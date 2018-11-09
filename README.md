@@ -27,5 +27,3 @@ npm run dev
 5. SOURCE seeds_deals.sql
 6. SOURCE seeds_users.sql
 7. SOURCE seeds_crypto_comments.sql
-
-
