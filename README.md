@@ -1,5 +1,5 @@
 # About AcceptMyCrypto
-*The purpose of the app is for cryptocurrencies holders to find and purchase deals that match to the cryptocurrencies that they're interested or owned.
+*The purpose of the app is for cryptocurrencies holders to find and purchase deals that match to the cryptocurrencies that they're interested or owned..
 
 ## API
 *AcceptMyCrypto uses coinmarketcap api to get crypto info shown below*
@@ -7,7 +7,7 @@
 * Symple
 * Price
 * Logo
-* Website URL 
+* Website URL
 
 ## Venues
 *AcceptMyCrypto doesn't rely on any third party API to get the venues data set. All data regarding venues are manually inserted by the team.*
