@@ -33,9 +33,9 @@ router.post('/api/deals', verifyToken, function(req, res) {
   if (id) { //if login
 
     // Create a multi nested SQL query
-    
+
                   //1) query the users_cryptos table to get the crypto_id that the user is interested/owned
-    
+
             //2) query the venues that accept those cryptos
 
       // 3) query the deals that offered by those venues
@@ -44,8 +44,6 @@ router.post('/api/deals', verifyToken, function(req, res) {
           [id],
           function(error, results, fields) {
             if (error) console.log(error);
-
-            console.log(JSON.stringify(results));
             res.json(results);
 
           }
