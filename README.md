@@ -1,5 +1,5 @@
 # About AcceptMyCrypto
-*The purpose of the app is for cryptocurrencies holders to check what venues out there are accepting their cryptos.*
+*The purpose of the app is for cryptocurrencies holders to find and purchase deals that match to the cryptocurrencies that they're interested or owned.
 
 ## API
 *AcceptMyCrypto uses coinmarketcap api to get crypto info shown below*
