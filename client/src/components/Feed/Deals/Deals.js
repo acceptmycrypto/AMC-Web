@@ -1,26 +1,30 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import CryptoRankings from '../../CryptosRanking';
-import { _loadDeals } from "../../../services/DealServices";
+// import { _loadDeals } from "../../../services/DealServices";
 import './Deals.css';
 import Layout from "../../Layout"
+import { connect } from "react-redux";
+import {bindActionCreators} from 'redux';
+import { _loadDeals } from "../../../actions/dealsActions";
 
 class Deals extends Component {
-  constructor() {
-    super();
+  // constructor() {
+  //   super();
 
-    this.state = {
-      deals: []
-    };
-  }
+  //   this.state = {
+  //     deals: []
+  //   };
+  // }
 
 
   //Another way to fetch api with promise using es6 syntax so we can call multiple api routes
   componentDidMount() {
-    return _loadDeals(localStorage.getItem('token'))
-      .then(result => this.setState({
-        deals: result.deals
-      }))
+    // return _loadDeals(localStorage.getItem('token'))
+    //   .then(result => this.setState({
+    //     deals: result.deals
+    //   }))
+    this.props.dispatch(_loadDeals(localStorage.getItem('token')));
   }
 
   convertToPercentage = (priceInDollar, priceInCrypto) => {
@@ -28,6 +32,17 @@ class Deals extends Component {
   }
 
   render() {
+    const { error, loading, deals } = this.props;
+
+    if (error) {
+      return <div>Error! {error.message}</div>;
+    }
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+
+
     return (
       <div>
         <Layout/>
@@ -35,7 +50,7 @@ class Deals extends Component {
           <CryptoRankings />
 
           <div id="right" className="grid">
-            {this.state.deals.map(deal => (
+            {deals && deals.map(deal => (
               <div key={deal.id} className="deal">
                 <Link to={`/feed/deals/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
 
@@ -73,4 +88,11 @@ class Deals extends Component {
   }
 }
 
-export default Deals;
+const mapStateToProps = state => ({
+  deals: state.matchedDeals.deals,
+  loading: state.matchedDeals.loading,
+  error: state.matchedDeals.error
+});
+
+
+export default connect(mapStateToProps)(Deals);
