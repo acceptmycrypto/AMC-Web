@@ -3,16 +3,11 @@ import { BrowserRouter as Switch, Route, Link, Redirect } from "react-router-dom
 
 import SignUp from "./components/Home/SignUp";
 import SignIn from "./components/Home/SignIn";
-
 import Profile from "./components/Profile/UserProfile";
-
 import Settings from "./components/UserSettings/Settings"
-
-
-
-
-import FeedDeals from "./components/Feed/Deals";
 import DealItem from "./components/Feed/Deals/DealItem";
+
+import FeedDeals from "./containers/Deals";
 
 // import Layout from "./components/Layout";
 
@@ -31,13 +26,13 @@ class App extends Component {
 
               <Route exact path="/profile" component={Profile} />
 
-              
+
               <Route exact path ="/settings" component={Settings} />
               <Route exact path="/crypto" component={Crypto} />
 
 
-             
-              <Route exact path="/feed/deals" component={FeedDeals} /> 
+
+              <Route exact path="/feed/deals" component={FeedDeals} />
               <Route path='/feed/deals/:deal_name' component={DealItem}/>
 
 
