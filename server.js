@@ -16,6 +16,18 @@ var session = require("express-session");
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 
+if (process.env.NODE_ENV === 'production') {
+  // Exprees will serve up production assets
+  app.use(express.static('client/build'));
+
+  // Express serve up index.html file if it doesn't recognize route
+  const path = require('path');
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
+else app.use(express.static("public"));
+
 //allow the api to be accessed by other apps
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -26,6 +38,8 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");
   next();
 });
+
+
 
 //routers
 var navbarRoutes = require("./routes/navbar.js");
