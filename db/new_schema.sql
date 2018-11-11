@@ -15,8 +15,8 @@ CREATE TABLE crypto_metadata(
 CREATE TABLE crypto_info(
 	id INT NOT NULL AUTO_INCREMENT,
 	crypto_metadata_name VARCHAR(255) NULL UNIQUE,
-	crypto_logo VARCHAR(255) NOT NULL UNIQUE,
-	crypto_link VARCHAR(255) NOT NULL UNIQUE,
+	crypto_logo VARCHAR(255) NULL UNIQUE,
+	crypto_link VARCHAR(255) NULL UNIQUE,
 	PRIMARY KEY (id),
 	FOREIGN KEY (crypto_metadata_name) REFERENCES crypto_metadata(crypto_name)
 );
