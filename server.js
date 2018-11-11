@@ -86,7 +86,7 @@ var connection = mysql.createConnection({
   user: "root",
 
   // Your password
-  password: "password",
+  password: process.env.DB_PW,
   database: "crypto_db"
 });
 
