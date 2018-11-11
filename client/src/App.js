@@ -4,7 +4,7 @@ import { BrowserRouter as Switch, Route, Link, Redirect } from "react-router-dom
 import SignUp from "./components/Home/SignUp";
 import SignIn from "./components/Home/SignIn";
 
-import Profile from "./components/Profile/UserProfile";
+import Profile from "./containers/Profile/UserProfile";
 
 import Settings from "./components/UserSettings/Settings"
 
