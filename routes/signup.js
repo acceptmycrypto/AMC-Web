@@ -89,7 +89,7 @@ router.post('/register', function(req, res) {
                     );
 
                     //use sendgrid to send email
-                    let link = "http://localhost:3001/email-verify/" + userID + "/" + result[0].email_verification_token;
+                    let link = "/email-verify/" + userID + "/" + result[0].email_verification_token;
 
                     const email_verification = {
                       to: req.body.email,
