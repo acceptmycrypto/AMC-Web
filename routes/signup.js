@@ -182,7 +182,7 @@ router.get('/email-verify/:user_id/:email_verification_token', function(req, res
 router.get('/cryptocurrencies', function(req, res) {
 
   connection.query(
-    'SELECT crypto_metadata_name, crypto_symbol FROM crypto_info',
+    'SELECT crypto_metadata_name, crypto_symbol FROM crypto_info LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name',
     function(error, results, fields) {
 
       if (error) throw error;
