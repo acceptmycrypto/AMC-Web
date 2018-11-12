@@ -1,23 +1,17 @@
 import React, { Component } from "react";
 import "./CryptosRanking.css";
+import { connect } from "react-redux";
+import { _loadCryptosRanking } from "../../actions/cryptosRankingActions";
 
 class CryptosRankings extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      cryptosRanking: []
-    };
-  }
 
   async componentDidMount() {
-    const cryptosList = await fetch("http://localhost:3001/api/cryptosranking");
-    const cryptosRanking = await cryptosList.json();
-
-    this.setState({ cryptosRanking });
+    this.props.dispatch(_loadCryptosRanking());
   }
 
   render() {
+
+    debugger
     return (
       <div id="left" className="column cryptosRanking">
         <table className="table table-hover">
@@ -30,7 +24,7 @@ class CryptosRankings extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.cryptosRanking.map((crypto, i) => (
+            {this.props.cryptosRanking.map((crypto, i) => (
               <tr key={crypto+i}>
                 <th scope="row">{i + 1}</th>
                 <td><img src={crypto.crypto_logo} alt="crypto-logo"/> {crypto.crypto_symbol}</td>
@@ -45,4 +39,10 @@ class CryptosRankings extends Component {
   }
 }
 
-export default CryptosRankings;
+const mapStateToProps = state => ({
+  cryptosRanking: state.Cryptos.cryptos,
+  loading: state.Cryptos.loading,
+  error: state.Cryptos.error
+});
+
+export default connect(mapStateToProps)(CryptosRankings);
