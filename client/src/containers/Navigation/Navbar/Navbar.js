@@ -2,39 +2,22 @@ import React, { Component } from "react";
 import { Link, NavLink } from "react-router-dom";
 import "./Navbar.css";
 import Notification from "../Notification";
-import { _loadPhoto } from "../../../services/NavbarService";
+import { connect } from "react-redux";
+import { _loadPhoto } from "../../../actions/navbarActions";
 
 
 class Navbar extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      photo: ""
-    }
-
-  }
 
   logOut = () => {
-
     localStorage.removeItem('token');
     this.props.history.push('/');
   }
 
-
   componentDidMount() {
-
-    return _loadPhoto(localStorage.getItem('token')).then(photo => {
-      this.setState({
-        photo
-      })
-
-    });
+    this.props.dispatch(_loadPhoto(localStorage.getItem('token')));
   }
 
-
   render() {
-    console.log(this.state);
     return (
       <header className="Toolbar">
         <div className="nav-left">
@@ -64,7 +47,7 @@ class Navbar extends Component {
           <li>
             <div className="dropdown show m-0 p-0">
               <div className="dropdown-toggle picture-toggle m-0 p-0" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i className={'fas mt-1 pt-1 px-2 user-icon-navbar ' + this.state.photo.photo}></i>
+                <i className={'fas mt-1 pt-1 px-2 user-icon-navbar ' + this.props.photo.photo}></i>
 
               </div>
 
@@ -82,6 +65,11 @@ class Navbar extends Component {
   };
 }
 
-export default Navbar;
+const mapStateToProps = state => ({
+  photo: state.Photo,
+  loading: state.Photo.loading,
+  error: state.Photo.error
+});
 
 
+export default connect(mapStateToProps)(Navbar);

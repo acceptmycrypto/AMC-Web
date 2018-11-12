@@ -1,28 +1,26 @@
 const initialState = {
-  user: false,
+  photo: "",
   loading: false,
   error: null
 };
 
-export default function layoutReducer(state = initialState, action) {
+export default function photoReducer(state = initialState, action) {
   switch(action.type) {
-    case "FETCH_USER_BEGIN":
-      // Mark the state as "loading" so we can show a spinner or something
-      // Also, reset any errors. We're starting fresh.
+    case "FETCH_PHOTO_BEGIN":
       return {
         ...state,
         loading: true,
         error: null
       };
 
-    case "FETCH_USER_SUCCESS":
+    case "FETCH_PHOTO_SUCCESS":
       return {
         ...state,
         loading: false,
-        user: action.payload
+        photo: action.payload.photo
       };
 
-    case "FETCH_USER_FAILURE":
+    case "FETCH_PHOTO_FAILURE":
       // The request failed, but it did stop, so set loading to "false".
       // Save the error, and we can display it somewhere
       // Since it failed, we don't have items to display anymore, so set it empty.
@@ -32,7 +30,7 @@ export default function layoutReducer(state = initialState, action) {
         ...state,
         loading: false,
         error: action.payload.error,
-        deals: []
+        photo: ""
       };
 
     default:

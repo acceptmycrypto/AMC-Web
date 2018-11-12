@@ -26,7 +26,6 @@ export const fetchUserBegin = () => ({
 
 
 export const fetchUserSuccess = user => {
-  console.log("user: ", user);
   if(user.message == "Right Token"){
     return {
       type: "FETCH_USER_SUCCESS",
