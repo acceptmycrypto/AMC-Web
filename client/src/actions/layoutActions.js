@@ -1,5 +1,5 @@
 export function _isLoggedIn(token) {
-  const settings = {
+  const settingsLoggedIn = {
     method: "POST",
     headers: {
       "Accept": "application/json",
@@ -10,7 +10,7 @@ export function _isLoggedIn(token) {
 
   return dispatch => {
     dispatch(fetchUserBegin());
-    return fetch("http://localhost:3001/loggedIn", settings)
+    return fetch("http://localhost:3001/loggedIn", settingsLoggedIn)
       .then(res => res.json())
       .then(jsonLogin => {
         dispatch(fetchUserSuccess(jsonLogin));
