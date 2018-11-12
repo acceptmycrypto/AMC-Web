@@ -2,12 +2,17 @@ import React, { Component } from "react";
 import "./UserProfile.css";
 import { Link } from "react-router-dom";
 import coinAddressValidator from "coin-address-validator";
-import ProfileCard from "../ProfileCard";
-import CryptoCard from "../CryptoCard";
-import CryptoAddress from "../CryptoAddress";
-import ProfileFeed from "../ProfileFeed";
-import Layout from "../../Layout"
-import { _updateCryptoTable, _loadProfile, _verifyUser } from "../../../services/UserProfileService";
+import ProfileCard from "../../../components/Profile/ProfileCard";
+import CryptoCard from "../../../components/Profile/CryptoCard";
+import CryptoAddress from "../../../components/Profile/CryptoAddress";
+import ProfileFeed from "../../../components/Profile/ProfileFeed";
+import Layout from "../../../components/Layout"
+import { connect } from "react-redux";
+import {bindActionCreators} from 'redux';
+import { _updateCryptoTable, _verifyUser } from "../../../services/UserProfileService";
+import { _loadProfile } from "../../../actions/userLoadActions";
+
+
 
 
 class UserProfile extends Component {
@@ -16,14 +21,13 @@ class UserProfile extends Component {
 
     this.state = {
       crypto_view: "owned",
-      user_info: [],
-      user_crypto: [],
+      // user_info: [],
+      // user_crypto: [],
       add_address: false,
       qr: false,
       users_cryptos_id: null,
       current_crypto_name: null,
-      friends_array: [],
-      transactions: []
+      // transactions: []
     }
 
   }
@@ -218,15 +222,17 @@ class UserProfile extends Component {
 
   componentDidMount() {
   
-    return _loadProfile(localStorage.getItem('token')).then(res => {
-      // console.log(res);
+    // return _loadProfile(localStorage.getItem('token')).then(res => {
+    //   // console.log(res);
 
-      let { user_info, user_crypto, friends_array, transactions } = res;
-      // console.log(user_info, user_crypto, friends_array, transactions);
+    //   let { user_info, user_crypto, friends_array, transactions } = res;
+    //   // console.log(user_info, user_crypto, friends_array, transactions);
      
-      this.setState({ user_info, user_crypto, friends_array, transactions });
+    //   this.setState({ user_info, user_crypto, friends_array, transactions });
       
-    });
+    // });
+
+    this.props.dispatch(_loadProfile(localStorage.getItem('token')));
 
 
 
@@ -234,9 +240,19 @@ class UserProfile extends Component {
 
 
   render() {
-    console.log(this.state);
+    // console.log(this.state);
     // console.log(this.props.location.pathname);
     // console.log(this.props.match.params);
+
+    const { error, loading, user_info, user_crypto, transactions } = this.props;
+
+    if (error) {
+      return <div>Error! {error.message}</div>;
+    }
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
 
     return (
       <div>
@@ -244,9 +260,9 @@ class UserProfile extends Component {
         <div className="userProfile d-flex flex-row justify-content-between">
           <div className="d-flex flex-column width-20">
 
-            <ProfileCard user_info={this.state.user_info} />
+            <ProfileCard user_info={user_info} />
 
-            <CryptoCard handleToggleChange={this.handleToggleChange} handleAddressFormChange={this.handleAddressFormChange} handleQRChange={this.handleQRChange} crypto_view={this.state.crypto_view} user_crypto={this.state.user_crypto}>
+            <CryptoCard handleToggleChange={this.handleToggleChange} handleAddressFormChange={this.handleAddressFormChange} handleQRChange={this.handleQRChange} crypto_view={this.state.crypto_view} user_crypto={user_crypto}>
 
               {this.state.add_address &&
                 <CryptoAddress updateCryptos={this.updateCryptos} updateCryptoTable={this.updateCryptoTable} />
@@ -258,7 +274,7 @@ class UserProfile extends Component {
           </div>
 
           <div className="w-100 mx-5">
-            <ProfileFeed transactions={this.state.transactions} />
+            <ProfileFeed transactions={transactions} />
           </div>
 
           {/* <div className="width-20 mr-3">       
@@ -271,4 +287,13 @@ class UserProfile extends Component {
   }
 }
 
-export default UserProfile;
+const mapStateToProps = state => ({
+  user_info: state.userInfo.user_info,
+  user_crypto: state.userInfo.user_crypto,
+  transactions: state.userInfo.transactions,
+  loading: state.userInfo.loading,
+  error: state.userInfo.error
+});
+
+export default connect(mapStateToProps)(UserProfile);
+
