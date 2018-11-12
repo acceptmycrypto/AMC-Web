@@ -105,36 +105,36 @@ router.post('/register', function(req, res) {
                 );
 
                 //insert selected cryptos into users_cryptos table
-                // connection.query(
-                //   "SELECT * FROM crypto_metadata LEFT JOIN crypto_info ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name WHERE crypto_name IN (?)",
-                //   [selectedCryptos],
-                //   function(error, results, fields) {
-                //     if (error) throw error;
-                //     const userID_cryptoID = [];
+                connection.query(
+                  "SELECT * FROM crypto_metadata LEFT JOIN crypto_info ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name WHERE crypto_name IN (?)",
+                  [selectedCryptos],
+                  function(error, results, fields) {
+                    if (error) throw error;
+                    const userID_cryptoID = [];
 
-                //     const cryptoIDs = results.map(crypto => {
-                //       return crypto["id"]
-                //     })
+                    const cryptoIDs = results.map(crypto => {
+                      return crypto["id"]
+                    })
 
-                //     for (let i = 0; i < cryptoIDs.length; i++) {
-                //       let innerArr = [];
-                //       innerArr.push(userID, cryptoIDs[i]);
-                //       userID_cryptoID.push(innerArr);
-                //     }
+                    for (let i = 0; i < cryptoIDs.length; i++) {
+                      let innerArr = [];
+                      innerArr.push(userID, cryptoIDs[i]);
+                      userID_cryptoID.push(innerArr);
+                    }
 
                 //Now we insert the userID_cryptoID array into the users_cryptos table
-                //     connection.query(
-                //       'INSERT INTO users_cryptos (user_id, crypto_id) VALUES ?',
-                //       [userID_cryptoID],
-                //       function(error, user_cryptos, fields) {
-                //         if (error) throw error;
-                //       }
+                    connection.query(
+                      'INSERT INTO users_cryptos (user_id, crypto_id) VALUES ?',
+                      [userID_cryptoID],
+                      function(error, user_cryptos, fields) {
+                        if (error) throw error;
+                      }
 
 
-                //     );
+                    );
 
-                //   }
-                // );
+                  }
+                );
 
             }
           });
