@@ -32,7 +32,7 @@ export default function layoutReducer(state = initialState, action) {
         ...state,
         loading: false,
         error: action.payload.error,
-        deals: []
+        user: false
       };
 
     default:
