@@ -16,7 +16,7 @@ var session = require("express-session");
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 
-if (process.env.NODE_ENV === 'production') {
+// if (process.env.NODE_ENV === 'production') {
   // Exprees will serve up production assets
   app.use(express.static('client/build'));
 
@@ -25,8 +25,8 @@ if (process.env.NODE_ENV === 'production') {
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });
-}
-else app.use(express.static("public"));
+// }
+// else app.use(express.static("public"));
 
 //allow the api to be accessed by other apps
 app.use(function(req, res, next) {
@@ -61,7 +61,7 @@ var notificationRoutes = require("./routes/cryptos_ranking.js");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.static("public"));
+// app.use(express.static("public"));
 app.use(methodOverride("_method"));
 app.use(cookieParser());
 app.use(
