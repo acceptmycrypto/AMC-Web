@@ -149,7 +149,7 @@ router.post('/register', function(req, res) {
 
 
  //Once the user clicks on the email verification, we get the id and email verification params
-router.get('/email-verify/:user_id/:email_verification_token', function(req, res) {
+router.get('https://amc-web.herokuapp.com/email-verify/:user_id/:email_verification_token', function(req, res) {
   connection.query(
     'SELECT * FROM users WHERE id = ?',
     [req.params.user_id],
