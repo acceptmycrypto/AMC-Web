@@ -1,5 +1,5 @@
 export function _loadPhoto(token) {
-  const settings = {
+  const settingsPhoto = {
     method: "POST",
     headers: {
       "Accept": "application/json",
@@ -10,7 +10,7 @@ export function _loadPhoto(token) {
 
   return dispatch => {
     dispatch(fetchPhotoBegin());
-    return fetch("http://localhost:3001/navbar/photo", settings)
+    return fetch("http://localhost:3001/navbar/photo", settingsPhoto)
       .then(res => res.json())
       .then(jsonPhoto => {
         dispatch(fetchPhotoSuccess(jsonPhoto));
