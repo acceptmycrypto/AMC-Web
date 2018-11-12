@@ -1,0 +1,10 @@
+INSERT INTO crypto_metadata (crypto_name, crypto_symbol, crypto_price) VALUES ("bitcoin", "BTC", "1000");
+INSERT INTO crypto_metadata (crypto_name, crypto_symbol, crypto_price) VALUES ("test", "qwer", "300");
+INSERT INTO crypto_metadata (crypto_name, crypto_symbol, crypto_price) VALUES ("asdf", "zxcvxcv", "600");
+INSERT INTO crypto_metadata (crypto_name, crypto_symbol, crypto_price) VALUES ("qwer", "asdf", "200");
+INSERT INTO crypto_metadata (crypto_name, crypto_symbol, crypto_price) VALUES ("hjkg", "qwere", "500");
+INSERT INTO crypto_metadata (crypto_name, crypto_symbol, crypto_price) VALUES ("ipuio", "vzxcvczxv", "900");
+INSERT INTO crypto_metadata (crypto_name, crypto_symbol, crypto_price) VALUES ("jklhjk", "DTE", "100");
+INSERT INTO crypto_metadata (crypto_name, crypto_symbol, crypto_price) VALUES ("asdfv", "SDF", "2500");
+INSERT INTO crypto_metadata (crypto_name, crypto_symbol, crypto_price) VALUES ("qwevrqew", "QWE", "400");
+INSERT INTO crypto_metadata (crypto_name, crypto_symbol, crypto_price) VALUES ("asdfvasdf", "ZXCV", "5660");
