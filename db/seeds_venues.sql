@@ -6,12 +6,12 @@ VALUES
 INSERT INTO venues
 (venue_name, venue_description, venue_link, accepted_crypto)
 VALUES
-("Microsoft", "an American multinational corp. technology company.", "https://www.microsoft.com/en-us/", TRUE);
+("Cryptopet", "E-commcerce store for pets ", "http://cryptopet.com/", TRUE);
 
 INSERT INTO venues
 (venue_name, venue_description, venue_link, accepted_crypto)
 VALUES
-("BitPay", "cryptocurrency payment processor, serving industry-leading merchants on six continents.", "https://www.bitpay.com/", TRUE);
+("Save the Children", "One of the World's leading children's charity working in 120 countries that provide Education, Healthcare & Disaster relief for children & protect their rights.", "https://www.savethechildren.org/", TRUE);
 
 INSERT INTO venues
 (venue_name, venue_description, venue_link, accepted_crypto)
@@ -36,7 +36,7 @@ VALUES
 INSERT INTO venues
 (venue_name, venue_description, venue_link, accepted_crypto)
 VALUES
-("bitcoin.com", "premier source for everything Bitcoin related", "https://store.bitcoin.com/", TRUE);
+("Sakama", "E-commerce for rug and leather wholesale industry", "https://www.sakamaonline.com/", TRUE);
 
 INSERT INTO venues
 (venue_name, venue_description, venue_link, accepted_crypto)
