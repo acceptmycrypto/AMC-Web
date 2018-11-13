@@ -31,22 +31,6 @@ class DealItem extends Component {
     };
   }
 
-  //load deal item
-  // componentDidMount() {
-  //   //return the param value
-  //   const { deal_name } = this.props.match.params;
-
-  //   return _loadDealItem(deal_name).then(dealItem => {
-  //     let venue_name = dealItem[0].venue_name;
-  //     let acceptedCryptos = dealItem[1];
-
-  //     this.setState({
-  //       dealItem: dealItem[0],
-  //       acceptedCryptos
-  //     });
-  //   });
-  // }
-
   componentDidMount() {
     //return the param value
     const { deal_name } = this.props.match.params;
@@ -173,7 +157,7 @@ class DealItem extends Component {
         handle_ShippingState={this.handleShippingStateInput}/> },
       { name: "Payment", component:
         <PurchaseOrder
-        cryptos={this.state.dealItem && this.cryptoOptions(acceptedCryptos)}
+        cryptos={acceptedCryptos && this.cryptoOptions(acceptedCryptos)}
         cryptoSelected={this.state.selectedOption}
         selectCrypto={this.handleSelectedCrypto}
         SubmitPayment={this.createPaymentHandler}
