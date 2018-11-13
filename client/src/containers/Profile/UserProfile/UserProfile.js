@@ -6,7 +6,8 @@ import ProfileCard from "../../../components/Profile/ProfileCard";
 import CryptoCard from "../../../components/Profile/CryptoCard";
 import CryptoAddress from "../../../components/Profile/CryptoAddress";
 import ProfileFeed from "../../../components/Profile/ProfileFeed";
-import Layout from "../../../components/Layout"
+// import Layout from "../../../components/Layout"
+import Layout from "../../Layout";
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import { _updateCryptoTable, _verifyUser } from "../../../services/UserProfileService";
@@ -246,7 +247,7 @@ class UserProfile extends Component {
 
     const { error, loading, user_info, user_crypto, transactions } = this.props;
 
-    console.log(this.props);
+    
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -291,11 +292,11 @@ class UserProfile extends Component {
 }
 
 const mapStateToProps = state => ({
-  user_info: state.userInfo.user_info,
-  user_crypto: state.userInfo.user_crypto,
-  transactions: state.userInfo.transactions,
-  loading: state.userInfo.loading,
-  error: state.userInfo.error
+  user_info: state.UserInfo.user_info,
+  user_crypto: state.UserInfo.user_crypto,
+  transactions: state.UserInfo.transactions,
+  loading: state.UserInfo.loading,
+  error: state.UserInfo.error
 });
 
 export default connect(mapStateToProps)(UserProfile);
