@@ -207,7 +207,7 @@ const mapStateToProps = state => ({
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({handleDropdownChange: handleDropdownChange, _loadCryptocurrencies: _loadCryptocurrencies}, dispatch);
+  return bindActionCreators({handleDropdownChange, _loadCryptocurrencies}, dispatch);
 }
 
 
