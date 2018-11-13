@@ -1,21 +1,21 @@
 import React, { Component } from "react";
-import { _loadDealItem, _fetchTransactionInfo } from "../../../../services/DealServices";
+import { _fetchTransactionInfo } from "../../../services/DealServices";
 import "./DealItem.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { connect } from "react-redux";
+import { _loadDealItem } from "../../../actions/dealItemActions";
 import { Carousel } from "react-responsive-carousel";
 import StepZilla from "react-stepzilla";
 import CustomizeOrder from "../CustomizeOrder";
 import ShipOrder from "../ShipOrder";
 import PurchaseOrder from "../PurchaseOrder";
-import Layout from "../../../Layout";
+import Layout from "../../Layout";
 
 class DealItem extends Component {
   constructor() {
     super();
 
     this.state = {
-      dealItem: null,
-      acceptedCryptos: null,
       selectedOption: {value: "BTC", label: "Bitcoin (BTC)", logo: "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png", name: "Bitcoin"},
       selectedSize: null,
       selectedColor: null,
@@ -31,20 +31,10 @@ class DealItem extends Component {
     };
   }
 
-  //load deal item
   componentDidMount() {
     //return the param value
     const { deal_name } = this.props.match.params;
-
-    return _loadDealItem(deal_name).then(dealItem => {
-      let venue_name = dealItem[0].venue_name;
-      let acceptedCryptos = dealItem[1];
-
-      this.setState({
-        dealItem: dealItem[0],
-        acceptedCryptos
-      });
-    });
+    this.props.dispatch(_loadDealItem(deal_name));
   }
 
   handleSelectedCrypto = (selectedOption) => {
@@ -52,9 +42,9 @@ class DealItem extends Component {
   }
 
   //set the options to delect crypto from
-  cryptoOptions() {
+  cryptoOptions(acceptedCryptos) {
     let options = [];
-    this.state.acceptedCryptos.map(crypto => {
+    acceptedCryptos.map(crypto => {
 
       let optionObj = {};
       optionObj.value = crypto.crypto_symbol;
@@ -142,6 +132,15 @@ class DealItem extends Component {
 
   render() {
 
+    const { error, loading, dealItem, acceptedCryptos } = this.props;
+    if (error) {
+      return <div>Error! {error.message}</div>;
+    }
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+    debugger
+
     const steps = [
       { name: "Customizing",
         component:
@@ -158,7 +157,7 @@ class DealItem extends Component {
         handle_ShippingState={this.handleShippingStateInput}/> },
       { name: "Payment", component:
         <PurchaseOrder
-        cryptos={this.state.dealItem && this.cryptoOptions()}
+        cryptos={acceptedCryptos && this.cryptoOptions(acceptedCryptos)}
         cryptoSelected={this.state.selectedOption}
         selectCrypto={this.handleSelectedCrypto}
         SubmitPayment={this.createPaymentHandler}
@@ -173,29 +172,18 @@ class DealItem extends Component {
       <div>
         <Layout/>
         <div>
-          {/* {this.state.dealItem.map(item => (
-          <ul key={item.id}>
-            <li>{item.deal_name}</li>
-            <li>{item.deal_description}</li>
-            <li>{item.deal_image}</li>
-            <li>{item.pay_in_dollar}</li>
-            <li>{item.pay_in_crypto}</li>
-            <li>{item.venue_name}</li>
-            <li>{item.venue_link}</li>
-          </ul>
-        ))} */}
           <div className="deal-container">
             <div className="deal-header">
 
               <div className="deal-item-header">
                 <div className="deal-item-name">
-                  <strong>{this.state.dealItem && this.state.dealItem.deal_name}</strong> <br/>
-                  <small> Offered By: {this.state.dealItem && this.state.dealItem.venue_name}</small>
+                  <strong>{dealItem && dealItem.deal_name}</strong> <br/>
+                  <small> Offered By: {dealItem && dealItem.venue_name}</small>
                 </div>
                 <div className="deal-item-cost">
-                  <strong>Pay in Crypto:  ${this.state.dealItem && this.state.dealItem.pay_in_crypto}</strong>  <small className="deal-item-discount">
-                  {this.state.dealItem && this.convertToPercentage(this.state.dealItem.pay_in_dollar, this.state.dealItem.pay_in_crypto)}% OFF</small> <br/>
-                  <small>Pay in Dollar:  ${this.state.dealItem && this.state.dealItem.pay_in_dollar} <br/></small>
+                  <strong>Pay in Crypto:  ${dealItem && dealItem.pay_in_crypto}</strong>  <small className="deal-item-discount">
+                  {dealItem && this.convertToPercentage(dealItem.pay_in_dollar, dealItem.pay_in_crypto)}% OFF</small> <br/>
+                  <small>Pay in Dollar:  ${dealItem && dealItem.pay_in_dollar} <br/></small>
                 </div>
               </div>
 
@@ -231,8 +219,7 @@ class DealItem extends Component {
                   width={"55%"}
                   showStatus={false}>
 
-                  {this.state.dealItem &&
-                  this.state.dealItem.deal_image.map(img => (
+                  {dealItem && dealItem.deal_image.map(img => (
                     <div className="deal-item-image">
                       <img src={img} />
                     </div>
@@ -254,4 +241,11 @@ class DealItem extends Component {
   }
 }
 
-export default DealItem;
+const mapStateToProps = state => ({
+  dealItem: state.DealItem.dealItem,
+  acceptedCryptos: state.DealItem.acceptedCryptos,
+  loading: state.DealItem.loading,
+  error: state.DealItem.error
+});
+
+export default connect(mapStateToProps)(DealItem);

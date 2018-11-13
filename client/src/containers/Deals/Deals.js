@@ -16,6 +16,13 @@ class Deals extends Component {
     return parseInt(((priceInDollar - priceInCrypto) / priceInDollar) * 100)
   }
 
+  handleLongDescription = (description) => {
+    let trimmedDescription = description.trim();
+    if (trimmedDescription.length > 125) {
+      return trimmedDescription.substring(0, trimmedDescription.indexOf(' ', 75)) + "...";
+    }
+  }
+
   render() {
     const { error, loading, deals } = this.props;
 
@@ -35,14 +42,14 @@ class Deals extends Component {
           <CryptoRankings />
 
           <div id="right" className="grid">
-            {deals.map(deal => (
+            {deals != undefined && deals.map(deal => (
               <div key={deal.id} className="deal">
                 <Link to={`/feed/deals/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
 
                     <div className="deal-info">
                       <img className="deal-image" src={deal.featured_deal_image} alt="deal"/>
                       <div className="mt-1">{deal.deal_name}</div>
-                      <small className="deal-description">{deal.deal_description}</small>
+                      <small className="deal-description">{this.handleLongDescription(deal.deal_description)}</small>
                       <div><small>Offered by: {deal.venue_name}</small></div>
                     </div>
 

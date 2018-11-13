@@ -93,6 +93,8 @@
 
 .deal-item-image img {
   border-radius: 5px;
+  max-width: 300px;
+  max-height: 300px;
 }
 
 /* stop default stiling of ol */
