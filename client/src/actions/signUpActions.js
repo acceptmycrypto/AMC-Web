@@ -3,14 +3,14 @@
 //we need to map through the array and get the value of each object
 
 export const handleDropdownChange = (selectedOptions) => {
-    console.log('these are the selected options ', selectedOptions);
+    
 
     let selectedCryptos = [];
     selectedOptions.map(crypto => {
         selectedCryptos.push(crypto.value);
     })
 
-    console.log(selectedCryptos);
+
     // action
         // made up of two parts 1. type 2. payload
     return {
