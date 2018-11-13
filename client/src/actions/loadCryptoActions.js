@@ -1,6 +1,6 @@
 export function _loadCryptocurrencies() {
 
-  return async dispatch => {
+  return dispatch => {
     dispatch(loadCryptoBegin());
     return fetch("http://localhost:3001/cryptocurrencies")
       .then(res => res.json())
