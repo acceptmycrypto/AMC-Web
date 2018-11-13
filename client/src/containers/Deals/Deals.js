@@ -42,7 +42,7 @@ class Deals extends Component {
           <CryptoRankings />
 
           <div id="right" className="grid">
-            {deals && deals.map(deal => (
+            {deals != undefined && deals.map(deal => (
               <div key={deal.id} className="deal">
                 <Link to={`/feed/deals/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
 
