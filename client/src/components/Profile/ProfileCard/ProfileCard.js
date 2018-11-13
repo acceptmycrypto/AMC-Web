@@ -7,7 +7,7 @@ const ProfileCard = props => {
             {props.user_info.map((userData, i) =>
                 <div id="profile" data-id={userData.id} className="p-3 pb-0 ml-3 d-flex flex-column w-100 white-bg" key={"user" + i}>
                     {(userData.photo.indexOf("fa-user") !== -1)
-                        ? <i className={'fas my-2 py-4 px-1 user-icon-shaded ' + userData.photo}></i>
+                        ? <i className={'fas my-2 py-5 px-1 user-icon-shaded ' + userData.photo}></i>
                         : <img src={userData.photo}></img>
                     }
 

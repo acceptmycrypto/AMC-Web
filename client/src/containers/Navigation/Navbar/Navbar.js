@@ -22,9 +22,10 @@ class Navbar extends Component {
       <header className="Toolbar">
         <div className="nav-left">
           <Link to="/feed/deals" className="Logo">
-            AcceptMyCrypto
+            <div className="font-17 color-deepBlue">AcceptMyCrypto</div>
         </Link>
-          <div className="Search">
+          <div className="Search d-flex flex-row align-items-center">
+            <i class="fas fa-search fa-lg mx-2"></i>
             <input type="text" placeholder="Search" />
           </div>
           <div className="Feed">
@@ -35,19 +36,19 @@ class Navbar extends Component {
             </li> */}
           </div>
         </div>
-        <div className="Nav">
+        <div className="Nav d-flex flex-row align-items-center">
           <li>
             <Link to="/feed/deals">
-              <i className="fas fa-dollar-sign" /> Matched Deals
+              <i className="fas fa-dollar-sign fa-lg" /> <h7 className="color-deepBlue font-17">Matched Deals</h7>
             </Link>
           </li>
           <li>
-            <Notification />
+            {/* <Notification /> */}
           </li>
           <li>
             <div className="dropdown show m-0 p-0">
               <div className="dropdown-toggle picture-toggle m-0 p-0" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i className={'fas mt-1 pt-1 px-2 user-icon-navbar ' + this.props.photo.photo}></i>
+                <i className={'fas my-1 py-2 px-3 user-icon-navbar ' + this.props.photo.photo}></i>
 
               </div>
 

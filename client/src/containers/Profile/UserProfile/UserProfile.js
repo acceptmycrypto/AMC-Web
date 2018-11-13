@@ -261,7 +261,7 @@ class UserProfile extends Component {
       <div>
         <Layout />
         <div className="userProfile d-flex flex-row justify-content-between">
-          <div className="d-flex flex-column width-20">
+          <div className="d-flex flex-column width-35">
             {user_info != undefined && <ProfileCard user_info={user_info} />}
 
             {user_crypto != undefined &&
