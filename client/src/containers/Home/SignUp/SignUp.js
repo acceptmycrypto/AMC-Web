@@ -2,20 +2,18 @@ import "./SignUp.css";
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
 import Select from "react-select";
-import { _signUp, _loadCryptocurrencies } from "../../../services/AuthService";
+import { _signUp } from "../../../services/AuthService";
+import { connect } from "react-redux";
+import { _loadCryptocurrencies } from "../../../actions/loadCryptoActions";
+
 
 class SignUp extends Component {
   constructor() {
     super();
 
     this.state = {
-      username: "",
-      email: "",
-      password: "",
-      cryptoOptions: [],
+      // cryptoOptions: [],
       cryptoProfile: [],
-      hasAgreed: false,
-      redirect: false
     };
     
     this.handleChange = this.handleChange.bind(this);
@@ -23,21 +21,24 @@ class SignUp extends Component {
   }
 
   componentDidMount() {
-    return _loadCryptocurrencies().then(cryptos => {
+    // return _loadCryptocurrencies().then(cryptos => {
 
-      let cryptoOptions = [];
+    //   let cryptoOptions = [];
 
-      cryptos.map(crypto => {
+    //   cryptos.map(crypto => {
 
-        let optionObj = {};
-        optionObj.value = crypto.crypto_metadata_name;
-        optionObj.label = crypto.crypto_metadata_name + " " + "(" + crypto.crypto_symbol + ")";
+    //     let optionObj = {};
+    //     optionObj.value = crypto.crypto_metadata_name;
+    //     optionObj.label = crypto.crypto_metadata_name + " " + "(" + crypto.crypto_symbol + ")";
 
-        cryptoOptions.push(optionObj);
-      })
+    //     cryptoOptions.push(optionObj);
+    //   })
 
-      this.setState({cryptoOptions});
-    });
+    //   this.setState({cryptoOptions});
+    // });
+
+    this.props.dispatch(_loadCryptocurrencies());
+
   }
 
 
@@ -97,6 +98,20 @@ class SignUp extends Component {
 
   render() {
     const { selectedOptions } = this.state;
+
+    const { error, loading, cryptoOptions } = this.props;
+
+  
+    if (error) {
+      return <div>Error! {error.message}</div>;
+    }
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+
+    console.log('These are the crypto options: ' , cryptoOptions);
+
     if(localStorage.getItem('token')){
       this.props.history.push('/feed/deals');
     }
@@ -109,16 +124,16 @@ class SignUp extends Component {
             <h2 className="font-weight-light mb-0">
             <ul>
               <br></br>
-              <li><i class="homepage-icons fas fa-dollar-sign"></i>
+              <li><i className="homepage-icons fas fa-dollar-sign"></i>
                   Grab Deals for Purchase with Cryptocurrency
                 </li>
               <br></br>
 
-              <li><i class="homepage-icons fa fa-user" aria-hidden="true"></i>
+              <li><i className="homepage-icons fa fa-user" aria-hidden="true"></i>
                Find Friends with Matching Currencies
               </li>
               <br></br>
-              <li><i class="homepage-icons fa fa-users" aria-hidden="true"></i>
+              <li><i className="homepage-icons fa fa-users" aria-hidden="true"></i>
                 Engage with Your Crypto Community
               </li>
             </ul>
@@ -154,8 +169,6 @@ class SignUp extends Component {
                   className="FormField__Input"
                   placeholder="Enter your desired User Name"
                   name="username"
-                  value={this.state.username}
-                  onChange={this.handleChange}
                   required
                 />
               </div>
@@ -169,8 +182,6 @@ class SignUp extends Component {
                   className="FormField__Input"
                   placeholder="Enter your email"
                   name="email"
-                  value={this.state.email}
-                  onChange={this.handleChange}
                   required
                 />
               </div>
@@ -184,8 +195,6 @@ class SignUp extends Component {
                   className="FormField__Input"
                   placeholder="Enter your password"
                   name="password"
-                  value={this.state.password}
-                  onChange={this.handleChange}
                   required
                 />
               </div>
@@ -201,7 +210,7 @@ class SignUp extends Component {
                   required
                   value={selectedOptions}
                   onChange={this.handleDropdownChange}
-                  options={this.state.cryptoOptions}
+                  options={cryptoOptions}
                   isMulti={true}
                   autoBlur={false}
 
@@ -214,7 +223,6 @@ class SignUp extends Component {
                     className="FormField__Checkbox"
                     type="checkbox"
                     name="hasAgreed"
-                    value={this.state.hasAgreed}
                     onChange={this.handleChange}
                   />
                   I agree all statements in
@@ -240,4 +248,14 @@ class SignUp extends Component {
   }
 }
 
-export default SignUp;
+const mapStateToProps = state => ({
+  cryptoOptions: state.LoadCrypto.cryptoOptions, 
+  loading: state.LoadCrypto.loading,
+  error: state.LoadCrypto.error
+
+});
+
+
+export default connect(mapStateToProps)(SignUp);
+
+
