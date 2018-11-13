@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./Settings.css";
 import { Link } from "react-router-dom";
-import Layout from "../../Layout";
+import Layout from "../../../containers/Layout";
 import { Menu } from "semantic-ui-react"
 import ProfileSettings from "../ProfileSettings";
 import PrivacySettings from "../PrivacySettings";
