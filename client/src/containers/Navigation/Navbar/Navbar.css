@@ -76,3 +76,12 @@ li {
 .picture-toggle::after {
   display:none;
 }
+
+.font-17{
+  font-size: 17px;
+  
+}
+
+.color-deepBlue{
+  color: #2a3c51;
+}
