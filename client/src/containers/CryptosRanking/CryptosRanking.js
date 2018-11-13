@@ -11,7 +11,6 @@ class CryptosRankings extends Component {
 
   render() {
 
-    debugger
     return (
       <div id="left" className="column cryptosRanking">
         <table className="table table-hover">
