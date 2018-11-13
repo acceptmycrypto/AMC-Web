@@ -1,8 +1,8 @@
 import React from "react";
 import "./PurchaseOrder.css";
 import Select from "react-select";
-import Checkout from "../../../Checkout";
-import LoadingSpinner from "../../../UI/LoadingSpinner/LoadingSpinner";
+import Checkout from "../../../components/Checkout";
+import LoadingSpinner from "../../../components/UI/LoadingSpinner";
 
 const PurchaseOrder = props => {
   return (

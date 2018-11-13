@@ -5,7 +5,7 @@ import { _loadCryptosRanking } from "../../actions/cryptosRankingActions";
 
 class CryptosRankings extends Component {
 
-  async componentDidMount() {
+  componentDidMount() {
     this.props.dispatch(_loadCryptosRanking());
   }
 

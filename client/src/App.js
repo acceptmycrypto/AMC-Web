@@ -5,9 +5,9 @@ import SignUp from "./components/Home/SignUp";
 import SignIn from "./components/Home/SignIn";
 import Profile from "./components/Profile/UserProfile";
 import Settings from "./components/UserSettings/Settings"
-import DealItem from "./components/Feed/Deals/DealItem";
 
 import FeedDeals from "./containers/Deals";
+import DealItem from "./containers/Deals/DealItem";
 
 // import Layout from "./components/Layout";
 
