@@ -81,15 +81,15 @@ class SignIn extends Component {
               <h2 className="font-weight-light mb-0">
                 <ul>
                   <br></br>
-                  <li><i class="homepage-icons fas fa-dollar-sign"></i>
+                  <li><i className="homepage-icons fas fa-dollar-sign"></i>
                     Grab Deals for Purchase with Cryptocurrency
                   </li>
                   <br></br>
-                  <li><i class="homepage-icons fa fa-user" aria-hidden="true"></i>
+                  <li><i className="homepage-icons fa fa-user" aria-hidden="true"></i>
                     Find Friends with Matching Currencies
                   </li>
                   <br></br>
-                  <li><i class="homepage-icons fa fa-users" aria-hidden="true"></i>
+                  <li><i className="homepage-icons fa fa-users" aria-hidden="true"></i>
                     Engage with Your Crypto Community
                   </li>
                 </ul>
