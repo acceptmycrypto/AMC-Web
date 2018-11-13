@@ -1,9 +1,13 @@
 import React, { Component } from "react";
 import { BrowserRouter as Switch, Route, Link, Redirect } from "react-router-dom";
 
-import SignUp from "./components/Home/SignUp";
-import SignIn from "./components/Home/SignIn";
-import Profile from "./components/Profile/UserProfile";
+import SignUp from "./containers/Home/SignUp";
+import SignIn from "./containers/Home/SignIn";
+
+
+import Profile from "./containers/Profile/UserProfile";
+
+
 import Settings from "./components/UserSettings/Settings"
 
 import FeedDeals from "./containers/Deals";
