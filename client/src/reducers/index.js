@@ -3,12 +3,18 @@ import Deals from './reducer-deals';
 import UserInfo from './reducer-user-info';
 import Layout from './reducer-layout';
 import Photo from './reducer-photo';
+import LoadCrypto from './reducer-load-cryptos';
+import CryptoSelected from './reducer-sign-up';
+import SignInModal from './reducer-sign-in';
 
 const allReducers = combineReducers({
   matchedDeals: Deals,
-  userInfo: UserInfo,
+  UserInfo,
   Layout,
-  Photo
+  Photo,
+  LoadCrypto,
+  CryptoSelected,
+  SignInModal
   
 });
 
