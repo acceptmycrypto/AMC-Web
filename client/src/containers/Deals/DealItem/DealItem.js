@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import { _fetchTransactionInfo } from "../../../services/DealServices";
 import "./DealItem.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import {bindActionCreators} from 'redux';
 import { connect } from "react-redux";
-import { _loadDealItem } from "../../../actions/dealItemActions";
+import { _loadDealItem, handleCustomizingSize, handleCustomizingColor } from "../../../actions/dealItemActions";
 import { Carousel } from "react-responsive-carousel";
 import StepZilla from "react-stepzilla";
 import CustomizeOrder from "../CustomizeOrder";
@@ -17,8 +18,6 @@ class DealItem extends Component {
 
     this.state = {
       selectedOption: {value: "BTC", label: "Bitcoin (BTC)", logo: "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png", name: "Bitcoin"},
-      selectedSize: null,
-      selectedColor: null,
       fullName: null,
       address: null,
       city: null,
@@ -34,7 +33,7 @@ class DealItem extends Component {
   componentDidMount() {
     //return the param value
     const { deal_name } = this.props.match.params;
-    this.props.dispatch(_loadDealItem(deal_name));
+    this.props._loadDealItem(deal_name);
   }
 
   handleSelectedCrypto = (selectedOption) => {
@@ -77,14 +76,6 @@ class DealItem extends Component {
 
   }
 
-  handleCustomizingSize = event => {
-    this.setState({selectedSize: event.target.value})
-  }
-
-  handleCustomizingColor = event => {
-    this.setState({selectedColor: event.target.value})
-  }
-
   handleFullNameInput= event => {
     this.setState({fullName: event.target.value})
   }
@@ -106,12 +97,12 @@ class DealItem extends Component {
     this.setState({shippingState: event.target.value})
   }
 
-  createPaymentHandler = (event) => {
+  createPaymentHandler = (event, dealItem) => {
     event.preventDefault();
     //info needed to insert into user_purchases table
     //deal_id, crypto_name, amount, and user_id
-    let deal_id = this.state.dealItem.deal_id;
-    let amount = this.state.dealItem.pay_in_crypto;
+    let deal_id = dealItem.deal_id;
+    let amount = dealItem.pay_in_crypto;
     // let user_id = '4' //hardcoded user_id for now. Need to grab user_id dynamically
     let crypto_symbol = this.state.selectedOption.value;
     let crypto_name = this.state.selectedOption.name;
@@ -132,7 +123,8 @@ class DealItem extends Component {
 
   render() {
 
-    const { error, loading, dealItem, acceptedCryptos } = this.props;
+    const { error, loading, dealItem, acceptedCryptos, selectedSize, selectedColor } = this.props;
+
     if (error) {
       return <div>Error! {error.message}</div>;
     }
@@ -145,8 +137,8 @@ class DealItem extends Component {
       { name: "Customizing",
         component:
         <CustomizeOrder
-        handle_CustomizingSize={this.handleCustomizingSize}
-        handle_CustomizingColor={this.handleCustomizingColor}/>},
+        handle_CustomizingSize={this.props.handleCustomizingSize}
+        handle_CustomizingColor={this.props.handleCustomizingColor}/>},
       { name: "Shipping",
         component:
         <ShipOrder
@@ -190,8 +182,8 @@ class DealItem extends Component {
               <div className="deal-item-summary">
                   <div className="customize-item-summary">
                     <strong>Customizing</strong> <br/>
-                    <small>{this.state.selectedSize}</small> <br/>
-                    <small>{this.state.selectedColor}</small> <br/>
+                    <small>{selectedSize}</small> <br/>
+                    <small>{selectedColor}</small> <br/>
                   </div>
 
                   <div className="customize-item-shipping">
@@ -244,8 +236,14 @@ class DealItem extends Component {
 const mapStateToProps = state => ({
   dealItem: state.DealItem.dealItem,
   acceptedCryptos: state.DealItem.acceptedCryptos,
+  selectedSize: state.DealItem.selectedSize,
+  selectedColor: state.DealItem.selectedColor,
   loading: state.DealItem.loading,
   error: state.DealItem.error
 });
 
-export default connect(mapStateToProps)(DealItem);
+const matchDispatchToProps = dispatch =>{
+  return bindActionCreators({_loadDealItem, handleCustomizingSize, handleCustomizingColor}, dispatch);
+}
+
+export default connect(mapStateToProps, matchDispatchToProps)(DealItem);

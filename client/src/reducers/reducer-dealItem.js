@@ -27,7 +27,6 @@ export default function dealItemReducer(state = initialState, action) {
       };
 
     case "FETCH_DEAL_ITEM_SUCCESS":
-    debugger
       return {
         ...state,
         loading: false,
@@ -36,17 +35,24 @@ export default function dealItemReducer(state = initialState, action) {
       };
 
     case "FETCH_DEAL_ITEM_FAILURE":
-      // The request failed, but it did stop, so set loading to "false".
-      // Save the error, and we can display it somewhere
-      // Since it failed, we don't have items to display anymore, so set it empty.
-      // This is up to you and your app though: maybe you want to keep the items
-      // around! Do whatever seems right.
       return {
         ...state,
         loading: false,
         error: action.payload.error,
         dealItem: null,
         acceptedCryptos: null
+      };
+
+    case "SELECT_SIZE":
+      return {
+        ...state,
+        selectedSize: action.payload
+      };
+
+    case "SELECT_COLOR":
+      return {
+        ...state,
+        selectedColor: action.payload
       };
 
     default:

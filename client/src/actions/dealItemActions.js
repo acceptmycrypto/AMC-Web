@@ -33,3 +33,17 @@ export const fetchDealItemFailure = error => ({
   type: "FETCH_DEAL_ITEM_FAILURE",
   payload: { error }
 });
+
+export const handleCustomizingSize = (event) => {
+  return {
+      type: 'SELECT_SIZE',
+      payload: event.target.value
+  }
+};
+
+export const handleCustomizingColor = (event) => {
+  return {
+      type: 'SELECT_COLOR',
+      payload: event.target.value
+  }
+};
