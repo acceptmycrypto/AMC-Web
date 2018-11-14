@@ -97,7 +97,7 @@ class SignIn extends Component {
 
               </div>
               <Modal visible={this.props.visible} effect="fadeInLeft" onClickAway={() => {this.props.closeModal(); this.props._loadProfile(localStorage.getItem('token')); }}>
-                <div className="Modal">
+                <div className="login_modal">
                   <h4>You have successfully logged in</h4>
                   <p>From the team at Accept My Crypto, welcome back!</p>
                   <a className="a-link" href="javascript:void(0);" onClick={() => {this.props.closeModal(); this.props._loadProfile(localStorage.getItem('token')); }}>Ok</a>
