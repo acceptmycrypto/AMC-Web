@@ -4,7 +4,7 @@ import "./DealItem.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import {bindActionCreators} from 'redux';
 import { connect } from "react-redux";
-import { _loadDealItem, handleCustomizingSize, handleCustomizingColor, handleFullNameInput } from "../../../actions/dealItemActions";
+import { _loadDealItem, handleCustomizingSize, handleCustomizingColor, handleFullNameInput, handleAddressInput } from "../../../actions/dealItemActions";
 import { Carousel } from "react-responsive-carousel";
 import StepZilla from "react-stepzilla";
 import CustomizeOrder from "../CustomizeOrder";
@@ -75,9 +75,9 @@ class DealItem extends Component {
 
   }
 
-  handleAddressInput= event => {
-    this.setState({address: event.target.value})
-  }
+  // handleAddressInput= event => {
+  //   this.setState({address: event.target.value})
+  // }
 
   handleCityInput= event => {
     this.setState({city: event.target.value})
@@ -118,7 +118,7 @@ class DealItem extends Component {
 
   render() {
 
-    const { error, loading, dealItem, acceptedCryptos, selectedSize, selectedColor, fullName} = this.props;
+    const { error, loading, dealItem, acceptedCryptos, selectedSize, selectedColor, fullName, shippingAddress} = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -138,7 +138,7 @@ class DealItem extends Component {
         component:
         <ShipOrder
         handle_ShippingFullName={this.props.handleFullNameInput}
-        handle_ShippingAddress={this.handleAddressInput}
+        handle_ShippingAddress={this.props.handleAddressInput}
         handle_ShippingCity={this.handleCityInput}
         handle_ShippingZipcode={this.handleZipcodeInput}
         handle_ShippingState={this.handleShippingStateInput}/> },
@@ -184,7 +184,7 @@ class DealItem extends Component {
                   <div className="customize-item-shipping">
                     <strong>Shipping</strong> <br/>
                     <small>{fullName}</small> <br/>
-                    <small>{this.state.address}</small> <br/>
+                    <small>{shippingAddress}</small> <br/>
                     <small>{this.state.city} </small>
                     <small>{this.state.zipcode} </small>
                     <small>{this.state.shippingState}</small>
@@ -234,12 +234,13 @@ const mapStateToProps = state => ({
   selectedSize: state.DealItem.selectedSize,
   selectedColor: state.DealItem.selectedColor,
   fullName: state.DealItem.fullName,
+  shippingAddress: state.DealItem.shippingAddress,
   loading: state.DealItem.loading,
   error: state.DealItem.error
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({_loadDealItem, handleCustomizingSize, handleCustomizingColor, handleFullNameInput}, dispatch);
+  return bindActionCreators({_loadDealItem, handleCustomizingSize, handleCustomizingColor, handleFullNameInput, handleAddressInput}, dispatch);
 }
 
 export default connect(mapStateToProps, matchDispatchToProps)(DealItem);

@@ -5,7 +5,7 @@ const initialState = {
   selectedSize: null,
   selectedColor: null,
   fullName: null,
-  address: null,
+  shippingAddress: null,
   city: null,
   zipcode: null,
   shippingState: null,
@@ -61,6 +61,13 @@ export default function dealItemReducer(state = initialState, action) {
         ...state,
         fullName: action.payload
       };
+
+    case "SHIPPING_ADDRESS":
+      return {
+        ...state,
+        shippingAddress: action.payload
+      };
+
 
     default:
       // ALWAYS have a default case in a reducer

@@ -54,3 +54,10 @@ export const handleFullNameInput = (event) => {
       payload: event.target.value
   }
 };
+
+export const handleAddressInput = (event) => {
+  return {
+      type: 'SHIPPING_ADDRESS',
+      payload: event.target.value
+  }
+};
