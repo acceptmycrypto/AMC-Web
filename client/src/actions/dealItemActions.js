@@ -61,3 +61,10 @@ export const handleAddressInput = (event) => {
       payload: event.target.value
   }
 };
+
+export const handleCityInput = (event) => {
+  return {
+      type: 'SHIPPING_CITY',
+      payload: event.target.value
+  }
+};
