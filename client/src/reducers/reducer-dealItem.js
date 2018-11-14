@@ -27,7 +27,6 @@ export default function dealItemReducer(state = initialState, action) {
       };
 
     case "FETCH_DEAL_ITEM_SUCCESS":
-    debugger
       return {
         ...state,
         loading: false,
