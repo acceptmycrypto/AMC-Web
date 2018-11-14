@@ -13,7 +13,7 @@ class SignUp extends Component {
   constructor() {
     super();
 
-  
+
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -71,7 +71,7 @@ class SignUp extends Component {
       <div className="App">
         <div className="App__Aside">
           <img className="crypto-img img-fluid mb-5 d-block mx-auto" src="../../../assets/images/logo.png" alt=""></img>
-          <h1 className="text-uppercase mb-0">Accept My Crypto</h1>
+          <h1 className="text-uppercase mb-0 ">Accept My Crypto</h1>
           <hr className="star-light"></hr>
           <h2 className="font-weight-light mb-0">
             <ul>
