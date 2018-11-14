@@ -225,6 +225,10 @@ ol.progtrckr li.progtrckr-done:hover:before {
   background-color: #52C4B9 !important;
 }
 
+.footer-buttons #next-button {
+  float: right;
+}
+
 /* for mobile */
 @media (max-width: 650px) {
   .progtrckr li span {

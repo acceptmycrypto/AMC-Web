@@ -1,7 +1,6 @@
 const initialState = {
   dealItem: null,
   acceptedCryptos: null,
-  selectedOption: {value: "BTC", label: "Bitcoin (BTC)", logo: "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png", name: "Bitcoin"},
   selectedSize: null,
   selectedColor: null,
   fullName: null,
@@ -9,6 +8,7 @@ const initialState = {
   shippingCity: null,
   zipcode: null,
   shippingState: null,
+  selectedOption: null,
   transactionInfo: null,
   paidIn: null,
   purchasing: false,
@@ -84,6 +84,12 @@ export default function dealItemReducer(state = initialState, action) {
       return {
         ...state,
         shippingState: action.payload
+      };
+
+    case "SELECT_PAYMENT":
+      return {
+        ...state,
+        selectedOption: action.payload.selectedOption
       };
 
     default:

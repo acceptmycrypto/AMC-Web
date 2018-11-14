@@ -82,3 +82,12 @@ export const handleShippingStateInput = (event) => {
       payload: event.target.value
   }
 };
+
+export const handleSelectedCrypto = (selectedOption) => {
+  return {
+      type: 'SELECT_PAYMENT',
+      payload: {selectedOption}
+  }
+};
+
+

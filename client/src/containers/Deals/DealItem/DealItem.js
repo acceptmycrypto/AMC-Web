@@ -4,7 +4,7 @@ import "./DealItem.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import {bindActionCreators} from 'redux';
 import { connect } from "react-redux";
-import { _loadDealItem, handleCustomizingSize, handleCustomizingColor, handleFullNameInput, handleAddressInput, handleCityInput, handleZipcodeInput, handleShippingStateInput } from "../../../actions/dealItemActions";
+import { _loadDealItem, handleCustomizingSize, handleCustomizingColor, handleFullNameInput, handleAddressInput, handleCityInput, handleZipcodeInput, handleShippingStateInput, handleSelectedCrypto } from "../../../actions/dealItemActions";
 import { Carousel } from "react-responsive-carousel";
 import StepZilla from "react-stepzilla";
 import CustomizeOrder from "../CustomizeOrder";
@@ -17,7 +17,6 @@ class DealItem extends Component {
     super();
 
     this.state = {
-      selectedOption: {value: "BTC", label: "Bitcoin (BTC)", logo: "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png", name: "Bitcoin"},
       transactionInfo: null,
       paidIn: null,
       purchasing: false,
@@ -29,10 +28,6 @@ class DealItem extends Component {
     //return the param value
     const { deal_name } = this.props.match.params;
     this.props._loadDealItem(deal_name);
-  }
-
-  handleSelectedCrypto = (selectedOption) => {
-    this.setState({ selectedOption });
   }
 
   //set the options to select crypto from
@@ -98,7 +93,7 @@ class DealItem extends Component {
 
   render() {
 
-    const { error, loading, dealItem, acceptedCryptos, selectedSize, selectedColor, fullName, shippingAddress, shippingCity, zipcode, shippingState} = this.props;
+    const { error, loading, dealItem, acceptedCryptos, selectedSize, selectedColor, fullName, shippingAddress, shippingCity, zipcode, shippingState, selectedOption} = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -106,7 +101,6 @@ class DealItem extends Component {
     if (loading) {
       return <div>Loading...</div>;
     }
-    debugger
 
     const steps = [
       { name: "Customizing",
@@ -125,8 +119,7 @@ class DealItem extends Component {
       { name: "Payment", component:
         <PurchaseOrder
         cryptos={acceptedCryptos && this.handleCryptoOptions(acceptedCryptos)}
-        cryptoSelected={this.state.selectedOption}
-        selectCrypto={this.handleSelectedCrypto}
+        selectCrypto={this.props.handleSelectedCrypto}
 
         SubmitPayment={this.createPaymentHandler}
         transactionInfo={this.state.transactionInfo}
@@ -174,7 +167,7 @@ class DealItem extends Component {
                   <div className="customize-item-payment">
                     <div className="crypto_logo">
                       <strong>Payment</strong> <br/>
-                      <img src={this.state.selectedOption.logo} alt="cryptoLogo" />
+                      {selectedOption ?  <img src={selectedOption.logo} alt="cryptoLogo" /> : null}
                     </div>
                   </div>
               </div>
@@ -219,12 +212,13 @@ const mapStateToProps = state => ({
   shippingCity: state.DealItem.shippingCity,
   zipcode: state.DealItem.zipcode,
   shippingState: state.DealItem.shippingState,
+  selectedOption: state.DealItem.selectedOption,
   loading: state.DealItem.loading,
   error: state.DealItem.error
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({_loadDealItem, handleCustomizingSize, handleCustomizingColor, handleFullNameInput, handleAddressInput, handleCityInput, handleZipcodeInput, handleShippingStateInput}, dispatch);
+  return bindActionCreators({_loadDealItem, handleCustomizingSize, handleCustomizingColor, handleFullNameInput, handleAddressInput, handleCityInput, handleZipcodeInput, handleShippingStateInput, handleSelectedCrypto}, dispatch);
 }
 
 export default connect(mapStateToProps, matchDispatchToProps)(DealItem);
