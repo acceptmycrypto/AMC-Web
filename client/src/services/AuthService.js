@@ -23,6 +23,9 @@ export const _login = (email, password) => {
 export async function _loadCryptocurrencies () {
   const cryptocurrencies = await fetch('/cryptocurrencies');
   const cryptos = await cryptocurrencies.json();
+// export async function _loadCryptocurrencies () {
+//   const cryptocurrencies = await fetch('http://localhost:3001/cryptocurrencies');
+//   const cryptos = await cryptocurrencies.json();
 
-  return cryptos
+//   return cryptos
 }
