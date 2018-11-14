@@ -11,9 +11,9 @@ import { _isLoggedIn } from '../../actions/loggedInActions';
 
 class Deals extends Component {
 
-  async componentDidMount() {
-    await this.props._isLoggedIn(localStorage.getItem('token'));
-    await this.props._loadDeals(localStorage.getItem('token'));
+  componentDidMount() {
+    this.props._isLoggedIn(localStorage.getItem('token'));
+    this.props._loadDeals(localStorage.getItem('token'));
   }
 
   convertToPercentage = (priceInDollar, priceInCrypto) => {

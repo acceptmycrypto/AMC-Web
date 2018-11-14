@@ -28,8 +28,8 @@ class Settings extends Component {
         this.setState({ activeItem: name })
     }
 
-    async componentDidMount() {
-        await this.props._isLoggedIn(localStorage.getItem('token'));
+    componentDidMount() {
+        this.props._isLoggedIn(localStorage.getItem('token'));
     }
     
 

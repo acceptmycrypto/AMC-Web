@@ -34,11 +34,11 @@ class DealItem extends Component {
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     //return the param value
-    await this.props._isLoggedIn(localStorage.getItem('token'));
-   const { deal_name } = await this.props.match.params;
-    await this.props._loadDealItem(deal_name);
+    this.props._isLoggedIn(localStorage.getItem('token'));
+    const { deal_name } = this.props.match.params;
+    this.props._loadDealItem(deal_name);
   }
 
   handleSelectedCrypto = (selectedOption) => {

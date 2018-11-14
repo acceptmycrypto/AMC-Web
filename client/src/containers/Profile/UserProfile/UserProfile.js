@@ -222,7 +222,7 @@ class UserProfile extends Component {
   }
 
 
-  async componentDidMount() {
+  componentDidMount() {
 
     // return _loadProfile(localStorage.getItem('token')).then(res => {
     //   // console.log(res);
@@ -234,8 +234,8 @@ class UserProfile extends Component {
 
     // });
 
-    await this.props._isLoggedIn(localStorage.getItem('token'));
-    await this.props._loadProfile(localStorage.getItem('token'));
+    this.props._isLoggedIn(localStorage.getItem('token'));
+    this.props._loadProfile(localStorage.getItem('token'));
 
 
 
