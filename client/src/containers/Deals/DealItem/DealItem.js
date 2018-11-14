@@ -18,7 +18,6 @@ class DealItem extends Component {
 
     this.state = {
       selectedOption: {value: "BTC", label: "Bitcoin (BTC)", logo: "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png", name: "Bitcoin"},
-      shippingState: null,
       transactionInfo: null,
       paidIn: null,
       purchasing: false,
@@ -36,8 +35,9 @@ class DealItem extends Component {
     this.setState({ selectedOption });
   }
 
-  //set the options to delect crypto from
-  cryptoOptions(acceptedCryptos) {
+  //set the options to select crypto from
+  //this function is needed to change the format of objects to be able to used for react select
+  handleCryptoOptions(acceptedCryptos) {
     let options = [];
     acceptedCryptos.map(crypto => {
 
@@ -70,10 +70,6 @@ class DealItem extends Component {
 
       return hDisplay + mDisplay + sDisplay;
 
-  }
-
-  handleShippingStateInput= event => {
-    this.setState({shippingState: event.target.value})
   }
 
   createPaymentHandler = (event, dealItem) => {
@@ -128,9 +124,10 @@ class DealItem extends Component {
         handle_ShippingState={this.props.handleShippingStateInput}/> },
       { name: "Payment", component:
         <PurchaseOrder
-        cryptos={acceptedCryptos && this.cryptoOptions(acceptedCryptos)}
+        cryptos={acceptedCryptos && this.handleCryptoOptions(acceptedCryptos)}
         cryptoSelected={this.state.selectedOption}
         selectCrypto={this.handleSelectedCrypto}
+
         SubmitPayment={this.createPaymentHandler}
         transactionInfo={this.state.transactionInfo}
         cryptoSymbol={this.state.paidIn}
