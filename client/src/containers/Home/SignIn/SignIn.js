@@ -65,9 +65,8 @@ class SignIn extends Component {
 
     if (userLoggedIn) {
       this.props.history.push('/feed/deals');
-    }else{
-      localStorage.removeItem('token');
     }
+    
     return (
       <div className="App">
         <div className="App__Aside">
