@@ -1,40 +1,28 @@
 const initialState = {
-  dealItem: null,
-  acceptedCryptos: null,
-  selectedOption: {value: "BTC", label: "Bitcoin (BTC)", logo: "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png", name: "Bitcoin"},
-  selectedSize: null,
-  selectedColor: null,
-  fullName: null,
-  address: null,
-  city: null,
-  zipcode: null,
-  shippingState: null,
-  transactionInfo: null,
-  paidIn: null,
-  purchasing: false,
-  transactionLoading: false,
+  userLoggedIn: null,
   loading: false,
   error: null
 };
 
-export default function dealItemReducer(state = initialState, action) {
+export default function layoutReducer(state = initialState, action) {
   switch(action.type) {
-    case "FETCH_DEAL_ITEM_BEGIN":
+    case "FETCH_USER_BEGIN":
+      // Mark the state as "loading" so we can show a spinner or something
+      // Also, reset any errors. We're starting fresh.
       return {
         ...state,
         loading: true,
         error: null
       };
 
-    case "FETCH_DEAL_ITEM_SUCCESS":
+    case "FETCH_USER_SUCCESS":
       return {
         ...state,
         loading: false,
-        dealItem: action.payload.dealItem[0],
-        acceptedCryptos: action.payload.dealItem[1]
+        userLoggedIn: action.payload
       };
 
-    case "FETCH_DEAL_ITEM_FAILURE":
+    case "FETCH_USER_FAILURE":
       // The request failed, but it did stop, so set loading to "false".
       // Save the error, and we can display it somewhere
       // Since it failed, we don't have items to display anymore, so set it empty.
@@ -44,8 +32,7 @@ export default function dealItemReducer(state = initialState, action) {
         ...state,
         loading: false,
         error: action.payload.error,
-        dealItem: null,
-        acceptedCryptos: null
+        userLoggedIn: false
       };
 
     default:

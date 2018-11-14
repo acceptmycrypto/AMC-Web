@@ -3,6 +3,7 @@ import { _fetchTransactionInfo } from "../../../services/DealServices";
 import "./DealItem.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { connect } from "react-redux";
+import {bindActionCreators} from 'redux';
 import { _loadDealItem } from "../../../actions/dealItemActions";
 import { Carousel } from "react-responsive-carousel";
 import StepZilla from "react-stepzilla";
@@ -10,6 +11,8 @@ import CustomizeOrder from "../CustomizeOrder";
 import ShipOrder from "../ShipOrder";
 import PurchaseOrder from "../PurchaseOrder";
 import Layout from "../../Layout";
+import { _isLoggedIn } from "../../../actions/loggedInActions";
+
 
 class DealItem extends Component {
   constructor() {
@@ -33,8 +36,9 @@ class DealItem extends Component {
 
   componentDidMount() {
     //return the param value
+    this.props._isLoggedIn(localStorage.getItem('token'));
     const { deal_name } = this.props.match.params;
-    this.props.dispatch(_loadDealItem(deal_name));
+    this.props._loadDealItem(deal_name);
   }
 
   handleSelectedCrypto = (selectedOption) => {
@@ -132,14 +136,21 @@ class DealItem extends Component {
 
   render() {
 
-    const { error, loading, dealItem, acceptedCryptos } = this.props;
+    const { error, loading, dealItem, acceptedCryptos, userLoggedIn } = this.props;
     if (error) {
       return <div>Error! {error.message}</div>;
     }
     if (loading) {
       return <div>Loading...</div>;
     }
-    debugger
+    
+    if (userLoggedIn) {
+      console.log("user logged in");
+      
+    }else{
+      // localStorage.removeItem('token');
+      this.props.history.push('/');
+    }
 
     const steps = [
       { name: "Customizing",
@@ -245,7 +256,13 @@ const mapStateToProps = state => ({
   dealItem: state.DealItem.dealItem,
   acceptedCryptos: state.DealItem.acceptedCryptos,
   loading: state.DealItem.loading,
-  error: state.DealItem.error
+  error: state.DealItem.error,
+  userLoggedIn: state.LoggedIn.userLoggedIn,
 });
 
-export default connect(mapStateToProps)(DealItem);
+
+const matchDispatchToProps = dispatch =>{
+  return bindActionCreators({_isLoggedIn, _loadDealItem}, dispatch);
+}
+
+export default connect(mapStateToProps, matchDispatchToProps)(DealItem);
