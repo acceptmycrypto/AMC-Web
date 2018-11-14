@@ -8,6 +8,8 @@ import { connect } from "react-redux";
 import {bindActionCreators} from 'redux';
 import { openModal, closeModal } from '../../../actions/signInActions';
 import { _loadProfile } from "../../../actions/userLoadActions";
+import { _isLoggedIn } from '../../../actions/loggedInActions';
+
 
 
 class SignIn extends Component {
@@ -33,20 +35,38 @@ class SignIn extends Component {
           console.log(res.token);
           // alert("You've successfully logged in");
           //redirect user to the feed/deals
+          this.props.history.push('/feed/deals');
 
         } else {
           console.log("Login error: ", res);
-          alert(res.err);
+          // alert(res.err);
+          this.props.openModal();
         }
       });
 
     }
   }
 
-  render() {
+  componentDidMount (){
+    this.props._isLoggedIn(localStorage.getItem('token'));
+  }
 
-    if (localStorage.getItem('token')) {
+  render() {
+    const { error, loading, userLoggedIn, visible } = this.props;
+    // console.log(userLoggedIn);
+
+    if (error) {
+      return <div>Error! {error.message}</div>;
+    }
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+
+    if (userLoggedIn) {
       this.props.history.push('/feed/deals');
+    }else{
+      localStorage.removeItem('token');
     }
     return (
       <div className="App">
@@ -92,15 +112,15 @@ class SignIn extends Component {
 
               <div className="FormField">
 
-                <button className="FormField__Button mr-10" onClick={() => this.props.openModal()}>Sign In</button>
+                <button className="FormField__Button mr-10" >Sign In</button>
                 <Link to="/" className="FormField__Link">Create an account</Link>
 
               </div>
-              <Modal visible={this.props.visible} effect="fadeInLeft" onClickAway={() => {this.props.closeModal(); this.props._loadProfile(localStorage.getItem('token')); }}>
+              <Modal visible={visible} effect="fadeInLeft" onClickAway={() => {this.props.closeModal(); }}>
                 <div className="Modal">
-                  <h4>You have successfully logged in</h4>
-                  <p>From the team at Accept My Crypto, welcome back!</p>
-                  <a className="a-link" href="javascript:void(0);" onClick={() => {this.props.closeModal(); this.props._loadProfile(localStorage.getItem('token')); }}>Ok</a>
+                  <h4>Your Your Email or Password was Invalid</h4>
+                  {/* <p>From the team at Accept My Crypto, welcome back!</p> */}
+                  <a className="a-link" href="javascript:void(0);" onClick={() => {this.props.closeModal(); }}>Ok</a>
                 </div>
               </Modal>
             </form>
@@ -114,12 +134,15 @@ class SignIn extends Component {
 }
 
 const mapStateToProps = state => ({
-  visible: state.SignInModal.visible
+  visible: state.SignInModal.visible,
+  userLoggedIn: state.LoggedIn.userLoggedIn,
+  error: state.LoggedIn.error,
+  loading: state.LoggedIn.loading
 
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({openModal, closeModal, _loadProfile}, dispatch);
+  return bindActionCreators({openModal, closeModal, _loadProfile, _isLoggedIn}, dispatch);
 }
 
 
