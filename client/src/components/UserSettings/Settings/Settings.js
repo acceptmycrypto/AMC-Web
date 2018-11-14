@@ -48,7 +48,7 @@ class Settings extends Component {
       console.log("user logged in");
       
     }else{
-        localStorage.removeItem('token');
+        // localStorage.removeItem('token');
         this.props.history.push('/');
     }
         const { color } = this.state
