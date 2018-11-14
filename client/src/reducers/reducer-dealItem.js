@@ -80,6 +80,12 @@ export default function dealItemReducer(state = initialState, action) {
         zipcode: action.payload
       };
 
+    case "SHIPPING_STATE":
+      return {
+        ...state,
+        shippingState: action.payload
+      };
+
     default:
       // ALWAYS have a default case in a reducer
       return state;

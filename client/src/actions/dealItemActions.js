@@ -75,3 +75,10 @@ export const handleZipcodeInput = (event) => {
       payload: event.target.value
   }
 };
+
+export const handleShippingStateInput = (event) => {
+  return {
+      type: 'SHIPPING_STATE',
+      payload: event.target.value
+  }
+};
