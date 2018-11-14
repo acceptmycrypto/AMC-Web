@@ -68,3 +68,10 @@ export const handleCityInput = (event) => {
       payload: event.target.value
   }
 };
+
+export const handleZipcodeInput = (event) => {
+  return {
+      type: 'ZIP_CODE',
+      payload: event.target.value
+  }
+};

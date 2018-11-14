@@ -4,7 +4,7 @@ import "./DealItem.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import {bindActionCreators} from 'redux';
 import { connect } from "react-redux";
-import { _loadDealItem, handleCustomizingSize, handleCustomizingColor, handleFullNameInput, handleAddressInput, handleCityInput } from "../../../actions/dealItemActions";
+import { _loadDealItem, handleCustomizingSize, handleCustomizingColor, handleFullNameInput, handleAddressInput, handleCityInput, handleZipcodeInput } from "../../../actions/dealItemActions";
 import { Carousel } from "react-responsive-carousel";
 import StepZilla from "react-stepzilla";
 import CustomizeOrder from "../CustomizeOrder";
@@ -18,7 +18,6 @@ class DealItem extends Component {
 
     this.state = {
       selectedOption: {value: "BTC", label: "Bitcoin (BTC)", logo: "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png", name: "Bitcoin"},
-      zipcode: null,
       shippingState: null,
       transactionInfo: null,
       paidIn: null,
@@ -73,11 +72,6 @@ class DealItem extends Component {
 
   }
 
-  handleZipcodeInput= event => {
-    this.setState({zipcode: event.target.value})
-  }
-
-
   handleShippingStateInput= event => {
     this.setState({shippingState: event.target.value})
   }
@@ -108,7 +102,7 @@ class DealItem extends Component {
 
   render() {
 
-    const { error, loading, dealItem, acceptedCryptos, selectedSize, selectedColor, fullName, shippingAddress, shippingCity} = this.props;
+    const { error, loading, dealItem, acceptedCryptos, selectedSize, selectedColor, fullName, shippingAddress, shippingCity, zipcode} = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -130,7 +124,7 @@ class DealItem extends Component {
         handle_ShippingFullName={this.props.handleFullNameInput}
         handle_ShippingAddress={this.props.handleAddressInput}
         handle_ShippingCity={this.props.handleCityInput}
-        handle_ShippingZipcode={this.handleZipcodeInput}
+        handle_ShippingZipcode={this.props.handleZipcodeInput}
         handle_ShippingState={this.handleShippingStateInput}/> },
       { name: "Payment", component:
         <PurchaseOrder
@@ -176,8 +170,8 @@ class DealItem extends Component {
                     <small>{fullName}</small> <br/>
                     <small>{shippingAddress}</small> <br/>
                     <small>{shippingCity} </small>
-                    <small>{this.state.zipcode} </small>
-                    <small>{this.state.shippingState}</small>
+                    <small>{this.state.shippingState} </small>
+                    <small>{zipcode}</small>
                   </div>
 
                   <div className="customize-item-payment">
@@ -226,12 +220,13 @@ const mapStateToProps = state => ({
   fullName: state.DealItem.fullName,
   shippingAddress: state.DealItem.shippingAddress,
   shippingCity: state.DealItem.shippingCity,
+  zipcode: state.DealItem.zipcode,
   loading: state.DealItem.loading,
   error: state.DealItem.error
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({_loadDealItem, handleCustomizingSize, handleCustomizingColor, handleFullNameInput, handleAddressInput, handleCityInput}, dispatch);
+  return bindActionCreators({_loadDealItem, handleCustomizingSize, handleCustomizingColor, handleFullNameInput, handleAddressInput, handleCityInput, handleZipcodeInput}, dispatch);
 }
 
 export default connect(mapStateToProps, matchDispatchToProps)(DealItem);
