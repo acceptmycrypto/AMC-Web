@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import { _updateCryptoTable, _verifyUser } from "../../../services/UserProfileService";
 import { _loadProfile } from "../../../actions/userLoadActions";
+import { _isLoggedIn } from "../../../actions/loggedInActions";
 
 
 
@@ -221,7 +222,7 @@ class UserProfile extends Component {
   }
 
 
-  componentDidMount() {
+  async componentDidMount() {
 
     // return _loadProfile(localStorage.getItem('token')).then(res => {
     //   // console.log(res);
@@ -233,7 +234,8 @@ class UserProfile extends Component {
 
     // });
 
-    this.props.dispatch(_loadProfile(localStorage.getItem('token')));
+    await this.props._isLoggedIn(localStorage.getItem('token'));
+    await this.props._loadProfile(localStorage.getItem('token'));
 
 
 
@@ -245,7 +247,7 @@ class UserProfile extends Component {
     // console.log(this.props.location.pathname);
     // console.log(this.props.match.params);
 
-    const { error, loading, user_info, user_crypto, transactions } = this.props;
+    const { error, loading, user_info, user_crypto, transactions, userLoggedIn } = this.props;
 
     
 
@@ -255,6 +257,14 @@ class UserProfile extends Component {
 
     if (loading) {
       return <div>Loading...</div>;
+    }
+
+    if (userLoggedIn) {
+      console.log("user logged in");
+      
+    }else{
+        localStorage.removeItem('token');
+        this.props.history.push('/');
     }
 
     return (
@@ -296,8 +306,16 @@ const mapStateToProps = state => ({
   user_crypto: state.UserInfo.user_crypto,
   transactions: state.UserInfo.transactions,
   loading: state.UserInfo.loading,
-  error: state.UserInfo.error
+  error: state.UserInfo.error,
+  userLoggedIn: state.LoggedIn.userLoggedIn
 });
 
-export default connect(mapStateToProps)(UserProfile);
+const matchDispatchToProps = dispatch =>{
+  return bindActionCreators({_isLoggedIn, _loadProfile}, dispatch);
+}
+
+
+export default connect(mapStateToProps, matchDispatchToProps)(UserProfile);
+
+
 

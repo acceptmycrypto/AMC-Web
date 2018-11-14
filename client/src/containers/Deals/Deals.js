@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import {bindActionCreators} from 'redux';
 import { _loadDeals } from "../../actions/dealsActions";
 import CryptoRankings from '../CryptosRanking';
 import Layout from "../Layout"
 import './Deals.css';
+import { _isLoggedIn } from '../../actions/loggedInActions';
+
 
 class Deals extends Component {
 
-  componentDidMount() {
-    this.props.dispatch(_loadDeals(localStorage.getItem('token')));
+  async componentDidMount() {
+    await this.props._isLoggedIn(localStorage.getItem('token'));
+    await this.props._loadDeals(localStorage.getItem('token'));
   }
 
   convertToPercentage = (priceInDollar, priceInCrypto) => {
@@ -24,7 +28,7 @@ class Deals extends Component {
   }
 
   render() {
-    const { error, loading, deals } = this.props;
+    const { error, loading, deals, userLoggedIn } = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -33,8 +37,13 @@ class Deals extends Component {
     if (loading) {
       return <div>Loading...</div>;
     }
-
-
+    if (userLoggedIn) {
+      console.log("user logged in");
+      
+    }else{
+        this.props.history.push('/');
+    }
+    
     return (
       <div>
         <Layout/>
@@ -83,8 +92,13 @@ class Deals extends Component {
 const mapStateToProps = state => ({
   deals: state.matchedDeals.deals,
   loading: state.matchedDeals.loading,
-  error: state.matchedDeals.error
+  error: state.matchedDeals.error,
+  userLoggedIn: state.LoggedIn.userLoggedIn,
 });
 
+const matchDispatchToProps = dispatch =>{
+  return bindActionCreators({_isLoggedIn, _loadDeals}, dispatch);
+}
 
-export default connect(mapStateToProps)(Deals);
+
+export default connect(mapStateToProps, matchDispatchToProps)(Deals);
