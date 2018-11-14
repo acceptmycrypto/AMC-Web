@@ -47,3 +47,10 @@ export const handleCustomizingColor = (event) => {
       payload: event.target.value
   }
 };
+
+export const handleFullNameInput = (event) => {
+  return {
+      type: 'FULL_NAME',
+      payload: event.target.value
+  }
+};

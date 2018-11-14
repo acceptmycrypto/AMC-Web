@@ -55,6 +55,13 @@ export default function dealItemReducer(state = initialState, action) {
         selectedColor: action.payload
       };
 
+
+    case "FULL_NAME":
+      return {
+        ...state,
+        fullName: action.payload
+      };
+
     default:
       // ALWAYS have a default case in a reducer
       return state;
