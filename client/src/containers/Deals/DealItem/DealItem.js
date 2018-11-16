@@ -22,14 +22,6 @@ import PurchaseOrder from "../PurchaseOrder";
 import Layout from "../../Layout";
 
 class DealItem extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      loading: false
-    };
-  }
-
   componentDidMount() {
     //return the param value
     const { deal_name } = this.props.match.params;
@@ -137,7 +129,7 @@ class DealItem extends Component {
         paymentButtonClicked={createPaymentButtonClicked}
 
         showLoadingSpinner={loading}
-        timeout={this.state.transactionInfo && this.convertSecondToMinute(this.state.transactionInfo.timeout)}/> }
+        timeout={paymentInfo && this.convertSecondToMinute(paymentInfo.timeout)}/> }
     ];
 
     return (

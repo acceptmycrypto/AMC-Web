@@ -15,7 +15,6 @@ export default function paymentTransactionReducer(state = initialState, action) 
       };
 
     case "CREATE_TRANSACTION_SUCCESS":
-    debugger
       return {
         ...state,
         loading: false,
