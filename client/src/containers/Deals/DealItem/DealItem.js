@@ -1,10 +1,19 @@
 import React, { Component } from "react";
-import { _fetchTransactionInfo } from "../../../services/DealServices";
 import "./DealItem.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import {bindActionCreators} from 'redux';
 import { connect } from "react-redux";
-import { _loadDealItem, handleCustomizingSize, handleCustomizingColor, handleFullNameInput, handleAddressInput, handleCityInput, handleZipcodeInput, handleShippingStateInput, handleSelectedCrypto } from "../../../actions/dealItemActions";
+import {
+  _loadDealItem,
+  handleCustomizingSize,
+  handleCustomizingColor,
+  handleFullNameInput,
+  handleAddressInput,
+  handleCityInput,
+  handleZipcodeInput,
+  handleShippingStateInput,
+  handleSelectedCrypto } from "../../../actions/dealItemActions";
+import { _fetchTransactionInfo } from "../../../actions/paymentActions";
 import { Carousel } from "react-responsive-carousel";
 import StepZilla from "react-stepzilla";
 import CustomizeOrder from "../CustomizeOrder";
@@ -17,9 +26,6 @@ class DealItem extends Component {
     super();
 
     this.state = {
-      transactionInfo: null,
-      paidIn: null,
-      purchasing: false,
       loading: false
     };
   }
@@ -67,33 +73,37 @@ class DealItem extends Component {
 
   }
 
-  createPaymentHandler = (event, dealItem) => {
+  createPaymentHandler = (event) => {
     event.preventDefault();
+    const { dealItem, selectedOption } = this.props;
     //info needed to insert into user_purchases table
     //deal_id, crypto_name, amount, and user_id
     let deal_id = dealItem.deal_id;
     let amount = dealItem.pay_in_crypto;
     // let user_id = '4' //hardcoded user_id for now. Need to grab user_id dynamically
-    let crypto_symbol = this.state.selectedOption.value;
-    let crypto_name = this.state.selectedOption.name;
+    let crypto_symbol = selectedOption.value;
+    let crypto_name = selectedOption.name;
     let token = localStorage.getItem('token');
 
-    this.setState({loading: true}, () => {
-      return _fetchTransactionInfo(crypto_name, crypto_symbol, deal_id, amount, token)
-      .then(transactionInfo => {
-        this.setState(
-          { loading: false,
-            transactionInfo,
-            paidIn: crypto_symbol,
-            purchasing: true
-          });
-      });
-    })
+    this.props._fetchTransactionInfo(crypto_name, crypto_symbol, deal_id, amount, token);
   };
 
   render() {
 
-    const { error, loading, dealItem, acceptedCryptos, selectedSize, selectedColor, fullName, shippingAddress, shippingCity, zipcode, shippingState, selectedOption} = this.props;
+    const { error,
+            loading,
+            dealItem,
+            acceptedCryptos,
+            selectedSize,
+            selectedColor,
+            fullName,
+            shippingAddress,
+            shippingCity,
+            zipcode,
+            shippingState,
+            selectedOption,
+            paymentInfo,
+            createPaymentButtonClicked} = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -122,10 +132,11 @@ class DealItem extends Component {
         selectCrypto={this.props.handleSelectedCrypto}
 
         SubmitPayment={this.createPaymentHandler}
-        transactionInfo={this.state.transactionInfo}
-        cryptoSymbol={this.state.paidIn}
-        paymentButtonClicked={this.state.purchasing}
-        showLoadingSpinner={this.state.loading}
+        transactionInfo={paymentInfo}
+        cryptoSymbol={selectedOption && selectedOption.value}
+        paymentButtonClicked={createPaymentButtonClicked}
+
+        showLoadingSpinner={loading}
         timeout={this.state.transactionInfo && this.convertSecondToMinute(this.state.transactionInfo.timeout)}/> }
     ];
 
@@ -213,12 +224,24 @@ const mapStateToProps = state => ({
   zipcode: state.DealItem.zipcode,
   shippingState: state.DealItem.shippingState,
   selectedOption: state.DealItem.selectedOption,
+  paymentInfo: state.TransactionInfo.transactionInfo,
+  createPaymentButtonClicked: state.TransactionInfo.createPaymentButtonClicked,
   loading: state.DealItem.loading,
   error: state.DealItem.error
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({_loadDealItem, handleCustomizingSize, handleCustomizingColor, handleFullNameInput, handleAddressInput, handleCityInput, handleZipcodeInput, handleShippingStateInput, handleSelectedCrypto}, dispatch);
+  return bindActionCreators({
+    _loadDealItem,
+    _fetchTransactionInfo,
+    handleCustomizingSize,
+    handleCustomizingColor,
+    handleFullNameInput,
+    handleAddressInput,
+    handleCityInput,
+    handleZipcodeInput,
+    handleShippingStateInput,
+    handleSelectedCrypto}, dispatch);
 }
 
 export default connect(mapStateToProps, matchDispatchToProps)(DealItem);
