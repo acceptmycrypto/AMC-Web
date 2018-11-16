@@ -63,10 +63,11 @@ class SignUp extends Component {
       return <div>Loading...</div>;
     }
 
+    // console.log("This.props" , this.props);
 
-    if (localStorage.getItem('token')) {
-      this.props.history.push('/feed/deals');
-    }
+    // if (localStorage.getItem('token')) {
+    //   this.props.history.push('/feed/deals');
+    // }
     return (
       <div className="App">
         <div className="App__Aside">

@@ -20,13 +20,19 @@ import CustomizeOrder from "../CustomizeOrder";
 import ShipOrder from "../ShipOrder";
 import PurchaseOrder from "../PurchaseOrder";
 import Layout from "../../Layout";
+import { _isLoggedIn } from "../../../actions/loggedInActions";
+
 
 class DealItem extends Component {
   componentDidMount() {
     //return the param value
+    this.props._isLoggedIn(localStorage.getItem('token'));
     const { deal_name } = this.props.match.params;
     this.props._loadDealItem(deal_name);
+
   }
+
+ }
 
   //set the options to select crypto from
   //this function is needed to change the format of objects to be able to used for react select
@@ -95,7 +101,9 @@ class DealItem extends Component {
             shippingState,
             selectedOption,
             paymentInfo,
-            createPaymentButtonClicked} = this.props;
+            createPaymentButtonClicked,
+            userLoggedIn} = this.props;
+
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -103,6 +111,16 @@ class DealItem extends Component {
     if (loading) {
       return <div>Loading...</div>;
     }
+
+    
+    if (userLoggedIn) {
+      console.log("user logged in");
+      
+    }else{
+      // localStorage.removeItem('token');
+      this.props.history.push('/');
+    }
+
 
     const steps = [
       { name: "Customizing",
@@ -219,8 +237,10 @@ const mapStateToProps = state => ({
   paymentInfo: state.TransactionInfo.transactionInfo,
   createPaymentButtonClicked: state.TransactionInfo.createPaymentButtonClicked,
   loading: state.DealItem.loading,
-  error: state.DealItem.error
+  error: state.DealItem.error,
+  userLoggedIn: state.LoggedIn.userLoggedIn,
 });
+
 
 const matchDispatchToProps = dispatch =>{
   return bindActionCreators({
@@ -233,7 +253,9 @@ const matchDispatchToProps = dispatch =>{
     handleCityInput,
     handleZipcodeInput,
     handleShippingStateInput,
-    handleSelectedCrypto}, dispatch);
+    handleSelectedCrypto,
+    _isLoggedIn}, dispatch);
+
 }
 
 export default connect(mapStateToProps, matchDispatchToProps)(DealItem);
