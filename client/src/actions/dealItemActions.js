@@ -34,6 +34,13 @@ export const fetchDealItemFailure = error => ({
   payload: { error }
 });
 
+
+export const resetDealitemState = () => {
+  return {
+      type: 'LOCATION_CHANGE'
+  }
+};
+
 export const handleCustomizingSize = (event) => {
   return {
       type: 'SELECT_SIZE',

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { _loadDeals } from "../../actions/dealsActions";
+import { resetDealitemState } from "../../actions/dealItemActions";
+import {bindActionCreators} from 'redux';
 import CryptoRankings from '../CryptosRanking';
 import Layout from "../Layout"
 import './Deals.css';
@@ -9,7 +11,7 @@ import './Deals.css';
 class Deals extends Component {
 
   componentDidMount() {
-    this.props.dispatch(_loadDeals(localStorage.getItem('token')));
+    this.props._loadDeals(localStorage.getItem('token'));
   }
 
   convertToPercentage = (priceInDollar, priceInCrypto) => {
@@ -34,6 +36,8 @@ class Deals extends Component {
       return <div>Loading...</div>;
     }
 
+    //reset dealItem state when user hit deals route
+    this.props.resetDealitemState();
 
     return (
       <div>
@@ -86,5 +90,9 @@ const mapStateToProps = state => ({
   error: state.matchedDeals.error
 });
 
+const matchDispatchToProps = dispatch =>{
+  return bindActionCreators({ _loadDeals, resetDealitemState }, dispatch);
+}
 
-export default connect(mapStateToProps)(Deals);
+
+export default connect(mapStateToProps, matchDispatchToProps)(Deals);

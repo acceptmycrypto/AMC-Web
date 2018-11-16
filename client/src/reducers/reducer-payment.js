@@ -32,6 +32,9 @@ export default function paymentTransactionReducer(state = initialState, action) 
         createPaymentButtonClicked: false,
       };
 
+    case "LOCATION_CHANGE":
+      return initialState;
+
     default:
       // ALWAYS have a default case in a reducer
       return state;

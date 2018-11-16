@@ -43,6 +43,9 @@ export default function dealItemReducer(state = initialState, action) {
         acceptedCryptos: null
       };
 
+    case "LOCATION_CHANGE":
+      return initialState;
+
     case "SELECT_SIZE":
       return {
         ...state,
