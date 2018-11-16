@@ -1,14 +1,14 @@
 const initialState = {
   dealItem: null,
   acceptedCryptos: null,
-  selectedOption: {value: "BTC", label: "Bitcoin (BTC)", logo: "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png", name: "Bitcoin"},
   selectedSize: null,
   selectedColor: null,
   fullName: null,
-  address: null,
-  city: null,
+  shippingAddress: null,
+  shippingCity: null,
   zipcode: null,
   shippingState: null,
+  selectedOption: null,
   transactionInfo: null,
   paidIn: null,
   purchasing: false,
@@ -35,17 +35,64 @@ export default function dealItemReducer(state = initialState, action) {
       };
 
     case "FETCH_DEAL_ITEM_FAILURE":
-      // The request failed, but it did stop, so set loading to "false".
-      // Save the error, and we can display it somewhere
-      // Since it failed, we don't have items to display anymore, so set it empty.
-      // This is up to you and your app though: maybe you want to keep the items
-      // around! Do whatever seems right.
       return {
         ...state,
         loading: false,
         error: action.payload.error,
         dealItem: null,
         acceptedCryptos: null
+      };
+
+    case "LOCATION_CHANGE":
+      return initialState;
+
+    case "SELECT_SIZE":
+      return {
+        ...state,
+        selectedSize: action.payload
+      };
+
+    case "SELECT_COLOR":
+      return {
+        ...state,
+        selectedColor: action.payload
+      };
+
+
+    case "FULL_NAME":
+      return {
+        ...state,
+        fullName: action.payload
+      };
+
+    case "SHIPPING_ADDRESS":
+      return {
+        ...state,
+        shippingAddress: action.payload
+      };
+
+    case "SHIPPING_CITY":
+      return {
+        ...state,
+        shippingCity: action.payload
+      };
+
+    case "ZIP_CODE":
+      return {
+        ...state,
+        zipcode: action.payload
+      };
+
+    case "SHIPPING_STATE":
+      return {
+        ...state,
+        shippingState: action.payload
+      };
+
+    case "SELECT_PAYMENT":
+      return {
+        ...state,
+        selectedOption: action.payload.selectedOption
       };
 
     default:

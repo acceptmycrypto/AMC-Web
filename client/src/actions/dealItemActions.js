@@ -33,3 +33,67 @@ export const fetchDealItemFailure = error => ({
   type: "FETCH_DEAL_ITEM_FAILURE",
   payload: { error }
 });
+
+
+export const resetDealitemState = () => {
+  return {
+      type: 'LOCATION_CHANGE'
+  }
+};
+
+export const handleCustomizingSize = (event) => {
+  return {
+      type: 'SELECT_SIZE',
+      payload: event.target.value
+  }
+};
+
+export const handleCustomizingColor = (event) => {
+  return {
+      type: 'SELECT_COLOR',
+      payload: event.target.value
+  }
+};
+
+export const handleFullNameInput = (event) => {
+  return {
+      type: 'FULL_NAME',
+      payload: event.target.value
+  }
+};
+
+export const handleAddressInput = (event) => {
+  return {
+      type: 'SHIPPING_ADDRESS',
+      payload: event.target.value
+  }
+};
+
+export const handleCityInput = (event) => {
+  return {
+      type: 'SHIPPING_CITY',
+      payload: event.target.value
+  }
+};
+
+export const handleZipcodeInput = (event) => {
+  return {
+      type: 'ZIP_CODE',
+      payload: event.target.value
+  }
+};
+
+export const handleShippingStateInput = (event) => {
+  return {
+      type: 'SHIPPING_STATE',
+      payload: event.target.value
+  }
+};
+
+export const handleSelectedCrypto = (selectedOption) => {
+  return {
+      type: 'SELECT_PAYMENT',
+      payload: {selectedOption}
+  }
+};
+

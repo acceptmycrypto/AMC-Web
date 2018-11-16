@@ -55,6 +55,7 @@ const ShipOrder = props => {
           <option value="WA">Washington</option>
           <option value="ORG">Oregon</option>
         </select>
+
       </form>
     </div>
   );

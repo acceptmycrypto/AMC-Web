@@ -1,10 +1,19 @@
 import React, { Component } from "react";
-import { _fetchTransactionInfo } from "../../../services/DealServices";
 import "./DealItem.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { connect } from "react-redux";
 import {bindActionCreators} from 'redux';
-import { _loadDealItem } from "../../../actions/dealItemActions";
+import { connect } from "react-redux";
+import {
+  _loadDealItem,
+  handleCustomizingSize,
+  handleCustomizingColor,
+  handleFullNameInput,
+  handleAddressInput,
+  handleCityInput,
+  handleZipcodeInput,
+  handleShippingStateInput,
+  handleSelectedCrypto } from "../../../actions/dealItemActions";
+import { _fetchTransactionInfo } from "../../../actions/paymentActions";
 import { Carousel } from "react-responsive-carousel";
 import StepZilla from "react-stepzilla";
 import CustomizeOrder from "../CustomizeOrder";
@@ -15,38 +24,19 @@ import { _isLoggedIn } from "../../../actions/loggedInActions";
 
 
 class DealItem extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      selectedOption: {value: "BTC", label: "Bitcoin (BTC)", logo: "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png", name: "Bitcoin"},
-      selectedSize: null,
-      selectedColor: null,
-      fullName: null,
-      address: null,
-      city: null,
-      zipcode: null,
-      shippingState: null,
-      transactionInfo: null,
-      paidIn: null,
-      purchasing: false,
-      loading: false
-    };
-  }
-
   componentDidMount() {
     //return the param value
     this.props._isLoggedIn(localStorage.getItem('token'));
     const { deal_name } = this.props.match.params;
     this.props._loadDealItem(deal_name);
+
   }
 
-  handleSelectedCrypto = (selectedOption) => {
-    this.setState({ selectedOption });
-  }
+ }
 
-  //set the options to delect crypto from
-  cryptoOptions(acceptedCryptos) {
+  //set the options to select crypto from
+  //this function is needed to change the format of objects to be able to used for react select
+  handleCryptoOptions(acceptedCryptos) {
     let options = [];
     acceptedCryptos.map(crypto => {
 
@@ -81,68 +71,47 @@ class DealItem extends Component {
 
   }
 
-  handleCustomizingSize = event => {
-    this.setState({selectedSize: event.target.value})
-  }
-
-  handleCustomizingColor = event => {
-    this.setState({selectedColor: event.target.value})
-  }
-
-  handleFullNameInput= event => {
-    this.setState({fullName: event.target.value})
-  }
-
-  handleAddressInput= event => {
-    this.setState({address: event.target.value})
-  }
-
-  handleCityInput= event => {
-    this.setState({city: event.target.value})
-  }
-
-  handleZipcodeInput= event => {
-    this.setState({zipcode: event.target.value})
-  }
-
-
-  handleShippingStateInput= event => {
-    this.setState({shippingState: event.target.value})
-  }
-
   createPaymentHandler = (event) => {
     event.preventDefault();
+    const { dealItem, selectedOption } = this.props;
     //info needed to insert into user_purchases table
     //deal_id, crypto_name, amount, and user_id
-    let deal_id = this.state.dealItem.deal_id;
-    let amount = this.state.dealItem.pay_in_crypto;
+    let deal_id = dealItem.deal_id;
+    let amount = dealItem.pay_in_crypto;
     // let user_id = '4' //hardcoded user_id for now. Need to grab user_id dynamically
-    let crypto_symbol = this.state.selectedOption.value;
-    let crypto_name = this.state.selectedOption.name;
+    let crypto_symbol = selectedOption.value;
+    let crypto_name = selectedOption.name;
     let token = localStorage.getItem('token');
 
-    this.setState({loading: true}, () => {
-      return _fetchTransactionInfo(crypto_name, crypto_symbol, deal_id, amount, token)
-      .then(transactionInfo => {
-        this.setState(
-          { loading: false,
-            transactionInfo,
-            paidIn: crypto_symbol,
-            purchasing: true
-          });
-      });
-    })
+    this.props._fetchTransactionInfo(crypto_name, crypto_symbol, deal_id, amount, token);
   };
 
   render() {
 
-    const { error, loading, dealItem, acceptedCryptos, userLoggedIn } = this.props;
+    const { error,
+            loading,
+            dealItem,
+            acceptedCryptos,
+            selectedSize,
+            selectedColor,
+            fullName,
+            shippingAddress,
+            shippingCity,
+            zipcode,
+            shippingState,
+            selectedOption,
+            paymentInfo,
+            createPaymentButtonClicked,
+            userLoggedIn} = this.props;
+
+
     if (error) {
       return <div>Error! {error.message}</div>;
     }
     if (loading) {
       return <div>Loading...</div>;
     }
+
     
     if (userLoggedIn) {
       console.log("user logged in");
@@ -152,31 +121,33 @@ class DealItem extends Component {
       this.props.history.push('/');
     }
 
+
     const steps = [
       { name: "Customizing",
         component:
         <CustomizeOrder
-        handle_CustomizingSize={this.handleCustomizingSize}
-        handle_CustomizingColor={this.handleCustomizingColor}/>},
+        handle_CustomizingSize={this.props.handleCustomizingSize}
+        handle_CustomizingColor={this.props.handleCustomizingColor}/>},
       { name: "Shipping",
         component:
         <ShipOrder
-        handle_ShippingFullName={this.handleFullNameInput}
-        handle_ShippingAddress={this.handleAddressInput}
-        handle_ShippingCity={this.handleCityInput}
-        handle_ShippingZipcode={this.handleZipcodeInput}
-        handle_ShippingState={this.handleShippingStateInput}/> },
+        handle_ShippingFullName={this.props.handleFullNameInput}
+        handle_ShippingAddress={this.props.handleAddressInput}
+        handle_ShippingCity={this.props.handleCityInput}
+        handle_ShippingZipcode={this.props.handleZipcodeInput}
+        handle_ShippingState={this.props.handleShippingStateInput}/> },
       { name: "Payment", component:
         <PurchaseOrder
-        cryptos={acceptedCryptos && this.cryptoOptions(acceptedCryptos)}
-        cryptoSelected={this.state.selectedOption}
-        selectCrypto={this.handleSelectedCrypto}
+        cryptos={acceptedCryptos && this.handleCryptoOptions(acceptedCryptos)}
+        selectCrypto={this.props.handleSelectedCrypto}
+
         SubmitPayment={this.createPaymentHandler}
-        transactionInfo={this.state.transactionInfo}
-        cryptoSymbol={this.state.paidIn}
-        paymentButtonClicked={this.state.purchasing}
-        showLoadingSpinner={this.state.loading}
-        timeout={this.state.transactionInfo && this.convertSecondToMinute(this.state.transactionInfo.timeout)}/> }
+        transactionInfo={paymentInfo}
+        cryptoSymbol={selectedOption && selectedOption.value}
+        paymentButtonClicked={createPaymentButtonClicked}
+
+        showLoadingSpinner={loading}
+        timeout={paymentInfo && this.convertSecondToMinute(paymentInfo.timeout)}/> }
     ];
 
     return (
@@ -201,23 +172,23 @@ class DealItem extends Component {
               <div className="deal-item-summary">
                   <div className="customize-item-summary">
                     <strong>Customizing</strong> <br/>
-                    <small>{this.state.selectedSize}</small> <br/>
-                    <small>{this.state.selectedColor}</small> <br/>
+                    <small>{selectedSize}</small> <br/>
+                    <small>{selectedColor}</small> <br/>
                   </div>
 
                   <div className="customize-item-shipping">
                     <strong>Shipping</strong> <br/>
-                    <small>{this.state.fullName}</small> <br/>
-                    <small>{this.state.address}</small> <br/>
-                    <small>{this.state.city} </small>
-                    <small>{this.state.zipcode} </small>
-                    <small>{this.state.shippingState}</small>
+                    <small>{fullName}</small> <br/>
+                    <small>{shippingAddress}</small> <br/>
+                    <small>{shippingCity} </small>
+                    <small>{shippingState} </small>
+                    <small>{zipcode}</small>
                   </div>
 
                   <div className="customize-item-payment">
                     <div className="crypto_logo">
                       <strong>Payment</strong> <br/>
-                      <img src={this.state.selectedOption.logo} alt="cryptoLogo" />
+                      {selectedOption ?  <img src={selectedOption.logo} alt="cryptoLogo" /> : null}
                     </div>
                   </div>
               </div>
@@ -255,6 +226,16 @@ class DealItem extends Component {
 const mapStateToProps = state => ({
   dealItem: state.DealItem.dealItem,
   acceptedCryptos: state.DealItem.acceptedCryptos,
+  selectedSize: state.DealItem.selectedSize,
+  selectedColor: state.DealItem.selectedColor,
+  fullName: state.DealItem.fullName,
+  shippingAddress: state.DealItem.shippingAddress,
+  shippingCity: state.DealItem.shippingCity,
+  zipcode: state.DealItem.zipcode,
+  shippingState: state.DealItem.shippingState,
+  selectedOption: state.DealItem.selectedOption,
+  paymentInfo: state.TransactionInfo.transactionInfo,
+  createPaymentButtonClicked: state.TransactionInfo.createPaymentButtonClicked,
   loading: state.DealItem.loading,
   error: state.DealItem.error,
   userLoggedIn: state.LoggedIn.userLoggedIn,
@@ -262,7 +243,19 @@ const mapStateToProps = state => ({
 
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({_isLoggedIn, _loadDealItem}, dispatch);
+  return bindActionCreators({
+    _loadDealItem,
+    _fetchTransactionInfo,
+    handleCustomizingSize,
+    handleCustomizingColor,
+    handleFullNameInput,
+    handleAddressInput,
+    handleCityInput,
+    handleZipcodeInput,
+    handleShippingStateInput,
+    handleSelectedCrypto,
+    _isLoggedIn}, dispatch);
+
 }
 
 export default connect(mapStateToProps, matchDispatchToProps)(DealItem);

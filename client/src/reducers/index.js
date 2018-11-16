@@ -2,6 +2,7 @@ import {combineReducers} from 'redux';
 import Deals from './reducer-deals';
 
 import DealItem from './reducer-dealItem';
+import TransactionInfo from './reducer-payment';
 import Cryptos from './reducer-cryptos';
 import UserInfo from './reducer-user-info';
 import LoggedIn from './reducer-logged-in';
@@ -20,7 +21,8 @@ const allReducers = combineReducers({
   DealItem,
   LoadCrypto,
   CryptoSelected,
-  SignInModal
+  SignInModal,
+  TransactionInfo
 });
 
 export default allReducers;

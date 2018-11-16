@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import {bindActionCreators} from 'redux';
 import { _loadDeals } from "../../actions/dealsActions";
+import { resetDealitemState } from "../../actions/dealItemActions";
+import {bindActionCreators} from 'redux';
 import CryptoRankings from '../CryptosRanking';
 import Layout from "../Layout"
 import './Deals.css';
@@ -12,6 +14,7 @@ import { _isLoggedIn } from '../../actions/loggedInActions';
 class Deals extends Component {
 
   componentDidMount() {
+
     this.props._isLoggedIn(localStorage.getItem('token'));
     this.props._loadDeals(localStorage.getItem('token'));
   }
@@ -37,6 +40,12 @@ class Deals extends Component {
     if (loading) {
       return <div>Loading...</div>;
     }
+
+
+    //reset dealItem state when user hit deals route
+    this.props.resetDealitemState();
+
+
     if (userLoggedIn) {
       console.log("user logged in");
       
@@ -44,6 +53,7 @@ class Deals extends Component {
         this.props.history.push('/');
     }
     
+
     return (
       <div>
         <Layout/>
@@ -97,7 +107,9 @@ const mapStateToProps = state => ({
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({_isLoggedIn, _loadDeals}, dispatch);
+
+  return bindActionCreators({ _loadDeals, resetDealitemState, _isLoggedIn }, dispatch);
+
 }
 
 
