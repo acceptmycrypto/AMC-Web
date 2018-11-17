@@ -16,19 +16,18 @@ class ForVendor extends Component {
           <h1 className="text-uppercase mb-0 ">AcceptMyCrypto</h1>
           <hr className="star-light"></hr>
           <h2 className="font-weight-light mb-0">
-            <ul className="">
-              <br></br>
-              <li><i className="homepage-icons fas fa-dollar-sign"></i>
-                Grab Deals for Purchase with Cryptocurrency
+            <ul className="text-uppercase font-weight-light">
+              <li><i className="homepage-icons fab fa-bitcoin"></i>
+                Accept Cryptocurrencies You Support
                 </li>
               <br></br>
 
-              <li><i className="homepage-icons fa fa-user" aria-hidden="true"></i>
-                Find Friends with Matching Currencies
+              <li><i className="homepage-icons fas fa-store" aria-hidden="true"></i>
+                Get access to new buyers in the crypto market
               </li>
               <br></br>
-              <li><i className="homepage-icons fa fa-users" aria-hidden="true"></i>
-                Engage with Your Crypto Community
+              <li><i className="homepage-icons fas fa-tag" aria-hidden="true"></i>
+              Raise your brand awareness through promotional deal program
               </li>
             </ul>
           </h2>
@@ -41,14 +40,14 @@ class ForVendor extends Component {
               activeClassName="PageSwitcher__Item--Active"
               className="PageSwitcher__Item"
             >
-              ForUser
+              For User
             </NavLink>
             <NavLink
               to="/vendor"
               activeClassName="PageSwitcher__Item--Active"
               className="PageSwitcher__Item"
             >
-              ForVendor
+              For Vendor
             </NavLink>
           </div>
         </div>
