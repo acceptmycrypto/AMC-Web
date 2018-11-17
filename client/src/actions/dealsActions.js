@@ -10,7 +10,7 @@ export function _loadDeals(token) {
 
   return dispatch => {
     dispatch(fetchDealsBegin());
-    return fetch("http://localhost:3001/api/deals", settings)
+    return fetch("/api/deals", settings)
       .then(res => res.json())
       .then(jsonDeals => {
         dispatch(fetchDealsSuccess(jsonDeals));

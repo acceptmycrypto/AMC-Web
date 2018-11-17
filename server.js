@@ -148,7 +148,7 @@ async.map(
   function(err, results) {
     // all requests have been made
     if (err) {
-      // console.log(err);
+      console.log(err);
     } else {
       var coin_info = results[0].data;
       var coin_metadata = results[1].data;
@@ -167,7 +167,7 @@ async.map(
           },
           function(err, res) {
             if (err) {
-              // console.log(err);
+              console.log("170: " + err);
             }
           }
         );

@@ -89,7 +89,7 @@ router.post('/register', function(req, res) {
                     );
 
                     //use sendgrid to send email
-                    let link = "https://amc-web.herokuapp.com/email-verify/" + userID + "/" + result[0].email_verification_token;
+                    let link = process.env.BACKEND_URL+"/email-verify/" + userID + "/" + result[0].email_verification_token;
 
                     const email_verification = {
                       to: req.body.email,
