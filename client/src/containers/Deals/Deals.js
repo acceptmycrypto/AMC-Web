@@ -1,15 +1,21 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import {bindActionCreators} from 'redux';
 import { _loadDeals } from "../../actions/dealsActions";
+import { resetDealitemState } from "../../actions/dealItemActions";
 import CryptoRankings from '../CryptosRanking';
 import Layout from "../Layout"
 import './Deals.css';
+import { _isLoggedIn } from '../../actions/loggedInActions';
+
 
 class Deals extends Component {
 
   componentDidMount() {
-    this.props.dispatch(_loadDeals(localStorage.getItem('token')));
+
+    this.props._isLoggedIn(localStorage.getItem('token'));
+    this.props._loadDeals(localStorage.getItem('token'));
   }
 
   convertToPercentage = (priceInDollar, priceInCrypto) => {
@@ -24,7 +30,7 @@ class Deals extends Component {
   }
 
   render() {
-    const { error, loading, deals } = this.props;
+    const { error, loading, deals, userLoggedIn } = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -35,6 +41,18 @@ class Deals extends Component {
     }
 
 
+    //reset dealItem state when user hit deals route
+    this.props.resetDealitemState();
+
+
+    if (userLoggedIn) {
+      console.log("user logged in");
+      
+    }else{
+        this.props.history.push('/');
+    }
+    
+
     return (
       <div>
         <Layout/>
@@ -42,7 +60,7 @@ class Deals extends Component {
           <CryptoRankings />
 
           <div id="right" className="grid">
-            {deals !== undefined && deals.map(deal => (
+            {deals != undefined && deals.length > 0 && deals.map(deal => (
               <div key={deal.id} className="deal">
                 <Link to={`/feed/deals/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
 
@@ -83,8 +101,15 @@ class Deals extends Component {
 const mapStateToProps = state => ({
   deals: state.matchedDeals.deals,
   loading: state.matchedDeals.loading,
-  error: state.matchedDeals.error
+  error: state.matchedDeals.error,
+  userLoggedIn: state.LoggedIn.userLoggedIn,
 });
 
+const matchDispatchToProps = dispatch =>{
 
-export default connect(mapStateToProps)(Deals);
+  return bindActionCreators({ _loadDeals, resetDealitemState, _isLoggedIn }, dispatch);
+
+}
+
+
+export default connect(mapStateToProps, matchDispatchToProps)(Deals);

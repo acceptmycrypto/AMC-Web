@@ -10,7 +10,7 @@
     background-color: #66DAC7;
     padding-top: 75px;
     padding-bottom: 75px;
-   
+
   }
 
   .App__Form {
@@ -146,8 +146,8 @@
     padding-bottom: 2px;
     margin-left: 5px;
   }
-  
-  .Modal{
+
+  .login_modal{
     text-align: center;
     width: 600px;
     height: 250px;
@@ -159,12 +159,13 @@
     color: white;
     position: fixed;
   }
-  p{
+
+  .login_modal p{
     text-align: center;
     padding-top: 30px;
     font-size: .6em;
   }
-  .a-link{
+  .login_modal .a-link{
     color: white;
     font-size: 20px;
     margin-left: 90%;

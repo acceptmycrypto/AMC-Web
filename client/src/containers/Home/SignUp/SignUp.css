@@ -197,8 +197,8 @@ ul {
   font-weight: 500;
 }
 
-h1,
-h2 {
+.App__Aside h1,
+.App__Aside h2 {
   color: #616e7f;
   text-align: center;
   font-weight: 700;
@@ -236,7 +236,7 @@ hr.star-light {
     background-color: #66DAC7;
   }
 
-  .homepage-icons {
+  .App__Aside .homepage-icons {
     color: #445366;
     padding: 10px;
   }

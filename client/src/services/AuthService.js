@@ -1,5 +1,5 @@
 export const _signUp = (username, email, password, cryptoProfile) => {
-	return fetch("/register/", {
+	return fetch("/register", {
 	    method: 'POST',
 	    headers: {
 	      'Accept': 'application/json',
@@ -10,7 +10,7 @@ export const _signUp = (username, email, password, cryptoProfile) => {
 }
 
 export const _login = (email, password) => {
-	return fetch("/signin/", {
+	return fetch("/signin", {
 	    method: 'POST',
 	    headers: {
 	      'Accept': 'application/json',

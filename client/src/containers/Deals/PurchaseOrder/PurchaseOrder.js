@@ -12,7 +12,7 @@ const PurchaseOrder = props => {
         <label className="text-capitalize" htmlFor="select_crypto">Select the Cryptocurrency to pay with</label>
         <Select
         id="select_crypto"
-        defaultValue={props.cryptoSelected}
+        required
         onChange={props.selectCrypto}
         options={props.cryptos}
       />
