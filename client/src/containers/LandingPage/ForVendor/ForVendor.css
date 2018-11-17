@@ -56,6 +56,11 @@ body {
     text-decoration: none;
   }
 
+  .PageSwitcher__Item:hover {
+    text-decoration: none;
+    color: white;
+  }
+
   .PageSwitcher__Item--Active {
     background-color: #5ED0C0;
     color: white;
