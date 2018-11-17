@@ -181,8 +181,8 @@ class SignUp extends Component {
                     type="checkbox"
                     name="hasAgreed"
                     required
-                    value={this.state.hasAgreed}
-                    onChange={this.handleChange}
+                    // value={this.state.hasAgreed}
+                    // onChange={this.handleChange}
                   />
                   I agree all statements in
                   <a href="#" className="FormField__TermsLink">
@@ -200,13 +200,13 @@ class SignUp extends Component {
                 </Link>
               </div>
 
-              <Modal visible={this.state.visible} effect="fadeInLeft" onClickAway={() => this.closeModal()}>
+              {/* <Modal visible={visible} effect="fadeInLeft" onClickAway={() => this.closeModal()}>
                 <div className="Modal">
                   <h4>You have successfully registered! </h4>
                   <h4>Please check your Email and follow the instructions for Email verification.</h4>
                   <a className="a-link" href="javascript:void(0);" onClick={() => this.closeModal()}>Ok</a>
                 </div>
-              </Modal>
+              </Modal> */}
 
             </form>
           </div>
