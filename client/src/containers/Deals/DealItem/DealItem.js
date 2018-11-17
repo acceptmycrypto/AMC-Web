@@ -32,11 +32,11 @@ class DealItem extends Component {
 
   }
 
- }
+ 
 
   //set the options to select crypto from
   //this function is needed to change the format of objects to be able to used for react select
-  handleCryptoOptions(acceptedCryptos) {
+  handleCryptoOptions = (acceptedCryptos) => {
     let options = [];
     acceptedCryptos.map(crypto => {
 
@@ -49,7 +49,7 @@ class DealItem extends Component {
       options.push(optionObj);
     })
 
-    return options
+    return options;
   }
 
   convertToPercentage = (priceInDollar, priceInCrypto) => {
@@ -84,7 +84,7 @@ class DealItem extends Component {
     let token = localStorage.getItem('token');
 
     this.props._fetchTransactionInfo(crypto_name, crypto_symbol, deal_id, amount, token);
-  };
+  }
 
   render() {
 
@@ -222,6 +222,7 @@ class DealItem extends Component {
     );
   }
 }
+
 
 const mapStateToProps = state => ({
   dealItem: state.DealItem.dealItem,
