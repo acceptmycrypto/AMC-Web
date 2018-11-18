@@ -92,18 +92,8 @@ body {
   }
 
   .vendor-list-feaures i {
-    /* margin-right: 10px;
-    margin-top: 3px; */
     margin: 3px 10px 0 0;
   }
-
-  /* #how-it-work ol {
-    line-height: 3;
-  }
-
-  #how-it-work li i {
-    margin-right: 10px;
-  } */
 
   .getListed_input {
     width: 100%;
@@ -131,38 +121,8 @@ body {
     text-transform: uppercase;
     float: right;
     cursor: pointer;
+    margin-left: 50px;
   }
-
-
-  /* How it works */
-
-  /* .FormField {
-    margin-bottom: 40px;
-    color: teal;
-  }
-
-  .FormField__Label {
-    display: block;
-    text-transform: uppercase;
-    font-size: .9em;
-    color: white;
-  }
-  .FormField__Input {
-    width: 85%;
-    background-color: transparent;
-    border: none;
-    color: white;
-    outline: none;
-    border-bottom: 1px solid #445366;
-    font-size: 1em;
-    font-weight: 300;
-    padding-bottom: 10px;
-    margin-top: 10px;
-  }
-
-  .FormField__Input::placeholder {
-    color: #616E7F;
-  } */
 
 /* Left Panel */
 .crypto-img {
@@ -224,4 +184,3 @@ hr.star-light {
     padding: 10px;
     font-size: 25px;
   }
-

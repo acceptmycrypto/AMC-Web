@@ -7,6 +7,11 @@ import { connect } from "react-redux";
 
 class ForVendor extends Component {
 
+  handleGetListed = (event) => {
+    event.preventDefault();
+    document.getElementById("vendor_email").value = "";
+  }
+
 
   render() {
     return (
@@ -73,7 +78,7 @@ class ForVendor extends Component {
               </div>
             </div>
 
-            <form>
+            <form onSubmit={this.handleGetListed()}>
               <input
                   type="email"
                   id="vendor_email"
@@ -85,7 +90,11 @@ class ForVendor extends Component {
                 <button className="getListed_button mr-10">
                   Get Listed
                 </button>
-              </form>
+            </form>
+
+            <div>
+              Thank you for your interest, one of our team members will get in touch with you.
+            </div>
 
           </div>
         </div>
@@ -95,6 +104,7 @@ class ForVendor extends Component {
 }
 
 const mapStateToProps = state => ({
+
 });
 
 const matchDispatchToProps = dispatch =>{
