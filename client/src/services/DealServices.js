@@ -8,14 +8,14 @@ export async function _loadDeals(token) {
     body: JSON.stringify({token})
   };
 
-  const dealsList = await fetch("http://localhost:3001/api/deals", settings);
+  const dealsList = await fetch("/api/deals", settings);
   const deals = await dealsList.json();
 
   return {deals}
 }
 
 export async function _loadDealItem (deal_name) {
-  const dealItemArr = await fetch(`http://localhost:3001/api/deals/${deal_name}`);
+  const dealItemArr = await fetch(`/api/deals/${deal_name}`);
   const dealItem = await dealItemArr.json();
 
   return dealItem
@@ -23,7 +23,7 @@ export async function _loadDealItem (deal_name) {
 
 export async function _fetchTransactionInfo (crypto_name, crypto_symbol, deal_id, amount, token) {
 
-	return fetch('http://localhost:3001/checkout', {
+	return fetch('/checkout', {
 	    method: 'POST',
 	    headers: {
 	      'Accept': 'application/json',

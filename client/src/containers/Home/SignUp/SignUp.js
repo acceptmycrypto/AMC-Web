@@ -9,10 +9,12 @@ import { _loadCryptocurrencies } from "../../../actions/loadCryptoActions";
 import { handleDropdownChange } from "../../../actions/signUpActions";
 
 
+import Modal from 'react-awesome-modal';
+
 class SignUp extends Component {
   constructor() {
     super();
-
+    
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -36,6 +38,8 @@ class SignUp extends Component {
     console.log("crypto to submit:", cryptoProfile);
     let hasAgreed = e.target.children[4].children[0].children[0].checked;
 
+    
+
     //we add validation on the front end so that user has to enter in the required field before clicking submit
     //TODO
     if (!username || !email || !password) {
@@ -43,6 +47,7 @@ class SignUp extends Component {
     } else {
       return _signUp(username, email, password, cryptoProfile).then(res => {
         console.log("message sent from server if success: ", res);
+        this.openModal();
         //TODO
         //prompt users to check their email
       });
@@ -175,6 +180,9 @@ class SignUp extends Component {
                     className="FormField__Checkbox"
                     type="checkbox"
                     name="hasAgreed"
+                    required
+                    // value={this.state.hasAgreed}
+                    // onChange={this.handleChange}
                   />
                   I agree all statements in
                   <a href="#" className="FormField__TermsLink">
@@ -191,6 +199,15 @@ class SignUp extends Component {
                   I'm already member
                 </Link>
               </div>
+
+              {/* <Modal visible={visible} effect="fadeInLeft" onClickAway={() => this.closeModal()}>
+                <div className="Modal">
+                  <h4>You have successfully registered! </h4>
+                  <h4>Please check your Email and follow the instructions for Email verification.</h4>
+                  <a className="a-link" href="javascript:void(0);" onClick={() => this.closeModal()}>Ok</a>
+                </div>
+              </Modal> */}
+
             </form>
           </div>
         </div>

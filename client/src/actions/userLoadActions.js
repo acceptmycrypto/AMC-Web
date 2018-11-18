@@ -12,9 +12,9 @@ export function _loadProfile (token) {
     return dispatch  => {
         dispatch(fetchUserBegin());
         return Promise.all([
-            fetch("http://localhost:3001/profile", Usersettings),
-            fetch("http://localhost:3001/profile/crypto", Usersettings),
-            fetch("http://localhost:3001/profile/user/transactions", Usersettings)
+            fetch("/profile", Usersettings),
+            fetch("/profile/crypto", Usersettings),
+            fetch("/profile/user/transactions", Usersettings)
           ])
             .then(([res1, res2, res3]) => Promise.all([res1.json(), res2.json(), res3.json()]))
             .then(([user_info, user_crypto, transactions]) => {

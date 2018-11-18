@@ -10,7 +10,7 @@ export function _isLoggedIn(token) {
 
   return dispatch => {
     dispatch(fetchUserBegin());
-    return fetch("http://localhost:3001/loggedIn", settingsLoggedIn)
+    return fetch("/loggedIn", settingsLoggedIn)
       .then(res => res.json())
       .then(jsonLogin => {
         dispatch(fetchUserSuccess(jsonLogin));
