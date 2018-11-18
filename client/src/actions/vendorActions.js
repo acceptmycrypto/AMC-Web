@@ -11,13 +11,8 @@ export function submitVendor(vendor_email) {
   return dispatch => {
     dispatch(submitVendorBegin());
     return fetch("http://localhost:3001/vendor/subscription", settings)
-      .then(res => {
-        debugger
-        res.json();
-      })
+      .then(res => res.json())
       .then(jsonMsg => {
-        console.log("jsonMsg", jsonMsg.message);
-        debugger
         dispatch(submitVendorSuccess(jsonMsg.message));
         return jsonMsg.message;
       })

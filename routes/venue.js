@@ -51,8 +51,6 @@ router.post('/vendor/subscription', function(req, res) {
           message: "Thank you for your interest, one of our team members will get in touch with you."
         });
       }
-      console.log("response", result)
-      // res.send("Thank you for your interest, one of our team members will get in touch with you.");
     }
   );
 });

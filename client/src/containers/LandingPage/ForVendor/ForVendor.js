@@ -30,8 +30,6 @@ class ForVendor extends Component {
       return <div>Loading...</div>;
     }
 
-
-    console.log(this.props);
     return (
       <div className="App">
         <div className="App__Aside">
