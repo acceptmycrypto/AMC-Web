@@ -61,6 +61,7 @@ CREATE TABLE cryptos_venues (
 	FOREIGN KEY (venue_id) REFERENCES venues(id)
 );
 
+-- This table is created for project 1
 CREATE TABLE userInput (
 	id INT NOT NULL AUTO_INCREMENT,
 	user_email VARCHAR(255) NOT NULL UNIQUE,
@@ -70,6 +71,7 @@ CREATE TABLE userInput (
 	PRIMARY KEY (id)
 );
 
+-- This table is created for project 1
 CREATE TABLE userQueries (
 	id INT NOT NULL AUTO_INCREMENT,
 	email VARCHAR(255) NOT NULL UNIQUE,

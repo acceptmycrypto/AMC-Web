@@ -36,8 +36,6 @@ class ForUser extends Component {
           </div>
         </div>
       </div>
-
-
     );
   }
 }

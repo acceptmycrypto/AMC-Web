@@ -27,11 +27,12 @@ class ForVendor extends Component {
               </li>
               <br></br>
               <li><i className="homepage-icons fas fa-tag" aria-hidden="true"></i>
-              Raise your brand awareness through promotional deal program
+              Raise your brand awareness through promotional deals
               </li>
             </ul>
           </h2>
         </div>
+
         <div className="App__Form">
           <div className="PageSwitcher">
             <NavLink
@@ -49,6 +50,43 @@ class ForVendor extends Component {
             >
               For Vendor
             </NavLink>
+          </div>
+
+          <div className="lp-vendor">
+            <div id="how-it-work">
+              <h5>
+                How it works
+              </h5>
+              <div>
+                <div className="vendor-list-feaures">
+                  <i class="fas fa-star"></i>
+                  <p>List a discount item or service for purchase with cryptocurrencies</p>
+                </div>
+                <div className="vendor-list-feaures">
+                  <i class="fas fa-star"></i>
+                  <p>Select your choices of cryptos to be accepted</p>
+                </div>
+                <div className="vendor-list-feaures">
+                  <i class="fas fa-star"></i>
+                  <p>Receive payment in cryptos or USD</p>
+                </div>
+              </div>
+            </div>
+
+            <form>
+              <input
+                  type="email"
+                  id="vendor_email"
+                  className="getListed_input"
+                  placeholder="Enter your email"
+                  name="email"
+                  required
+                />
+                <button className="getListed_button mr-10">
+                  Get Listed
+                </button>
+              </form>
+
           </div>
         </div>
       </div>
