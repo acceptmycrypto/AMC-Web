@@ -10,7 +10,7 @@ export function _loadPhoto(token) {
 
   return dispatch => {
     dispatch(fetchPhotoBegin());
-    return fetch("http://localhost:3001/navbar/photo", settingsPhoto)
+    return fetch("/navbar/photo", settingsPhoto)
       .then(res => res.json())
       .then(jsonPhoto => {
         dispatch(fetchPhotoSuccess(jsonPhoto));

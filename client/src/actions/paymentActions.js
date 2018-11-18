@@ -10,7 +10,7 @@ export function _fetchTransactionInfo(crypto_name, crypto_symbol, deal_id, amoun
 
   return dispatch => {
     dispatch(createTransactionBegin());
-    return fetch("http://localhost:3001/checkout", settings)
+    return fetch("/checkout", settings)
       .then(res => res.json())
       .then(jsonTransaction => {
         dispatch(createTransactionSuccess(jsonTransaction));

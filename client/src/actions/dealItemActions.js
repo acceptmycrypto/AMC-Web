@@ -9,7 +9,7 @@ export function _loadDealItem(deal_name) {
 
   return dispatch => {
     dispatch(fetchDealItemBegin());
-    return fetch(`http://localhost:3001/api/deals/${deal_name}`, settings)
+    return fetch(`/api/deals/${deal_name}`, settings)
       .then(res => res.json())
       .then(jsonPhoto => {
         dispatch(fetchDealItemSuccess(jsonPhoto));

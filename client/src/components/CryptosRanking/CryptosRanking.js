@@ -11,7 +11,7 @@ class CryptosRankings extends Component {
   }
 
   async componentDidMount() {
-    const cryptosList = await fetch("http://localhost:3001/api/cryptosranking");
+    const cryptosList = await fetch("/api/cryptosranking");
     const cryptosRanking = await cryptosList.json();
 
     this.setState({ cryptosRanking });
