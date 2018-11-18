@@ -4,16 +4,34 @@ import './ForVendor.css';
 import { BrowserRouter as Router, Route, Link, NavLink } from 'react-router-dom';
 import {bindActionCreators} from 'redux';
 import { connect } from "react-redux";
+import { submitVendor } from "../../../actions/vendorActions";
 
 class ForVendor extends Component {
 
   handleGetListed = (event) => {
     event.preventDefault();
+
+    let vendor_email = document.getElementById('vendor_email').value;
+    this.props.submitVendor(vendor_email);
+
     document.getElementById("vendor_email").value = "";
   }
 
 
   render() {
+
+    const { error, loading, message } = this.props;
+
+    if (error) {
+      return <div>Error! {error.message}</div>;
+    }
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+
+
+    console.log(this.props);
     return (
       <div className="App">
         <div className="App__Aside">
@@ -64,21 +82,21 @@ class ForVendor extends Component {
               </h5>
               <div>
                 <div className="vendor-list-feaures">
-                  <i class="fas fa-star"></i>
+                  <i className="fas fa-star"></i>
                   <p>List a discount item or service for purchase with cryptocurrencies</p>
                 </div>
                 <div className="vendor-list-feaures">
-                  <i class="fas fa-star"></i>
+                  <i className="fas fa-star"></i>
                   <p>Select your choices of cryptos to be accepted</p>
                 </div>
                 <div className="vendor-list-feaures">
-                  <i class="fas fa-star"></i>
+                  <i className="fas fa-star"></i>
                   <p>Receive payment in cryptos or USD</p>
                 </div>
               </div>
             </div>
 
-            <form onSubmit={this.handleGetListed()}>
+            <form onSubmit={this.handleGetListed}>
               <input
                   type="email"
                   id="vendor_email"
@@ -92,9 +110,7 @@ class ForVendor extends Component {
                 </button>
             </form>
 
-            <div>
-              Thank you for your interest, one of our team members will get in touch with you.
-            </div>
+            <div>{message}</div>
 
           </div>
         </div>
@@ -104,11 +120,13 @@ class ForVendor extends Component {
 }
 
 const mapStateToProps = state => ({
-
+  message: state.Vendor.subscriptionMessage,
+  loading: state.matchedDeals.loading,
+  error: state.matchedDeals.error
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({}, dispatch);
+  return bindActionCreators({submitVendor}, dispatch);
 }
 
 

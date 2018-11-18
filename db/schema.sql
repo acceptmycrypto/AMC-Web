@@ -62,12 +62,9 @@ CREATE TABLE cryptos_venues (
 );
 
 -- This table is created for project 1
-CREATE TABLE userInput (
+CREATE TABLE vendor_subscription (
 	id INT NOT NULL AUTO_INCREMENT,
-	user_email VARCHAR(255) NOT NULL UNIQUE,
-	crypto_name VARCHAR(255) NOT NULL UNIQUE,
-	venue VARCHAR(255) NOT NULL UNIQUE,
-	venue_link VARCHAR(255) NOT NULL UNIQUE,
+	vendor_email VARCHAR(255) NOT NULL UNIQUE,
 	PRIMARY KEY (id)
 );
 
