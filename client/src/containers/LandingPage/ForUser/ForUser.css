@@ -92,6 +92,13 @@
     font-size: .9em;
     color: white;
   }
+
+  .FormField__Label_landing{
+    display: block;
+    text-transform: uppercase;
+    font-size: 1em;
+    color: white;
+  }
   .FormField__Input {
     width: 85%;
     background-color: transparent;
