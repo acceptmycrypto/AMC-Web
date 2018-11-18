@@ -11,7 +11,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "node server.js",
     "client": "npm run start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "landing-dropdown": "node load-landing-crypto-dropdown.js"
   },
   "keywords": [],
   "author": "",
