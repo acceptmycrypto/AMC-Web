@@ -38,6 +38,10 @@ body {
     padding-bottom: 75px;
   }
 
+  .App__Aside .PageSwitcher {
+    display: none;
+  }
+
   .PageSwitcher {
     display: flex;
     justify-content: flex-end;
@@ -184,3 +188,31 @@ hr.star-light {
     padding: 10px;
     font-size: 25px;
   }
+
+/* media query */
+@media only screen and (max-width: 640px) {
+  .App {
+    height: 100vh;
+    display: table;
+    color: white;
+    /* this margin top is needed to offset the layout margin top so there is no gap between the nav bar and the sign up content */
+    /* margin-top: -30px; */
+  }
+
+  .App__Aside {
+    width: 100%;
+    background-color: #66DAC7;
+    padding-top: 75px;
+    padding-bottom: 75px;
+  }
+
+  .App__Form {
+    width: 100%;
+    background-color: #2E4158;
+  }
+
+  .App__Form .PageSwitcher {
+    display: none;
+  }
+
+}
