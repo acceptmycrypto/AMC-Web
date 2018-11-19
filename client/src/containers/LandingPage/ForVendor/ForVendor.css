@@ -75,47 +75,28 @@ body {
     border-bottom-right-radius: 25px;
   }
 
-  .FormCenter {
-    margin-bottom: 100px;
-  }
-
-  .FormTitle {
-    color: #707C8B;
-    font-weight: 300;
-    margin-bottom: 50px;
-  }
-
-  .FormTitle__Link {
-    color: #707C8B;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 1.7em;
-    margin: 0 10px;
-    padding-bottom: 5px;
-  }
-
-  .FormTitle__Link:first-child {
-    margin-left: 0;
-  }
-
-  .FormTitle__Link--Active {
-    color: white;
-    border-bottom: 1px solid #199087;
-  }
-
-  .FormField {
-    margin-bottom: 40px;
-    color: teal;
-  }
-
-  .FormField__Label {
+  #how-it-work {
     display: block;
     text-transform: uppercase;
-    font-size: .9em;
+    font-size: 1em;
     color: white;
   }
-  .FormField__Input {
-    width: 85%;
+
+  #how-it-work h5 {
+    margin-bottom: 20px;
+  }
+
+  .vendor-list-feaures {
+    display: flex;
+    margin-bottom: 15px;
+  }
+
+  .vendor-list-feaures i {
+    margin: 3px 10px 0 0;
+  }
+
+  .getListed_input {
+    width: 100%;
     background-color: transparent;
     border: none;
     color: white;
@@ -124,75 +105,26 @@ body {
     font-size: 1em;
     font-weight: 300;
     padding-bottom: 10px;
-    margin-top: 10px;
+    margin-top: 30px;
+    margin-bottom: 20px;
   }
 
-  .FormField__Input::placeholder {
-    color: #616E7F;
-  }
-
-  .FormField__Button {
+  .getListed_button {
     background-color: #52C4B9;
     color: white;
     border: none;
     outline: none;
-    border-radius: 25px;
-    padding: 15px 70px;
+    border-radius: 100px;
+    padding: 10px 30px;
     font-size: 1em;
     font-weight: 500;
-  }
-
-  .FormField__Link {
-    color: #66707D;
-    text-decoration: none;
-    display: inline-block;
-    border-bottom: 1.5px solid #225E62;
-    padding-bottom: 5px;
-  }
-
-  .FormField__CheckboxLabel {
-    color: #646F7D;
-    font-size: .9em;
-  }
-
-  .FormField__Checkbox {
-    position: relative;
-    top: 1.5px;
-  }
-
-  .FormField__TermsLink {
-    color: white;
-    border-bottom: 1px solid #199087;
-    text-decoration: none;
-    display: inline-block;
-    padding-bottom: 2px;
-    margin-left: 5px;
-  }
-
-  /* .Modal{
-    text-align: center;
-    width: 600px;
-    height: 250px;
-    background-color: #2E4158;
-    border: solid #199087 .5em;
-    padding: 50px 70px;
-    display: block;
     text-transform: uppercase;
-    color: white;
-    position: fixed;
+    float: right;
+    cursor: pointer;
+    margin-left: 50px;
   }
-  p{
-    text-align: center;
-    padding-top: 30px;
-    font-size: .6em;
-  }
-  .a-link{
-    color: white;
-    font-size: 20px;
-    margin-left: 90%;
-  } */
 
-
+/* Left Panel */
 .crypto-img {
   width: 150px;
 }
@@ -252,4 +184,3 @@ hr.star-light {
     padding: 10px;
     font-size: 25px;
   }
-

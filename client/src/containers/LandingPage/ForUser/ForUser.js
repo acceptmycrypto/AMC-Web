@@ -20,7 +20,7 @@ class ForUser extends Component {
               </li>
               <br/>
               <li><i className="homepage-icons fas fa-dollar-sign" aria-hidden="true"></i>
-                Find Deals from a variety of matching Vendors
+                Find Deals for purchase with Cryptocurrencies
               </li>
               <br/>
               <li><i className="homepage-icons fas fa-chart-area" aria-hidden="true"></i>
@@ -36,8 +36,6 @@ class ForUser extends Component {
           </div>
         </div>
       </div>
-
-
     );
   }
 }
