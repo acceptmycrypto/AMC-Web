@@ -61,28 +61,12 @@ CREATE TABLE cryptos_venues (
 	FOREIGN KEY (venue_id) REFERENCES venues(id)
 );
 
--- This table is created for project 1
-CREATE TABLE vendor_subscription (
-	id INT NOT NULL AUTO_INCREMENT,
-	vendor_email VARCHAR(255) NOT NULL UNIQUE,
-	PRIMARY KEY (id)
-);
-
--- This table is created for project 1
-CREATE TABLE userQueries (
-	id INT NOT NULL AUTO_INCREMENT,
-	email VARCHAR(255) NOT NULL UNIQUE,
-	message VARCHAR(255) NOT NULL,
-	PRIMARY KEY (id)
-);
-
 CREATE TABLE admin_users (
 	id INT NOT NULL AUTO_INCREMENT,
 	email VARCHAR(255) UNIQUE,
 	password VARCHAR(255) NOT NULL UNIQUE,
 	PRIMARY KEY (id)
 );
-
 
 CREATE TABLE users(
 	id INT NOT NULL AUTO_INCREMENT,

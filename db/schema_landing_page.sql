@@ -1,0 +1,5 @@
+CREATE TABLE vendor_subscription (
+	id INT NOT NULL AUTO_INCREMENT,
+	vendor_email VARCHAR(255) NOT NULL UNIQUE,
+	PRIMARY KEY (id)
+);

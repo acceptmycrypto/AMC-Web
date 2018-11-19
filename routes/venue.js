@@ -45,10 +45,12 @@ router.post('/vendor/subscription', function(req, res) {
     req.body,
     function(error, result, fields) {
       if (error) {
-        res.send(error);
+        res.json({
+          message: "Something's wrong. Please contact our support for assistance."
+        });
       } else {
         res.json({
-          message: "Thank you for your interest, one of our team members will get in touch with you."
+          message: "Thank you for your interest. One of our team members will get in touch with you."
         });
       }
     }
