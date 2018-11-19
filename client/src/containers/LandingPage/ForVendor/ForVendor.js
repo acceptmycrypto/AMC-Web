@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import './ForVendor.css';
 // Router and Route is never being called, but at the same time must not be deleted. If deleted, it thows an error.
 import { BrowserRouter as Router, Route, Link, NavLink } from 'react-router-dom';
-import {bindActionCreators} from 'redux';
-import { connect } from "react-redux";
-import { submitVendor } from "../../../actions/vendorActions";
+import { _LandingVendorService } from "../../../services/LandingVendorService";
 
 class ForVendor extends Component {
 
@@ -12,24 +10,14 @@ class ForVendor extends Component {
     event.preventDefault();
 
     let vendor_email = document.getElementById('vendor_email').value;
-    this.props.submitVendor(vendor_email);
 
-    document.getElementById("vendor_email").value = "";
+    return _LandingVendorService(vendor_email).then(res => {
+      document.getElementById("vendor-submit-success").innerHTML = res.message;
+      document.getElementById("vendor_email").value = "";
+    });
   }
 
-
   render() {
-
-    const { error, loading, message } = this.props;
-
-    if (error) {
-      return <div>Error! {error.message}</div>;
-    }
-
-    if (loading) {
-      return <div>Loading...</div>;
-    }
-
     return (
       <div className="App">
         <div className="App__Aside">
@@ -108,7 +96,7 @@ class ForVendor extends Component {
                 </button>
             </form>
 
-            <div>{message}</div>
+            <div id="vendor-submit-success"></div>
 
           </div>
         </div>
@@ -117,17 +105,4 @@ class ForVendor extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  message: state.Vendor.subscriptionMessage,
-  loading: state.matchedDeals.loading,
-  error: state.matchedDeals.error
-});
-
-const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({submitVendor}, dispatch);
-}
-
-
-export default connect(mapStateToProps, matchDispatchToProps)(ForVendor);
-
-
+export default ForVendor;
