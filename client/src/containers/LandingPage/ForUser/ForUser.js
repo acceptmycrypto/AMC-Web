@@ -27,6 +27,11 @@ class ForUser extends Component {
     } else {
       return _addUserCryptoVotes(email, cryptoProfile).then(res => {
         console.log("message sent from server if success: ", res);
+        if(res.error == "User already exists"){
+          alert("You have already filled out this form.")
+        }
+        this.props.history.push('/results');
+    
 
       });
     }
