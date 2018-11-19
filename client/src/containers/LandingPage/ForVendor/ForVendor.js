@@ -33,26 +33,6 @@ class ForVendor extends Component {
     return (
       <div className="App">
         <div className="App__Aside">
-
-          {/* This is needed so when page is mobile we display it on top  */}
-          <div className="PageSwitcher">
-            <NavLink
-              exact
-              to="/"
-              activeClassName="PageSwitcher__Item--Active"
-              className="PageSwitcher__Item"
-            >
-              For User
-            </NavLink>
-            <NavLink
-              to="/vendor"
-              activeClassName="PageSwitcher__Item--Active"
-              className="PageSwitcher__Item"
-            >
-              For Vendor
-            </NavLink>
-          </div>
-
           <img className="crypto-img img-fluid mb-5 d-block mx-auto" src="../../../assets/images/logo.png" alt=""></img>
           <h1 className="text-uppercase mb-0 ">AcceptMyCrypto</h1>
           <hr className="star-light"></hr>
