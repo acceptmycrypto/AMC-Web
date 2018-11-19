@@ -12,7 +12,6 @@ import CryptoSelected from './reducer-sign-up';
 import SignInModal from './reducer-sign-in';
 import LandingCryptos from './reducer-landing-cryptos';
 
-
 const allReducers = combineReducers({
   matchedDeals: Deals,
   UserInfo,

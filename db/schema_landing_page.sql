@@ -1,3 +1,4 @@
+
 USE crypto_db;
 DROP TABLE landing_users_cryptos;
 DROP TABLE landing_cryptos;
@@ -25,4 +26,11 @@ CREATE TABLE landing_users_cryptos(
     PRIMARY KEY (id),
     FOREIGN KEY (landing_users_id) REFERENCES landing_users(id),
     FOREIGN KEY (landing_cryptos_id) REFERENCES landing_cryptos(id)
+  );
+
+CREATE TABLE vendor_subscription (
+	id INT NOT NULL AUTO_INCREMENT,
+	vendor_email VARCHAR(255) NOT NULL UNIQUE,
+	PRIMARY KEY (id)
+
 );
