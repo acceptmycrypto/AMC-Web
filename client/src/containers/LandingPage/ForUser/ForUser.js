@@ -20,7 +20,7 @@ class ForUser extends Component {
     e.preventDefault();
     let email = e.target.children[0].children[3].value
     let cryptoProfile = this.props.selectedCryptos;
-  
+
     if (!email || !cryptoProfile) {
       alert("Please enter in the required field!");
     } else {
@@ -32,8 +32,8 @@ class ForUser extends Component {
         }else{
           this.props.history.push('/results');
         }
-        
-    
+
+
 
       });
     }
@@ -41,7 +41,7 @@ class ForUser extends Component {
   render() {
     const { error, loading, landingCryptoOptions, selectedCryptos } = this.props;
 
-    
+
     if (error) {
       return <div>Error! {error.message}</div>;
     }
@@ -62,11 +62,11 @@ class ForUser extends Component {
               </li>
               <br />
               <li><i className="homepage-icons fas fa-dollar-sign" aria-hidden="true"></i>
-                Find Deals for purchase with Cryptocurrencies
+                Find Deals to purchase with Cryptocurrencies
               </li>
               <br />
               <li><i className="homepage-icons fas fa-chart-area" aria-hidden="true"></i>
-                Read Market Trend based on crypto purchase transactions
+                Follow Market Trends based on crypto purchase transactions
               </li>
             </ul>
           </h2>
@@ -85,8 +85,8 @@ class ForUser extends Component {
 
                 <label className="labelLanding" htmlFor="email">E-Mail Address</label>
                 <input type="email" id="email" className="getUserListed_input" placeholder="Enter your email" name="email" required />
-                
-                <label className="labelLanding py-3" htmlFor="landing_cryptos">Enter the Crypto you're interested in spending online</label>
+
+                <label className="labelLanding py-3" htmlFor="landing_cryptos">Enter the Cryptos you're interested in spending online</label>
                 <Select
                   id="landing_cryptos"
                   required
@@ -119,7 +119,7 @@ class ForUser extends Component {
 const mapStateToProps = state => ({
   landingCryptoOptions: state.LandingCryptos.landingCryptoOptions,
   loading: state.LandingCryptos.loading,
-  error: state.LandingCryptos.error, 
+  error: state.LandingCryptos.error,
   selectedCryptos: state.CryptoSelected.selectedCryptos
 
 });
