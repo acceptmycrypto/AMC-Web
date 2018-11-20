@@ -13,7 +13,7 @@ INSERT INTO deal_images (deal_id, deal_image) VALUES
 (1,"https://ak1.ostkcdn.com/images/products/9542248/Safavieh-Malone-White-Chrome-Coffee-Table-484ef737-1052-4a6b-88ce-9eb8263250dc_600.jpg"),
 (1,"https://ak1.ostkcdn.com/images/products/9542248/Safavieh-Malone-White-Chrome-Coffee-Table-a94e199e-40dd-42c9-9a08-510c6ab89575.jpg"),
 (1,"https://ak1.ostkcdn.com/images/products/9542248/Safavieh-Malone-White-Chrome-Coffee-Table-0cd25a65-34f7-45b9-ad14-eea58cd5f23e.jpg"),
-(1,"https://ak1.ostkcdn.com/images/products/20603133/Safavieh-Malone-White-Chrome-Coffee-Table-dd199e25-e046-4d02-ab4c-30aa666965ae.jpg"),
+(1,"https://ak1.ostkcdn.com/images/products/20603133/Safavieh-Malone-White-Chrome-Coffee-Table-dd199e25-e046-4d02-ab4c-30aa666965ae.jpg");
 -- (1,"https://ak1.ostkcdn.com/images/products/9542248/Safavieh-Malone-White-Chrome-Coffee-Table-75cbe2d0-913d-40a4-98ce-f05fd19a56ca.jpg"),
 -- (1,"https://ak1.ostkcdn.com/images/products/9542248/Safavieh-Malone-White-Chrome-Coffee-Table-a00e2a88-5c67-432c-a10f-761e5417f361.jpg"),
 -- (1,"https://ak1.ostkcdn.com/images/products/9542248/Safavieh-Malone-White-Chrome-Coffee-Table-f3d273fa-cf8e-4716-ae6e-c2597ec35c42.jpg");
