@@ -57,6 +57,9 @@ var signInRoutes = require('./routes/signin.js');
 var transactionsRoutes = require("./routes/transactions.js");
 var cryptosRankingRoutes = require("./routes/cryptos_ranking.js");
 var notificationRoutes = require("./routes/cryptos_ranking.js");
+var landingUsersRoutes = require("./routes/landing_users.js");
+var landingResultsRoutes = require("./routes/landing_results.js");
+
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -87,6 +90,9 @@ app.use('/', signInRoutes);
 app.use("/", transactionsRoutes);
 app.use("/", cryptosRankingRoutes);
 app.use("/", notificationRoutes);
+app.use("/", landingUsersRoutes);
+app.use("/", landingResultsRoutes);
+
 
 path.join(__dirname, "public");
 
@@ -196,7 +202,7 @@ async.map(
 );
 
 // set the view engine to ejs
-app.set("view engine", "ejs");
+// app.set("view engine", "ejs");
 
 //Heroku tells us which port our app to use. For production, we use Heroku port. For development, we use 3000
 const PORT = process.env.PORT || 3001;

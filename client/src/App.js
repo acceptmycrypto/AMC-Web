@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import { BrowserRouter as Switch, Route, Link, Redirect } from "react-router-dom";
 
-import SignUp from "./containers/Home/SignUp";
-import SignIn from "./containers/Home/SignIn";
+// import SignUp from "./containers/Home/SignUp";
+// import SignIn from "./containers/Home/SignIn";
+import ForVendor from "./containers/LandingPage/ForVendor";
+import ForUser from "./containers/LandingPage/ForUser";
+import Results from "./containers/LandingPage/Results";
 
 
 import Profile from "./containers/Profile/UserProfile";
@@ -24,8 +27,12 @@ class App extends Component {
         <Switch>
           <div>
             {/* <Layout /> */}
-              <Route exact path="/" component={SignIn} />
-              <Route exact path="/SignUp" component={SignUp} />
+              {/* <Route exact path="/" component={SignIn} />
+              <Route exact path="/SignUp" component={SignUp} /> */}
+              <Route exact path="/" component={ForUser} />
+              <Route exact path="/vendor" component={ForVendor} />
+              <Route exact path="/results" component={Results} />
+              
 
 
               <Route exact path="/profile" component={Profile} />

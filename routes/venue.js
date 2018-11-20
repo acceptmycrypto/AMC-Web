@@ -38,13 +38,21 @@ router.get('/venues', function(req, res) {
   );
 });
 
-router.post('/venues/create', function(req, res) {
+//this is for vendor subscription
+router.post('/vendor/subscription', function(req, res) {
   var query = connection.query(
-    'INSERT INTO userInput SET ?',
+    'INSERT INTO vendor_subscription SET ?',
     req.body,
-    function(err, response) {
-      req.flash('info', 'Thank you for your Submit. Once verified, we will email you the result.');
-      res.redirect('/');
+    function(error, result, fields) {
+      if (error) {
+        res.json({
+          message: "Something's wrong. Please contact our support for assistance."
+        });
+      } else {
+        res.json({
+          message: "Thank you for your interest. One of our team members will get in touch with you."
+        });
+      }
     }
   );
 });
