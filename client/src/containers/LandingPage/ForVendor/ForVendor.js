@@ -32,11 +32,11 @@ class ForVendor extends Component {
               <br></br>
 
               <li><i className="homepage-icons fas fa-store" aria-hidden="true"></i>
-                Get access to new buyers in the crypto market
+              UNCOVER NEW BUYERS POTENTIAL IN THE CRYPTO MARKET
               </li>
               <br></br>
               <li><i className="homepage-icons fas fa-tag" aria-hidden="true"></i>
-              Raise your brand awareness through promotional deals
+              Raise brand awareness through promotional deals
               </li>
             </ul>
           </h2>
