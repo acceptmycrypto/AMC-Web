@@ -55,7 +55,7 @@ class Deals extends Component {
 
     return (
       <div>
-        <Layout/>
+        <Layout>
         <div className="venues-content mb-5">
           <CryptoRankings />
 
@@ -93,6 +93,7 @@ class Deals extends Component {
           </div>
 
         </div>
+        </Layout >
       </div>
     );
   }

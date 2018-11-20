@@ -152,7 +152,7 @@ class DealItem extends Component {
 
     return (
       <div>
-        <Layout/>
+        <Layout>
         <div>
           <div className="deal-container">
             <div className="deal-header">
@@ -218,6 +218,7 @@ class DealItem extends Component {
             </div>
           </div>
         </div>
+        </Layout >
       </div>
     );
   }
