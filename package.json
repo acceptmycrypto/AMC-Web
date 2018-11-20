@@ -14,7 +14,7 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "landing-dropdown": "node load-landing-crypto-dropdown.js",
     "start": "node server.js",
-    "heroku-postbuild": "npm run landing-dropdown && cd client && npm install && npm run build"
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "keywords": [],
   "author": "",
