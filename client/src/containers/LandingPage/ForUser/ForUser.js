@@ -7,7 +7,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from "react-redux";
 import { _loadLandingDropdown } from '../../../actions/landingUserActions';
 import { handleDropdownChange } from '../../../actions/signUpActions';
-import { _addUserCryptoVotes } from '../../../services/landingUserService';
+import { _addUserCryptoVotes } from '../../../services/LandingUserService';
 
 
 
