@@ -18,8 +18,7 @@ class ForUser extends Component {
 
   handleDropdownSubmit = (e) => {
     e.preventDefault();
-
-    let email = e.target.children[0].children[1].value
+    let email = e.target.children[0].children[3].value
     let cryptoProfile = this.props.selectedCryptos;
   
     if (!email || !cryptoProfile) {
@@ -28,9 +27,12 @@ class ForUser extends Component {
       return _addUserCryptoVotes(email, cryptoProfile).then(res => {
         console.log("message sent from server if success: ", res);
         if(res.error == "User already exists"){
-          alert("You have already filled out this form.")
+          // alert("You have already filled out this form.");
+          document.getElementById("user-submit-success").innerHTML = "You have already filled out this form.";
+        }else{
+          this.props.history.push('/results');
         }
-        this.props.history.push('/results');
+        
     
 
       });
@@ -78,11 +80,13 @@ class ForUser extends Component {
             <form className="FormFields" onSubmit={this.handleDropdownSubmit}>
 
               <div className="FormField">
+                <div id="user-instructions">AcceptMyCrypto Coming Soon!</div>
+                <div className="labelLandingSubheader">Submit your vote below</div>
 
-                <label className="FormField__Label_landing" htmlFor="email">E-Mail Address:</label>
-                <input type="email" id="email" className="FormField__Input" placeholder="Enter your email" name="email" required />
+                <label className="labelLanding" htmlFor="email">E-Mail Address</label>
+                <input type="email" id="email" className="getUserListed_input" placeholder="Enter your email" name="email" required />
                 
-                <label className="FormField__Label_landing pt-3" htmlFor="landing_cryptos">Enter the Cryptocurrencies are you interested in spending online:</label>
+                <label className="labelLanding py-3" htmlFor="landing_cryptos">Enter the Crypto you're interested in spending online</label>
                 <Select
                   id="landing_cryptos"
                   required
@@ -98,11 +102,13 @@ class ForUser extends Component {
 
               <div className="FormField">
 
-                <button className="FormField__Button mr-10">Submit</button>
+                <button className="getListed_button mr-10 mt-5">Submit</button>
+
 
               </div>
 
             </form>
+            <div id="user-submit-success"></div>
           </div>
         </div>
       </div>

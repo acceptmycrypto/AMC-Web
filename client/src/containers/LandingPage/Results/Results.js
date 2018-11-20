@@ -56,7 +56,7 @@ class Results extends Component {
             <NavLink to="/" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">For User</NavLink>
             <NavLink exact to="/vendor" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">For Vendor</NavLink>
           </div>
-          <div className="FormField__Label_landing pb-3">Top Ten Cryptocurrencies Users are Interested In:</div>
+          <div className="pb-3" id="results-instructions">Top Ten Cryptocurrencies Our Users are Interested In:</div>
           <table class="table table-hover">
             <thead>
               <tr>
