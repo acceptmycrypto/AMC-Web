@@ -2,12 +2,19 @@ import React, { Component } from "react";
 import "./UserProfile.css";
 import { Link } from "react-router-dom";
 import coinAddressValidator from "coin-address-validator";
-import ProfileCard from "../ProfileCard";
-import CryptoCard from "../CryptoCard";
-import CryptoAddress from "../CryptoAddress";
-import ProfileFeed from "../ProfileFeed";
-import Layout from "../../Layout"
-import { _updateCryptoTable, _loadProfile, _verifyUser } from "../../../services/UserProfileService";
+import ProfileCard from "../../../components/Profile/ProfileCard";
+import CryptoCard from "../../../components/Profile/CryptoCard";
+import CryptoAddress from "../../../components/Profile/CryptoAddress";
+import ProfileFeed from "../../../components/Profile/ProfileFeed";
+// import Layout from "../../../components/Layout"
+import Layout from "../../Layout";
+import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+import { _updateCryptoTable, _verifyUser } from "../../../services/UserProfileService";
+import { _loadProfile } from "../../../actions/userLoadActions";
+import { _isLoggedIn } from "../../../actions/loggedInActions";
+
+
 
 
 class UserProfile extends Component {
@@ -16,14 +23,13 @@ class UserProfile extends Component {
 
     this.state = {
       crypto_view: "owned",
-      user_info: [],
-      user_crypto: [],
+      // user_info: [],
+      // user_crypto: [],
       add_address: false,
       qr: false,
       users_cryptos_id: null,
       current_crypto_name: null,
-      friends_array: [],
-      transactions: []
+      // transactions: []
     }
 
   }
@@ -173,7 +179,7 @@ class UserProfile extends Component {
     // TO DO: FIX LITECOIN VALIATION ISSUE
 
     // commented out for now because is not working
-    
+
     // coin-address-validator does not list Verge as a supported currency type to validate by currency name so will validate manually
     // if (current_crypto_name === "Verge" && crypto_address.indexOf(" ") === -1 && crypto_address[0] === "D" && crypto_address.length === 34) {
     //   validAddress = true;
@@ -181,22 +187,22 @@ class UserProfile extends Component {
     // } else if (crypto_address > 20 && coinAddressValidator.validate(crypto_address, current_crypto_name)) {
     //   // use coin-address-validator to validate the crypto address for the specific crypto selected
     //   validAddress = coinAddressValidator.validate(crypto_address, current_crypto_name)
- 
-  
+
+
     // } else {
     //   validAddress = false;
-      
+
     // }
 
     if (validAddress) {
 
       this.updateCryptoTable(crypto_address, id).then(res => {
         // update users crypto wallet address in database
-      
+
         //update state
         let { user_info, user_crypto, crypto_view, add_address } = res;
         this.setState({ user_info, user_crypto, crypto_view, add_address });
-      
+
         //set toggle button checked = false
         document.querySelector("#togBtn").checked = false;
 
@@ -217,16 +223,19 @@ class UserProfile extends Component {
 
 
   componentDidMount() {
-  
-    return _loadProfile(localStorage.getItem('token')).then(res => {
-      // console.log(res);
 
-      let { user_info, user_crypto, friends_array, transactions } = res;
-      // console.log(user_info, user_crypto, friends_array, transactions);
-     
-      this.setState({ user_info, user_crypto, friends_array, transactions });
-      
-    });
+    // return _loadProfile(localStorage.getItem('token')).then(res => {
+    //   // console.log(res);
+
+    //   let { user_info, user_crypto, friends_array, transactions } = res;
+    //   // console.log(user_info, user_crypto, friends_array, transactions);
+
+    //   this.setState({ user_info, user_crypto, friends_array, transactions });
+
+    // });
+
+    this.props._isLoggedIn(localStorage.getItem('token'));
+    this.props._loadProfile(localStorage.getItem('token'));
 
 
 
@@ -234,31 +243,52 @@ class UserProfile extends Component {
 
 
   render() {
-    console.log(this.state);
+    // console.log(this.state);
     // console.log(this.props.location.pathname);
     // console.log(this.props.match.params);
 
+    const { error, loading, user_info, user_crypto, transactions, userLoggedIn } = this.props;
+
+    
+
+    if (error) {
+      return <div>Error! {error.message}</div>;
+    }
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+
+    if (userLoggedIn) {
+      console.log("user logged in");
+      
+    }else{
+        // localStorage.removeItem('token');
+        this.props.history.push('/');
+    }
+
     return (
       <div>
-        <Layout/>
+        <Layout />
         <div className="userProfile d-flex flex-row justify-content-between">
-          <div className="d-flex flex-column width-20">
+          <div className="d-flex flex-column width-30">
+            {user_info != undefined && <ProfileCard user_info={user_info} />}
 
-            <ProfileCard user_info={this.state.user_info} />
+            {user_crypto != undefined &&
+              <CryptoCard handleToggleChange={this.handleToggleChange} handleAddressFormChange={this.handleAddressFormChange} handleQRChange={this.handleQRChange} crypto_view={this.state.crypto_view} user_crypto={user_crypto}>
 
-            <CryptoCard handleToggleChange={this.handleToggleChange} handleAddressFormChange={this.handleAddressFormChange} handleQRChange={this.handleQRChange} crypto_view={this.state.crypto_view} user_crypto={this.state.user_crypto}>
+                {this.state.add_address &&
+                  <CryptoAddress updateCryptos={this.updateCryptos} updateCryptoTable={this.updateCryptoTable} />
+                }
 
-              {this.state.add_address &&
-                <CryptoAddress updateCryptos={this.updateCryptos} updateCryptoTable={this.updateCryptoTable} />
-              }
-
-            </CryptoCard>
-
+              </CryptoCard>
+            }
 
           </div>
 
           <div className="w-100 mx-5">
-            <ProfileFeed transactions={this.state.transactions} />
+          { transactions != undefined && <ProfileFeed transactions={transactions} />}
+            
           </div>
 
           {/* <div className="width-20 mr-3">       
@@ -271,4 +301,21 @@ class UserProfile extends Component {
   }
 }
 
-export default UserProfile;
+const mapStateToProps = state => ({
+  user_info: state.UserInfo.user_info,
+  user_crypto: state.UserInfo.user_crypto,
+  transactions: state.UserInfo.transactions,
+  loading: state.UserInfo.loading,
+  error: state.UserInfo.error,
+  userLoggedIn: state.LoggedIn.userLoggedIn
+});
+
+const matchDispatchToProps = dispatch =>{
+  return bindActionCreators({_isLoggedIn, _loadProfile}, dispatch);
+}
+
+
+export default connect(mapStateToProps, matchDispatchToProps)(UserProfile);
+
+
+

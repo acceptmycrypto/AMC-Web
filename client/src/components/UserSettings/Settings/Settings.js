@@ -1,12 +1,16 @@
 import React, { Component } from "react";
 import "./Settings.css";
+import { connect } from "react-redux";
+import {bindActionCreators} from 'redux';
 import { Link } from "react-router-dom";
-import Layout from "../../Layout";
+import Layout from "../../../containers/Layout";
 import { Menu } from "semantic-ui-react"
 import ProfileSettings from "../ProfileSettings";
 import PrivacySettings from "../PrivacySettings";
 import CryptocurrencySettings from "../CryptocurrencySettings";
 import TransactionsSettings from "../TransactionsSettings";
+import { _isLoggedIn } from "../../../actions/loggedInActions";
+
 
 
 class Settings extends Component {
@@ -23,10 +27,30 @@ class Settings extends Component {
     handleItemClick = (e, { name }) => {
         this.setState({ activeItem: name })
     }
+
+    componentDidMount() {
+        this.props._isLoggedIn(localStorage.getItem('token'));
+    }
     
 
 
     render() {
+    const { error, loading, userLoggedIn } = this.props;
+
+    if (error) {
+      return <div>Error! {error.message}</div>;
+    }
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+    if (userLoggedIn) {
+      console.log("user logged in");
+      
+    }else{
+        // localStorage.removeItem('token');
+        this.props.history.push('/');
+    }
         const { color } = this.state
         const { activeItem } = this.state
 
@@ -70,4 +94,16 @@ class Settings extends Component {
     }
 }
 
-export default Settings;
+const mapStateToProps = state => ({
+    loading: state.LoggedIn.loading,
+    error: state.LoggedIn.error,
+    userLoggedIn: state.LoggedIn.userLoggedIn
+  });
+  
+  const matchDispatchToProps = dispatch =>{
+    return bindActionCreators({_isLoggedIn}, dispatch);
+  }
+  
+  
+  export default connect(mapStateToProps, matchDispatchToProps)(Settings);
+  

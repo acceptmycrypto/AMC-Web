@@ -2,70 +2,43 @@ import "./SignUp.css";
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
 import Select from "react-select";
-import { _signUp, _loadCryptocurrencies } from "../../../services/AuthService";
+import { _signUp } from "../../../services/AuthService";
+import { connect } from "react-redux";
+import {bindActionCreators} from 'redux';
+import { _loadCryptocurrencies } from "../../../actions/loadCryptoActions";
+import { handleDropdownChange } from "../../../actions/signUpActions";
+
+
+import Modal from 'react-awesome-modal';
 
 class SignUp extends Component {
   constructor() {
     super();
-
-    this.state = {
-      username: "",
-      email: "",
-      password: "",
-      cryptoOptions: [],
-      cryptoProfile: [],
-      hasAgreed: false,
-      redirect: false
-    };
     
-    this.handleChange = this.handleChange.bind(this);
+
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
-    return _loadCryptocurrencies().then(cryptos => {
-
-      let cryptoOptions = [];
-
-      cryptos.map(crypto => {
-
-        let optionObj = {};
-        optionObj.value = crypto.crypto_metadata_name;
-        optionObj.label = crypto.crypto_metadata_name + " " + "(" + crypto.crypto_symbol + ")";
-
-        cryptoOptions.push(optionObj);
-      })
-
-      this.setState({cryptoOptions});
-    });
+    this.props._loadCryptocurrencies();
   }
 
 
-
-  //this function handles the change of crypto option user selects everytime
-  //selectedOptions is an array of object
-  //we need to map through the array and get the value of each object
-  handleDropdownChange = selectedOptions => {
-    let SelectedCryptos = [];
-    selectedOptions.map(crypto => {
-      SelectedCryptos.push(crypto.value);
-    })
-    console.log(SelectedCryptos);
-
-    this.setState({
-      cryptoProfile: SelectedCryptos //this is what we get [Bitcoin, Litecoin, ...] as user select the option
-    });
-
-  };
 
   //function to handle when user clicks submit button to register
   handleSubmit(e) {
     e.preventDefault();
 
+
     let username = e.target.children[0].children[1].value;
     let email = e.target.children[1].children[1].value;
     let password = e.target.children[2].children[1].value;
-    let cryptoProfile = this.state.cryptoProfile;
+    let cryptoProfile = this.props.selectedCryptos;
+    console.log(this.props);
+    console.log("crypto to submit:", cryptoProfile);
+    let hasAgreed = e.target.children[4].children[0].children[0].checked;
+
+    
 
     //we add validation on the front end so that user has to enter in the required field before clicking submit
     //TODO
@@ -74,56 +47,56 @@ class SignUp extends Component {
     } else {
       return _signUp(username, email, password, cryptoProfile).then(res => {
         console.log("message sent from server if success: ", res);
+        this.openModal();
         //TODO
         //prompt users to check their email
       });
     }
   }
 
-  handleChange(e) {
-    let target = e.target;
-    let value = target.type === "checkbox" ? target.checked : target.value;
-    let name = target.name;
 
-    this.setState({
-      [name]: value
-    });
-    console.log(name);
-  }
-
-  state = {
-    selectedOptions: null
-  };
 
   render() {
-    const { selectedOptions } = this.state;
-    if(localStorage.getItem('token')){
-      this.props.history.push('/feed/deals');
+
+    const { error, loading, cryptoOptions } = this.props;
+
+    if (error) {
+      return <div>Error! {error.message}</div>;
     }
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+
+    // console.log("This.props" , this.props);
+
+    // if (localStorage.getItem('token')) {
+    //   this.props.history.push('/feed/deals');
+    // }
     return (
       <div className="App">
         <div className="App__Aside">
-            <img className="crypto-img img-fluid mb-5 d-block mx-auto" src="../../../assets/images/logo.png" alt=""></img>
-            <h1 className="text-uppercase mb-0">Accept My Crypto</h1>
-            <hr className="star-light"></hr>
-            <h2 className="font-weight-light mb-0">
+          <img className="crypto-img img-fluid mb-5 d-block mx-auto" src="../../../assets/images/logo.png" alt=""></img>
+          <h1 className="text-uppercase mb-0 ">Accept My Crypto</h1>
+          <hr className="star-light"></hr>
+          <h2 className="font-weight-light mb-0">
             <ul>
               <br></br>
-              <li><i class="homepage-icons fas fa-dollar-sign"></i>
-                  Grab Deals for Purchase with Cryptocurrency
+              <li><i className="homepage-icons fas fa-dollar-sign"></i>
+                Grab Deals for Purchase with Cryptocurrency
                 </li>
               <br></br>
 
-              <li><i class="homepage-icons fa fa-user" aria-hidden="true"></i>
-               Find Friends with Matching Currencies
+              <li><i className="homepage-icons fa fa-user" aria-hidden="true"></i>
+                Find Friends with Matching Currencies
               </li>
               <br></br>
-              <li><i class="homepage-icons fa fa-users" aria-hidden="true"></i>
+              <li><i className="homepage-icons fa fa-users" aria-hidden="true"></i>
                 Engage with Your Crypto Community
               </li>
             </ul>
-            </h2>
-          </div>
+          </h2>
+        </div>
         <div className="App__Form">
           <div className="PageSwitcher">
             <NavLink
@@ -154,8 +127,6 @@ class SignUp extends Component {
                   className="FormField__Input"
                   placeholder="Enter your desired User Name"
                   name="username"
-                  value={this.state.username}
-                  onChange={this.handleChange}
                   required
                 />
               </div>
@@ -169,8 +140,6 @@ class SignUp extends Component {
                   className="FormField__Input"
                   placeholder="Enter your email"
                   name="email"
-                  value={this.state.email}
-                  onChange={this.handleChange}
                   required
                 />
               </div>
@@ -184,8 +153,6 @@ class SignUp extends Component {
                   className="FormField__Input"
                   placeholder="Enter your password"
                   name="password"
-                  value={this.state.password}
-                  onChange={this.handleChange}
                   required
                 />
               </div>
@@ -197,11 +164,10 @@ class SignUp extends Component {
 
                 {/* <input type="text" id="cryptoProfile" className="FormField__Input" placeholder="Your Crypto Profile" name="email" value={this.state.cryptoProfile} onChange={this.handleChange} /> */}
                 <Select
-
+                  className = "dropdown"
                   required
-                  value={selectedOptions}
-                  onChange={this.handleDropdownChange}
-                  options={this.state.cryptoOptions}
+                  onChange={this.props.handleDropdownChange}
+                  options={cryptoOptions}
                   isMulti={true}
                   autoBlur={false}
 
@@ -214,8 +180,9 @@ class SignUp extends Component {
                     className="FormField__Checkbox"
                     type="checkbox"
                     name="hasAgreed"
-                    value={this.state.hasAgreed}
-                    onChange={this.handleChange}
+                    required
+                    // value={this.state.hasAgreed}
+                    // onChange={this.handleChange}
                   />
                   I agree all statements in
                   <a href="#" className="FormField__TermsLink">
@@ -232,6 +199,15 @@ class SignUp extends Component {
                   I'm already member
                 </Link>
               </div>
+
+              {/* <Modal visible={visible} effect="fadeInLeft" onClickAway={() => this.closeModal()}>
+                <div className="Modal">
+                  <h4>You have successfully registered! </h4>
+                  <h4>Please check your Email and follow the instructions for Email verification.</h4>
+                  <a className="a-link" href="javascript:void(0);" onClick={() => this.closeModal()}>Ok</a>
+                </div>
+              </Modal> */}
+
             </form>
           </div>
         </div>
@@ -240,4 +216,19 @@ class SignUp extends Component {
   }
 }
 
-export default SignUp;
+const mapStateToProps = state => ({
+  cryptoOptions: state.LoadCrypto.cryptoOptions,
+  loading: state.LoadCrypto.loading,
+  error: state.LoadCrypto.error,
+  selectedCryptos: state.CryptoSelected.selectedCryptos
+
+});
+
+const matchDispatchToProps = dispatch =>{
+  return bindActionCreators({handleDropdownChange, _loadCryptocurrencies}, dispatch);
+}
+
+
+export default connect(mapStateToProps, matchDispatchToProps)(SignUp);
+
+
