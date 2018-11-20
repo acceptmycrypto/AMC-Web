@@ -1,10 +1,3 @@
-
-USE crypto_db;
-DROP TABLE landing_users_cryptos;
-DROP TABLE landing_cryptos;
-DROP TABLE landing_users;
-
-
 CREATE TABLE landing_cryptos(
 	id INT NOT NULL AUTO_INCREMENT,
 	crypto_name VARCHAR(255) NOT NULL UNIQUE,
