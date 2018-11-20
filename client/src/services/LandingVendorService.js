@@ -1,5 +1,5 @@
 export const _LandingVendorService = (vendor_email) => {
-	return fetch("http://localhost:3001/vendor/subscription", {
+	return fetch("/vendor/subscription", {
 	    method: 'POST',
 	    headers: {
 	      'Accept': 'application/json',

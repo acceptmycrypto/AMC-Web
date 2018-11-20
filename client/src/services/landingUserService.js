@@ -1,5 +1,5 @@
 export const _addUserCryptoVotes = (email,cryptoProfile) => {
-	return fetch("http://localhost:3001/landing/users/votes", {
+	return fetch("/landing/users/votes", {
 	    method: 'POST',
 	    headers: {
 	      'Accept': 'application/json',
