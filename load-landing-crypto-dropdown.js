@@ -45,7 +45,7 @@ async function callback(error, response, body) {
         var cryptoQuery = 'INSERT INTO landing_cryptos (crypto_name, crypto_symbol) VALUES ' + cryptoNames;
         await connection.query(cryptoQuery, function (error, results, fields) {
             if (error) throw error;
-            console.log(results);
+//             console.log(results);
             process.exit();
         });
         
