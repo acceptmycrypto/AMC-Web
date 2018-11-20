@@ -9,7 +9,7 @@ export function _loadCryptosRanking() {
 
   return dispatch => {
     dispatch(fetchCryptosBegin());
-    return fetch("http://localhost:3001/api/cryptosranking", cryptosRankingSettings)
+    return fetch("/api/cryptosranking", cryptosRankingSettings)
       .then(res => res.json())
       .then(jsonCryptos => {
         dispatch(fetchCryptosSuccess(jsonCryptos));

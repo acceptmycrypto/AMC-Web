@@ -7,7 +7,7 @@ export async function _loadPhoto(token) {
     },
     body: JSON.stringify({ token })
   };
-  const photo_data = await fetch("http://localhost:3001/navbar/photo", settings)
+  const photo_data = await fetch("/navbar/photo", settings)
   const photo = await photo_data.json();
 
 
@@ -25,7 +25,7 @@ export async function _isLoggedIn(token) {
     },
     body: JSON.stringify({ token })
   };
-  const user_logged_in = await fetch("http://localhost:3001/loggedIn", login)
+  const user_logged_in = await fetch("/loggedIn", login)
 
   const logged_in = await user_logged_in.json();
 

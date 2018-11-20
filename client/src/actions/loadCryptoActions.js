@@ -2,7 +2,7 @@ export function _loadCryptocurrencies() {
 
   return dispatch => {
     dispatch(loadCryptoBegin());
-    return fetch("http://localhost:3001/cryptocurrencies")
+    return fetch("/cryptocurrencies")
       .then(res => res.json())
       .then(jsonLoadCrypto => {
         let cryptoOptions = [];

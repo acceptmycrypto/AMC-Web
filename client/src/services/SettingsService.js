@@ -9,7 +9,7 @@ export async function _loadCryptoSettings (token) {
     };
  
   
-    const profile_crypto = await fetch("http://localhost:3001/profile/crypto", Cryptosettings)
+    const profile_crypto = await fetch("/profile/crypto", Cryptosettings)
     const user_crypto = await profile_crypto.json();
 
     return({user_crypto});
@@ -27,7 +27,7 @@ export async function _loadCryptoSettings (token) {
     };
  
   
-    const matched = await fetch("http://localhost:3001/profile/matched/friends", Matchedsettings)
+    const matched = await fetch("/profile/matched/friends", Matchedsettings)
     const matched_friends = await matched.json();
 
     return({matched_friends});
@@ -45,7 +45,7 @@ export async function _loadCryptoSettings (token) {
     };
  
   
-    const friendship = await fetch("http://localhost:3001/settings/make/friends", Friendssettings)
+    const friendship = await fetch("/settings/make/friends", Friendssettings)
     const friends = await friendship.json();
 
     return("done");
@@ -63,7 +63,7 @@ export async function _loadCryptoSettings (token) {
     };
  
   
-    const allTransactions = await fetch("http://localhost:3001/profile/user/transactions", Transactionssettings)
+    const allTransactions = await fetch("/profile/user/transactions", Transactionssettings)
     const transactions = await allTransactions.json();
 
     return({transactions});
