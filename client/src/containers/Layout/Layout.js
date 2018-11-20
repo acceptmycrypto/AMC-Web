@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./Layout.css";
 import Navbar from "../Navigation/Navbar";
+import Footer from "../../components/Layout/Footer";
 // import { connect } from "react-redux";
 // import { _isLoggedIn } from "../../actions/layoutActions";
 
@@ -21,6 +22,8 @@ class Layout extends Component {
       <main className="Content">
         {this.props.children}
       </main>
+
+      <Footer/>
     </div>
   );
   }
