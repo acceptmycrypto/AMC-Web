@@ -44,12 +44,13 @@ async function callback(error, response, body) {
         await connection.query(cryptoQuery, function (error, results, fields) {
             if (error) throw error;
 //             console.log(results);
-           
+               process.exit(0);
         });
 
     }
     else{
         console.log(error);
+        process.exit(1);
 
     }
     }
