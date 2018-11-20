@@ -5,17 +5,30 @@ import './Results.css';
 import { BrowserRouter as Router, Route, Link, NavLink } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from "react-redux";
+import { _loadCryptoResults } from '../../../actions/landingResultsActions';
+
+
 
 
 
 class Results extends Component {
   componentDidMount() {
-    // this.props._loadLandingDropdown();
+    this.props._loadCryptoResults();
   }
 
-  
+
   render() {
+    const { error, loading, cryptoResults } = this.props;
+
     
+    if (error) {
+      return <div>Error! {error.message}</div>;
+    }
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+
     return (
       <div className="App">
         <div className="App__Aside">
@@ -43,7 +56,26 @@ class Results extends Component {
             <NavLink to="/" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">For User</NavLink>
             <NavLink exact to="/vendor" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">For Vendor</NavLink>
           </div>
-          
+          <div className="FormField__Label_landing pb-3">Top Ten Cryptocurrencies Users are Interested In:</div>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Cryptocurrencies</th>
+                <th scope="col">Votes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cryptoResults.map((result, i) =>(
+                <tr>
+                <th scope="row">{i+1}</th>
+                <td>{result.crypto_name}</td>
+                <td>{result.Count}</td>
+              </tr>
+              ))}
+            </tbody>
+          </table>
+
         </div>
       </div>
     );
@@ -51,12 +83,14 @@ class Results extends Component {
 }
 
 const mapStateToProps = state => ({
-
+  cryptoResults: state.CryptoResults.cryptoResults,
+  loading: state.CryptoResults.loading,
+  error: state.CryptoResults.error, 
 
 });
 
 const matchDispatchToProps = dispatch => {
-  return bindActionCreators({  }, dispatch);
+  return bindActionCreators({_loadCryptoResults}, dispatch);
 }
 
 
