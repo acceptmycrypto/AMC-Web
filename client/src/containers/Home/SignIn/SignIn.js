@@ -9,6 +9,7 @@ import {bindActionCreators} from 'redux';
 import { openModal, closeModal } from '../../../actions/signInActions';
 import { _loadProfile } from "../../../actions/userLoadActions";
 import { _isLoggedIn } from '../../../actions/loggedInActions';
+import Footer from '../../../components/Layout/Footer';
 
 
 
@@ -111,7 +112,7 @@ class SignIn extends Component {
 
               <div className="FormField">
 
-                <button className="FormField__Button mr-10" >Sign In</button>
+                <button className="FormField__Button mr-20" >Sign In</button>
                 <Link to="/" className="FormField__Link">Create an account</Link>
 
               </div>
@@ -125,6 +126,7 @@ class SignIn extends Component {
                 </div>
               </Modal>
             </form>
+            <Footer/>
           </div>
         </div>
       </div>
