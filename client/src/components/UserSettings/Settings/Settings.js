@@ -58,7 +58,7 @@ class Settings extends Component {
 
 
             <div>
-                <Layout />
+                <Layout >
                 <div className="mr-4 ml-4">
                     <Menu color={color} inverted widths={4}>
                         <Menu.Item name="Profile Settings" active={activeItem === "Profile Settings"} onClick={this.handleItemClick} />
@@ -87,6 +87,7 @@ class Settings extends Component {
 
                     </div>
                 </div>
+                </Layout >
 
             </div>
 

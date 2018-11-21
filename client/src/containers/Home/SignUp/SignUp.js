@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import {bindActionCreators} from 'redux';
 import { _loadCryptocurrencies } from "../../../actions/loadCryptoActions";
 import { handleDropdownChange } from "../../../actions/signUpActions";
+import Footer from "../../../components/Layout/Footer";
 
 
 class SignUp extends Component {
@@ -183,8 +184,8 @@ class SignUp extends Component {
                 </label>
               </div>
 
-              <div className="FormField">
-                <button className="FormField__Button mr-10">
+              <div className="FormField buttonLink">
+                <button className="FormField__Button">
                   Sign Up
                 </button>
                 <Link to="/" className="FormField__Link">
@@ -192,6 +193,7 @@ class SignUp extends Component {
                 </Link>
               </div>
             </form>
+            <Footer/>
           </div>
         </div>
       </div>
