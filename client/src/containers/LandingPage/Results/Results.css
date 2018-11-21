@@ -5,10 +5,10 @@
     text-transform: uppercase;
     color: #199087;
     font-weight: bold;
-  
+
   }
 
 .results-table{
   margin-bottom: 40px;
-  min-height: calc(100vh - 260px);
+  min-height: 80%;
 }

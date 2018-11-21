@@ -43,5 +43,13 @@
 }
 
 .FormCenter{
-  min-height: calc(100vh - 260px);
+  min-height: 80%;
+}
+
+.results_link {
+  color: #199087;
+}
+
+.results_link:hover {
+  color: #199087;
 }

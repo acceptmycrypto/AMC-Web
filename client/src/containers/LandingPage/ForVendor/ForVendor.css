@@ -191,7 +191,7 @@ hr.star-light {
   }
 
   .lp-vendor{
-    min-height: calc(100vh - 260px);
+    min-height: 80%;
   }
 
 /* media query */
@@ -220,6 +220,18 @@ hr.star-light {
 
   .App__Aside ul {
     padding-right: 15px;
+  }
+
+  #vendor-submit-success {
+    width: 100%;
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+
+  #user-submit-success {
+    width: 100%;
+    display: inline-block;
+    margin-bottom: 20px;
   }
 
 

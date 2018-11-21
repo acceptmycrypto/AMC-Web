@@ -82,7 +82,8 @@ class ForUser extends Component {
 
               <div className="FormField">
                 <div id="user-instructions">AcceptMyCrypto Coming Soon!</div>
-                <div className="labelLandingSubheader">Submit your vote below</div>
+                <div className="labelLandingSubheader">Submit your vote below or see the <Link className="results_link" to={"/results"}>results</Link>
+                </div>
 
                 <label className="labelLanding" htmlFor="email">E-Mail Address</label>
                 <input type="email" id="email" className="getUserListed_input" placeholder="Enter your email" name="email" required />
@@ -110,7 +111,7 @@ class ForUser extends Component {
 
             </form>
             <div id="user-submit-success"></div>
-            
+
           </div>
           <Footer/>
         </div>
