@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Link, NavLink } from 'react-router-dom'
 import { bindActionCreators } from 'redux';
 import { connect } from "react-redux";
 import { _loadCryptoResults } from '../../../actions/landingResultsActions';
+import Footer from '../../../components/Layout/Footer';
 
 
 
@@ -38,15 +39,15 @@ class Results extends Component {
           <h2>
             <ul className="text-uppercase font-weight-light" >
               <li><i className="homepage-icons fab fa-bitcoin"></i>
-                Spend Cryptocurrencies You Support
+              <span>Spend Cryptocurrencies You Support</span>
               </li>
               <br />
               <li><i className="homepage-icons fas fa-dollar-sign" aria-hidden="true"></i>
-                Find Deals for purchase with Cryptocurrencies
+              <span>Find Deals for purchase with Cryptocurrencies</span>
               </li>
               <br />
               <li><i className="homepage-icons fas fa-chart-area" aria-hidden="true"></i>
-                Read Market Trend based on crypto purchase transactions
+              <span>Read Market Trend based on crypto purchase transactions</span>
               </li>
             </ul>
           </h2>
@@ -57,7 +58,7 @@ class Results extends Component {
             <NavLink exact to="/vendor" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">For Vendor</NavLink>
           </div>
           <div className="pb-3" id="results-instructions">Top Ten Cryptocurrencies Our Users are Interested In:</div>
-          <table class="table table-hover">
+          <table class="table table-hover results-table">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -75,7 +76,7 @@ class Results extends Component {
               ))}
             </tbody>
           </table>
-
+          <Footer/>
         </div>
       </div>
     );
