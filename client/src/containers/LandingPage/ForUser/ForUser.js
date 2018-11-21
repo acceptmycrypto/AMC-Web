@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import { _loadLandingDropdown } from '../../../actions/landingUserActions';
 import { handleDropdownChange } from '../../../actions/signUpActions';
 import { _addUserCryptoVotes } from '../../../services/LandingUserService';
+import Footer from '../../../components/Layout/Footer';
 
 
 
@@ -58,15 +59,15 @@ class ForUser extends Component {
           <h2>
             <ul className="text-uppercase font-weight-light" >
               <li><i className="homepage-icons fab fa-bitcoin"></i>
-                Spend Cryptocurrencies You Support
+              <span>Spend Cryptocurrencies You Support</span>
               </li>
               <br />
               <li><i className="homepage-icons fas fa-dollar-sign" aria-hidden="true"></i>
-                Find Deals to purchase with Cryptocurrencies
+              <span>Find Deals to purchase with Cryptocurrencies</span>
               </li>
               <br />
               <li><i className="homepage-icons fas fa-chart-area" aria-hidden="true"></i>
-                Follow Market Trends based on crypto purchase transactions
+                <span>Follow Market Trends based on crypto purchase transactions</span>
               </li>
             </ul>
           </h2>
@@ -109,7 +110,9 @@ class ForUser extends Component {
 
             </form>
             <div id="user-submit-success"></div>
+            
           </div>
+          <Footer/>
         </div>
       </div>
     );
