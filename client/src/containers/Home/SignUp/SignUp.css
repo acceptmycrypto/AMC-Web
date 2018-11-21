@@ -136,6 +136,8 @@ body {
     padding: 15px 70px;
     font-size: 0.8em;
     font-weight: 500;
+    width: fit-content;
+    margin: 0 20px 20px 0;
   }
 
   .FormField__Link {
@@ -144,6 +146,7 @@ body {
     /* display: inline-block; */
     border-bottom: 1.5px solid #225E62;
     padding-bottom: 5px;
+    width: fit-content;
   }
 
   .FormField__CheckboxLabel {
@@ -243,7 +246,6 @@ hr.star-light {
   }
 
 
-
   .FormFields{
     min-height: calc(100vh - 260px);
   }
@@ -311,5 +313,20 @@ hr.star-light {
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
     text-align: center;
+  }
+
+}
+
+@media only screen and (max-width: 840px) {
+
+  .buttonLink{
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .FormField__Button {
+    margin: 0 0px 20px 0;
   }
 }

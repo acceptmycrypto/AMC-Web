@@ -110,9 +110,9 @@ class SignIn extends Component {
                 <input type="password" id="password" className="FormField__Input" placeholder="Enter your password" name="password" required />
               </div>
 
-              <div className="FormField">
+              <div className="FormField buttonLink">
 
-                <button className="FormField__Button mr-20" >Sign In</button>
+                <button className="FormField__Button" >Sign In</button>
                 <Link to="/" className="FormField__Link">Create an account</Link>
 
               </div>

@@ -184,8 +184,8 @@ class SignUp extends Component {
                 </label>
               </div>
 
-              <div className="FormField">
-                <button className="FormField__Button mr-20">
+              <div className="FormField buttonLink">
+                <button className="FormField__Button">
                   Sign Up
                 </button>
                 <Link to="/" className="FormField__Link">
