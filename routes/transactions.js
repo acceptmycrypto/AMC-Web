@@ -8,6 +8,10 @@ var methodOverride = require("method-override");
 var Coinpayments = require("coinpayments");
 var keys = require("../key");
 var client = new Coinpayments(keys.coinpayment);
+var MERCHANT_ID = keys.coinpayment.MERCHANT_ID;
+var IPN_SECRET = keys.coinpayment.IPN_SECRET;
+var { verify } = require(`coinpayments-ipn`);
+var CoinpaymentsIPNError = require(`coinpayments-ipn/lib/error`);
 
 var verifyToken =  require ("./utils/validation");
 
@@ -50,7 +54,7 @@ router.post("/checkout", verifyToken, function(req, res) {
   //Need to listen to IPA when payment has recieved and then update payment_recieved to true
   console.log(req.body);
 
-  let user_id = req.decoded._id; 
+  let user_id = req.decoded._id;
   let crypto_name = req.body.crypto_name;
 
   createMatchedFriends(user_id, crypto_name);
@@ -101,7 +105,42 @@ router.post("/checkout", verifyToken, function(req, res) {
       }
     }
   );
-  
+
+});
+
+console.log("my ipn_secret: ", IPN_SECRET);
+//ipa (listen to coinpayment's events)
+router.post("/checkout/notification", function (req, res, next) {
+  if(!req.get(`HMAC`) || !req.body || !req.body.ipn_mode || req.body.ipn_mode !== `hmac` || MERCHANT_ID !== req.body.merchant) {
+    return next(new Error(`Invalid request`));
+  }
+
+  let isValid, error;
+
+  try {
+    isValid = verify(req.get(`HMAC`), IPN_SECRET, req.body);
+    console.log("my ipn_secret: ", IPN_SECRET);
+    console.log("HMAC: ", req.get(`HMAC`));
+    console.log("Verification Value: ", isValid);
+  } catch (e) {
+    error = e;
+  }
+
+  //The instanceof operator tests whether the prototype property of a constructor appears anywhere in the prototype chain of an object.
+  if (error && error instanceof CoinpaymentsIPNError) {
+    console.log("error: ", error)
+    return next(error);
+  }
+
+  if (!isValid) {
+    console.log("Verification Value: ", isValid);
+    return next(new Error(`Hmac calculation does not match`));
+  }
+
+  return next();
+}, function (req, res, next) {
+  console.log(`Process payment notification`, req.body);
+  return next();
 });
 
 
@@ -113,7 +152,7 @@ function createMatchedFriends(user_id, crypto_name){
 
       connection.query(
         "SELECT DISTINCT user_id, date_purchased FROM users_purchases WHERE ? AND payment_received = 1 AND user_id NOT IN (SELECT matched_friend_id FROM users_matched_friends WHERE user_id = ?) AND NOT ? ORDER BY users_purchases.date_purchased DESC",
-         [{crypto_id}, {user_id}, {user_id}], 
+         [{crypto_id}, {user_id}, {user_id}],
          function(error, results, fields) {
           if (error) throw error;
 
@@ -124,18 +163,18 @@ function createMatchedFriends(user_id, crypto_name){
 
             console.log(JSON.stringify(limitedIDArray));
 
-            
+
             for (let j = 0; j< limitedIDArray.length; j++){
                 matches.push([user_id, limitedIDArray[j].user_id]);
-                matches.push([limitedIDArray[j].user_id, user_id]);              
+                matches.push([limitedIDArray[j].user_id, user_id]);
             }
-            
+
             let sql =  "INSERT INTO users_matched_friends (user_id, matched_friend_id) VALUES ?"
 
             connection.query( sql, [matches], function(error, results, fields) {
                 if (error) throw error;
-                console.log("Number of records inserted: " + results.affectedRows);          
-      
+                console.log("Number of records inserted: " + results.affectedRows);
+
               }
             );
 
@@ -144,11 +183,11 @@ function createMatchedFriends(user_id, crypto_name){
             console.log('No Matches');
           }
 
-          
+
         }
       );
 
-      
+
     }
   );
 }
