@@ -1,8 +1,9 @@
 
 .copyrightFooter{
+  width: 100%;
   height: fit-content;
   display: flex;
-  flex-direction: row-reverse;
+  justify-content: center;
   color: #768496;
-  margin: 0px 50px 15px 0;
+  margin-bottom: 20px;
 }
