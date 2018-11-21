@@ -41,3 +41,15 @@
   margin-top: 10px;
   margin-bottom: 20px;
 }
+
+.FormCenter{
+  min-height: 80%;
+}
+
+.results_link {
+  color: #199087;
+}
+
+.results_link:hover {
+  color: #199087;
+}

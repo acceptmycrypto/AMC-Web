@@ -11,7 +11,7 @@ body {
 }
 
 .mr-20 {
-  margin-right: 20px !important;
+  margin-right: 20px;
 }
 
 .App {
@@ -26,7 +26,7 @@ body {
     width: 50%;
     background-color: #66DAC7;
     padding-top: 75px;
-    padding-bottom: 75px;
+    /* padding-bottom: 75px; */
   }
 
   .App__Form {
@@ -35,7 +35,7 @@ body {
     padding: 25px 40px;
     overflow: auto;
     padding-top: 75px;
-    padding-bottom: 75px;
+    /* padding-bottom: 75px; */
   }
 
   .App__Aside .PageSwitcher {
@@ -53,7 +53,7 @@ body {
     color: #9DA6B1;
     padding: 10px 25px;
     cursor: pointer;
-    font-size: 1.2em;
+    font-size: 1em;
     border: none;
     outline: none;
     display: inline-block;
@@ -134,10 +134,10 @@ body {
   width: 150px;
 }
 
-ul {
+/* .font-weight-light ul {
   font-size: 25px;
   font-weight: 500;
-}
+} */
 
 .App__Aside h1,
 .App__Aside h2 {
@@ -190,12 +190,17 @@ hr.star-light {
     font-size: 25px;
   }
 
+  .lp-vendor{
+    min-height: 80%;
+  }
+
 /* media query */
 @media only screen and (max-width: 640px) {
   .App {
     height: 100vh;
     display: table;
     color: white;
+    width: 100%;
     /* this margin top is needed to offset the layout margin top so there is no gap between the nav bar and the sign up content */
     /* margin-top: -30px; */
   }
@@ -216,6 +221,19 @@ hr.star-light {
   .App__Aside ul {
     padding-right: 15px;
   }
+
+  #vendor-submit-success {
+    width: 100%;
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+
+  #user-submit-success {
+    width: 100%;
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+
 
 /* page switcher toggle */
   .App__Form .PageSwitcher {

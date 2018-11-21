@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import { _loadLandingDropdown } from '../../../actions/landingUserActions';
 import { handleDropdownChange } from '../../../actions/signUpActions';
 import { _addUserCryptoVotes } from '../../../services/LandingUserService';
+import Footer from '../../../components/Layout/Footer';
 
 
 
@@ -20,7 +21,7 @@ class ForUser extends Component {
     e.preventDefault();
     let email = e.target.children[0].children[3].value
     let cryptoProfile = this.props.selectedCryptos;
-  
+
     if (!email || !cryptoProfile) {
       alert("Please enter in the required field!");
     } else {
@@ -32,8 +33,8 @@ class ForUser extends Component {
         }else{
           this.props.history.push('/results');
         }
-        
-    
+
+
 
       });
     }
@@ -41,7 +42,7 @@ class ForUser extends Component {
   render() {
     const { error, loading, landingCryptoOptions, selectedCryptos } = this.props;
 
-    
+
     if (error) {
       return <div>Error! {error.message}</div>;
     }
@@ -58,15 +59,15 @@ class ForUser extends Component {
           <h2>
             <ul className="text-uppercase font-weight-light" >
               <li><i className="homepage-icons fab fa-bitcoin"></i>
-                Spend Cryptocurrencies You Support
+              <span>Spend Cryptocurrencies You Support</span>
               </li>
               <br />
               <li><i className="homepage-icons fas fa-dollar-sign" aria-hidden="true"></i>
-                Find Deals for purchase with Cryptocurrencies
+              <span>Find Deals to purchase with Cryptocurrencies</span>
               </li>
               <br />
               <li><i className="homepage-icons fas fa-chart-area" aria-hidden="true"></i>
-                Read Market Trend based on crypto purchase transactions
+                <span>Follow Market Trends based on crypto purchase transactions</span>
               </li>
             </ul>
           </h2>
@@ -81,12 +82,13 @@ class ForUser extends Component {
 
               <div className="FormField">
                 <div id="user-instructions">AcceptMyCrypto Coming Soon!</div>
-                <div className="labelLandingSubheader">Submit your vote below</div>
+                <div className="labelLandingSubheader">Submit your vote below or see the <Link className="results_link" to={"/results"}>results</Link>
+                </div>
 
                 <label className="labelLanding" htmlFor="email">E-Mail Address</label>
                 <input type="email" id="email" className="getUserListed_input" placeholder="Enter your email" name="email" required />
-                
-                <label className="labelLanding py-3" htmlFor="landing_cryptos">Enter the Crypto you're interested in spending online</label>
+
+                <label className="labelLanding py-3" htmlFor="landing_cryptos">Enter the Cryptos you're interested in spending online</label>
                 <Select
                   id="landing_cryptos"
                   required
@@ -109,7 +111,9 @@ class ForUser extends Component {
 
             </form>
             <div id="user-submit-success"></div>
+
           </div>
+          <Footer/>
         </div>
       </div>
     );
@@ -119,7 +123,7 @@ class ForUser extends Component {
 const mapStateToProps = state => ({
   landingCryptoOptions: state.LandingCryptos.landingCryptoOptions,
   loading: state.LandingCryptos.loading,
-  error: state.LandingCryptos.error, 
+  error: state.LandingCryptos.error,
   selectedCryptos: state.CryptoSelected.selectedCryptos
 
 });
