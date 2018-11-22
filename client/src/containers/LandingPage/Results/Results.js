@@ -21,14 +21,15 @@ class Results extends Component {
   render() {
     const { error, loading, cryptoResults } = this.props;
 
-    
+
     if (error) {
       return <div>Error! {error.message}</div>;
     }
 
-    if (loading) {
-      return <div>Loading...</div>;
-    }
+    //comment out to bypass the white loading screen displayed before the component mounts
+    // if (loading) {
+    //   return <div>Loading...</div>;
+    // }
 
     return (
       <div className="App">
@@ -58,7 +59,7 @@ class Results extends Component {
             <NavLink exact to="/vendor" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">For Vendor</NavLink>
           </div>
           <div className="pb-3" id="results-instructions">Top Ten Cryptocurrencies Our Users are Interested In:</div>
-          <table class="table table-hover results-table">
+          <table className="table table-hover results-table">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -68,7 +69,7 @@ class Results extends Component {
             </thead>
             <tbody>
               {cryptoResults.map((result, i) =>(
-                <tr>
+                <tr key={i}>
                 <th scope="row">{i+1}</th>
                 <td>{result.crypto_name}</td>
                 <td>{result.Count}</td>
@@ -86,7 +87,7 @@ class Results extends Component {
 const mapStateToProps = state => ({
   cryptoResults: state.CryptoResults.cryptoResults,
   loading: state.CryptoResults.loading,
-  error: state.CryptoResults.error, 
+  error: state.CryptoResults.error,
 
 });
 

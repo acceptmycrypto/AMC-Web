@@ -1,3 +1,9 @@
+@media only screen and (min-height: 560px) {
+#root, .fullHeight{
+  height:100%;
+}
+}
+
 /* .App {
   height: 100vh;
   display: flex;

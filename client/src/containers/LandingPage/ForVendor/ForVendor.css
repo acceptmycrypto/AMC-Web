@@ -15,7 +15,7 @@ body {
 }
 
 .App {
-    height: 100vh;
+    height: 100%;
     display: flex;
     color: white;
     /* this margin top is needed to offset the layout margin top so there is no gap between the nav bar and the sign up content */
@@ -197,7 +197,7 @@ hr.star-light {
 /* media query */
 @media only screen and (max-width: 640px) {
   .App {
-    height: 100vh;
+    height: 100%;
     display: table;
     color: white;
     width: 100%;
