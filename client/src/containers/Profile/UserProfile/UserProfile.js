@@ -13,6 +13,7 @@ import { bindActionCreators } from 'redux';
 import { _updateCryptoTable, _verifyUser } from "../../../services/UserProfileService";
 import { _loadProfile } from "../../../actions/userLoadActions";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
+import { handleToggleChange } from "../../../actions/userActions";
 
 
 
@@ -83,12 +84,6 @@ class UserProfile extends Component {
       displayAddress.innerHTML = address;
       surroundingDiv.append(qr, displayAddress);
 
-      // let icon = document.createElement("i");
-      // icon.classList.add("fas", "fa-times", "deleteIcon");
-      // icon.addEventListener("click", this.hideQR);
-      // icon.classList.add("deleteQR");
-      // surroundingDiv.insertBefore(icon, parentDiv);
-
     } else {
       // status = "hide"
 
@@ -105,20 +100,20 @@ class UserProfile extends Component {
   }
 
 
-  handleToggleChange = (event) => {
-    let target = event.target.checked; // checkbox has property checked = true or checked = false;
+  // handleToggleChange = (event) => {
+  //   let target = event.target.checked; // checkbox has property checked = true or checked = false;
 
-    if (target) { // if checkbox is checked show interested coins
-      this.setCurrentState("interested", false, false, null, null); // crypto_view, qr, add_address, users_cryptos_id, current_crypto_name
+  //   if (target) { // if checkbox is checked show interested coins
+  //     this.setCurrentState("interested", false, false, null, null); // crypto_view, qr, add_address, users_cryptos_id, current_crypto_name
 
-      this.hideOrShowCoin("show");
+  //     this.hideOrShowCoin("show");
 
-    } else { // if checkbox is not checked show owned coins
-      this.setCurrentState("owned", false, false, null, null); //crypto_view, qr, add_address, users_cryptos_id, current_crypto_name
+  //   } else { // if checkbox is not checked show owned coins
+  //     this.setCurrentState("owned", false, false, null, null); //crypto_view, qr, add_address, users_cryptos_id, current_crypto_name
 
-      this.hideOrShowCoin("show");
-    }
-  }
+  //     this.hideOrShowCoin("show");
+  //   }
+  // }
 
   handleQRChange = (event) => {
     if (this.state.qr) {
@@ -223,41 +218,22 @@ class UserProfile extends Component {
 
 
   componentDidMount() {
-
-    // return _loadProfile(localStorage.getItem('token')).then(res => {
-    //   // console.log(res);
-
-    //   let { user_info, user_crypto, friends_array, transactions } = res;
-    //   // console.log(user_info, user_crypto, friends_array, transactions);
-
-    //   this.setState({ user_info, user_crypto, friends_array, transactions });
-
-    // });
-
     this.props._isLoggedIn(localStorage.getItem('token'));
     this.props._loadProfile(localStorage.getItem('token'));
-
-
-
   }
 
 
   render() {
-    // console.log(this.state);
-    // console.log(this.props.location.pathname);
-    // console.log(this.props.match.params);
 
-    const { error, loading, user_info, user_crypto, transactions, userLoggedIn } = this.props;
-
-    
+    const { error, loading, user_info, user_crypto, transactions, userLoggedIn, handleToggleChange, hideOrShowCoin } = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
     }
 
-    if (loading) {
-      return <div>Loading...</div>;
-    }
+    // if (loading) {
+    //   return <div>Loading...</div>;
+    // }
 
     if (userLoggedIn) {
       console.log("user logged in");
@@ -265,6 +241,13 @@ class UserProfile extends Component {
     }else{
         // localStorage.removeItem('token');
         this.props.history.push('/');
+    }
+
+    if(hideOrShowCoin == "show"){
+
+    }
+    else{
+      
     }
 
     return (
@@ -275,7 +258,7 @@ class UserProfile extends Component {
             {user_info != undefined && <ProfileCard user_info={user_info} />}
 
             {user_crypto != undefined &&
-              <CryptoCard handleToggleChange={this.handleToggleChange} handleAddressFormChange={this.handleAddressFormChange} handleQRChange={this.handleQRChange} crypto_view={this.state.crypto_view} user_crypto={user_crypto}>
+              <CryptoCard handleToggleChange={handleToggleChange} handleAddressFormChange={this.handleAddressFormChange} handleQRChange={this.handleQRChange} crypto_view={this.state.crypto_view} user_crypto={user_crypto}>
 
                 {this.state.add_address &&
                   <CryptoAddress updateCryptos={this.updateCryptos} updateCryptoTable={this.updateCryptoTable} />
@@ -308,11 +291,18 @@ const mapStateToProps = state => ({
   transactions: state.UserInfo.transactions,
   loading: state.UserInfo.loading,
   error: state.UserInfo.error,
-  userLoggedIn: state.LoggedIn.userLoggedIn
+  userLoggedIn: state.LoggedIn.userLoggedIn, 
+  crypto_view: state.User.crypto_view,
+  qr: state.User.qr,
+  add_address: state.User.add_address,
+  users_cryptos_id: state.User.users_cryptos_id,
+  current_crypto_name: state.User.current_crypto_name,
+  hideOrShowCoin: state.User.hideOrShowCoin
+
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({_isLoggedIn, _loadProfile}, dispatch);
+  return bindActionCreators({_isLoggedIn, _loadProfile, handleToggleChange}, dispatch);
 }
 
 
