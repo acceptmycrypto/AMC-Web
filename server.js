@@ -207,6 +207,15 @@ async.map(
   }
 );
 
+var dropdownSettings = {
+  method: "GET",
+  url: "https://api.coinmarketcap.com/v2/ticker/?limit=100&structure=array",
+  headers: {
+      "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
+      Accept: "application/json"
+  }
+};
+
 async function callback(error, response, body) {
   if (!error && response.statusCode == 200) {
       var cryptoNames = "";
