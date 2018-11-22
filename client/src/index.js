@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import BrowserRouter from "react-router-dom/BrowserRouter";
-
+import HttpsRedirect from 'react-https-redirect';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware, compose} from 'redux'
 import thunk from "redux-thunk";
@@ -20,9 +20,11 @@ const store = createStore(
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <HttpsRedirect>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </HttpsRedirect>
   </Provider>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

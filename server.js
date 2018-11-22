@@ -21,13 +21,13 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
 
   //redirect to https
-  app.get('*',function(req,res,next){
-    console.log("reg.originalUrl: ", req.originalUrl);
-    if(req.headers['x-forwarded-proto']!='https')
-      res.redirect(process.env.BACKEND_URL + req.originalUrl)
-    else
-      next() /* Continue to other routes if we're not redirecting */
-  })
+  // app.get('*',function(req,res,next){
+  //   console.log("reg.originalUrl: ", req.originalUrl);
+  //   if(req.headers['x-forwarded-proto']!='https')
+  //     res.redirect(process.env.BACKEND_URL + req.originalUrl)
+  //   else
+  //     next() /* Continue to other routes if we're not redirecting */
+  // })
 
   // Express serve up index.html file if it doesn't recognize route
   // const path = require('path');
