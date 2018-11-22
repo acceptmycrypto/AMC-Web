@@ -25,8 +25,7 @@ class ForUser extends Component {
     if (!email || !cryptoProfile) {
       alert("Please enter in the required field!");
     } else {
-      return _addUserCryptoVotes(email, cryptoProfile).then(res => {
-        console.log("message sent from server if success: ", res);
+      return _addUserCryptoVotes(email, cryptoProfile).then(res => {  
         if(res.error == "User already exists"){
           // alert("You have already filled out this form.");
           document.getElementById("user-submit-success").innerHTML = "You have already filled out this form.";
