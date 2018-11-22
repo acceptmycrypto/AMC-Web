@@ -22,8 +22,9 @@ if (process.env.NODE_ENV === 'production') {
 
   //redirect to https
   app.get('*',function(req,res,next){
+    console.log("reg.originalUrl: ", req.originalUrl);
     if(req.headers['x-forwarded-proto']!='https')
-      res.redirect(process.env.BACKEND_URL + req.url)
+      res.redirect(process.env.BACKEND_URL + req.originalUrl)
     else
       next() /* Continue to other routes if we're not redirecting */
   })
