@@ -39,8 +39,6 @@ app.use(function(req, res, next) {
   next();
 });
 
-
-
 //routers
 var navbarRoutes = require("./routes/navbar.js");
 var adminRoutes = require("./routes/admin.js");
