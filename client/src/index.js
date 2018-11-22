@@ -20,6 +20,7 @@ const store = createStore(
 
 ReactDOM.render(
   <Provider store={store}>
+  {/* HttpsRedirect needed on the frontend to redirect from http to https */}
     <HttpsRedirect>
       <BrowserRouter>
         <App />

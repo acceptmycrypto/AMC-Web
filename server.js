@@ -20,15 +20,6 @@ if (process.env.NODE_ENV === 'production') {
   // Exprees will serve up production assets
   app.use(express.static('client/build'));
 
-  //redirect to https
-  // app.get('*',function(req,res,next){
-  //   console.log("reg.originalUrl: ", req.originalUrl);
-  //   if(req.headers['x-forwarded-proto']!='https')
-  //     res.redirect(process.env.BACKEND_URL + req.originalUrl)
-  //   else
-  //     next() /* Continue to other routes if we're not redirecting */
-  // })
-
   // Express serve up index.html file if it doesn't recognize route
   // const path = require('path');
   // app.get('*', (req, res) => {
@@ -144,108 +135,69 @@ var options = [
 ];
 
 //use aynch to map two request ojects and return all results in one callback
-// async.map(
-//   options,
-//   function(obj, callback) {
-//     // iterator function
-//     request(obj, function(error, response, body) {
-//       if (!error && response.statusCode == 200) {
-//         // transform data here or pass it on
-//         var body = JSON.parse(body);
-//         callback(null, body);
-//       } else {
-//         callback(error || response.statusCode);
-//       }
-//     });
-//   },
-//   function(err, results) {
-//     // all requests have been made
-//     if (err) {
-//       console.log(err);
-//     } else {
-//       var coin_info = results[0].data;
-//       var coin_metadata = results[1].data;
+async.map(
+  options,
+  function(obj, callback) {
+    // iterator function
+    request(obj, function(error, response, body) {
+      if (!error && response.statusCode == 200) {
+        // transform data here or pass it on
+        var body = JSON.parse(body);
+        callback(null, body);
+      } else {
+        callback(error || response.statusCode);
+      }
+    });
+  },
+  function(err, results) {
+    // all requests have been made
+    if (err) {
+      console.log(err);
+    } else {
+      var coin_info = results[0].data;
+      var coin_metadata = results[1].data;
 
-//       for (var i in coin_metadata) {
-//         var crypto_name = coin_metadata[i].name;
-//         var crypto_symbol = coin_metadata[i].symbol;
-//         var crypto_price = coin_metadata[i].quote.USD.price;
+      for (var i in coin_metadata) {
+        var crypto_name = coin_metadata[i].name;
+        var crypto_symbol = coin_metadata[i].symbol;
+        var crypto_price = coin_metadata[i].quote.USD.price;
 
-//         connection.query(
-//           "INSERT INTO crypto_metadata SET ?",
-//           {
-//             crypto_name: crypto_name,
-//             crypto_symbol: crypto_symbol,
-//             crypto_price: crypto_price
-//           },
-//           function(err, res) {
-//             if (err) {
-//               console.log("170: " + err);
-//             }
-//           }
-//         );
-//       }
+        connection.query(
+          "INSERT INTO crypto_metadata SET ?",
+          {
+            crypto_name: crypto_name,
+            crypto_symbol: crypto_symbol,
+            crypto_price: crypto_price
+          },
+          function(err, res) {
+            if (err) {
+              console.log("170: " + err);
+            }
+          }
+        );
+      }
 
-//       for (var j in coin_info) {
-//         var crypto_site = coin_info[j].urls.website[0];
-//         var crypto_logo = coin_info[j].logo;
-//         var crypto_metadata_name = coin_info[j].name;
-//         connection.query(
-//           "INSERT INTO crypto_info SET ?",
-//           {
-//             crypto_logo: crypto_logo,
-//             crypto_link: crypto_site,
-//             crypto_metadata_name
-//           },
-//           function(err, res) {
-//             if (err) {
-//               // console.log(err);
-//             }
-//           }
-//         );
-//       }
-//     }
-//   }
-// );
-
-// var dropdownSettings = {
-//   method: "GET",
-//   url: "https://api.coinmarketcap.com/v2/ticker/?limit=100&structure=array",
-//   headers: {
-//       "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
-//       Accept: "application/json"
-//   }
-// };
-
-// async function callback(error, response, body) {
-//   if (!error && response.statusCode == 200) {
-//       var cryptoNames = "";
-//       var res = JSON.parse(body);
-//       var resData = res.data;
-//       for (var i in resData){
-//           cryptoNames += await  "('" + resData[i].name + "','" + resData[i].symbol  + "'),";
-
-//       }
-//       // take off the last comma since we added one after each value
-//       //cryptoNames = ('Bitcoin','BTC'),('XRP','XRP'),('Ethereum','ETH'),('Bitcoin Cash','BCH'),...
-//       cryptoNames = await cryptoNames.substr(0,cryptoNames.length-1);
-
-//       var cryptoQuery = 'INSERT INTO landing_cryptos (crypto_name, crypto_symbol) VALUES ' + cryptoNames;
-//       await connection.query(cryptoQuery, function (error, results, fields) {
-//           if (error) throw error;
-// //             console.log(results);
-
-//       });
-
-//   }
-//   else{
-//       console.log(error);
-
-
-//   }
-//   }
-
-//   request(dropdownSettings, callback);
+      for (var j in coin_info) {
+        var crypto_site = coin_info[j].urls.website[0];
+        var crypto_logo = coin_info[j].logo;
+        var crypto_metadata_name = coin_info[j].name;
+        connection.query(
+          "INSERT INTO crypto_info SET ?",
+          {
+            crypto_logo: crypto_logo,
+            crypto_link: crypto_site,
+            crypto_metadata_name
+          },
+          function(err, res) {
+            if (err) {
+              // console.log(err);
+            }
+          }
+        );
+      }
+    }
+  }
+);
 
 // set the view engine to ejs
 // app.set("view engine", "ejs");
