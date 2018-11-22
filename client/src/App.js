@@ -22,7 +22,7 @@ class App extends Component {
   render() {
     return (
         <Switch>
-          <div>
+          <div className="fullHeight">
             {/* <Layout /> */}
               <Route exact path="/" component={SignIn} />
               <Route exact path="/SignUp" component={SignUp} />

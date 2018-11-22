@@ -126,8 +126,8 @@ class SignIn extends Component {
                 </div>
               </Modal>
             </form>
-            <Footer/>
           </div>
+          <Footer/>
         </div>
       </div>
 
