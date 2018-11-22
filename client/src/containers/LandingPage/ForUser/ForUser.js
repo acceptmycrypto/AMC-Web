@@ -47,9 +47,10 @@ class ForUser extends Component {
       return <div>Error! {error.message}</div>;
     }
 
-    if (loading) {
-      return <div>Loading...</div>;
-    }
+    //comment out to bypass the white loading screen displayed before the component mounts
+    // if (loading) {
+    //   return <div>Loading...</div>;
+    // }
     return (
       <div className="App">
         <div className="App__Aside">
