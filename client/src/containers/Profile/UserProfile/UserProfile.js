@@ -13,7 +13,7 @@ import { bindActionCreators } from 'redux';
 import { _updateCryptoTable, _verifyUser } from "../../../services/UserProfileService";
 import { _loadProfile } from "../../../actions/userLoadActions";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
-import { handleToggleChange } from "../../../actions/userActions";
+import { handleToggleChange, handleAddressFormChange } from "../../../actions/cryptoPortfolioActions";
 
 
 
@@ -41,63 +41,63 @@ class UserProfile extends Component {
   }
 
 
-  // if status is show, all coins in wallet will be shown but if status is hide, all coins but the one clicked on will be hidden
-  hideOrShowCoin = (status, parentDiv) => {
-    // status can be either "show" or "hide"
-    let surroundingDiv = document.querySelector(".cryptoWallet");
-    let allChildren = surroundingDiv.children;
+  // // if status is show, all coins in wallet will be shown but if status is hide, all coins but the one clicked on will be hidden
+  // hideOrShowCoin = (status, parentDiv) => {
+  //   // status can be either "show" or "hide"
+  //   let surroundingDiv = document.querySelector(".cryptoWallet");
+  //   let allChildren = surroundingDiv.children;
 
-    if (status === "show") {
-      // displays all the user's coins
-      for (let i = 0; i < allChildren.length; i++) {
-        let element = allChildren[i]
-        element.style.display = "flex";
-      }
+  //   if (status === "show") {
+  //     // displays all the user's coins
+  //     for (let i = 0; i < allChildren.length; i++) {
+  //       let element = allChildren[i]
+  //       element.style.display = "flex";
+  //     }
 
-      if (this.state.qr) { //if the QR is shown on the page
-        this.hideOrShowAddress("hide"); // will hide the QR code and Wallet address when all the coins are shown
-      }
+  //     if (this.state.qr) { //if the QR is shown on the page
+  //       this.hideOrShowAddress("hide"); // will hide the QR code and Wallet address when all the coins are shown
+  //     }
 
-    } else {
-      // status is hide, all coins other than what user clicked on will be hidden
-      for (let i = 0; i < allChildren.length; i++) {
-        let element = allChildren[i]
-        if (element != parentDiv) {
-          element.style.display = "none";
-        }
-      }
-    }
-  }
+  //   } else {
+  //     // status is hide, all coins other than what user clicked on will be hidden
+  //     for (let i = 0; i < allChildren.length; i++) {
+  //       let element = allChildren[i]
+  //       if (element != parentDiv) {
+  //         element.style.display = "none";
+  //       }
+  //     }
+  //   }
+  // }
 
-  // if status is show, the QR code and Wallet Address will be shown, if status is hide, the QR code and Wallet Address will be removed from DOM
-  hideOrShowAddress = (status, parentDiv, address) => {
-    if (status === "show") {
-      // the wallet address, QR code and delete button will be created and shown
-      let surroundingDiv = document.querySelector(".cryptoWallet");
+  // // if status is show, the QR code and Wallet Address will be shown, if status is hide, the QR code and Wallet Address will be removed from DOM
+  // hideOrShowAddress = (status, parentDiv, address) => {
+  //   if (status === "show") {
+  //     // the wallet address, QR code and delete button will be created and shown
+  //     let surroundingDiv = document.querySelector(".cryptoWallet");
 
-      let qr = document.createElement("img");
-      qr.classList.add("qr");
-      qr.src = `https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${address}`;
+  //     let qr = document.createElement("img");
+  //     qr.classList.add("qr");
+  //     qr.src = `https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${address}`;
 
-      let displayAddress = document.createElement("p");
-      displayAddress.classList.add("address");
-      displayAddress.innerHTML = address;
-      surroundingDiv.append(qr, displayAddress);
+  //     let displayAddress = document.createElement("p");
+  //     displayAddress.classList.add("address");
+  //     displayAddress.innerHTML = address;
+  //     surroundingDiv.append(qr, displayAddress);
 
-    } else {
-      // status = "hide"
+  //   } else {
+  //     // status = "hide"
 
-      console.log('hidden');
-      let address = document.querySelector(".address");
-      let qr = document.querySelector(".qr");
-      // let deleteIcon = document.querySelector(".deleteIcon");
+  //     console.log('hidden');
+  //     let address = document.querySelector(".address");
+  //     let qr = document.querySelector(".qr");
+  //     // let deleteIcon = document.querySelector(".deleteIcon");
 
-      // remove wallet address, QR code, and delete icon from DOM
-      address.remove();
-      qr.remove();
-      // deleteIcon.remove();
-    }
-  }
+  //     // remove wallet address, QR code, and delete icon from DOM
+  //     address.remove();
+  //     qr.remove();
+  //     // deleteIcon.remove();
+  //   }
+  // }
 
 
   // handleToggleChange = (event) => {
@@ -138,30 +138,30 @@ class UserProfile extends Component {
     }
   }
 
-  handleAddressFormChange = (event) => {
+  // handleAddressFormChange = (event) => {
 
-    let target = event.target;
-    let parentDiv = target.parentElement.parentElement;
+  //   let target = event.target;
+  //   let parentDiv = target.parentElement.parentElement;
 
-    let users_cryptos_id = target.getAttribute("data-id");
-    let current_crypto_name = target.getAttribute("data-name");
+  //   let users_cryptos_id = target.getAttribute("data-id");
+  //   let current_crypto_name = target.getAttribute("data-name");
 
 
-    if (this.state.add_address) {
-      // when add wallet form is hidden then show all coins
+  //   if (this.state.add_address) {
+  //     // when add wallet form is hidden then show all coins
 
-      this.hideOrShowCoin("show");
+  //     this.hideOrShowCoin("show");
 
-      this.setCurrentState(this.state.crypto_view, this.state.qr, false, null, null); //crypto_view, qr, add_address, users_cryptos_id, current_crypto_name
+  //     this.setCurrentState(this.state.crypto_view, this.state.qr, false, null, null); //crypto_view, qr, add_address, users_cryptos_id, current_crypto_name
 
-    } else {
-      // when add wallet address form is shown then hide other coins
+  //   } else {
+  //     // when add wallet address form is shown then hide other coins
 
-      this.hideOrShowCoin("hide", parentDiv);
+  //     this.hideOrShowCoin("hide", parentDiv);
 
-      this.setCurrentState(this.state.crypto_view, this.state.qr, true, users_cryptos_id, current_crypto_name); //crypto_view, qr, add_address, users_cryptos_id, current_crypto_name
-    }
-  }
+  //     this.setCurrentState(this.state.crypto_view, this.state.qr, true, users_cryptos_id, current_crypto_name); //crypto_view, qr, add_address, users_cryptos_id, current_crypto_name
+  //   }
+  // }
 
   updateCryptos = (event) => {
     event.preventDefault();
@@ -199,7 +199,7 @@ class UserProfile extends Component {
         this.setState({ user_info, user_crypto, crypto_view, add_address });
 
         //set toggle button checked = false
-        document.querySelector("#togBtn").checked = false;
+        document.querySelector("#ownedInterestedToggleButton").checked = false;
 
         // show all coins
         this.hideOrShowCoin("show");
@@ -225,7 +225,7 @@ class UserProfile extends Component {
 
   render() {
 
-    const { error, loading, user_info, user_crypto, transactions, userLoggedIn, handleToggleChange, hideOrShowCoin } = this.props;
+    const { error, loading, user_info, user_crypto, transactions, userLoggedIn, crypto_view, address_form_shown, handleToggleChange, handleAddressFormChange} = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -243,13 +243,6 @@ class UserProfile extends Component {
         this.props.history.push('/');
     }
 
-    if(hideOrShowCoin == "show"){
-
-    }
-    else{
-      
-    }
-
     return (
       <div>
         <Layout >
@@ -258,9 +251,9 @@ class UserProfile extends Component {
             {user_info != undefined && <ProfileCard user_info={user_info} />}
 
             {user_crypto != undefined &&
-              <CryptoCard handleToggleChange={handleToggleChange} handleAddressFormChange={this.handleAddressFormChange} handleQRChange={this.handleQRChange} crypto_view={this.state.crypto_view} user_crypto={user_crypto}>
+              <CryptoCard handleToggleChange={handleToggleChange} address_form_shown={address_form_shown} handleAddressFormChange={handleAddressFormChange} handleQRChange={this.handleQRChange} crypto_view={crypto_view} user_crypto={user_crypto}>
 
-                {this.state.add_address &&
+                {address_form_shown &&
                   <CryptoAddress updateCryptos={this.updateCryptos} updateCryptoTable={this.updateCryptoTable} />
                 }
 
@@ -292,17 +285,16 @@ const mapStateToProps = state => ({
   loading: state.UserInfo.loading,
   error: state.UserInfo.error,
   userLoggedIn: state.LoggedIn.userLoggedIn, 
-  crypto_view: state.User.crypto_view,
-  qr: state.User.qr,
-  add_address: state.User.add_address,
-  users_cryptos_id: state.User.users_cryptos_id,
-  current_crypto_name: state.User.current_crypto_name,
-  hideOrShowCoin: state.User.hideOrShowCoin
+  crypto_view: state.CryptoPortfolio.crypto_view,
+  isQRShown: state.CryptoPortfolio.isQRShown,
+  address_form_shown: state.CryptoPortfolio.address_form_shown,
+  users_cryptos_id: state.CryptoPortfolio.users_cryptos_id,
+  current_crypto_name: state.CryptoPortfolio.current_crypto_name
 
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({_isLoggedIn, _loadProfile, handleToggleChange}, dispatch);
+  return bindActionCreators({_isLoggedIn, _loadProfile, handleToggleChange, handleAddressFormChange}, dispatch);
 }
 
 
