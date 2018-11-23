@@ -7,7 +7,7 @@ const CryptoCard = props => {
         <div id="cryptoPortfolio" className="p-1 m-3 text-center w-100 white-bg">
             <h5 id="cryptoHeader" className="blueText header font-15">CRYPTO PORTFOLIO</h5>
 
-            <label className="switch"><input type="checkbox" id="ownedInterestedToggleButton" onChange={props.handleToggleChange} /><div className="slider round"><span className="own">OWNED</span><span className="interest">INTERESTED</span></div></label>
+            <label className="switch"><input type="checkbox" id="ownedInterestedToggleButton" onChange={(event)=>{props.handleToggleChange(event, props.qr_shown)}} /><div className="slider round"><span className="own">OWNED</span><span className="interest">INTERESTED</span></div></label>
             <div className="cryptoWallet">
                 {(props.user_crypto.length > 0)
 
@@ -36,7 +36,7 @@ const CryptoCard = props => {
                                         ? <div className="mx-1 my-2 cryptos">
                                             <a className="blueText cryptoText link" href={crypto.crypto_link} target="_blank">{crypto.crypto_metadata_name}</a>
                                             <br></br>
-                                            <img className="cryptoImage" data-name={crypto.crypto_metadata_name} data-address={crypto.crypto_address} data-id={crypto.id} src={crypto.crypto_logo} onClick={props.handleQRChange}></img>
+                                            <img className="cryptoImage" data-name={crypto.crypto_metadata_name} data-address={crypto.crypto_address} data-id={crypto.id} src={crypto.crypto_logo} onClick={(event) =>{props.handleQRChange(event, props.qr_shown)}}></img>
                                             <br></br>
                                         </div>
                                         : null
