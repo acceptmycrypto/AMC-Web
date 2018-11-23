@@ -13,7 +13,7 @@ import { bindActionCreators } from 'redux';
 import { _updateCryptoTable, _verifyUser } from "../../../services/UserProfileService";
 import { _loadProfile } from "../../../actions/userLoadActions";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
-import { handleToggleChange, handleAddressFormChange } from "../../../actions/cryptoPortfolioActions";
+import { handleToggleChange, handleAddressFormChange, handleQRChange } from "../../../actions/cryptoPortfolioActions";
 
 
 
@@ -115,28 +115,28 @@ class UserProfile extends Component {
   //   }
   // }
 
-  handleQRChange = (event) => {
-    if (this.state.qr) {
-      // after click of coin, if in state qr = true then show all coins and set state
-      this.hideOrShowCoin("show");
+  // handleQRChange = (event) => {
+  //   if (this.state.qr) {
+  //     // after click of coin, if in state qr = true then show all coins and set state
+  //     this.hideOrShowCoin("show");
 
-      this.setCurrentState(this.state.crypto_view, false, this.state.add_address, null, null); //crypto_view, qr, add_address, users_cryptos_id, current_crypto_name
+  //     this.setCurrentState(this.state.crypto_view, false, this.state.add_address, null, null); //crypto_view, qr, add_address, users_cryptos_id, current_crypto_name
 
-    } else {
-      // after click of coin, if in state qr = false then change qr = true in state and hide all other coins and show the QR and wallet address of the coin that was clicked on
-      let target = event.target; // coin that was clicked on
-      let parentDiv = target.parentElement.parentElement;
-      let address = target.getAttribute("data-address");
+  //   } else {
+  //     // after click of coin, if in state qr = false then change qr = true in state and hide all other coins and show the QR and wallet address of the coin that was clicked on
+  //     let target = event.target; // coin that was clicked on
+  //     let parentDiv = target.parentElement.parentElement;
+  //     let address = target.getAttribute("data-address");
 
-      console.log(parentDiv);
+  //     console.log(parentDiv);
 
-      this.hideOrShowCoin("hide", parentDiv);
+  //     this.hideOrShowCoin("hide", parentDiv);
 
-      this.hideOrShowAddress("show", parentDiv, address);
+  //     this.hideOrShowAddress("show", parentDiv, address);
 
-      this.setCurrentState(this.state.crypto_view, true, this.state.add_address, null, null); //crypto_view, qr, add_address, users_cryptos_id, current_crypto_name
-    }
-  }
+  //     this.setCurrentState(this.state.crypto_view, true, this.state.add_address, null, null); //crypto_view, qr, add_address, users_cryptos_id, current_crypto_name
+  //   }
+  // }
 
   // handleAddressFormChange = (event) => {
 
@@ -225,7 +225,7 @@ class UserProfile extends Component {
 
   render() {
 
-    const { error, loading, user_info, user_crypto, transactions, userLoggedIn, crypto_view, address_form_shown, handleToggleChange, handleAddressFormChange} = this.props;
+    const { error, loading, user_info, user_crypto, transactions, userLoggedIn, crypto_view, address_form_shown, qr_shown, handleToggleChange, handleAddressFormChange, handleQRChange} = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -251,7 +251,7 @@ class UserProfile extends Component {
             {user_info != undefined && <ProfileCard user_info={user_info} />}
 
             {user_crypto != undefined &&
-              <CryptoCard handleToggleChange={handleToggleChange} address_form_shown={address_form_shown} handleAddressFormChange={handleAddressFormChange} handleQRChange={this.handleQRChange} crypto_view={crypto_view} user_crypto={user_crypto}>
+              <CryptoCard handleToggleChange={handleToggleChange} address_form_shown={address_form_shown} handleAddressFormChange={handleAddressFormChange} handleQRChange={handleQRChange} qr_shown={qr_shown} crypto_view={crypto_view} user_crypto={user_crypto}>
 
                 {address_form_shown &&
                   <CryptoAddress updateCryptos={this.updateCryptos} updateCryptoTable={this.updateCryptoTable} />
@@ -286,7 +286,7 @@ const mapStateToProps = state => ({
   error: state.UserInfo.error,
   userLoggedIn: state.LoggedIn.userLoggedIn, 
   crypto_view: state.CryptoPortfolio.crypto_view,
-  isQRShown: state.CryptoPortfolio.isQRShown,
+  qr_shown: state.CryptoPortfolio.qr_shown,
   address_form_shown: state.CryptoPortfolio.address_form_shown,
   users_cryptos_id: state.CryptoPortfolio.users_cryptos_id,
   current_crypto_name: state.CryptoPortfolio.current_crypto_name
@@ -294,7 +294,7 @@ const mapStateToProps = state => ({
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({_isLoggedIn, _loadProfile, handleToggleChange, handleAddressFormChange}, dispatch);
+  return bindActionCreators({_isLoggedIn, _loadProfile, handleToggleChange, handleAddressFormChange, handleQRChange}, dispatch);
 }
 
 
