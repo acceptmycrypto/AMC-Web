@@ -13,6 +13,10 @@ var sgMail = require("@sendgrid/mail");
 var keys = require("../key");
 sgMail.setApiKey(keys.sendgrid);
 
+//signup email template
+var hogan = require('hogan.js');
+var fs = require('fs');
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('public'));
@@ -32,6 +36,13 @@ var connection = mysql.createConnection({
   database: process.env.DB_DB
 });
 
+
+// signup email template
+// get file
+var signupEmailTemplateText = fs.readFileSync('./routes/emailTemplate_signup/email_template.hjs', 'utf-8');
+// compile template
+var signupEmailTemplate = hogan.compile(signupEmailTemplateText);
+//now render template in email_verification object
 
 
 router.post('/register', function(req, res) {
@@ -90,12 +101,17 @@ router.post('/register', function(req, res) {
 
                     //use sendgrid to send email
                     let link = process.env.BACKEND_URL+"/email-verify/" + userID + "/" + result[0].email_verification_token;
+                    var signupEmailHtml = signupEmailTemplate.render({
+                      NEW_USER_NAME: req.body.username,
+                      NEW_USER_ACT_LINK: process.env.BACKEND_URL+"/email-verify/" + userID + "/" + result[0].email_verification_token
+                    });
+                   
 
                     const email_verification = {
                       to: req.body.email,
                       from: 'simon@acceptmycrypto.com',
                       subject: 'Please click the link below to verify your email.',
-                      html: `<a href=${link}>Verify Email</a>`
+                      html: signupEmailHtml
                     };
                     sgMail.send(email_verification);
                   }
@@ -191,5 +207,22 @@ router.get('/cryptocurrencies', function(req, res) {
     }
   );
 });
+
+//create a route for testing an email template
+router.get('/preview', function(req, res) {
+
+  
+  var text = signupEmailTemplate.render({
+    "link": "https://www.w3schools.com/nodejs/nodejs_filesystem.asp", 
+    "NEW_USER_NAME": "Alex"
+  })
+  res.send(text)
+  // res.render('index');
+  // res.send('hi');
+  // res.render(text);
+
+  // res.sendFile(path.join(__dirname, "index.html"));
+});
+
 
 module.exports = router;
