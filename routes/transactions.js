@@ -145,7 +145,7 @@ router.post("/checkout/notification", function (req, res, next) {
     [req.body.txn_id],
     function(err, data_status, fields) {
       let current_status = data_status[0].status;
-      // data_status is 0 (waiting for buyer funds)
+
       if (current_status === "0" && req.body.status === "1") {
         //update the status in the table to "1"
         //meaning: Funds received and confirmed, sending to you shortly...
@@ -154,10 +154,10 @@ router.post("/checkout/notification", function (req, res, next) {
         [{ status: req.body.status}, { txn_id: req.body.txn_id }],
         function (error, results, fields) {
           if (error) throw error;
-  
+
           const handle_order = {
             to: 'simon@acceptmycrypto.com',
-            from: 'simon@acceptmycrypto.com',
+            from: process.env.CUSTOMER_SUPPORT,
             subject: 'A customer has ordered and paid a deal item. Please take action.',
             html: `<div>Check user invoice</div>`
           };
@@ -173,10 +173,9 @@ router.post("/checkout/notification", function (req, res, next) {
         [{ status: req.body.status}, { txn_id: req.body.txn_id }],
         function (error, results, fields) {
           if (error) throw error;
-          console.log("We have received your order. We'll notify you when we ship your order.", results);
           const confirm_payment_with_customer = {
             to: data_status[0].email,
-            from: 'simon@acceptmycrypto.com',
+            from: process.env.CUSTOMER_SUPPORT,
             subject: 'Thank You for your order!',
             html: `<div>We have received your order. We'll notify you when we ship your order.</div>`
           };
@@ -192,10 +191,9 @@ router.post("/checkout/notification", function (req, res, next) {
         [{ status: req.body.status}, { txn_id: req.body.txn_id }],
         function (error, results, fields) {
           if (error) throw error;
-          console.log("We didn't receive your payment.", results);
           const cancel_order = {
             to: data_status[0].email,
-            from: 'simon@acceptmycrypto.com',
+            from: process.env.CUSTOMER_SUPPORT,
             subject: 'Your order has canceled!',
             html: `<div>We didn't receive your payment.</div>`
           };
