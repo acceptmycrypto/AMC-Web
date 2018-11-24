@@ -13,6 +13,10 @@ var IPN_SECRET = keys.coinpayment.IPN_SECRET;
 var { verify } = require(`coinpayments-ipn`);
 var CoinpaymentsIPNError = require(`coinpayments-ipn/lib/error`);
 
+//use sendgrid
+var sgMail = require("@sendgrid/mail");
+sgMail.setApiKey(keys.sendgrid);
+
 var verifyToken =  require ("./utils/validation");
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -77,7 +81,7 @@ router.post("/checkout", verifyToken, function(req, res) {
           [req.body.crypto_name],
           function(error, cryptoID, fields) {
             if (error) console.log(error);
-
+            console.log("payment info: ", paymentInfo);
             connection.query(
               "INSERT INTO users_purchases SET ?",
               {
@@ -115,31 +119,92 @@ router.post("/checkout/notification", function (req, res, next) {
     return next(new Error(`Invalid request`));
   }
 
-  let isValid, error;
+  let isValid, error, hmac;
 
   try {
-    isValid = verify(req.get(`HMAC`), IPN_SECRET, req.body);
-    console.log("my ipn_secret: ", IPN_SECRET);
-    console.log("HMAC: ", req.get(`HMAC`));
-    console.log("Verification Value: ", isValid);
+    hmac = req.get("HMAC");
+    isValid = verify(hmac, IPN_SECRET, req.body);
   } catch (e) {
     error = e;
   }
 
   //The instanceof operator tests whether the prototype property of a constructor appears anywhere in the prototype chain of an object.
   if (error && error instanceof CoinpaymentsIPNError) {
-    console.log("error: ", error)
     return next(error);
   }
 
   if (!isValid) {
-    console.log("Verification Value: ", isValid);
     return next(new Error(`Hmac calculation does not match`));
   }
 
   return next();
 }, function (req, res, next) {
-  console.log(`Process payment notification`, req.body);
+  //handle events
+  connection.query(
+    'SELECT status, email FROM users_purchases LEFT JOIN users ON users_purchases.user_id = users.id WHERE txn_id = ?',
+    [req.body.txn_id],
+    function(err, data_status, fields) {
+      let current_status = data_status[0].status;
+      // data_status is 0 (waiting for buyer funds)
+      if (current_status === "0" && req.body.status === "1") {
+        //update the status in the table to "1"
+        //meaning: Funds received and confirmed, sending to you shortly...
+        //send email to acceptmycrypto's support to notify user has sent the payment
+        connection.query('UPDATE users_purchases SET ? WHERE ?',
+        [{ status: req.body.status}, { txn_id: req.body.txn_id }],
+        function (error, results, fields) {
+          if (error) throw error;
+  
+          const handle_order = {
+            to: 'simon@acceptmycrypto.com',
+            from: 'simon@acceptmycrypto.com',
+            subject: 'A customer has ordered and paid a deal item. Please take action.',
+            html: `<div>Check user invoice</div>`
+          };
+          sgMail.send(handle_order);
+        });
+      }
+
+      if (current_status === "1" && req.body.status === "100") {
+        //update the status in the table to "100"
+        //meaning: payment has received in coinpayment address
+        //send an email to user saying the payment has been recieved. ship the order
+        connection.query('UPDATE users_purchases SET ? WHERE ?',
+        [{ status: req.body.status}, { txn_id: req.body.txn_id }],
+        function (error, results, fields) {
+          if (error) throw error;
+          console.log("We have received your order. We'll notify you when we ship your order.", results);
+          const confirm_payment_with_customer = {
+            to: data_status[0].email,
+            from: 'simon@acceptmycrypto.com',
+            subject: 'Thank You for your order!',
+            html: `<div>We have received your order. We'll notify you when we ship your order.</div>`
+          };
+          sgMail.send(confirm_payment_with_customer);
+        });
+      }
+
+      if (current_status === "0" && req.body.status === "-1") {
+        //update the status in the table to "-1"
+        //meaning: payment has been timeout
+        //send an email to user saying the payment has been canceled
+        connection.query('UPDATE users_purchases SET ? WHERE ?',
+        [{ status: req.body.status}, { txn_id: req.body.txn_id }],
+        function (error, results, fields) {
+          if (error) throw error;
+          console.log("We didn't receive your payment.", results);
+          const cancel_order = {
+            to: data_status[0].email,
+            from: 'simon@acceptmycrypto.com',
+            subject: 'Your order has canceled!',
+            html: `<div>We didn't receive your payment.</div>`
+          };
+          sgMail.send(cancel_order);
+        });
+      }
+    }
+  );
+  // console.log(`Process payment notification`, req.body);
   return next();
 });
 
