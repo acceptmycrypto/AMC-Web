@@ -112,7 +112,6 @@ router.post("/checkout", verifyToken, function(req, res) {
 
 });
 
-console.log("my ipn_secret: ", IPN_SECRET);
 //ipa (listen to coinpayment's events)
 router.post("/checkout/notification", function (req, res, next) {
   if(!req.get(`HMAC`) || !req.body || !req.body.ipn_mode || req.body.ipn_mode !== `hmac` || MERCHANT_ID !== req.body.merchant) {
@@ -200,9 +199,10 @@ router.post("/checkout/notification", function (req, res, next) {
           sgMail.send(cancel_order);
         });
       }
+
     }
   );
-  // console.log(`Process payment notification`, req.body);
+
   return next();
 });
 
