@@ -6,7 +6,7 @@ import * as serviceWorker from './serviceWorker';
 import BrowserRouter from "react-router-dom/BrowserRouter";
 import HttpsRedirect from 'react-https-redirect';
 import {Provider} from 'react-redux';
-import {createStore, applyMiddleware} from 'redux';
+import {createStore, applyMiddleware, compose} from 'redux';
 import thunk from "redux-thunk";
 import allReducers from './reducers';
 
