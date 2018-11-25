@@ -30,7 +30,7 @@ class Deals extends Component {
   }
 
   render() {
-    const { error, loading, deals, userLoggedIn } = this.props;
+    let { error, loading, deals, userLoggedIn } = this.props;  //does this need to be const?? i changed it to let so line 56 will work
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -52,6 +52,9 @@ class Deals extends Component {
         this.props.history.push('/');
     }
     
+    if (this.props.searchTerm!=""){
+        deals = this.props.searchedDeals;
+    }
 
     return (
       <div>
@@ -104,6 +107,8 @@ const mapStateToProps = state => ({
   loading: state.matchedDeals.loading,
   error: state.matchedDeals.error,
   userLoggedIn: state.LoggedIn.userLoggedIn,
+  searchTerm: state.Search.searchTerm,
+  searchedDeals: state.Search.searchedDeals
 });
 
 const matchDispatchToProps = dispatch =>{
