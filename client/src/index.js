@@ -10,7 +10,7 @@ import {createStore, applyMiddleware, compose} from 'redux';
 import thunk from "redux-thunk";
 import allReducers from './reducers';
 
-//all data store in variable store
+//for redux devtool on Chrome to work, came from extension's documentation
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 //all data store in variable store
 const store = createStore(
