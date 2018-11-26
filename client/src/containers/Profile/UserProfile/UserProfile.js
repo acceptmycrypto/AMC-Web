@@ -6,6 +6,7 @@ import ProfileCard from "../../../components/Profile/ProfileCard";
 import CryptoCard from "../../../components/Profile/CryptoCard";
 import CryptoAddress from "../../../components/Profile/CryptoAddress";
 import ProfileFeed from "../../../components/Profile/ProfileFeed";
+import CryptoRankings from "../../CryptosRanking";
 // import Layout from "../../../components/Layout"
 import Layout from "../../Layout";
 import { connect } from "react-redux";
@@ -50,7 +51,7 @@ class UserProfile extends Component {
       <div>
         <Layout >
         <div className="userProfile d-flex flex-row justify-content-between">
-          <div className="d-flex flex-column width-30">
+          <div className="d-flex flex-column w-25">
             {user_info != undefined && <ProfileCard user_info={user_info} />}
 
             {user_crypto != undefined &&
@@ -65,7 +66,7 @@ class UserProfile extends Component {
 
           </div>
 
-          <div className="w-100 mx-5">
+          <div className="w-50 mx-5">
           { transactions != undefined && <ProfileFeed transactions={transactions} />}
             
           </div>
@@ -73,6 +74,9 @@ class UserProfile extends Component {
           {/* <div className="width-20 mr-3">       
             <FriendCard friends_array={this.state.friends_array} />
           </div> */}
+
+          <CryptoRankings/>
+
 
         </div>
         </Layout >
