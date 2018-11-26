@@ -4,7 +4,7 @@ import "./Navbar.css";
 import Notification from "../Notification";
 import { connect } from "react-redux";
 import { _loadPhoto } from "../../../actions/navbarActions";
-
+import SearchBar from "./Searchbar";
 
 class Navbar extends Component {
 
@@ -24,10 +24,11 @@ class Navbar extends Component {
           <Link to="/feed/deals" className="Logo">
             <div className="font-17 color-deepBlue">AcceptMyCrypto</div>
         </Link>
-          <div className="Search d-flex flex-row align-items-center">
+          {/* <div className="Search d-flex flex-row align-items-center">
             <i class="fas fa-search fa-lg mx-2"></i>
             <input type="text" placeholder="Search" />
-          </div>
+          </div> */}
+        <SearchBar />
           <div className="Feed">
             {/* <li>
               <Link to="/feed/deals">
