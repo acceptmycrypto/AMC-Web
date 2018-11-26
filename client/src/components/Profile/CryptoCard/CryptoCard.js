@@ -7,7 +7,7 @@ const CryptoCard = props => {
         <div id="cryptoPortfolio" className="p-1 m-3 text-center w-100 white-bg">
             <h5 id="cryptoHeader" className="blueText header font-15">CRYPTO PORTFOLIO</h5>
 
-            <label className="switch"><input type="checkbox" id="ownedInterestedToggleButton" onChange={(event)=>{props.handleToggleChange(event, props.qr_shown)}} /><div className="slider round"><span className="own">OWNED</span><span className="interest">INTERESTED</span></div></label>
+            <label className="switch"><input type="checkbox" id="ownedInterestedToggleButton" onChange={(event)=>{props.handleToggleChange(event.target.checked, props.qr_shown)}} /><div className="slider round"><span className="own">OWNED</span><span className="interest">INTERESTED</span></div></label>
             <div className="cryptoWallet">
                 {(props.user_crypto.length > 0)
 
