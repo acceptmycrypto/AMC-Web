@@ -13,7 +13,7 @@ import { bindActionCreators } from 'redux';
 import { _updateCryptoTable, _verifyUser } from "../../../services/UserProfileService";
 import { _loadProfile } from "../../../actions/userLoadActions";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
-import { handleToggleChange, handleAddressFormChange, handleQRChange } from "../../../actions/cryptoPortfolioActions";
+import { handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos } from "../../../actions/cryptoPortfolioActions";
 
 
 
@@ -22,23 +22,23 @@ class UserProfile extends Component {
   constructor() {
     super();
 
-    this.state = {
-      crypto_view: "owned",
-      // user_info: [],
-      // user_crypto: [],
-      add_address: false,
-      qr: false,
-      users_cryptos_id: null,
-      current_crypto_name: null,
-      // transactions: []
-    }
+    // this.state = {
+    //   crypto_view: "owned",
+    //   // user_info: [],
+    //   // user_crypto: [],
+    //   add_address: false,
+    //   qr: false,
+    //   users_cryptos_id: null,
+    //   current_crypto_name: null,
+    //   // transactions: []
+    // }
 
   }
 
-  // updates state
-  setCurrentState = (crypto_view, qr, add_address, users_cryptos_id, current_crypto_name) => {
-    this.setState({ crypto_view, qr, add_address, users_cryptos_id, current_crypto_name });
-  }
+  // // updates state
+  // setCurrentState = (crypto_view, qr, add_address, users_cryptos_id, current_crypto_name) => {
+  //   this.setState({ crypto_view, qr, add_address, users_cryptos_id, current_crypto_name });
+  // }
 
 
   // // if status is show, all coins in wallet will be shown but if status is hide, all coins but the one clicked on will be hidden
@@ -163,58 +163,58 @@ class UserProfile extends Component {
   //   }
   // }
 
-  updateCryptos = (event) => {
-    event.preventDefault();
+  // updateCryptos = (event) => {
+  //   event.preventDefault();
 
-    let id = this.state.users_cryptos_id;
-    let current_crypto_name = this.state.current_crypto_name.trim();
-    let crypto_address = event.target.children[0].value;
-    let validAddress = true;
+  //   let id = this.state.users_cryptos_id;
+  //   let current_crypto_name = this.state.current_crypto_name.trim();
+  //   let crypto_address = event.target.children[0].value;
+  //   let validAddress = true;
 
-    // TO DO: FIX LITECOIN VALIATION ISSUE
+  //   // TO DO: FIX LITECOIN VALIATION ISSUE
 
-    // commented out for now because is not working
+  //   // commented out for now because is not working
 
-    // coin-address-validator does not list Verge as a supported currency type to validate by currency name so will validate manually
-    // if (current_crypto_name === "Verge" && crypto_address.indexOf(" ") === -1 && crypto_address[0] === "D" && crypto_address.length === 34) {
-    //   validAddress = true;
+  //   // coin-address-validator does not list Verge as a supported currency type to validate by currency name so will validate manually
+  //   // if (current_crypto_name === "Verge" && crypto_address.indexOf(" ") === -1 && crypto_address[0] === "D" && crypto_address.length === 34) {
+  //   //   validAddress = true;
 
-    // } else if (crypto_address > 20 && coinAddressValidator.validate(crypto_address, current_crypto_name)) {
-    //   // use coin-address-validator to validate the crypto address for the specific crypto selected
-    //   validAddress = coinAddressValidator.validate(crypto_address, current_crypto_name)
+  //   // } else if (crypto_address > 20 && coinAddressValidator.validate(crypto_address, current_crypto_name)) {
+  //   //   // use coin-address-validator to validate the crypto address for the specific crypto selected
+  //   //   validAddress = coinAddressValidator.validate(crypto_address, current_crypto_name)
 
 
-    // } else {
-    //   validAddress = false;
+  //   // } else {
+  //   //   validAddress = false;
 
-    // }
+  //   // }
 
-    if (validAddress) {
+  //   if (validAddress) {
 
-      this.updateCryptoTable(crypto_address, id).then(res => {
-        // update users crypto wallet address in database
+  //     this.updateCryptoTable(crypto_address, id).then(res => {
+  //       // update users crypto wallet address in database
 
-        //update state
-        let { user_info, user_crypto, crypto_view, add_address } = res;
-        this.setState({ user_info, user_crypto, crypto_view, add_address });
+  //       //update state
+  //       let { user_info, user_crypto, crypto_view, add_address } = res;
+  //       this.setState({ user_info, user_crypto, crypto_view, add_address });
 
-        //set toggle button checked = false
-        document.querySelector("#ownedInterestedToggleButton").checked = false;
+  //       //set toggle button checked = false
+  //       document.querySelector("#ownedInterestedToggleButton").checked = false;
 
-        // show all coins
-        this.hideOrShowCoin("show");
-      })
+  //       // show all coins
+  //       this.hideOrShowCoin("show");
+  //     })
 
-    } else {
-      event.target.children[0].value = "Invalid Address";
-    }
+  //   } else {
+  //     event.target.children[0].value = "Invalid Address";
+  //   }
 
-  }
+  // }
 
-  // update database with users new added wallet address
-  updateCryptoTable = (crypto_address, id) => {
-    return _updateCryptoTable(crypto_address, id, localStorage.getItem('token'));
-  }
+  // // update database with users new added wallet address
+  // updateCryptoTable = (crypto_address, id) => {
+  //   return _updateCryptoTable(crypto_address, id, localStorage.getItem('token'));
+  // }
 
 
   componentDidMount() {
@@ -225,7 +225,7 @@ class UserProfile extends Component {
 
   render() {
 
-    const { error, loading, user_info, user_crypto, transactions, userLoggedIn, crypto_view, address_form_shown, qr_shown, handleToggleChange, handleAddressFormChange, handleQRChange} = this.props;
+    const { error, loading, user_info, user_crypto, transactions, userLoggedIn, crypto_view, address_form_shown, qr_shown, users_cryptos_id, current_crypto_name, handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos} = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -254,7 +254,7 @@ class UserProfile extends Component {
               <CryptoCard handleToggleChange={handleToggleChange} address_form_shown={address_form_shown} handleAddressFormChange={handleAddressFormChange} handleQRChange={handleQRChange} qr_shown={qr_shown} crypto_view={crypto_view} user_crypto={user_crypto}>
 
                 {address_form_shown &&
-                  <CryptoAddress updateCryptos={this.updateCryptos} updateCryptoTable={this.updateCryptoTable} />
+                  <CryptoAddress updateCryptos={updateCryptos} crypto_id={users_cryptos_id} current_crypto_name={current_crypto_name} token={localStorage.getItem('token')} />
                 }
 
               </CryptoCard>
@@ -285,16 +285,15 @@ const mapStateToProps = state => ({
   loading: state.UserInfo.loading,
   error: state.UserInfo.error,
   userLoggedIn: state.LoggedIn.userLoggedIn, 
-  crypto_view: state.CryptoPortfolio.crypto_view,
-  qr_shown: state.CryptoPortfolio.qr_shown,
-  address_form_shown: state.CryptoPortfolio.address_form_shown,
-  users_cryptos_id: state.CryptoPortfolio.users_cryptos_id,
-  current_crypto_name: state.CryptoPortfolio.current_crypto_name
-
+  crypto_view: state.UserInfo.crypto_view,
+  qr_shown: state.UserInfo.qr_shown,
+  address_form_shown: state.UserInfo.address_form_shown,
+  users_cryptos_id: state.UserInfo.users_cryptos_id,
+  current_crypto_name: state.UserInfo.current_crypto_name
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({_isLoggedIn, _loadProfile, handleToggleChange, handleAddressFormChange, handleQRChange}, dispatch);
+  return bindActionCreators({_isLoggedIn, _loadProfile, handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos}, dispatch);
 }
 
 
