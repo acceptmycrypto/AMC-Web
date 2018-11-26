@@ -1,3 +1,7 @@
+export const FETCH_USER_BEGIN = "FETCH_USER_BEGIN";
+export const FETCH_USER_SUCCESS = "FETCH_USER_SUCCESS";
+export const FETCH_USER_FAILURE = "FETCH_USER_FAILURE";
+
 export function _loadProfile (token) {
     const Usersettings = {
       method: "POST",
@@ -30,16 +34,16 @@ export function _loadProfile (token) {
 
   
   export const fetchUserBegin = () => ({
-    type: "FETCH_USER_BEGIN"
+    type: FETCH_USER_BEGIN
   });
   
   export const fetchUserSuccess = (user_info, user_crypto, transactions) => ({
-    type: "FETCH_USER_SUCCESS",
+    type: FETCH_USER_SUCCESS,
     payload: { user_info, user_crypto, transactions }
   });
   
   export const fetchUserFailure = error => ({
-    type: "FETCH_USER_FAILURE",
+    type: FETCH_USER_FAILURE,
     payload: { error }
   });
   
