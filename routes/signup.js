@@ -93,7 +93,7 @@ router.post('/register', function(req, res) {
 
                     const email_verification = {
                       to: req.body.email,
-                      from: 'simon@acceptmycrypto.com',
+                      from: process.env.CUSTOMER_SUPPORT,
                       subject: 'Please click the link below to verify your email.',
                       html: `<a href=${link}>Verify Email</a>`
                     };

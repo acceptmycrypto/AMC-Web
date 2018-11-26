@@ -8,6 +8,8 @@ INSERT INTO deals (venue_id, deal_name, deal_description, featured_deal_image, p
 
 INSERT INTO deals (venue_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto) VALUES ("3", "Blankets", "Warm and cozy blankets insulate and comfort children forced from their homes and into emergency shelters by disasters, emergencies and conflict. These blankets help maintain and improve the health of children who have become unexpectedly vulnerable.", "https://dx2eq2oh924g4.cloudfront.net/wrpr/images/gift-catalog/products/1241/1152.jpg", "20.00", "15.00");
 
+INSERT INTO deals (venue_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto) VALUES ("1", "Tech4Kids - Paw Patrol Soft Lite Figure", "Make your child's bedtime more fun with this Paw Patrol Soft Lite night light.", "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6257/6257850_sd.jpg;maxHeight=550;maxWidth=550", "9.99", "1.00");
+
 -- Images for each deal
 INSERT INTO deal_images (deal_id, deal_image) VALUES
 (1,"https://ak1.ostkcdn.com/images/products/9542248/Safavieh-Malone-White-Chrome-Coffee-Table-484ef737-1052-4a6b-88ce-9eb8263250dc_600.jpg"),
@@ -31,4 +33,7 @@ INSERT INTO deal_images (deal_id, deal_image) VALUES
 
 INSERT INTO deal_images (deal_id, deal_image) VALUES
 (5,"https://dx2eq2oh924g4.cloudfront.net/wrpr/images/gift-catalog/products/1241/1152.jpg");
+
+INSERT INTO deal_images (deal_id, deal_image) VALUES
+(6,"https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6257/6257850_sd.jpg;maxHeight=550;maxWidth=550");
 

@@ -8,6 +8,14 @@ var methodOverride = require("method-override");
 var Coinpayments = require("coinpayments");
 var keys = require("../key");
 var client = new Coinpayments(keys.coinpayment);
+var MERCHANT_ID = keys.coinpayment.MERCHANT_ID;
+var IPN_SECRET = keys.coinpayment.IPN_SECRET;
+var { verify } = require(`coinpayments-ipn`);
+var CoinpaymentsIPNError = require(`coinpayments-ipn/lib/error`);
+
+//use sendgrid
+var sgMail = require("@sendgrid/mail");
+sgMail.setApiKey(keys.sendgrid);
 
 var verifyToken =  require ("./utils/validation");
 
@@ -48,9 +56,8 @@ router.get("/api/transactions/community/payment_received", function(req, res) {
 router.post("/checkout", verifyToken, function(req, res) {
   //Inserting to user_purchases table, this doens't mean purchase is successful
   //Need to listen to IPA when payment has recieved and then update payment_recieved to true
-  console.log(req.body);
 
-  let user_id = req.decoded._id; 
+  let user_id = req.decoded._id;
   let crypto_name = req.body.crypto_name;
 
   createMatchedFriends(user_id, crypto_name);
@@ -101,7 +108,101 @@ router.post("/checkout", verifyToken, function(req, res) {
       }
     }
   );
-  
+
+});
+
+//ipa (listen to coinpayment's events)
+router.post("/checkout/notification", function (req, res, next) {
+  if(!req.get(`HMAC`) || !req.body || !req.body.ipn_mode || req.body.ipn_mode !== `hmac` || MERCHANT_ID !== req.body.merchant) {
+    return next(new Error(`Invalid request`));
+  }
+
+  let isValid, error, hmac;
+
+  try {
+    hmac = req.get("HMAC");
+    isValid = verify(hmac, IPN_SECRET, req.body);
+  } catch (e) {
+    error = e;
+  }
+
+  //The instanceof operator tests whether the prototype property of a constructor appears anywhere in the prototype chain of an object.
+  if (error && error instanceof CoinpaymentsIPNError) {
+    return next(error);
+  }
+
+  if (!isValid) {
+    return next(new Error(`Hmac calculation does not match`));
+  }
+
+  return next();
+}, function (req, res, next) {
+  //handle events
+  connection.query(
+    'SELECT status, email FROM users_purchases LEFT JOIN users ON users_purchases.user_id = users.id WHERE txn_id = ?',
+    [req.body.txn_id],
+    function(err, data_status, fields) {
+      let current_status = data_status[0].status;
+
+      if (current_status === "0" && req.body.status === "1") {
+        //update the status in the table to "1"
+        //meaning: Funds received and confirmed, sending to you shortly...
+        //send email to acceptmycrypto's support to notify user has sent the payment
+        connection.query('UPDATE users_purchases SET ? WHERE ?',
+        [{ status: req.body.status}, { txn_id: req.body.txn_id }],
+        function (error, results, fields) {
+          if (error) throw error;
+
+          const handle_order = {
+            to: 'simon@acceptmycrypto.com',
+            from: process.env.CUSTOMER_SUPPORT,
+            subject: 'A customer has ordered and paid a deal item. Please take action.',
+            html: `<div>Check user invoice</div>`
+          };
+          sgMail.send(handle_order);
+        });
+      }
+
+      if (current_status === "1" && req.body.status === "100") {
+        //update the status in the table to "100"
+        //meaning: payment has received in coinpayment address
+        //send an email to user saying the payment has been recieved. ship the order
+        connection.query('UPDATE users_purchases SET status = ?, payment_received = ? WHERE ?',
+        [req.body.status, 1, { txn_id: req.body.txn_id }],
+        function (error, results, fields) {
+          if (error) throw error;
+          const confirm_payment_with_customer = {
+            to: data_status[0].email,
+            from: process.env.CUSTOMER_SUPPORT,
+            subject: 'Thank You for your order!',
+            html: `<div>We have received your order. We'll notify you when we ship your order.</div>`
+          };
+          sgMail.send(confirm_payment_with_customer);
+        });
+      }
+
+      if (current_status === "0" && req.body.status === "-1") {
+        //update the status in the table to "-1"
+        //meaning: payment has been timeout
+        //send an email to user saying the payment has been canceled
+        connection.query('UPDATE users_purchases SET ? WHERE ?',
+        [{ status: req.body.status}, { txn_id: req.body.txn_id }],
+        function (error, results, fields) {
+          if (error) throw error;
+          const cancel_order = {
+            to: data_status[0].email,
+            from: process.env.CUSTOMER_SUPPORT,
+            subject: 'Your order has canceled!',
+            html: `<div>We didn't receive your payment.</div>`
+          };
+          sgMail.send(cancel_order);
+        });
+      }
+
+    }
+  );
+
+  return next();
 });
 
 
@@ -113,7 +214,7 @@ function createMatchedFriends(user_id, crypto_name){
 
       connection.query(
         "SELECT DISTINCT user_id, date_purchased FROM users_purchases WHERE ? AND payment_received = 1 AND user_id NOT IN (SELECT matched_friend_id FROM users_matched_friends WHERE user_id = ?) AND NOT ? ORDER BY users_purchases.date_purchased DESC",
-         [{crypto_id}, {user_id}, {user_id}], 
+         [{crypto_id}, {user_id}, {user_id}],
          function(error, results, fields) {
           if (error) throw error;
 
@@ -124,18 +225,18 @@ function createMatchedFriends(user_id, crypto_name){
 
             console.log(JSON.stringify(limitedIDArray));
 
-            
+
             for (let j = 0; j< limitedIDArray.length; j++){
                 matches.push([user_id, limitedIDArray[j].user_id]);
-                matches.push([limitedIDArray[j].user_id, user_id]);              
+                matches.push([limitedIDArray[j].user_id, user_id]);
             }
-            
+
             let sql =  "INSERT INTO users_matched_friends (user_id, matched_friend_id) VALUES ?"
 
             connection.query( sql, [matches], function(error, results, fields) {
                 if (error) throw error;
-                console.log("Number of records inserted: " + results.affectedRows);          
-      
+                console.log("Number of records inserted: " + results.affectedRows);
+
               }
             );
 
@@ -144,11 +245,11 @@ function createMatchedFriends(user_id, crypto_name){
             console.log('No Matches');
           }
 
-          
+
         }
       );
 
-      
+
     }
   );
 }
