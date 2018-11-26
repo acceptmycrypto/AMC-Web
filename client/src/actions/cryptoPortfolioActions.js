@@ -4,7 +4,6 @@
  * Actions are javascript objects that are payloads of information that send data from the application to the store.
  * @prop {string} type -Actions have a type property that indicates the type of action being performed
  * @prop {object}  payload -The payload property holds data that will be sent to the store
- * @author Avanika Krishnaswamy @avakrishn
  */
 
 
@@ -19,9 +18,9 @@ export const HIDE_ADDRESS_FORM = "HIDE_ADDRESS_FORM";
 export const SHOW_ADDRESS_FORM = "SHOW_ADDRESS_FORM";
 export const HIDE_QR = "HIDE_QR";
 export const SHOW_QR = "SHOW_QR";
-
-
-
+export const FETCH_UPDATE_CRYPTO_BEGIN = "FETCH_UPDATE_CRYPTO_BEGIN";
+export const FETCH_UPDATE_CRYPTO_SUCCESS = "FETCH_UPDATE_CRYPTO_SUCCESS";
+export const FETCH_UPDATE_CRYPTO_FAILURE = "FETCH_UPDATE_CRYPTO_FAILURE";
 
 
 /**
@@ -47,8 +46,8 @@ export const SHOW_QR = "SHOW_QR";
 */
 
 
-export const handleToggleChange = (event, qr_shown) => {
-    let isChecked = event.target.checked;
+export const handleToggleChange = (isChecked, qr_shown) => {
+    // isChecked = event.target.checked;
     if (isChecked) {
         hideOrShowCryptos("show", false);
         if (qr_shown) {
@@ -147,7 +146,7 @@ export const handleQRChange = (event, qr_shown) => {
         hideOrShowCryptos("show");
         hideOrShowAddress("hide");
         return {
-            type: "HIDE_QR",
+            type: HIDE_QR,
             payload: {
                 qr_shown: false
             },
@@ -160,17 +159,98 @@ export const handleQRChange = (event, qr_shown) => {
         hideOrShowCryptos("hide", true, parentDiv);
         hideOrShowAddress("show", address);
         return {
-            type: "SHOW_QR",
+            type: SHOW_QR,
             payload: {
                 qr_shown: true
             },
         }
-
-
     }
 }
 
+/** 
+  * @func updateCryptos 
+  * @summary function is invoked in CryptoAddress component when Add Address form is submitted
+  * @desc  function will update users_crypto in state with new crypto address the user has entered
+  * @param {event} event - event occurs onSubmit of the addAddress form
+  * @param {number} id - crypto id of the interested cryptocurrency that the user will be adding address for
+  * @param {string} current_crypto_name - crypto name of the interested cryptocurrency that the user will be adding address for
+  * @param {string} token - the user's token that is stored in local storage after user has logged in
+  * @member {function} fetchCryptoUpdateBegin
+  * @member {function} fetchCryptoUpdateSuccess 
+  * @member {function} fetchCryptoUpdateFailure
+*/
+export function updateCryptos(event, id, current_crypto_name, token) {
+    event.preventDefault();
 
+    let crypto_address = document.querySelector("#addressFormInput").value.trim();
+
+    const crypto_settings = {
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ crypto_address, id, token })
+    };
+
+    const user_settings = {
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token })
+    };
+
+    return dispatch => {
+        dispatch(fetchCryptoUpdateBegin());
+        return Promise.all([
+            fetch("/profile/addAddress?_method=PUT", crypto_settings),
+            fetch("/profile/crypto", user_settings),
+        ])
+            .then(([res1, res2]) => Promise.all([res1.json(), res2.json()]))
+            .then(([respons_1, user_crypto]) => {
+                console.log("user crypto ", user_crypto);
+                dispatch(fetchCryptoUpdateSuccess(user_crypto));
+                document.querySelector("#ownedInterestedToggleButton").checked = false;
+                return (user_crypto);
+            })
+            .catch(error => dispatch(fetchCryptoUpdateFailure(error)));
+    };
+}
+
+/** 
+  * @func fetchCryptoUpdateBegin 
+  * @summary function is invoked in @func updateCryptos
+  * @desc returns action with type: FETCH_UPDATE_CRYPTO_BEGIN before the post routes are complete
+*/
+
+export const fetchCryptoUpdateBegin = () => ({
+    type: FETCH_UPDATE_CRYPTO_BEGIN,
+});
+
+/** 
+* @func fetchCryptoUpdateSuccess 
+* @summary function is invoked in @func updateCryptos
+* @desc returns action with type: FETCH_UPDATE_CRYPTO_SUCCESS and payload to update the store after the post routes are complete
+*/
+
+export const fetchCryptoUpdateSuccess = (user_crypto) => ({
+    type: FETCH_UPDATE_CRYPTO_SUCCESS,
+    payload: { user_crypto, crypto_view: "owned", address_form_shown: false }
+});
+
+
+/** 
+* @func fetchCryptoUpdateFailure 
+* @summary function is invoked in @func updateCryptos
+* @desc returns action with type: FETCH_UPDATE_CRYPTO_FAILURE and payload: error to update the store if the post routes fail due to error
+*/
+
+export const fetchCryptoUpdateFailure = error => ({
+    type: FETCH_UPDATE_CRYPTO_FAILURE,
+    payload: { error }
+});
 
 
 /**
