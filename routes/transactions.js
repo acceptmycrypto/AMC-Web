@@ -56,7 +56,6 @@ router.get("/api/transactions/community/payment_received", function(req, res) {
 router.post("/checkout", verifyToken, function(req, res) {
   //Inserting to user_purchases table, this doens't mean purchase is successful
   //Need to listen to IPA when payment has recieved and then update payment_recieved to true
-  console.log(req.body);
 
   let user_id = req.decoded._id;
   let crypto_name = req.body.crypto_name;
@@ -81,7 +80,7 @@ router.post("/checkout", verifyToken, function(req, res) {
           [req.body.crypto_name],
           function(error, cryptoID, fields) {
             if (error) console.log(error);
-            console.log("payment info: ", paymentInfo);
+
             connection.query(
               "INSERT INTO users_purchases SET ?",
               {
@@ -168,8 +167,8 @@ router.post("/checkout/notification", function (req, res, next) {
         //update the status in the table to "100"
         //meaning: payment has received in coinpayment address
         //send an email to user saying the payment has been recieved. ship the order
-        connection.query('UPDATE users_purchases SET ? WHERE ?',
-        [{ status: req.body.status}, { txn_id: req.body.txn_id }],
+        connection.query('UPDATE users_purchases SET status = ?, payment_received = ? WHERE ?',
+        [req.body.status, 1, { txn_id: req.body.txn_id }],
         function (error, results, fields) {
           if (error) throw error;
           const confirm_payment_with_customer = {
