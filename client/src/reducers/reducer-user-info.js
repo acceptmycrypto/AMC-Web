@@ -10,6 +10,12 @@ import {
   FETCH_UPDATE_CRYPTO_FAILURE, 
 
 } from "../actions/cryptoPortfolioActions";
+import { 
+  FETCH_USER_BEGIN, 
+  FETCH_USER_FAILURE, 
+  FETCH_USER_SUCCESS 
+} from "../actions/userLoadActions";
+
 
 const initialState = {
   user_info: [],
@@ -26,20 +32,15 @@ const initialState = {
 
 export default function userInfoReducer(state = initialState, action) {
   switch (action.type) {
-    case "FETCH_USER_BEGIN":
-      // Mark the state as "loading" so we can show a spinner or something
-      // Also, reset any errors. We're starting fresh.
+    case FETCH_USER_BEGIN:
       return {
         ...state,
         loading: true,
         error: null
       };
 
-    case "FETCH_USER_SUCCESS":
-      // All done: set loading "false".
-      // Also, replace the items with the ones from the server
-      console.log("User has successfully called!")
-      console.log(action);
+    case FETCH_USER_SUCCESS:
+      // All done with fetch call: set loading "false".
       return {
         ...state,
         loading: false,
@@ -48,12 +49,7 @@ export default function userInfoReducer(state = initialState, action) {
         transactions: action.payload.transactions
       };
 
-    case "FETCH_USER_FAILURE":
-      // The request failed, but it did stop, so set loading to "false".
-      // Save the error, and we can display it somewhere
-      // Since it failed, we don't have items to display anymore, so set it empty.
-      // This is up to you and your app though: maybe you want to keep the items
-      // around! Do whatever seems right.
+    case FETCH_USER_FAILURE:
       return {
         ...state,
         loading: false,
