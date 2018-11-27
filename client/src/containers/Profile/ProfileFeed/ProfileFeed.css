@@ -1,0 +1,14 @@
+.right{
+    width: 100%;
+}
+
+.overflow-y{
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 75vh;
+    padding: 10px 20px 0 0;
+}
+
+.color-blueRanking{
+    color: #2a3c51;
+  }
