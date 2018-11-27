@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var router = express.Router();
+var path = require("path");
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
@@ -12,6 +13,8 @@ const uuidv4 = require('uuid/v4'); //generates uuid for us
 var sgMail = require("@sendgrid/mail");
 var keys = require("../key");
 sgMail.setApiKey(keys.sendgrid);
+//email template
+var fs = require('fs');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -32,7 +35,11 @@ var connection = mysql.createConnection({
   database: process.env.DB_DB
 });
 
-
+//compile email template
+var filename = path.join(__dirname, "../views/emailTemplates/emailVerification.js', 'utf-8");
+var signupEmailTemplateText = fs.readFileSync(filename, 'utf-8');
+var signupEmailTemplate = ejs.compile(signupEmailTemplateText);
+console.log(signupEmailTemplate);
 
 router.post('/register', function(req, res) {
   console.log(req.body);
@@ -176,6 +183,13 @@ router.get('/email-verify/:user_id/:email_verification_token', function(req, res
     }
   );
 });
+
+
+//email template
+router.get('/preview', function(req, res) {
+  res.render("emailTemplates/emailVerification", { email: "simon@acceptmycrypto.com"})
+});
+
 
 //Anyone can access this route
 //grab the cryptos list for user to select
