@@ -15,6 +15,7 @@ var keys = require("../key");
 sgMail.setApiKey(keys.sendgrid);
 //email template
 var fs = require('fs');
+var ejs = require('ejs');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -36,10 +37,8 @@ var connection = mysql.createConnection({
 });
 
 //compile email template
-var filename = path.join(__dirname, "../views/emailTemplates/emailVerification.js', 'utf-8");
-var signupEmailTemplateText = fs.readFileSync(filename, 'utf-8');
+var signupEmailTemplateText = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/emailVerification/emailVerification.ejs'), 'utf-8');
 var signupEmailTemplate = ejs.compile(signupEmailTemplateText);
-console.log(signupEmailTemplate);
 
 router.post('/register', function(req, res) {
   console.log(req.body);
@@ -96,13 +95,13 @@ router.post('/register', function(req, res) {
                     );
 
                     //use sendgrid to send email
-                    let link = process.env.BACKEND_URL+"/email-verify/" + userID + "/" + result[0].email_verification_token;
+                    let verify_link = process.env.BACKEND_URL+"/email-verify/" + userID + "/" + result[0].email_verification_token;
 
                     const email_verification = {
                       to: req.body.email,
                       from: process.env.CUSTOMER_SUPPORT,
-                      subject: 'Please click the link below to verify your email.',
-                      html: `<a href=${link}>Verify Email</a>`
+                      subject: 'Confirm your email address',
+                      html: signupEmailTemplate({ email: req.body.email, verify_link })
                     };
                     sgMail.send(email_verification);
                   }
@@ -183,13 +182,6 @@ router.get('/email-verify/:user_id/:email_verification_token', function(req, res
     }
   );
 });
-
-
-//email template
-router.get('/preview', function(req, res) {
-  res.render("emailTemplates/emailVerification", { email: "simon@acceptmycrypto.com"})
-});
-
 
 //Anyone can access this route
 //grab the cryptos list for user to select
