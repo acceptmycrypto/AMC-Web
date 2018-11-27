@@ -35,7 +35,7 @@ CREATE TABLE deals (
 	venue_id INT NOT NULL,
 	deal_name VARCHAR(255) NOT NULL,
 	deal_description VARCHAR(255) NOT NULL,
-  featured_deal_image VARCHAR(255) NOT NULL,
+  	featured_deal_image VARCHAR(255) NOT NULL,
 	pay_in_dollar DECIMAL(10,2) NOT NULL,
 	pay_in_crypto DECIMAL(10, 2) NOT NULL,
 	date_expired DATETIME NULL,
@@ -46,8 +46,8 @@ CREATE TABLE deals (
 
 CREATE TABLE deal_images (
 	id INT NOT NULL AUTO_INCREMENT,
-  deal_id INT NOT NULL,
-  deal_image VARCHAR(255) NOT NULL,
+  	deal_id INT NOT NULL,
+  	deal_image VARCHAR(255) NOT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
@@ -142,7 +142,7 @@ CREATE TABLE users_purchases(
 	timeout INT NOT NULL,
 	status_url VARCHAR(255) NULL,
 	qrcode_url VARCHAR(255) NOT NULL,
-  status VARCHAR(255) NOT NULL DEFAULT "0",
+  	status VARCHAR(255) NOT NULL DEFAULT "0",
 	payment_received BOOLEAN NOT NULL DEFAULT FALSE,
 	permission VARCHAR(255) NOT NULL DEFAULT "community",
 	PRIMARY KEY (id),
@@ -190,7 +190,7 @@ CREATE TABLE notifications (
 	matched_friend_id INT NOT NULL,
 	venue_id INT NOT NULL,
 	deal_id INT NOT NULL,
-  PRIMARY KEY (id),
+  	PRIMARY KEY (id),
 	FOREIGN KEY (user_id) REFERENCES users(id),
 	FOREIGN KEY (matched_friend_id) REFERENCES users_matched_friends(id),
 	FOREIGN KEY (venue_id) REFERENCES venues(id),
