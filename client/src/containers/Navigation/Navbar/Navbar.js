@@ -28,7 +28,11 @@ class Navbar extends Component {
             <i class="fas fa-search fa-lg mx-2"></i>
             <input type="text" placeholder="Search" />
           </div> */}
-        <SearchBar />
+          { window.location.pathname == "/feed/deals"
+              ?  <SearchBar />
+              : null
+            }
+            
           <div className="Feed">
             {/* <li>
               <Link to="/feed/deals">
