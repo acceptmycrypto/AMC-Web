@@ -5,7 +5,7 @@ import coinAddressValidator from "coin-address-validator";
 import ProfileCard from "../../../components/Profile/ProfileCard";
 import CryptoCard from "../../../components/Profile/CryptoCard";
 import CryptoAddress from "../../../components/Profile/CryptoAddress";
-import ProfileFeed from "../../../components/Profile/ProfileFeed";
+import ProfileFeed from "../ProfileFeed";
 import CryptoRankings from "../../CryptosRanking";
 // import Layout from "../../../components/Layout"
 import Layout from "../../Layout";
@@ -51,8 +51,8 @@ class UserProfile extends Component {
       <div>
         <Layout >
         <div className="userProfile d-flex flex-row justify-content-between">
-          <div className="d-flex flex-column w-25">
-            {user_info != undefined && <ProfileCard user_info={user_info} />}
+          <div className="d-flex flex-column w-25 ml-2">
+            {user_info != undefined && user_info.length > 0 && <ProfileCard user_info={user_info} />}
 
             {user_crypto != undefined &&
               <CryptoCard handleToggleChange={handleToggleChange} address_form_shown={address_form_shown} handleAddressFormChange={handleAddressFormChange} handleQRChange={handleQRChange} qr_shown={qr_shown} crypto_view={crypto_view} user_crypto={user_crypto}>
@@ -66,8 +66,8 @@ class UserProfile extends Component {
 
           </div>
 
-          <div className="w-50 mx-5">
-          { transactions != undefined && <ProfileFeed transactions={transactions} />}
+          <div className="w-50 mr-4 ml-5">
+          { transactions != undefined && <ProfileFeed classname="w-50" transactions={transactions} />}
             
           </div>
 
