@@ -142,6 +142,7 @@ CREATE TABLE users_purchases(
 	timeout INT NOT NULL,
 	status_url VARCHAR(255) NULL,
 	qrcode_url VARCHAR(255) NOT NULL,
+  status VARCHAR(255) NOT NULL DEFAULT "0",
 	payment_received BOOLEAN NOT NULL DEFAULT FALSE,
 	permission VARCHAR(255) NOT NULL DEFAULT "community",
 	PRIMARY KEY (id),

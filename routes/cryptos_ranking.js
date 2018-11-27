@@ -54,4 +54,12 @@ router.get('/api/cryptosranking', function(req, res) {
   );
 });
 
+router.get('/api/cryptosranking_transactions', function(req, res) {
+  connection.query(
+    'SELECT crypto_metadata.crypto_symbol, count(users_purchases.crypto_id) as total_transactions, crypto_metadata.crypto_price FROM users_purchases LEFT JOIN crypto_metadata ON users_purchases.crypto_id = crypto_metadata.id GROUP BY users_purchases.crypto_id ORDER BY total_transactions DESC',
+    function(err, transaction_count, fields) {
+      res.json(transaction_count);
+    }
+  );
+});
 module.exports = router;
