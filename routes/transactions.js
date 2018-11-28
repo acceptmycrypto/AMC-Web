@@ -19,6 +19,11 @@ sgMail.setApiKey(keys.sendgrid);
 
 var verifyToken =  require ("./utils/validation");
 
+//email template
+var path = require("path");
+var fs = require('fs');
+var ejs = require('ejs');
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static("public"));
@@ -111,6 +116,20 @@ router.post("/checkout", verifyToken, function(req, res) {
 
 });
 
+
+//compile email template
+//this email template is sent to customer if payment has received
+var customer_invoice_ET = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/customerInvoice/customerInvoice.ejs'), 'utf-8');
+var customer_invoice_emailTemplate = ejs.compile(customer_invoice_ET);
+
+//this email template is sent to us if item has been ordered
+var item_ordered_ET = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/itemOrdered/itemOrdered.ejs'), 'utf-8');
+var item_ordered_emailTemplate = ejs.compile(item_ordered_ET);
+
+//this email template is sent to customer if item has been canceled
+var item_canceled_ET = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/itemCanceled/itemCanceled.ejs'), 'utf-8');
+var item_canceled_emailTemplate = ejs.compile(item_canceled_ET);
+
 //ipa (listen to coinpayment's events)
 router.post("/checkout/notification", function (req, res, next) {
   if(!req.get(`HMAC`) || !req.body || !req.body.ipn_mode || req.body.ipn_mode !== `hmac` || MERCHANT_ID !== req.body.merchant) {
@@ -139,7 +158,7 @@ router.post("/checkout/notification", function (req, res, next) {
 }, function (req, res, next) {
   //handle events
   connection.query(
-    'SELECT status, email FROM users_purchases LEFT JOIN users ON users_purchases.user_id = users.id WHERE txn_id = ?',
+    'SELECT status, email, amount, crypto_symbol, deal_name FROM users_purchases LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE txn_id = ?',
     [req.body.txn_id],
     function(err, data_status, fields) {
       let current_status = data_status[0].status;
@@ -154,10 +173,10 @@ router.post("/checkout/notification", function (req, res, next) {
           if (error) throw error;
 
           const handle_order = {
-            to: 'simon@acceptmycrypto.com',
+            to: process.env.CUSTOMER_SUPPORT,
             from: process.env.CUSTOMER_SUPPORT,
-            subject: 'A customer has ordered and paid a deal item. Please take action.',
-            html: `<div>Check user invoice</div>`
+            subject: 'Item Ordered',
+            html: item_ordered_emailTemplate({ txn_id: req.body.txn_id })
           };
           sgMail.send(handle_order);
         });
@@ -167,6 +186,10 @@ router.post("/checkout/notification", function (req, res, next) {
         //update the status in the table to "100"
         //meaning: payment has received in coinpayment address
         //send an email to user saying the payment has been recieved. ship the order
+
+        //this link doesn't work locally
+        let view_order = process.env.BACKEND_URL + "/profile/";
+
         connection.query('UPDATE users_purchases SET status = ?, payment_received = ? WHERE ?',
         [req.body.status, 1, { txn_id: req.body.txn_id }],
         function (error, results, fields) {
@@ -174,8 +197,8 @@ router.post("/checkout/notification", function (req, res, next) {
           const confirm_payment_with_customer = {
             to: data_status[0].email,
             from: process.env.CUSTOMER_SUPPORT,
-            subject: 'Thank You for your order!',
-            html: `<div>We have received your order. We'll notify you when we ship your order.</div>`
+            subject: 'Order Confirmation',
+            html: customer_invoice_emailTemplate({ txn_id: req.body.txn_id, view_order })
           };
           sgMail.send(confirm_payment_with_customer);
         });
@@ -192,8 +215,14 @@ router.post("/checkout/notification", function (req, res, next) {
           const cancel_order = {
             to: data_status[0].email,
             from: process.env.CUSTOMER_SUPPORT,
-            subject: 'Your order has canceled!',
-            html: `<div>We didn't receive your payment.</div>`
+            subject: 'Payment Timed Out',
+            html: item_canceled_emailTemplate(
+              { txn_id: req.body.txn_id,
+                amount: req.body.amount,
+                crypto_symbol: req.body.crypto_symbol,
+                deal_name: req.body.deal_name,
+                sign_in: process.env.BACKEND_URL
+              })
           };
           sgMail.send(cancel_order);
         });

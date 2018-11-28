@@ -1,7 +1,6 @@
 var express = require('express');
 var app = express();
 var router = express.Router();
-var path = require("path");
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
@@ -14,6 +13,7 @@ var sgMail = require("@sendgrid/mail");
 var keys = require("../key");
 sgMail.setApiKey(keys.sendgrid);
 //email template
+var path = require("path");
 var fs = require('fs');
 var ejs = require('ejs');
 
