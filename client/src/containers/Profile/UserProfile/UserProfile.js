@@ -29,7 +29,7 @@ class UserProfile extends Component {
 
   render() {
 
-    const { error, loading, user_info, user_crypto, transactions, userLoggedIn, crypto_view, address_form_shown, qr_shown, users_cryptos_id, current_crypto_name, handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos} = this.props;
+    const { error, loading, user_info, user_crypto, transactions, confirmed, pending, tx_history_view, userLoggedIn, crypto_view, address_form_shown, qr_shown, users_cryptos_id, current_crypto_name, handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos} = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -67,7 +67,7 @@ class UserProfile extends Component {
           </div>
 
           <div className="w-50 mr-4 ml-5">
-          { transactions != undefined && <ProfileFeed classname="w-50" transactions={transactions} />}
+          { transactions != undefined && <ProfileFeed classname="w-50" />}
             
           </div>
 
@@ -89,6 +89,9 @@ const mapStateToProps = state => ({
   user_info: state.UserInfo.user_info,
   user_crypto: state.UserInfo.user_crypto,
   transactions: state.UserInfo.transactions,
+  confirmed: state.UserInfo.confirmed,
+  pending: state.UserInfo.pending,
+  tx_history_view: state.UserInfo.tx_history_view,
   loading: state.UserInfo.loading,
   error: state.UserInfo.error,
   userLoggedIn: state.LoggedIn.userLoggedIn, 
