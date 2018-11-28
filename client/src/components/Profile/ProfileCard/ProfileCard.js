@@ -4,7 +4,7 @@ import "./ProfileCard.css";
 const ProfileCard = props => {
     return (
         <div className="text-center">
-            {props.user_info.map((userData, i) =>
+            {props.user_info !== undefined && props.user_info.length > 0 && props.user_info.map((userData, i) =>
                 <div id="profile" data-id={userData.id} className="p-3 pb-0 ml-3 d-flex flex-column w-100 white-bg" key={"user" + i}>
                     {(userData.photo.indexOf("fa-user") !== -1)
                         ? <i className={'fas my-2 py-5 px-1 user-icon-shaded ' + userData.photo}></i>
