@@ -8,12 +8,17 @@ import {
   FETCH_UPDATE_CRYPTO_BEGIN,
   FETCH_UPDATE_CRYPTO_SUCCESS,
   FETCH_UPDATE_CRYPTO_FAILURE, 
+ 
 
 } from "../actions/cryptoPortfolioActions";
 import { 
   FETCH_USER_BEGIN, 
   FETCH_USER_FAILURE, 
-  FETCH_USER_SUCCESS 
+  FETCH_USER_SUCCESS,
+  UPDATE_TX_HISTORY_VIEW,
+  FETCH_TRANSACTIONS_BEGIN,
+  FETCH_TRANSACTIONS_SUCCESS,
+  FETCH_TRANSACTIONS_FAILURE, 
 } from "../actions/userLoadActions";
 
 
@@ -27,7 +32,10 @@ const initialState = {
   address_form_shown: false,
   qr_shown: false,
   users_cryptos_id: null,
-  current_crypto_name: null
+  current_crypto_name: null, 
+  confirmed: [],
+  pending: [],
+  tx_history_view: null
 };
 
 export default function userInfoReducer(state = initialState, action) {
@@ -46,7 +54,10 @@ export default function userInfoReducer(state = initialState, action) {
         loading: false,
         user_info: action.payload.user_info,
         user_crypto: action.payload.user_crypto,
-        transactions: action.payload.transactions
+        transactions: action.payload.transactions, 
+        confirmed:action.payload.confirmed,
+        pending: action.payload.pending, 
+        tx_history_view: action.payload.tx_history_view
       };
 
     case FETCH_USER_FAILURE:
@@ -115,6 +126,27 @@ export default function userInfoReducer(state = initialState, action) {
         address_form_shown: action.payload.address_form_shown
       };
     case FETCH_UPDATE_CRYPTO_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error
+      }
+      case FETCH_TRANSACTIONS_BEGIN:
+      return {
+        ...state,
+        loading: true,
+        error: null
+      };
+    case FETCH_TRANSACTIONS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        transactions: action.payload.transactions, 
+        confirmed: action.payload.confirmed, 
+        pending: action.payload.pending, 
+        tx_history_view: action.payload.tx_history_view, 
+      };
+    case FETCH_TRANSACTIONS_FAILURE:
       return {
         ...state,
         loading: false,
