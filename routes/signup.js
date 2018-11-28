@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var router = express.Router();
+var path = require("path");
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
@@ -12,6 +13,9 @@ const uuidv4 = require('uuid/v4'); //generates uuid for us
 var sgMail = require("@sendgrid/mail");
 var keys = require("../key");
 sgMail.setApiKey(keys.sendgrid);
+//email template
+var fs = require('fs');
+var ejs = require('ejs');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -32,7 +36,9 @@ var connection = mysql.createConnection({
   database: process.env.DB_DB
 });
 
-
+//compile email template
+var signupEmailTemplateText = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/emailVerification/emailVerification.ejs'), 'utf-8');
+var signupEmailTemplate = ejs.compile(signupEmailTemplateText);
 
 router.post('/register', function(req, res) {
   console.log(req.body);
@@ -89,13 +95,13 @@ router.post('/register', function(req, res) {
                     );
 
                     //use sendgrid to send email
-                    let link = process.env.BACKEND_URL+"/email-verify/" + userID + "/" + result[0].email_verification_token;
+                    let verify_link = process.env.BACKEND_URL+"/email-verify/" + userID + "/" + result[0].email_verification_token;
 
                     const email_verification = {
                       to: req.body.email,
                       from: process.env.CUSTOMER_SUPPORT,
-                      subject: 'Please click the link below to verify your email.',
-                      html: `<a href=${link}>Verify Email</a>`
+                      subject: 'Confirm your email address',
+                      html: signupEmailTemplate({ email: req.body.email, verify_link })
                     };
                     sgMail.send(email_verification);
                   }
