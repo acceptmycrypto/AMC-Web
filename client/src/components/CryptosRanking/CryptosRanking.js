@@ -33,7 +33,7 @@ class CryptosRankings extends Component {
             {this.state.cryptosRanking.map((crypto, i) => (
               <tr key={crypto+i}>
                 <th scope="row">{i + 1}</th>
-                <td><img src={crypto.crypto_logo} alt="crypto-logo"/> {crypto.crypto_symbol}</td>
+                <td><img class="rankImage" src={crypto.crypto_logo} alt="crypto-logo"/> {crypto.crypto_symbol}</td>
                 <td>{crypto.venues_count}</td>
                 <td>{crypto.crypto_price}</td>
               </tr>

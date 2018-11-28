@@ -8,11 +8,12 @@
   background-color: rgba(255, 255, 255, 1);
   display: flex;
   align-items: center;
-  padding: 0 20px;
+  padding: 25px 20px;
   box-sizing: border-box;
   z-index: 90;
   font-size: 14px;
   font-family: Verdana, sans-serif;
+  box-shadow:0 2px 2px 0 rgba(0,0,0,0.16);
 }
 
 .Toolbar a {
@@ -84,4 +85,8 @@ li {
 
 .color-deepBlue{
   color: #2a3c51;
+}
+
+.teal-underline{
+  border-bottom: solid 2px rgb(22, 190, 182);
 }

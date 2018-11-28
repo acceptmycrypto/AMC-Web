@@ -98,17 +98,32 @@ router.post('/profile/matched/friends', verifyToken, function (req, res) {
 router.post("/profile/user/transactions", verifyToken, function(req, res) {
     let id = req.decoded._id;
     connection.query(
-      'SELECT users_purchases.date_purchased, users_purchases.amount, deals.deal_name, users.username, users_profiles.photo, venues.venue_name, crypto_metadata.crypto_symbol AS crypto_symbol FROM users_purchases LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata_name = crypto_metadata.crypto_name LEFT JOIN venues ON venue_id = venues.id LEFT JOIN users_profiles ON users_profiles.user_id = users.id WHERE users.id =? AND payment_received = ? ORDER BY users_purchases.date_purchased DESC',
-      [id, 1], //1 is true for payment received 
+      'SELECT users_purchases.date_purchased, users_purchases.amount, deals.deal_name, deals.featured_deal_image, users.username, users_profiles.photo, venues.venue_name, crypto_metadata.crypto_symbol AS crypto_symbol, users_purchases.txn_id, users_purchases.qrcode_url, users_purchases.status, users_purchases.payment_received, users_purchases.address FROM users_purchases LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata_name = crypto_metadata.crypto_name LEFT JOIN venues ON venue_id = venues.id LEFT JOIN users_profiles ON users_profiles.user_id = users.id WHERE users.id = ? ORDER BY users_purchases.date_purchased DESC',
+    //   [id, 1], //1 is true for payment received 
+        [id],
       function(error, results, fields) {
         if (error) throw error;
         res.json(results);
+        console.log(results);
       }
     );
   });
 
 
- 
+//grab the cryptos list for user to select
+router.post("/crypto/left", verifyToken, function(req, res) {
+    let id = req.decoded._id;
+    connection.query(
+      'SELECT crypto_metadata.crypto_name, crypto_metadata.crypto_symbol FROM crypto_metadata WHERE crypto_metadata.crypto_name NOT IN (SELECT crypto_metadata.crypto_name FROM users_cryptos LEFT JOIN crypto_metadata ON users_cryptos.crypto_id = crypto_metadata.id WHERE users_cryptos.user_id = ?)',
+      [id],
+      function(error, results, fields) {
+  
+        if (error) throw error;
+  
+        res.json(results);
+      }
+    );
+  });
 
 
 function shuffle(array) {

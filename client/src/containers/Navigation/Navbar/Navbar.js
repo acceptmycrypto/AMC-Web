@@ -28,7 +28,11 @@ class Navbar extends Component {
             <i class="fas fa-search fa-lg mx-2"></i>
             <input type="text" placeholder="Search" />
           </div> */}
-        <SearchBar />
+          { window.location.pathname == "/feed/deals"
+              ?  <SearchBar />
+              : null
+            }
+            
           <div className="Feed">
             {/* <li>
               <Link to="/feed/deals">
@@ -40,7 +44,10 @@ class Navbar extends Component {
         <div className="Nav d-flex flex-row align-items-center">
           <li>
             <Link to="/feed/deals">
-              <i className="fas fa-dollar-sign fa-lg" /> <h7 className="color-deepBlue font-17">Matched Deals</h7>
+            { window.location.pathname == "/feed/deals"
+              ? <i className="fas fa-dollar-sign fa-lg"> <h7 className="color-deepBlue font-17 teal-underline">Deals</h7></i>
+              : <i className="fas fa-dollar-sign fa-lg"> <h7 className="color-deepBlue font-17">Deals</h7></i>
+            }
             </Link>
           </li>
           <li>
