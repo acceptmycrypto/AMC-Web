@@ -32,8 +32,6 @@ class DealItem extends Component {
 
   }
 
- 
-
   //set the options to select crypto from
   //this function is needed to change the format of objects to be able to used for react select
   handleCryptoOptions = (acceptedCryptos) => {
@@ -56,19 +54,8 @@ class DealItem extends Component {
     return parseInt(((priceInDollar - priceInCrypto) / priceInDollar) * 100)
   }
 
-  convertSecondToMinute = (sec) => {
-
-      sec = Number(sec);
-      let h = Math.floor(sec / 3600); //1400
-      let m = Math.floor(sec % 3600 / 60); //0
-      let s = Math.floor(sec % 3600 % 60); //0
-
-      let hDisplay = h > 0 ? h + (":") : "00:";
-      let mDisplay = m > 0 ? m + (":") : "00:";
-      let sDisplay = s > 0 ? s : "00";
-
-      return hDisplay + mDisplay + sDisplay;
-
+  timeInMilliseconds = (sec) => {
+    return sec * 1000
   }
 
   createPaymentHandler = (event) => {
@@ -87,7 +74,6 @@ class DealItem extends Component {
   }
 
   render() {
-
     const { error,
             loading,
             dealItem,
@@ -112,10 +98,10 @@ class DealItem extends Component {
       return <div>Loading...</div>;
     }
 
-    
+
     if (userLoggedIn) {
       console.log("user logged in");
-      
+
     }else{
       // localStorage.removeItem('token');
       this.props.history.push('/');
@@ -147,7 +133,7 @@ class DealItem extends Component {
         paymentButtonClicked={createPaymentButtonClicked}
 
         showLoadingSpinner={loading}
-        timeout={paymentInfo && this.convertSecondToMinute(paymentInfo.timeout)}/> }
+        timeout={paymentInfo && this.timeInMilliseconds(paymentInfo.timeout)}/> }
     ];
 
     return (
