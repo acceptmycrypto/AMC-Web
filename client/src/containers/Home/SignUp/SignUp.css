@@ -148,6 +148,7 @@ body, html {
     border-bottom: 1.5px solid #225E62;
     padding-bottom: 5px;
     width: fit-content;
+    margin-left: 15px;
   }
 
   .FormField__CheckboxLabel {

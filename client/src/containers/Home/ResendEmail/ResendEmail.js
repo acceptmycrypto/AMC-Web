@@ -1,8 +1,7 @@
-import "./SignUp.css";
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
 import Select from "react-select";
-import { _signUp } from "../../../services/AuthService";
+import { _resendEmail } from "../../../services/AuthService";
 import { connect } from "react-redux";
 import {bindActionCreators} from 'redux';
 import { _loadCryptocurrencies } from "../../../actions/loadCryptoActions";
@@ -29,27 +28,18 @@ class SignUp extends Component {
     e.preventDefault();
 
 
-    let username = e.target.children[0].children[1].value;
-    let email = e.target.children[1].children[1].value;
-    let password = e.target.children[2].children[1].value;
-    let cryptoProfile = this.props.selectedCryptos;
+    let email = e.target.children[0].children[1].value;
     console.log(this.props);
-    console.log("crypto to submit:", cryptoProfile);
-    let hasAgreed = e.target.children[4].children[0].children[0].checked;
-
     //we add validation on the front end so that user has to enter in the required field before clicking submit
     //TODO
-    if (!username || !email || !password) {
+    if (!email) {
       alert("Please enter in the required field!");
     } else {
-      return _signUp(username, email, password, cryptoProfile).then(res => {
+      return _resendEmail(email).then(res => {
         console.log("message sent from server if success: ", res);
         //TODO
         //prompt users to check their email
-        document.getElementById('username').value="";
         document.getElementById('email').value="";
-        document.getElementById('password').value="";
-        //don't know how to clear the dropdown
       });
     }
   }
@@ -97,19 +87,6 @@ class SignUp extends Component {
           <div className="FormCenter">
             <form onSubmit={this.handleSubmit} className="FormFields">
               <div className="FormField">
-                <label className="FormField__Label" htmlFor="username">
-                  User Name
-                </label>
-                <input
-                  type="username"
-                  id="username"
-                  className="FormField__Input"
-                  placeholder="Enter your desired User Name"
-                  name="username"
-                  required
-                />
-              </div>
-              <div className="FormField">
                 <label className="FormField__Label" htmlFor="email">
                   E-Mail Address
                 </label>
@@ -122,57 +99,12 @@ class SignUp extends Component {
                   required
                 />
               </div>
-              <div className="FormField">
-                <label className="FormField__Label" htmlFor="password">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  className="FormField__Input"
-                  placeholder="Enter your password"
-                  name="password"
-                  required
-                />
-              </div>
-
-              <div className="FormField">
-                <label className="FormField__Label" htmlFor="cryptoProfile">
-                  Your Cryptocurrency Portfolio
-                </label>
-
-                {/* <input type="text" id="cryptoProfile" className="FormField__Input" placeholder="Your Crypto Profile" name="email" value={this.state.cryptoProfile} onChange={this.handleChange} /> */}
-                <Select
-                  className = "dropdown"
-                  required
-                  onChange={this.props.handleDropdownChange}
-                  options={cryptoOptions}
-                  isMulti={true}
-                  autoBlur={false}
-
-                />
-              </div>
-
-              <div className="FormField">
-                <label className="FormField__CheckboxLabel">
-                  <input
-                    className="FormField__Checkbox"
-                    type="checkbox"
-                    name="hasAgreed"
-                  />
-                  I agree all statements in
-                  <a href="#" className="FormField__TermsLink">
-                    terms of service
-                  </a>
-                </label>
-              </div>
-
               <div className="FormField buttonLink">
                 <button className="FormField__Button">
-                  Sign Up
+                  Resend Email
                 </button>
                 <Link to="/" className="FormField__Link">
-                  I'm already member
+                  back to sign in
                 </Link>
               </div>
             </form>
