@@ -1,5 +1,6 @@
 import React from "react";
 import "./Checkout.css";
+import Countdown from 'react-countdown-now';
 
 const Checkout = props => (
   <div>
@@ -18,7 +19,8 @@ const Checkout = props => (
           <p>AcceptMyCrpto Payment Address:</p>
           <strong><p id="coinpayment-address">{props.showTransaction.address}</p></strong>
         </div>
-        <small><p>*If no payment received in {props.showTimeout}, the purchase order will be canceled.</p></small>
+        <small><p>*If no payment received in <Countdown date={Date.now() + props.showTimeout} />, the purchase order will be canceled.</p></small>
+
       </div>
     </div>
 
