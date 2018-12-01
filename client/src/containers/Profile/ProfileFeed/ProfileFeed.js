@@ -51,18 +51,19 @@ class ProfileFeed extends Component {
             <div className="w-100">
                 {(transactions !== undefined && transactions.length > 0)
                     ? <div>
-                        <div className="mb-3 mt-1 text-center">
+                        <div className="mb-1 mt-1 text-center">
                             {/* <span><button className="btn btn-outline-primary" id="order-history-button"className="feed-button button-active">Order History</button><button id="" className="feed-button">Pending Orders</button></span> */}
                             <div class="btn-group" role="group" aria-label="button-group">
                                 {tx_history_view === "pending"
                                     ? <div>
-                                        {confirmed.length >0 &&
-                                        <button id="orderHistoryBtn" type="button" class="btn btn-outline-primary" onClick={(event)=>{changeTxHistoryView(event, "confirmed", localStorage.getItem('token'))}}>Order History</button>}
-                                        <button id="pendingBtn"type="button" class="btn btn-primary" disabled>Pending Orders</button>
+                                        {confirmed.length > 0 &&
+                                            <button id="orderHistoryBtn" type="button" class="btn btn-outline-primary mr-3 btn-lg" onClick={(event)=>{changeTxHistoryView(event, "confirmed", localStorage.getItem('token'))}}>Order History</button>
+                                        }
+                                        <button id="pendingBtn"type="button" class="btn btn-primary btn-lg" disabled>Pending Orders</button>
                                     </div>
                                     : <div>
-                                        <button id="orderHistoryBtn" type="button" class="btn btn-primary" disabled>Order History</button>
-                                        <button id="pendingBtn"type="button" class="btn btn-outline-primary " onClick={(event)=>{changeTxHistoryView(event, "pending", localStorage.getItem("token"))}}>Pending Orders</button>
+                                        <button id="orderHistoryBtn" type="button" class="btn btn-primary mr-3 btn-lg" disabled>Order History</button>
+                                        <button id="pendingBtn"type="button" class="btn btn-outline-primary btn-lg" onClick={(event)=>{changeTxHistoryView(event, "pending", localStorage.getItem("token"))}}>Pending Orders</button>
                                     </div>
                                 }
                             </div>
