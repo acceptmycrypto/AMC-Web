@@ -28,8 +28,16 @@ class Settings extends Component {
         this.setState({ activeItem: name })
     }
 
-    componentDidMount() {
-        this.props._isLoggedIn(localStorage.getItem('token'));
+    componentDidMount = async () => {
+        await this.props._isLoggedIn(localStorage.getItem('token'));
+
+        if (this.props.userLoggedIn) {
+            await console.log("user logged in");
+            
+          }else{
+              // localStorage.removeItem('token');
+              await this.props.history.push('/');
+          }
     }
     
 
@@ -43,13 +51,6 @@ class Settings extends Component {
 
     if (loading) {
       return <div>Loading...</div>;
-    }
-    if (userLoggedIn) {
-      console.log("user logged in");
-      
-    }else{
-        // localStorage.removeItem('token');
-        this.props.history.push('/');
     }
         const { color } = this.state
         const { activeItem } = this.state

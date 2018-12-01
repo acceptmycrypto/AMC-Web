@@ -21,9 +21,17 @@ import { handleToggleChange, handleAddressFormChange, handleQRChange, updateCryp
 
 class UserProfile extends Component {
   
-  componentDidMount() {
-    this.props._isLoggedIn(localStorage.getItem('token'));
-    this.props._loadProfile(localStorage.getItem('token'));
+  componentDidMount = async () => {
+    await this.props._isLoggedIn(localStorage.getItem('token'));
+    await this.props._loadProfile(localStorage.getItem('token'));
+
+    if (this.props.userLoggedIn) {
+      await console.log("user logged in");
+      
+    }else{
+        // localStorage.removeItem('token');
+        await this.props.history.push('/');
+    }
   }
 
 
@@ -39,13 +47,7 @@ class UserProfile extends Component {
     //   return <div>Loading...</div>;
     // }
 
-    if (userLoggedIn) {
-      console.log("user logged in");
-      
-    }else{
-        // localStorage.removeItem('token');
-        this.props.history.push('/');
-    }
+  
 
     return (
       <div>
