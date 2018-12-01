@@ -9,7 +9,7 @@ import { handleDropdownChange } from "../../../actions/signUpActions";
 import Footer from "../../../components/Layout/Footer";
 import Aside from '../Aside/Aside';
 
-class SignUp extends Component {
+class ResendEmail extends Component {
   constructor() {
     super();
 
@@ -36,7 +36,7 @@ class SignUp extends Component {
       alert("Please enter in the required field!");
     } else {
       return _resendEmail(email).then(res => {
-        console.log("message sent from server if success: ", res);
+        console.log("message sent from server if success1: ", res);
         //TODO
         //prompt users to check their email
         document.getElementById('email').value="";
@@ -129,6 +129,6 @@ const matchDispatchToProps = dispatch =>{
 }
 
 
-export default connect(mapStateToProps, matchDispatchToProps)(SignUp);
+export default connect(mapStateToProps, matchDispatchToProps)(ResendEmail);
 
 

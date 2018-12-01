@@ -95,7 +95,7 @@ class SignIn extends Component {
                 <button className="FormField__Button" >Sign In</button>
                 <Link to="/SignUp" className="FormField__Link">Create an account</Link>
                 <Link to="/ResendEmail" className="FormField__Link">
-                  I lost my verification email
+                  Resend my verification email
                 </Link>
 
               </div>

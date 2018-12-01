@@ -165,19 +165,17 @@ router.post('/resend-email', function(req, res) {
   //if we find the user exists in the database, we send "User already exists" to the client
         if (!result[0]) return res.status(404).json({ error: 'Email not in database' });
         userID = result[0].id;
-        //use sendgrid to send email
-        let link = process.env.BACKEND_URL+"/email-verify/" + userID + "/" + result[0].email_verification_token;
-  
-        const email_verification = {
-          to: req.body.email,
-          from: process.env.CUSTOMER_SUPPORT,
-          subject: 'Please click the link below to verify your email again.',
-          html: `<a href=${link}>Verify Email</a>`
-        };
-        sgMail.send(email_verification);
-        res.json({
-            message: "We sent you an email for email verification. Please confirm your email."
-        });
+        
+       //use sendgrid to send email
+       let verify_link = process.env.BACKEND_URL+"/email-verify/" + userID + "/" + result[0].email_verification_token;
+
+       const email_verification = {
+         to: req.body.email,
+         from: process.env.CUSTOMER_SUPPORT,
+         subject: 'Confirm your email address',
+         html: signupEmailTemplate({ email: req.body.email, verify_link })
+       };
+       sgMail.send(email_verification);
         
       }
     );
