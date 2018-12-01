@@ -3,7 +3,7 @@ import { BrowserRouter as Switch, Route, Link, Redirect } from "react-router-dom
 
 import SignUp from "./containers/Home/SignUp";
 import SignIn from "./containers/Home/SignIn";
-
+import ResendEmail from "./containers/Home/ResendEmail";
 
 import Profile from "./containers/Profile/UserProfile";
 
@@ -26,6 +26,7 @@ class App extends Component {
             {/* <Layout /> */}
               <Route exact path="/" component={SignIn} />
               <Route exact path="/SignUp" component={SignUp} />
+              <Route exact path="/ResendEmail" component={ResendEmail} />
 
 
               <Route exact path="/profile" component={Profile} />

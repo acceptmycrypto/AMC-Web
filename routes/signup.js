@@ -153,6 +153,33 @@ router.post('/register', function(req, res) {
   );
 });
 
+router.post('/resend-email', function(req, res) {
+    console.log(req.body);
+  //First we make a query to see if user exists in the database
+    connection.query(
+      'SELECT * FROM users WHERE email = ?',
+      [req.body.email],
+      function(error, result, fields) {
+        if (error) throw error;
+        console.log(result);
+  //if we find the user exists in the database, we send "User already exists" to the client
+        if (!result[0]) return res.status(404).json({ error: 'Email not in database' });
+        userID = result[0].id;
+        
+       //use sendgrid to send email
+       let verify_link = process.env.BACKEND_URL+"/email-verify/" + userID + "/" + result[0].email_verification_token;
+
+       const email_verification = {
+         to: req.body.email,
+         from: process.env.CUSTOMER_SUPPORT,
+         subject: 'Confirm your email address',
+         html: signupEmailTemplate({ email: req.body.email, verify_link })
+       };
+       sgMail.send(email_verification);
+        
+      }
+    );
+  });
 
  //Once the user clicks on the email verification, we get the id and email verification params
 router.get('/email-verify/:user_id/:email_verification_token', function(req, res) {
