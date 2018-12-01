@@ -150,6 +150,20 @@ CREATE TABLE users_purchases(
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
 
+CREATE TABLE users_shipping_address(
+	id INT NOT NULL AUTO_INCREMENT,
+	user_id INT NOT NULL,
+	deal_id INT NOT NULL,
+  shipping_fullname VARCHAR(255) NOT NULL,
+  shipping_address VARCHAR(255) NOT NULL,
+  shipping_city VARCHAR(255) NOT NULL,
+  shipping_state VARCHAR(255) NOT NULL,
+  shipping_zipcode VARCHAR(255) NOT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (user_id) REFERENCES users(id),
+	FOREIGN KEY (deal_id) REFERENCES deals(id)
+);
+
 CREATE TABLE users_matched_friends(
 	id INT NOT NULL AUTO_INCREMENT,
 	user_id INT NOT NULL,
