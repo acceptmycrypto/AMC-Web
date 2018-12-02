@@ -36,7 +36,7 @@ router.get('/api/cryptosranking_venues', function(req, res) {
 
 router.get('/api/cryptosranking_transactions', function(req, res) {
   connection.query(
-    'SELECT crypto_metadata.crypto_symbol, count(users_purchases.crypto_id) as total_transactions, crypto_metadata.crypto_price FROM users_purchases LEFT JOIN crypto_metadata ON users_purchases.crypto_id = crypto_metadata.id GROUP BY users_purchases.crypto_id ORDER BY total_transactions DESC',
+    'SELECT users_purchases.crypto_id, crypto_metadata.crypto_name, crypto_metadata.crypto_symbol, crypto_info.crypto_logo, crypto_metadata.crypto_price, count(users_purchases.crypto_id) as total_transactions FROM users_purchases LEFT JOIN crypto_metadata ON users_purchases.crypto_id = crypto_metadata.id LEFT JOIN crypto_info ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name GROUP BY users_purchases.crypto_id ORDER BY total_transactions DESC',
     function(err, transaction_count, fields) {
       res.json(transaction_count);
     }

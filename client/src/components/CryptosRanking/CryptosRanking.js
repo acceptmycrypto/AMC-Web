@@ -11,7 +11,7 @@ class CryptosRankings extends Component {
   }
 
   async componentDidMount() {
-    const cryptosList = await fetch("/api/cryptosranking");
+    const cryptosList = await fetch("/api/cryptosranking_venues");
     const cryptosRanking = await cryptosList.json();
 
     this.setState({ cryptosRanking });
@@ -20,6 +20,8 @@ class CryptosRankings extends Component {
   render() {
     return (
       <div id="left" className="column cryptosRanking">
+        <button onClick=''>Venues</button>
+        <button onClick=''>Transactions</button>
         <table className="table table-hover">
           <thead>
             <tr>
