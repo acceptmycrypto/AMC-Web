@@ -30,8 +30,7 @@ class Settings extends Component {
 
     componentDidMount = async () => {
         await this.props._isLoggedIn(localStorage.getItem('token'));
-
-        if (this.props.userLoggedIn) {
+        if (await this.props.userLoggedIn) {
             await console.log("user logged in");
             
           }else{

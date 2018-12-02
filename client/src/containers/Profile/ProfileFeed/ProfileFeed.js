@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import "./ProfileFeed.css";
 import FeedCard from "../../../components/Profile/FeedCard";
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import { _loadDeals } from "../../../actions/dealsActions";
+import { _isLoggedIn } from "../../../actions/loggedInActions";
 import { changeTxHistoryView } from '../../../actions/userLoadActions';
 
 
 class ProfileFeed extends Component {
-    componentDidMount() {
-        this.props._loadDeals(localStorage.getItem('token'));
+    componentDidMount = async () => {
+        await this.props._isLoggedIn(localStorage.getItem('token'));
+
+        if (await this.props.userLoggedIn) {
+            await this.props._loadDeals(localStorage.getItem('token'));
+        }
     }
     convertToPercentage = (priceInDollar, priceInCrypto) => {
         return parseInt(((priceInDollar - priceInCrypto) / priceInDollar) * 100)
@@ -57,22 +62,22 @@ class ProfileFeed extends Component {
                                 {tx_history_view === "pending"
                                     ? <div>
                                         {confirmed.length > 0 &&
-                                            <button id="orderHistoryBtn" type="button" class="btn btn-outline-primary mr-3 btn-lg" onClick={(event)=>{changeTxHistoryView(event, "confirmed", localStorage.getItem('token'))}}>Order History</button>
+                                            <button id="orderHistoryBtn" type="button" class="btn btn-outline-primary mr-3 btn-lg" onClick={(event) => { changeTxHistoryView(event, "confirmed", localStorage.getItem('token')) }}>Order History</button>
                                         }
-                                        <button id="pendingBtn"type="button" class="btn btn-primary btn-lg" disabled>Pending Orders</button>
+                                        <button id="pendingBtn" type="button" class="btn btn-primary btn-lg" disabled>Pending Orders</button>
                                     </div>
                                     : <div>
                                         <button id="orderHistoryBtn" type="button" class="btn btn-primary mr-3 btn-lg" disabled>Order History</button>
-                                        <button id="pendingBtn"type="button" class="btn btn-outline-primary btn-lg" onClick={(event)=>{changeTxHistoryView(event, "pending", localStorage.getItem("token"))}}>Pending Orders</button>
+                                        <button id="pendingBtn" type="button" class="btn btn-outline-primary btn-lg" onClick={(event) => { changeTxHistoryView(event, "pending", localStorage.getItem("token")) }}>Pending Orders</button>
                                     </div>
                                 }
                             </div>
                         </div>
                         <div className="overflow-y">
                             {tx_history_view === "pending"
-                                ? <FeedCard transactions={pending} orderType={"pending"}/>
+                                ? <FeedCard transactions={pending} orderType={"pending"} />
                                 : <FeedCard transactions={confirmed} orderType={"confirmed"} />
-                            } 
+                            }
                         </div>
                     </div>
                     : <div>
@@ -127,11 +132,12 @@ const mapStateToProps = state => ({
     confirmed: state.UserInfo.confirmed,
     pending: state.UserInfo.pending,
     tx_history_view: state.UserInfo.tx_history_view,
+    userLoggedIn: state.LoggedIn.userLoggedIn, 
 });
 
 const matchDispatchToProps = dispatch => {
 
-    return bindActionCreators({ _loadDeals, changeTxHistoryView }, dispatch);
+    return bindActionCreators({ _loadDeals, changeTxHistoryView, _isLoggedIn }, dispatch);
 
 }
 

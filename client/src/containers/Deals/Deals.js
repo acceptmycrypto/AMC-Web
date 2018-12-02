@@ -15,11 +15,9 @@ class Deals extends Component {
   componentDidMount = async () => {
 
     await this.props._isLoggedIn(localStorage.getItem('token'));
-    await this.props._loadDeals(localStorage.getItem('token'));
 
-    if (this.props.userLoggedIn) {
-      await console.log("user logged in");
-      
+    if (await this.props.userLoggedIn) {      
+      await this.props._loadDeals(localStorage.getItem('token'));
     }else{
         // localStorage.removeItem('token');
         await this.props.history.push('/');

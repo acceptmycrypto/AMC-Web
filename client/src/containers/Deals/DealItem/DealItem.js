@@ -27,11 +27,10 @@ class DealItem extends Component {
   componentDidMount = async () => {
     //return the param value
     await this.props._isLoggedIn(localStorage.getItem('token'));
-    const { deal_name } = await this.props.match.params;
-    await this.props._loadDealItem(deal_name);
 
-    if (this.props.userLoggedIn) {
-      await console.log("user logged in");
+    if (await this.props.userLoggedIn) {
+      const { deal_name } = await this.props.match.params;
+      await this.props._loadDealItem(deal_name);
       
     }else{
         // localStorage.removeItem('token');

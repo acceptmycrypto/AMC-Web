@@ -21,13 +21,15 @@ import { handleToggleChange, handleAddressFormChange, handleQRChange, updateCryp
 
 class UserProfile extends Component {
   
+  
   componentDidMount = async () => {
+    await console.log(this.props.userLoggedIn);
     await this.props._isLoggedIn(localStorage.getItem('token'));
-    await this.props._loadProfile(localStorage.getItem('token'));
 
-    if (this.props.userLoggedIn) {
-      await console.log("user logged in");
-      
+    await console.log(this.props.userLoggedIn);
+
+    if (await this.props.userLoggedIn) {      
+      await this.props._loadProfile(localStorage.getItem('token'));
     }else{
         // localStorage.removeItem('token');
         await this.props.history.push('/');

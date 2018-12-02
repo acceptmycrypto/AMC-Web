@@ -48,8 +48,12 @@ class SignIn extends Component {
     }
   }
 
-  componentDidMount (){
-    this.props._isLoggedIn(localStorage.getItem('token'));
+  componentDidMount = async () =>{
+    await this.props._isLoggedIn(localStorage.getItem('token'));
+
+    if (await this.props.userLoggedIn) {
+      await this.props.history.push('/feed/deals');
+    }
   }
 
   render() {
@@ -62,10 +66,6 @@ class SignIn extends Component {
 
     if (loading) {
       return <div>Loading...</div>;
-    }
-
-    if (userLoggedIn) {
-      this.props.history.push('/feed/deals');
     }
     
     return (
