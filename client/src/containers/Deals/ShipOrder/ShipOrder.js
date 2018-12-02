@@ -4,7 +4,7 @@ import "./ShipOrder.css";
 const ShipOrder = props => {
   return (
     <div>
-      <form>
+      <form onSubmit={props.SubmitPayment}>
         <div class="form-group">
           <input
             type="text"

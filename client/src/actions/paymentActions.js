@@ -1,11 +1,35 @@
-export function _fetchTransactionInfo(crypto_name, crypto_symbol, deal_id, amount, token) {
+export function _fetchTransactionInfo(
+  crypto_name,
+  crypto_symbol,
+  deal_id,
+  amount,
+  token,
+  shippingAddress,
+  shippingCity,
+  zipcode,
+  shippingState,
+  fullName,
+  selectedSize,
+  selectedColor) {
   const settings = {
     method: "POST",
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({crypto_name, crypto_symbol, deal_id, amount, token})
+    body: JSON.stringify({
+      crypto_name,
+      crypto_symbol,
+      deal_id,
+      amount,
+      token,
+      shippingAddress,
+      shippingCity,
+      zipcode,
+      shippingState,
+      fullName,
+      selectedSize,
+      selectedColor})
   };
 
   return dispatch => {

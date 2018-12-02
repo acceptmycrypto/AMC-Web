@@ -104,6 +104,36 @@ router.post("/checkout", verifyToken, function(req, res) {
                 if (err) {
                   console.log(err);
                 }
+
+                //insert shipping address into table
+                connection.query(
+                  "INSERT INTO users_shipping_address SET ?",
+                  {
+                    shipping_fullname: req.body.fullName,
+                    shipping_address: req.body.shippingAddress,
+                    shipping_city: req.body.shippingCity,
+                    shipping_state: req.body.shippingState,
+                    shipping_zipcode: req.body.zipcode,
+                    txn_id: paymentInfo.txn_id
+                  },
+                  function(err, shipping_data, fields) {
+                    if (err) throw err;
+                  }
+                );
+
+                //insert purchase customization into table
+                connection.query(
+                  "INSERT INTO users_purchase_customization SET ?",
+                  {
+                    color: req.body.selectedColor,
+                    size: req.body.selectedSize,
+                    txn_id: paymentInfo.txn_id
+                  },
+                  function(err, custom_data, fields) {
+                    if (err) throw err;
+                  }
+                );
+
               }
             );
 
