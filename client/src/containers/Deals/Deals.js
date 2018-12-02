@@ -12,10 +12,16 @@ import { _isLoggedIn } from '../../actions/loggedInActions';
 
 class Deals extends Component {
 
-  componentDidMount() {
+  componentDidMount = async () => {
 
-    this.props._isLoggedIn(localStorage.getItem('token'));
-    this.props._loadDeals(localStorage.getItem('token'));
+    await this.props._isLoggedIn(localStorage.getItem('token'));
+
+    if (await this.props.userLoggedIn) {      
+      await this.props._loadDeals(localStorage.getItem('token'));
+    }else{
+        // localStorage.removeItem('token');
+        await this.props.history.push('/');
+    }
   }
 
   convertToPercentage = (priceInDollar, priceInCrypto) => {
@@ -44,13 +50,6 @@ class Deals extends Component {
     //reset dealItem state when user hit deals route
     this.props.resetDealitemState();
 
-
-    if (userLoggedIn) {
-      console.log("user logged in");
-      
-    }else{
-        this.props.history.push('/');
-    }
     
     if (this.props.searchTerm!=""){
         deals = this.props.searchedDeals;

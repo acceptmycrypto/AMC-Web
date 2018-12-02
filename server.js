@@ -113,7 +113,7 @@ var options = [
       symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,XVG,XMR"
     },
     headers: {
-      "X-CMC_PRO_API_KEY": "a3cfb929-0767-498b-b32d-271c640e722b",
+      "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
       Accept: "application/json"
     }
   },
@@ -124,7 +124,7 @@ var options = [
       symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,XVG,XMR"
     },
     headers: {
-      "X-CMC_PRO_API_KEY": "a3cfb929-0767-498b-b32d-271c640e722b",
+      "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
       Accept: "application/json"
     }
   }

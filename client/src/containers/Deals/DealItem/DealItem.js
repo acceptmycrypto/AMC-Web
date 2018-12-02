@@ -24,11 +24,18 @@ import { _isLoggedIn } from "../../../actions/loggedInActions";
 
 
 class DealItem extends Component {
-  componentDidMount() {
+  componentDidMount = async () => {
     //return the param value
-    this.props._isLoggedIn(localStorage.getItem('token'));
-    const { deal_name } = this.props.match.params;
-    this.props._loadDealItem(deal_name);
+    await this.props._isLoggedIn(localStorage.getItem('token'));
+
+    if (await this.props.userLoggedIn) {
+      const { deal_name } = await this.props.match.params;
+      await this.props._loadDealItem(deal_name);
+      
+    }else{
+        // localStorage.removeItem('token');
+        await this.props.history.push('/');
+    }
 
   }
 
@@ -97,16 +104,6 @@ class DealItem extends Component {
     if (loading) {
       return <div>Loading...</div>;
     }
-
-
-    if (userLoggedIn) {
-      console.log("user logged in");
-
-    }else{
-      // localStorage.removeItem('token');
-      this.props.history.push('/');
-    }
-
 
     const steps = [
       { name: "Customizing",
