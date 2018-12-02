@@ -66,7 +66,9 @@ class DealItem extends Component {
             shippingCity,
             zipcode,
             shippingState,
-            fullName } = this.props;
+            fullName,
+            selectedSize,
+            selectedColor } = this.props;
 
     //info needed to insert into user_purchases table
     //deal_id, crypto_name, amount, and user_id
@@ -76,7 +78,7 @@ class DealItem extends Component {
     let crypto_name = selectedOption.name;
     let token = localStorage.getItem('token');
 
-    this.props._fetchTransactionInfo(crypto_name, crypto_symbol, deal_id, amount, token, shippingAddress, shippingCity, zipcode, shippingState, fullName);
+    this.props._fetchTransactionInfo(crypto_name, crypto_symbol, deal_id, amount, token, shippingAddress, shippingCity, zipcode, shippingState, fullName, selectedSize, selectedColor);
   }
 
   render() {

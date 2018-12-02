@@ -64,7 +64,6 @@ router.post("/checkout", verifyToken, function(req, res) {
 
   let user_id = req.decoded._id;
   let crypto_name = req.body.crypto_name;
-  console.log(req.body);
 
   createMatchedFriends(user_id, crypto_name);
 
@@ -105,6 +104,36 @@ router.post("/checkout", verifyToken, function(req, res) {
                 if (err) {
                   console.log(err);
                 }
+
+                //insert shipping address into table
+                connection.query(
+                  "INSERT INTO users_shipping_address SET ?",
+                  {
+                    shipping_fullname: req.body.fullName,
+                    shipping_address: req.body.shippingAddress,
+                    shipping_city: req.body.shippingCity,
+                    shipping_state: req.body.shippingState,
+                    shipping_zipcode: req.body.zipcode,
+                    txn_id: paymentInfo.txn_id
+                  },
+                  function(err, shipping_data, fields) {
+                    if (err) throw err;
+                  }
+                );
+
+                //insert purchase customization into table
+                connection.query(
+                  "INSERT INTO users_purchase_customization SET ?",
+                  {
+                    color: req.body.selectedColor,
+                    size: req.body.selectedSize,
+                    txn_id: paymentInfo.txn_id
+                  },
+                  function(err, custom_data, fields) {
+                    if (err) throw err;
+                  }
+                );
+
               }
             );
 
@@ -112,23 +141,6 @@ router.post("/checkout", verifyToken, function(req, res) {
         );
 
       }
-    }
-  );
-
-  //insert shipping address into table
-  connection.query(
-    "INSERT INTO users_shipping_address SET ?",
-    {
-      user_id: user_id,
-      deal_id: req.body.deal_id,
-      shipping_fullname: req.body.fullName,
-      shipping_address: req.body.shippingAddress,
-      shipping_city: req.body.shippingCity,
-      shipping_state: req.body.shippingState,
-      shipping_zipcode: req.body.zipcode
-    },
-    function(err, shipping_data, fields) {
-      if (err) throw err;
     }
   );
 

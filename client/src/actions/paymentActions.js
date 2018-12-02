@@ -8,7 +8,9 @@ export function _fetchTransactionInfo(
   shippingCity,
   zipcode,
   shippingState,
-  fullName) {
+  fullName,
+  selectedSize,
+  selectedColor) {
   const settings = {
     method: "POST",
     headers: {
@@ -25,7 +27,9 @@ export function _fetchTransactionInfo(
       shippingCity,
       zipcode,
       shippingState,
-      fullName})
+      fullName,
+      selectedSize,
+      selectedColor})
   };
 
   return dispatch => {
