@@ -17,7 +17,8 @@ export default function cryptosReducer(state = initialState, action) {
       return {
         ...state,
         loading: false,
-        cryptos: action.payload.cryptos
+        cryptos: action.payload.cryptos,
+        cryptosSort: action.cryptosSort
       };
 
     case "FETCH_CRYPTOS_FAILURE":
