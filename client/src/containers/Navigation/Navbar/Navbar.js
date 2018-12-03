@@ -80,7 +80,6 @@ class Navbar extends Component {
 }
 
 const mapStateToProps = state => ({
-  deals: state.matchedDeals.deals,
   photo: state.Photo,
   loading: state.Photo.loading,
   error: state.Photo.error
