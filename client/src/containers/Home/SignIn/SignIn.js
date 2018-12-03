@@ -103,7 +103,6 @@ class SignIn extends Component {
               <Modal visible={visible} effect="fadeInLeft" onClickAway={() => {this.props.closeModal(); }}>
                 <div className="Modal">
                   <h4>Your Your Email or Password was Invalid</h4>
-                  {/* <p>From the team at Accept My Crypto, welcome back!</p> */}
                   <a className="a-link" href="javascript:void(0);" onClick={() => {this.props.closeModal(); }}>Ok</a>
 
                 </div>
