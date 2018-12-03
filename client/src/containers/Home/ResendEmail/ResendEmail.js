@@ -7,7 +7,7 @@ import {bindActionCreators} from 'redux';
 import { _loadCryptocurrencies } from "../../../actions/loadCryptoActions";
 import { handleDropdownChange } from "../../../actions/signUpActions";
 import Footer from "../../../components/Layout/Footer";
-import Aside from '../Aside/Aside';
+import Aside from '../Aside';
 
 class ResendEmail extends Component {
   constructor() {

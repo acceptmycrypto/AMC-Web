@@ -10,7 +10,7 @@ import { openModal, closeModal } from '../../../actions/signInActions';
 import { _loadProfile } from "../../../actions/userLoadActions";
 import { _isLoggedIn } from '../../../actions/loggedInActions';
 import Footer from '../../../components/Layout/Footer';
-import Aside from '../Aside/Aside';
+import Aside from '../Aside';
 
 
 class SignIn extends Component {

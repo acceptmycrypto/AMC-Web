@@ -8,7 +8,7 @@ import {bindActionCreators} from 'redux';
 import { _loadCryptocurrencies } from "../../../actions/loadCryptoActions";
 import { handleDropdownChange } from "../../../actions/signUpActions";
 import Footer from "../../../components/Layout/Footer";
-import Aside from '../Aside/Aside';
+import Aside from '../Aside';
 
 class SignUp extends Component {
   constructor() {
@@ -49,7 +49,9 @@ class SignUp extends Component {
         document.getElementById('username').value="";
         document.getElementById('email').value="";
         document.getElementById('password').value="";
-        //don't know how to clear the dropdown
+        // document.getElementById('dropdown').value={selectedCryptos:null};
+        // look into clearing the dropdown later
+        document.getElementById('checkbox').checked=false;
       });
     }
   }
@@ -58,7 +60,7 @@ class SignUp extends Component {
 
   render() {
 
-    const { error, loading, cryptoOptions } = this.props;
+    const { error, loading, cryptoOptions, selectedCryptos } = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -149,6 +151,7 @@ class SignUp extends Component {
                   options={cryptoOptions}
                   isMulti={true}
                   autoBlur={false}
+                  id="dropdown"
 
                 />
               </div>
@@ -159,6 +162,7 @@ class SignUp extends Component {
                     className="FormField__Checkbox"
                     type="checkbox"
                     name="hasAgreed"
+                    id="checkbox"
                   />
                   I agree all statements in
                   <a href="#" className="FormField__TermsLink">
