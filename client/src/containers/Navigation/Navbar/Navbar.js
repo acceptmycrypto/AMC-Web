@@ -27,15 +27,18 @@ class Navbar extends Component {
           <Link onClick={this.props.resetFilter} to="/feed/deals" className="Logo">
             <div className="font-17 color-deepBlue">
               <img className="navbar_logo" src="https://s3-us-west-1.amazonaws.com/acceptmycrypto/logo.png" alt="logo"/>
+              <span className="ml-2">
+              AcceptMyCrypto
+              </span>
             </div>
           </Link>
 
           { window.location.pathname == "/feed/deals" ?
-            <Category/> : null
+            <SearchBar /> : null
           }
 
           { window.location.pathname == "/feed/deals" ?
-            <SearchBar /> : null
+            <Category/> : null
           }
 
           <div className="Feed">
