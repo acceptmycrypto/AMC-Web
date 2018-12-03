@@ -11,7 +11,7 @@ class Category extends Component {
             <a className="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Categories
             </a>
-            <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <div className="dropdown-menu category-dropdown" aria-labelledby="dropdownMenuLink">
               {this.props.allDeals.map(deal => (
                 <div key={deal.id} className="dropdown-item" onClick={(event) => this.props.filterCategory(event.target.innerHTML, this.props.allDeals)}>{deal.category}</div>
               ))}

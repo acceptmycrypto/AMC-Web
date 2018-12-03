@@ -94,3 +94,7 @@ li {
 .navbar_logo {
   width: 50px;
 }
+
+.category-dropdown:hover {
+  cursor: pointer;
+}
