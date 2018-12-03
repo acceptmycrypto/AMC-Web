@@ -106,7 +106,7 @@ body, html {
   }
 
   .FormField__Label {
-    display: block;
+    /* display: block; */
     text-transform: uppercase;
     font-size: .9em;
     color: white;

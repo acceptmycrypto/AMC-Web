@@ -81,12 +81,15 @@ class SignIn extends Component {
             <form onSubmit={this.handleLogin} className="FormFields">
 
               <div className="FormField">
-                <label className="FormField__Label" htmlFor="email">E-Mail Address</label>
+                <div><label className="FormField__Label" htmlFor="email">E-Mail Address</label></div>
                 <input type="email" id="email" className="FormField__Input" placeholder="Enter your email" name="email" required />
               </div>
 
               <div className="FormField">
-                <label className="FormField__Label" htmlFor="password">Password</label>
+              <div>
+                    <label className="FormField__Label" htmlFor="password">Password</label>
+                    <Link to="/ResetPassword" className="FormField__Link">Forgot my password</Link>
+                </div>
                 <input type="password" id="password" className="FormField__Input" placeholder="Enter your password" name="password" required />
               </div>
 

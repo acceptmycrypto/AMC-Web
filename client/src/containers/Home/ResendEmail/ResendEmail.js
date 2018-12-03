@@ -87,9 +87,9 @@ class ResendEmail extends Component {
           <div className="FormCenter">
             <form onSubmit={this.handleSubmit} className="FormFields">
               <div className="FormField">
-                <label className="FormField__Label" htmlFor="email">
-                  E-Mail Address
-                </label>
+                <div>
+                    <label className="FormField__Label" htmlFor="email">E-Mail Address</label>
+                </div>
                 <input
                   type="email"
                   id="email"

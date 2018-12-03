@@ -99,9 +99,11 @@ class SignUp extends Component {
           <div className="FormCenter">
             <form onSubmit={this.handleSubmit} className="FormFields">
               <div className="FormField">
-                <label className="FormField__Label" htmlFor="username">
-                  User Name
-                </label>
+                <div>
+                    <label className="FormField__Label" htmlFor="username">
+                    User Name
+                    </label>
+                </div>
                 <input
                   type="username"
                   id="username"
@@ -112,9 +114,11 @@ class SignUp extends Component {
                 />
               </div>
               <div className="FormField">
-                <label className="FormField__Label" htmlFor="email">
-                  E-Mail Address
-                </label>
+                <div>
+                    <label className="FormField__Label" htmlFor="email">
+                    E-Mail Address
+                    </label>
+                </div>
                 <input
                   type="email"
                   id="email"
@@ -125,9 +129,11 @@ class SignUp extends Component {
                 />
               </div>
               <div className="FormField">
-                <label className="FormField__Label" htmlFor="password">
-                  Password
-                </label>
+                <div>
+                    <label className="FormField__Label" htmlFor="password">
+                    Password
+                    </label>
+                </div>
                 <input
                   type="password"
                   id="password"
@@ -139,9 +145,11 @@ class SignUp extends Component {
               </div>
 
               <div className="FormField">
-                <label className="FormField__Label" htmlFor="cryptoProfile">
-                  Your Cryptocurrency Portfolio
-                </label>
+                <div>
+                    <label className="FormField__Label" htmlFor="cryptoProfile">
+                    Your Cryptocurrency Portfolio
+                    </label>
+                </div>
 
                 {/* <input type="text" id="cryptoProfile" className="FormField__Input" placeholder="Your Crypto Profile" name="email" value={this.state.cryptoProfile} onChange={this.handleChange} /> */}
                 <Select
