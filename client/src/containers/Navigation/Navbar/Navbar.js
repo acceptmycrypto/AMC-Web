@@ -5,6 +5,8 @@ import Notification from "../Notification";
 import { connect } from "react-redux";
 import { _loadPhoto } from "../../../actions/navbarActions";
 import SearchBar from "./Searchbar";
+import {bindActionCreators} from 'redux';
+import {resetSearchbar} from "../../../actions/searchBarActions";
 
 class Navbar extends Component {
 
@@ -21,7 +23,7 @@ class Navbar extends Component {
     return (
       <header className="Toolbar">
         <div className="nav-left">
-          <Link to="/feed/deals" className="Logo">
+          <Link to="/feed/deals" className="Logo" onClick={this.props.dispatch(resetSearchbar)}>
             <div className="font-17 color-deepBlue">AcceptMyCrypto</div>
         </Link>
           {/* <div className="Search d-flex flex-row align-items-center">
@@ -43,7 +45,7 @@ class Navbar extends Component {
         </div>
         <div className="Nav d-flex flex-row align-items-center">
           <li>
-            <Link to="/feed/deals">
+            <Link to="/feed/deals" onClick={this.props.dispatch(resetSearchbar)}>
             { window.location.pathname == "/feed/deals"
               ? <i className="fas fa-dollar-sign fa-lg"> <h7 className="color-deepBlue font-17 teal-underline">Deals</h7></i>
               : <i className="fas fa-dollar-sign fa-lg"> <h7 className="color-deepBlue font-17">Deals</h7></i>

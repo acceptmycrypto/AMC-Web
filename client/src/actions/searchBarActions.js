@@ -13,3 +13,10 @@ export const searchDeals = (searchTerm, allDeals) => {
         }
     }
 }
+
+export const resetSearchbar = () => {
+    console.log("reset searchbar");
+    return {
+        type: "RESET_SEARCHBAR"
+    }
+}

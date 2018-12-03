@@ -14,6 +14,8 @@ export default function searchbarReducer(state = initialState, action) {
                 searchedDeals: action.payload.searchedDeals,
                 searchTerm: action.payload.searchTerm
             };
+        case "RESET_SEARCHBAR":
+            return state;
         default:
             return state;
     }
