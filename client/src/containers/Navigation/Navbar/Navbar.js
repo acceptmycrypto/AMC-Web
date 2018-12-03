@@ -2,9 +2,12 @@ import React, { Component } from "react";
 import { Link, NavLink } from "react-router-dom";
 import "./Navbar.css";
 import Notification from "../Notification";
+import {bindActionCreators} from 'redux';
 import { connect } from "react-redux";
 import { _loadPhoto } from "../../../actions/navbarActions";
 import SearchBar from "./Searchbar";
+import Category from "./Category";
+import { resetFilter } from "../../../actions/categoryActions";
 
 class Navbar extends Component {
 
@@ -14,36 +17,26 @@ class Navbar extends Component {
   }
 
   componentDidMount() {
-    this.props.dispatch(_loadPhoto(localStorage.getItem('token')));
+    this.props._loadPhoto(localStorage.getItem('token'));
   }
 
   render() {
     return (
       <header className="Toolbar">
         <div className="nav-left">
-          <Link to="/feed/deals" className="Logo">
+          <Link onClick={this.props.resetFilter} to="/feed/deals" className="Logo">
             <div className="font-17 color-deepBlue">
               <img className="navbar_logo" src="https://s3-us-west-1.amazonaws.com/acceptmycrypto/logo.png" alt="logo"/>
             </div>
           </Link>
-          {window.location.pathname == "/feed/deals" ?
-            <div className="dropdown show mx-4">
-              <a className="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Categories
-              </a>
 
-              <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a className="dropdown-item" href="#">Electronics</a>
-                <a className="dropdown-item" href="#">Toys</a>
-                <a className="dropdown-item" href="#">Donations</a>
-              </div>
-            </div> : null
+          { window.location.pathname == "/feed/deals" ?
+            <Category/> : null
           }
 
-          { window.location.pathname == "/feed/deals"
-              ?  <SearchBar />
-              : null
-            }
+          { window.location.pathname == "/feed/deals" ?
+            <SearchBar /> : null
+          }
 
           <div className="Feed">
             {/* <li>
@@ -55,7 +48,7 @@ class Navbar extends Component {
         </div>
         <div className="Nav d-flex flex-row align-items-center">
           <li>
-            <Link to="/feed/deals">
+            <Link onClick={this.props.resetFilter} to="/feed/deals">
             { window.location.pathname == "/feed/deals"
               ? <i className="fas fa-dollar-sign fa-lg"> <h7 className="color-deepBlue font-17 teal-underline">Deals</h7></i>
               : <i className="fas fa-dollar-sign fa-lg"> <h7 className="color-deepBlue font-17">Deals</h7></i>
@@ -87,10 +80,15 @@ class Navbar extends Component {
 }
 
 const mapStateToProps = state => ({
+  deals: state.matchedDeals.deals,
   photo: state.Photo,
   loading: state.Photo.loading,
   error: state.Photo.error
 });
 
+const matchDispatchToProps = dispatch =>{
+  return bindActionCreators({ _loadPhoto, resetFilter }, dispatch);
+}
 
-export default connect(mapStateToProps)(Navbar);
+
+export default connect(mapStateToProps, matchDispatchToProps)(Navbar);
