@@ -10,6 +10,7 @@ import Photo from './reducer-photo';
 import LoadCrypto from './reducer-load-cryptos';
 import CryptoSelected from './reducer-sign-up';
 import SignInModal from './reducer-sign-in';
+import Settings from './reducer-settings';
 
 
 const allReducers = combineReducers({
@@ -23,7 +24,8 @@ const allReducers = combineReducers({
   CryptoSelected,
   SignInModal,
   TransactionInfo,
-  Search
+  Search,
+  Settings
 });
 
 export default allReducers;
