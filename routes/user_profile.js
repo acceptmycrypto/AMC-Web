@@ -6,7 +6,7 @@ var methodOverride = require('method-override');
 
 var bodyParser = require('body-parser');
 
-var verifyToken =  require ("./utils/validation");
+var verifyToken = require("./utils/validation");
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -62,7 +62,7 @@ router.put('/profile/addAddress', verifyToken, function (req, res) {
     let { id, crypto_address } = req.body
     let user_id = req.decoded._id;
     console.log(id, crypto_address);
-    connection.query('UPDATE users_cryptos SET ? WHERE  ? AND ?', [{ crypto_address }, { id }, {user_id}], function (error, results, fields) {
+    connection.query('UPDATE users_cryptos SET ? WHERE  ? AND ?', [{ crypto_address }, { id }, { user_id }], function (error, results, fields) {
         if (error) throw error;
 
         res.json(results);
@@ -74,7 +74,7 @@ router.post('/profile/friends', verifyToken, function (req, res) {
     connection.query('SELECT users.id, users.username, users.first_name, users.last_name, users_profiles.photo, users_profiles.user_location FROM users LEFT JOIN users_profiles ON users.id = users_profiles.user_id WHERE users.id IN (SELECT matched_friend_id AS id FROM users_matched_friends WHERE user_id = ? AND both_accepted = 1)', [id], function (error, results, fields) {
         let shuffledfriendsArray = shuffle(results);
 
-        let friendsArray = shuffledfriendsArray.slice(0,11);
+        let friendsArray = shuffledfriendsArray.slice(0, 11);
 
         res.json(friendsArray);
 
@@ -95,53 +95,80 @@ router.post('/profile/matched/friends', verifyToken, function (req, res) {
 
 });
 
-router.post("/profile/user/transactions", verifyToken, function(req, res) {
+router.post("/profile/user/transactions", verifyToken, function (req, res) {
     let id = req.decoded._id;
     connection.query(
-      'SELECT users_purchases.date_purchased, users_purchases.amount, deals.deal_name, deals.featured_deal_image, users.username, users_profiles.photo, venues.venue_name, crypto_metadata.crypto_symbol AS crypto_symbol, users_purchases.txn_id, users_purchases.qrcode_url, users_purchases.status, users_purchases.payment_received, users_purchases.timeout, users_purchases.address FROM users_purchases LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata_name = crypto_metadata.crypto_name LEFT JOIN venues ON venue_id = venues.id LEFT JOIN users_profiles ON users_profiles.user_id = users.id WHERE users.id = ? ORDER BY users_purchases.date_purchased DESC',
-    //   [id, 1], //1 is true for payment received
+        'SELECT users_purchases.date_purchased, users_purchases.amount, deals.deal_name, deals.featured_deal_image, users.username, users_profiles.photo, venues.venue_name, crypto_metadata.crypto_symbol AS crypto_symbol, users_purchases.txn_id, users_purchases.qrcode_url, users_purchases.status, users_purchases.payment_received, users_purchases.timeout, users_purchases.address FROM users_purchases LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata_name = crypto_metadata.crypto_name LEFT JOIN venues ON venue_id = venues.id LEFT JOIN users_profiles ON users_profiles.user_id = users.id WHERE users.id = ? ORDER BY users_purchases.date_purchased DESC',
+        //   [id, 1], //1 is true for payment received
         [id],
-      function(error, results, fields) {
-        if (error) throw error;
-        res.json(results);
-      }
+        function (error, results, fields) {
+            if (error) throw error;
+            res.json(results);
+        }
     );
-  });
+});
 
 
 //grab the cryptos list for user to select
-router.post("/crypto/left", verifyToken, function(req, res) {
+router.post("/crypto/left", verifyToken, function (req, res) {
     let id = req.decoded._id;
     connection.query(
-      'SELECT crypto_metadata.crypto_name, crypto_metadata.crypto_symbol FROM crypto_metadata WHERE crypto_metadata.crypto_name NOT IN (SELECT crypto_metadata.crypto_name FROM users_cryptos LEFT JOIN crypto_metadata ON users_cryptos.crypto_id = crypto_metadata.id WHERE users_cryptos.user_id = ?)',
-      [id],
-      function(error, results, fields) {
+        'SELECT crypto_metadata.crypto_name, crypto_metadata.crypto_symbol FROM crypto_metadata WHERE crypto_metadata.crypto_name NOT IN (SELECT crypto_metadata.crypto_name FROM users_cryptos LEFT JOIN crypto_metadata ON users_cryptos.crypto_id = crypto_metadata.id WHERE users_cryptos.user_id = ?)',
+        [id],
+        function (error, results, fields) {
 
-        if (error) throw error;
+            if (error) throw error;
+
+            res.json(results);
+        }
+    );
+});
+
+//add cryptos to user crypto portfolio
+router.get("/add/cryptos", verifyToken, function (req, res) {
+    let id = req.decoded._id;
+    let selectedCryptos = req.body.cryptoProfile;
+
+    connection.query("SELECT id FROM crypto_metadata WHERE crypto_name IN (?)", [selectedCryptos], function (error, results, fields) {
+
+        let cryptoNames = "";
+        for (let i in results) {
+            cryptoNames +=  "('" + id + "','" + results[i].id + "'),";
+        }
+
+        cryptoNames = cryptoNames.substr(0, cryptoNames.length - 1);
+        let cryptoQuery = 'INSERT INTO users_cryptos (user_id, crypto_id) VALUES ' + cryptoNames;
+        connection.query(cryptoQuery, function (error, results, fields) {
+            if (error) throw error;
+                
+
+        });
 
         res.json(results);
-      }
-    );
-  });
+    
+    });
+        
+    }
+);
 
 
 function shuffle(array) {
-  let currentIndex = array.length, temporaryValue, randomIndex;
+    let currentIndex = array.length, temporaryValue, randomIndex;
 
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
 
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
 
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
 
-  return array;
+    return array;
 }
 
 
