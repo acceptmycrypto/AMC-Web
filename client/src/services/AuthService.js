@@ -29,3 +29,14 @@ export async function _loadCryptocurrencies () {
 
 //   return cryptos
 }
+
+export const _resendEmail = (email) => {
+	return fetch("/resend-email", {
+	    method: 'POST',
+	    headers: {
+	      'Accept': 'application/json',
+	      'Content-Type': 'application/json'
+	    },
+	    body: JSON.stringify({email})
+	  }).then(res => res.json())
+}

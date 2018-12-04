@@ -213,6 +213,7 @@ export function updateCryptos(event, id, current_crypto_name, token) {
                 console.log("user crypto ", user_crypto);
                 dispatch(fetchCryptoUpdateSuccess(user_crypto));
                 document.querySelector("#ownedInterestedToggleButton").checked = false;
+                document.querySelector(".cryptoWallet").style.flexDirection = "row";
                 return (user_crypto);
             })
             .catch(error => dispatch(fetchCryptoUpdateFailure(error)));
@@ -287,9 +288,10 @@ export const hideOrShowCryptos = (status, qr_shown, parentDiv) => {
 
             hideOrShowAddress("hide");
         }
+        document.querySelector(".cryptoWallet").style.flexDirection = "row";
         // status is hide, all cryptos other than what user clicked on will be hidden
     } else {
-
+        document.querySelector(".cryptoWallet").style.flexDirection = "column";
         for (let i = 0; i < allChildren.length; i++) {
             let element = allChildren[i]
             if (element != parentDiv) {
@@ -323,8 +325,10 @@ export const hideOrShowAddress = (status, address) => {
         displayAddress.classList.add("address");
         displayAddress.innerHTML = address;
         surroundingDiv.append(qr, displayAddress);
+        document.querySelector(".cryptoWallet").style.flexDirection = "column";
 
     } else {
+        document.querySelector(".cryptoWallet").style.flexDirection = "row";
         let displayAddress = document.querySelector(".address");
         let qr = document.querySelector(".qr");
         // remove wallet address and QR code from DOM

@@ -24,11 +24,18 @@ import { _isLoggedIn } from "../../../actions/loggedInActions";
 
 
 class DealItem extends Component {
-  componentDidMount() {
+  componentDidMount = async () => {
     //return the param value
-    this.props._isLoggedIn(localStorage.getItem('token'));
-    const { deal_name } = this.props.match.params;
-    this.props._loadDealItem(deal_name);
+    await this.props._isLoggedIn(localStorage.getItem('token'));
+
+    if (await this.props.userLoggedIn) {
+      const { deal_name } = await this.props.match.params;
+      await this.props._loadDealItem(deal_name);
+      
+    }else{
+        // localStorage.removeItem('token');
+        await this.props.history.push('/');
+    }
 
   }
 
@@ -60,17 +67,25 @@ class DealItem extends Component {
 
   createPaymentHandler = (event) => {
     event.preventDefault();
-    const { dealItem, selectedOption } = this.props;
+    const { dealItem,
+            selectedOption,
+            shippingAddress,
+            shippingCity,
+            zipcode,
+            shippingState,
+            fullName,
+            selectedSize,
+            selectedColor } = this.props;
+
     //info needed to insert into user_purchases table
     //deal_id, crypto_name, amount, and user_id
     let deal_id = dealItem.deal_id;
     let amount = dealItem.pay_in_crypto;
-    // let user_id = '4' //hardcoded user_id for now. Need to grab user_id dynamically
     let crypto_symbol = selectedOption.value;
     let crypto_name = selectedOption.name;
     let token = localStorage.getItem('token');
 
-    this.props._fetchTransactionInfo(crypto_name, crypto_symbol, deal_id, amount, token);
+    this.props._fetchTransactionInfo(crypto_name, crypto_symbol, deal_id, amount, token, shippingAddress, shippingCity, zipcode, shippingState, fullName, selectedSize, selectedColor);
   }
 
   render() {
@@ -98,16 +113,6 @@ class DealItem extends Component {
       return <div>Loading...</div>;
     }
 
-
-    if (userLoggedIn) {
-      console.log("user logged in");
-
-    }else{
-      // localStorage.removeItem('token');
-      this.props.history.push('/');
-    }
-
-
     const steps = [
       { name: "Customizing",
         component:
@@ -117,6 +122,7 @@ class DealItem extends Component {
       { name: "Shipping",
         component:
         <ShipOrder
+        SubmitPayment={this.createPaymentHandler}
         handle_ShippingFullName={this.props.handleFullNameInput}
         handle_ShippingAddress={this.props.handleAddressInput}
         handle_ShippingCity={this.props.handleCityInput}
