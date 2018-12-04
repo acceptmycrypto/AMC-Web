@@ -2,9 +2,12 @@ import React, { Component } from "react";
 import { Link, NavLink } from "react-router-dom";
 import "./Navbar.css";
 import Notification from "../Notification";
+import {bindActionCreators} from 'redux';
 import { connect } from "react-redux";
 import { _loadPhoto } from "../../../actions/navbarActions";
 import SearchBar from "./Searchbar";
+import Category from "./Category";
+import { resetFilter } from "../../../actions/categoryActions";
 
 class Navbar extends Component {
 
@@ -14,25 +17,30 @@ class Navbar extends Component {
   }
 
   componentDidMount() {
-    this.props.dispatch(_loadPhoto(localStorage.getItem('token')));
+    this.props._loadPhoto(localStorage.getItem('token'));
   }
 
   render() {
     return (
       <header className="Toolbar">
         <div className="nav-left">
-          <Link to="/feed/deals" className="Logo">
-            <div className="font-17 color-deepBlue">AcceptMyCrypto</div>
-        </Link>
-          {/* <div className="Search d-flex flex-row align-items-center">
-            <i class="fas fa-search fa-lg mx-2"></i>
-            <input type="text" placeholder="Search" />
-          </div> */}
-          { window.location.pathname == "/feed/deals"
-              ?  <SearchBar />
-              : null
-            }
-            
+          <Link onClick={this.props.resetFilter} to="/feed/deals" className="Logo">
+            <div className="font-17 color-deepBlue">
+              <img className="navbar_logo" src="https://s3-us-west-1.amazonaws.com/acceptmycrypto/logo.png" alt="logo"/>
+              <span className="ml-2">
+              AcceptMyCrypto
+              </span>
+            </div>
+          </Link>
+
+          { window.location.pathname == "/feed/deals" ?
+            <SearchBar /> : null
+          }
+
+          { window.location.pathname == "/feed/deals" ?
+            <Category/> : null
+          }
+
           <div className="Feed">
             {/* <li>
               <Link to="/feed/deals">
@@ -43,7 +51,7 @@ class Navbar extends Component {
         </div>
         <div className="Nav d-flex flex-row align-items-center">
           <li>
-            <Link to="/feed/deals">
+            <Link onClick={this.props.resetFilter} to="/feed/deals">
             { window.location.pathname == "/feed/deals"
               ? <i className="fas fa-dollar-sign fa-lg"> <h7 className="color-deepBlue font-17 teal-underline">Deals</h7></i>
               : <i className="fas fa-dollar-sign fa-lg"> <h7 className="color-deepBlue font-17">Deals</h7></i>
@@ -80,5 +88,9 @@ const mapStateToProps = state => ({
   error: state.Photo.error
 });
 
+const matchDispatchToProps = dispatch =>{
+  return bindActionCreators({ _loadPhoto, resetFilter }, dispatch);
+}
 
-export default connect(mapStateToProps)(Navbar);
+
+export default connect(mapStateToProps, matchDispatchToProps)(Navbar);

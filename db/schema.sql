@@ -39,14 +39,15 @@ CREATE TABLE deals (
 	pay_in_crypto DECIMAL(10, 2) NOT NULL,
 	date_expired DATETIME NULL,
 	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  category VARCHAR(255) NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (venue_id) REFERENCES venues(id)
 );
 
 CREATE TABLE deal_images (
 	id INT NOT NULL AUTO_INCREMENT,
-  	deal_id INT NOT NULL,
-  	deal_image VARCHAR(255) NOT NULL,
+  deal_id INT NOT NULL,
+  deal_image VARCHAR(255) NOT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );

@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux';
 import Deals from './reducer-deals';
 import Search from './reducer-searchbar';
+import Category from './reducer-category';
 import DealItem from './reducer-dealItem';
 import TransactionInfo from './reducer-payment';
 import Cryptos from './reducer-cryptos';
@@ -25,7 +26,8 @@ const allReducers = combineReducers({
   SignInModal,
   TransactionInfo,
   Search,
-  Settings
+  Settings,
+  Category
 });
 
 export default allReducers;

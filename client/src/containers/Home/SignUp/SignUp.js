@@ -1,14 +1,16 @@
 import "./SignUp.css";
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
+import Modal from 'react-awesome-modal'
 import Select from "react-select";
 import { _signUp } from "../../../services/AuthService";
 import { connect } from "react-redux";
 import {bindActionCreators} from 'redux';
 import { _loadCryptocurrencies } from "../../../actions/loadCryptoActions";
-import { handleDropdownChange } from "../../../actions/signUpActions";
+import { handleDropdownChange, openModal, closeModal } from "../../../actions/signUpActions";
+
 import Footer from "../../../components/Layout/Footer";
-import Aside from '../Aside/Aside';
+
 
 class SignUp extends Component {
   constructor() {
@@ -44,21 +46,16 @@ class SignUp extends Component {
     } else {
       return _signUp(username, email, password, cryptoProfile).then(res => {
         console.log("message sent from server if success: ", res);
+        this.props.openModal();
         //TODO
         //prompt users to check their email
-        document.getElementById('username').value="";
-        document.getElementById('email').value="";
-        document.getElementById('password').value="";
-        //don't know how to clear the dropdown
       });
     }
   }
 
-
-
   render() {
 
-    const { error, loading, cryptoOptions } = this.props;
+    const { error, loading, cryptoOptions, visible } = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -75,7 +72,28 @@ class SignUp extends Component {
     // }
     return (
       <div className="App">
-        <Aside />
+        <div className="App__Aside">
+          <img className="crypto-img img-fluid mb-5 d-block mx-auto" src="../../../assets/images/logo.png" alt=""></img>
+          <h1 className="text-uppercase mb-0 ">Accept My Crypto</h1>
+          <hr className="star-light"></hr>
+          <h2 className="font-weight-light mb-0">
+            <ul>
+              <br></br>
+              <li><i className="homepage-icons fas fa-dollar-sign"></i>
+                Grab Deals for Purchase with Cryptocurrency
+                </li>
+              <br></br>
+
+              <li><i className="homepage-icons fa fa-user" aria-hidden="true"></i>
+                Find Friends with Matching Currencies
+              </li>
+              <br></br>
+              <li><i className="homepage-icons fa fa-users" aria-hidden="true"></i>
+                Engage with Your Crypto Community
+              </li>
+            </ul>
+          </h2>
+        </div>
         <div className="App__Form">
           <div className="PageSwitcher">
             <NavLink
@@ -175,6 +193,14 @@ class SignUp extends Component {
                   I'm already member
                 </Link>
               </div>
+              <Modal visible={visible} effect="fadeInLeft" onClickAway={() => {this.props.closeModal();}}>
+                <div className="Modal">
+                  <h4>You have successfully registered! </h4>
+                  <h4>Please check your Email and follow the instructions for Email verification.</h4>
+                  <a className="a-link" href="javascript:void(0);" onClick={() => {this.props.closeModal()}}>Ok</a>
+                </div>
+              </Modal>
+
             </form>
           </div>
           <Footer/>
@@ -185,6 +211,7 @@ class SignUp extends Component {
 }
 
 const mapStateToProps = state => ({
+  visible: state.SignInModal.visible,
   cryptoOptions: state.LoadCrypto.cryptoOptions,
   loading: state.LoadCrypto.loading,
   error: state.LoadCrypto.error,
@@ -193,7 +220,7 @@ const mapStateToProps = state => ({
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({handleDropdownChange, _loadCryptocurrencies}, dispatch);
+  return bindActionCreators({openModal, closeModal, handleDropdownChange, _loadCryptocurrencies}, dispatch);
 }
 
 

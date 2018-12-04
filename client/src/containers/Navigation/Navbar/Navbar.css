@@ -1,5 +1,5 @@
 .Toolbar {
-  height: 45px;
+  height: 55px;
   width: 100%;
   position: fixed;
   justify-content: space-between;
@@ -39,7 +39,7 @@
 }
 
 .Search {
-  margin-right: 45px;
+  margin-right: 85px;
   border-radius: 5px;
 }
 
@@ -80,7 +80,7 @@ li {
 
 .font-17{
   font-size: 17px;
-  
+
 }
 
 .color-deepBlue{
@@ -89,4 +89,12 @@ li {
 
 .teal-underline{
   border-bottom: solid 2px rgb(22, 190, 182);
+}
+
+.navbar_logo {
+  width: 50px;
+}
+
+.category-dropdown:hover {
+  cursor: pointer;
 }

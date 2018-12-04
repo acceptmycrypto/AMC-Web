@@ -10,7 +10,7 @@ import { openModal, closeModal } from '../../../actions/signInActions';
 import { _loadProfile } from "../../../actions/userLoadActions";
 import { _isLoggedIn } from '../../../actions/loggedInActions';
 import Footer from '../../../components/Layout/Footer';
-import Aside from '../Aside/Aside';
+import Aside from '../Aside';
 
 
 class SignIn extends Component {
@@ -103,7 +103,6 @@ class SignIn extends Component {
               <Modal visible={visible} effect="fadeInLeft" onClickAway={() => {this.props.closeModal(); }}>
                 <div className="Modal">
                   <h4>Your Your Email or Password was Invalid</h4>
-                  {/* <p>From the team at Accept My Crypto, welcome back!</p> */}
                   <a className="a-link" href="javascript:void(0);" onClick={() => {this.props.closeModal(); }}>Ok</a>
 
                 </div>
