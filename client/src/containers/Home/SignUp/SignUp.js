@@ -3,10 +3,8 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
 import Modal from 'react-awesome-modal'
 import Select from "react-select";
-<<<<<<< HEAD:client/src/components/Home/SignUp/SignUp.js
 import { _signUp, _loadCryptocurrencies } from "../../../services/AuthService";
 import Modal from 'react-awesome-modal';
-=======
 import { _signUp } from "../../../services/AuthService";
 import { connect } from "react-redux";
 import {bindActionCreators} from 'redux';
@@ -15,29 +13,12 @@ import { handleDropdownChange, openModal, closeModal } from "../../../actions/si
 
 import Footer from "../../../components/Layout/Footer";
 
->>>>>>> 6cfa52d44fc58966490cf5577af875400e6174c8:client/src/containers/Home/SignUp/SignUp.js
 
 class SignUp extends Component {
   constructor() {
     super();
     
 
-<<<<<<< HEAD:client/src/components/Home/SignUp/SignUp.js
-    this.state = {
-      username: "",
-      email: "",
-      password: "",
-      cryptoOptions: [],
-      cryptoProfile: [],
-      hasAgreed: false,
-      redirect: false,
-      visible: false
-    };
-    
-    this.handleChange = this.handleChange.bind(this);
-=======
-
->>>>>>> 6cfa52d44fc58966490cf5577af875400e6174c8:client/src/containers/Home/SignUp/SignUp.js
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -69,11 +50,7 @@ class SignUp extends Component {
     } else {
       return _signUp(username, email, password, cryptoProfile).then(res => {
         console.log("message sent from server if success: ", res);
-<<<<<<< HEAD:client/src/components/Home/SignUp/SignUp.js
-        this.openModal();
-=======
         this.props.openModal();
->>>>>>> 6cfa52d44fc58966490cf5577af875400e6174c8:client/src/containers/Home/SignUp/SignUp.js
         //TODO
         //prompt users to check their email
       });
@@ -84,29 +61,9 @@ class SignUp extends Component {
 
     const { error, loading, cryptoOptions, visible } = this.props;
 
-<<<<<<< HEAD:client/src/components/Home/SignUp/SignUp.js
-  state = {
-    selectedOptions: null
-  };
-  
-
-  openModal() {
-    this.setState({
-        visible : true
-    });
-}
-  closeModal() {
-    const { history } = this.props;
-      this.setState({
-          visible : false 
-    });
-    history.push('/');
-  };
-=======
     if (error) {
       return <div>Error! {error.message}</div>;
     }
->>>>>>> 6cfa52d44fc58966490cf5577af875400e6174c8:client/src/containers/Home/SignUp/SignUp.js
 
     if (loading) {
       return <div>Loading...</div>;
@@ -224,12 +181,9 @@ class SignUp extends Component {
                     className="FormField__Checkbox"
                     type="checkbox"
                     name="hasAgreed"
-<<<<<<< HEAD:client/src/components/Home/SignUp/SignUp.js
                     required
                     value={this.state.hasAgreed}
                     onChange={this.handleChange}
-=======
->>>>>>> 6cfa52d44fc58966490cf5577af875400e6174c8:client/src/containers/Home/SignUp/SignUp.js
                   />
                   I agree all statements in
                   <a href="#" className="FormField__TermsLink">
@@ -246,20 +200,11 @@ class SignUp extends Component {
                   I'm already member
                 </Link>
               </div>
-<<<<<<< HEAD:client/src/components/Home/SignUp/SignUp.js
-
-              <Modal visible={this.state.visible} effect="fadeInLeft" onClickAway={() => this.closeModal()}>
-                <div className="Modal">
-                  <h4>You have successfully registered! </h4>
-                  <h4>Please check your Email and follow the instructions for Email verification.</h4>
-                  <a className="a-link" href="javascript:void(0);" onClick={() => this.closeModal()}>Ok</a>
-=======
               <Modal visible={visible} effect="fadeInLeft" onClickAway={() => {this.props.closeModal();}}>
                 <div className="Modal">
                   <h4>You have successfully registered! </h4>
                   <h4>Please check your Email and follow the instructions for Email verification.</h4>
                   <a className="a-link" href="javascript:void(0);" onClick={() => {this.props.closeModal()}}>Ok</a>
->>>>>>> 6cfa52d44fc58966490cf5577af875400e6174c8:client/src/containers/Home/SignUp/SignUp.js
                 </div>
               </Modal>
 
