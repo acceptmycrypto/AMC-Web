@@ -64,9 +64,12 @@ class Deals extends Component {
       <div>
         <Layout>
         <div className="venues-content mb-5">
-          <CryptoRankings />
 
-          <div id="right" className="grid">
+
+          {/* remove the cryptoranking table on the deals page until further notice
+          <CryptoRankings /> */}
+
+          <div id="right" className="grid mx-4">
             {deals != undefined && deals.length > 0 && deals.map(deal => (
               <div key={deal.id} className="deal">
                 <Link to={`/feed/deals/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
