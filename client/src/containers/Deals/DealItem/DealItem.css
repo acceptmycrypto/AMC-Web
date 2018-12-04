@@ -1,7 +1,7 @@
 .deal-container {
-  margin: 50px;
+  margin: 0px 50px;;
   margin-bottom: 10px;
-  height: 80vh; /*relative to the height of the viewport*/
+  height: 80%;
   box-sizing: border-box;
   box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
   display: flex;
@@ -61,6 +61,14 @@
   width: 20%;
 }
 
+/* .deal-item-steps {
+  background-color: sandybrown;
+} */
+
+.ui.steps {
+  border-radius: 0px;
+  width: 100%;
+}
 .deal-main-info {
   display: flex;
   height: 100%;
@@ -69,7 +77,7 @@
 
 .deal-images-container {
   height: 100%;
-  width: 100%;
+  width: 50%;
   padding: 15px;
 
 }

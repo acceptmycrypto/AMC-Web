@@ -21,6 +21,7 @@ import ShipOrder from "../ShipOrder";
 import PurchaseOrder from "../PurchaseOrder";
 import Layout from "../../Layout";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
+import { Icon, Step } from 'semantic-ui-react'
 
 
 class DealItem extends Component {
@@ -31,7 +32,7 @@ class DealItem extends Component {
     if (await this.props.userLoggedIn) {
       const { deal_name } = await this.props.match.params;
       await this.props._loadDealItem(deal_name);
-      
+
     }else{
         // localStorage.removeItem('token');
         await this.props.history.push('/');
@@ -185,6 +186,32 @@ class DealItem extends Component {
                   </div>
               </div>
             </div>
+            <div className="deal-item-steps">
+            <Step.Group>
+    <Step>
+      <Icon name='truck' />
+      <Step.Content>
+        <Step.Title>Shipping</Step.Title>
+        <Step.Description>Choose your shipping options</Step.Description>
+      </Step.Content>
+    </Step>
+
+    <Step active>
+      <Icon name='payment' />
+      <Step.Content>
+        <Step.Title>Billing</Step.Title>
+        <Step.Description>Enter billing information</Step.Description>
+      </Step.Content>
+    </Step>
+
+    <Step disabled>
+      <Icon name='info' />
+      <Step.Content>
+        <Step.Title>Confirm Order</Step.Title>
+      </Step.Content>
+    </Step>
+  </Step.Group>
+              </div>
 
             <div className="deal-main-info">
               <div className="deal-images-container">
