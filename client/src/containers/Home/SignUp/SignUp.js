@@ -3,8 +3,6 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
 import Modal from 'react-awesome-modal'
 import Select from "react-select";
-import { _signUp, _loadCryptocurrencies } from "../../../services/AuthService";
-import Modal from 'react-awesome-modal';
 import { _signUp } from "../../../services/AuthService";
 import { connect } from "react-redux";
 import {bindActionCreators} from 'redux';
