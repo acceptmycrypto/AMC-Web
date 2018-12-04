@@ -180,8 +180,8 @@ class SignUp extends Component {
                     type="checkbox"
                     name="hasAgreed"
                     required
-                    value={this.state.hasAgreed}
-                    onChange={this.handleChange}
+                    // value={this.props.hasAgreed}
+                    // onChange={this.handleChange}
                   />
                   I agree all statements in
                   <a href="#" className="FormField__TermsLink">
