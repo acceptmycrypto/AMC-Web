@@ -48,7 +48,6 @@ router.post('/navbar/photo',verifyToken, function (req, res) {
 });
 
 router.post('/loggedIn', verifyToken, function (req, res){
-    console.log('hi at loggedIn');
     if(req.decoded._id){
         res.json({"message": "Right Token"});
     }else{

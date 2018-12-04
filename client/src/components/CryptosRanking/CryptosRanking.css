@@ -1,6 +1,6 @@
 .column {
   height: 100%; /* span the full height of the browser window*/
-  display: flex;
+  /* display: flex; */
 }
 
 #left {
