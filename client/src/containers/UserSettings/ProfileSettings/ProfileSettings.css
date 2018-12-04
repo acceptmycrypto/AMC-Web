@@ -20,3 +20,12 @@
 .button-font{
     font-size: 16px;
 }
+
+.settings-icon-shaded{
+    display: inline-block;
+    color: white;
+    background-image: linear-gradient(-85deg, #49cdb7, #1ab7db); 
+    width: fit-content;
+    font-size: 3em;
+    border-radius: 5px;
+}
