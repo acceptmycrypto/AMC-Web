@@ -8,7 +8,7 @@ import ResendEmail from "./containers/Home/ResendEmail";
 import Profile from "./containers/Profile/UserProfile";
 
 
-import Settings from "./components/UserSettings/Settings"
+import Settings from "./containers/UserSettings/Settings"
 
 import FeedDeals from "./containers/Deals";
 import DealItem from "./containers/Deals/DealItem";
