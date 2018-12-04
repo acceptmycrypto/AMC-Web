@@ -1,0 +1,22 @@
+.profileSettings{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 auto;
+    width: 50%;
+}
+
+.margin-L-15{
+    margin-left: 15%;
+}
+
+.margin-L-38{
+    margin-left: 38%;
+}
+
+.margin-L-45{
+    margin-left: 45%;
+}
+.button-font{
+    font-size: 16px;
+}
