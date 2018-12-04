@@ -23,10 +23,10 @@ class UserProfile extends Component {
   
   
   componentDidMount = async () => {
-    await console.log(this.props.userLoggedIn);
+    // await console.log(this.props.userLoggedIn);
     await this.props._isLoggedIn(localStorage.getItem('token'));
 
-    await console.log(this.props.userLoggedIn);
+    // await console.log(this.props.userLoggedIn);
 
     if (await this.props.userLoggedIn) {      
       await this.props._loadProfile(localStorage.getItem('token'));
