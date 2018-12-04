@@ -8,7 +8,6 @@ CREATE TABLE crypto_metadata(
 	crypto_name VARCHAR(255) NOT NULL UNIQUE,
 	crypto_symbol VARCHAR(255) NOT NULL UNIQUE,
 	crypto_price DECIMAL(10, 4) NOT NULL,
-	venues_count INT NULL,
 	PRIMARY KEY (id)
 );
 
@@ -46,8 +45,8 @@ CREATE TABLE deals (
 
 CREATE TABLE deal_images (
 	id INT NOT NULL AUTO_INCREMENT,
-  deal_id INT NOT NULL,
-  deal_image VARCHAR(255) NOT NULL,
+  	deal_id INT NOT NULL,
+  	deal_image VARCHAR(255) NOT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
@@ -136,18 +135,40 @@ CREATE TABLE users_purchases(
 	crypto_id INT NOT NULL,
 	date_purchased TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	amount DECIMAL(20, 8) NOT NULL,
-	txn_id VARCHAR(255) NOT NULL,
+	txn_id VARCHAR(255) NOT NULL UNIQUE,
 	address VARCHAR(255) NOT NULL,
 	confirms_needed VARCHAR(255) NOT NULL,
 	timeout INT NOT NULL,
 	status_url VARCHAR(255) NULL,
 	qrcode_url VARCHAR(255) NOT NULL,
+  status VARCHAR(255) NOT NULL DEFAULT "0",
 	payment_received BOOLEAN NOT NULL DEFAULT FALSE,
 	permission VARCHAR(255) NOT NULL DEFAULT "community",
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_id) REFERENCES users(id),
 	FOREIGN KEY (crypto_id) REFERENCES crypto_info(id),
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
+);
+
+CREATE TABLE users_shipping_address(
+	id INT NOT NULL AUTO_INCREMENT,
+  txn_id VARCHAR(255) NOT NULL,
+  shipping_fullname VARCHAR(255) NOT NULL,
+  shipping_address VARCHAR(255) NOT NULL,
+  shipping_city VARCHAR(255) NOT NULL,
+  shipping_state VARCHAR(255) NOT NULL,
+  shipping_zipcode VARCHAR(255) NOT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (txn_id) REFERENCES users_purchases(txn_id)
+);
+
+CREATE TABLE users_purchase_customization(
+	id INT NOT NULL AUTO_INCREMENT,
+  txn_id VARCHAR(255) NOT NULL,
+  color VARCHAR(255) NULL,
+  size VARCHAR(255) NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (txn_id) REFERENCES users_purchases(txn_id)
 );
 
 CREATE TABLE users_matched_friends(
@@ -189,7 +210,7 @@ CREATE TABLE notifications (
 	matched_friend_id INT NOT NULL,
 	venue_id INT NOT NULL,
 	deal_id INT NOT NULL,
-  PRIMARY KEY (id),
+  	PRIMARY KEY (id),
 	FOREIGN KEY (user_id) REFERENCES users(id),
 	FOREIGN KEY (matched_friend_id) REFERENCES users_matched_friends(id),
 	FOREIGN KEY (venue_id) REFERENCES venues(id),

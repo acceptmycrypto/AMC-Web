@@ -1,34 +1,39 @@
-INSERT INTO deals (venue_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto) VALUES ("7", "Ledger Nano S", "Ledger Nano S Bitcoin Ethereum Crypto Altcoin Litecoin Ripple Wallet NEW SEALED", "https://s3-media3.fl.yelpcdn.com/bphoto/l6i8jx4iPbn3i_lpzXKdHA/ls.jpg", "99.95", "79.99");
+INSERT INTO deals (venue_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto) VALUES ("1", "Safavieh Malone Coffee Table", "Complete your living room with the Malone coffee table. A synthesis of retro and contemporary styling, this subtly glamorous table is crafted with white lacquer-like finish on its top with a bottom shelf of tempered clear glass and a chrome metal frame.", "https://ak1.ostkcdn.com/images/products/9542248/Safavieh-Malone-White-Chrome-Coffee-Table-484ef737-1052-4a6b-88ce-9eb8263250dc_600.jpg", "256.99", "224.99");
 
 INSERT INTO deals (venue_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto) VALUES ("6", "Equal Exchange Organic Love Buzz", "1 pound, bulk packaging.", "https://images-na.ssl-images-amazon.com/images/I/51R6iGcdunL.jpg", "13.25", "9.94");
 
-INSERT INTO deals (venue_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto) VALUES ("1", '9" H Patch the Pumpkin Stained Glass Accent Lamp', "Option - Patch the Pumpkin Stained Glass Accent Lamp", "https://i.ebayimg.com/images/g/UtwAAOSwWHZbEGSV/s-l500.jpg", "82.49", "70.12");
+INSERT INTO deals (venue_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto) VALUES ("7", "eGifter Choice Cards™", "The eGifter Choice Card gives you total flexibility and choice! Redeem it for a Gift Card from hundreds of retails on eGifter.com or in our mobile apps ranging from Adidas to Whole Foods Market.", "https://pbs.twimg.com/profile_images/801156735847329792/4QOvt45k_400x400.jpg", "100.00", "90.00");
 
-INSERT INTO deals (venue_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto) VALUES ("1", 'Safavieh Jacket', "Safavieh Casual Natural Fiber Hand-Woven Natural Accents Chunky Thick Jute Rug - 9' x 12'", "https://images-na.ssl-images-amazon.com/images/I/51R6iGcdunL.jpg", "1296.00", "265.99");
+INSERT INTO deals (venue_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto) VALUES ("2", "ANAHEIM ANGELS CLASSIC LEATHER BASEBALL COLLAR", "Handcrafted from soft baseball leather and enhanced with your teams logo and colors. Your pet is sure to stand out in these collars!", "http://cryptopet.com/wp-content/uploads/2014/12/anaheim_angels_classic_leather_small_baseball_collar_clc-mlb-ana-s_950x950.jpg", "32.40", "25.00");
 
-INSERT INTO deals (venue_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto) VALUES ("1", 'West Coast Jewelry', "Polished Jasper and Matte Onyx Beaded Stretch Bracelet (10mm Wide)", "https://i.ebayimg.com/images/g/2XkAAOSwUWVboT0L/s-l500.jpg", "23.04", "16.31");
+INSERT INTO deals (venue_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto) VALUES ("3", "Blankets", "Warm and cozy blankets insulate and comfort children forced from their homes and into emergency shelters by disasters, emergencies and conflict. These blankets help maintain and improve the health of children who have become unexpectedly vulnerable.", "https://dx2eq2oh924g4.cloudfront.net/wrpr/images/gift-catalog/products/1241/1152.jpg", "20.00", "15.00");
 
-INSERT INTO deals (venue_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto) VALUES ("7", 'Shop Button Decorative Throw Pillows', "These classic button pillows make a simply chic statement and provide a delightful addition to any room of the house.", "https://i.ebayimg.com/images/g/2XkAAOSwUWVboT0L/s-l500.jpg", "15.00", "10.00");
+INSERT INTO deals (venue_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto) VALUES ("1", "Tech4Kids - Paw Patrol Soft Lite Figure", "Make your child's bedtime more fun with this Paw Patrol Soft Lite night light.", "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6257/6257850_sd.jpg;maxHeight=550;maxWidth=550", "9.99", "1.00");
 
 -- Images for each deal
 INSERT INTO deal_images (deal_id, deal_image) VALUES
-(1,"https://s3-media3.fl.yelpcdn.com/bphoto/l6i8jx4iPbn3i_lpzXKdHA/ls.jpg"),
-(1,"https://www.dhresource.com/0x0s/f2-albu-g5-M00-AB-91-rBVaI1luzG6AVwW3AAIxbvRp4Dk232.jpg/35cm-18cm-cute-emoji-pillow-plush-pillow.jpg"),
-(1,"https://i.ebayimg.com/images/g/2XkAAOSwUWVboT0L/s-l500.jpg");
+(1,"https://ak1.ostkcdn.com/images/products/9542248/Safavieh-Malone-White-Chrome-Coffee-Table-484ef737-1052-4a6b-88ce-9eb8263250dc_600.jpg"),
+(1,"https://ak1.ostkcdn.com/images/products/9542248/Safavieh-Malone-White-Chrome-Coffee-Table-a94e199e-40dd-42c9-9a08-510c6ab89575.jpg"),
+(1,"https://ak1.ostkcdn.com/images/products/9542248/Safavieh-Malone-White-Chrome-Coffee-Table-0cd25a65-34f7-45b9-ad14-eea58cd5f23e.jpg"),
+(1,"https://ak1.ostkcdn.com/images/products/20603133/Safavieh-Malone-White-Chrome-Coffee-Table-dd199e25-e046-4d02-ab4c-30aa666965ae.jpg");
+-- (1,"https://ak1.ostkcdn.com/images/products/9542248/Safavieh-Malone-White-Chrome-Coffee-Table-75cbe2d0-913d-40a4-98ce-f05fd19a56ca.jpg"),
+-- (1,"https://ak1.ostkcdn.com/images/products/9542248/Safavieh-Malone-White-Chrome-Coffee-Table-a00e2a88-5c67-432c-a10f-761e5417f361.jpg"),
+-- (1,"https://ak1.ostkcdn.com/images/products/9542248/Safavieh-Malone-White-Chrome-Coffee-Table-f3d273fa-cf8e-4716-ae6e-c2597ec35c42.jpg");
 
 INSERT INTO deal_images (deal_id, deal_image) VALUES
-(2,"https://images-na.ssl-images-amazon.com/images/I/51R6iGcdunL.jpg"),
-(2,"https://www.dhresource.com/0x0s/f2-albu-g5-M00-AB-91-rBVaI1luzG6AVwW3AAIxbvRp4Dk232.jpg/35cm-18cm-cute-emoji-pillow-plush-pillow.jpg"),
-(2,"https://i.ebayimg.com/images/g/2XkAAOSwUWVboT0L/s-l500.jpg");
+(2,"https://images-na.ssl-images-amazon.com/images/I/51R6iGcdunL.jpg");
 
 INSERT INTO deal_images (deal_id, deal_image) VALUES
-(3,"https://i.ebayimg.com/images/g/UtwAAOSwWHZbEGSV/s-l500.jpg");
+(3,"https://pbs.twimg.com/profile_images/801156735847329792/4QOvt45k_400x400.jpg");
 
 INSERT INTO deal_images (deal_id, deal_image) VALUES
-(4,"https://images-na.ssl-images-amazon.com/images/I/51R6iGcdunL.jpg");
+(4,"http://cryptopet.com/wp-content/uploads/2014/12/anaheim_angels_classic_leather_small_baseball_collar_clc-mlb-ana-s_950x950.jpg"),
+(4,"http://cryptopet.com/wp-content/uploads/2014/12/anaheim_angels_classic_leather_toy_baseball_collar_clc-mlb-ana-t.jpg"),
+(4,"http://cryptopet.com/wp-content/uploads/2014/12/Size-Chart-MLB-leather-Collar-.jpg");
 
 INSERT INTO deal_images (deal_id, deal_image) VALUES
-(5,"https://i.ebayimg.com/images/g/2XkAAOSwUWVboT0L/s-l500.jpg");
+(5,"https://dx2eq2oh924g4.cloudfront.net/wrpr/images/gift-catalog/products/1241/1152.jpg");
 
 INSERT INTO deal_images (deal_id, deal_image) VALUES
-(6,"https://i.ebayimg.com/images/g/2XkAAOSwUWVboT0L/s-l500.jpg");
+(6,"https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6257/6257850_sd.jpg;maxHeight=550;maxWidth=550");
+

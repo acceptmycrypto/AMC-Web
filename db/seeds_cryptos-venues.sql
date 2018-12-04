@@ -1,6 +1,5 @@
 -- Bitcoin Cash
 INSERT INTO cryptos_venues (crypto_id, venue_id) VALUES ("1", "1");
-INSERT INTO cryptos_venues (crypto_id, venue_id) VALUES ("1", "3");
 INSERT INTO cryptos_venues (crypto_id, venue_id) VALUES ("1", "7");
 
 -- Bitcoin
@@ -16,10 +15,12 @@ INSERT INTO cryptos_venues (crypto_id, venue_id) VALUES ("2", "10");
 
 -- Dash
 INSERT INTO cryptos_venues (crypto_id, venue_id) VALUES ("3", "1");
+INSERT INTO cryptos_venues (crypto_id, venue_id) VALUES ("3", "2");
 INSERT INTO cryptos_venues (crypto_id, venue_id) VALUES ("3", "10");
 
 -- Doge Coin
 INSERT INTO cryptos_venues (crypto_id, venue_id) VALUES ("4", "1");
+INSERT INTO cryptos_venues (crypto_id, venue_id) VALUES ("4", "2");
 INSERT INTO cryptos_venues (crypto_id, venue_id) VALUES ("4", "6");
 INSERT INTO cryptos_venues (crypto_id, venue_id) VALUES ("4", "10");
 
@@ -29,14 +30,17 @@ INSERT INTO cryptos_venues (crypto_id, venue_id) VALUES ("5", "10");
 
 -- Ethereum
 INSERT INTO cryptos_venues (crypto_id, venue_id) VALUES ("6", "1");
+INSERT INTO cryptos_venues (crypto_id, venue_id) VALUES ("6", "2");
 INSERT INTO cryptos_venues (crypto_id, venue_id) VALUES ("6", "6");
 INSERT INTO cryptos_venues (crypto_id, venue_id) VALUES ("6", "7");
 INSERT INTO cryptos_venues (crypto_id, venue_id) VALUES ("6", "10");
 
 -- Litecoin
 INSERT INTO cryptos_venues (crypto_id, venue_id) VALUES ("7", "1");
+INSERT INTO cryptos_venues (crypto_id, venue_id) VALUES ("7", "2");
 INSERT INTO cryptos_venues (crypto_id, venue_id) VALUES ("7", "6");
 INSERT INTO cryptos_venues (crypto_id, venue_id) VALUES ("7", "7");
+INSERT INTO cryptos_venues (crypto_id, venue_id) VALUES ("7", "8");
 INSERT INTO cryptos_venues (crypto_id, venue_id) VALUES ("7", "10");
 
 -- Monero

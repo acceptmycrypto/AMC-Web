@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import "./TransactionsSettings.css";
-import FeedCard from "../../Feed/FeedCard";
+import FeedCard from "../../Profile/FeedCard";
 import { _loadAllTransactions } from "../../../services/SettingsService";
 
 

@@ -12,6 +12,10 @@ const uuidv4 = require('uuid/v4'); //generates uuid for us
 var sgMail = require("@sendgrid/mail");
 var keys = require("../key");
 sgMail.setApiKey(keys.sendgrid);
+//email template
+var path = require("path");
+var fs = require('fs');
+var ejs = require('ejs');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -19,20 +23,22 @@ app.use(express.static('public'));
 app.use(methodOverride('_method'));
 
 var connection = mysql.createConnection({
-  host: 'localhost',
+  host: process.env.DB_HOST,
 
   // Your port; if not 3306
   port: 3306,
 
   // Your username
-  user: 'root',
+  user: process.env.DB_USER,
 
   // Your password
-  password: 'password',
-  database: 'crypto_db'
+  password: process.env.DB_PW,
+  database: process.env.DB_DB
 });
 
-
+//compile email template
+var signupEmailTemplateText = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/emailVerification/emailVerification.ejs'), 'utf-8');
+var signupEmailTemplate = ejs.compile(signupEmailTemplateText);
 
 router.post('/register', function(req, res) {
   console.log(req.body);
@@ -89,13 +95,13 @@ router.post('/register', function(req, res) {
                     );
 
                     //use sendgrid to send email
-                    let link = "http://localhost:3001/email-verify/" + userID + "/" + result[0].email_verification_token;
+                    let verify_link = process.env.BACKEND_URL+"/email-verify/" + userID + "/" + result[0].email_verification_token;
 
                     const email_verification = {
                       to: req.body.email,
-                      from: 'simon@acceptmycrypto.com',
-                      subject: 'Please click the link below to verify your email.',
-                      html: `<a href=${link}>Verify Email</a>`
+                      from: process.env.CUSTOMER_SUPPORT,
+                      subject: 'Confirm your email address',
+                      html: signupEmailTemplate({ email: req.body.email, verify_link })
                     };
                     sgMail.send(email_verification);
                   }
@@ -147,6 +153,33 @@ router.post('/register', function(req, res) {
   );
 });
 
+router.post('/resend-email', function(req, res) {
+    console.log(req.body);
+  //First we make a query to see if user exists in the database
+    connection.query(
+      'SELECT * FROM users WHERE email = ?',
+      [req.body.email],
+      function(error, result, fields) {
+        if (error) throw error;
+        console.log(result);
+  //if we find the user exists in the database, we send "User already exists" to the client
+        if (!result[0]) return res.status(404).json({ error: 'Email not in database' });
+        userID = result[0].id;
+        
+       //use sendgrid to send email
+       let verify_link = process.env.BACKEND_URL+"/email-verify/" + userID + "/" + result[0].email_verification_token;
+
+       const email_verification = {
+         to: req.body.email,
+         from: process.env.CUSTOMER_SUPPORT,
+         subject: 'Confirm your email address',
+         html: signupEmailTemplate({ email: req.body.email, verify_link })
+       };
+       sgMail.send(email_verification);
+        
+      }
+    );
+  });
 
  //Once the user clicks on the email verification, we get the id and email verification params
 router.get('/email-verify/:user_id/:email_verification_token', function(req, res) {

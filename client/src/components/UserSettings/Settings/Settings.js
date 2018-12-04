@@ -1,12 +1,16 @@
 import React, { Component } from "react";
 import "./Settings.css";
+import { connect } from "react-redux";
+import {bindActionCreators} from 'redux';
 import { Link } from "react-router-dom";
-import Layout from "../../Layout";
+import Layout from "../../../containers/Layout";
 import { Menu } from "semantic-ui-react"
 import ProfileSettings from "../ProfileSettings";
 import PrivacySettings from "../PrivacySettings";
 import CryptocurrencySettings from "../CryptocurrencySettings";
 import TransactionsSettings from "../TransactionsSettings";
+import { _isLoggedIn } from "../../../actions/loggedInActions";
+
 
 
 class Settings extends Component {
@@ -23,10 +27,30 @@ class Settings extends Component {
     handleItemClick = (e, { name }) => {
         this.setState({ activeItem: name })
     }
+
+    componentDidMount = async () => {
+        await this.props._isLoggedIn(localStorage.getItem('token'));
+        if (await this.props.userLoggedIn) {
+            await console.log("user logged in");
+            
+          }else{
+              // localStorage.removeItem('token');
+              await this.props.history.push('/');
+          }
+    }
     
 
 
     render() {
+    const { error, loading, userLoggedIn } = this.props;
+
+    if (error) {
+      return <div>Error! {error.message}</div>;
+    }
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
         const { color } = this.state
         const { activeItem } = this.state
 
@@ -34,7 +58,7 @@ class Settings extends Component {
 
 
             <div>
-                <Layout />
+                <Layout >
                 <div className="mr-4 ml-4">
                     <Menu color={color} inverted widths={4}>
                         <Menu.Item name="Profile Settings" active={activeItem === "Profile Settings"} onClick={this.handleItemClick} />
@@ -63,6 +87,7 @@ class Settings extends Component {
 
                     </div>
                 </div>
+                </Layout >
 
             </div>
 
@@ -70,4 +95,16 @@ class Settings extends Component {
     }
 }
 
-export default Settings;
+const mapStateToProps = state => ({
+    loading: state.LoggedIn.loading,
+    error: state.LoggedIn.error,
+    userLoggedIn: state.LoggedIn.userLoggedIn
+  });
+  
+  const matchDispatchToProps = dispatch =>{
+    return bindActionCreators({_isLoggedIn}, dispatch);
+  }
+  
+  
+  export default connect(mapStateToProps, matchDispatchToProps)(Settings);
+  

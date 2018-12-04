@@ -16,6 +16,18 @@ var session = require("express-session");
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 
+if (process.env.NODE_ENV === 'production') {
+  // Exprees will serve up production assets
+  app.use(express.static('client/build'));
+
+  // Express serve up index.html file if it doesn't recognize route
+  // const path = require('path');
+  // app.get('*', (req, res) => {
+  //   res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  // });
+}
+else app.use(express.static("public"));
+
 //allow the api to be accessed by other apps
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -26,6 +38,8 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");
   next();
 });
+
+
 
 //routers
 var navbarRoutes = require("./routes/navbar.js");
@@ -47,7 +61,7 @@ var notificationRoutes = require("./routes/cryptos_ranking.js");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.static("public"));
+// app.use(express.static("public"));
 app.use(methodOverride("_method"));
 app.use(cookieParser());
 app.use(
@@ -77,17 +91,17 @@ app.use("/", notificationRoutes);
 path.join(__dirname, "public");
 
 var connection = mysql.createConnection({
-  host: "localhost",
+  host: process.env.DB_HOST,
 
   // Your port; if not 3306
   port: 3306,
 
   // Your username
-  user: "root",
+  user: process.env.DB_USER,
 
   // Your password
-  password: "password",
-  database: "crypto_db"
+  password: process.env.DB_PW,
+  database: process.env.DB_DB
 });
 
 //pass options as a param to request
@@ -99,7 +113,7 @@ var options = [
       symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,XVG,XMR"
     },
     headers: {
-      "X-CMC_PRO_API_KEY": "0972c733-b48c-4f2e-8da9-21e39cff4fc9",
+      "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
       Accept: "application/json"
     }
   },
@@ -110,7 +124,7 @@ var options = [
       symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,XVG,XMR"
     },
     headers: {
-      "X-CMC_PRO_API_KEY": "0972c733-b48c-4f2e-8da9-21e39cff4fc9",
+      "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
       Accept: "application/json"
     }
   }
@@ -134,7 +148,7 @@ async.map(
   function(err, results) {
     // all requests have been made
     if (err) {
-      // console.log(err);
+      console.log(err);
     } else {
       var coin_info = results[0].data;
       var coin_metadata = results[1].data;
@@ -153,7 +167,7 @@ async.map(
           },
           function(err, res) {
             if (err) {
-              // console.log(err);
+              console.log("170: " + err);
             }
           }
         );

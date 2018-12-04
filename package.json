@@ -11,7 +11,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "node server.js",
     "client": "npm run start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "start": "node server.js",
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +27,7 @@
     "body-parser": "^1.18.3",
     "cheerio": "^1.0.0-rc.2",
     "coinpayments": "^1.1.8",
+    "coinpayments-ipn": "^1.0.0",
     "concurrently": "^4.0.1",
     "cookie-parser": "^1.4.3",
     "dotenv": "^6.1.0",
