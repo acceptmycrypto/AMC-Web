@@ -182,11 +182,11 @@ body, html {
     color: white;
     position: fixed;
   }
-  p{
+  /* p{
     text-align: center;
     padding-top: 30px;
     font-size: .6em;
-  }
+  } */
   .a-link{
     color: white;
     font-size: 20px;
