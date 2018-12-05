@@ -34,20 +34,20 @@ CREATE TABLE deals (
 	venue_id INT NOT NULL,
 	deal_name VARCHAR(255) NOT NULL,
 	deal_description VARCHAR(255) NOT NULL,
-  featured_deal_image VARCHAR(255) NOT NULL,
+  	featured_deal_image VARCHAR(255) NOT NULL,
 	pay_in_dollar DECIMAL(10,2) NOT NULL,
 	pay_in_crypto DECIMAL(10, 2) NOT NULL,
 	date_expired DATETIME NULL,
 	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  category VARCHAR(255) NULL,
+  	category VARCHAR(255) NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (venue_id) REFERENCES venues(id)
 );
 
 CREATE TABLE deal_images (
 	id INT NOT NULL AUTO_INCREMENT,
-  deal_id INT NOT NULL,
-  deal_image VARCHAR(255) NOT NULL,
+  	deal_id INT NOT NULL,
+  	deal_image VARCHAR(255) NOT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
@@ -95,6 +95,7 @@ CREATE TABLE users(
 	last_name VARCHAR (255) NULL,
 	phone_number VARCHAR(100) NULL,
 	email VARCHAR(100) NOT NULL UNIQUE,
+	previous_email VARCHAR(100) NULL UNIQUE,
 	password VARCHAR(255) NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (id)
@@ -142,7 +143,7 @@ CREATE TABLE users_purchases(
 	timeout INT NOT NULL,
 	status_url VARCHAR(255) NULL,
 	qrcode_url VARCHAR(255) NOT NULL,
-  status VARCHAR(255) NOT NULL DEFAULT "0",
+  	status VARCHAR(255) NOT NULL DEFAULT "0",
 	payment_received BOOLEAN NOT NULL DEFAULT FALSE,
 	permission VARCHAR(255) NOT NULL DEFAULT "community",
 	PRIMARY KEY (id),
@@ -153,21 +154,21 @@ CREATE TABLE users_purchases(
 
 CREATE TABLE users_shipping_address(
 	id INT NOT NULL AUTO_INCREMENT,
-  txn_id VARCHAR(255) NOT NULL,
-  shipping_fullname VARCHAR(255) NOT NULL,
-  shipping_address VARCHAR(255) NOT NULL,
-  shipping_city VARCHAR(255) NOT NULL,
-  shipping_state VARCHAR(255) NOT NULL,
-  shipping_zipcode VARCHAR(255) NOT NULL,
+	txn_id VARCHAR(255) NOT NULL,
+	shipping_fullname VARCHAR(255) NOT NULL,
+	shipping_address VARCHAR(255) NOT NULL,
+	shipping_city VARCHAR(255) NOT NULL,
+	shipping_state VARCHAR(255) NOT NULL,
+	shipping_zipcode VARCHAR(255) NOT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (txn_id) REFERENCES users_purchases(txn_id)
 );
 
 CREATE TABLE users_purchase_customization(
 	id INT NOT NULL AUTO_INCREMENT,
-  txn_id VARCHAR(255) NOT NULL,
-  color VARCHAR(255) NULL,
-  size VARCHAR(255) NULL,
+	txn_id VARCHAR(255) NOT NULL,
+	color VARCHAR(255) NULL,
+	size VARCHAR(255) NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (txn_id) REFERENCES users_purchases(txn_id)
 );
