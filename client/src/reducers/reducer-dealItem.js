@@ -9,6 +9,9 @@ const initialState = {
   zipcode: null,
   shippingState: null,
   selectedOption: null,
+  showCustomizationStep: true,
+  showShippingStep: false,
+  showPayingStep: false,
   transactionInfo: null,
   paidIn: null,
   purchasing: false,
@@ -93,6 +96,30 @@ export default function dealItemReducer(state = initialState, action) {
       return {
         ...state,
         selectedOption: action.payload.selectedOption
+      };
+
+    case "SHOW_CUSTOMIZATION":
+      return {
+        ...state,
+        showCustomizationStep: action.payload.showCustomizationStep,
+        showShippingStep: action.payload.showShippingStep,
+        showPayingStep: action.payload.showPayingStep
+      };
+
+    case "SHOW_SHIPPING":
+      return {
+        ...state,
+        showCustomizationStep: action.payload.showCustomizationStep,
+        showShippingStep: action.payload.showShippingStep,
+        showPayingStep: action.payload.showPayingStep
+      };
+
+    case "SHOW_PAYING":
+      return {
+        ...state,
+        showCustomizationStep: action.payload.showCustomizationStep,
+        showShippingStep: action.payload.showShippingStep,
+        showPayingStep: action.payload.showPayingStep
       };
 
     default:

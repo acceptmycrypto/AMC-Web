@@ -12,7 +12,10 @@ import {
   handleCityInput,
   handleZipcodeInput,
   handleShippingStateInput,
-  handleSelectedCrypto } from "../../../actions/dealItemActions";
+  handleSelectedCrypto,
+  handleCustomizingStep,
+  handleShippingStep,
+  handlePayingStep} from "../../../actions/dealItemActions";
 import { _fetchTransactionInfo } from "../../../actions/paymentActions";
 import { Carousel } from "react-responsive-carousel";
 import StepZilla from "react-stepzilla";
@@ -104,6 +107,13 @@ class DealItem extends Component {
             selectedOption,
             paymentInfo,
             createPaymentButtonClicked,
+
+            handleCustomizingStep,
+            handleShippingStep,
+            handlePayingStep,
+            showCustomizationStep,
+            showShippingStep,
+            showPayingStep,
             userLoggedIn} = this.props;
 
 
@@ -187,33 +197,34 @@ class DealItem extends Component {
               </div>
             </div>
             <div className="deal-item-steps">
-            <Step.Group>
-    <Step>
-      <Icon name='truck' />
-      <Step.Content>
-        <Step.Title>Shipping</Step.Title>
-        <Step.Description>Choose your shipping options</Step.Description>
-      </Step.Content>
-    </Step>
 
-    <Step active>
-      <Icon name='payment' />
-      <Step.Content>
-        <Step.Title>Billing</Step.Title>
-        <Step.Description>Enter billing information</Step.Description>
-      </Step.Content>
-    </Step>
-
-    <Step disabled>
-      <Icon name='info' />
-      <Step.Content>
-        <Step.Title>Confirm Order</Step.Title>
-      </Step.Content>
-    </Step>
-  </Step.Group>
+              <div className="ui steps">
+                <a onClick={handleCustomizingStep}className="active step">
+                  <i className="edit icon"></i>
+                  <div className="content">
+                    <div className="title">Customizing</div>
+                    <div className="description">Choose your size or color</div>
+                  </div>
+                </a>
+                <a onClick={handleShippingStep} className="step">
+                <i className="truck icon"></i>
+                  <div className="content">
+                    <div className="title">Shipping</div>
+                    <div className="description">Enter shipping information</div>
+                  </div>
+                </a>
+                <a onClick={handlePayingStep}className="step">
+                <i className="shopping cart icon"></i>
+                  <div className="content">
+                    <div className="title">Paying</div>
+                    <div className="description">Choose your payment</div>
+                  </div>
+                </a>
               </div>
 
-            <div className="deal-main-info">
+            </div>
+
+            <div classNameName="deal-main-info">
               <div className="deal-images-container">
                 <Carousel
                   className="react-carousel"
@@ -231,7 +242,9 @@ class DealItem extends Component {
 
               <div className="deal-checkout-container">
                 <div className="step-progress">
-                  <StepZilla steps={steps}/>
+                  {showCustomizationStep && <CustomizeOrder />}
+                  {showShippingStep &&  <ShipOrder />}
+                  {showPayingStep && <PurchaseOrder />}
                 </div>
               </div>
             </div>
@@ -260,6 +273,9 @@ const mapStateToProps = state => ({
   loading: state.DealItem.loading,
   error: state.DealItem.error,
   userLoggedIn: state.LoggedIn.userLoggedIn,
+  showCustomizationStep: state.DealItem.showCustomizationStep,
+  showShippingStep: state.DealItem.showShippingStep,
+  showPayingStep: state.DealItem.showPayingStep
 });
 
 
@@ -275,6 +291,9 @@ const matchDispatchToProps = dispatch =>{
     handleZipcodeInput,
     handleShippingStateInput,
     handleSelectedCrypto,
+    handleCustomizingStep,
+    handleShippingStep,
+    handlePayingStep,
     _isLoggedIn}, dispatch);
 
 }
