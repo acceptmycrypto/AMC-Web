@@ -39,16 +39,36 @@ var connection = mysql.createConnection({
 
 
 
-router.post('/photo/options', verifyToken, function (req, res) {
+router.post('/update/photo', verifyToken, function (req, res) {
     // var decoded = jwt.decode(token);
     // console.log(decoded);
-    let id = req.decoded._id;
-    connection.query('SELECT users.id, users.username, users.first_name, users.last_name, users.email, users_profiles.bio, users_profiles.photo, users_profiles.user_location, users_profiles.birthday  FROM users LEFT JOIN users_profiles ON users.id = users_profiles.user_id WHERE users.id = ?;', [id], function (error, results, fields) {
+    let user_id = req.decoded._id;
+    let photo = req.body.selectedPhoto;
+    connection.query('UPDATE users_profiles SET ? WHERE ? ;', [{photo}, {user_id}], function (error, results, fields) {
         if (error) throw error;
         res.json(results);
     });
 });
 
+
+router.post('/update/username', verifyToken, function (req, res) {
+    // var decoded = jwt.decode(token);
+    // console.log(decoded);
+    let id = req.decoded._id;
+    let username = req.body.newUsername;
+    connection.query('SELECT username FROM users WHERE ?;', [{username}], function (error, results, fields) {
+        if (error) throw error;
+        if(results.length < 1){
+            connection.query('UPDATE users SET ? WHERE ? ;', [{username}, {id}], function (error, results, fields) {
+                if (error) throw error;
+                res.json(results);
+            });
+        }else{
+            res.json({responseMessage: "Username is taken. Enter a different Username"});
+        }
+        
+    });
+});
 
 
 
