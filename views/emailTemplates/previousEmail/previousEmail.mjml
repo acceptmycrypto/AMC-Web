@@ -1,0 +1,42 @@
+<mjml>
+  <mj-head>
+
+    </mj-head>
+  <mj-body>
+
+    <!-- Company Header -->
+    <mj-section background-color="#6bd9c7">
+      <mj-column>
+        <mj-text font-size="20px" color="#626e7e" align="center">
+          AcceptMyCrypto
+        </mj-text>
+        <mj-image width="80px" src="https://s3-us-west-1.amazonaws.com/acceptmycrypto/logo.png" />
+      </mj-column>
+    </mj-section>
+
+    <!-- verifying section -->
+    <mj-section background-color="#2e4157">
+
+      <mj-column>
+        <mj-text color="#fff" font-size="15px" align="left" line-height="20px">
+            Success! You’ve changed your Email Address for your AcceptMyCrypto account.
+             
+        </mj-text>
+        <mj-text color="#6bd9c7" font-size="18px" align="center" line-height="20px">
+            You can use <%=email%> to sign into your AcceptMyCrypto account and all your AcceptMyCrypto notifications will now be sent to <%=email%>.
+        </mj-text>
+
+         <mj-text color="#fff" font-size="15px" align="left" line-height="20px">
+            Think you’re getting this email by mistake? Don’t worry - just click the button below.
+        </mj-text>
+
+        <mj-button background-color="grey" href="<%=reverse_email_link%>">
+          Cancel Email Address Change
+        </mj-button>
+
+      </mj-column>
+
+    </mj-section>
+
+  </mj-body>
+</mjml>
