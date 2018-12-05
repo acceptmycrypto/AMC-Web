@@ -18,14 +18,11 @@ import {
   handlePayingStep} from "../../../actions/dealItemActions";
 import { _fetchTransactionInfo } from "../../../actions/paymentActions";
 import { Carousel } from "react-responsive-carousel";
-import StepZilla from "react-stepzilla";
 import CustomizeOrder from "../CustomizeOrder";
 import ShipOrder from "../ShipOrder";
 import PurchaseOrder from "../PurchaseOrder";
 import Layout from "../../Layout";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
-import { Icon, Step } from 'semantic-ui-react'
-
 
 class DealItem extends Component {
   componentDidMount = async () => {
@@ -197,23 +194,23 @@ class DealItem extends Component {
               </div>
             </div>
             <div className="deal-item-steps">
-
+              {/* classname is ui steps indiate using sematic ui */}
               <div className="ui steps">
-                <a onClick={handleCustomizingStep}className="active step">
+                <a onClick={handleCustomizingStep} className={showCustomizationStep ? "active step" : "step"}>
                   <i className="edit icon"></i>
                   <div className="content">
                     <div className="title">Customizing</div>
                     <div className="description">Choose your size or color</div>
                   </div>
                 </a>
-                <a onClick={handleShippingStep} className="step">
+                <a onClick={handleShippingStep} className={showShippingStep ? "active step" : "step"}>
                 <i className="truck icon"></i>
                   <div className="content">
                     <div className="title">Shipping</div>
                     <div className="description">Enter shipping information</div>
                   </div>
                 </a>
-                <a onClick={handlePayingStep}className="step">
+                <a onClick={handlePayingStep} className={showPayingStep ? "active step" : "step"}>
                 <i className="shopping cart icon"></i>
                   <div className="content">
                     <div className="title">Paying</div>
