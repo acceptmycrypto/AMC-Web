@@ -4,7 +4,7 @@ import { Menu } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { _loadProfile } from "../../../actions/userLoadActions";
-import { handleProfileSettingsMenuItemClick, _changePhoto, _changeUsername } from "../../../actions/settingsActions";
+import { handleProfileSettingsMenuItemClick, _changePhoto, _changeUsername, _changeEmail } from "../../../actions/settingsActions";
 
 
 
@@ -22,6 +22,9 @@ class ProfileSettings extends Component {
             document.querySelector("#photoResponse").innerHTML = "";
         } else if (document.querySelector("#usernameResponse")) {
             document.querySelector("#usernameResponse").innerHTML = "";
+        }else if(document.querySelector("#emailResponse")){
+            document.querySelector("#emailResponse").innerHTML = "";
+
         }
 
 
@@ -58,6 +61,25 @@ class ProfileSettings extends Component {
         } else {
             document.querySelector("#usernameResponse").innerHTML = "Enter a different username";
         }
+
+    }
+
+    changeEmail = async(currentEmail) =>{
+        let token = localStorage.getItem("token");
+        let newEmail = document.querySelector("#newEmail").value.trim();
+        if (newEmail !== currentEmail) {
+
+            _changeEmail(token, newEmail).then(res => {
+                console.log(res.responseMessage);
+                    document.querySelector("#emailResponse").innerHTML = res.responseMessage;
+                    this.props._loadProfile(localStorage.getItem("token"));
+                    document.querySelector("#newEmail").value = "";
+            });
+
+        } else {
+            document.querySelector("#emailResponse").innerHTML = "Enter a different email";
+        }
+
 
     }
 
@@ -145,9 +167,9 @@ class ProfileSettings extends Component {
                                 <div id="editEmailAddress" className="mb-3">
                                     <h3 className="mb-4">Change Email Address</h3>
                                     <h4 className="blueText margin-L-15 mb-5">Current Email Address: <span className="ml-4">{user_info !== undefined && user_info.length > 0 ? user_info[0].email : null}</span></h4>
-                                    <h4 className="blueText margin-L-15 mb-5">New Email Address: <input className="ml-3" type="email" required /></h4>
-                                    <div className="margin-L-15 mt-5"><button className="py-1 btn btn-primary button-font">Update Email Address</button></div>
-                                    <h6 className="redText margin-L-45" id="emailResponse"></h6>
+                                    <h4 className="blueText margin-L-15 mb-5">New Email Address: <input id="newEmail" className="ml-3" type="email" onChange={this.clearMessage} required /></h4>
+                                    <h6 className="redText margin-L-15" id="emailResponse"></h6>                                    
+                                    <div className="margin-L-15 mt-5"><button className="py-1 btn btn-primary button-font" onClick={() => { this.changeEmail(user_info[0].email) }}>Update Email Address</button></div>
                                 </div>
                             }
                             {activeProfileSettingsItem == "Change Password" &&
