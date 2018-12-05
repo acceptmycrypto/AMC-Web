@@ -1,6 +1,7 @@
 import { 
     SET_ACTIVE_SETTINGS,
-    SET_ACTIVE_PROFILE_SETTINGS
+    SET_ACTIVE_PROFILE_SETTINGS,
+    SET_INITIAL_STATE
 
 } from "../actions/settingsActions";
 
@@ -13,6 +14,8 @@ const initialSettingsState = {
 
 export default function settingsReducer (state = initialSettingsState, action) {
     switch (action.type) {
+        case SET_INITIAL_STATE:
+            return initialSettingsState;
         case SET_ACTIVE_SETTINGS:
             return {
                 ...state,
