@@ -4,6 +4,7 @@ import "./ShipOrder.css";
 const ShipOrder = props => {
   return (
     <div>
+      <label className="text-capitalize" htmlFor="select_crypto">Enter Shipping Information</label>
       <form onSubmit={props.SubmitPayment}>
         <div class="form-group">
           <input
@@ -57,6 +58,14 @@ const ShipOrder = props => {
         </select>
 
       </form>
+
+      <div onClick={props.previous_step} id="previous-step">
+        <button>Previous</button>
+      </div>
+
+      <div onClick={props.next_step} id="steps-workflow">
+        <button>Next</button>
+      </div>
     </div>
   );
 };

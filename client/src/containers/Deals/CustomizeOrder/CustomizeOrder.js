@@ -5,6 +5,7 @@ const CustomizeOrder = props => {
   return (
     <div>
       <form class="form-group">
+      <label className="text-capitalize" htmlFor="select_crypto">Select Size or Color</label>
         <select
           class="custom-select my-2 mr-sm-2"
           id="select-size"
@@ -27,6 +28,10 @@ const CustomizeOrder = props => {
           <option value="White">White</option>
         </select>
       </form>
+
+      <div onClick={props.next_step} id="next-step">
+        <button>Next</button>
+      </div>
     </div>
   );
 };

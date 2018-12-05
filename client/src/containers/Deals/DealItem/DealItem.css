@@ -1,7 +1,6 @@
 .deal-container {
   margin: 0px 50px;;
   margin-bottom: 10px;
-  height: 80%;
   box-sizing: border-box;
   box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
   display: flex;
@@ -69,6 +68,7 @@
   border-radius: 0px;
   width: 100%;
 }
+
 .deal-main-info {
   display: flex;
   height: 100%;
@@ -78,8 +78,7 @@
 .deal-images-container {
   height: 100%;
   width: 50%;
-  padding: 15px;
-
+  margin-top: 25px;
 }
 
 .deal-checkout-container {
@@ -106,26 +105,27 @@
   max-height: 300px;
 }
 
+/*
 /* stop default stiling of ol */
-ol.progtrckr {
+/* ol.progtrckr {
   list-style-type: none;
   padding: 0;
   display: flex;
   justify-content: center;
   height: 25%;
   margin-bottom: 30px;
-}
+} */
 
 /* Hide the default step of order list*/
-.progtrckr em {
+/* .progtrckr em {
   display: none;
   font-weight: 700;
   padding-left: 1rem;
-}
+} */
 
 
 /* Set the color of three states: todo, doing, and done */
-ol.progtrckr li.progtrckr-todo {
+/* ol.progtrckr li.progtrckr-todo {
   color: silver;
   border-bottom: 4px solid silver;
 }
@@ -159,10 +159,10 @@ ol.progtrckr li:before {
   float: left;
   left: 50%;
   margin-top:  4px;
-}
+} */
 
 /* adding the content "\00a0\00a0" after li to make some spaces for cenetering */
-ol.progtrckr li:after {
+/* ol.progtrckr li:after {
   content: "\A0\A0";
 }
 
@@ -202,7 +202,8 @@ ol.progtrckr li.progtrckr-done:before {
 
 ol.progtrckr li.progtrckr-done:hover:before {
   color: #333;
-}
+} */
+
 
 /*Make the button stay at the bottom*/
 .footer-buttons {
@@ -236,17 +237,4 @@ ol.progtrckr li.progtrckr-done:hover:before {
 
 .footer-buttons #next-button {
   float: right;
-}
-
-/* for mobile */
-@media (max-width: 650px) {
-  .progtrckr li span {
-    display: none;
-  }
-}
-
-@media (max-width: 650px) {
-  .progtrckr em {
-    display: inline;
-  }
 }

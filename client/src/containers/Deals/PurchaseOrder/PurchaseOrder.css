@@ -3,14 +3,18 @@
   margin-top: 10px;
 }
 
-#submit_payment {
+#steps-workflow, #next-step {
   display: flex;
   justify-content: flex-end;
   width: 100%;
   margin-top: 20px;
 }
 
-#submit_payment button {
+#previous-step {
+  margin-top: 20px;
+}
+
+#steps-workflow button, #next-step button, #previous-step button {
   background-color:green;
   color: white;
   border: none;
@@ -21,7 +25,5 @@
   font-weight: 500;
   cursor: pointer;
   position: absolute;
-  bottom: 0%;
   margin: 20px 0px;
-  z-index: 1;
 }

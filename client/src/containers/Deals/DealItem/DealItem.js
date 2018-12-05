@@ -121,34 +121,34 @@ class DealItem extends Component {
       return <div>Loading...</div>;
     }
 
-    const steps = [
-      { name: "Customizing",
-        component:
-        <CustomizeOrder
-        handle_CustomizingSize={this.props.handleCustomizingSize}
-        handle_CustomizingColor={this.props.handleCustomizingColor}/>},
-      { name: "Shipping",
-        component:
-        <ShipOrder
-        SubmitPayment={this.createPaymentHandler}
-        handle_ShippingFullName={this.props.handleFullNameInput}
-        handle_ShippingAddress={this.props.handleAddressInput}
-        handle_ShippingCity={this.props.handleCityInput}
-        handle_ShippingZipcode={this.props.handleZipcodeInput}
-        handle_ShippingState={this.props.handleShippingStateInput}/> },
-      { name: "Payment", component:
-        <PurchaseOrder
-        cryptos={acceptedCryptos && this.handleCryptoOptions(acceptedCryptos)}
-        selectCrypto={this.props.handleSelectedCrypto}
+    // const steps = [
+    //   { name: "Customizing",
+    //     component:
+    //     <CustomizeOrder
+    //     handle_CustomizingSize={this.props.handleCustomizingSize}
+    //     handle_CustomizingColor={this.props.handleCustomizingColor}/>},
+    //   { name: "Shipping",
+    //     component:
+    //     <ShipOrder
+    //     SubmitPayment={this.createPaymentHandler}
+    //     handle_ShippingFullName={this.props.handleFullNameInput}
+    //     handle_ShippingAddress={this.props.handleAddressInput}
+    //     handle_ShippingCity={this.props.handleCityInput}
+    //     handle_ShippingZipcode={this.props.handleZipcodeInput}
+    //     handle_ShippingState={this.props.handleShippingStateInput}/> },
+    //   { name: "Payment", component:
+    //     <PurchaseOrder
+    //     cryptos={acceptedCryptos && this.handleCryptoOptions(acceptedCryptos)}
+    //     selectCrypto={this.props.handleSelectedCrypto}
 
-        SubmitPayment={this.createPaymentHandler}
-        transactionInfo={paymentInfo}
-        cryptoSymbol={selectedOption && selectedOption.value}
-        paymentButtonClicked={createPaymentButtonClicked}
+    //     SubmitPayment={this.createPaymentHandler}
+    //     transactionInfo={paymentInfo}
+    //     cryptoSymbol={selectedOption && selectedOption.value}
+    //     paymentButtonClicked={createPaymentButtonClicked}
 
-        showLoadingSpinner={loading}
-        timeout={paymentInfo && this.timeInMilliseconds(paymentInfo.timeout)}/> }
-    ];
+    //     showLoadingSpinner={loading}
+    //     timeout={paymentInfo && this.timeInMilliseconds(paymentInfo.timeout)}/> }
+    // ];
 
     return (
       <div>
@@ -193,7 +193,7 @@ class DealItem extends Component {
                   </div>
               </div>
             </div>
-            <div className="deal-item-steps">
+            <div>
               {/* classname is ui steps indiate using sematic ui */}
               <div className="ui steps">
                 <a onClick={handleCustomizingStep} className={showCustomizationStep ? "active step" : "step"}>
@@ -221,7 +221,7 @@ class DealItem extends Component {
 
             </div>
 
-            <div classNameName="deal-main-info">
+            <div className="deal-main-info">
               <div className="deal-images-container">
                 <Carousel
                   className="react-carousel"
@@ -237,14 +237,43 @@ class DealItem extends Component {
                 </Carousel>
               </div>
 
-              <div className="deal-checkout-container">
+              <div className="deal-checkout-container mt-5">
                 <div className="step-progress">
-                  {showCustomizationStep && <CustomizeOrder />}
-                  {showShippingStep &&  <ShipOrder />}
-                  {showPayingStep && <PurchaseOrder />}
+                  {showCustomizationStep &&
+                  <CustomizeOrder
+                  handle_CustomizingSize={handleCustomizingSize}
+                  handle_CustomizingColor={handleCustomizingColor}
+                  next_step={handleShippingStep}/>}
+
+                  {showShippingStep &&
+                  <ShipOrder
+                  handle_ShippingFullName={handleFullNameInput}
+                  handle_ShippingAddress={handleAddressInput}
+                  handle_ShippingCity={handleCityInput}
+                  handle_ShippingZipcode={handleZipcodeInput}
+                  handle_ShippingState={handleShippingStateInput}
+                  next_step={handlePayingStep}
+                  previous_step={handleCustomizingStep}/>}
+
+                  {showPayingStep &&
+                  <PurchaseOrder
+                  cryptos={acceptedCryptos && this.handleCryptoOptions(acceptedCryptos)}
+                  selectCrypto={this.props.handleSelectedCrypto}
+
+                  previous_step={handleShippingStep}
+                  SubmitPayment={this.createPaymentHandler}
+                  transactionInfo={paymentInfo}
+                  cryptoSymbol={selectedOption && selectedOption.value}
+                  paymentButtonClicked={createPaymentButtonClicked}
+
+                  showLoadingSpinner={loading}
+                  timeout={paymentInfo && this.timeInMilliseconds(paymentInfo.timeout)}/>}
+
                 </div>
               </div>
+
             </div>
+
           </div>
         </div>
         </Layout >
