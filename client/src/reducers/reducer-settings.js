@@ -7,7 +7,7 @@ import {
 
 const initialSettingsState = {
     activeSettingsItem: "Profile Settings",
-    activeProfileSettingsItem: 'Change Username',
+    activeProfileSettingsItem: "Change Photo",
     
 }
 
