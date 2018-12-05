@@ -197,7 +197,7 @@ class SignUp extends Component {
                 <div className="Modal">
                   <h4>You have successfully registered! </h4>
                   <h4>Please check your Email and follow the instructions for Email verification.</h4>
-                  <a className="a-link" href="javascript:void(0);" onClick={() => {this.props.closeModal()}}>Ok</a>
+                  <a className="a-link" href="javascript:void(0);" onClick={() => {this.props.closeModal(); this.props.history.push("/")}}>Ok</a>
                 </div>
               </Modal>
 

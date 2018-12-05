@@ -125,21 +125,26 @@ router.post("/crypto/left", verifyToken, function (req, res) {
 });
 
 //add cryptos to user crypto portfolio
-router.get("/add/cryptos", verifyToken, function (req, res) {
+router.post("/add/cryptos", verifyToken, function (req, res) {
     let id = req.decoded._id;
     let selectedCryptos = req.body.cryptoProfile;
 
     connection.query("SELECT id FROM crypto_metadata WHERE crypto_name IN (?)", [selectedCryptos], function (error, results, fields) {
-
+        console.log(" line 133 Results,", results);
         let cryptoNames = "";
         for (let i in results) {
+            console.log("results[i]", results[i]);
+            console.log("results[i].id", results[i].id);
+
             cryptoNames +=  "('" + id + "','" + results[i].id + "'),";
         }
 
         cryptoNames = cryptoNames.substr(0, cryptoNames.length - 1);
+        console.log("cryptoNames", cryptoNames)
         let cryptoQuery = 'INSERT INTO users_cryptos (user_id, crypto_id) VALUES ' + cryptoNames;
         connection.query(cryptoQuery, function (error, results, fields) {
             if (error) throw error;
+            console.log("line 147 Results", results)
                 
 
         });
