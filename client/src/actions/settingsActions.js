@@ -1,7 +1,8 @@
 export const SET_ACTIVE_SETTINGS = "SET_ACTIVE_SETTINGS";
 export const SET_ACTIVE_PROFILE_SETTINGS = "SET_ACTIVE_PROFILE_SETTINGS";
 export const SET_INITIAL_STATE = "SET_INITIAL_STATE";
-
+export const SET_ACTIVE_CRYPTO_SETTINGS = "SET_ACTIVE_CRYPTO_SETTINGS";
+export const CRYPTO_LEFT = "CRYPTO_LEFT";
 
 export const setInitialSettingsState = () => {
     return {
@@ -26,6 +27,17 @@ export const handleProfileSettingsMenuItemClick = (e, {name} ) => {
         
     }
 }
+
+
+export const handleCryptoSettingsMenuItemClick = (e, {name} ) => {
+
+    return {
+        type: SET_ACTIVE_CRYPTO_SETTINGS,
+        payload: {activeCryptoSettingsItem: name}
+        
+    }
+}
+
 
 export const _changePhoto = (token, selectedPhoto)=>{
     const settings = {
@@ -98,3 +110,78 @@ export const _changePassword = (token, oldPassword, newPassword)=>{
         })
 }
 
+export const _cryptoOptionsLeft = (token) => {
+    const settings = {
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token})
+    }; 
+    return dispatch => {
+        dispatch(cryptoOptionsBegin());
+        return fetch(`/crypto/left`, settings)
+          .then(res => res.json())
+          .then(jsonLoadCrypto => {
+
+            let cryptoOptions = [];
+      
+             jsonLoadCrypto.map(crypto => {
+      
+                let optionObj = {};
+                optionObj.value = crypto.crypto_name;
+                optionObj.label = crypto.crypto_name + " " + "(" + crypto.crypto_symbol + ")";
+      
+                cryptoOptions.push(optionObj);
+              })
+      
+              return cryptoOptions;
+      
+            
+          }). then(cryptoOptionsArray =>{
+            dispatch(cryptoOptionsSuccess(cryptoOptionsArray));
+            return cryptoOptionsArray;
+
+          })
+          .catch(error => dispatch(cryptoOptionsFailure(error)));
+      };
+    }
+
+    
+    export const cryptoOptionsBegin = () => ({
+      type: "CRYPTO_OPTIONS_LEFT_BEGIN"
+    });
+    
+    
+    export const cryptoOptionsSuccess = cryptoLeft => ({
+      type: "CRYPTO_OPTIONS_LEFT_SUCCESS",
+      payload: { cryptoLeft }
+    });
+    
+    export const cryptoOptionsFailure = error => ({
+      type: "CRYPTO_OPTIONS_LEFT_FAILURE",
+      payload: { error }
+    });
+    
+
+    export const _addCryptos = (token, cryptoProfile)=>{
+         const settings = {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token, cryptoProfile })
+        }; 
+        const update_cryptos =  fetch("/add/cryptos", settings);
+
+    
+        return {
+            type: 'ADD_CRYPTO_SUCCESS',
+            payload: {
+                activeCryptoSettingsItem: "Crypto I am Are Interested In"
+            }
+        }
+    
+    }
