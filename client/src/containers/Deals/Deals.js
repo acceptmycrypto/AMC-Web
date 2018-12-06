@@ -16,7 +16,7 @@ class Deals extends Component {
 
     await this.props._isLoggedIn(localStorage.getItem('token'));
 
-    if (await this.props.userLoggedIn) {      
+    if (await this.props.userLoggedIn) {
       await this.props._loadDeals(localStorage.getItem('token'));
     }else{
         // localStorage.removeItem('token');
@@ -50,18 +50,26 @@ class Deals extends Component {
     //reset dealItem state when user hit deals route
     this.props.resetDealitemState();
 
-    
+    //filter deals by search
     if (this.props.searchTerm!=""){
         deals = this.props.searchedDeals;
+    }
+
+    //filter deals by category
+    if (this.props.category){
+      deals = this.props.categorizedDeals;
     }
 
     return (
       <div>
         <Layout>
         <div className="venues-content mb-5">
-          <CryptoRankings />
 
-          <div id="right" className="grid">
+
+          {/* remove the cryptoranking table on the deals page until further notice
+          <CryptoRankings /> */}
+
+          <div id="right" className="grid mx-4">
             {deals != undefined && deals.length > 0 && deals.map(deal => (
               <div key={deal.id} className="deal">
                 <Link to={`/feed/deals/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
@@ -107,14 +115,13 @@ const mapStateToProps = state => ({
   error: state.matchedDeals.error,
   userLoggedIn: state.LoggedIn.userLoggedIn,
   searchTerm: state.Search.searchTerm,
-  searchedDeals: state.Search.searchedDeals
+  searchedDeals: state.Search.searchedDeals,
+  category: state.Category.category,
+  categorizedDeals: state.Category.filteredCategory
 });
 
 const matchDispatchToProps = dispatch =>{
-
   return bindActionCreators({ _loadDeals, resetDealitemState, _isLoggedIn }, dispatch);
-
 }
-
 
 export default connect(mapStateToProps, matchDispatchToProps)(Deals);

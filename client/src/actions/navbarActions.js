@@ -34,3 +34,7 @@ export const fetchPhotoFailure = error => ({
   type: "FETCH_PHOTO_FAILURE",
   payload: { error }
 });
+
+export const resetNavbar = deals => ({
+    type: "RESET_NAVBAR"
+  });

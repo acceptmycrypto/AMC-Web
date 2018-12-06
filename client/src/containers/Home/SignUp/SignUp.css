@@ -170,7 +170,7 @@ body, html {
     margin-left: 5px;
   }
 
-  /* .Modal{
+  .Modal{
     text-align: center;
     width: 600px;
     height: 250px;
@@ -182,16 +182,12 @@ body, html {
     color: white;
     position: fixed;
   }
-  p{
-    text-align: center;
-    padding-top: 30px;
-    font-size: .6em;
-  }
+  
   .a-link{
     color: white;
     font-size: 20px;
     margin-left: 90%;
-  } */
+  }
 
 
 .crypto-img {

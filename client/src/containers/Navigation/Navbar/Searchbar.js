@@ -14,7 +14,7 @@ class SearchBar extends Component {
                         // localStorage.getItem('token'),
                         event.target.value,
                         this.props.allDeals)}
-                    // value={this.props.term}
+                    value={this.props.term}
                 />
             </div>
         )
