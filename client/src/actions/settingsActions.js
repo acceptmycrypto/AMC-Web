@@ -80,3 +80,21 @@ export const _changeEmail = (token, newEmail)=>{
             return jsonEmail;
         })
 }
+
+export const _changePassword = (token, oldPassword, newPassword)=>{
+    const passSettings = {
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token, oldPassword, newPassword})
+    }; 
+    return fetch("/update/password", passSettings)
+        .then(res => res.json())
+        .then(jsonPassword => {
+            console.log("jsonPassword ",  jsonPassword);
+            return jsonPassword;
+        })
+}
+
