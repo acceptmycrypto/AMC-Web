@@ -7,6 +7,10 @@ var methodOverride = require('method-override');
 var bodyParser = require('body-parser');
 
 var verifyToken = require("./utils/validation");
+//for login/logout (authentication)
+var bcrypt = require('bcryptjs');
+var jwt = require('jsonwebtoken');
+var keys = require("../key");
 
 //use sendgrid
 var sgMail = require("@sendgrid/mail");
@@ -165,6 +169,47 @@ router.get('/email-reverse/:user_id/:email_verification_token', function(req, re
       }
     );
   });
+
+  router.post('/update/password', verifyToken, function (req, res) {
+    
+    let id = req.decoded._id;
+    let oldPassword = req.body.oldPassword;
+    let newPassword = req.body.newPassword;
+
+    connection.query('SELECT * FROM users WHERE ?',
+        [{id}],
+        function(error, result, fields) {
+        if (error) console.log(error);
+        console.log(result);
+        if (!result[0]) return res.status(404).json({ responseMessage: 'user not found' });
+
+        if (!bcrypt.compareSync(oldPassword, result[0].password)) return res.json({responseMessage: "Old Password is not correct"});
+
+
+        bcrypt.genSalt(10, function(err, salt) {
+            bcrypt.hash(newPassword, salt, function(err, password_hash) {
+    //1) insert the new user into users table
+    
+              connection.query('UPDATE users SET password = ? WHERE id = ?',
+              [password_hash, id],
+              function (error, results, fields) {
+    
+                if (error) {
+                  console.log(error)
+                } else {
+                  
+                  res.json({
+                    responseMessage: "Password has been updated successfully!"
+                  });
+
+                }
+              });
+    
+            });
+    
+          }); 
+    });
+});
 
 
 module.exports = router;
