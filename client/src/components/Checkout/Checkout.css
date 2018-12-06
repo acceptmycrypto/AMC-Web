@@ -3,8 +3,8 @@
 }
 
 .send-payment img {
-  height: 100px;
-  width: 100px;
+  height: 200px;
+  width: 200px;
   margin: 0 10px;
 }
 
@@ -13,5 +13,27 @@
 }
 .payment-address {
   line-height: .5;
+  margin: 0 25px;
+  font-size: 20px;
+  text-align: center;
 }
 
+#coinpayment-address {
+  color: green;
+}
+
+.payment-timeout {
+  text-align: center;
+  margin-top: 40px;
+  margin-left:25px;
+  font-size: 15px;
+}
+
+.send-crypto-amount {
+  margin: 25px 0;
+  padding-bottom: 25px;
+}
+
+.send-crypto-amount strong {
+  color: green;
+}

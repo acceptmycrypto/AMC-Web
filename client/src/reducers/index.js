@@ -12,7 +12,6 @@ import LoadCrypto from './reducer-load-cryptos';
 import CryptoSelected from './reducer-sign-up';
 import SignInModal from './reducer-sign-in';
 
-
 const allReducers = combineReducers({
   matchedDeals: Deals,
   UserInfo,
