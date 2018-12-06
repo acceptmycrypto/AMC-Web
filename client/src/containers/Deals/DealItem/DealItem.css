@@ -78,7 +78,7 @@
 
 .deal-images-container {
   height: 100%;
-  width: 50%;
+  width: 35%;
   margin-top: 25px;
 }
 
@@ -86,7 +86,7 @@
   padding: 0 20px;
   position: relative;
   height: 100%;
-  width: 100%;
+  width: 65%;
 }
 
 .react-carousel {
@@ -94,6 +94,10 @@
   flex-direction: column;
   align-items: center;
 
+}
+
+.thumbs.animated {
+  overflow-x: auto;
 }
 
 .deal-item-image {
