@@ -30,12 +30,12 @@ class ProfileSettings extends Component {
 
     }
 
-    changePhoto = () => {
+    changePhoto = async () => {
         let token = localStorage.getItem("token");
         if (document.querySelector('input[name="crypto"]:checked') != undefined) {
-            let selectedPhoto = document.querySelector('input[name="crypto"]:checked').value;
-            this.props._changePhoto(token, selectedPhoto);
-            setTimeout(() => { this.props._loadProfile(localStorage.getItem("token")); }, 200);
+            let selectedPhoto = await document.querySelector('input[name="crypto"]:checked').value;
+            await this.props._changePhoto(token, selectedPhoto);
+            await setTimeout(() => { this.props._loadProfile(localStorage.getItem("token")); }, 300);
 
         } else {
             document.querySelector("#photoResponse").innerHTML = "Select a Photo";
