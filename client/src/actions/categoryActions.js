@@ -14,7 +14,3 @@ export const filterCategory = (category, allDeals) => {
       }
   }
 }
-
-export const resetFilter = deals => ({
-  type: "RESET_FILTER"
-});

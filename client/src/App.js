@@ -4,11 +4,11 @@ import { BrowserRouter as Switch, Route, Link, Redirect } from "react-router-dom
 import SignUp from "./containers/Home/SignUp";
 import SignIn from "./containers/Home/SignIn";
 import ResendEmail from "./containers/Home/ResendEmail";
-
+import ResetPassword from "./containers/Home/ResetPassword";
+import ResetPasswordEmail from "./containers/Home/ResetPasswordEmail";
 import Profile from "./containers/Profile/UserProfile";
-
-
 import Settings from "./containers/UserSettings/Settings"
+
 
 import FeedDeals from "./containers/Deals";
 import DealItem from "./containers/Deals/DealItem";
@@ -27,8 +27,8 @@ class App extends Component {
               <Route exact path="/" component={SignIn} />
               <Route exact path="/SignUp" component={SignUp} />
               <Route exact path="/ResendEmail" component={ResendEmail} />
-
-
+              <Route exact path="/ResetPasswordEmail" component={ResetPasswordEmail} />
+              <Route exact path="/ResetPassword" component={ResetPassword}/>
               <Route exact path="/profile" component={Profile} />
 
 
