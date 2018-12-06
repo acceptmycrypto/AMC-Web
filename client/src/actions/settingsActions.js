@@ -185,3 +185,42 @@ export const _cryptoOptionsLeft = (token) => {
         }
     
     }
+
+export const _allTransactions = (token) =>{
+    const settings = {
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token})
+    }; 
+
+    return dispatch => {
+        dispatch(fetchAllTransactionsBegin());
+        return fetch("/complete/order/details", settings)
+          .then(res => res.json())
+          .then(jsonAllTransactions => {
+            dispatch(fetchAllTransactionsSuccess(jsonAllTransactions));
+            return jsonAllTransactions;
+          })
+          .catch(error => dispatch(fetchAllTransactionsFailure(error)));
+      };
+}
+
+    
+    export const fetchAllTransactionsBegin = () => ({
+      type: "ALL_TRANSACTIONS_LEFT_BEGIN"
+    });
+    
+    
+    export const fetchAllTransactionsSuccess = transactionInfo => ({
+      type: "ALL_TRANSACTIONS_LEFT_SUCCESS",
+      payload: { transactionInfo }
+    });
+    
+    export const fetchAllTransactionsFailure = error => ({
+      type: "ALL_TRANSACTIONS_LEFT_FAILURE",
+      payload: { error }
+    });
+    
