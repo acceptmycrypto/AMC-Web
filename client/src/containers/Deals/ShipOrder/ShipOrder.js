@@ -15,6 +15,12 @@ const ShipOrder = props => {
             onChange={props.handle_ShippingFullName}
           />
         </div>
+        <div className="dealitem-error-msg" id="fullname-error"></div>
+
+         {/* document.getElementById("shipping-address-error").innerHTML = this._validationErrors(validateNewInput).shippingAddressValMsg;
+      document.getElementById("shipping-city-error").innerHTML = this._validationErrors(validateNewInput).shippingCityValMsg;
+      document.getElementById("shipping-zipcode-error").innerHTML = this._validationErrors(validateNewInput).zipcodeValMsg;
+      document.getElementById("shipping-state-error").innerHTML = this._validationErrors(validateNewInput).shippingStateValMsg; */}
 
         <div class="form-group">
           <input
@@ -25,6 +31,7 @@ const ShipOrder = props => {
             onChange={props.handle_ShippingAddress}
           />
         </div>
+        <div className="dealitem-error-msg" id="shipping-address-error"></div>
 
         <div class="form-group">
           <input
@@ -35,6 +42,7 @@ const ShipOrder = props => {
             onChange={props.handle_ShippingCity}
           />
         </div>
+        <div className="dealitem-error-msg" id="shipping-city-error"></div>
 
         <div class="form-group">
           <input
@@ -45,6 +53,7 @@ const ShipOrder = props => {
             onChange={props.handle_ShippingZipcode}
           />
         </div>
+        <div className="dealitem-error-msg" id="shipping-zipcode-error"></div>
 
         <select
           class="custom-select mr-sm-2"
@@ -56,6 +65,7 @@ const ShipOrder = props => {
           <option value="WA">Washington</option>
           <option value="ORG">Oregon</option>
         </select>
+        <div className="dealitem-error-msg" id="shipping-state-error"></div>
 
       </form>
 
@@ -63,7 +73,7 @@ const ShipOrder = props => {
         <button>Previous</button>
       </div>
 
-      <div onClick={props.next_step} id="steps-workflow">
+      <div onClick={() => props.validateShipmentData() && props.next_step()} id="steps-workflow">
         <button>Next</button>
       </div>
     </div>

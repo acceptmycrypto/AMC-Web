@@ -107,6 +107,7 @@ export const handleSelectedCrypto = (selectedOption) => {
 // };
 
 export const handleCustomizingStep = () => {
+
   return {
     type: "SHOW_CUSTOMIZATION",
     payload: {
@@ -138,4 +139,3 @@ export const handlePayingStep = () => {
     }
   }
 }
-

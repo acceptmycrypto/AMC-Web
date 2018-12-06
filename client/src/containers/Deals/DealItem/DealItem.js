@@ -89,8 +89,75 @@ class DealItem extends Component {
     this.props._fetchTransactionInfo(crypto_name, crypto_symbol, deal_id, amount, token, shippingAddress, shippingCity, zipcode, shippingState, fullName, selectedSize, selectedColor);
   }
 
+  handleCustomizationValidation = () => {
+    const validateNewInput = {
+      selectedColorValue: this.props.selectedColor,
+      selectedSizeValue: this.props.selectedSize
+    }
+    let isDataValid = false;
+
+    //Object.keys(validateNewInput) give us an array of keys
+    //Array.every check if all indices passed the test
+    //we check if the value of each property in the the object validateNewInput is === true
+    if (Object.keys(validateNewInput).every((k) => {
+      return validateNewInput[k] ? true : false
+    })) {
+      isDataValid = true;
+    } else {
+      document.getElementById("select-size-error").innerHTML = this._validationErrors(validateNewInput).sizeValMsg;
+
+      document.getElementById("select-color-error").innerHTML = this._validationErrors(validateNewInput).colorValMsg;
+
+    }
+
+    return isDataValid;
+  }
+
+  handleShipmentValidation = () => {
+
+    const validateNewInput = {
+      enteredFullname: this.props.fullName,
+      enteredShippingAddress: this.props.shippingAddress,
+      enteredShippingCity: this.props.shippingCity,
+      enteredZipcode: this.props.zipcode,
+      selectedShippingState: this.props.shippingState
+    }
+    let isDataValid = false;
+
+    if (Object.keys(validateNewInput).every((k) => {
+      return validateNewInput[k] ? true : false
+    })) {
+      isDataValid = true;
+    } else {
+      // document.getElementById("fullname").classList.add("dealitem-error-msg");
+
+      document.getElementById("fullname").innerHTML = this._validationErrors(validateNewInput).fullNameValMsg;
+      document.getElementById("shipping-address-error").innerHTML = this._validationErrors(validateNewInput).shippingAddressValMsg;
+      document.getElementById("shipping-city-error").innerHTML = this._validationErrors(validateNewInput).shippingCityValMsg;
+      document.getElementById("shipping-zipcode-error").innerHTML = this._validationErrors(validateNewInput).zipcodeValMsg;
+      document.getElementById("shipping-state-error").innerHTML = this._validationErrors(validateNewInput).shippingStateValMsg;
+    }
+
+    return isDataValid;
+  }
+
+  _validationErrors(val) {
+    const errMsgs = {
+      colorValMsg: val.selectedColorValue ? null : 'Please select a color',
+      sizeValMsg: val.selectedSizeValue ? null : 'Please select a size',
+      fullNameValMsg: val.enteredFullname ? null : 'Please enter your full name',
+      shippingAddressValMsg: val.enteredShippingAddress ? null : 'Please enter your shipping address',
+      shippingCityValMsg: val.enteredShippingCity ? null : 'Please enter your shipping city',
+      zipcodeValMsg: val.enteredZipcode ? null : 'Please enter your zip code',
+      shippingStateValMsg: val.selectedShippingState ? null : 'Please select your state',
+    }
+
+    return errMsgs;
+  }
+
   render() {
-    const { error,
+    const { //state
+            error,
             loading,
             dealItem,
             acceptedCryptos,
@@ -104,15 +171,25 @@ class DealItem extends Component {
             selectedOption,
             paymentInfo,
             createPaymentButtonClicked,
+            showCustomizationStep,
+            showShippingStep,
+            showPayingStep,
+
+            //actions
+            handleCustomizingSize,
+            handleCustomizingColor,
+            handleFullNameInput,
+            handleAddressInput,
+            handleCityInput,
+            handleZipcodeInput,
+            handleShippingStateInput,
+            handleSelectedCrypto,
 
             handleCustomizingStep,
             handleShippingStep,
             handlePayingStep,
-            showCustomizationStep,
-            showShippingStep,
-            showPayingStep,
-            userLoggedIn} = this.props;
 
+            userLoggedIn} = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -203,14 +280,14 @@ class DealItem extends Component {
                     <div className="description">Choose your size or color</div>
                   </div>
                 </a>
-                <a onClick={handleShippingStep} className={showShippingStep ? "active step" : "step"}>
+                <a onClick={() => this.handleCustomizationValidation() && handleShippingStep()} className={showShippingStep ? "active step" : "step"}>
                 <i className="truck icon"></i>
                   <div className="content">
                     <div className="title">Shipping</div>
                     <div className="description">Enter shipping information</div>
                   </div>
                 </a>
-                <a onClick={handlePayingStep} className={showPayingStep ? "active step" : "step"}>
+                <a onClick={() => this.handleShipmentValidation() && handlePayingStep()} className={showPayingStep ? "active step" : "step"}>
                 <i className="shopping cart icon"></i>
                   <div className="content">
                     <div className="title">Paying</div>
@@ -243,7 +320,8 @@ class DealItem extends Component {
                   <CustomizeOrder
                   handle_CustomizingSize={handleCustomizingSize}
                   handle_CustomizingColor={handleCustomizingColor}
-                  next_step={handleShippingStep}/>}
+                  next_step={handleShippingStep}
+                  validateCustomizationData={this.handleCustomizationValidation}/>}
 
                   {showShippingStep &&
                   <ShipOrder
@@ -253,12 +331,13 @@ class DealItem extends Component {
                   handle_ShippingZipcode={handleZipcodeInput}
                   handle_ShippingState={handleShippingStateInput}
                   next_step={handlePayingStep}
-                  previous_step={handleCustomizingStep}/>}
+                  previous_step={handleCustomizingStep}
+                  validateShipmentData={this.handleShipmentValidation}/>}
 
                   {showPayingStep &&
                   <PurchaseOrder
                   cryptos={acceptedCryptos && this.handleCryptoOptions(acceptedCryptos)}
-                  selectCrypto={this.props.handleSelectedCrypto}
+                  selectCrypto={handleSelectedCrypto}
 
                   previous_step={handleShippingStep}
                   SubmitPayment={this.createPaymentHandler}

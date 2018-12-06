@@ -1,6 +1,7 @@
 .deal-container {
   margin: 0px 50px;;
   margin-bottom: 10px;
+  /* height: 550px; */
   box-sizing: border-box;
   box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
   display: flex;
@@ -103,6 +104,12 @@
   border-radius: 5px;
   max-width: 300px;
   max-height: 300px;
+}
+
+.dealitem-error-msg {
+  /* border-color: red; */
+  color: red;
+
 }
 
 /*
