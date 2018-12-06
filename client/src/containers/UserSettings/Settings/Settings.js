@@ -10,7 +10,9 @@ import PrivacySettings from "../PrivacySettings";
 import CryptocurrencySettings from "../CryptocurrencySettings";
 import TransactionsSettings from "../TransactionsSettings";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
-import { handleSettingsMenuItemClick } from "../../../actions/settingsActions";
+
+import { setInitialSettingsState, handleSettingsMenuItemClick } from "../../../actions/settingsActions";
+
 
 
 
@@ -20,6 +22,9 @@ class Settings extends Component {
         await this.props._isLoggedIn(localStorage.getItem('token'));
         if (await this.props.userLoggedIn) {
             await console.log("user logged in");
+
+            await this.props.setInitialSettingsState();
+
 
         } else {
             // localStorage.removeItem('token');
@@ -53,8 +58,10 @@ class Settings extends Component {
                                 onClick={handleSettingsMenuItemClick}
                             />
                             <Menu.Item
-                                name="Confirmed Order Details"
-                                active={activeSettingsItem === "Transactions"}
+
+                                name="Order Details"
+                                active={activeSettingsItem === "Order Details"}
+
                                 onClick={handleSettingsMenuItemClick}
                             />
                         </Menu>
@@ -62,7 +69,9 @@ class Settings extends Component {
                             {activeSettingsItem == "Profile Settings" && <ProfileSettings />}
                             {/* { activeSettingsItem == "Privacy Settings" && <PrivacySettings/>} */}
                             {activeSettingsItem == "Cryptocurrency" && <CryptocurrencySettings />}
-                            {activeSettingsItem == "Transactions" && <TransactionsSettings />}
+
+                            {activeSettingsItem == "Order Details" && <TransactionsSettings />}
+
 
 
                         </div>
@@ -83,7 +92,9 @@ const mapStateToProps = state => ({
 });
 
 const matchDispatchToProps = dispatch => {
-    return bindActionCreators({ _isLoggedIn, handleSettingsMenuItemClick }, dispatch);
+
+    return bindActionCreators({ setInitialSettingsState, _isLoggedIn, handleSettingsMenuItemClick }, dispatch);
+
 }
 
 
