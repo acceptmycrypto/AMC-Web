@@ -7,8 +7,8 @@ import ResendEmail from "./containers/Home/ResendEmail";
 import ResetPassword from "./containers/Home/ResetPassword";
 import ResetPasswordEmail from "./containers/Home/ResetPasswordEmail";
 import Profile from "./containers/Profile/UserProfile";
+import Settings from "./containers/UserSettings/Settings"
 
-import Settings from "./components/UserSettings/Settings"
 
 import FeedDeals from "./containers/Deals";
 import DealItem from "./containers/Deals/DealItem";
