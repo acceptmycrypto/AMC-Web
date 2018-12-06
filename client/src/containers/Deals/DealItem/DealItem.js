@@ -67,7 +67,7 @@ class DealItem extends Component {
   }
 
   createPaymentHandler = () => {
-    
+
     const { dealItem,
             selectedOption,
             shippingAddress,
@@ -177,7 +177,7 @@ class DealItem extends Component {
   render() {
     const { //state
             error,
-            loading,
+            deal_item_loading,
             dealItem,
             acceptedCryptos,
             selectedSize,
@@ -188,6 +188,7 @@ class DealItem extends Component {
             zipcode,
             shippingState,
             selectedOption,
+            transaction_loading,
             paymentInfo,
             createPaymentButtonClicked,
             showCustomizationStep,
@@ -213,7 +214,7 @@ class DealItem extends Component {
     if (error) {
       return <div>Error! {error.message}</div>;
     }
-    if (loading) {
+    if (deal_item_loading) {
       return <div>Loading...</div>;
     }
 
@@ -365,7 +366,7 @@ class DealItem extends Component {
                   cryptoSymbol={selectedOption && selectedOption.value}
                   paymentButtonClicked={createPaymentButtonClicked}
 
-                  showLoadingSpinner={loading}
+                  showLoadingSpinner={transaction_loading}
                   timeout={paymentInfo && this.timeInMilliseconds(paymentInfo.timeout)}/>}
 
                 </div>
@@ -395,7 +396,8 @@ const mapStateToProps = state => ({
   selectedOption: state.DealItem.selectedOption,
   paymentInfo: state.TransactionInfo.transactionInfo,
   createPaymentButtonClicked: state.TransactionInfo.createPaymentButtonClicked,
-  loading: state.DealItem.loading,
+  transaction_loading: state.TransactionInfo.loading,
+  deal_item_loading: state.DealItem.loading,
   error: state.DealItem.error,
   userLoggedIn: state.LoggedIn.userLoggedIn,
   showCustomizationStep: state.DealItem.showCustomizationStep,
