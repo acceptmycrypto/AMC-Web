@@ -148,7 +148,6 @@ async.map(
   function(err, results) {
     // all requests have been made
     if (err) {
-        console.log("hello");
       console.log(err);
     } else {
       var coin_info = results[0].data;
