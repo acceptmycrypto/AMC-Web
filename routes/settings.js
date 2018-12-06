@@ -212,4 +212,17 @@ router.get('/email-reverse/:user_id/:email_verification_token', function(req, re
 });
 
 
+router.post('/complete/order/details', verifyToken, function(req, res) {
+    let id = req.decoded._id;
+    connection.query(
+      'SELECT * FROM users_purchases LEFT JOIN users_purchase_customization ON users_purchases.txn_id = users_purchase_customization.txn_id LEFT JOIN users_shipping_address ON users_purchases.txn_id = users_shipping_address.txn_id LEFT JOIN deals ON users_purchases.deal_id = deals.id WHERE users_purchases.user_id = ?',
+      [id],
+      function(error, result, fields) {
+        if (error) throw error;
+        res.json(result);
+      
+      }
+    );
+  });
+
 module.exports = router;
