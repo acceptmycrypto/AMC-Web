@@ -10,6 +10,16 @@ INSERT INTO deals (venue_id, deal_name, deal_description, featured_deal_image, p
 
 INSERT INTO deals (venue_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto, category) VALUES ("1", "Tech4Kids - Paw Patrol Soft Lite Figure", "Make your child's bedtime more fun with this Paw Patrol Soft Lite night light.", "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6257/6257850_sd.jpg;maxHeight=550;maxWidth=550", "9.99", "1.00", "Toy");
 
+INSERT INTO deals (venue_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto, category) VALUES ("5", "6 ft Blanket Ladder, Rustic Wood Blanket Ladder, Tall Wooden Ladder", "Blanket ladders are fantastic for storage, gorgeous to look at, and take up much less space than other storage options.", "https://i.etsystatic.com/12913099/r/il/31d7c8/1497451694/il_570xN.1497451694_81dn.jpg", "44.00", "30.00", "Furniture");
+
+INSERT INTO deals (venue_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto, category) VALUES ("5", "Floating Shelves Beautiful Handmade Rustic Recycled Wood", "Each shelf is made out of recycled, reclaimed wood, It may show signs of age, imperfection, holes, etc. Small shelves will support up to 15 lbs when screwed on to studs.", "https://i.etsystatic.com/18814808/r/il/9abb6e/1737131995/il_570xN.1737131995_4imj.jpg", "29.99", "20.00", "Furniture");
+
+INSERT INTO deals (venue_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto, category) VALUES ("5", "Braided Crib Bumper", "The crib bumper protects your baby's hands and feet from getting stuck between crib spindles as well as it protects the baby's head and body from hitting and bruising against the crib walls.", "https://i.etsystatic.com/12913099/r/il/31d7c8/1497451694/il_570xN.1497451694_81dn.jpg", "12.95", "8.00", "Furniture");
+
+INSERT INTO deals (venue_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto, category) VALUES ("5", "UNPOPPABLE Ball - Dog Toy", "These balls are UNPOPPABLE! Just being crocheted, they never have a truly seamless surface. There are 'holes' from stitch to stitch where those little teeth can slip right in without doing damage to the ball itself.", "https://i.etsystatic.com/9424277/r/il/8fab69/1588618994/il_570xN.1588618994_ljjj.jpg", "4.50", "1.00", "Toy");
+
+INSERT INTO deals (venue_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto, category) VALUES ("5", "Little Climber", "Little Climber is the Smart Home Playground designed to enhance your children's motor skill development, balance control, creativity, and so much more!", "https://i.etsystatic.com/15171532/r/il/7ee60b/1609149021/il_570xN.1609149021_qfai.jpg", "249.95", "100.00", "Toy");
+
 -- Images for each deal
 INSERT INTO deal_images (deal_id, deal_image) VALUES
 (1,"https://ak1.ostkcdn.com/images/products/9542248/Safavieh-Malone-White-Chrome-Coffee-Table-484ef737-1052-4a6b-88ce-9eb8263250dc_600.jpg"),
@@ -37,3 +47,26 @@ INSERT INTO deal_images (deal_id, deal_image) VALUES
 INSERT INTO deal_images (deal_id, deal_image) VALUES
 (6,"https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6257/6257850_sd.jpg;maxHeight=550;maxWidth=550");
 
+INSERT INTO deal_images (deal_id, deal_image) VALUES
+(7,"https://i.etsystatic.com/12913099/r/il/31d7c8/1497451694/il_570xN.1497451694_81dn.jpg"),
+(7,"https://i.etsystatic.com/12913099/r/il/224ec9/1544925973/il_570xN.1544925973_t3tc.jpg"),
+(7,"https://i.etsystatic.com/12913099/r/il/f0ad86/1033502195/il_570xN.1033502195_oqw8.jpg");
+
+INSERT INTO deal_images (deal_id, deal_image) VALUES
+(8,"https://i.etsystatic.com/18814808/r/il/9abb6e/1737131995/il_570xN.1737131995_4imj.jpg"),
+(8,"https://i.etsystatic.com/18814808/r/il/9b2e12/1689664150/il_570xN.1689664150_22n8.jpg");
+
+INSERT INTO deal_images (deal_id, deal_image) VALUES
+(9,"https://i.etsystatic.com/12913099/r/il/31d7c8/1497451694/il_570xN.1497451694_81dn.jpg"),
+(9,"https://i.etsystatic.com/12913099/r/il/224ec9/1544925973/il_570xN.1544925973_t3tc.jpg"),
+(9,"https://i.etsystatic.com/12913099/r/il/f0ad86/1033502195/il_570xN.1033502195_oqw8.jpg");
+
+INSERT INTO deal_images (deal_id, deal_image) VALUES
+(10,"https://i.etsystatic.com/9424277/r/il/8fab69/1588618994/il_570xN.1588618994_ljjj.jpg"),
+(10,"https://i.etsystatic.com/9424277/r/il/d95954/1033899292/il_570xN.1033899292_c11m.jpg"),
+(10,"https://i.etsystatic.com/9424277/r/il/c78010/1325172710/il_570xN.1325172710_1ges.jpg");
+
+INSERT INTO deal_images (deal_id, deal_image) VALUES
+(11,"https://i.etsystatic.com/15171532/r/il/7ee60b/1609149021/il_570xN.1609149021_qfai.jpg"),
+(11,"https://i.etsystatic.com/15171532/r/il/36d923/1544404113/il_570xN.1544404113_q4xp.jpg"),
+(11,"https://i.etsystatic.com/15171532/r/il/bcbe88/1292328003/il_570xN.1292328003_1z08.jpg");
