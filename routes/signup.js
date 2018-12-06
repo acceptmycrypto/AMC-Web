@@ -40,6 +40,10 @@ var connection = mysql.createConnection({
 var signupEmailTemplateText = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/emailVerification/emailVerification.ejs'), 'utf-8');
 var signupEmailTemplate = ejs.compile(signupEmailTemplateText);
 
+//compile email template for password reset
+var resetPasswordEmailTemplateText = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/resetPassword/resetPassword.ejs'), 'utf-8');
+var resetPasswordEmailTemplate = ejs.compile(resetPasswordEmailTemplateText);
+
 router.post('/register', function(req, res) {
   console.log(req.body);
   var selectedCryptos = req.body.cryptoProfile;
@@ -154,6 +158,7 @@ router.post('/register', function(req, res) {
 });
 
 router.post('/resend-email', function(req, res) {
+    console.log("resend-email");
     console.log(req.body);
   //First we make a query to see if user exists in the database
     connection.query(
@@ -164,6 +169,9 @@ router.post('/resend-email', function(req, res) {
         console.log(result);
   //if we find the user exists in the database, we send "User already exists" to the client
         if (!result[0]) return res.status(404).json({ error: 'Email not in database' });
+        res.json({
+            message: "We sent you another email for email verification. Please confirm your email."
+        });
         userID = result[0].id;
         
        //use sendgrid to send email
@@ -183,6 +191,7 @@ router.post('/resend-email', function(req, res) {
 
  //Once the user clicks on the email verification, we get the id and email verification params
 router.get('/email-verify/:user_id/:email_verification_token', function(req, res) {
+    console.log("email-verify");
   connection.query(
     'SELECT * FROM users WHERE id = ?',
     [req.params.user_id],
@@ -209,6 +218,83 @@ router.get('/email-verify/:user_id/:email_verification_token', function(req, res
     }
   );
 });
+
+router.post('/reset-password-email', function(req, res) {
+    console.log("reset-password-email");
+    console.log(req.body);
+  //First we make a query to see if user exists in the database
+    connection.query(
+      'SELECT * FROM users WHERE email = ?',
+      [req.body.email],
+      function(error, result, fields) {
+        if (error) throw error;
+        console.log(result);
+  //if user does not exist in the database, we throw error to the client
+        if (!result[0]) return res.status(404).json({ error: 'Email not in database' });
+        res.json({
+            message: "We sent you an email for password reset. Please confirm your email."
+        });
+        userID = result[0].id;
+        
+       //use sendgrid to send email
+       let password_reset_link = process.env.FRONTEND_URL+"/ResetPassword";
+
+       const email_password_reset = {
+         to: req.body.email,
+         from: process.env.CUSTOMER_SUPPORT,
+         subject: 'Reset your Password',
+         html: resetPasswordEmailTemplate({ token: result[0].email_verification_token, password_reset_link })
+       };
+       sgMail.send(email_password_reset);
+        
+      }
+    );
+  });
+
+   //Once the user clicks on the email for password reset, we get the id and email verification params
+   router.post('/reset-password', function(req, res) {
+    console.log("req");
+    console.log(req);
+    connection.query(
+      'SELECT * FROM users WHERE email_verification_token = ?',
+      [req.body.token],
+      function(error, result, fields) {
+        if (error) throw error;
+        if (!result[0]) return res.status(404).json({ error: 'invalid token' });
+        if (!req.body.password1) return res.status(401).json({ error: 'you need a password' });
+        if (!req.body.password2) return res.status(401).json({ error: 'you need a password' });
+        if (req.body.password1!=req.body.password2) return res.status(401).json({ error: 'passwords do not match' });
+        if (req.body.password1.length <= 5) return res.status(401).json({ error: 'password length must be greater than 5' });
+        //if user is verified already then send a message to user that the account is verified
+        if (result[0].email_verification_token === req.body.token) {
+
+            bcrypt.genSalt(10, function(err, salt) {
+                bcrypt.hash(req.body.password1, salt, function(err, password_hash) {
+                
+                  connection.query('UPDATE users SET ? WHERE ?',
+                  [{password: password_hash}, {email_verification_token: req.body.token}],
+                  function (error, results, fields) {
+                
+                    if (error) {
+                      console.log(error)
+                    } else {
+                      //send a notificiation to the client side to let user verify their email
+                      res.json({
+                          message: "Password changed."
+                      });
+                    }
+                  });
+        
+                });//bcrypt.hash closing bracket
+        
+              }); //bcrypt.getsalt closing bracket
+
+  
+        }
+  
+      }
+    );
+  });
 
 //Anyone can access this route
 //grab the cryptos list for user to select

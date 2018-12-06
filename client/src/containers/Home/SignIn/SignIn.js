@@ -88,7 +88,7 @@ class SignIn extends Component {
               <div className="FormField">
               <div>
                     <label className="FormField__Label" htmlFor="password">Password</label>
-                    <Link to="/ResetPassword" className="FormField__Link">Forgot my password</Link>
+                    <Link to="/ResetPasswordEmail" className="FormField__Link">Forgot my password</Link>
                 </div>
                 <input type="password" id="password" className="FormField__Input" placeholder="Enter your password" name="password" required />
               </div>

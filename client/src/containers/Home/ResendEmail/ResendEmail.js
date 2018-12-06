@@ -8,6 +8,8 @@ import { _loadCryptocurrencies } from "../../../actions/loadCryptoActions";
 import { handleDropdownChange } from "../../../actions/signUpActions";
 import Footer from "../../../components/Layout/Footer";
 import Aside from '../Aside';
+import Modal from 'react-awesome-modal';
+import { openModal, closeModal } from '../../../actions/signInActions';
 
 class ResendEmail extends Component {
   constructor() {
@@ -39,6 +41,7 @@ class ResendEmail extends Component {
         console.log("message sent from server if success1: ", res);
         //TODO
         //prompt users to check their email
+        this.props.openModal();
         document.getElementById('email').value="";
       });
     }
@@ -48,7 +51,7 @@ class ResendEmail extends Component {
 
   render() {
 
-    const { error, loading, cryptoOptions } = this.props;
+    const { error, loading, cryptoOptions, visible } = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -67,7 +70,7 @@ class ResendEmail extends Component {
       <div className="App">
         <Aside />
         <div className="App__Form">
-          <div className="PageSwitcher">
+          <div className="PageSwitcher" style={{visibility: "hidden"}}>
             <NavLink
               exact
               to="/"
@@ -107,6 +110,13 @@ class ResendEmail extends Component {
                   back to sign in
                 </Link>
               </div>
+              <Modal visible={visible} effect="fadeInLeft" onClickAway={() => {this.props.closeModal(); }}>
+                <div className="Modal">
+                  <h4>Please check your email to confirm registration.</h4>
+                  <a className="a-link" href="javascript:void(0);" onClick={() => {this.props.closeModal(); }}>Ok</a>
+
+                </div>
+              </Modal>
             </form>
           </div>
           <Footer/>
@@ -120,12 +130,12 @@ const mapStateToProps = state => ({
   cryptoOptions: state.LoadCrypto.cryptoOptions,
   loading: state.LoadCrypto.loading,
   error: state.LoadCrypto.error,
-  selectedCryptos: state.CryptoSelected.selectedCryptos
-
+  selectedCryptos: state.CryptoSelected.selectedCryptos,
+  visible: state.SignInModal.visible,
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({handleDropdownChange, _loadCryptocurrencies}, dispatch);
+  return bindActionCreators({openModal, closeModal, handleDropdownChange, _loadCryptocurrencies}, dispatch);
 }
 
 
