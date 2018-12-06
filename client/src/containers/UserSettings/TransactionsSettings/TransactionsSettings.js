@@ -23,7 +23,8 @@ class TransactionsSettings extends Component {
         return (
             <div className="w-100 mx-0 text-center">
 
-                <h1 className="text-center lightBlueText"> All Transactions History </h1>
+                <h1 className="text-center lightBlueText py-3"> Order Details </h1>
+                <hr></hr>
 
                 <div className="w-75 mx-auto">
 

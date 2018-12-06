@@ -19,12 +19,12 @@ class CryptocurrencySettings extends Component {
         this.props._cryptoOptionsLeft(localStorage.getItem("token"));
     }
 
-    addCryptos = async() => {
+    addCryptos = async () => {
         const token = await localStorage.getItem('token');
         if (this.props.selectedCryptos != null) {
             await this.props._addCryptos(token, this.props.selectedCryptos);
             await setTimeout(() => { this.props._loadProfile(localStorage.getItem("token")); }, 200);
-        }else{
+        } else {
             document.querySelector('#addCryptoResponse').innerHTML = "Select Cryptos from the dropdown above"
         }
     }
@@ -49,106 +49,116 @@ class CryptocurrencySettings extends Component {
 
         return (
             <div className="d-flex flex-direction-row">
-                <Menu pointing secondary vertical>
-                    {interestedObj.length > 0
-                        ? <Menu.Item
-                            name='Crypto I am Are Interested In'
-                            active={activeCryptoSettingsItem === 'Crypto I am Are Interested In'}
-                            onClick={handleCryptoSettingsMenuItemClick} />
-                        : null
-                    }
-                    {ownObj.length > 0
-                        ? <Menu.Item
-                            name="Crypto I Own"
-                            active={activeCryptoSettingsItem === "Crypto I Own"}
-                            onClick={handleCryptoSettingsMenuItemClick}
-                        />
-                        : null
-                    }
-                    <Menu.Item
-                        name='Update Crypto Portfolio'
-                        active={activeCryptoSettingsItem === 'Update Crypto Portfolio'}
-                        onClick={handleCryptoSettingsMenuItemClick}
-                    />
-                </Menu>
 
-                <div className="w-75 mx-0 text-center">
+                <div className="w-100 mx-0 text-center">
 
-                    <h1 className="text-center lightBlueText mb-3">Cryptocurrencies</h1>
+                    <h1 className="text-center lightBlueText py-3">Cryptocurrencies</h1>
+                    <hr></hr>
 
-                    {activeCryptoSettingsItem == "Crypto I am Are Interested In" &&
-                        <div>
-                            <h3 className="mb-3">Cryptocurrencies I am Are Interested In</h3>
-                            <div className="d-flex flex-row justify-content-center">
+                    <div className="d-flex flex-row">
+                        <div className="w-25 mt-3 text-left">
+                            <Menu pointing secondary vertical>
                                 {interestedObj.length > 0
-                                    ? interestedObj.map((crypto, i) =>
-                                        <div key={"interestedObj " + i} className="mr-5">
-                                            <div className="mx-1 my-2 cryptos">
-                                                <a className="blueText cryptoText link" href={crypto.crypto_link} target="_blank">{crypto.crypto_metadata_name}</a>
-                                                <br></br>
-                                                <img className="cryptoSmall" data-name={crypto.crypto_metadata_name} src={crypto.crypto_logo} data-id={crypto.id} ></img>
-                                            </div>
-                                        </div>
-                                    )
-                                    : <h5>You Are not interested in any Cryptos</h5>
-
+                                    ? <Menu.Item
+                                        name='Crypto I am Are Interested In'
+                                        active={activeCryptoSettingsItem === 'Crypto I am Are Interested In'}
+                                        onClick={handleCryptoSettingsMenuItemClick} />
+                                    : null
                                 }
-                            </div>
-
-                        </div>
-                    }
-                    {activeCryptoSettingsItem == "Crypto I Own" &&
-                        <div>
-                            <h3 className="mb-3">Cryptocurrencies I Own</h3>
-                            <div className="d-flex flex-row justify-content-center">
                                 {ownObj.length > 0
-                                    ? ownObj.map((crypto, i) =>
-                                        <div key={"ownObj " + i} className="mr-5">
-                                            <div className="mx-1 my-2 cryptos">
-                                                <a className="blueText cryptoText link" href={crypto.crypto_link} target="_blank">{crypto.crypto_metadata_name}</a>
-                                                <br></br>
-                                                <img className="cryptoSmall" data-name={crypto.crypto_metadata_name} data-address={crypto.crypto_address} data-id={crypto.id} src={crypto.crypto_logo}></img>
-                                            </div>
-                                        </div>
-                                    )
-                                    : <h5>You Don't Own Any Cryptos</h5>
-
+                                    ? <Menu.Item
+                                        name="Crypto I Own"
+                                        active={activeCryptoSettingsItem === "Crypto I Own"}
+                                        onClick={handleCryptoSettingsMenuItemClick}
+                                    />
+                                    : null
                                 }
-                            </div>
+                                <Menu.Item
+                                    name='Update Crypto Portfolio'
+                                    active={activeCryptoSettingsItem === 'Update Crypto Portfolio'}
+                                    onClick={handleCryptoSettingsMenuItemClick}
+                                />
+                            </Menu>
 
                         </div>
-                    }
-                    {activeCryptoSettingsItem == "Update Crypto Portfolio" &&
-                        <div>
-                            <h3 className="mb-3">Update Crypto Portfolio</h3>
-                            <div className="text-left mb-5">
-                                <h4 className="blueText margin-L-15 mb-3">ADD Cryptos to Your Portfolio:</h4>
-                                {cryptoLeft != undefined && cryptoLeft.length > 0
-                                    ? <div className=" margin-L-22 mb-3">
-                                        <Select
-                                            className="dropdown"
-                                            required
-                                            onChange={handleDropdownChange}
-                                            options={cryptoLeft}
-                                            isMulti={true}
-                                            autoBlur={false}
-                                        />
-                                        <h6 className="redText margin-L-15 my-3" id="addCryptoResponse"></h6>
 
-                                        <div className="margin-L-15 mt-1"><button className="py-1 btn btn-primary button-font" onClick={this.addCryptos}>Add Cryptos to Portfolio</button></div>
+                        <div className="text-left w-75 mt-4 margin-L-15">
+
+                            {activeCryptoSettingsItem == "Crypto I am Are Interested In" &&
+                                <div>
+                                    <h3 className="mb-3 text-left">Cryptocurrencies I am Are Interested In</h3>
+                                    <div className="d-flex flex-row justify-content-start ml-5">
+                                        {interestedObj.length > 0
+                                            ? interestedObj.map((crypto, i) =>
+                                                <div key={"interestedObj " + i} className="mr-5">
+                                                    <div className="mx-1 my-2 cryptos">
+                                                        <a className="blueText cryptoText link" href={crypto.crypto_link} target="_blank">{crypto.crypto_metadata_name}</a>
+                                                        <br></br>
+                                                        <img className="cryptoSmall" data-name={crypto.crypto_metadata_name} src={crypto.crypto_logo} data-id={crypto.id} ></img>
+                                                    </div>
+                                                </div>
+                                            )
+                                            : <h5>You Are not interested in any Cryptos</h5>
+
+                                        }
                                     </div>
-                                    : <h5 className="margin-L-22 mb-3">All Cryptos have been added to your Crypto Portfolio</h5>
 
-                                }
+                                </div>
+                            }
+                            {activeCryptoSettingsItem == "Crypto I Own" &&
+                                <div>
+                                    <h3 className="mb-3 text-start">Cryptocurrencies I Own</h3>
+                                    <div className="d-flex flex-row text-center justify-content-start ml-5">
+                                        {ownObj.length > 0
+                                            ? ownObj.map((crypto, i) =>
+                                                <div key={"ownObj " + i} className="mr-5">
+                                                    <div className="my-2 cryptos ">
+                                                        <a className="blueText cryptoText link" href={crypto.crypto_link} target="_blank">{crypto.crypto_metadata_name}</a>
+                                                        <br></br>
+                                                        <img className="cryptoSmall" data-name={crypto.crypto_metadata_name} data-address={crypto.crypto_address} data-id={crypto.id} src={crypto.crypto_logo}></img>
+                                                    </div>
+                                                </div>
+                                            )
+                                            : <h5>You Don't Own Any Cryptos</h5>
 
-                            </div>
-                            {/* <div className="text-left">
+                                        }
+                                    </div>
+
+                                </div>
+                            }
+                            {activeCryptoSettingsItem == "Update Crypto Portfolio" &&
+                                <div>
+                                    <h3 className="mb-3">Update Crypto Portfolio</h3>
+                                    <div className="text-left mb-5">
+                                        <h4 className="blueText  mb-3">ADD Cryptos to Your Portfolio:</h4>
+                                        {cryptoLeft != undefined && cryptoLeft.length > 0
+                                            ? <div className="w-50 mb-3">
+                                                <Select
+                                                    className="dropdown"
+                                                    required
+                                                    onChange={handleDropdownChange}
+                                                    options={cryptoLeft}
+                                                    isMulti={true}
+                                                    autoBlur={false}
+                                                />
+                                                <h6 className="redText  my-3" id="addCryptoResponse"></h6>
+
+                                                <div className=" mt-1"><button className="py-1 btn btn-primary button-font" onClick={this.addCryptos}>Add Cryptos to Portfolio</button></div>
+                                            </div>
+                                            : <h5 className=" mb-3">All Cryptos have been added to your Crypto Portfolio</h5>
+
+                                        }
+
+                                    </div>
+                                    {/* <div className="text-left">
                                 <h4 className="blueText margin-L-15 mb-3">REMOVE Cryptos From Your Portfolio:</h4>
                             </div> */}
 
-                        </div>
-                    }
+                                </div>
 
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
 
