@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
-import Select from "react-select";
-import { _resendEmail } from "../../../services/AuthService";
+import { _resetPasswordEmail } from "../../../services/AuthService";
 import { connect } from "react-redux";
 import {bindActionCreators} from 'redux';
 import { _loadCryptocurrencies } from "../../../actions/loadCryptoActions";
@@ -11,7 +10,7 @@ import Aside from '../Aside';
 import Modal from 'react-awesome-modal';
 import { openModal, closeModal } from '../../../actions/signInActions';
 
-class ResendEmail extends Component {
+class ResetPasswordEmail extends Component {
   constructor() {
     super();
 
@@ -37,8 +36,8 @@ class ResendEmail extends Component {
     if (!email) {
       alert("Please enter in the required field!");
     } else {
-      return _resendEmail(email).then(res => {
-        console.log("message sent from server if success1: ", res);
+      return _resetPasswordEmail(email).then(res => {
+        console.log("message sent from server if success2: ", res);
         //TODO
         //prompt users to check their email
         this.props.openModal();
@@ -91,7 +90,9 @@ class ResendEmail extends Component {
             <form onSubmit={this.handleSubmit} className="FormFields">
               <div className="FormField">
                 <div>
-                    <label className="FormField__Label" htmlFor="email">E-Mail Address</label>
+                    <label className="FormField__Label" htmlFor="email">
+                    E-Mail Address
+                    </label>
                 </div>
                 <input
                   type="email"
@@ -104,7 +105,7 @@ class ResendEmail extends Component {
               </div>
               <div className="FormField buttonLink">
                 <button className="FormField__Button">
-                  Resend Email
+                  Reset Password
                 </button>
                 <Link to="/" className="FormField__Link">
                   back to sign in
@@ -112,7 +113,7 @@ class ResendEmail extends Component {
               </div>
               <Modal visible={visible} effect="fadeInLeft" onClickAway={() => {this.props.closeModal(); }}>
                 <div className="Modal">
-                  <h4>Please check your email to confirm registration.</h4>
+                  <h4>Please check your email to reset password.</h4>
                   <a className="a-link" href="javascript:void(0);" onClick={() => {this.props.closeModal(); }}>Ok</a>
 
                 </div>
@@ -131,7 +132,7 @@ const mapStateToProps = state => ({
   loading: state.LoadCrypto.loading,
   error: state.LoadCrypto.error,
   selectedCryptos: state.CryptoSelected.selectedCryptos,
-  visible: state.SignInModal.visible,
+  visible: state.SignInModal.visible
 });
 
 const matchDispatchToProps = dispatch =>{
@@ -139,6 +140,6 @@ const matchDispatchToProps = dispatch =>{
 }
 
 
-export default connect(mapStateToProps, matchDispatchToProps)(ResendEmail);
+export default connect(mapStateToProps, matchDispatchToProps)(ResetPasswordEmail);
 
 

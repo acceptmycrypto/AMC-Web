@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { _loadPhoto } from "../../../actions/navbarActions";
 import SearchBar from "./Searchbar";
 import Category from "./Category";
-import { resetFilter } from "../../../actions/categoryActions";
+import { resetNavbar } from "../../../actions/navbarActions";
 
 class Navbar extends Component {
 
@@ -24,7 +24,7 @@ class Navbar extends Component {
     return (
       <header className="Toolbar">
         <div className="nav-left">
-          <Link onClick={this.props.resetFilter} to="/feed/deals" className="Logo">
+          <Link onClick={this.props.resetNavbar} to="/feed/deals" className="Logo">
             <div className="font-17 color-deepBlue">
               <img className="navbar_logo" src="https://s3-us-west-1.amazonaws.com/acceptmycrypto/logo.png" alt="logo"/>
               <span className="ml-2">
@@ -51,7 +51,7 @@ class Navbar extends Component {
         </div>
         <div className="Nav d-flex flex-row align-items-center">
           <li>
-            <Link onClick={this.props.resetFilter} to="/feed/deals">
+            <Link onClick={this.props.resetNavbar} to="/feed/deals">
             { window.location.pathname == "/feed/deals"
               ? <i className="fas fa-dollar-sign fa-lg"> <h7 className="color-deepBlue font-17 teal-underline">Deals</h7></i>
               : <i className="fas fa-dollar-sign fa-lg"> <h7 className="color-deepBlue font-17">Deals</h7></i>
@@ -89,7 +89,7 @@ const mapStateToProps = state => ({
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({ _loadPhoto, resetFilter }, dispatch);
+  return bindActionCreators({ _loadPhoto, resetNavbar }, dispatch);
 }
 
 
