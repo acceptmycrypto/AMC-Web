@@ -12,16 +12,17 @@ import {
   handleCityInput,
   handleZipcodeInput,
   handleShippingStateInput,
-  handleSelectedCrypto } from "../../../actions/dealItemActions";
+  handleSelectedCrypto,
+  handleCustomizingStep,
+  handleShippingStep,
+  handlePayingStep} from "../../../actions/dealItemActions";
 import { _fetchTransactionInfo } from "../../../actions/paymentActions";
 import { Carousel } from "react-responsive-carousel";
-import StepZilla from "react-stepzilla";
 import CustomizeOrder from "../CustomizeOrder";
 import ShipOrder from "../ShipOrder";
 import PurchaseOrder from "../PurchaseOrder";
 import Layout from "../../Layout";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
-
 
 class DealItem extends Component {
   componentDidMount = async () => {
@@ -31,7 +32,7 @@ class DealItem extends Component {
     if (await this.props.userLoggedIn) {
       const { deal_name } = await this.props.match.params;
       await this.props._loadDealItem(deal_name);
-      
+
     }else{
         // localStorage.removeItem('token');
         await this.props.history.push('/');
@@ -65,8 +66,8 @@ class DealItem extends Component {
     return sec * 1000
   }
 
-  createPaymentHandler = (event) => {
-    event.preventDefault();
+  createPaymentHandler = () => {
+
     const { dealItem,
             selectedOption,
             shippingAddress,
@@ -88,11 +89,98 @@ class DealItem extends Component {
     this.props._fetchTransactionInfo(crypto_name, crypto_symbol, deal_id, amount, token, shippingAddress, shippingCity, zipcode, shippingState, fullName, selectedSize, selectedColor);
   }
 
+  handleCustomizationValidation = () => {
+    const validateNewInput = {
+      selectedColorValue: this.props.selectedColor,
+      selectedSizeValue: this.props.selectedSize
+    }
+    let isDataValid = false;
+
+    //Object.keys(validateNewInput) give us an array of keys
+    //Array.every check if all indices passed the test
+    //we check if the value of each property in the the object validateNewInput is === true
+    if (Object.keys(validateNewInput).every((k) => {
+      return validateNewInput[k] ? true : false
+    })) {
+      isDataValid = true;
+    } else {
+      document.getElementById("select-size-error").innerHTML = this._validationErrors(validateNewInput).sizeValMsg;
+
+      document.getElementById("select-color-error").innerHTML = this._validationErrors(validateNewInput).colorValMsg;
+
+    }
+
+    return isDataValid;
+  }
+
+  handleShipmentValidation = () => {
+
+    const validateNewInput = {
+      enteredFullname: this.props.fullName,
+      enteredShippingAddress: this.props.shippingAddress,
+      enteredShippingCity: this.props.shippingCity,
+      enteredZipcode: this.props.zipcode,
+      selectedShippingState: this.props.shippingState
+    }
+    let isDataValid = false;
+
+    if (Object.keys(validateNewInput).every((k) => {
+      return validateNewInput[k] ? true : false
+    })) {
+      isDataValid = true;
+    } else {
+
+      document.getElementById("shipping-fullname-error").innerHTML = this._validationErrors(validateNewInput).fullNameValMsg;
+      document.getElementById("shipping-address-error").innerHTML = this._validationErrors(validateNewInput).shippingAddressValMsg;
+      document.getElementById("shipping-city-error").innerHTML = this._validationErrors(validateNewInput).shippingCityValMsg;
+      document.getElementById("shipping-zipcode-error").innerHTML = this._validationErrors(validateNewInput).zipcodeValMsg;
+      document.getElementById("shipping-state-error").innerHTML = this._validationErrors(validateNewInput).shippingStateValMsg;
+    }
+
+    return isDataValid;
+  }
+
+  handlePaymentValidation = () => {
+
+    const validateNewInput = {
+      selectedPaymentOption: this.props.selectedOption,
+    }
+    let isDataValid = false;
+
+    if (Object.keys(validateNewInput).every((k) => {
+      return validateNewInput[k] ? true : false
+    })) {
+      isDataValid = true;
+    } else {
+
+      document.getElementById("selected-payment-error").innerHTML = this._validationErrors(validateNewInput).selectedPaymentValMsg;
+    }
+
+    return isDataValid;
+  }
+
+  _validationErrors(val) {
+    const errMsgs = {
+      colorValMsg: val.selectedColorValue ? null : 'Please select a color',
+      sizeValMsg: val.selectedSizeValue ? null : 'Please select a size',
+      fullNameValMsg: val.enteredFullname ? null : 'Please enter your full name',
+      shippingAddressValMsg: val.enteredShippingAddress ? null : 'Please enter your shipping address',
+      shippingCityValMsg: val.enteredShippingCity ? null : 'Please enter your shipping city',
+      zipcodeValMsg: val.enteredZipcode ? null : 'Please enter your zip code',
+      shippingStateValMsg: val.selectedShippingState ? null : 'Please select your state',
+      selectedPaymentValMsg: val.selectedPaymentOption ? null : 'Please select your payment option'
+    }
+
+    return errMsgs;
+  }
+
   render() {
-    const { error,
-            loading,
+    const { //state
+            error,
+            deal_item_loading,
             dealItem,
             acceptedCryptos,
+            allStates,
             selectedSize,
             selectedColor,
             fullName,
@@ -101,46 +189,64 @@ class DealItem extends Component {
             zipcode,
             shippingState,
             selectedOption,
+            transaction_loading,
             paymentInfo,
             createPaymentButtonClicked,
-            userLoggedIn} = this.props;
+            showCustomizationStep,
+            showShippingStep,
+            showPayingStep,
 
+            //actions
+            handleCustomizingSize,
+            handleCustomizingColor,
+            handleFullNameInput,
+            handleAddressInput,
+            handleCityInput,
+            handleZipcodeInput,
+            handleShippingStateInput,
+            handleSelectedCrypto,
+
+            handleCustomizingStep,
+            handleShippingStep,
+            handlePayingStep,
+
+            userLoggedIn} = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
     }
-    if (loading) {
+    if (deal_item_loading) {
       return <div>Loading...</div>;
     }
 
-    const steps = [
-      { name: "Customizing",
-        component:
-        <CustomizeOrder
-        handle_CustomizingSize={this.props.handleCustomizingSize}
-        handle_CustomizingColor={this.props.handleCustomizingColor}/>},
-      { name: "Shipping",
-        component:
-        <ShipOrder
-        SubmitPayment={this.createPaymentHandler}
-        handle_ShippingFullName={this.props.handleFullNameInput}
-        handle_ShippingAddress={this.props.handleAddressInput}
-        handle_ShippingCity={this.props.handleCityInput}
-        handle_ShippingZipcode={this.props.handleZipcodeInput}
-        handle_ShippingState={this.props.handleShippingStateInput}/> },
-      { name: "Payment", component:
-        <PurchaseOrder
-        cryptos={acceptedCryptos && this.handleCryptoOptions(acceptedCryptos)}
-        selectCrypto={this.props.handleSelectedCrypto}
+    // const steps = [
+    //   { name: "Customizing",
+    //     component:
+    //     <CustomizeOrder
+    //     handle_CustomizingSize={this.props.handleCustomizingSize}
+    //     handle_CustomizingColor={this.props.handleCustomizingColor}/>},
+    //   { name: "Shipping",
+    //     component:
+    //     <ShipOrder
+    //     SubmitPayment={this.createPaymentHandler}
+    //     handle_ShippingFullName={this.props.handleFullNameInput}
+    //     handle_ShippingAddress={this.props.handleAddressInput}
+    //     handle_ShippingCity={this.props.handleCityInput}
+    //     handle_ShippingZipcode={this.props.handleZipcodeInput}
+    //     handle_ShippingState={this.props.handleShippingStateInput}/> },
+    //   { name: "Payment", component:
+    //     <PurchaseOrder
+    //     cryptos={acceptedCryptos && this.handleCryptoOptions(acceptedCryptos)}
+    //     selectCrypto={this.props.handleSelectedCrypto}
 
-        SubmitPayment={this.createPaymentHandler}
-        transactionInfo={paymentInfo}
-        cryptoSymbol={selectedOption && selectedOption.value}
-        paymentButtonClicked={createPaymentButtonClicked}
+    //     SubmitPayment={this.createPaymentHandler}
+    //     transactionInfo={paymentInfo}
+    //     cryptoSymbol={selectedOption && selectedOption.value}
+    //     paymentButtonClicked={createPaymentButtonClicked}
 
-        showLoadingSpinner={loading}
-        timeout={paymentInfo && this.timeInMilliseconds(paymentInfo.timeout)}/> }
-    ];
+    //     showLoadingSpinner={loading}
+    //     timeout={paymentInfo && this.timeInMilliseconds(paymentInfo.timeout)}/> }
+    // ];
 
     return (
       <div>
@@ -155,9 +261,9 @@ class DealItem extends Component {
                   <small> Offered By: {dealItem && dealItem.venue_name}</small>
                 </div>
                 <div className="deal-item-cost">
-                  <strong>Pay in Crypto:  ${dealItem && dealItem.pay_in_crypto}</strong>  <small className="deal-item-discount">
+                  <strong>Pay in Crypto:  ${dealItem && dealItem.pay_in_crypto.toFixed(2)}</strong>  <small className="deal-item-discount">
                   {dealItem && this.convertToPercentage(dealItem.pay_in_dollar, dealItem.pay_in_crypto)}% OFF</small> <br/>
-                  <small>Pay in Dollar:  ${dealItem && dealItem.pay_in_dollar} <br/></small>
+                  <small>Pay in Dollar:  ${dealItem && dealItem.pay_in_dollar.toFixed(2)} <br/></small>
                 </div>
               </div>
 
@@ -185,6 +291,34 @@ class DealItem extends Component {
                   </div>
               </div>
             </div>
+            <div>
+              {/* classname is ui steps indiate using sematic ui */}
+              <div className="ui steps">
+                <a onClick={handleCustomizingStep} className={showCustomizationStep ? "active step" : "step"}>
+                  <i className="edit icon"></i>
+                  <div className="content">
+                    <div className="title">Customizing</div>
+                    <div className="description">Choose your size or color</div>
+                  </div>
+                </a>
+                <a onClick={() => this.handleCustomizationValidation() && handleShippingStep()} className={showShippingStep ? "active step" : "step"}>
+                <i className="truck icon"></i>
+                  <div className="content">
+                    <div className="title">Shipping</div>
+                    <div className="description">Enter shipping information</div>
+                  </div>
+                </a>
+
+                <a onClick={() => this.handleShipmentValidation() &&   handlePayingStep()} className={"step " + (!showShippingStep && showCustomizationStep ? "disabled" : showPayingStep ? "active" : "" )} >
+                <i className="shopping cart icon"></i>
+                  <div className="content">
+                    <div className="title">Paying</div>
+                    <div className="description">Choose your payment</div>
+                  </div>
+                </a>
+              </div>
+
+            </div>
 
             <div className="deal-main-info">
               <div className="deal-images-container">
@@ -193,8 +327,8 @@ class DealItem extends Component {
                   width={"55%"}
                   showStatus={false}>
 
-                  {dealItem && dealItem.deal_image.map(img => (
-                    <div className="deal-item-image">
+                  {dealItem && dealItem.deal_image.map((img,i) => (
+                    <div key={i} className="deal-item-image">
                       <img src={img} />
                     </div>
                   ))}
@@ -202,12 +336,54 @@ class DealItem extends Component {
                 </Carousel>
               </div>
 
-              <div className="deal-checkout-container">
+              <div className="deal-checkout-container mt-5">
                 <div className="step-progress">
-                  <StepZilla steps={steps}/>
+                  {showCustomizationStep &&
+                  <CustomizeOrder
+                  handle_CustomizingSize={handleCustomizingSize}
+                  handle_CustomizingColor={handleCustomizingColor}
+                  showSelectedSize={selectedSize}
+                  showSelectedColor={selectedColor}
+                  next_step={handleShippingStep}
+                  validateCustomizationData={this.handleCustomizationValidation}/>}
+
+                  {showShippingStep &&
+                  <ShipOrder
+                  listOfAllStates={allStates}
+                  handle_ShippingFullName={handleFullNameInput}
+                  handle_ShippingAddress={handleAddressInput}
+                  handle_ShippingCity={handleCityInput}
+                  handle_ShippingZipcode={handleZipcodeInput}
+                  handle_ShippingState={handleShippingStateInput}
+                  showShippingFullName={fullName}
+                  showShippingAddress={shippingAddress}
+                  showShippingCity={shippingCity}
+                  showShippingState={shippingState}
+                  showShippingZipcode={zipcode}
+                  next_step={handlePayingStep}
+                  previous_step={handleCustomizingStep}
+                  validateShipmentData={this.handleShipmentValidation}/>}
+
+                  {showPayingStep &&
+                  <PurchaseOrder
+                  cryptos={acceptedCryptos && this.handleCryptoOptions(acceptedCryptos)}
+                  selectCrypto={handleSelectedCrypto}
+                  selectedPayment={selectedOption}
+                  previous_step={handleShippingStep}
+                  validatePaymentData={this.handlePaymentValidation}
+                  SubmitPayment={this.createPaymentHandler}
+                  transactionInfo={paymentInfo}
+                  cryptoSymbol={selectedOption && selectedOption.value}
+                  paymentButtonClicked={createPaymentButtonClicked}
+
+                  showLoadingSpinner={transaction_loading}
+                  timeout={paymentInfo && this.timeInMilliseconds(paymentInfo.timeout)}/>}
+
                 </div>
               </div>
+
             </div>
+
           </div>
         </div>
         </Layout >
@@ -228,11 +404,16 @@ const mapStateToProps = state => ({
   zipcode: state.DealItem.zipcode,
   shippingState: state.DealItem.shippingState,
   selectedOption: state.DealItem.selectedOption,
+  allStates: state.DealItem.states,
   paymentInfo: state.TransactionInfo.transactionInfo,
   createPaymentButtonClicked: state.TransactionInfo.createPaymentButtonClicked,
-  loading: state.DealItem.loading,
+  transaction_loading: state.TransactionInfo.loading,
+  deal_item_loading: state.DealItem.loading,
   error: state.DealItem.error,
   userLoggedIn: state.LoggedIn.userLoggedIn,
+  showCustomizationStep: state.DealItem.showCustomizationStep,
+  showShippingStep: state.DealItem.showShippingStep,
+  showPayingStep: state.DealItem.showPayingStep
 });
 
 
@@ -248,6 +429,9 @@ const matchDispatchToProps = dispatch =>{
     handleZipcodeInput,
     handleShippingStateInput,
     handleSelectedCrypto,
+    handleCustomizingStep,
+    handleShippingStep,
+    handlePayingStep,
     _isLoggedIn}, dispatch);
 
 }

@@ -13,7 +13,6 @@ import CryptoSelected from './reducer-sign-up';
 import SignInModal from './reducer-sign-in';
 import Settings from './reducer-settings';
 
-
 const allReducers = combineReducers({
   matchedDeals: Deals,
   UserInfo,

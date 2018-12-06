@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
-import Select from "react-select";
-import { _resendEmail } from "../../../services/AuthService";
+import { _resetPassword } from "../../../services/AuthService";
 import { connect } from "react-redux";
 import {bindActionCreators} from 'redux';
 import { _loadCryptocurrencies } from "../../../actions/loadCryptoActions";
@@ -11,7 +10,7 @@ import Aside from '../Aside';
 import Modal from 'react-awesome-modal';
 import { openModal, closeModal } from '../../../actions/signInActions';
 
-class ResendEmail extends Component {
+class ResetPassword extends Component {
   constructor() {
     super();
 
@@ -29,20 +28,24 @@ class ResendEmail extends Component {
   handleSubmit(e) {
     e.preventDefault();
 
+    let code = e.target.children[0].children[1].value;
+    let password1 = e.target.children[1].children[1].value;
+    let password2 = e.target.children[2].children[1].value;
 
-    let email = e.target.children[0].children[1].value;
     console.log(this.props);
     //we add validation on the front end so that user has to enter in the required field before clicking submit
     //TODO
-    if (!email) {
-      alert("Please enter in the required field!");
+    if (password1!=password2) {
+      alert("Passwords do not match!");
     } else {
-      return _resendEmail(email).then(res => {
-        console.log("message sent from server if success1: ", res);
+      return _resetPassword(code, password1, password2).then(res => {
+        console.log("message sent from server if success3: ", res);
         //TODO
         //prompt users to check their email
         this.props.openModal();
-        document.getElementById('email').value="";
+        document.getElementById('verificationcode').value="";
+        document.getElementById('newpassword').value="";
+        document.getElementById('confirmpassword').value="";
       });
     }
   }
@@ -91,20 +94,52 @@ class ResendEmail extends Component {
             <form onSubmit={this.handleSubmit} className="FormFields">
               <div className="FormField">
                 <div>
-                    <label className="FormField__Label" htmlFor="email">E-Mail Address</label>
+                    <label className="FormField__Label" htmlFor="email">
+                    Verification Code
+                    </label>
                 </div>
                 <input
-                  type="email"
-                  id="email"
+                  type="text"
+                  id="verificationcode"
                   className="FormField__Input"
-                  placeholder="Enter your email"
-                  name="email"
+                  placeholder="Enter your verification code from the email"
+                  name="verificationcode"
+                  required
+                />
+              </div>
+              <div className="FormField">
+                <div>
+                    <label className="FormField__Label" htmlFor="password">
+                    New Password
+                    </label>
+                </div>
+                <input
+                  type="password"
+                  id="newpassword"
+                  className="FormField__Input"
+                  placeholder="Enter your new password"
+                  name="newpassword"
+                  required
+                />
+              </div>
+              <div className="FormField">
+                <div>
+                    <label className="FormField__Label" htmlFor="password">
+                    Confirm Password
+                    </label>
+                </div>
+                <input
+                  type="password"
+                  id="confirmpassword"
+                  className="FormField__Input"
+                  placeholder="Confirm your new password"
+                  name="confirmpassword"
                   required
                 />
               </div>
               <div className="FormField buttonLink">
                 <button className="FormField__Button">
-                  Resend Email
+                  Reset Password
                 </button>
                 <Link to="/" className="FormField__Link">
                   back to sign in
@@ -112,7 +147,7 @@ class ResendEmail extends Component {
               </div>
               <Modal visible={visible} effect="fadeInLeft" onClickAway={() => {this.props.closeModal(); }}>
                 <div className="Modal">
-                  <h4>Please check your email to confirm registration.</h4>
+                  <h4>Password changed.</h4>
                   <a className="a-link" href="javascript:void(0);" onClick={() => {this.props.closeModal(); }}>Ok</a>
 
                 </div>
@@ -132,6 +167,7 @@ const mapStateToProps = state => ({
   error: state.LoadCrypto.error,
   selectedCryptos: state.CryptoSelected.selectedCryptos,
   visible: state.SignInModal.visible,
+
 });
 
 const matchDispatchToProps = dispatch =>{
@@ -139,6 +175,6 @@ const matchDispatchToProps = dispatch =>{
 }
 
 
-export default connect(mapStateToProps, matchDispatchToProps)(ResendEmail);
+export default connect(mapStateToProps, matchDispatchToProps)(ResetPassword);
 
 

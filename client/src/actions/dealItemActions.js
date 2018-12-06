@@ -97,3 +97,36 @@ export const handleSelectedCrypto = (selectedOption) => {
   }
 };
 
+export const handleCustomizingStep = () => {
+
+  return {
+    type: "SHOW_CUSTOMIZATION",
+    payload: {
+      showCustomizationStep: true,
+      showShippingStep: false,
+      showPayingStep: false
+    }
+  }
+}
+
+export const handleShippingStep = () => {
+  return {
+    type: "SHOW_SHIPPING",
+    payload: {
+      showCustomizationStep: false,
+      showShippingStep: true,
+      showPayingStep: false
+    }
+  }
+}
+
+export const handlePayingStep = () => {
+  return {
+    type: "SHOW_PAYING",
+    payload: {
+      showCustomizationStep: false,
+      showShippingStep: false,
+      showPayingStep: true
+    }
+  }
+}
