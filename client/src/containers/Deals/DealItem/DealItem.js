@@ -66,8 +66,8 @@ class DealItem extends Component {
     return sec * 1000
   }
 
-  createPaymentHandler = (event) => {
-    event.preventDefault();
+  createPaymentHandler = () => {
+    
     const { dealItem,
             selectedOption,
             shippingAddress,
@@ -129,13 +129,31 @@ class DealItem extends Component {
     })) {
       isDataValid = true;
     } else {
-      // document.getElementById("fullname").classList.add("dealitem-error-msg");
 
       document.getElementById("fullname-error").innerHTML = this._validationErrors(validateNewInput).fullNameValMsg;
       document.getElementById("shipping-address-error").innerHTML = this._validationErrors(validateNewInput).shippingAddressValMsg;
       document.getElementById("shipping-city-error").innerHTML = this._validationErrors(validateNewInput).shippingCityValMsg;
       document.getElementById("shipping-zipcode-error").innerHTML = this._validationErrors(validateNewInput).zipcodeValMsg;
       document.getElementById("shipping-state-error").innerHTML = this._validationErrors(validateNewInput).shippingStateValMsg;
+    }
+
+    return isDataValid;
+  }
+
+  handlePaymentValidation = () => {
+
+    const validateNewInput = {
+      selectedPaymentOption: this.props.selectedOption,
+    }
+    let isDataValid = false;
+
+    if (Object.keys(validateNewInput).every((k) => {
+      return validateNewInput[k] ? true : false
+    })) {
+      isDataValid = true;
+    } else {
+
+      document.getElementById("selected-payment-error").innerHTML = this._validationErrors(validateNewInput).selectedPaymentValMsg;
     }
 
     return isDataValid;
@@ -150,6 +168,7 @@ class DealItem extends Component {
       shippingCityValMsg: val.enteredShippingCity ? null : 'Please enter your shipping city',
       zipcodeValMsg: val.enteredZipcode ? null : 'Please enter your zip code',
       shippingStateValMsg: val.selectedShippingState ? null : 'Please select your state',
+      selectedPaymentValMsg: val.selectedPaymentOption ? null : 'Please select your payment option'
     }
 
     return errMsgs;
@@ -340,6 +359,7 @@ class DealItem extends Component {
                   selectCrypto={handleSelectedCrypto}
 
                   previous_step={handleShippingStep}
+                  validatePaymentData={this.handlePaymentValidation}
                   SubmitPayment={this.createPaymentHandler}
                   transactionInfo={paymentInfo}
                   cryptoSymbol={selectedOption && selectedOption.value}

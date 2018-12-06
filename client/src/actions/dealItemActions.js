@@ -97,15 +97,6 @@ export const handleSelectedCrypto = (selectedOption) => {
   }
 };
 
-// export const handleCustomizingStep = (selectedStep) => {
-
-
-//   return {
-//       type: 'SHOW_CUSTOMIZATION',
-//       payload: {selectedStep} //value is true or false
-//   }
-// };
-
 export const handleCustomizingStep = () => {
 
   return {

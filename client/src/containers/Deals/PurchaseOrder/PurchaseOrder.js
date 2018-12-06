@@ -7,27 +7,27 @@ import LoadingSpinner from "../../../components/UI/LoadingSpinner";
 const PurchaseOrder = props => {
   return (
     <div>
-      <form onSubmit={props.SubmitPayment}>
+      <form>
         <div class="form-group">
-        <label className="text-capitalize" htmlFor="select_crypto">Select the Cryptocurrency to pay with</label>
-        <Select
-        id="select_crypto"
-        required
-        onChange={props.selectCrypto}
-        options={props.cryptos}
-      />
+          <label className="text-capitalize" htmlFor="select_crypto">Select the Cryptocurrency to pay with</label>
+            <Select
+              id="select_crypto"
+              required
+              onChange={props.selectCrypto}
+              options={props.cryptos}
+            />
         </div>
+        <div className="dealitem-error-msg" id="selected-payment-error"></div>
+      </form>
 
         <div onClick={props.previous_step} id="previous-step">
           <button>Previous</button>
         </div>
 
         {!props.paymentButtonClicked ?
-        <div id="next-step">
+        <div onClick={() => props.validatePaymentData() && props.SubmitPayment()} id="next-step">
           <button>Send Your Payment</button>
         </div> : null}
-
-      </form>
 
 
       {props.paymentButtonClicked ?
