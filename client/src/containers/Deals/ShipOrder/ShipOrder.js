@@ -50,11 +50,11 @@ const ShipOrder = props => {
           value={props.showShippingState}
         >
           <option selected>Select State</option>
-          <option value="CA">California</option>
-          <option value="WA">Washington</option>
-          <option value="ORG">Oregon</option>
+          {props.listOfAllStates.map((state) => {
+            return (<option value={state.label}>{state.value}</option>)
+          })}
         </select>
-
+       
         <div className="dealitem-error-msg" id="shipping-state-error"></div>
 
         <div class="form-group mb-1">

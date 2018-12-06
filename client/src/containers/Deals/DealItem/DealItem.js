@@ -180,6 +180,7 @@ class DealItem extends Component {
             deal_item_loading,
             dealItem,
             acceptedCryptos,
+            allStates,
             selectedSize,
             selectedColor,
             fullName,
@@ -347,6 +348,7 @@ class DealItem extends Component {
 
                   {showShippingStep &&
                   <ShipOrder
+                  listOfAllStates={allStates}
                   handle_ShippingFullName={handleFullNameInput}
                   handle_ShippingAddress={handleAddressInput}
                   handle_ShippingCity={handleCityInput}
@@ -401,6 +403,7 @@ const mapStateToProps = state => ({
   zipcode: state.DealItem.zipcode,
   shippingState: state.DealItem.shippingState,
   selectedOption: state.DealItem.selectedOption,
+  allStates: state.DealItem.states,
   paymentInfo: state.TransactionInfo.transactionInfo,
   createPaymentButtonClicked: state.TransactionInfo.createPaymentButtonClicked,
   transaction_loading: state.TransactionInfo.loading,
