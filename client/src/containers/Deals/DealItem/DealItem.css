@@ -83,7 +83,7 @@
 }
 
 .deal-checkout-container {
-  padding: 0 15px;
+  padding: 0 20px;
   position: relative;
   height: 100%;
   width: 100%;
@@ -109,7 +109,7 @@
 .dealitem-error-msg {
   /* border-color: red; */
   color: red;
-
+  margin-bottom: 10px;
 }
 
 /*

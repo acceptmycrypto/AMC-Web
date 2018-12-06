@@ -131,7 +131,7 @@ class DealItem extends Component {
     } else {
       // document.getElementById("fullname").classList.add("dealitem-error-msg");
 
-      document.getElementById("fullname").innerHTML = this._validationErrors(validateNewInput).fullNameValMsg;
+      document.getElementById("fullname-error").innerHTML = this._validationErrors(validateNewInput).fullNameValMsg;
       document.getElementById("shipping-address-error").innerHTML = this._validationErrors(validateNewInput).shippingAddressValMsg;
       document.getElementById("shipping-city-error").innerHTML = this._validationErrors(validateNewInput).shippingCityValMsg;
       document.getElementById("shipping-zipcode-error").innerHTML = this._validationErrors(validateNewInput).zipcodeValMsg;

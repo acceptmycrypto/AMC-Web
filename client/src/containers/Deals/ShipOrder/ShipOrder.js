@@ -4,9 +4,10 @@ import "./ShipOrder.css";
 const ShipOrder = props => {
   return (
     <div>
-      <label className="text-capitalize" htmlFor="select_crypto">Enter Shipping Information</label>
-      <form onSubmit={props.SubmitPayment}>
-        <div class="form-group">
+      <div className="shipping-form">
+        <label className="text-capitalize" htmlFor="select_crypto">Enter Shipping Information</label>
+        <form onSubmit={props.SubmitPayment}>
+        <div class="form-group mb-1">
           <input
             type="text"
             class="form-control"
@@ -17,12 +18,7 @@ const ShipOrder = props => {
         </div>
         <div className="dealitem-error-msg" id="fullname-error"></div>
 
-         {/* document.getElementById("shipping-address-error").innerHTML = this._validationErrors(validateNewInput).shippingAddressValMsg;
-      document.getElementById("shipping-city-error").innerHTML = this._validationErrors(validateNewInput).shippingCityValMsg;
-      document.getElementById("shipping-zipcode-error").innerHTML = this._validationErrors(validateNewInput).zipcodeValMsg;
-      document.getElementById("shipping-state-error").innerHTML = this._validationErrors(validateNewInput).shippingStateValMsg; */}
-
-        <div class="form-group">
+        <div class="form-group mb-1">
           <input
             type="text"
             class="form-control"
@@ -33,7 +29,7 @@ const ShipOrder = props => {
         </div>
         <div className="dealitem-error-msg" id="shipping-address-error"></div>
 
-        <div class="form-group">
+        <div class="form-group mb-1">
           <input
             type="text"
             class="form-control"
@@ -43,17 +39,6 @@ const ShipOrder = props => {
           />
         </div>
         <div className="dealitem-error-msg" id="shipping-city-error"></div>
-
-        <div class="form-group">
-          <input
-            type="text"
-            class="form-control"
-            id="address"
-            placeholder="Enter Postal Code"
-            onChange={props.handle_ShippingZipcode}
-          />
-        </div>
-        <div className="dealitem-error-msg" id="shipping-zipcode-error"></div>
 
         <select
           class="custom-select mr-sm-2"
@@ -67,7 +52,19 @@ const ShipOrder = props => {
         </select>
         <div className="dealitem-error-msg" id="shipping-state-error"></div>
 
+        <div class="form-group mb-1">
+          <input
+            type="text"
+            class="form-control"
+            id="address"
+            placeholder="Enter Postal Code"
+            onChange={props.handle_ShippingZipcode}
+          />
+        </div>
+        <div className="dealitem-error-msg" id="shipping-zipcode-error"></div>
+
       </form>
+      </div>
 
       <div onClick={props.previous_step} id="previous-step">
         <button>Previous</button>
