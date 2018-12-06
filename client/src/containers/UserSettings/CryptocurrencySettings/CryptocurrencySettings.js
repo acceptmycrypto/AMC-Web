@@ -142,9 +142,9 @@ class CryptocurrencySettings extends Component {
                                 }
 
                             </div>
-                            <div className="text-left">
+                            {/* <div className="text-left">
                                 <h4 className="blueText margin-L-15 mb-3">REMOVE Cryptos From Your Portfolio:</h4>
-                            </div>
+                            </div> */}
 
                         </div>
                     }
