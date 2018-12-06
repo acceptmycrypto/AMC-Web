@@ -54,8 +54,8 @@ class Settings extends Component {
                                 onClick={handleSettingsMenuItemClick}
                             />
                             <Menu.Item
-                                name="Confirmed Order Details"
-                                active={activeSettingsItem === "Transactions"}
+                                name="Order Details"
+                                active={activeSettingsItem === "Order Details"}
                                 onClick={handleSettingsMenuItemClick}
                             />
                         </Menu>
@@ -63,7 +63,7 @@ class Settings extends Component {
                             {activeSettingsItem == "Profile Settings" && <ProfileSettings />}
                             {/* { activeSettingsItem == "Privacy Settings" && <PrivacySettings/>} */}
                             {activeSettingsItem == "Cryptocurrency" && <CryptocurrencySettings />}
-                            {activeSettingsItem == "Transactions" && <TransactionsSettings />}
+                            {activeSettingsItem == "Order Details" && <TransactionsSettings />}
 
 
                         </div>
