@@ -5,10 +5,10 @@ const CustomizeOrder = props => {
 
   return (
     <div>
-      <form class="form-group">
+      <form className="form-group">
       <label className="text-capitalize" htmlFor="select_crypto">Select Size or Color</label>
         <select
-          class="custom-select my-2 mr-sm-2"
+          className="custom-select my-2 mr-sm-2"
           id="select-size"
           onChange={props.handle_CustomizingSize}
           value={props.showSelectedSize}
@@ -21,7 +21,7 @@ const CustomizeOrder = props => {
         <div className="dealitem-error-msg" id="select-size-error"></div>
 
         <select
-          class="custom-select my-3 mr-sm-2"
+          className="custom-select my-3 mr-sm-2"
           id="select-color"
           onChange={props.handle_CustomizingColor}
           value={props.showSelectedColor}

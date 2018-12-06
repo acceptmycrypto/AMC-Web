@@ -17,7 +17,7 @@ const ShipOrder = props => {
             value={props.showShippingFullName ? props.showShippingFullName : null}
           />
         </div>
-        <div className="dealitem-error-msg" id="fullname-error"></div>
+        <div className="dealitem-error-msg" id="shipping-fullname-error"></div>
 
         <div class="form-group mb-1">
           <input
@@ -50,11 +50,11 @@ const ShipOrder = props => {
           value={props.showShippingState}
         >
           <option selected>Select State</option>
-          {props.listOfAllStates.map((state) => {
-            return (<option value={state.label}>{state.value}</option>)
+          {props.listOfAllStates.map((state, i) => {
+            return (<option key={i} value={state.label}>{state.value}</option>)
           })}
         </select>
-       
+
         <div className="dealitem-error-msg" id="shipping-state-error"></div>
 
         <div class="form-group mb-1">

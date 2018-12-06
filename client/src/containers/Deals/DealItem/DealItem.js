@@ -129,8 +129,8 @@ class DealItem extends Component {
     })) {
       isDataValid = true;
     } else {
-      debugger
-      document.getElementById("fullname-error").innerHTML = this._validationErrors(validateNewInput).fullNameValMsg;
+
+      document.getElementById("shipping-fullname-error").innerHTML = this._validationErrors(validateNewInput).fullNameValMsg;
       document.getElementById("shipping-address-error").innerHTML = this._validationErrors(validateNewInput).shippingAddressValMsg;
       document.getElementById("shipping-city-error").innerHTML = this._validationErrors(validateNewInput).shippingCityValMsg;
       document.getElementById("shipping-zipcode-error").innerHTML = this._validationErrors(validateNewInput).zipcodeValMsg;
@@ -308,7 +308,8 @@ class DealItem extends Component {
                     <div className="description">Enter shipping information</div>
                   </div>
                 </a>
-                <a onClick={() => this.handleShipmentValidation() &&  handlePayingStep()} className={showPayingStep ? "active step" : "step"}>
+
+                <a onClick={() => this.handleShipmentValidation() &&   handlePayingStep()} className={"step " + (!showShippingStep && showCustomizationStep ? "disabled" : showPayingStep ? "active" : "" )} >
                 <i className="shopping cart icon"></i>
                   <div className="content">
                     <div className="title">Paying</div>
@@ -326,8 +327,8 @@ class DealItem extends Component {
                   width={"55%"}
                   showStatus={false}>
 
-                  {dealItem && dealItem.deal_image.map(img => (
-                    <div className="deal-item-image">
+                  {dealItem && dealItem.deal_image.map((img,i) => (
+                    <div key={i} className="deal-item-image">
                       <img src={img} />
                     </div>
                   ))}
