@@ -16,6 +16,7 @@ const PurchaseOrder = props => {
                 id="select_crypto"
                 required
                 onChange={props.selectCrypto}
+                value={props.selectedPayment}
                 options={props.cryptos}
               />
           </div>

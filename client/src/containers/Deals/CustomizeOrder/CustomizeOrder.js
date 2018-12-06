@@ -11,8 +11,9 @@ const CustomizeOrder = props => {
           class="custom-select my-2 mr-sm-2"
           id="select-size"
           onChange={props.handle_CustomizingSize}
+          value={props.showSelectedSize}
         >
-          <option selected value="">Select Size</option>
+          <option value="">Select Size</option>
           <option value="Small">Small</option>
           <option value="Medium">Medium</option>
           <option value="Large">Large</option>
@@ -23,6 +24,7 @@ const CustomizeOrder = props => {
           class="custom-select my-3 mr-sm-2"
           id="select-color"
           onChange={props.handle_CustomizingColor}
+          value={props.showSelectedColor}
         >
           <option selected value="">Select Color</option>
           <option value="Blue">Blue</option>

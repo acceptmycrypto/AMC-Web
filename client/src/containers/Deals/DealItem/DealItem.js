@@ -129,7 +129,7 @@ class DealItem extends Component {
     })) {
       isDataValid = true;
     } else {
-
+      debugger
       document.getElementById("fullname-error").innerHTML = this._validationErrors(validateNewInput).fullNameValMsg;
       document.getElementById("shipping-address-error").innerHTML = this._validationErrors(validateNewInput).shippingAddressValMsg;
       document.getElementById("shipping-city-error").innerHTML = this._validationErrors(validateNewInput).shippingCityValMsg;
@@ -307,7 +307,7 @@ class DealItem extends Component {
                     <div className="description">Enter shipping information</div>
                   </div>
                 </a>
-                <a onClick={() => this.handleShipmentValidation() && handlePayingStep()} className={showPayingStep ? "active step" : "step"}>
+                <a onClick={() => this.handleShipmentValidation() &&  handlePayingStep()} className={showPayingStep ? "active step" : "step"}>
                 <i className="shopping cart icon"></i>
                   <div className="content">
                     <div className="title">Paying</div>
@@ -340,6 +340,8 @@ class DealItem extends Component {
                   <CustomizeOrder
                   handle_CustomizingSize={handleCustomizingSize}
                   handle_CustomizingColor={handleCustomizingColor}
+                  showSelectedSize={selectedSize}
+                  showSelectedColor={selectedColor}
                   next_step={handleShippingStep}
                   validateCustomizationData={this.handleCustomizationValidation}/>}
 
@@ -350,6 +352,11 @@ class DealItem extends Component {
                   handle_ShippingCity={handleCityInput}
                   handle_ShippingZipcode={handleZipcodeInput}
                   handle_ShippingState={handleShippingStateInput}
+                  showShippingFullName={fullName}
+                  showShippingAddress={shippingAddress}
+                  showShippingCity={shippingCity}
+                  showShippingState={shippingState}
+                  showShippingZipcode={zipcode}
                   next_step={handlePayingStep}
                   previous_step={handleCustomizingStep}
                   validateShipmentData={this.handleShipmentValidation}/>}
@@ -358,7 +365,7 @@ class DealItem extends Component {
                   <PurchaseOrder
                   cryptos={acceptedCryptos && this.handleCryptoOptions(acceptedCryptos)}
                   selectCrypto={handleSelectedCrypto}
-
+                  selectedPayment={selectedOption}
                   previous_step={handleShippingStep}
                   validatePaymentData={this.handlePaymentValidation}
                   SubmitPayment={this.createPaymentHandler}

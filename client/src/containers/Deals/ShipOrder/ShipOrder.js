@@ -6,7 +6,7 @@ const ShipOrder = props => {
     <div>
       <div className="shipping-form">
         <label className="text-capitalize" htmlFor="select_crypto">Enter Shipping Information</label>
-        <form onSubmit={props.SubmitPayment}>
+        <form>
         <div class="form-group mb-1">
           <input
             type="text"
@@ -14,6 +14,7 @@ const ShipOrder = props => {
             id="fullname"
             placeholder="Enter Full Name"
             onChange={props.handle_ShippingFullName}
+            value={props.showShippingFullName ? props.showShippingFullName : null}
           />
         </div>
         <div className="dealitem-error-msg" id="fullname-error"></div>
@@ -25,6 +26,7 @@ const ShipOrder = props => {
             id="address"
             placeholder="Enter Address"
             onChange={props.handle_ShippingAddress}
+            value={props.showShippingAddress ? props.showShippingAddress : null}
           />
         </div>
         <div className="dealitem-error-msg" id="shipping-address-error"></div>
@@ -36,6 +38,7 @@ const ShipOrder = props => {
             id="address"
             placeholder="Enter City"
             onChange={props.handle_ShippingCity}
+            value={props.showShippingCity ? props.showShippingCity : null}
           />
         </div>
         <div className="dealitem-error-msg" id="shipping-city-error"></div>
@@ -44,12 +47,14 @@ const ShipOrder = props => {
           class="custom-select mr-sm-2"
           id="select-color"
           onChange={props.handle_ShippingState}
+          value={props.showShippingState}
         >
           <option selected>Select State</option>
           <option value="CA">California</option>
           <option value="WA">Washington</option>
           <option value="ORG">Oregon</option>
         </select>
+
         <div className="dealitem-error-msg" id="shipping-state-error"></div>
 
         <div class="form-group mb-1">
@@ -59,6 +64,7 @@ const ShipOrder = props => {
             id="address"
             placeholder="Enter Postal Code"
             onChange={props.handle_ShippingZipcode}
+            value={props.showShippingZipcode ? props.showShippingZipcode : null}
           />
         </div>
         <div className="dealitem-error-msg" id="shipping-zipcode-error"></div>
