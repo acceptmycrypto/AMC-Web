@@ -31,7 +31,7 @@ class DealItem extends Component {
     if (await this.props.userLoggedIn) {
       const { deal_name } = await this.props.match.params;
       await this.props._loadDealItem(deal_name);
-      
+
     }else{
         // localStorage.removeItem('token');
         await this.props.history.push('/');
@@ -155,9 +155,9 @@ class DealItem extends Component {
                   <small> Offered By: {dealItem && dealItem.venue_name}</small>
                 </div>
                 <div className="deal-item-cost">
-                  <strong>Pay in Crypto:  ${dealItem && dealItem.pay_in_crypto}</strong>  <small className="deal-item-discount">
+                  <strong>Pay in Crypto:  ${dealItem && dealItem.pay_in_crypto.toFixed(2)}</strong>  <small className="deal-item-discount">
                   {dealItem && this.convertToPercentage(dealItem.pay_in_dollar, dealItem.pay_in_crypto)}% OFF</small> <br/>
-                  <small>Pay in Dollar:  ${dealItem && dealItem.pay_in_dollar} <br/></small>
+                  <small>Pay in Dollar:  ${dealItem && dealItem.pay_in_dollar.toFixed(2)} <br/></small>
                 </div>
               </div>
 

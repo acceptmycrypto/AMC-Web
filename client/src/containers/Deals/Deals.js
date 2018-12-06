@@ -85,11 +85,11 @@ class Deals extends Component {
                       <div className="price-differ">
                         <div>
                           <div className="purchase-method">Dollar</div>
-                          <div>${deal.pay_in_dollar}</div>
+                          <div>${deal.pay_in_dollar.toFixed(2)}</div>
                         </div>
                         <div>
                           <div className="purchase-method">Cryptocurrency</div>
-                          <strong className="pay_in_crypto">${deal.pay_in_crypto}
+                          <strong className="pay_in_crypto">${deal.pay_in_crypto.toFixed(2)}
                           <small className="discount">{this.convertToPercentage(deal.pay_in_dollar, deal.pay_in_crypto)}% OFF</small>
                           </strong>
                         </div>
