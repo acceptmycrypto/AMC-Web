@@ -159,12 +159,14 @@ class CryptocurrencySettings extends Component {
                             }
                         </div>
                     </div>
+
                 </div>
             </div>
 
         );
     }
 }
+
 
 
 const mapStateToProps = state => ({
@@ -181,4 +183,5 @@ const matchDispatchToProps = dispatch => {
 
 
 export default connect(mapStateToProps, matchDispatchToProps)(CryptocurrencySettings);
+
 

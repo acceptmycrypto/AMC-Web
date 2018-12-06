@@ -1,3 +1,4 @@
+
 import {
     SET_ACTIVE_SETTINGS,
     SET_ACTIVE_PROFILE_SETTINGS,
@@ -5,12 +6,14 @@ import {
     SET_INITIAL_STATE,
     CRYPTO_LEFT
 
+
 } from "../actions/settingsActions";
 
 
 const initialSettingsState = {
     activeSettingsItem: "Profile Settings",
     activeProfileSettingsItem: "Change Photo",
+
     activeCryptoSettingsItem: "Crypto I am Are Interested In",
     cryptoLeft: [],
     transactionInfo: []
@@ -21,6 +24,7 @@ export default function settingsReducer(state = initialSettingsState, action) {
     switch (action.type) {
         case SET_INITIAL_STATE:
             return initialSettingsState;
+
         case SET_ACTIVE_SETTINGS:
             return {
                 ...state,
@@ -31,6 +35,7 @@ export default function settingsReducer(state = initialSettingsState, action) {
                 ...state,
                 activeProfileSettingsItem: action.payload.activeProfileSettingsItem
             }
+
         case SET_ACTIVE_CRYPTO_SETTINGS:
             return {
                 ...state,
@@ -90,5 +95,6 @@ export default function settingsReducer(state = initialSettingsState, action) {
         default:
             return state;
     }
+
 
 }

@@ -1,5 +1,6 @@
 export const SET_ACTIVE_SETTINGS = "SET_ACTIVE_SETTINGS";
 export const SET_ACTIVE_PROFILE_SETTINGS = "SET_ACTIVE_PROFILE_SETTINGS";
+
 export const SET_INITIAL_STATE = "SET_INITIAL_STATE";
 export const SET_ACTIVE_CRYPTO_SETTINGS = "SET_ACTIVE_CRYPTO_SETTINGS";
 export const CRYPTO_LEFT = "CRYPTO_LEFT";
@@ -9,6 +10,7 @@ export const setInitialSettingsState = () => {
         type: SET_INITIAL_STATE
     }
 }
+
 
 export const handleSettingsMenuItemClick = (e, {name} ) => {
 
@@ -29,6 +31,7 @@ export const handleProfileSettingsMenuItemClick = (e, {name} ) => {
 }
 
 
+
 export const handleCryptoSettingsMenuItemClick = (e, {name} ) => {
 
     return {
@@ -37,6 +40,7 @@ export const handleCryptoSettingsMenuItemClick = (e, {name} ) => {
         
     }
 }
+
 
 
 export const _changePhoto = (token, selectedPhoto)=>{
@@ -74,6 +78,7 @@ export const _changeUsername = (token, newUsername)=>{
             console.log("jsonUsername ",  jsonUsername);
             return jsonUsername;
         })
+
 }
 
 export const _changeEmail = (token, newEmail)=>{
@@ -224,3 +229,4 @@ export const _allTransactions = (token) =>{
       payload: { error }
     });
     
+

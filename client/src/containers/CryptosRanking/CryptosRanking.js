@@ -34,16 +34,16 @@ class CryptosRankings extends Component {
                 <th scope="col">#</th>
                 <th scope="col">Cryptocurrency</th>
                 <th scope="col">Venues</th>
-                <th className='text-align' scope="col">Price $</th>
+                <th className='text-align align-middle' scope="col">Price $</th>
               </tr>
             </thead>
             <tbody>
               {this.props.cryptosRanking.map((crypto, i) => (
                 <tr key={crypto+i}>
                   <th scope="row">{i + 1}</th>
-                  <td className='text-align'><img src={crypto.crypto_logo} alt="crypto-logo"/> {crypto.crypto_symbol}</td>
-                  <td className='text-align'>{crypto.venues_count}</td>
-                  <td className='text-align'>{crypto.crypto_price}</td>
+                  <td className='text-align align-middle d-flex flex-row align-items-center justify-content-between' id={i==0 ? 'no-border-top' : null }><img className="rankingImage" src={crypto.crypto_logo} alt="crypto-logo"/> <div>{crypto.crypto_symbol}</div></td>
+                  <td className='text-align align-middle'>{crypto.venues_count}</td>
+                  <td className='text-right align-middle mr-2'>{crypto.crypto_price}</td>
                 </tr>
               ))}
             </tbody>
@@ -67,16 +67,16 @@ class CryptosRankings extends Component {
                 <th scope="col">#</th>
                 <th scope="col">Cryptocurrency</th>
                 <th scope="col">Transactions</th>
-                <th className='text-align' scope="col">Price $</th>
+                <th className='text-align align-middle' scope="col">Price $</th>
               </tr>
             </thead>
             <tbody>
               {this.props.cryptosRanking.map((crypto, i) => (
                 <tr key={crypto+i}>
                   <th scope="row">{i + 1}</th>
-                  <td className='text-align'><img src={crypto.crypto_logo} alt="crypto-logo"/> {crypto.crypto_symbol}</td>
-                  <td className='text-align'>{crypto.total_transactions}</td>
-                  <td className='text-align'>{crypto.crypto_price}</td>
+                  <td className='text-align align-middle d-flex flex-row align-items-center justify-content-between' id={i==0 ? 'no-border-top' : null }><img className="rankingImage" src={crypto.crypto_logo} alt="crypto-logo"/> <div className="ml-2">{crypto.crypto_symbol} </div></td>
+                  <td className='text-align align-middle'>{crypto.total_transactions}</td>
+                  <td className='text-right align-middle mr-2'>{crypto.crypto_price}</td>
                 </tr>
               ))}
             </tbody>

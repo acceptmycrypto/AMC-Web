@@ -1,3 +1,4 @@
+
 import React, { Component } from "react";
 import "./TransactionsSettings.css";
 import { connect } from "react-redux";
@@ -16,12 +17,14 @@ class TransactionsSettings extends Component {
         // this.props._allTransactions(localStorage.getItem('token'));
         this.props._loadProfile(localStorage.getItem("token"));
 
+
     }
     render() {
 
 
         return (
             <div className="w-100 mx-0 text-center">
+
 
                 <h1 className="text-center lightBlueText py-3"> Order Details </h1>
                 <hr></hr>
@@ -75,10 +78,12 @@ class TransactionsSettings extends Component {
                     ))}
 
                 </div>
+
             </div>
         );
     }
 }
+
 
 
 const mapStateToProps = state => ({
@@ -93,3 +98,4 @@ const matchDispatchToProps = dispatch => {
 
 
 export default connect(mapStateToProps, matchDispatchToProps)(TransactionsSettings);
+

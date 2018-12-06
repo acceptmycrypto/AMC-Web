@@ -7,6 +7,7 @@ var methodOverride = require('method-override');
 var bodyParser = require('body-parser');
 
 var verifyToken = require("./utils/validation");
+
 //for login/logout (authentication)
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
@@ -20,6 +21,7 @@ sgMail.setApiKey(keys.sendgrid);
 var path = require("path");
 var fs = require('fs');
 var ejs = require('ejs');
+
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -50,6 +52,7 @@ var connection = mysql.createConnection({
     database: process.env.DB_DB
 });
 
+
 //compile email template
 var newEmailTemplateText = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/emailVerification/emailVerification.ejs'), 'utf-8');
 var newEmailTemplate = ejs.compile(newEmailTemplateText);
@@ -59,6 +62,7 @@ var previousEmailTemplate = ejs.compile(previousEmailTemplateText);
 
 var resetEmailTemplateText = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/resetEmail/resetEmail.ejs'), 'utf-8');
 var resetEmailTemplate = ejs.compile(resetEmailTemplateText);
+
 
 
 router.post('/update/photo', verifyToken, function (req, res) {
@@ -86,6 +90,7 @@ router.post('/update/username', verifyToken, function (req, res) {
                 res.json(results);
             });
         }else{
+
             res.json({responseMessage: "Username is taken. Enter a different Username."});
         }
         
@@ -139,11 +144,12 @@ router.post('/update/email', verifyToken, function (req, res) {
                 
             });
         }else{
-            res.json({responseMessage: "Email Address is linked to another account. Enter a different Email Address."});
+
         }
         
     });
 });
+
 
 router.get('/email-reverse/:user_id/:email_verification_token', function(req, res) {
     connection.query(
@@ -224,5 +230,6 @@ router.post('/complete/order/details', verifyToken, function(req, res) {
       }
     );
   });
+
 
 module.exports = router;
