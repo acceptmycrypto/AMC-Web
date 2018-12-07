@@ -5,6 +5,17 @@ import {filterCategory} from '../../../actions/categoryActions';
 
 class Category extends Component {
 
+    sortUniqueCategory = (deals) => {
+      let newCategory = [];
+      deals.map(deal => (
+        newCategory.push(deal.category)
+      ))
+
+      let uniqueArray = [...new Set(newCategory)]
+
+      return uniqueArray
+    }
+
     render(){
         return (
           <div className="dropdown show mx-4">
@@ -12,9 +23,15 @@ class Category extends Component {
               Categories
             </a>
             <div className="dropdown-menu category-dropdown" aria-labelledby="dropdownMenuLink">
-              {this.props.allDeals.map(deal => (
+            {this.sortUniqueCategory(this.props.allDeals).map((category, i) => {
+              return (
+               <div key={i} className="dropdown-item" onClick={(event) => this.props.filterCategory(event.target.innerHTML, this.props.allDeals)}>{category}</div>)
+            })}
+
+
+              {/* {this.props.allDeals.map(deal => (
                 <div key={deal.id} className="dropdown-item" onClick={(event) => this.props.filterCategory(event.target.innerHTML, this.props.allDeals)}>{deal.category}</div>
-              ))}
+              ))} */}
             </div>
           </div>
         )

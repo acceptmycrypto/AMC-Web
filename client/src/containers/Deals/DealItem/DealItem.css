@@ -108,6 +108,9 @@
   border-radius: 5px;
   max-width: 300px;
   max-height: 300px;
+  min-width: 175px;
+  min-height: 175px;
+  object-fit: cover;
 }
 
 .dealitem-error-msg {
