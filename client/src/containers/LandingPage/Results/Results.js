@@ -72,7 +72,7 @@ class Results extends Component {
                 <tr key={i}>
                 <th scope="row">{i+1}</th>
                 <td>{result.crypto_name}</td>
-                <td>{result.Count}</td>
+                <td>{(Math.round(result.Count/(cryptoResults.length)*100)) + "%"}</td>
               </tr>
               ))}
             </tbody>
