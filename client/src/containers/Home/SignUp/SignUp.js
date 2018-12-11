@@ -41,12 +41,16 @@ class SignUp extends Component {
 
     //we add validation on the front end so that user has to enter in the required field before clicking submit
     //TODO
+    if (username || email || password){
+      this.props.openModal();
+    }
+    
     if (!username || !email || !password) {
       alert("Please enter in the required field!");
     } else {
       return _signUp(username, email, password, cryptoProfile).then(res => {
         console.log("message sent from server if success: ", res);
-        this.props.openModal();
+        
         //TODO
         //prompt users to check their email
       });
