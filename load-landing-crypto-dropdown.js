@@ -1,3 +1,4 @@
+// to run this script file on command line: `npm run landing-dropdown`
 require("dotenv").config();
 var mysql = require("mysql");
 var express = require("express");

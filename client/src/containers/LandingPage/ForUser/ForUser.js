@@ -17,24 +17,24 @@ class ForUser extends Component {
     this.props._loadLandingDropdown();
   }
 
-  handleDropdownSubmit = (e) => {
+  handleDropdownSubmit = async(e) => {
     e.preventDefault();
     let email = e.target.children[0].children[3].value
     let cryptoProfile = this.props.selectedCryptos;
 
-    if (!email || !cryptoProfile) {
-      alert("Please enter in the required field!");
-    } else {
+    if (!email) {
+        document.getElementById("user-submit-success").innerHTML = "Please enter your email address.";
+      // alert("Please enter in the required field!");
+    } else if(!cryptoProfile){
+        document.getElementById("user-submit-success").innerHTML = "Please select the cryptos you are interested in.";
+    }else {
       return _addUserCryptoVotes(email, cryptoProfile).then(res => {  
         if(res.error == "User already exists"){
-          // alert("You have already filled out this form.");
           document.getElementById("user-submit-success").innerHTML = "You have already filled out this form.";
-        }else{
+        }
+        else{
           this.props.history.push('/results');
         }
-
-
-
       });
     }
   }
@@ -129,7 +129,7 @@ const mapStateToProps = state => ({
 });
 
 const matchDispatchToProps = dispatch => {
-  return bindActionCreators({ _loadLandingDropdown, handleDropdownChange }, dispatch);
+  return bindActionCreators({ _loadLandingDropdown, handleDropdownChange}, dispatch);
 }
 
 
