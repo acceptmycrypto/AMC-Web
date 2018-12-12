@@ -7,7 +7,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from "react-redux";
 import { _loadLandingDropdown } from '../../../actions/landingUserActions';
 import { handleDropdownChange } from '../../../actions/signUpActions';
-import { _loadCryptoResults } from '../../../actions/landingResultsActions';
 import { _addUserCryptoVotes } from '../../../services/LandingUserService';
 import Footer from '../../../components/Layout/Footer';
 
@@ -15,7 +14,7 @@ import Footer from '../../../components/Layout/Footer';
 
 class ForUser extends Component {
   componentDidMount() {
-    setTimeout(this.props._loadLandingDropdown(), 2000);
+    this.props._loadLandingDropdown();
   }
 
   handleDropdownSubmit = async(e) => {
@@ -130,7 +129,7 @@ const mapStateToProps = state => ({
 });
 
 const matchDispatchToProps = dispatch => {
-  return bindActionCreators({ _loadLandingDropdown, handleDropdownChange, _loadCryptoResults }, dispatch);
+  return bindActionCreators({ _loadLandingDropdown, handleDropdownChange}, dispatch);
 }
 
 
