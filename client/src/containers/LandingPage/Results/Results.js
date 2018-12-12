@@ -13,7 +13,7 @@ import Footer from '../../../components/Layout/Footer';
 
 
 class Results extends Component {
-  componentDidMount() {
+  componentDidMount = () => {
     this.props._loadCryptoResults();
   }
 
@@ -30,6 +30,14 @@ class Results extends Component {
     // if (loading) {
     //   return <div>Loading...</div>;
     // }
+    let totalResults = null;
+    cryptoResults.map((result, i) =>{
+        totalResults += result.Count;
+    });
+    console.log("thisIs ", totalResults);
+
+    console.log("cryptoResults", cryptoResults);
+
 
     return (
       <div className="App">
@@ -68,11 +76,11 @@ class Results extends Component {
               </tr>
             </thead>
             <tbody>
-              {cryptoResults.map((result, i) =>(
+              {totalResults != null && cryptoResults.map((result, i) =>(
                 <tr key={i}>
                 <th scope="row">{i+1}</th>
                 <td>{result.crypto_name}</td>
-                <td>{result.Count}</td>
+                <td>{Math.round((result.Count/(totalResults)*100)) + "%"}</td>
               </tr>
               ))}
             </tbody>
