@@ -179,6 +179,7 @@ class SignUp extends Component {
                 <label className="FormField__CheckboxLabel">
                   <input
                     className="FormField__Checkbox"
+                    required
                     type="checkbox"
                     name="hasAgreed"
                   />
