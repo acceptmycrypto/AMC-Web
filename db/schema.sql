@@ -241,7 +241,7 @@ CREATE TABLE notifications (
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
 
-CREATE TABLE buyer_reviews_deals (
+CREATE TABLE buyers_reviews_deals (
 	id INT NOT NULL AUTO_INCREMENT,
 	buyer_id INT NOT NULL,
 	deal_id INT NOT NULL,
@@ -262,11 +262,11 @@ CREATE TABLE buyer_reviews_deals (
 CREATE TABLE parents_children_deals_reviews(
 	review_parent_id INT NOT NULL,
 	review_child_id INT NOT NULL,
-	FOREIGN KEY (review_parent_id) REFERENCES buyer_reviews_deals(id),
-	FOREIGN KEY (review_child_id) REFERENCES buyer_reviews_deals(id)
+	FOREIGN KEY (review_parent_id) REFERENCES buyers_reviews_deals(id),
+	FOREIGN KEY (review_child_id) REFERENCES buyers_reviews_deals(id)
 );
 
-CREATE TABLE buyer_reviews_sellers(
+CREATE TABLE buyers_reviews_sellers(
 	id INT NOT NULL AUTO_INCREMENT,
 	buyer_id INT NOT NULL,
 	seller_id INT NOT NULL,
