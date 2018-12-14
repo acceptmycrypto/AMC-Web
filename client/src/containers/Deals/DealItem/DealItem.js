@@ -235,6 +235,7 @@ class DealItem extends Component {
                   <strong>Pay in Crypto:  ${dealItem && dealItem.pay_in_crypto.toFixed(2)}</strong>  <small className="deal-item-discount">
                   {dealItem && this.convertToPercentage(dealItem.pay_in_dollar, dealItem.pay_in_crypto)}% OFF</small> <br/>
                   <small>Pay in Dollar:  ${dealItem && dealItem.pay_in_dollar.toFixed(2)} <br/></small>
+                  <img style={{width: "100px"}} src="../../../assets/images/paypal_button.png" alt="coinpayment_logo"/>
                 </div>
               </div>
 
@@ -257,7 +258,12 @@ class DealItem extends Component {
                   <div className="customize-item-payment">
                     <div className="crypto_logo">
                       <strong>Payment</strong> <br/>
-                      {selectedOption ?  <img src={selectedOption.logo} alt="cryptoLogo" /> : null}
+                      {selectedOption ?  <img src={selectedOption.logo} alt="cryptoLogo" /> :
+                      <div>
+                        Powered By
+                        <img style={{width: "100px", marginTop: "0px"}} src="../../../assets/images/coin_payment.png" alt="coinpayment_logo"/>
+                      </div>
+                       }
                     </div>
                   </div>
               </div>
