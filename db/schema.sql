@@ -31,7 +31,8 @@ CREATE TABLE venues (
 
 CREATE TABLE deals (
 	id INT NOT NULL AUTO_INCREMENT,
-	venue_id INT NOT NULL,
+	venue_id INT NULL, -- changed venue_id to NULL because as of now we we have seeds with venue_id that reference the vendors
+	seller_id INT NULL, -- added this to reference users who choose to be sellers, a deal item will either have a venue_id or a seller_id
 	deal_name VARCHAR(255) NOT NULL,
 	deal_description VARCHAR(255) NOT NULL,
   	featured_deal_image VARCHAR(255) NOT NULL,
@@ -39,9 +40,10 @@ CREATE TABLE deals (
 	pay_in_crypto DECIMAL(10, 2) NOT NULL,
 	date_expired DATETIME NULL,
 	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  	category VARCHAR(255) NULL,
+  	category VARCHAR(255) NULL, -- we need to take this out eventually
 	PRIMARY KEY (id),
-	FOREIGN KEY (venue_id) REFERENCES venues(id)
+	FOREIGN KEY (venue_id) REFERENCES venues(id),
+	FOREIGN KEY (seller_id) REFERENCES users(id)
 );
 
 CREATE TABLE deal_images (
@@ -51,6 +53,26 @@ CREATE TABLE deal_images (
 	PRIMARY KEY (id),
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
+
+CREATE TABLE category ( 
+	id INT NOT NULL AUTO_INCREMENT,
+	category_name VARCHAR(100) NOT NULL,
+	PRIMARY KEY (id)
+);
+
+CREATE TABLE parent_child_categories(
+	parent_category_id INT NOT NULL,
+	child_category_id INT NOT NULL,
+	FOREIGN KEY (parent_category_id) REFERENCES category(id),
+	FOREIGN KEY (child_category_id) REFERENCES category(id)
+);
+
+CREATE TABLE categories_deals(
+	category_id INT NOT NULL,
+	deals_id INT NOT NULL,
+	FOREIGN KEY (category_id) REFERENCES category(id),
+	FOREIGN KEY (deals_id) REFERENCES deals(id)
+)
 
 -- create a junction table for many-to-many association
 CREATE TABLE cryptos_venues (
