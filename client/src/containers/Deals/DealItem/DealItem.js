@@ -219,35 +219,6 @@ class DealItem extends Component {
       return <div>Loading...</div>;
     }
 
-    // const steps = [
-    //   { name: "Customizing",
-    //     component:
-    //     <CustomizeOrder
-    //     handle_CustomizingSize={this.props.handleCustomizingSize}
-    //     handle_CustomizingColor={this.props.handleCustomizingColor}/>},
-    //   { name: "Shipping",
-    //     component:
-    //     <ShipOrder
-    //     SubmitPayment={this.createPaymentHandler}
-    //     handle_ShippingFullName={this.props.handleFullNameInput}
-    //     handle_ShippingAddress={this.props.handleAddressInput}
-    //     handle_ShippingCity={this.props.handleCityInput}
-    //     handle_ShippingZipcode={this.props.handleZipcodeInput}
-    //     handle_ShippingState={this.props.handleShippingStateInput}/> },
-    //   { name: "Payment", component:
-    //     <PurchaseOrder
-    //     cryptos={acceptedCryptos && this.handleCryptoOptions(acceptedCryptos)}
-    //     selectCrypto={this.props.handleSelectedCrypto}
-
-    //     SubmitPayment={this.createPaymentHandler}
-    //     transactionInfo={paymentInfo}
-    //     cryptoSymbol={selectedOption && selectedOption.value}
-    //     paymentButtonClicked={createPaymentButtonClicked}
-
-    //     showLoadingSpinner={loading}
-    //     timeout={paymentInfo && this.timeInMilliseconds(paymentInfo.timeout)}/> }
-    // ];
-
     return (
       <div>
         <Layout>
