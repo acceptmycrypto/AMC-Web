@@ -76,6 +76,21 @@ CREATE TABLE categories_deals(
 	FOREIGN KEY (deals_id) REFERENCES deals(id)
 );
 
+-- custom options to be displayed when user is listing an item to sell eg. size, color, model etc based on the categoryies of the item
+CREATE TABLE customizable_option(
+	id INT NOT NULL AUTO_INCREMENT,
+	custom_option_name VARCHAR(100) NOT NULL,
+	PRIMARY KEY (id)
+);
+
+-- many to many relationship table
+CREATE TABLE categories_customizable_options(
+	category_id INT NOT NULL,
+	custom_option_id INT NOT NULL,
+	FOREIGN KEY (category_id) REFERENCES category(id),
+	FOREIGN KEY (custom_option_id) REFERENCES customizable_option(id)
+);
+
 -- CREATE TABLE hashtag ( 
 -- 	id INT NOT NULL AUTO_INCREMENT,
 -- 	hashtag_name VARCHAR(100) NOT NULL,
