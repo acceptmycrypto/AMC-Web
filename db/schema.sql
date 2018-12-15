@@ -285,7 +285,7 @@ CREATE TABLE buyers_reviews_deals (
 	likes INT DEFAULT 0,
 	dislikes INT DEFAULT 0,
 	helpful_review INT DEFAULT 0,
-	display_review BOOLEAN NOT NULL DEFAULT TRUE,
+	display_review BOOLEAN NOT NULL DEFAULT FALSE,
 	PRIMARY KEY (id),
 	FOREIGN KEY (buyer_id) REFERENCES users(id),
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
@@ -311,17 +311,18 @@ CREATE TABLE buyers_reviews_sellers(
 	FOREIGN KEY (seller_id) REFERENCES users(id)
 );
 
-CREATE TABLE sellers_reviews_buyers(
-	id INT NOT NULL AUTO_INCREMENT,
-	buyer_id INT NOT NULL,
-	seller_id INT NOT NULL,
-	rating INT NOT NULL DEFAULT 0,
-	body TEXT NULL,
-	date_reviewed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY (id),
-	FOREIGN KEY (buyer_id) REFERENCES users(id),
-	FOREIGN KEY (seller_id) REFERENCES users(id)
-);
+-- may not need this table if we have the flagged users table
+-- CREATE TABLE sellers_reviews_buyers(
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	buyer_id INT NOT NULL,
+-- 	seller_id INT NOT NULL,
+-- 	rating INT NOT NULL DEFAULT 0,
+-- 	body TEXT NULL,
+-- 	date_reviewed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+-- 	PRIMARY KEY (id),
+-- 	FOREIGN KEY (buyer_id) REFERENCES users(id),
+-- 	FOREIGN KEY (seller_id) REFERENCES users(id)
+-- );
 
 -- venue can report another venue, venue can report a user, user can report another user, and user can report a venue
 CREATE TABLE flagged_users(
@@ -330,9 +331,16 @@ CREATE TABLE flagged_users(
 	venue_id INT NULL,
 	user_reporter INT NULL,
 	venue_reporter INT NULL,
+	deal_id INT NULL,
+	review_id INT NULL,
+	txn_id VARCHAR(255) NULL,
+	reason VARCHAR(255) NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_id) REFERENCES users(id),
 	FOREIGN KEY (venue_id) REFERENCES venues(id),
 	FOREIGN KEY (user_reporter) REFERENCES users(id),
-	FOREIGN KEY (venue_reporter) REFERENCES venues(id)
+	FOREIGN KEY (venue_reporter) REFERENCES venues(id),
+	FOREIGN KEY (deal_id) REFERENCES deals(id),
+	FOREIGN KEY (review_id) REFERENCES buyers_reviews_deals(id),
+	FOREIGN KEY (txn_id) REFERENCES users_purchases(txn_id)
 );
