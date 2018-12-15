@@ -276,6 +276,7 @@ CREATE TABLE buyers_reviews_deals (
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
 
+-- many to many relationship table
 CREATE TABLE parents_children_deals_reviews(
 	review_parent_id INT NOT NULL,
 	review_child_id INT NOT NULL,
@@ -307,10 +308,16 @@ CREATE TABLE sellers_reviews_buyers(
 	FOREIGN KEY (seller_id) REFERENCES users(id)
 );
 
-
+-- venue can report another venue, venue can report a user, user can report another user, and user can report a venue
 CREATE TABLE flagged_users(
 	id INT NOT NULL AUTO_INCREMENT,
-	user_id INT NOT NULL,
+	user_id INT NULL,
+	venue_id INT NULL,
+	user_reporter INT NULL,
+	venue_reporter INT NULL,
 	PRIMARY KEY (id),
-	FOREIGN KEY (user_id) REFERENCES users(id)
+	FOREIGN KEY (user_id) REFERENCES users(id),
+	FOREIGN KEY (venue_id) REFERENCES venues(id),
+	FOREIGN KEY (user_reporter) REFERENCES users(id),
+	FOREIGN KEY (venue_reporter) REFERENCES venues(id)
 );
