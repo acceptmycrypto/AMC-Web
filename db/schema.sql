@@ -60,6 +60,7 @@ CREATE TABLE category (
 	PRIMARY KEY (id)
 );
 
+-- many to many relationship table
 CREATE TABLE parent_child_categories(
 	parent_category_id INT NOT NULL,
 	child_category_id INT NOT NULL,
@@ -67,12 +68,28 @@ CREATE TABLE parent_child_categories(
 	FOREIGN KEY (child_category_id) REFERENCES category(id)
 );
 
+-- many to many relationship table
 CREATE TABLE categories_deals(
 	category_id INT NOT NULL,
 	deals_id INT NOT NULL,
 	FOREIGN KEY (category_id) REFERENCES category(id),
 	FOREIGN KEY (deals_id) REFERENCES deals(id)
-)
+);
+
+-- CREATE TABLE hashtag ( 
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	hashtag_name VARCHAR(100) NOT NULL,
+-- 	PRIMARY KEY (id)
+-- );
+
+-- -- many to many relationship table
+-- CREATE TABLE hashtags_deals(
+-- 	hashtag_id INT NOT NULL,
+-- 	deals_id INT NOT NULL,
+-- 	FOREIGN KEY (hashtag_id) REFERENCES hashtag(id),
+-- 	FOREIGN KEY (deals_id) REFERENCES deals(id)
+-- );
+
 
 -- create a junction table for many-to-many association
 CREATE TABLE cryptos_venues (
