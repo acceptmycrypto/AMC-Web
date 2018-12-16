@@ -7,7 +7,7 @@ import { _signUp } from "../../../services/AuthService";
 import { connect } from "react-redux";
 import {bindActionCreators} from 'redux';
 import { _loadCryptocurrencies } from "../../../actions/loadCryptoActions";
-import { handleDropdownChange, openModal, closeModal } from "../../../actions/signUpActions";
+import { handleDropdownChange, openModal, closeModal, resetSelectedCryptos } from "../../../actions/signUpActions";
 
 import Footer from "../../../components/Layout/Footer";
 
@@ -25,7 +25,6 @@ class SignUp extends Component {
   }
 
 
-
   //function to handle when user clicks submit button to register
   handleSubmit(e) {
     e.preventDefault();
@@ -37,28 +36,33 @@ class SignUp extends Component {
     console.log(this.props);
     console.log("crypto to submit:", cryptoProfile);
     let hasAgreed = e.target.children[4].children[0].children[0].checked;
-  
+    
+    if(cryptoProfile.length < 1){
+      document.querySelector("#selectCryptoError").innerHTML = "Select Cryptocurrencies";
 
-    //we add validation on the front end so that user has to enter in the required field before clicking submit
-    //TODO
-    // if (username || email || password){
-    //   this.props.openModal();
-    // }
-    console.log(cryptoProfile);
-    if (!username || !email || !password) {
-      alert("Please enter in the required field!");
-    } else {
-      return _signUp(username, email, password, cryptoProfile).then(res => {
-        console.log("message sent from server if success: ", res);
-        if(res.error){
-          alert(res.error);
-        }else{
-          this.props.openModal();
-        }
-        
-        //TODO
-        //prompt users to check their email
-      });
+    }else{
+
+      if (!username || !email || !password) {
+        alert("Please enter in the required field!");
+      } else {
+        return _signUp(username, email, password, cryptoProfile).then(res => {
+          console.log("message sent from server if success: ", res);
+          if(res.emailError || res.usernameError || res.passwordError){
+            if(res.emailError){
+              document.querySelector("#emailError").innerHTML = res.emailError;
+            }
+            if(res.usernameError){
+              document.querySelector("#usernameError").innerHTML = res.usernameError;
+            }
+            if(res.passwordError){
+              document.querySelector("#passwordError").innerHTML = res.passwordError;            
+            }
+          }else{
+            this.props.openModal();
+            this.props.resetSelectedCryptos();
+          }
+        });
+      }
     }
   }
 
@@ -126,7 +130,7 @@ class SignUp extends Component {
               <div className="FormField">
                 <div>
                     <label className="FormField__Label" htmlFor="username">
-                    User Name
+                    UserName
                     </label>
                 </div>
                 <input
@@ -137,6 +141,7 @@ class SignUp extends Component {
                   name="username"
                   required
                 />
+                <div id="usernameError" class="mt-1 orangeText"></div>
               </div>
               <div className="FormField">
                 <div>
@@ -152,6 +157,7 @@ class SignUp extends Component {
                   name="email"
                   required
                 />
+                <div id="emailError" class="mt-1 orangeText"></div>
               </div>
               <div className="FormField">
                 <div>
@@ -167,6 +173,7 @@ class SignUp extends Component {
                   name="password"
                   required
                 />
+                <div id="passwordError" class="mt-1 orangeText"></div>
               </div>
 
               <div className="FormField">
@@ -186,6 +193,7 @@ class SignUp extends Component {
                   autoBlur={false}
 
                 />
+                <div id="selectCryptoError" class="mt-1 orangeText"></div>
               </div>
 
               <div className="FormField">
@@ -238,7 +246,7 @@ const mapStateToProps = state => ({
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({openModal, closeModal, handleDropdownChange, _loadCryptocurrencies}, dispatch);
+  return bindActionCreators({openModal, closeModal, handleDropdownChange, _loadCryptocurrencies, resetSelectedCryptos}, dispatch);
 }
 
 
