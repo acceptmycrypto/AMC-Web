@@ -49,26 +49,26 @@ router.post('/register', function(req, res) {
   var selectedCryptos = req.body.cryptoProfile;
 //First we make a query to see if user exists in the database
   connection.query(
-    'SELECT * FROM users WHERE email = ?',
-    [req.body.email],
+    'SELECT * FROM users WHERE username = ?',
+    [req.body.username],
     function(error, result, fields) {
       if (error) throw error;
 
       //if we find the email exists in the database, we send "Email is taken" to the client
-      if (result[0]) return res.status(404).json({ error: 'Email is taken' });
+      if (result[0]) return res.status(404).json({ usernameError: 'Username is taken'});
 
       
       connection.query(
-        'SELECT * FROM users WHERE username = ?',
-        [req.body.username],
+        'SELECT * FROM users WHERE email = ?',
+        [req.body.email],
         function(error, result, fields) {
           if (error) throw error;
           //if we find the username exists in the database, we send "Username is taken" to the client
-          if (result[0]) return res.status(404).json({ error: 'Username is taken'});
+          if (result[0]) return res.status(404).json({ emailError: 'Email is taken' });
 
           if (!req.body.password) return res.status(401).json({ error: 'you need a password' });
 
-          if (req.body.password.length <= 5) return res.status(401).json({ error: 'Password length must be greater than 5' });
+          if (req.body.password.length <= 5) return res.status(401).json({ passwordError: 'Password length must be greater than 5' });
 
           bcrypt.genSalt(10, function(err, salt) {
             bcrypt.hash(req.body.password, salt, function(err, password_hash) {
@@ -123,38 +123,40 @@ router.post('/register', function(req, res) {
     
                     );
     
-                    //insert selected cryptos into users_cryptos table
-                    connection.query(
-                      "SELECT * FROM crypto_metadata LEFT JOIN crypto_info ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name WHERE crypto_name IN (?)",
-                      [selectedCryptos],
-                      function(error, results, fields) {
-                        if (error) throw error;
-                        const userID_cryptoID = [];
-    
-                        const cryptoIDs = results.map(crypto => {
-                          return crypto["id"]
-                        })
-    
-                        for (let i = 0; i < cryptoIDs.length; i++) {
-                          let innerArr = [];
-                          innerArr.push(userID, cryptoIDs[i]);
-                          userID_cryptoID.push(innerArr);
-                        }
-    
-                    //Now we insert the userID_cryptoID array into the users_cryptos table
-                        connection.query(
-                          'INSERT INTO users_cryptos (user_id, crypto_id) VALUES ?',
-                          [userID_cryptoID],
-                          function(error, user_cryptos, fields) {
-                            if (error) throw error;
+                    if(selectedCryptos.length > 0){
+                                          //insert selected cryptos into users_cryptos table
+                      connection.query(
+                        "SELECT * FROM crypto_metadata LEFT JOIN crypto_info ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name WHERE crypto_name IN (?)",
+                        [selectedCryptos],
+                        function(error, results, fields) {
+                          if (error) throw error;
+                          const userID_cryptoID = [];
+      
+                          const cryptoIDs = results.map(crypto => {
+                            return crypto["id"]
+                          })
+      
+                          for (let i = 0; i < cryptoIDs.length; i++) {
+                            let innerArr = [];
+                            innerArr.push(userID, cryptoIDs[i]);
+                            userID_cryptoID.push(innerArr);
                           }
-    
-    
-                        );
-    
-                      }
-                    );
-    
+      
+                        //Now we insert the userID_cryptoID array into the users_cryptos table
+                          connection.query(
+                            'INSERT INTO users_cryptos (user_id, crypto_id) VALUES ?',
+                            [userID_cryptoID],
+                            function(error, user_cryptos, fields) {
+                              if (error) throw error;
+                            }
+      
+      
+                          );
+      
+                        }
+                      );
+
+                    }    
                 }
               });
     
