@@ -14,15 +14,8 @@ import Aside from '../Aside';
 
 
 class SignIn extends Component {
-  constructor() {
-    super();
 
-
-    this.handleLogin = this.handleLogin.bind(this);
-  }
-
-
-  handleLogin(e) {
+  handleLogin = (e) => {
     e.preventDefault();
     let email = e.target.children[0].children[1].value;
     let password = e.target.children[1].children[1].value;
