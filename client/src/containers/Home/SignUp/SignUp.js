@@ -30,7 +30,6 @@ class SignUp extends Component {
   handleSubmit(e) {
     e.preventDefault();
 
-
     let username = e.target.children[0].children[1].value;
     let email = e.target.children[1].children[1].value;
     let password = e.target.children[2].children[1].value;
@@ -38,18 +37,24 @@ class SignUp extends Component {
     console.log(this.props);
     console.log("crypto to submit:", cryptoProfile);
     let hasAgreed = e.target.children[4].children[0].children[0].checked;
+  
 
     //we add validation on the front end so that user has to enter in the required field before clicking submit
     //TODO
-    if (username || email || password){
-      this.props.openModal();
-    }
-    
+    // if (username || email || password){
+    //   this.props.openModal();
+    // }
+    console.log(cryptoProfile);
     if (!username || !email || !password) {
       alert("Please enter in the required field!");
     } else {
       return _signUp(username, email, password, cryptoProfile).then(res => {
         console.log("message sent from server if success: ", res);
+        if(res.error){
+          alert(res.error);
+        }else{
+          this.props.openModal();
+        }
         
         //TODO
         //prompt users to check their email
