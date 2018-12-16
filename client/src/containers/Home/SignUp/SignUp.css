@@ -248,6 +248,10 @@ hr.star-light {
     min-height: calc(100% - 23%);
   }
 
+  .orangeText{
+    color: orange;
+  }
+
   /* media query */
 @media only screen and (max-width: 640px) {
   .App {
