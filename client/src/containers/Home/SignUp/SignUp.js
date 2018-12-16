@@ -13,20 +13,14 @@ import Footer from "../../../components/Layout/Footer";
 
 
 class SignUp extends Component {
-  constructor() {
-    super();
 
-
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  componentDidMount() {
+  componentDidMount =() => {
     this.props._loadCryptocurrencies();
   }
 
 
   //function to handle when user clicks submit button to register
-  handleSubmit(e) {
+  handleSubmit = (e) => {
     e.preventDefault();
 
     let username = e.target.children[0].children[1].value;
@@ -64,6 +58,10 @@ class SignUp extends Component {
         });
       }
     }
+  }
+
+  clearErrorMessage = (id) =>{
+    document.querySelector(id).innerHTML = ""; 
   }
 
   render() {
@@ -139,6 +137,7 @@ class SignUp extends Component {
                   className="FormField__Input"
                   placeholder="Enter your desired User Name"
                   name="username"
+                  onChange={()=>{this.clearErrorMessage("#usernameError")}}
                   required
                 />
                 <div id="usernameError" class="mt-1 orangeText"></div>
@@ -155,6 +154,7 @@ class SignUp extends Component {
                   className="FormField__Input"
                   placeholder="Enter your email"
                   name="email"
+                  onChange={()=>{this.clearErrorMessage("#emailError")}}
                   required
                 />
                 <div id="emailError" class="mt-1 orangeText"></div>
@@ -171,6 +171,7 @@ class SignUp extends Component {
                   className="FormField__Input"
                   placeholder="Enter your password"
                   name="password"
+                  onChange={()=>{this.clearErrorMessage("#passwordError")}}
                   required
                 />
                 <div id="passwordError" class="mt-1 orangeText"></div>
