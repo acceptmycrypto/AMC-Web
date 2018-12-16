@@ -1,5 +1,5 @@
 const initialSignUpState = {
-    selectedCryptos: null,
+    selectedCryptos: [],
     redirect: false,
     visible: false
 }
@@ -11,7 +11,11 @@ export default function selectedCryptosReducer (state = initialSignUpState, acti
                 ...state,
                 selectedCryptos: action.payload.selectedCryptos
             }
-            case "OPEN_MODAL":
+        case 'RESET_SELECTED_CRYPTOS':
+            return{
+                selectedCryptos: []
+            }
+        case "OPEN_MODAL":
             return {
                 ...state,
                 visible: action.payload.visible
