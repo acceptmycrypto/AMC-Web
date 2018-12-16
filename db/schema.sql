@@ -41,6 +41,7 @@ CREATE TABLE deals (
 	date_expired DATETIME NULL,
 	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   	category VARCHAR(255) NULL, -- we need to take this out eventually
+	condition VARCHAR (255) NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (venue_id) REFERENCES venues(id),
 	FOREIGN KEY (seller_id) REFERENCES users(id)
@@ -76,20 +77,22 @@ CREATE TABLE categories_deals(
 	FOREIGN KEY (deals_id) REFERENCES deals(id)
 );
 
+--table to be used in the future
 -- custom options to be displayed when user is listing an item to sell eg. size, color, model etc based on the categoryies of the item
-CREATE TABLE customizable_option(
-	id INT NOT NULL AUTO_INCREMENT,
-	custom_option_name VARCHAR(100) NOT NULL,
-	PRIMARY KEY (id)
-);
+-- CREATE TABLE customizable_option(
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	custom_option_name VARCHAR(100) NOT NULL,
+-- 	PRIMARY KEY (id)
+-- );
 
+--table to be used in the future
 -- many to many relationship table
-CREATE TABLE categories_customizable_options(
-	category_id INT NOT NULL,
-	custom_option_id INT NOT NULL,
-	FOREIGN KEY (category_id) REFERENCES category(id),
-	FOREIGN KEY (custom_option_id) REFERENCES customizable_option(id)
-);
+-- CREATE TABLE categories_customizable_options(
+-- 	category_id INT NOT NULL,
+-- 	custom_option_id INT NOT NULL,
+-- 	FOREIGN KEY (category_id) REFERENCES category(id),
+-- 	FOREIGN KEY (custom_option_id) REFERENCES customizable_option(id)
+-- );
 
 -- CREATE TABLE hashtag ( 
 -- 	id INT NOT NULL AUTO_INCREMENT,
