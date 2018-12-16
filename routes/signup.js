@@ -54,105 +54,115 @@ router.post('/register', function(req, res) {
     function(error, result, fields) {
       if (error) throw error;
 
-//if we find the user exists in the database, we send "User already exists" to the client
-      if (result[0]) return res.status(404).json({ error: 'User already exists' });
+      //if we find the email exists in the database, we send "Email is taken" to the client
+      if (result[0]) return res.status(404).json({ error: 'Email is taken' });
 
-      if (!req.body.password) return res.status(401).json({ error: 'you need a password' });
+      
+      connection.query(
+        'SELECT * FROM users WHERE username = ?',
+        [req.body.username],
+        function(error, result, fields) {
+          if (error) throw error;
+          //if we find the username exists in the database, we send "Username is taken" to the client
+          if (result[0]) return res.status(404).json({ error: 'Username is taken'});
 
-      if (req.body.password.length <= 5) return res.status(401).json({ error: 'password length must be greater than 5' });
+          if (!req.body.password) return res.status(401).json({ error: 'you need a password' });
 
-      bcrypt.genSalt(10, function(err, salt) {
-        bcrypt.hash(req.body.password, salt, function(err, password_hash) {
-//1) insert the new user into users table
+          if (req.body.password.length <= 5) return res.status(401).json({ error: 'Password length must be greater than 5' });
 
-          connection.query('INSERT INTO users (email, password, username, email_verification_token) VALUES (?, ?, ?, ?)',
-          [req.body.email, password_hash, req.body.username, uuidv4()],
-          function (error, results, fields) {
-
-            if (error) {
-              console.log(error)
-            } else {
-              //send a notificiation to the client side to let user verify their email
-              res.json({
-                  message: "We sent you an email for email verification. Please confirm your email."
-              });
-
-              let UserID; //make a available to be resused when insert into users_cryptos table
-
-                //query the new inserted user to get the user-id and email verification code
-                connection.query(
-                  'SELECT * FROM users WHERE email = ?',
-                  [req.body.email],
-                  function(error, result, fields) {
-                    if (error) throw error;
-                    userID = result[0].id;
-
-                    let photo = ['fa-user-secret', 'fa-user-circle', 'fa-user-astronaut', 'fa-user-tie', 'fa-user'];
-                    let photo_index = Math.floor(Math.random() * (4 - 0 + 1)) + 0;
-
+          bcrypt.genSalt(10, function(err, salt) {
+            bcrypt.hash(req.body.password, salt, function(err, password_hash) {
+            //1) insert the new user into users table
+    
+              connection.query('INSERT INTO users (email, password, username, email_verification_token) VALUES (?, ?, ?, ?)',
+              [req.body.email, password_hash, req.body.username, uuidv4()],
+              function (error, results, fields) {
+    
+                if (error) {
+                  console.log(error)
+                } else {
+                  //send a notificiation to the client side to let user verify their email
+                  res.json({
+                      message: "We sent you an email for email verification. Please confirm your email."
+                  });
+    
+                  let UserID; //make a available to be resused when insert into users_cryptos table
+    
+                    //query the new inserted user to get the user-id and email verification code
                     connection.query(
-                      'INSERT INTO users_profiles (user_id, photo ) VALUES(?,?)',
-                      [result[0].id, photo[photo_index], ],
+                      'SELECT * FROM users WHERE email = ?',
+                      [req.body.email],
                       function(error, result, fields) {
                         if (error) throw error;
+                        userID = result[0].id;
+    
+                        let photo = ['fa-user-secret', 'fa-user-circle', 'fa-user-astronaut', 'fa-user-tie', 'fa-user'];
+                        let photo_index = Math.floor(Math.random() * (4 - 0 + 1)) + 0;
+    
+                        connection.query(
+                          'INSERT INTO users_profiles (user_id, photo ) VALUES(?,?)',
+                          [result[0].id, photo[photo_index], ],
+                          function(error, result, fields) {
+                            if (error) throw error;
+                          }
+                        );
+    
+                        //use sendgrid to send email
+                        let verify_link = process.env.BACKEND_URL+"/email-verify/" + userID + "/" + result[0].email_verification_token;
+    
+                        const email_verification = {
+                          to: req.body.email,
+                          from: process.env.CUSTOMER_SUPPORT,
+                          subject: 'Confirm your email address',
+                          html: signupEmailTemplate({ email: req.body.email, verify_link })
+                        };
+                        sgMail.send(email_verification);
                       }
+    
+    
+    
                     );
-
-                    //use sendgrid to send email
-                    let verify_link = process.env.BACKEND_URL+"/email-verify/" + userID + "/" + result[0].email_verification_token;
-
-                    const email_verification = {
-                      to: req.body.email,
-                      from: process.env.CUSTOMER_SUPPORT,
-                      subject: 'Confirm your email address',
-                      html: signupEmailTemplate({ email: req.body.email, verify_link })
-                    };
-                    sgMail.send(email_verification);
-                  }
-
-
-
-                );
-
-                //insert selected cryptos into users_cryptos table
-                connection.query(
-                  "SELECT * FROM crypto_metadata LEFT JOIN crypto_info ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name WHERE crypto_name IN (?)",
-                  [selectedCryptos],
-                  function(error, results, fields) {
-                    if (error) throw error;
-                    const userID_cryptoID = [];
-
-                    const cryptoIDs = results.map(crypto => {
-                      return crypto["id"]
-                    })
-
-                    for (let i = 0; i < cryptoIDs.length; i++) {
-                      let innerArr = [];
-                      innerArr.push(userID, cryptoIDs[i]);
-                      userID_cryptoID.push(innerArr);
-                    }
-
-                //Now we insert the userID_cryptoID array into the users_cryptos table
+    
+                    //insert selected cryptos into users_cryptos table
                     connection.query(
-                      'INSERT INTO users_cryptos (user_id, crypto_id) VALUES ?',
-                      [userID_cryptoID],
-                      function(error, user_cryptos, fields) {
+                      "SELECT * FROM crypto_metadata LEFT JOIN crypto_info ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name WHERE crypto_name IN (?)",
+                      [selectedCryptos],
+                      function(error, results, fields) {
                         if (error) throw error;
+                        const userID_cryptoID = [];
+    
+                        const cryptoIDs = results.map(crypto => {
+                          return crypto["id"]
+                        })
+    
+                        for (let i = 0; i < cryptoIDs.length; i++) {
+                          let innerArr = [];
+                          innerArr.push(userID, cryptoIDs[i]);
+                          userID_cryptoID.push(innerArr);
+                        }
+    
+                    //Now we insert the userID_cryptoID array into the users_cryptos table
+                        connection.query(
+                          'INSERT INTO users_cryptos (user_id, crypto_id) VALUES ?',
+                          [userID_cryptoID],
+                          function(error, user_cryptos, fields) {
+                            if (error) throw error;
+                          }
+    
+    
+                        );
+    
                       }
-
-
                     );
-
-                  }
-                );
-
-            }
-          });
-
-        });//bcrypt.hash closing bracket
-
-      }); //bcrypt.getsalt closing bracket
-
+    
+                }
+              });
+    
+            });//bcrypt.hash closing bracket
+    
+          }); //bcrypt.getsalt closing bracket
+        }
+      );
     }
   );
 });
