@@ -200,12 +200,12 @@ class SignUp extends Component {
               <div className="FormField">
                 <label className="FormField__CheckboxLabel">
                   <input
-                    className="FormField__Checkbox"
+                    className="FormField__Checkbox mr-2"
                     required
                     type="checkbox"
                     name="hasAgreed"
                   />
-                  I agree all statements in
+                  I agree to all statements in
                   <a href="#" className="FormField__TermsLink">
                     terms of service
                   </a>
