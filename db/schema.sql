@@ -94,12 +94,14 @@ CREATE TABLE categories_deals(
 -- 	FOREIGN KEY (custom_option_id) REFERENCES customizable_option(id)
 -- );
 
+--table to be used in the future
 -- CREATE TABLE hashtag ( 
 -- 	id INT NOT NULL AUTO_INCREMENT,
 -- 	hashtag_name VARCHAR(100) NOT NULL,
 -- 	PRIMARY KEY (id)
 -- );
 
+--table to be used in the future
 -- -- many to many relationship table
 -- CREATE TABLE hashtags_deals(
 -- 	hashtag_id INT NOT NULL,
@@ -276,6 +278,7 @@ CREATE TABLE notifications (
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
 
+--table to be used in the future
 CREATE TABLE buyers_reviews_deals (
 	id INT NOT NULL AUTO_INCREMENT,
 	buyer_id INT NOT NULL,
@@ -294,6 +297,7 @@ CREATE TABLE buyers_reviews_deals (
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
 
+--table to be used in the future
 -- many to many relationship table
 CREATE TABLE parents_children_deals_reviews(
 	review_parent_id INT NOT NULL,
@@ -306,12 +310,14 @@ CREATE TABLE buyers_reviews_sellers(
 	id INT NOT NULL AUTO_INCREMENT,
 	buyer_id INT NOT NULL,
 	seller_id INT NOT NULL,
+	deal_id INT NOT NULL,
 	rating INT NOT NULL DEFAULT 0,
 	body TEXT NULL,
 	date_reviewed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (id),
 	FOREIGN KEY (buyer_id) REFERENCES users(id),
-	FOREIGN KEY (seller_id) REFERENCES users(id)
+	FOREIGN KEY (seller_id) REFERENCES users(id),
+	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
 
 -- may not need this table if we have the flagged users table
