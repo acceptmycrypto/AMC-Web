@@ -314,6 +314,7 @@ CREATE TABLE buyers_reviews_sellers(
 	rating INT NOT NULL DEFAULT 0,
 	body TEXT NULL,
 	date_reviewed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	display_review BOOLEAN NOT NULL DEFAULT FALSE,
 	PRIMARY KEY (id),
 	FOREIGN KEY (buyer_id) REFERENCES users(id),
 	FOREIGN KEY (seller_id) REFERENCES users(id),
