@@ -120,6 +120,15 @@ CREATE TABLE cryptos_venues (
 	FOREIGN KEY (venue_id) REFERENCES venues(id)
 );
 
+-- create a junction table for many-to-many association
+CREATE TABLE cryptos_sellers (
+	crypto_id INT NOT NULL,
+	seller_id INT NOT NULL,
+	PRIMARY KEY (crypto_id, seller_id),
+	FOREIGN KEY (crypto_id)  REFERENCES crypto_metadata(id),
+	FOREIGN KEY (seller_id) REFERENCES users(id)
+);
+
 CREATE TABLE userInput (
 	id INT NOT NULL AUTO_INCREMENT,
 	user_email VARCHAR(255) NOT NULL UNIQUE,
