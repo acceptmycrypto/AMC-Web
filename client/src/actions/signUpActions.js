@@ -26,7 +26,7 @@ export const closeModal = () => {
 //we need to map through the array and get the value of each object
 
 export const handleDropdownChange = (selectedOptions) => {
-    
+    document.querySelector("#selectCryptoError").innerHTML = "";
 
     let selectedCryptos = [];
     selectedOptions.map(crypto => {
@@ -42,4 +42,8 @@ export const handleDropdownChange = (selectedOptions) => {
     }
 };
 
-
+export const resetSelectedCryptos = () => {
+    return {
+        type: 'RESET_SELECTED_CRYPTOS'
+    }
+}
