@@ -235,7 +235,6 @@ class DealItem extends Component {
                   <strong>Pay in Crypto:  ${dealItem && dealItem.pay_in_crypto.toFixed(2)}</strong>  <small className="deal-item-discount">
                   {dealItem && this.convertToPercentage(dealItem.pay_in_dollar, dealItem.pay_in_crypto)}% OFF</small> <br/>
                   <small>Pay in Dollar:  ${dealItem && dealItem.pay_in_dollar.toFixed(2)} <br/></small>
-                  <img style={{width: "100px"}} src="../../../assets/images/paypal_button.png" alt="coinpayment_logo"/>
                 </div>
               </div>
 
@@ -257,7 +256,7 @@ class DealItem extends Component {
 
                   <div className="customize-item-payment">
                     <div className="crypto_logo">
-                      <strong>Payment</strong> <br/>
+                      <strong>Crypto Payment</strong> <br/>
                       {selectedOption ?  <img src={selectedOption.logo} alt="cryptoLogo" /> :
                       <div>
                         Powered By
@@ -352,6 +351,13 @@ class DealItem extends Component {
                   transactionInfo={paymentInfo}
                   cryptoSymbol={selectedOption && selectedOption.value}
                   paymentButtonClicked={createPaymentButtonClicked}
+
+                  deal_item={dealItem}
+                  full_name={fullName}
+                  shipping_address={shippingAddress}
+                  shipping_city={shippingCity}
+                  zip_code={zipcode}
+                  shipping_state={shippingState}
 
                   showLoadingSpinner={transaction_loading}
                   timeout={paymentInfo && this.timeInMilliseconds(paymentInfo.timeout)}/>}
