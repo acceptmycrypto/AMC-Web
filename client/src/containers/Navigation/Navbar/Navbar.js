@@ -62,7 +62,7 @@ class Navbar extends Component {
             <Link onClick={this.props.resetNavbar} to="/feed/deals">
             { window.location.pathname == "/feed/deals"
               ? <i className="fas fa-dollar-sign fa-lg"> <h7 className="color-deepBlue font-17 teal-underline">All Deals</h7></i>
-              : <i className="fas fa-dollar-sign fa-lg"> <h7 className="color-deepBlue font-17">AllDeals</h7></i>
+              : <i className="fas fa-dollar-sign fa-lg"> <h7 className="color-deepBlue font-17">All Deals</h7></i>
             }
             </Link>
           </li>

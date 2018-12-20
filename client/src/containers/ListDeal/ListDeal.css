@@ -1,0 +1,58 @@
+.deal-listing-content {
+  min-height: 500px;
+  margin: 0px 50px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+  display: flex;
+  border-radius: 5px;
+}
+
+.deal-listing-shown-image-container {
+  width: 35%;
+  margin: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed;
+  border-radius: 5px;
+}
+
+.deal-listing-shown-image-container div:hover {
+  cursor: pointer;
+}
+
+.add-a-photo {
+  text-align: center;
+}
+
+.deal-listing-images {
+  width: 65%;
+  margin: 25px;
+  padding: 10px;
+  text-align: center;
+}
+
+.deal-listing-img {
+  border: dashed 1px;
+  border-radius: 5px;
+  height: 150px;
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.deal-listing-img .fa-plus:hover {
+  cursor: pointer;
+}
+
+.deal-listing-images .first-row{
+  display: flex;
+  justify-content: center;
+}
+
+.deal-listing-images .second-row{
+  display: flex;
+  justify-content: center;
+}
