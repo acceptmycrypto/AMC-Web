@@ -56,9 +56,12 @@ class ListDeal extends Component {
                 <div className="deal-listing-img col-3"></div>
                 <div className="deal-listing-img col-3"></div>
               </div>
-
-
+              <hr/>
+              <div id="photos-next-step">
+                <button>Next</button>
+              </div>
             </div>
+
           </div>
          </Layout>
       </div>
