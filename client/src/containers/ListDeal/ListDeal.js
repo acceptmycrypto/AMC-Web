@@ -2,10 +2,70 @@ import React, { Component } from "react";
 import "./ListDeal.css";
 import Layout from "../Layout"
 import { connect } from "react-redux";
+import LoadingSpinner from "../../components/UI/LoadingSpinner";
 
 class ListDeal extends Component {
 
+  state = {
+    uploading: false,
+    images: []
+  }
+
+  onChange = e => {
+    const files = Array.from(e.target.files)
+    this.setState({ uploading: true })
+
+    const formData = new FormData()
+
+    files.forEach((file, i) => {
+      formData.append(i, file)
+    })
+
+    return fetch("/image-upload", {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.json())
+    .then(images => {
+      this.setState({
+        uploading: false,
+        images
+      })
+    })
+  }
+
+
   render () {
+    const { uploading, images } = this.state
+
+    const content = () => {
+      switch(true) {
+        case uploading:
+          return <LoadingSpinner />
+        case images.length > 0:
+          return (
+            this.state.images.map((image, i) => (
+              <img src={image.secure_url} alt='' />
+            ))
+          )
+        default:
+          return (
+            <div id="uploading-image">
+                <label htmlFor="photos-upload">
+                  <div>
+                    <i class="fas fa-camera fa-7x"></i>
+                  </div>
+                  <div>
+                    <strong>Add a Photo</strong>
+                    <p>Images must be in PNG or JPG format and under 5mb</p>
+                  </div>
+                </label>
+                <input type='file' id='photos-upload' onChange={this.onChange}/>
+              </div>
+          )
+      }
+    }
+
     return (
       <div>
          <Layout>
@@ -29,7 +89,7 @@ class ListDeal extends Component {
                   <a className="step">
                   <i className="edit icon"></i>
                     <div className="content">
-                      <div className="title">Detailing</div>
+                      <div className="title">Description</div>
                       <div className="description">Let the world know more about your listing</div>
                     </div>
                   </a>
@@ -37,10 +97,7 @@ class ListDeal extends Component {
           </div>
           <div className="deal-listing-content">
             <div className="deal-listing-shown-image-container">
-              <div>
-                <i class="fas fa-camera fa-7x"></i>
-                <p className="add-a-photo">Add a Photo</p>
-              </div>
+              {content()}
             </div>
             <div className="deal-listing-images">
               <div className="first-row">

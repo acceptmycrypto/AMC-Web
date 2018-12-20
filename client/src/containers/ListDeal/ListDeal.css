@@ -22,8 +22,12 @@
   cursor: pointer;
 }
 
-.add-a-photo {
+#uploading-image {
   text-align: center;
+}
+
+#uploading-image input[type=file] {
+  visibility: hidden;
 }
 
 .deal-listing-images {
