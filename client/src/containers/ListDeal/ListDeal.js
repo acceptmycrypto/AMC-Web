@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import "./ListDeal.css";
 import Layout from "../Layout"
 import { connect } from "react-redux";
+import {bindActionCreators} from 'redux';
+import { _uploadImage } from "../../actions/listDealActions";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
 
 class ListDeal extends Component {
@@ -12,58 +14,55 @@ class ListDeal extends Component {
   }
 
   onChange = e => {
-    const files = Array.from(e.target.files)
-    this.setState({ uploading: true })
+    const files = Array.from(e.target.files);
 
-    const formData = new FormData()
-
+    const formData = new FormData();
+    // formData.append('file', this.state.file[0]);
     files.forEach((file, i) => {
-      formData.append(i, file)
+      formData.append(i, file);
     })
 
-    return fetch("/image-upload", {
-      method: 'POST',
-      body: formData
-    })
-    .then(res => res.json())
-    .then(images => {
-      this.setState({
-        uploading: false,
-        images
-      })
-    })
+    this.props._uploadImage(formData);
+
+  }
+
+  content = () => {
+    const { uploading, uploadedImages } = this.props;
+    switch(true) {
+      case uploading:
+        return <LoadingSpinner />
+      case uploadedImages.length > 0:
+        return (
+          uploadedImages.map((image, i) => (
+            <img src={image.secure_url} alt='' />
+          ))
+        )
+      default:
+        return (
+          <div id="uploading-image">
+              <label htmlFor="photos-upload">
+                <div>
+                  <i class="fas fa-camera fa-7x"></i>
+                </div>
+                <div>
+                  <strong>Add a Photo</strong>
+                  <p>Images must be in PNG or JPG format and under 5mb</p>
+                </div>
+              </label>
+              <input type='file' id='photos-upload' onChange={this.onChange} multiple/>
+            </div>
+        )
+    }
   }
 
 
-  render () {
-    const { uploading, images } = this.state
 
-    const content = () => {
-      switch(true) {
-        case uploading:
-          return <LoadingSpinner />
-        case images.length > 0:
-          return (
-            this.state.images.map((image, i) => (
-              <img src={image.secure_url} alt='' />
-            ))
-          )
-        default:
-          return (
-            <div id="uploading-image">
-                <label htmlFor="photos-upload">
-                  <div>
-                    <i class="fas fa-camera fa-7x"></i>
-                  </div>
-                  <div>
-                    <strong>Add a Photo</strong>
-                    <p>Images must be in PNG or JPG format and under 5mb</p>
-                  </div>
-                </label>
-                <input type='file' id='photos-upload' onChange={this.onChange}/>
-              </div>
-          )
-      }
+  render () {
+
+    const { error } = this.state
+
+    if (error) {
+      return <div>Error! {error.message}</div>;
     }
 
     return (
@@ -97,7 +96,7 @@ class ListDeal extends Component {
           </div>
           <div className="deal-listing-content">
             <div className="deal-listing-shown-image-container">
-              {content()}
+              {this.content()}
             </div>
             <div className="deal-listing-images">
               <div className="first-row">
@@ -127,4 +126,15 @@ class ListDeal extends Component {
 
 }
 
-export default ListDeal;
+const mapStateToProps = state => ({
+  uploadedImages: state.UploadedImages.images,
+  uploading: state.UploadedImages.uploading,
+  error: state.UploadedImages.error,
+});
+
+const matchDispatchToProps = dispatch =>{
+  return bindActionCreators({ _uploadImage }, dispatch);
+}
+
+export default connect(mapStateToProps, matchDispatchToProps)(ListDeal);
+
