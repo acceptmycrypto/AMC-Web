@@ -14,15 +14,8 @@ import Aside from '../Aside';
 
 
 class SignIn extends Component {
-  constructor() {
-    super();
 
-
-    this.handleLogin = this.handleLogin.bind(this);
-  }
-
-
-  handleLogin(e) {
+  handleLogin = (e) => {
     e.preventDefault();
     let email = e.target.children[0].children[1].value;
     let password = e.target.children[1].children[1].value;
@@ -105,7 +98,7 @@ class SignIn extends Component {
 
               <Modal visible={visible} effect="fadeInLeft" onClickAway={() => {this.props.closeModal(); }}>
                 <div className="Modal">
-                  <h4>Your Your Email or Password was Invalid</h4>
+                  <h4>Your Email or Password was Invalid</h4>
                   <a className="a-link" href="javascript:void(0);" onClick={() => {this.props.closeModal(); }}>Ok</a>
 
                 </div>

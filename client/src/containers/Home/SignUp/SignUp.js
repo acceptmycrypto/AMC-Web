@@ -7,29 +7,21 @@ import { _signUp } from "../../../services/AuthService";
 import { connect } from "react-redux";
 import {bindActionCreators} from 'redux';
 import { _loadCryptocurrencies } from "../../../actions/loadCryptoActions";
-import { handleDropdownChange, openModal, closeModal } from "../../../actions/signUpActions";
+import { handleDropdownChange, openModal, closeModal, resetSelectedCryptos } from "../../../actions/signUpActions";
 
 import Footer from "../../../components/Layout/Footer";
 
 
 class SignUp extends Component {
-  constructor() {
-    super();
 
-
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  componentDidMount() {
+  componentDidMount =() => {
     this.props._loadCryptocurrencies();
   }
 
 
-
   //function to handle when user clicks submit button to register
-  handleSubmit(e) {
+  handleSubmit = (e) => {
     e.preventDefault();
-
 
     let username = e.target.children[0].children[1].value;
     let email = e.target.children[1].children[1].value;
@@ -38,23 +30,38 @@ class SignUp extends Component {
     console.log(this.props);
     console.log("crypto to submit:", cryptoProfile);
     let hasAgreed = e.target.children[4].children[0].children[0].checked;
-
-    //we add validation on the front end so that user has to enter in the required field before clicking submit
-    //TODO
-    if (username || email || password){
-      this.props.openModal();
-    }
     
-    if (!username || !email || !password) {
-      alert("Please enter in the required field!");
-    } else {
-      return _signUp(username, email, password, cryptoProfile).then(res => {
-        console.log("message sent from server if success: ", res);
-        
-        //TODO
-        //prompt users to check their email
-      });
+    if(cryptoProfile.length < 1){
+      document.querySelector("#selectCryptoError").innerHTML = "Select Cryptocurrencies";
+
+    }else{
+
+      if (!username || !email || !password) {
+        alert("Please enter in the required field!");
+      } else {
+        return _signUp(username, email, password, cryptoProfile).then(res => {
+          console.log("message sent from server if success: ", res);
+          if(res.emailError || res.usernameError || res.passwordError){
+            if(res.emailError){
+              document.querySelector("#emailError").innerHTML = res.emailError;
+            }
+            if(res.usernameError){
+              document.querySelector("#usernameError").innerHTML = res.usernameError;
+            }
+            if(res.passwordError){
+              document.querySelector("#passwordError").innerHTML = res.passwordError;            
+            }
+          }else{
+            this.props.openModal();
+            this.props.resetSelectedCryptos();
+          }
+        });
+      }
     }
+  }
+
+  clearErrorMessage = (id) =>{
+    document.querySelector(id).innerHTML = ""; 
   }
 
   render() {
@@ -121,7 +128,7 @@ class SignUp extends Component {
               <div className="FormField">
                 <div>
                     <label className="FormField__Label" htmlFor="username">
-                    User Name
+                    UserName
                     </label>
                 </div>
                 <input
@@ -130,8 +137,10 @@ class SignUp extends Component {
                   className="FormField__Input"
                   placeholder="Enter your desired User Name"
                   name="username"
+                  onChange={()=>{this.clearErrorMessage("#usernameError")}}
                   required
                 />
+                <div id="usernameError" class="mt-1 orangeText"></div>
               </div>
               <div className="FormField">
                 <div>
@@ -145,8 +154,10 @@ class SignUp extends Component {
                   className="FormField__Input"
                   placeholder="Enter your email"
                   name="email"
+                  onChange={()=>{this.clearErrorMessage("#emailError")}}
                   required
                 />
+                <div id="emailError" class="mt-1 orangeText"></div>
               </div>
               <div className="FormField">
                 <div>
@@ -160,8 +171,10 @@ class SignUp extends Component {
                   className="FormField__Input"
                   placeholder="Enter your password"
                   name="password"
+                  onChange={()=>{this.clearErrorMessage("#passwordError")}}
                   required
                 />
+                <div id="passwordError" class="mt-1 orangeText"></div>
               </div>
 
               <div className="FormField">
@@ -181,17 +194,18 @@ class SignUp extends Component {
                   autoBlur={false}
 
                 />
+                <div id="selectCryptoError" class="mt-1 orangeText"></div>
               </div>
 
               <div className="FormField">
                 <label className="FormField__CheckboxLabel">
                   <input
-                    className="FormField__Checkbox"
+                    className="FormField__Checkbox mr-2"
                     required
                     type="checkbox"
                     name="hasAgreed"
                   />
-                  I agree all statements in
+                  I agree to all statements in
                   <a href="#" className="FormField__TermsLink">
                     terms of service
                   </a>
@@ -233,7 +247,7 @@ const mapStateToProps = state => ({
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({openModal, closeModal, handleDropdownChange, _loadCryptocurrencies}, dispatch);
+  return bindActionCreators({openModal, closeModal, handleDropdownChange, _loadCryptocurrencies, resetSelectedCryptos}, dispatch);
 }
 
 

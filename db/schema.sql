@@ -31,7 +31,8 @@ CREATE TABLE venues (
 
 CREATE TABLE deals (
 	id INT NOT NULL AUTO_INCREMENT,
-	venue_id INT NOT NULL,
+	venue_id INT NULL, -- changed venue_id to NULL because as of now we we have seeds with venue_id that reference the vendors
+	seller_id INT NULL, -- added this to reference users who choose to be sellers, a deal item will either have a venue_id or a seller_id
 	deal_name VARCHAR(255) NOT NULL,
 	deal_description VARCHAR(255) NOT NULL,
   	featured_deal_image VARCHAR(255) NOT NULL,
@@ -39,9 +40,11 @@ CREATE TABLE deals (
 	pay_in_crypto DECIMAL(10, 2) NOT NULL,
 	date_expired DATETIME NULL,
 	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  	category VARCHAR(255) NULL,
+  	category VARCHAR(255) NULL, -- we need to take this out eventually
+	condition VARCHAR (255) NULL,
 	PRIMARY KEY (id),
-	FOREIGN KEY (venue_id) REFERENCES venues(id)
+	FOREIGN KEY (venue_id) REFERENCES venues(id),
+	FOREIGN KEY (seller_id) REFERENCES users(id)
 );
 
 CREATE TABLE deal_images (
@@ -51,6 +54,62 @@ CREATE TABLE deal_images (
 	PRIMARY KEY (id),
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
+
+CREATE TABLE category ( 
+	id INT NOT NULL AUTO_INCREMENT,
+	category_name VARCHAR(100) NOT NULL,
+	PRIMARY KEY (id)
+);
+
+-- many to many relationship table
+CREATE TABLE parent_child_categories(
+	parent_category_id INT NOT NULL,
+	child_category_id INT NOT NULL,
+	FOREIGN KEY (parent_category_id) REFERENCES category(id),
+	FOREIGN KEY (child_category_id) REFERENCES category(id)
+);
+
+-- many to many relationship table
+CREATE TABLE categories_deals(
+	category_id INT NOT NULL,
+	deals_id INT NOT NULL,
+	FOREIGN KEY (category_id) REFERENCES category(id),
+	FOREIGN KEY (deals_id) REFERENCES deals(id)
+);
+
+--table to be used in the future
+-- custom options to be displayed when user is listing an item to sell eg. size, color, model etc based on the categoryies of the item
+-- CREATE TABLE customizable_option(
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	custom_option_name VARCHAR(100) NOT NULL,
+-- 	PRIMARY KEY (id)
+-- );
+
+--table to be used in the future
+-- many to many relationship table
+-- CREATE TABLE categories_customizable_options(
+-- 	category_id INT NOT NULL,
+-- 	custom_option_id INT NOT NULL,
+-- 	FOREIGN KEY (category_id) REFERENCES category(id),
+-- 	FOREIGN KEY (custom_option_id) REFERENCES customizable_option(id)
+-- );
+
+--table to be used in the future
+-- CREATE TABLE hashtag ( 
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	hashtag_name VARCHAR(100) NOT NULL,
+-- 	PRIMARY KEY (id)
+-- );
+
+--table to be used in the future
+-- -- many to many relationship table
+-- CREATE TABLE hashtags_deals(
+-- 	hashtag_id INT NOT NULL,
+-- 	deals_id INT NOT NULL,
+-- 	FOREIGN KEY (hashtag_id) REFERENCES hashtag(id),
+-- 	FOREIGN KEY (deals_id) REFERENCES deals(id)
+-- );
+
 
 -- create a junction table for many-to-many association
 CREATE TABLE cryptos_venues (
@@ -219,3 +278,79 @@ CREATE TABLE notifications (
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
 
+--table to be used in the future
+CREATE TABLE buyers_reviews_deals (
+	id INT NOT NULL AUTO_INCREMENT,
+	buyer_id INT NOT NULL,
+	deal_id INT NOT NULL,
+	title VARCHAR (255) NOT NULL,
+	body TEXT NULL,
+  	date_reviewed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	rating INT NOT NULL DEFAULT 0,
+	verified_purchase BOOLEAN NOT NULL DEFAULT FALSE,
+	likes INT DEFAULT 0,
+	dislikes INT DEFAULT 0,
+	helpful_review INT DEFAULT 0,
+	display_review BOOLEAN NOT NULL DEFAULT FALSE,
+	PRIMARY KEY (id),
+	FOREIGN KEY (buyer_id) REFERENCES users(id),
+	FOREIGN KEY (deal_id) REFERENCES deals(id)
+);
+
+--table to be used in the future
+-- many to many relationship table
+CREATE TABLE parents_children_deals_reviews(
+	review_parent_id INT NOT NULL,
+	review_child_id INT NOT NULL,
+	FOREIGN KEY (review_parent_id) REFERENCES buyers_reviews_deals(id),
+	FOREIGN KEY (review_child_id) REFERENCES buyers_reviews_deals(id)
+);
+
+CREATE TABLE buyers_reviews_sellers(
+	id INT NOT NULL AUTO_INCREMENT,
+	buyer_id INT NOT NULL,
+	seller_id INT NOT NULL,
+	deal_id INT NOT NULL,
+	rating INT NOT NULL DEFAULT 0,
+	body TEXT NULL,
+	date_reviewed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	display_review BOOLEAN NOT NULL DEFAULT FALSE,
+	PRIMARY KEY (id),
+	FOREIGN KEY (buyer_id) REFERENCES users(id),
+	FOREIGN KEY (seller_id) REFERENCES users(id),
+	FOREIGN KEY (deal_id) REFERENCES deals(id)
+);
+
+-- may not need this table if we have the flagged users table
+-- CREATE TABLE sellers_reviews_buyers(
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	buyer_id INT NOT NULL,
+-- 	seller_id INT NOT NULL,
+-- 	rating INT NOT NULL DEFAULT 0,
+-- 	body TEXT NULL,
+-- 	date_reviewed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+-- 	PRIMARY KEY (id),
+-- 	FOREIGN KEY (buyer_id) REFERENCES users(id),
+-- 	FOREIGN KEY (seller_id) REFERENCES users(id)
+-- );
+
+-- venue can report another venue, venue can report a user, user can report another user, and user can report a venue
+CREATE TABLE flagged_users(
+	id INT NOT NULL AUTO_INCREMENT,
+	user_id INT NULL,
+	venue_id INT NULL,
+	user_reporter INT NULL,
+	venue_reporter INT NULL,
+	deal_id INT NULL,
+	review_id INT NULL,
+	txn_id VARCHAR(255) NULL,
+	reason VARCHAR(255) NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (user_id) REFERENCES users(id),
+	FOREIGN KEY (venue_id) REFERENCES venues(id),
+	FOREIGN KEY (user_reporter) REFERENCES users(id),
+	FOREIGN KEY (venue_reporter) REFERENCES venues(id),
+	FOREIGN KEY (deal_id) REFERENCES deals(id),
+	FOREIGN KEY (review_id) REFERENCES buyers_reviews_deals(id),
+	FOREIGN KEY (txn_id) REFERENCES users_purchases(txn_id)
+);
