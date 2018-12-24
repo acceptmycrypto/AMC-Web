@@ -58,7 +58,7 @@ var transactionsRoutes = require("./routes/transactions.js");
 var cryptosRankingRoutes = require("./routes/cryptos_ranking.js");
 var notificationRoutes = require("./routes/cryptos_ranking.js");
 var settingsRoutes = require("./routes/settings.js");
-
+var reviewRoutes = require("./routes/reviews.js");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -89,6 +89,7 @@ app.use("/", transactionsRoutes);
 app.use("/", cryptosRankingRoutes);
 app.use("/", notificationRoutes);
 app.use("/", settingsRoutes);
+app.use("/", reviewRoutes);
 
 path.join(__dirname, "public");
 
