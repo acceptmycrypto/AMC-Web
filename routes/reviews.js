@@ -7,7 +7,7 @@ var methodOverride = require('method-override');
 var bodyParser = require('body-parser');
 
 var verifyToken = require("./utils/validation");
-
+// var async = require("async");
 //for login/logout (authentication)
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
@@ -98,20 +98,20 @@ router.post('/review/buyer/:user_id', verifyToken, function (req, res) { //need 
 router.post('/review/seller/:user_id', verifyToken, function (req, res) { //need to think of better route name
     let buyer_id = req.decoded._id;
     let seller_id = req.params.user_id;
-    let pass = languageFilter(req.body.body);
+    let languagePass = true; //languageFilter(req.body.body);
     //
-    if(pass)
+    if(languagePass)
     {
         connection.query(
             'INSERT INTO buyers_reviews_sellers (buyer_id, deal_id, seller_id, rating, body, display_review) VALUES (?,?,?,?,?,?);',
-            [req.decoded.id,req.body.deal_id,seller_id,req.body.rating,req.body.body,'1'],
+            [buyer_id,req.body.deal_id,seller_id,req.body.rating,req.body.body,'1'],
             function(error, response ,fields){
                 if (error) throw error;
-                //run a check of the body for language acceptance
+                
           
                 //then update deals table with avg rating and num ratings  
 
-                res.status(200).json({"success": true});  
+                res.status(200).json({success: true, message: "review accepted"});  
             });
         
     }
@@ -122,9 +122,8 @@ router.post('/review/seller/:user_id', verifyToken, function (req, res) { //need
             [req.decoded.id,req.body.deal_id,seller_id,req.body.rating,req.body.body,'0'],
             function(error, response ,fields){
                 if (error) throw error;
-                //run a check of the body for language acceptance
-          
-                //then update deals table with avg rating and num ratings    
+                
+                res.status(200).json({success: true, message: "review under review"});    
             });
 
     }
@@ -133,21 +132,60 @@ router.post('/review/seller/:user_id', verifyToken, function (req, res) { //need
 
 //route for getting the seller's rating
 //maybe actually make this a function that can be called on load deals or loading of individual deals
-router.get('/review/user/:user_id', verifyToken, function (req, res) {
+router.get('/review/user/:user_id', (req, res) => {
+    console.log("hitting route");
     //deals table has seller id, average ratings of everything in buyers reviews sellers to get the rating of seller
     //buyers reviews sellers also need a display_review column
     let seller_id = req.params.user_id;
-    //query below gets specified seller rating based on user id
-    connection.query('SELECT buyers_reviews_sellers.seller_id, buyers_reviews_sellers.buyer_id, buyers_reviews_sellers.rating, buyers_reviews_sellers.body, ROUND(AVG(buyers_reviews_sellers.rating),1) AS Average_Rating FROM buyers_reviews_sellers WHERE seller_id = ?',[seller_id], function (error, response, fields){
+    let reviews, avg_rating;
+    sellerReviewAggregate(seller_id, function(result){
+        reviews = result;
+        sellerScoreAggregate(seller_id, function(result){
+            avg_rating = result;
+            res.json({reviews, avg_rating});
+        }); 
+    });
+//     try{
+//         let results = await sellerReviewAggregate(seller_id);
+//         console.log('supposed to be here: ' + results);
+//         res.json(results);
+//     }
+//    catch(e){
+//        throw e;
+//    }
+//    res.send('hi');
+
+
+});
+
+sellerReviewAggregate = (user, callback) => {
+    // console.log(res);
+        // let result;
+            connection.query('SELECT * FROM buyers_reviews_sellers WHERE seller_id = ?',[user], function (error, response, fields){
+                if(error) throw error;
+                //add deal id
+                //join deals table 
+                //join user table to get buyer name
+                // console.log('response: ' + response);
+                return callback(response);
+            });
+      
+    // res.json(result);
+};
+
+sellerScoreAggregate = (user, callback) => {
+    connection.query('SELECT ROUND(AVG(buyers_reviews_sellers.rating),1) AS Average_Rating  FROM buyers_reviews_sellers WHERE seller_id = ?',[user], function (error, response, fields){
+        if(error) throw error;
         //add deal id
         //join deals table 
         //join user table to get buyer name
-    });
-});
+        // console.log(response);
 
-reviewAggregate = (user) => {
-    
-}
+        return callback(response);
+    });
+};
+
+
 
 
 languageFilter = (arg) => {
@@ -177,3 +215,5 @@ languageFilter = (arg) => {
 
 //users should be led to our sites as often as possible
 //  - 
+
+module.exports = router;
