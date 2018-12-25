@@ -59,8 +59,9 @@ router.get('/api/deals/:id/:deal_name', function (req, res) {
   let venue_name;
   let seller_name;
 
+  // specify specific column names rather than * because don't want to select all users (seller) info
   connection.query(
-    'SELECT * FROM deals LEFT JOIN deal_images ON deals.id = deal_images.deal_id LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN users ON deals.seller_id = users.id WHERE deals.id = ?',
+    'SELECT deals.id AS deal_id, deals.venue_id, deals.seller_id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, deal_images.deal_image, venues.id AS venues_id, venues.venue_name, venues.venue_description, venues.venue_link, venues.accepted_crypto, users.id AS seller_id, users.username AS seller_name FROM deals LEFT JOIN deal_images ON deals.id = deal_images.deal_id LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN users ON deals.seller_id = users.id WHERE deals.id = ?',
     [req.params.id],
     function (error, deal_images_result, fields) {
 
@@ -85,7 +86,7 @@ router.get('/api/deals/:id/:deal_name', function (req, res) {
       //assign the venue name to the variable venue_name that we defined earlier
       venue_name = newDealItem[0].venue_name;
 
-      seller_name = newDealItem[0].username;
+      seller_name = newDealItem[0].seller_name;
 
       console.log("venue_name", venue_name);
       console.log("seller_name", seller_name);
