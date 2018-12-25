@@ -53,14 +53,15 @@ router.post('/api/deals', verifyToken, function (req, res) {
 });
 
 //get a deal_item api
-router.get('/api/deals/:deal_name', function (req, res) {
+// include id param which references the deal id in route to account for if multiple users sell item with same deal_name 
+router.get('/api/deals/:id/:deal_name', function (req, res) {
   //important! we set this venue name a here so it's available to be used for crytoAccept list querry
   let venue_name;
   let seller_name;
 
   connection.query(
-    'SELECT * FROM deals LEFT JOIN deal_images ON deals.id = deal_images.deal_id LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN users ON deals.seller_id = users.id WHERE ?',
-    [req.params],
+    'SELECT * FROM deals LEFT JOIN deal_images ON deals.id = deal_images.deal_id LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN users ON deals.seller_id = users.id WHERE deals.id = ?',
+    [req.params.id],
     function (error, deal_images_result, fields) {
 
       console.log(deal_images_result);
