@@ -15,6 +15,7 @@ import { _updateCryptoTable, _verifyUser } from "../../../services/UserProfileSe
 import { _loadProfile } from "../../../actions/userLoadActions";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
 import { handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos } from "../../../actions/cryptoPortfolioActions";
+import { resetDealitemState } from "../../../actions/dealItemActions";
 
 
 
@@ -48,6 +49,9 @@ class UserProfile extends Component {
     // if (loading) {
     //   return <div>Loading...</div>;
     // }
+
+    //reset dealItem state when user hit deals route
+    this.props.resetDealitemState();
 
   
 
@@ -107,7 +111,7 @@ const mapStateToProps = state => ({
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({_isLoggedIn, _loadProfile, handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos}, dispatch);
+  return bindActionCreators({_isLoggedIn, _loadProfile, handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos, resetDealitemState}, dispatch);
 }
 
 
