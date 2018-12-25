@@ -5,7 +5,7 @@ var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var verifyToken =  require ("./utils/validation");
-
+var sellerScoreAgg = require("/reviews");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('public'));
@@ -104,6 +104,7 @@ router.get('/api/deals/:deal_name', function(req, res) {
             venue.push(acceptedCrypto);
           }
           newDealItem.push(venue);
+          
           res.json(newDealItem);
         }
       );
