@@ -30,8 +30,8 @@ class DealItem extends Component {
     await this.props._isLoggedIn(localStorage.getItem('token'));
 
     if (await this.props.userLoggedIn) {
-      const { deal_name } = await this.props.match.params;
-      await this.props._loadDealItem(deal_name);
+      const { deal_name, id } = await this.props.match.params;
+      await this.props._loadDealItem(id, deal_name);
 
     }else{
         // localStorage.removeItem('token');

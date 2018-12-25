@@ -72,7 +72,7 @@ class Deals extends Component {
           <div id="right" className="grid mx-4">
             {deals != undefined && deals.length > 0 && deals.map(deal => (
               <div key={deal.id} className="deal">
-                <Link to={`/feed/deals/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
+                <Link to={`/feed/deals/${deal.id}/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
 
                     <div className="deal-info">
                       <img className="deal-image" src={deal.featured_deal_image} alt="deal"/>
