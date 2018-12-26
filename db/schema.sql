@@ -42,7 +42,7 @@ CREATE TABLE deals (
 	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   	category VARCHAR(255) NULL, -- we need to take this out eventually
 	item_condition VARCHAR (255) NULL,
-	deal_rating FLOAT(4,2) NULL,
+	deal_rating FLOAT(3,2) NULL,
 	total_deal_ratings INT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (venue_id) REFERENCES venues(id),
