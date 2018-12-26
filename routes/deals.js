@@ -153,6 +153,23 @@ router.get('/api/deals/:id/:deal_name', function (req, res) {
     }
   );
 
+  
+// load all reviews of the seller
+router.get('/api/reviews/sellers/:seller_id', function (req, res) {
+  
+  
+    connection.query(
+      'SELECT seller.id AS seller_id, seller.username AS seller_name, seller.sellers_avg_rating, seller.total_sellers_ratings, buyer.username AS buyer_name, deals.deal_name FROM users seller LEFT JOIN buyers_reviews_sellers ON buyers_reviews_sellers.seller_id = seller.id LEFT JOIN users buyer ON buyers_reviews_sellers.buyer_id = buyer.id LEFT JOIN deals ON deals.id = buyers_reviews_sellers.deal_id LEFT JOIN users_purchases ON  WHERE seller.id = ? AND buyers_reviews_sellers.display_review = 1',
+      [req.params.seller_id],
+      function (error, results, fields) {
+        if (error) console.log(error);
+        res.json(results);
+
+      }
+    );
+});
+
+
   //get the accepted cryptos from a venue
   // router.get('/api/deals/venue_name', function(req, res) {
   //   connection.query(
