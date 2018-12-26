@@ -30,8 +30,8 @@ class DealItem extends Component {
     await this.props._isLoggedIn(localStorage.getItem('token'));
 
     if (await this.props.userLoggedIn) {
-      const { deal_name } = await this.props.match.params;
-      await this.props._loadDealItem(deal_name);
+      const { deal_name, id } = await this.props.match.params;
+      await this.props._loadDealItem(id, deal_name);
 
     }else{
         // localStorage.removeItem('token');
@@ -258,8 +258,9 @@ class DealItem extends Component {
               <div className="deal-item-header">
                 <div className="deal-item-name">
                   <strong>{dealItem && dealItem.deal_name}</strong> <br/>
-                  <small> Offered By: {dealItem && dealItem.venue_name}</small> <br/>
+                  <small> Offered By: {dealItem && dealItem.venue_name || dealItem && dealItem.seller_name}</small> <br/>
                   <small> Seller's Rating: <i class="fa fa-star" aria-hidden="true"></i> </small>
+                 
                 </div>
                 <div className="deal-item-cost">
                   <strong>Pay in Crypto:  ${dealItem && dealItem.pay_in_crypto.toFixed(2)}</strong>  <small className="deal-item-discount">

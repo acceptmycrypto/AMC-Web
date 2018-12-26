@@ -1,4 +1,4 @@
-export function _loadDealItem(deal_name) {
+export function _loadDealItem(id, deal_name) {
   const settings = {
     method: "GET",
     headers: {
@@ -9,7 +9,7 @@ export function _loadDealItem(deal_name) {
 
   return dispatch => {
     dispatch(fetchDealItemBegin());
-    return fetch(`/api/deals/${deal_name}`, settings)
+    return fetch(`/api/deals/${id}/${deal_name}`, settings)
       .then(res => res.json())
       .then(jsonPhoto => {
         dispatch(fetchDealItemSuccess(jsonPhoto));

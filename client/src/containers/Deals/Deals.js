@@ -72,14 +72,16 @@ class Deals extends Component {
           <div id="right" className="grid mx-4">
             {deals != undefined && deals.length > 0 && deals.map(deal => (
               <div key={deal.id} className="deal">
-                <Link to={`/feed/deals/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
+                <Link to={`/feed/deals/${deal.id}/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
 
                     <div className="deal-info">
                       <img className="deal-image" src={deal.featured_deal_image} alt="deal"/>
                       <div className="mt-1">{deal.deal_name}</div>
                       <small className="deal-description">{this.handleLongDescription(deal.deal_description)}</small>
-                      <div><small>Offered by: {deal.venue_name}</small></div>
+                      {/* if seller is a vendor then display the venue name else if seller is a user then display the seller name which is the user's username */}
+                      <div><small>Offered by: {deal.venue_name || deal.seller_name}</small></div>
                       <div><small> Seller's Rating: <i class="fa fa-star" aria-hidden="true"></i> </small></div>
+                      
                     </div>
 
                     <div className="deal-price">

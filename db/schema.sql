@@ -57,8 +57,10 @@ CREATE TABLE deals (
 	pay_in_crypto DECIMAL(10, 2) NOT NULL,
 	date_expired DATETIME NULL,
 	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  	category VARCHAR(255) NULL,
-	deal_condition VARCHAR (255) NULL,
+  	category VARCHAR(255) NULL, -- we need to take this out eventually
+	item_condition VARCHAR (255) NULL,
+	deal_avg_rating FLOAT(3,2) NULL,
+	total_deal_ratings INT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (venue_id) REFERENCES venues(id),
 	FOREIGN KEY (seller_id) REFERENCES users(id)
@@ -131,6 +133,15 @@ CREATE TABLE cryptos_venues (
 	PRIMARY KEY (crypto_id, venue_id),
 	FOREIGN KEY (crypto_id)  REFERENCES crypto_metadata(id),
 	FOREIGN KEY (venue_id) REFERENCES venues(id)
+);
+
+-- create a junction table for many-to-many association
+CREATE TABLE cryptos_sellers (
+	crypto_id INT NOT NULL,
+	seller_id INT NOT NULL,
+	PRIMARY KEY (crypto_id, seller_id),
+	FOREIGN KEY (crypto_id)  REFERENCES crypto_metadata(id),
+	FOREIGN KEY (seller_id) REFERENCES users(id)
 );
 
 CREATE TABLE userInput (
@@ -309,7 +320,11 @@ CREATE TABLE buyers_reviews_sellers(
 	seller_id INT NOT NULL,
 	deal_id INT NOT NULL,
 	rating INT NOT NULL DEFAULT 0,
+	title VARCHAR (255) NOT NULL,
 	body TEXT NULL,
+	likes INT DEFAULT 0,
+	dislikes INT DEFAULT 0,
+	helpful_review INT DEFAULT 0,
 	date_reviewed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	display_review BOOLEAN NOT NULL DEFAULT FALSE,
 	PRIMARY KEY (id),

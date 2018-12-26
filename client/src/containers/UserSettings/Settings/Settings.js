@@ -10,8 +10,9 @@ import PrivacySettings from "../PrivacySettings";
 import CryptocurrencySettings from "../CryptocurrencySettings";
 import TransactionsSettings from "../TransactionsSettings";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
-
 import { setInitialSettingsState, handleSettingsMenuItemClick } from "../../../actions/settingsActions";
+import { resetDealitemState } from "../../../actions/dealItemActions";
+
 
 
 
@@ -38,6 +39,9 @@ class Settings extends Component {
         if (error) {
             return <div>Error! {error.message}</div>;
         }
+
+            //reset dealItem state when user hit deals route
+            this.props.resetDealitemState();
 
         return (
 
@@ -93,7 +97,7 @@ const mapStateToProps = state => ({
 
 const matchDispatchToProps = dispatch => {
 
-    return bindActionCreators({ setInitialSettingsState, _isLoggedIn, handleSettingsMenuItemClick }, dispatch);
+    return bindActionCreators({ setInitialSettingsState, _isLoggedIn, handleSettingsMenuItemClick, resetDealitemState }, dispatch);
 
 }
 
