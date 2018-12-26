@@ -121,7 +121,7 @@ router.get('/api/deals/:id/:deal_name', function (req, res) {
         );
 
       }
-      else{
+      else {
         connection.query(
           'SELECT * FROM cryptos_sellers LEFT JOIN users ON users.id = cryptos_sellers.seller_id LEFT JOIN crypto_metadata ON crypto_metadata.id = cryptos_sellers.crypto_id LEFT JOIN crypto_info ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE users.username = ?',
           [seller_name],
@@ -153,32 +153,56 @@ router.get('/api/deals/:id/:deal_name', function (req, res) {
     }
   );
 
-  
-// load all reviews of a particular seller
-router.get('/api/reviews/sellers/:seller_id', function (req, res) {
-  console.log(req.params.seller_id);
-  console.log(req.query.order);
-  let order_by;
-  if(req.query.order == "rating" && req.query.direction == "desc"){
-      order_by = "ORDER BY buyers_reviews_sellers.rating DESC";
-  }else if(req.query.order == "rating"){
-    order_by = "ORDER BY buyers_reviews_sellers.rating";
-  }else{
-    order_by = "ORDER BY buyers_reviews_sellers.date_reviewed";
-  }
 
-  console.log("order by" , order_by);
+  // load all reviews of a particular seller
+  router.get('/api/reviews/sellers/:seller_id', function (req, res) {
+    console.log(req.params.seller_id);
+    console.log(req.query.order);
+    let order_by = "";
+    let where_rating = "";
+    if (req.query.order == "rating" && req.query.direction == "desc") {
+      order_by = "ORDER BY buyers_reviews_sellers.rating DESC";
+    } else if (req.query.order == "rating") {
+      order_by = "ORDER BY buyers_reviews_sellers.rating";
+    } else {
+      order_by = "ORDER BY buyers_reviews_sellers.date_reviewed";
+    }
+
+    if(req.query.select_rating == "5"){
+        where_rating = "AND buyers_reviews_sellers.rating = 5 "
+    } else if(req.query.select_rating == "4"){
+      where_rating = "AND buyers_reviews_sellers.rating = 4 "
+    }else if(req.query.select_rating == "3"){
+      where_rating = "AND buyers_reviews_sellers.rating = 3 "
+    }else if(req.query.select_rating == "2"){
+      where_rating = "AND buyers_reviews_sellers.rating = 2 "
+    }else if(req.query.select_rating == "1"){
+      where_rating = "AND buyers_reviews_sellers.rating = 1 "
+    }
+
+
     connection.query(
-      'SELECT DISTINCT seller.id AS seller_id, seller.username AS seller_name, seller.sellers_avg_rating, seller.total_sellers_ratings, buyer.username AS buyer_name, deals.deal_name, users_purchases.payment_received AS verified_purchase, buyers_reviews_sellers.id AS review_id, buyers_reviews_sellers.rating, buyers_reviews_sellers.title AS rating_title, buyers_reviews_sellers.body AS rating_body, buyers_reviews_sellers.likes AS rating_likes, buyers_reviews_sellers.dislikes AS rating_dislikes, buyers_reviews_sellers.helpful_review AS rating_helpful_review, buyers_reviews_sellers.date_reviewed AS rating_date_reviewed FROM users seller LEFT JOIN buyers_reviews_sellers ON buyers_reviews_sellers.seller_id = seller.id LEFT JOIN users buyer ON buyers_reviews_sellers.buyer_id = buyer.id LEFT JOIN deals ON deals.id = buyers_reviews_sellers.deal_id LEFT JOIN users_purchases ON users_purchases.deal_id = buyers_reviews_sellers.deal_id WHERE buyers_reviews_sellers.display_review = 1 AND seller.id = ?' + order_by,
+      'SELECT DISTINCT seller.id AS seller_id, seller.username AS seller_name, seller.sellers_avg_rating, seller.total_sellers_ratings, buyer.username AS buyer_name, deals.deal_name, users_purchases.payment_received AS verified_purchase, buyers_reviews_sellers.id AS review_id, buyers_reviews_sellers.rating, buyers_reviews_sellers.title AS rating_title, buyers_reviews_sellers.body AS rating_body, buyers_reviews_sellers.likes AS rating_likes, buyers_reviews_sellers.dislikes AS rating_dislikes, buyers_reviews_sellers.helpful_review AS rating_helpful_review, buyers_reviews_sellers.date_reviewed AS rating_date_reviewed FROM users seller LEFT JOIN buyers_reviews_sellers ON buyers_reviews_sellers.seller_id = seller.id LEFT JOIN users buyer ON buyers_reviews_sellers.buyer_id = buyer.id LEFT JOIN deals ON deals.id = buyers_reviews_sellers.deal_id LEFT JOIN users_purchases ON users_purchases.deal_id = buyers_reviews_sellers.deal_id WHERE buyers_reviews_sellers.display_review = 1 AND seller.id = ?' + where_rating + order_by,
       [req.params.seller_id],
       function (error, allReviewResults, fields) {
         if (error) console.log(error);
+
+
         
-        res.json(allReviewResults);
+        connection.query(
+          'SELECT rating, COUNT(rating) as num_ratings FROM buyers_reviews_sellers WHERE seller_id = ? GROUP BY rating ORDER BY rating',
+          [req.params.seller_id],
+          function (error, categorizeResults, fields) {
+            if (error) console.log(error);
+
+            res.json({allReviews: allReviewResults, ratingCategories: categorizeResults});
+
+          }
+        );
 
       }
     );
-});
+  });
 
 
   //get the accepted cryptos from a venue
