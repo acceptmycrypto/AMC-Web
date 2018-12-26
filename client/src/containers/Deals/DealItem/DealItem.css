@@ -119,6 +119,9 @@
   margin-bottom: 10px;
 }
 
+.rating{
+  color: yellow;
+}
 /*
 /* stop default stiling of ol */
 /* ol.progtrckr {

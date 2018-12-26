@@ -173,6 +173,60 @@ class DealItem extends Component {
 
     return errMsgs;
   }
+  ratingDisplay = (rating) => {
+    let star = <i class="rating fa fa-star" aria-hidden="true"></i>;
+    let halfStar = <i class="rating fas fa-star-half-alt"></i>;
+    let emptyStar = <i class="rating far fa-star" aria-hidden="true"></i>;
+    let result = [];
+    if(rating%1 == 0)
+    {
+      for (let i = 1; i <= 5; i++)
+      {
+        if(i<=rating)
+        {
+          result.push(star);
+        }
+        else
+        {
+          result.push(emptyStar);
+        }
+      }
+    }
+    else
+    {
+        let rem = rating%1;
+        let baseRating = Math.floor(rating);
+        for(let i = 0; i < 5; i++)
+        {
+          if(i <= rating)
+          {
+            if(i !== baseRating)
+            {
+              result.push(star);
+            }
+            else if(i == baseRating && rem<=0.25) //this might not be quite right
+            {
+              result.push(halfStar);
+            }
+            else if(i == baseRating && rem>0.25 && rem<0.75)
+            {
+              result.push(halfStar);
+            }
+            else
+            {
+              result.push(star);
+            }
+            
+          }
+          else
+          {
+              result.push(emptyStar);
+          }
+        }
+        
+    }
+    return result;
+  };
 
   render() {
     const { //state
@@ -259,7 +313,7 @@ class DealItem extends Component {
                 <div className="deal-item-name">
                   <strong>{dealItem && dealItem.deal_name}</strong> <br/>
                   <small> Offered By: {dealItem && dealItem.venue_name || dealItem && dealItem.seller_name}</small> <br/>
-                  <small> Seller's Rating: <i class="fa fa-star" aria-hidden="true"></i> </small>
+                  <small> Seller's Rating: {dealItem && dealItem.sellers_avg_rating && this.ratingDisplay(dealItem.sellers_avg_rating)} {dealItem && dealItem.sellers_avg_rating && dealItem.sellers_avg_rating.toFixed(1)} {dealItem && !dealItem.sellers_avg_rating && 'N/A'} out of 5 stars </small>
                  
                 </div>
                 <div className="deal-item-cost">
