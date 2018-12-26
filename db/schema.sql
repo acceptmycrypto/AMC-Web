@@ -42,7 +42,7 @@ CREATE TABLE deals (
 	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   	category VARCHAR(255) NULL, -- we need to take this out eventually
 	item_condition VARCHAR (255) NULL,
-	deal_rating FLOAT(3,2) NULL,
+	deal_avg_rating FLOAT(3,2) NULL,
 	total_deal_ratings INT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (venue_id) REFERENCES venues(id),
@@ -168,6 +168,8 @@ CREATE TABLE users(
 	previous_email VARCHAR(100) NULL UNIQUE,
 	password VARCHAR(255) NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	sellers_avg_rating FLOAT(3,2) NULL,
+	total_sellers_ratings INT NULL,
 	PRIMARY KEY (id)
 );
 
