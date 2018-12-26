@@ -79,6 +79,7 @@ class Deals extends Component {
                       <div className="mt-1">{deal.deal_name}</div>
                       <small className="deal-description">{this.handleLongDescription(deal.deal_description)}</small>
                       <div><small>Offered by: {deal.venue_name}</small></div>
+                      <div><small> Seller's Rating: <i class="fa fa-star" aria-hidden="true"></i> </small></div>
                     </div>
 
                     <div className="deal-price">

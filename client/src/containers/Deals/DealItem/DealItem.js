@@ -259,7 +259,7 @@ class DealItem extends Component {
                 <div className="deal-item-name">
                   <strong>{dealItem && dealItem.deal_name}</strong> <br/>
                   <small> Offered By: {dealItem && dealItem.venue_name}</small> <br/>
-                  <small> Seller's Rating: </small>
+                  <small> Seller's Rating: <i class="fa fa-star" aria-hidden="true"></i> </small>
                 </div>
                 <div className="deal-item-cost">
                   <strong>Pay in Crypto:  ${dealItem && dealItem.pay_in_crypto.toFixed(2)}</strong>  <small className="deal-item-discount">

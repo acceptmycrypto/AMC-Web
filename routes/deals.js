@@ -5,7 +5,7 @@ var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var verifyToken =  require ("./utils/validation");
-var sellerScoreAgg = require("/reviews");
+var sellerScoreAgg = require("./reviews");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('public'));
@@ -40,7 +40,7 @@ router.post('/api/deals', verifyToken, function(req, res) {
 
       // 3) query the deals that offered by those venues
         connection.query(
-          'SELECT deals.id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.category, deals.avg_rating, deals.num_ratings, venues.venue_name, venues.venue_link FROM deals LEFT JOIN venues ON deals.venue_id = venues.id WHERE venue_id IN (SELECT DISTINCT venue_id FROM cryptos_venues WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos WHERE user_id = ?))',
+          'SELECT deals.id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.category, venues.venue_name, venues.venue_link FROM deals LEFT JOIN venues ON deals.venue_id = venues.id WHERE venue_id IN (SELECT DISTINCT venue_id FROM cryptos_venues WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos WHERE user_id = ?))',
           [id],
           function(error, results, fields) {
             if (error) console.log(error);
@@ -104,7 +104,6 @@ router.get('/api/deals/:deal_name', function(req, res) {
             venue.push(acceptedCrypto);
           }
           newDealItem.push(venue);
-          
           res.json(newDealItem);
         }
       );

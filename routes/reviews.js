@@ -173,7 +173,7 @@ sellerReviewAggregate = (user, callback) => {
     // res.json(result);
 };
 
-export const sellerScoreAggregate = (user, callback) => {
+sellerScoreAggregate = (user, callback) => {
     connection.query('SELECT ROUND(AVG(buyers_reviews_sellers.rating),1) AS Average_Rating  FROM buyers_reviews_sellers WHERE seller_id = ?',[user], function (error, response, fields){
         if(error) throw error;
         //add deal id
