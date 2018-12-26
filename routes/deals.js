@@ -88,8 +88,6 @@ router.get('/api/deals/:id/:deal_name', function (req, res) {
 
       seller_name = newDealItem[0].seller_name;
 
-      console.log("venue_name", venue_name);
-      console.log("seller_name", seller_name);
 
       if (venue_name !== null) {
         //query the acceptedCryptos list from the given venue
