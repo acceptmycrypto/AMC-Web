@@ -1,32 +1,32 @@
-// multer: middleware for handling data files. Primarily used for uploading files.
-// multer-s3: multer extension for an easy file upload to Amazon S3 service.
 // aws-sdk: necessary package to work with AWS(Amazon Web Services). In our case S3 service.
+// bluebird:  fully featured promise library with focus on innovative features and performance
 
-const multer = require('multer');
-const multerS3 = require('multer-s3');
-const aws = require('aws-sdk');
+const AWS = require('aws-sdk');
+const bluebird = require('bluebird');
 
-aws.config.update({
-    secretAccessKey: process.env.AMAZON_SECRET_ACCESS_KEY,
-    accessKeyId: process.env.AMAZON_ACCESS_KEY_ID,
-    region: 'us-west-1' // region of your bucket
+// configure the keys for accessing AWS
+AWS.config.update({
+  secretAccessKey: process.env.AMAZON_SECRET_ACCESS_KEY,
+  accessKeyId: process.env.AMAZON_ACCESS_KEY_ID,
+  region: 'us-west-1' // region of your bucket
 });
 
-const s3 = new aws.S3();
+// configure AWS to work with promises
+AWS.config.setPromisesDependency(bluebird);
 
-const imageUpload = multer({
-  storage: multerS3({
-    s3: s3, //instance of Amazon S3
-    bucket: 'acceptmycrypto', //name of our bucket
-    acl: 'public-read', //access control for the file (‘public read’ means that anyone can view files). //https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl
-    metadata: function (req, file, cb) { //callback function to set metadata of uploaded files
-      console.log("metaddata file", file)
-      cb(null, {fieldName: file.fieldname});
-    },
-    key: function (req, file, cb) { //The name of the file. We use time stamp to set up the name of the file
-      cb(null, Date.now().toString())
-    }
-  })
-})
+// create S3 instance
+const s3 = new AWS.S3();
 
-module.exports = imageUpload;
+// abstracts function to upload a file returning a promise
+const uploadFile = (buffer, name, type) => {
+  const params = {
+    ACL: 'public-read',
+    Body: buffer,
+    Bucket: 'acceptmycrypto',
+    ContentType: type.mime,
+    Key: `${name}.${type.ext}`
+  };
+  return s3.upload(params).promise();
+};
+
+module.exports = uploadFile;

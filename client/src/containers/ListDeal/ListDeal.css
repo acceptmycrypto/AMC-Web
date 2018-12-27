@@ -30,6 +30,10 @@
   visibility: hidden;
 }
 
+#shown-uploading-image {
+  width: 50%;
+}
+
 .deal-listing-images {
   width: 65%;
   margin: 25px;

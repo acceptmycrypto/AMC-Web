@@ -5,14 +5,17 @@ var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var verifyToken =  require ("./utils/validation");
-var imageUpload = require('./utils/file_upload');
-const formData = require('express-form-data')
+
+// file-type: Detect the file type of a Buffer/Uint8Array
+// multiparty: Parse http requests with content-type multipart/form-data, also known as file uploads.
+const fs = require('fs');
+const fileType = require('file-type');
+const multiparty = require('multiparty');
+var uploadFile =  require ("./utils/file_upload");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.static('public'));
 app.use(methodOverride('_method'));
-app.use(formData.parse())
 
 var connection = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -28,18 +31,26 @@ var connection = mysql.createConnection({
   database: process.env.DB_DB
 });
 
-const multiUpload = imageUpload.array('images')
-
-router.post("/image/upload", function(req, res) {
-  multiUpload(req, res, function(err, some) {
-    if (err) {
-      return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}] });
-    }
-    console.log("images", req.file)
-    console.log("images location", req.file.location);
-    return res.json({'imageUrl': req.file.location});
-  });
+router.post("/image/upload", function(request, response) {
+  const form = new multiparty.Form(); // parse a file upload
+    form.parse(request, async (error, fields, files) => {
+      if (error) throw new Error(error);
+      try {
+        const path = files.file[0].path; //get the file path
+        const buffer = fs.readFileSync(path); //return the content of the path in buffer
+        const type = fileType(buffer); //return { ext: 'png', mime: 'image/png' }
+        const timestamp = Date.now().toString();
+        const fileName = `dealsImages/${timestamp}-lg`;
+        const data = await uploadFile(buffer, fileName, type);
+        return response.status(200).json(data);
+      } catch (error) {
+        return response.status(400).json(error);
+      }
+    });
 })
+
+
+
 
 // api
 // router.post('/listdeal', verifyToken, function(req, res) {

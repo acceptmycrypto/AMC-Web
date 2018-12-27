@@ -14,13 +14,11 @@ class ListDeal extends Component {
   }
 
   onChange = e => {
-    const files = Array.from(e.target.files);
 
-    const formData = new FormData();
-    // formData.append('file', this.state.file[0]);
-    files.forEach((file, i) => {
-      formData.append(i, file);
-    })
+    const file = e.target.files;
+    let formData = new FormData();
+
+    formData.append('file', file[0]);
 
     this.props._uploadImage(formData);
 
@@ -28,14 +26,13 @@ class ListDeal extends Component {
 
   content = () => {
     const { uploading, uploadedImages } = this.props;
+    debugger
     switch(true) {
       case uploading:
         return <LoadingSpinner />
-      case uploadedImages.length > 0:
+      case uploadedImages.hasOwnProperty('Location'):
         return (
-          uploadedImages.map((image, i) => (
-            <img src={image.secure_url} alt='' />
-          ))
+          <img id="shown-uploading-image" src={uploadedImages.Location} alt='uploaded image' />
         )
       default:
         return (
@@ -49,7 +46,7 @@ class ListDeal extends Component {
                   <p>Images must be in PNG or JPG format and under 5mb</p>
                 </div>
               </label>
-              <input type='file' id='photos-upload' onChange={this.onChange} multiple/>
+              <input type='file' id='photos-upload' onChange={this.onChange}/>
             </div>
         )
     }

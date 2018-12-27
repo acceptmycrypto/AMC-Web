@@ -2,9 +2,6 @@ export function _uploadImage(imageData) {
 
   const settings = {
     method: "POST",
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    },
     body: imageData
   };
 
@@ -13,6 +10,7 @@ export function _uploadImage(imageData) {
     return fetch("/image/upload", settings)
       .then(res => res.json())
       .then(jsonImages => {
+        debugger
         dispatch(uploadingImageSuccess(jsonImages));
         return jsonImages;
       })
