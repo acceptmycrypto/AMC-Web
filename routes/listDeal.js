@@ -1,23 +1,23 @@
-var express = require('express');
-var app = express();
-var router = express.Router();
-var mysql = require('mysql');
-var bodyParser = require('body-parser');
-var methodOverride = require('method-override');
-var verifyToken =  require ("./utils/validation");
+const express = require('express');
+const app = express();
+const router = express.Router();
+const mysql = require('mysql');
+const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
+const verifyToken =  require ("./utils/validation");
 
 // file-type: Detect the file type of a Buffer/Uint8Array
 // multiparty: Parse http requests with content-type multipart/form-data, also known as file uploads.
 const fs = require('fs');
 const fileType = require('file-type');
 const multiparty = require('multiparty');
-var uploadFile =  require ("./utils/file_upload");
+const uploadFile =  require ("./utils/file_upload");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride('_method'));
 
-var connection = mysql.createConnection({
+const connection = mysql.createConnection({
   host: process.env.DB_HOST,
 
   // Your port; if not 3306
