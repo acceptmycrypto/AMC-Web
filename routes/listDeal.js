@@ -31,7 +31,11 @@ const connection = mysql.createConnection({
   database: process.env.DB_DB
 });
 
-router.post("/image/upload", function(request, response) {
+router.post("/image/upload", verifyToken, function(request, response) {
+
+  let user_id = request.decoded;
+  console.log("this is my user ID", user_id);
+
   const form = new multiparty.Form(); // parse a file upload
     form.parse(request, async (error, fields, files) => {
       if (error) throw new Error(error);

@@ -20,13 +20,13 @@ class ListDeal extends Component {
 
     formData.append('file', file[0]);
 
-    this.props._uploadImage(formData);
+    this.props._uploadImage(localStorage.getItem('token'), formData);
 
   }
 
   content = () => {
     const { uploading, uploadedImages } = this.props;
-    debugger
+    
     switch(true) {
       case uploading:
         return <LoadingSpinner />

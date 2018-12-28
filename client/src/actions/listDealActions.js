@@ -1,7 +1,10 @@
-export function _uploadImage(imageData) {
+export function _uploadImage(token, imageData) {
 
   const settings = {
     method: "POST",
+    headers: {
+      Authorization: token, //verify the token in the headers
+    },
     body: imageData
   };
 
