@@ -42,8 +42,8 @@ CREATE TABLE deals (
 	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   	category VARCHAR(255) NULL, -- we need to take this out eventually
 	item_condition VARCHAR (255) NULL,
-	deal_avg_rating FLOAT(3,2) NULL,
-	total_deal_ratings INT NULL,
+-- 	deal_avg_rating FLOAT(3,2) NULL,
+-- 	total_deal_ratings INT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (venue_id) REFERENCES venues(id),
 	FOREIGN KEY (seller_id) REFERENCES users(id)
@@ -133,28 +133,28 @@ CREATE TABLE cryptos_deals (
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
 
-CREATE TABLE userInput (
-	id INT NOT NULL AUTO_INCREMENT,
-	user_email VARCHAR(255) NOT NULL UNIQUE,
-	crypto_name VARCHAR(255) NOT NULL UNIQUE,
-	venue VARCHAR(255) NOT NULL UNIQUE,
-	venue_link VARCHAR(255) NOT NULL UNIQUE,
-	PRIMARY KEY (id)
-);
+-- CREATE TABLE userInput (
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	user_email VARCHAR(255) NOT NULL UNIQUE,
+-- 	crypto_name VARCHAR(255) NOT NULL UNIQUE,
+-- 	venue VARCHAR(255) NOT NULL UNIQUE,
+-- 	venue_link VARCHAR(255) NOT NULL UNIQUE,
+-- 	PRIMARY KEY (id)
+-- );
 
-CREATE TABLE userQueries (
-	id INT NOT NULL AUTO_INCREMENT,
-	email VARCHAR(255) NOT NULL UNIQUE,
-	message VARCHAR(255) NOT NULL,
-	PRIMARY KEY (id)
-);
+-- CREATE TABLE userQueries (
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	email VARCHAR(255) NOT NULL UNIQUE,
+-- 	message VARCHAR(255) NOT NULL,
+-- 	PRIMARY KEY (id)
+-- );
 
-CREATE TABLE admin_users (
-	id INT NOT NULL AUTO_INCREMENT,
-	email VARCHAR(255) UNIQUE,
-	password VARCHAR(255) NOT NULL UNIQUE,
-	PRIMARY KEY (id)
-);
+-- CREATE TABLE admin_users (
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	email VARCHAR(255) UNIQUE,
+-- 	password VARCHAR(255) NOT NULL UNIQUE,
+-- 	PRIMARY KEY (id)
+-- );
 
 
 CREATE TABLE users(
