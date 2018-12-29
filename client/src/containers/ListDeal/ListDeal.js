@@ -3,23 +3,10 @@ import "./ListDeal.css";
 import Layout from "../Layout"
 import { connect } from "react-redux";
 import {bindActionCreators} from 'redux';
-import { _uploadImage } from "../../actions/listDealActions";
+import { _uploadImage, onSelectImageToView } from "../../actions/listDealActions";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
-import { debug } from "util";
 
 class ListDeal extends Component {
-
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     images: []
-  //   };
-  // }
-
-  // handleImagesUpload = () => {
-  //   let images = this.state.images.push(this.props.imageData.Location);
-  //   this.setState({images});
-  // }
 
   onChange = e => {
     const file = e.target.files;
@@ -30,19 +17,15 @@ class ListDeal extends Component {
     this.props._uploadImage(localStorage.getItem('token'), formData);
   }
 
-
-
   content = () => {
-    const { uploading, imageData } = this.props;
-
+    const { uploading, imageData, images } = this.props;
     switch(true) {
       case uploading:
         return <LoadingSpinner />
-      case imageData.hasOwnProperty('Location'):
+      case images.length > 0:
         // localStorage.setItem("image", imageData.Location);
-
         return (
-          <img id="shown-uploading-image" src={imageData.Location} alt='uploaded_image' />
+          <img id="shown-uploading-image" src={imageData} alt='uploaded_image' />
         )
       default:
         return (
@@ -62,11 +45,10 @@ class ListDeal extends Component {
     }
   }
 
-
   render () {
 
-    const { error, images } = this.props
-    debugger
+    const { error, images, onSelectImageToView } = this.props
+
     if (error) {
       return <div>Error! {error.message}</div>;
     }
@@ -107,7 +89,7 @@ class ListDeal extends Component {
             <div className="deal-listing-images">
               <div className="first-row">
                 <div className="deal-listing-img col-3">
-                {images[0] ? <img className="uploaded-listing-image" src={images[0]} alt='uploaded_image' /> :
+                {images[0] ? <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[0]} alt='uploaded_image' /> :
                             <div>
                               <label htmlFor="small-photo-upload">
                                 <i class="fas fa-plus fa-2x"></i>
@@ -116,7 +98,7 @@ class ListDeal extends Component {
                             </div>}
                 </div>
                 <div className="deal-listing-img col-3">
-                {images[1] ? <img className="uploaded-listing-image" src={images[1]} alt='uploaded_image' /> :
+                {images[1] ? <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[1]} alt='uploaded_image' /> :
                             images[0] ?
                             <div>
                               <label htmlFor="small-photo-upload">
@@ -125,7 +107,16 @@ class ListDeal extends Component {
                               <input type='file' id='small-photo-upload' onChange={this.onChange}/>
                             </div> : null}
                 </div>
-                <div className="deal-listing-img col-3"></div>
+                <div className="deal-listing-img col-3">
+                {images[2] ? <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[2]} alt='uploaded_image' /> :
+                            images[1] ?
+                            <div>
+                              <label htmlFor="small-photo-upload">
+                                <i class="fas fa-plus fa-2x"></i>
+                              </label>
+                              <input type='file' id='small-photo-upload' onChange={this.onChange}/>
+                            </div> : null}
+                </div>
               </div>
 
               <div className="second-row">
@@ -155,7 +146,7 @@ const mapStateToProps = state => ({
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({ _uploadImage }, dispatch);
+  return bindActionCreators({ _uploadImage, onSelectImageToView }, dispatch);
 }
 
 export default connect(mapStateToProps, matchDispatchToProps)(ListDeal);

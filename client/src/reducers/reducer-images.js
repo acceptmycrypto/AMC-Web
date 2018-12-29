@@ -1,5 +1,5 @@
 const initialState = {
-  imageData: {},
+  imageData: null,
   images: [],
   uploading: false,
   error: null
@@ -20,12 +20,11 @@ export default function imagesReducer(state = initialState, action) {
       };
 
     case "UPLOADING_IMAGES_SUCCESS":
-      handleImagesUpload(state.images, action.payload.imageData.Location);
-      debugger
+      handleImagesUpload(state.images, action.payload);
       return {
         ...state,
         uploading: false,
-        imageData: action.payload.imageData
+        imageData: action.payload
       };
 
     case "UPLOADING_IMAGES_FAILURE":
@@ -33,8 +32,14 @@ export default function imagesReducer(state = initialState, action) {
         ...state,
         uploading: false,
         error: action.payload.error,
-        imageData: {},
+        imageData: null,
         images: []
+      };
+
+    case "VIEW_UPLOADED_IMAGE":
+      return {
+        ...state,
+        imageData: action.payload
       };
 
     default:
