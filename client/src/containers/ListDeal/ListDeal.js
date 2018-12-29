@@ -107,9 +107,24 @@ class ListDeal extends Component {
             <div className="deal-listing-images">
               <div className="first-row">
                 <div className="deal-listing-img col-3">
-                {images[0] ? <img className="uploaded-listing-image" src={images[0]} alt='uploaded_image' /> :  <i class="fas fa-plus fa-2x"></i>}
+                {images[0] ? <img className="uploaded-listing-image" src={images[0]} alt='uploaded_image' /> :
+                            <div>
+                              <label htmlFor="small-photo-upload">
+                                <i class="fas fa-plus fa-2x"></i>
+                              </label>
+                              <input type='file' id='small-photo-upload' onChange={this.onChange}/>
+                            </div>}
                 </div>
-                <div className="deal-listing-img col-3"></div>
+                <div className="deal-listing-img col-3">
+                {images[1] ? <img className="uploaded-listing-image" src={images[1]} alt='uploaded_image' /> :
+                            images[0] ?
+                            <div>
+                              <label htmlFor="small-photo-upload">
+                                <i class="fas fa-plus fa-2x"></i>
+                              </label>
+                              <input type='file' id='small-photo-upload' onChange={this.onChange}/>
+                            </div> : null}
+                </div>
                 <div className="deal-listing-img col-3"></div>
               </div>
 

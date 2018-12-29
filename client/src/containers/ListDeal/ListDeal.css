@@ -26,8 +26,8 @@
   text-align: center;
 }
 
-#uploading-image input[type=file] {
-  visibility: hidden;
+#photos-upload, #small-photo-upload {
+  display: none;
 }
 
 #shown-uploading-image {
