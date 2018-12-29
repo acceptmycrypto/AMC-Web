@@ -31,7 +31,9 @@
 }
 
 #shown-uploading-image {
-  width: 50%;
+  max-height: 90%;
+  max-width: 90%;
+  padding: 5px;
 }
 
 .deal-listing-images {
@@ -49,6 +51,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.uploaded-listing-image {
+  max-height: 100%;
+  max-width: 100%;
+  padding: 5px;
 }
 
 .deal-listing-img .fa-plus:hover {

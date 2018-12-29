@@ -5,34 +5,44 @@ import { connect } from "react-redux";
 import {bindActionCreators} from 'redux';
 import { _uploadImage } from "../../actions/listDealActions";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
+import { debug } from "util";
 
 class ListDeal extends Component {
 
-  state = {
-    uploading: false,
-    images: []
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     images: []
+  //   };
+  // }
+
+  // handleImagesUpload = () => {
+  //   let images = this.state.images.push(this.props.imageData.Location);
+  //   this.setState({images});
+  // }
 
   onChange = e => {
-
     const file = e.target.files;
-    let formData = new FormData();
+    const formData = new FormData();
 
     formData.append('file', file[0]);
 
     this.props._uploadImage(localStorage.getItem('token'), formData);
-
   }
 
+
+
   content = () => {
-    const { uploading, uploadedImages } = this.props;
-    
+    const { uploading, imageData } = this.props;
+
     switch(true) {
       case uploading:
         return <LoadingSpinner />
-      case uploadedImages.hasOwnProperty('Location'):
+      case imageData.hasOwnProperty('Location'):
+        // localStorage.setItem("image", imageData.Location);
+
         return (
-          <img id="shown-uploading-image" src={uploadedImages.Location} alt='uploaded image' />
+          <img id="shown-uploading-image" src={imageData.Location} alt='uploaded_image' />
         )
       default:
         return (
@@ -53,11 +63,10 @@ class ListDeal extends Component {
   }
 
 
-
   render () {
 
-    const { error } = this.state
-
+    const { error, images } = this.props
+    debugger
     if (error) {
       return <div>Error! {error.message}</div>;
     }
@@ -98,7 +107,7 @@ class ListDeal extends Component {
             <div className="deal-listing-images">
               <div className="first-row">
                 <div className="deal-listing-img col-3">
-                <i class="fas fa-plus fa-2x"></i>
+                {images[0] ? <img className="uploaded-listing-image" src={images[0]} alt='uploaded_image' /> :  <i class="fas fa-plus fa-2x"></i>}
                 </div>
                 <div className="deal-listing-img col-3"></div>
                 <div className="deal-listing-img col-3"></div>
@@ -124,7 +133,8 @@ class ListDeal extends Component {
 }
 
 const mapStateToProps = state => ({
-  uploadedImages: state.UploadedImages.images,
+  imageData: state.UploadedImages.imageData,
+  images: state.UploadedImages.images,
   uploading: state.UploadedImages.uploading,
   error: state.UploadedImages.error,
 });
