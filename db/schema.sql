@@ -114,6 +114,7 @@ CREATE TABLE categories_deals(
 
 
 -- create a junction table for many-to-many association
+-- venues will have a set of cryptos they accept for all their deal items
 CREATE TABLE cryptos_venues (
 	crypto_id INT NOT NULL,
 	venue_id INT NOT NULL,
@@ -123,13 +124,13 @@ CREATE TABLE cryptos_venues (
 );
 
 -- create a junction table for many-to-many association
--- take out this table
-CREATE TABLE cryptos_sellers (
+-- sellers will specify the cryptocurrencies they will accept for each individual deal item
+CREATE TABLE cryptos_deals (
 	crypto_id INT NOT NULL,
-	seller_id INT NOT NULL,
-	PRIMARY KEY (crypto_id, seller_id),
+	deal_id INT NOT NULL,
+	PRIMARY KEY (crypto_id, deal_id),
 	FOREIGN KEY (crypto_id)  REFERENCES crypto_metadata(id),
-	FOREIGN KEY (seller_id) REFERENCES users(id)
+	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
 
 -- CREATE TABLE userInput (
