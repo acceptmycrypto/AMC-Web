@@ -41,3 +41,10 @@ export const onSelectImageToView = (event) => {
       payload: event.target.getAttribute('src')
   }
 };
+
+export const onSelectImageToRemove = (event) => {
+  return {
+      type: 'REMOVE_UPLOADED_IMAGE',
+      payload: event.target.nextElementSibling.getAttribute('src')
+  }
+};

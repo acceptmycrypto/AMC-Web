@@ -3,7 +3,7 @@ import "./ListDeal.css";
 import Layout from "../Layout"
 import { connect } from "react-redux";
 import {bindActionCreators} from 'redux';
-import { _uploadImage, onSelectImageToView } from "../../actions/listDealActions";
+import { _uploadImage, onSelectImageToView, onSelectImageToRemove } from "../../actions/listDealActions";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
 
 class ListDeal extends Component {
@@ -47,7 +47,7 @@ class ListDeal extends Component {
 
   render () {
 
-    const { error, images, onSelectImageToView } = this.props
+    const { error, images, onSelectImageToView, onSelectImageToRemove } = this.props
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -89,7 +89,7 @@ class ListDeal extends Component {
             <div className="deal-listing-images">
               <div className="first-row">
                 {images[0] ? <div className="deal-listing-img col-3">
-                                <i class="fa fa-lg fa-times-circle delete-uploading-photo" aria-hidden="true"></i>
+                                <i onClick={onSelectImageToRemove} class="fa fa-lg fa-times-circle delete-uploading-photo" aria-hidden="true"></i>
                                 <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[0]} alt='uploaded_image' />
                             </div> :
                               <div className="deal-listing-img col-3">
@@ -101,7 +101,7 @@ class ListDeal extends Component {
 
 
                 {images[1] ?  <div className="deal-listing-img col-3">
-                                <i class="fa fa-lg fa-times-circle delete-uploading-photo" aria-hidden="true"></i>
+                                <i onClick={onSelectImageToRemove} class="fa fa-lg fa-times-circle delete-uploading-photo" aria-hidden="true"></i>
                                 <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[1]} alt='uploaded_image' />
                               </div> :
                             images[0] ?
@@ -115,7 +115,7 @@ class ListDeal extends Component {
 
 
                 {images[2] ? <div className="deal-listing-img col-3">
-                                <i class="fa fa-lg fa-times-circle delete-uploading-photo" aria-hidden="true"></i>
+                                <i onClick={onSelectImageToRemove} class="fa fa-lg fa-times-circle delete-uploading-photo" aria-hidden="true"></i>
                                 <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[2]} alt='uploaded_image' />
                               </div> :
                             images[1] ?
@@ -156,7 +156,7 @@ const mapStateToProps = state => ({
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({ _uploadImage, onSelectImageToView }, dispatch);
+  return bindActionCreators({ _uploadImage, onSelectImageToView, onSelectImageToRemove }, dispatch);
 }
 
 export default connect(mapStateToProps, matchDispatchToProps)(ListDeal);

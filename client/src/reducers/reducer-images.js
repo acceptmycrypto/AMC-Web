@@ -6,7 +6,13 @@ const initialState = {
 };
 
 const handleImagesUpload = (images, imageURL) => {
+  debugger
   images.push(imageURL);
+}
+
+const handleImageRemove = (images, imageURL) => {
+  let newImageArr = images.filter(img => img !== imageURL);
+  return newImageArr
 }
 
 export default function imagesReducer(state = initialState, action) {
@@ -40,6 +46,12 @@ export default function imagesReducer(state = initialState, action) {
       return {
         ...state,
         imageData: action.payload
+      };
+
+    case "REMOVE_UPLOADED_IMAGE":
+      return {
+        ...state,
+        images: handleImageRemove(state.images, action.payload)
       };
 
     default:
