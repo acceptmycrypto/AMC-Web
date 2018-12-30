@@ -4,7 +4,7 @@ class Aside extends Component {
     render() {
         return (
             <div className="App__Aside">
-                <img className="crypto-img img-fluid mb-5 d-block mx-auto" src="../../../assets/images/logo.png" alt=""></img>
+                <img className="crypto-img img-fluid mb-5 d-block mx-auto" src="../../../assets/images/logo.png" alt="acceptmycrypto_logo"></img>
                 <h1 className="text-uppercase mb-0">Accept My Crypto</h1>
                 <hr className="star-light"></hr>
                 <h2 className="font-weight-light mb-0">

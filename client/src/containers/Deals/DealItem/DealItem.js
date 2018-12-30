@@ -219,35 +219,6 @@ class DealItem extends Component {
       return <div>Loading...</div>;
     }
 
-    // const steps = [
-    //   { name: "Customizing",
-    //     component:
-    //     <CustomizeOrder
-    //     handle_CustomizingSize={this.props.handleCustomizingSize}
-    //     handle_CustomizingColor={this.props.handleCustomizingColor}/>},
-    //   { name: "Shipping",
-    //     component:
-    //     <ShipOrder
-    //     SubmitPayment={this.createPaymentHandler}
-    //     handle_ShippingFullName={this.props.handleFullNameInput}
-    //     handle_ShippingAddress={this.props.handleAddressInput}
-    //     handle_ShippingCity={this.props.handleCityInput}
-    //     handle_ShippingZipcode={this.props.handleZipcodeInput}
-    //     handle_ShippingState={this.props.handleShippingStateInput}/> },
-    //   { name: "Payment", component:
-    //     <PurchaseOrder
-    //     cryptos={acceptedCryptos && this.handleCryptoOptions(acceptedCryptos)}
-    //     selectCrypto={this.props.handleSelectedCrypto}
-
-    //     SubmitPayment={this.createPaymentHandler}
-    //     transactionInfo={paymentInfo}
-    //     cryptoSymbol={selectedOption && selectedOption.value}
-    //     paymentButtonClicked={createPaymentButtonClicked}
-
-    //     showLoadingSpinner={loading}
-    //     timeout={paymentInfo && this.timeInMilliseconds(paymentInfo.timeout)}/> }
-    // ];
-
     return (
       <div>
         <Layout>
@@ -285,8 +256,13 @@ class DealItem extends Component {
 
                   <div className="customize-item-payment">
                     <div className="crypto_logo">
-                      <strong>Payment</strong> <br/>
-                      {selectedOption ?  <img src={selectedOption.logo} alt="cryptoLogo" /> : null}
+                      <strong>Crypto Payment</strong> <br/>
+                      {selectedOption ?  <img src={selectedOption.logo} alt="cryptoLogo" /> :
+                      <div>
+                        Powered By
+                        <img style={{width: "100px", marginTop: "0px"}} src="../../../assets/images/coin_payment.png" alt="coinpayment_logo"/>
+                      </div>
+                       }
                     </div>
                   </div>
               </div>
@@ -375,6 +351,13 @@ class DealItem extends Component {
                   transactionInfo={paymentInfo}
                   cryptoSymbol={selectedOption && selectedOption.value}
                   paymentButtonClicked={createPaymentButtonClicked}
+
+                  deal_item={dealItem}
+                  full_name={fullName}
+                  shipping_address={shippingAddress}
+                  shipping_city={shippingCity}
+                  zip_code={zipcode}
+                  shipping_state={shippingState}
 
                   showLoadingSpinner={transaction_loading}
                   timeout={paymentInfo && this.timeInMilliseconds(paymentInfo.timeout)}/>}
