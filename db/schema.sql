@@ -29,6 +29,25 @@ CREATE TABLE venues (
 	PRIMARY KEY (id)
 );
 
+-- rearrange users table location in scheme due to foreign key references in deals table
+CREATE TABLE users(
+	id INT NOT NULL AUTO_INCREMENT,
+	verified_email BOOLEAN DEFAULT FALSE,
+	-- when inserting into users table the value for email_verification_token should be uuid()
+	email_verification_token VARCHAR(255) NOT NULL,
+	username VARCHAR(30) NOT NULL UNIQUE,
+	first_name VARCHAR(255) NULL,
+	last_name VARCHAR (255) NULL,
+	phone_number VARCHAR(100) NULL,
+	email VARCHAR(100) NOT NULL UNIQUE,
+	previous_email VARCHAR(100) NULL UNIQUE,
+	password VARCHAR(255) NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	sellers_avg_rating FLOAT(3,2) NULL,
+	total_sellers_ratings INT NULL,
+	PRIMARY KEY (id)
+);
+
 CREATE TABLE deals (
 	id INT NOT NULL AUTO_INCREMENT,
 	venue_id INT NULL, -- changed venue_id to NULL because as of now we we have seeds with venue_id that reference the vendors
@@ -157,23 +176,7 @@ CREATE TABLE cryptos_deals (
 -- );
 
 
-CREATE TABLE users(
-	id INT NOT NULL AUTO_INCREMENT,
-	verified_email BOOLEAN DEFAULT FALSE,
-	-- when inserting into users table the value for email_verification_token should be uuid()
-	email_verification_token VARCHAR(255) NOT NULL,
-	username VARCHAR(30) NOT NULL UNIQUE,
-	first_name VARCHAR(255) NULL,
-	last_name VARCHAR (255) NULL,
-	phone_number VARCHAR(100) NULL,
-	email VARCHAR(100) NOT NULL UNIQUE,
-	previous_email VARCHAR(100) NULL UNIQUE,
-	password VARCHAR(255) NOT NULL,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	sellers_avg_rating FLOAT(3,2) NULL,
-	total_sellers_ratings INT NULL,
-	PRIMARY KEY (id)
-);
+
 
 CREATE TABLE users_logins(
 	id INT NOT NULL AUTO_INCREMENT,
