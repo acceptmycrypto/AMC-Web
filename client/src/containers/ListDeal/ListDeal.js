@@ -88,35 +88,45 @@ class ListDeal extends Component {
             </div>
             <div className="deal-listing-images">
               <div className="first-row">
-                <div className="deal-listing-img col-3">
-                {images[0] ? <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[0]} alt='uploaded_image' /> :
-                            <div>
-                              <label htmlFor="small-photo-upload">
-                                <i class="fas fa-plus fa-2x"></i>
-                              </label>
-                              <input type='file' id='small-photo-upload' onChange={this.onChange}/>
-                            </div>}
-                </div>
-                <div className="deal-listing-img col-3">
-                {images[1] ? <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[1]} alt='uploaded_image' /> :
+                {images[0] ? <div className="deal-listing-img col-3">
+                                <i class="fa fa-lg fa-times-circle delete-uploading-photo" aria-hidden="true"></i>
+                                <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[0]} alt='uploaded_image' />
+                            </div> :
+                              <div className="deal-listing-img col-3">
+                                <label htmlFor="small-photo-upload">
+                                  <i class="fas fa-plus fa-2x"></i>
+                                </label>
+                                <input type='file' id='small-photo-upload' onChange={this.onChange}/>
+                              </div>}
+
+
+                {images[1] ?  <div className="deal-listing-img col-3">
+                                <i class="fa fa-lg fa-times-circle delete-uploading-photo" aria-hidden="true"></i>
+                                <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[1]} alt='uploaded_image' />
+                              </div> :
                             images[0] ?
-                            <div>
+                            <div className="deal-listing-img col-3">
                               <label htmlFor="small-photo-upload">
                                 <i class="fas fa-plus fa-2x"></i>
                               </label>
                               <input type='file' id='small-photo-upload' onChange={this.onChange}/>
-                            </div> : null}
-                </div>
-                <div className="deal-listing-img col-3">
-                {images[2] ? <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[2]} alt='uploaded_image' /> :
+                            </div> :
+                            <div className="deal-listing-img col-3"></div>}
+
+
+                {images[2] ? <div className="deal-listing-img col-3">
+                                <i class="fa fa-lg fa-times-circle delete-uploading-photo" aria-hidden="true"></i>
+                                <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[2]} alt='uploaded_image' />
+                              </div> :
                             images[1] ?
-                            <div>
+                            <div className="deal-listing-img col-3">
                               <label htmlFor="small-photo-upload">
                                 <i class="fas fa-plus fa-2x"></i>
                               </label>
                               <input type='file' id='small-photo-upload' onChange={this.onChange}/>
-                            </div> : null}
-                </div>
+                            </div> :
+                            <div className="deal-listing-img col-3"></div>}
+
               </div>
 
               <div className="second-row">

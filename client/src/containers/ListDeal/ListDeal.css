@@ -54,12 +54,19 @@
 }
 
 .uploaded-listing-image {
-  max-height: 100%;
-  max-width: 100%;
+  max-height: 150px;
+  max-width: 150px;
   padding: 5px;
 }
 
 .deal-listing-img .fa-plus:hover {
+  cursor: pointer;
+}
+
+.delete-uploading-photo {
+  position: absolute;
+  top: 0;
+  left: -3px;
   cursor: pointer;
 }
 
