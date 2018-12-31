@@ -27,7 +27,7 @@ export const uploadingImageBegin = () => ({
 
 export const uploadingImageSuccess = imageData => ({
   type: "UPLOADING_IMAGES_SUCCESS",
-  payload: imageData.Location
+  payload: imageData
 });
 
 export const uploadingImageFailure = error => ({
@@ -42,9 +42,21 @@ export const onSelectImageToView = (event) => {
   }
 };
 
-export const onSelectImageToRemove = (event) => {
+export function _removeImage(token, imageKey) {
+  const settings = {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({token, imageKey})
+  };
+
+  fetch("/image/remove", settings).then(res => res.json());
+
   return {
-      type: 'REMOVE_UPLOADED_IMAGE',
-      payload: event.target.nextElementSibling.getAttribute('src')
+    type: 'REMOVE_UPLOADED_IMAGE',
+    payload: imageKey
   }
-};
+}
+

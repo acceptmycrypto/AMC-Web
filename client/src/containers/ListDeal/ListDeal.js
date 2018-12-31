@@ -3,12 +3,12 @@ import "./ListDeal.css";
 import Layout from "../Layout"
 import { connect } from "react-redux";
 import {bindActionCreators} from 'redux';
-import { _uploadImage, onSelectImageToView, onSelectImageToRemove } from "../../actions/listDealActions";
+import { _uploadImage, onSelectImageToView, _removeImage } from "../../actions/listDealActions";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
 
 class ListDeal extends Component {
 
-  onChange = e => {
+  handleImageUpload = e => {
     const file = e.target.files;
     const formData = new FormData();
 
@@ -17,15 +17,15 @@ class ListDeal extends Component {
     this.props._uploadImage(localStorage.getItem('token'), formData);
   }
 
-  content = () => {
-    const { uploading, imageData, images } = this.props;
+  imageOnView = () => {
+    const { uploading, images, imageView } = this.props;
     switch(true) {
       case uploading:
         return <LoadingSpinner />
       case images.length > 0:
         // localStorage.setItem("image", imageData.Location);
         return (
-          <img id="shown-uploading-image" src={imageData} alt='uploaded_image' />
+          <img id="shown-uploading-image" src={imageView} alt='uploaded_image' />
         )
       default:
         return (
@@ -45,9 +45,13 @@ class ListDeal extends Component {
     }
   }
 
-  render () {
+  onSelectImageToReMove = e => {
+    let imageKey = e.target.parentElement.getAttribute("data-imagekey")
+    this.props._removeImage(localStorage.getItem('token'), imageKey);
+  }
 
-    const { error, images, onSelectImageToView, onSelectImageToRemove } = this.props
+  render () {
+    const { error, images, onSelectImageToView } = this.props
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -84,49 +88,49 @@ class ListDeal extends Component {
           </div>
           <div className="deal-listing-content">
             <div className="deal-listing-shown-image-container">
-              {this.content()}
+              {this.imageOnView()}
             </div>
             <div className="deal-listing-images">
               <div className="first-row">
-                {images[0] ? <div className="deal-listing-img col-3">
-                                <i onClick={onSelectImageToRemove} class="fa fa-lg fa-times-circle delete-uploading-photo" aria-hidden="true"></i>
-                                <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[0]} alt='uploaded_image' />
+                {/* image one */}
+                {images[0] !== undefined ? <div data-imagekey={images[0].Key} className="deal-listing-img col-3">
+                                <i onClick={this.onSelectImageToReMove} class="fa fa-lg fa-times-circle delete-uploading-photo" aria-hidden="true"></i>
+                                <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[0].Location} alt='uploaded_image' />
                             </div> :
                               <div className="deal-listing-img col-3">
                                 <label htmlFor="small-photo-upload">
                                   <i class="fas fa-plus fa-2x"></i>
                                 </label>
-                                <input type='file' id='small-photo-upload' onChange={this.onChange}/>
+                                <input type='file' id='small-photo-upload' onChange={this.handleImageUpload}/>
                               </div>}
 
-
-                {images[1] ?  <div className="deal-listing-img col-3">
-                                <i onClick={onSelectImageToRemove} class="fa fa-lg fa-times-circle delete-uploading-photo" aria-hidden="true"></i>
-                                <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[1]} alt='uploaded_image' />
+                {/* image two */}
+                {images[1] !== undefined ?  <div data-imagekey={images[1].Key} className="deal-listing-img col-3">
+                                <i onClick={this.onSelectImageToReMove} class="fa fa-lg fa-times-circle delete-uploading-photo" aria-hidden="true"></i>
+                                <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[1].Location} alt='uploaded_image' />
                               </div> :
-                            images[0] ?
+                            images[0] !== undefined ?
                             <div className="deal-listing-img col-3">
                               <label htmlFor="small-photo-upload">
                                 <i class="fas fa-plus fa-2x"></i>
                               </label>
-                              <input type='file' id='small-photo-upload' onChange={this.onChange}/>
+                              <input type='file' id='small-photo-upload' onChange={this.handleImageUpload}/>
                             </div> :
                             <div className="deal-listing-img col-3"></div>}
 
-
-                {images[2] ? <div className="deal-listing-img col-3">
-                                <i onClick={onSelectImageToRemove} class="fa fa-lg fa-times-circle delete-uploading-photo" aria-hidden="true"></i>
-                                <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[2]} alt='uploaded_image' />
+                {/* image three */}
+                {images[2] !== undefined ? <div data-imagekey={images[2].Key} className="deal-listing-img col-3">
+                                <i onClick={this.onSelectImageToReMove} class="fa fa-lg fa-times-circle delete-uploading-photo" aria-hidden="true"></i>
+                                <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[2].Location} alt='uploaded_image' />
                               </div> :
-                            images[1] ?
+                            images[1] !== undefined ?
                             <div className="deal-listing-img col-3">
                               <label htmlFor="small-photo-upload">
                                 <i class="fas fa-plus fa-2x"></i>
                               </label>
-                              <input type='file' id='small-photo-upload' onChange={this.onChange}/>
+                              <input type='file' id='small-photo-upload' onChange={this.handleImageUpload}/>
                             </div> :
                             <div className="deal-listing-img col-3"></div>}
-
               </div>
 
               <div className="second-row">
@@ -151,12 +155,13 @@ class ListDeal extends Component {
 const mapStateToProps = state => ({
   imageData: state.UploadedImages.imageData,
   images: state.UploadedImages.images,
+  imageView: state.UploadedImages.imageView,
   uploading: state.UploadedImages.uploading,
   error: state.UploadedImages.error,
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({ _uploadImage, onSelectImageToView, onSelectImageToRemove }, dispatch);
+  return bindActionCreators({ _uploadImage, onSelectImageToView, _removeImage }, dispatch);
 }
 
 export default connect(mapStateToProps, matchDispatchToProps)(ListDeal);

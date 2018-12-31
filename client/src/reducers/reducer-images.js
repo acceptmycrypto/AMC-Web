@@ -1,17 +1,18 @@
 const initialState = {
-  imageData: null,
+  imageData: {},
   images: [],
+  imageView: "",
   uploading: false,
   error: null
 };
 
-const handleImagesUpload = (images, imageURL) => {
-  debugger
-  images.push(imageURL);
+const handleImagesUpload = (images, imageObj) => {
+  images.push(imageObj);
 }
 
-const handleImageRemove = (images, imageURL) => {
-  let newImageArr = images.filter(img => img !== imageURL);
+const handleImageRemove = (images, imageKey) => {
+  debugger
+  let newImageArr = images.filter(img => img.key !== imageKey);
   return newImageArr
 }
 
@@ -30,7 +31,8 @@ export default function imagesReducer(state = initialState, action) {
       return {
         ...state,
         uploading: false,
-        imageData: action.payload
+        imageData: action.payload,
+        imageView: action.payload.Location
       };
 
     case "UPLOADING_IMAGES_FAILURE":
@@ -39,13 +41,15 @@ export default function imagesReducer(state = initialState, action) {
         uploading: false,
         error: action.payload.error,
         imageData: null,
+        imageView: "",
         images: []
       };
 
     case "VIEW_UPLOADED_IMAGE":
+    debugger
       return {
         ...state,
-        imageData: action.payload
+        imageView: action.payload
       };
 
     case "REMOVE_UPLOADED_IMAGE":

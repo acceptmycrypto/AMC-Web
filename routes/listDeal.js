@@ -53,6 +53,13 @@ router.post("/image/upload", verifyToken, function(request, response) {
     });
 })
 
+router.post("/image/remove", verifyToken, function(request, response) {
+
+  let user_id = request.decoded;
+  console.log("imageKey", request.body.imageKey);
+
+})
+
 
 
 
