@@ -33,7 +33,7 @@ const connection = mysql.createConnection({
 
 router.post("/image/upload", verifyToken, function(request, response) {
 
-  let user_id = request.decoded;
+  let user_id = request.decoded._id;
   console.log("this is my user ID", user_id);
 
   const form = new multiparty.Form(); // parse a file upload
@@ -44,7 +44,7 @@ router.post("/image/upload", verifyToken, function(request, response) {
         const buffer = fs.readFileSync(path); //return the content of the path in buffer
         const type = fileType(buffer); //return { ext: 'png', mime: 'image/png' }
         const timestamp = Date.now().toString();
-        const fileName = `dealsImages/${timestamp}-lg`;
+        const fileName = `dealsImages/user_id-${user_id}/${timestamp}`;
         const data = await uploadFile(buffer, fileName, type);
         return response.status(200).json(data);
       } catch (error) {
