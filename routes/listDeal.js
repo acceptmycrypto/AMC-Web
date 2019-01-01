@@ -8,10 +8,14 @@ const verifyToken =  require ("./utils/validation");
 
 // file-type: Detect the file type of a Buffer/Uint8Array
 // multiparty: Parse http requests with content-type multipart/form-data, also known as file uploads.
+const AWS = require('aws-sdk');
 const fs = require('fs');
 const fileType = require('file-type');
 const multiparty = require('multiparty');
 const uploadFile =  require ("./utils/file_upload");
+
+// create S3 instance
+const s3 = new AWS.S3();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -32,7 +36,6 @@ const connection = mysql.createConnection({
 });
 
 router.post("/image/upload", verifyToken, function(request, response) {
-
   let user_id = request.decoded._id;
   console.log("this is my user ID", user_id);
 
@@ -54,6 +57,20 @@ router.post("/image/upload", verifyToken, function(request, response) {
 })
 
 router.post("/image/remove", verifyToken, function(request, response) {
+
+  let params = {
+    Bucket: "acceptmycrypto",
+    Key: request.body.imageKey
+   };
+
+   s3.deleteObject(params, function (err, data) {
+    if (data) {
+        console.log("File deleted successfully");
+    }
+    else {
+        console.log("Check if you have sufficient permissions : "+err);
+    }
+  });
 
   let user_id = request.decoded;
   console.log("imageKey", request.body.imageKey);
