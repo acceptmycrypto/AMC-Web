@@ -134,9 +134,47 @@ class ListDeal extends Component {
               </div>
 
               <div className="second-row">
-                <div className="deal-listing-img col-3"></div>
-                <div className="deal-listing-img col-3"></div>
-                <div className="deal-listing-img col-3"></div>
+                {/* image four */}
+                {images[3] !== undefined ? <div data-imagekey={images[3].Key} className="deal-listing-img col-3">
+                                <i onClick={this.onSelectImageToReMove} class="fa fa-lg fa-times-circle delete-uploading-photo" aria-hidden="true"></i>
+                                <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[3].Location} alt='uploaded_image' />
+                              </div> :
+                            images[2] !== undefined ?
+                            <div className="deal-listing-img col-3">
+                              <label htmlFor="small-photo-upload">
+                                <i class="fas fa-plus fa-2x"></i>
+                              </label>
+                              <input type='file' id='small-photo-upload' onChange={this.handleImageUpload}/>
+                            </div> :
+                            <div className="deal-listing-img col-3"></div>}
+
+                {/* image four */}
+                {images[4] !== undefined ? <div data-imagekey={images[4].Key} className="deal-listing-img col-3">
+                                <i onClick={this.onSelectImageToReMove} class="fa fa-lg fa-times-circle delete-uploading-photo" aria-hidden="true"></i>
+                                <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[4].Location} alt='uploaded_image' />
+                              </div> :
+                            images[3] !== undefined ?
+                            <div className="deal-listing-img col-3">
+                              <label htmlFor="small-photo-upload">
+                                <i class="fas fa-plus fa-2x"></i>
+                              </label>
+                              <input type='file' id='small-photo-upload' onChange={this.handleImageUpload}/>
+                            </div> :
+                            <div className="deal-listing-img col-3"></div>}
+
+               {/* image six */}
+                {images[5] !== undefined ? <div data-imagekey={images[5].Key} className="deal-listing-img col-3">
+                                <i onClick={this.onSelectImageToReMove} class="fa fa-lg fa-times-circle delete-uploading-photo" aria-hidden="true"></i>
+                                <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[5].Location} alt='uploaded_image' />
+                              </div> :
+                            images[4] !== undefined ?
+                            <div className="deal-listing-img col-3">
+                              <label htmlFor="small-photo-upload">
+                                <i class="fas fa-plus fa-2x"></i>
+                              </label>
+                              <input type='file' id='small-photo-upload' onChange={this.handleImageUpload}/>
+                            </div> :
+                            <div className="deal-listing-img col-3"></div>}
               </div>
               <hr/>
               <div id="photos-next-step">
