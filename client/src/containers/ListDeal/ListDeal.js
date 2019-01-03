@@ -50,7 +50,7 @@ class ListDeal extends Component {
                   <p>Images must be in PNG or JPG format and under 5mb</p>
                 </div>
               </label>
-              <input type='file' id='photos-upload' onChange={this.onChange}/>
+              <input type='file' id='photos-upload' onChange={this.handleImageUpload}/>
             </div>
         )
     }
