@@ -296,33 +296,35 @@ CREATE TABLE notifications (
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
 
---table to be used in the future
-CREATE TABLE buyers_reviews_deals (
-	id INT NOT NULL AUTO_INCREMENT,
-	buyer_id INT NOT NULL,
-	deal_id INT NOT NULL,
-	title VARCHAR (255) NOT NULL,
-	body TEXT NULL,
-  	date_reviewed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	rating INT NOT NULL DEFAULT 0,
-	verified_purchase BOOLEAN NOT NULL DEFAULT FALSE,
-	likes INT DEFAULT 0,
-	dislikes INT DEFAULT 0,
-	helpful_review INT DEFAULT 0,
-	display_review BOOLEAN NOT NULL DEFAULT FALSE,
-	PRIMARY KEY (id),
-	FOREIGN KEY (buyer_id) REFERENCES users(id),
-	FOREIGN KEY (deal_id) REFERENCES deals(id)
-);
+-- table to be used in the future
 
---table to be used in the future
+-- CREATE TABLE buyers_reviews_deals (
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	buyer_id INT NOT NULL,
+-- 	deal_id INT NOT NULL,
+-- 	title VARCHAR (255) NOT NULL,
+-- 	body TEXT NULL,
+--   	date_reviewed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+-- 	rating INT NOT NULL DEFAULT 0,
+-- 	verified_purchase BOOLEAN NOT NULL DEFAULT FALSE,
+-- 	likes INT DEFAULT 0,
+-- 	dislikes INT DEFAULT 0,
+-- 	helpful_review INT DEFAULT 0,
+-- 	display_review BOOLEAN NOT NULL DEFAULT FALSE,
+-- 	PRIMARY KEY (id),
+-- 	FOREIGN KEY (buyer_id) REFERENCES users(id),
+-- 	FOREIGN KEY (deal_id) REFERENCES deals(id)
+-- );
+
+-- table to be used in the future
 -- many to many relationship table
-CREATE TABLE parents_children_deals_reviews(
-	review_parent_id INT NOT NULL,
-	review_child_id INT NOT NULL,
-	FOREIGN KEY (review_parent_id) REFERENCES buyers_reviews_deals(id),
-	FOREIGN KEY (review_child_id) REFERENCES buyers_reviews_deals(id)
-);
+
+-- CREATE TABLE parents_children_deals_reviews(
+-- 	review_parent_id INT NOT NULL,
+-- 	review_child_id INT NOT NULL,
+-- 	FOREIGN KEY (review_parent_id) REFERENCES buyers_reviews_deals(id),
+-- 	FOREIGN KEY (review_child_id) REFERENCES buyers_reviews_deals(id)
+-- );
 
 CREATE TABLE buyers_reviews_sellers(
 	id INT NOT NULL AUTO_INCREMENT,
