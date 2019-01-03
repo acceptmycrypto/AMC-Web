@@ -3,7 +3,10 @@ const initialState = {
   images: [],
   imageView: "",
   uploading: false,
-  error: null
+  error: null,
+  showPhotosStep: true,
+  showPricingStep: false,
+  showDescriptionStep: false,
 };
 
 const handleImagesUpload = (images, imageObj) => {
@@ -16,7 +19,7 @@ const handleImageRemove = (images, imageKey) => {
   return newImageArr
 }
 
-export default function imagesReducer(state = initialState, action) {
+export default function CreateDealReducer(state = initialState, action) {
 
   switch(action.type) {
     case "UPLOADING_IMAGES_BEGIN":
@@ -56,6 +59,30 @@ export default function imagesReducer(state = initialState, action) {
       return {
         ...state,
         images: handleImageRemove(state.images, action.payload)
+      };
+
+    case "SHOW_PHOTOS_UPLOADING":
+      return {
+        ...state,
+        showPhotosStep: action.payload.showPhotosStep,
+        showPricingStep: action.payload.showPricingStep,
+        showDescriptionStep: action.payload.showDescriptionStep
+      };
+
+    case "SHOW_PRICING":
+      return {
+        ...state,
+        showPhotosStep: action.payload.showPhotosStep,
+        showPricingStep: action.payload.showPricingStep,
+        showDescriptionStep: action.payload.showDescriptionStep
+      };
+
+    case "SHOW_DESCRIPTION":
+      return {
+        ...state,
+        showPhotosStep: action.payload.showPhotosStep,
+        showPricingStep: action.payload.showPricingStep,
+        showDescriptionStep: action.payload.showDescriptionStep
       };
 
     default:

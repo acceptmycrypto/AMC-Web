@@ -60,3 +60,36 @@ export function _removeImage(token, imageKey) {
   }
 }
 
+export const handleUploadingPhotosStep = () => {
+  return {
+    type: "SHOW_PHOTOS_UPLOADING",
+    payload: {
+      showPhotosStep: true,
+      showPricingStep: false,
+      showDescriptionStep: false,
+    }
+  }
+}
+
+export const handlePricingStep = () => {
+  return {
+    type: "SHOW_PRICING",
+    payload: {
+      showPhotosStep: false,
+      showPricingStep: true,
+      showDescriptionStep: false,
+    }
+  }
+}
+
+export const handleDescriptionStep = () => {
+  return {
+    type: "SHOW_DESCRIPTION",
+    payload: {
+      showPhotosStep: false,
+      showPricingStep: false,
+      showDescriptionStep: true,
+    }
+  }
+}
+

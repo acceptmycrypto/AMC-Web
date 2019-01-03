@@ -7,7 +7,10 @@ import { bindActionCreators } from "redux";
 import {
   _uploadImage,
   onSelectImageToView,
-  _removeImage
+  _removeImage,
+  handleUploadingPhotosStep,
+  handlePricingStep,
+  handleDescriptionStep
 } from "../../actions/listDealActions";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
 import UploadingImage from "./UploadImage/UploadingImage";
@@ -74,7 +77,18 @@ class ListDeal extends Component {
   };
 
   render() {
-    const { error, images, onSelectImageToView } = this.props;
+    const {
+      error,
+      images,
+      showPhotosStep,
+      showPricingStep,
+      showDescriptionStep,
+
+      onSelectImageToView,
+      handleUploadingPhotosStep,
+      handlePricingStep,
+      handleDescriptionStep
+    } = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -90,14 +104,20 @@ class ListDeal extends Component {
         <Layout>
           <div className="deal-container">
             <div className="ui three steps">
-              <a className="active step">
+              <a
+                onClick={handleUploadingPhotosStep}
+                className={showPhotosStep ? "active step" : "step"}
+              >
                 <i className="image icon" />
                 <div className="content">
                   <div className="title">Photos</div>
                   <div className="description">Add up to six photos</div>
                 </div>
               </a>
-              <a className="step">
+              <a
+                onClick={handlePricingStep}
+                className={showPricingStep ? "active step" : "step"}
+              >
                 <i className="bitcoin icon" />
                 <div className="content">
                   <div className="title">Pricing</div>
@@ -107,7 +127,10 @@ class ListDeal extends Component {
                 </div>
               </a>
 
-              <a className="step">
+              <a
+                onClick={handleDescriptionStep}
+                className={showDescriptionStep ? "active step" : "step"}
+              >
                 <i className="edit icon" />
                 <div className="content">
                   <div className="title">Description</div>
@@ -118,13 +141,15 @@ class ListDeal extends Component {
               </a>
             </div>
           </div>
-          <UploadingImage
-            viewImage={onSelectImageToView}
-            uploadedImages={images}
-            uploadImage={this.handleImageUpload}
-            imageIsOnPreview={this.imageOnView}
-            removeImage={this.onSelectImageToReMove}
-          />
+          {showPhotosStep && (
+            <UploadingImage
+              viewImage={onSelectImageToView}
+              uploadedImages={images}
+              uploadImage={this.handleImageUpload}
+              imageIsOnPreview={this.imageOnView}
+              removeImage={this.onSelectImageToReMove}
+            />
+          )}
         </Layout>
       </div>
     );
@@ -132,16 +157,26 @@ class ListDeal extends Component {
 }
 
 const mapStateToProps = state => ({
-  imageData: state.UploadedImages.imageData,
-  images: state.UploadedImages.images,
-  imageView: state.UploadedImages.imageView,
-  uploading: state.UploadedImages.uploading,
-  error: state.UploadedImages.error
+  imageData: state.CreateDeal.imageData,
+  images: state.CreateDeal.images,
+  imageView: state.CreateDeal.imageView,
+  uploading: state.CreateDeal.uploading,
+  error: state.CreateDeal.error,
+  showPhotosStep: state.CreateDeal.showPhotosStep,
+  showPricingStep: state.CreateDeal.showPricingStep,
+  showDescriptionStep: state.CreateDeal.showDescriptionStep
 });
 
 const matchDispatchToProps = dispatch => {
   return bindActionCreators(
-    { _uploadImage, onSelectImageToView, _removeImage },
+    {
+      _uploadImage,
+      onSelectImageToView,
+      _removeImage,
+      handleUploadingPhotosStep,
+      handlePricingStep,
+      handleDescriptionStep
+    },
     dispatch
   );
 };
