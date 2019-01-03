@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Prompt } from 'react-router'
 import "./ListDeal.css";
 import Layout from "../Layout"
 import { connect } from "react-redux";
@@ -7,6 +8,16 @@ import { _uploadImage, onSelectImageToView, _removeImage } from "../../actions/l
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
 
 class ListDeal extends Component {
+
+  // If user refreshes the page, we warn users that data won't be saved
+  componentDidUpdate = () => {
+    const { images } = this.props;
+    if (images.length > 0) {
+      window.onbeforeunload = () => true
+    } else {
+      window.onbeforeunload = undefined
+    }
+  }
 
   handleImageUpload = e => {
     const file = e.target.files;
@@ -50,8 +61,19 @@ class ListDeal extends Component {
     this.props._removeImage(localStorage.getItem('token'), imageKey);
   }
 
+  handleImagesToBeDeletedOnS3 = () => {
+    // if (window.performance) {
+    //   if (performance.navigation.type == 1) {
+    //     alert( "This page is reloaded" );
+    //   }
+    // }
+    console.log(this.props);
+
+  }
+
   render () {
     const { error, images, onSelectImageToView } = this.props
+    // this.handleImagesToBeDeletedOnS3();
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -59,6 +81,8 @@ class ListDeal extends Component {
 
     return (
       <div>
+        {/* If user is navigating away from the page, let user know data won't be saved */}
+        <Prompt  when={images.length > 0} message="Changes you made may not be saved."/>
          <Layout>
            <div className="deal-container">
             <div className="ui three steps">
