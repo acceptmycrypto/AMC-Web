@@ -117,9 +117,10 @@ class ListDeal extends Component {
             <div className="deal-listing-images">
               <div className="first-row">
                 {/* image one */}
-                {images[0] !== undefined ? <div data-imagekey={images[0].Key} className="deal-listing-img col-3">
+                {images[0] !== undefined ? <div data-imagekey={images[0].Key} className="deal-uploaded-img-border col-3">
                                 <i onClick={this.onSelectImageToReMove} class="fa fa-lg fa-times-circle delete-uploading-photo" aria-hidden="true"></i>
                                 <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[0].Location} alt='uploaded_image' />
+                                <div class="main-uploaded-photo">Main Photo</div>
                             </div> :
                               <div className="deal-listing-img col-3">
                                 <label htmlFor="small-photo-upload">
@@ -129,7 +130,7 @@ class ListDeal extends Component {
                               </div>}
 
                 {/* image two */}
-                {images[1] !== undefined ?  <div data-imagekey={images[1].Key} className="deal-listing-img col-3">
+                {images[1] !== undefined ?  <div data-imagekey={images[1].Key} className="deal-uploaded-img-border col-3">
                                 <i onClick={this.onSelectImageToReMove} class="fa fa-lg fa-times-circle delete-uploading-photo" aria-hidden="true"></i>
                                 <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[1].Location} alt='uploaded_image' />
                               </div> :
@@ -143,7 +144,7 @@ class ListDeal extends Component {
                             <div className="deal-listing-img col-3"></div>}
 
                 {/* image three */}
-                {images[2] !== undefined ? <div data-imagekey={images[2].Key} className="deal-listing-img col-3">
+                {images[2] !== undefined ? <div data-imagekey={images[2].Key} className="deal-uploaded-img-border col-3">
                                 <i onClick={this.onSelectImageToReMove} class="fa fa-lg fa-times-circle delete-uploading-photo" aria-hidden="true"></i>
                                 <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[2].Location} alt='uploaded_image' />
                               </div> :
@@ -159,7 +160,7 @@ class ListDeal extends Component {
 
               <div className="second-row">
                 {/* image four */}
-                {images[3] !== undefined ? <div data-imagekey={images[3].Key} className="deal-listing-img col-3">
+                {images[3] !== undefined ? <div data-imagekey={images[3].Key} className="deal-uploaded-img-border col-3">
                                 <i onClick={this.onSelectImageToReMove} class="fa fa-lg fa-times-circle delete-uploading-photo" aria-hidden="true"></i>
                                 <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[3].Location} alt='uploaded_image' />
                               </div> :
@@ -173,7 +174,7 @@ class ListDeal extends Component {
                             <div className="deal-listing-img col-3"></div>}
 
                 {/* image four */}
-                {images[4] !== undefined ? <div data-imagekey={images[4].Key} className="deal-listing-img col-3">
+                {images[4] !== undefined ? <div data-imagekey={images[4].Key} className="deal-uploaded-img-border col-3">
                                 <i onClick={this.onSelectImageToReMove} class="fa fa-lg fa-times-circle delete-uploading-photo" aria-hidden="true"></i>
                                 <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[4].Location} alt='uploaded_image' />
                               </div> :
@@ -187,7 +188,7 @@ class ListDeal extends Component {
                             <div className="deal-listing-img col-3"></div>}
 
                {/* image six */}
-                {images[5] !== undefined ? <div data-imagekey={images[5].Key} className="deal-listing-img col-3">
+                {images[5] !== undefined ? <div data-imagekey={images[5].Key} className="deal-uploaded-img-border col-3">
                                 <i onClick={this.onSelectImageToReMove} class="fa fa-lg fa-times-circle delete-uploading-photo" aria-hidden="true"></i>
                                 <img onClick={onSelectImageToView} className="uploaded-listing-image" src={images[5].Location} alt='uploaded_image' />
                               </div> :
