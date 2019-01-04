@@ -7,6 +7,7 @@ const initialState = {
   showPhotosStep: true,
   showPricingStep: false,
   showDescriptionStep: false,
+  discountPercent: 50
 };
 
 const handleImagesUpload = (images, imageObj) => {
@@ -83,6 +84,12 @@ export default function CreateDealReducer(state = initialState, action) {
         showPhotosStep: action.payload.showPhotosStep,
         showPricingStep: action.payload.showPricingStep,
         showDescriptionStep: action.payload.showDescriptionStep
+      };
+
+    case "CHANGE_DISCOUNT_PERCENTAGE":
+      return {
+        ...state,
+        discountPercent: action.payload
       };
 
     default:

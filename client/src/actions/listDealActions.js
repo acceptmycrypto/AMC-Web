@@ -93,3 +93,10 @@ export const handleDescriptionStep = () => {
   }
 }
 
+export const onDiscountPercentageToChange = (event) => {
+  return {
+      type: 'CHANGE_DISCOUNT_PERCENTAGE',
+      payload: event.target.value
+  }
+};
+

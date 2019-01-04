@@ -10,10 +10,12 @@ import {
   _removeImage,
   handleUploadingPhotosStep,
   handlePricingStep,
-  handleDescriptionStep
+  handleDescriptionStep,
+  onDiscountPercentageToChange
 } from "../../actions/listDealActions";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
 import UploadingImage from "./UploadImage/UploadingImage";
+import Pricing from "./Pricing";
 
 class ListDeal extends Component {
   // If user refreshes the page, we warn users that data won't be saved
@@ -83,11 +85,13 @@ class ListDeal extends Component {
       showPhotosStep,
       showPricingStep,
       showDescriptionStep,
+      discountPercent,
 
       onSelectImageToView,
       handleUploadingPhotosStep,
       handlePricingStep,
-      handleDescriptionStep
+      handleDescriptionStep,
+      onDiscountPercentageToChange
     } = this.props;
 
     if (error) {
@@ -150,6 +154,9 @@ class ListDeal extends Component {
               removeImage={this.onSelectImageToReMove}
             />
           )}
+          {showPricingStep && (
+            <Pricing changeDiscountPercent={onDiscountPercentageToChange} showDiscountPercent={discountPercent}/>
+          )}
         </Layout>
       </div>
     );
@@ -164,7 +171,8 @@ const mapStateToProps = state => ({
   error: state.CreateDeal.error,
   showPhotosStep: state.CreateDeal.showPhotosStep,
   showPricingStep: state.CreateDeal.showPricingStep,
-  showDescriptionStep: state.CreateDeal.showDescriptionStep
+  showDescriptionStep: state.CreateDeal.showDescriptionStep,
+  discountPercent: state.CreateDeal.discountPercent
 });
 
 const matchDispatchToProps = dispatch => {
@@ -175,7 +183,8 @@ const matchDispatchToProps = dispatch => {
       _removeImage,
       handleUploadingPhotosStep,
       handlePricingStep,
-      handleDescriptionStep
+      handleDescriptionStep,
+      onDiscountPercentageToChange
     },
     dispatch
   );
