@@ -65,7 +65,7 @@ router.get('/api/deals/:id/:deal_name', function (req, res) {
     [req.params.id],
     function (error, deal_images_result, fields) {
 
-      console.log(deal_images_result);
+      // console.log(deal_images_result);
       if (error) throw error;
 
       let newDealItem = [];
@@ -150,6 +150,7 @@ router.get('/api/deals/:id/:deal_name', function (req, res) {
 
     }
   );
+  });
 
 
   // load all reviews of a particular seller
@@ -188,11 +189,12 @@ router.get('/api/deals/:id/:deal_name', function (req, res) {
 
         
         connection.query(
-          'SELECT rating, COUNT(rating) as num_ratings FROM buyers_reviews_sellers WHERE seller_id = ? GROUP BY rating ORDER BY rating',
+          'SELECT rating, COUNT(rating) as num_ratings FROM buyers_reviews_sellers WHERE seller_id = ? AND display_review = 1 GROUP BY rating ORDER BY rating',
           [req.params.seller_id],
           function (error, categorizeResults, fields) {
             if (error) console.log(error);
-
+            console.log(allReviewResults);
+            console.log(categorizeResults);
             res.json({allReviews: allReviewResults, ratingCategories: categorizeResults});
 
           }
@@ -248,6 +250,6 @@ router.get('/api/deals/:id/:deal_name', function (req, res) {
   //   );
   // });
 
-});
+// });
 
 module.exports = router;

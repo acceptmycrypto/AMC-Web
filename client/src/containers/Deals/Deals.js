@@ -35,60 +35,60 @@ class Deals extends Component {
     }
   }
 
-  ratingDisplay = (rating) => {
-    let star = <i class="rating fa fa-star" aria-hidden="true"></i>;
-    let halfStar = <i class="rating fas fa-star-half-alt"></i>;
-    let emptyStar = <i class="rating far fa-star" aria-hidden="true"></i>;
-    let result = [];
-    if(rating%1 == 0)
-    {
-      for (let i = 1; i <= 5; i++)
-      {
-        if(i<=rating)
-        {
-          result.push(star);
-        }
-        else
-        {
-          result.push(emptyStar);
-        }
-      }
-    }
-    else
-    {
-        let rem = rating%1;
-        let baseRating = Math.floor(rating);
-        for(let i = 0; i < 5; i++)
-        {
-          if(i <= rating)
-          {
-            if(i !== baseRating)
-            {
-              result.push(star);
-            }
-            else if(i == baseRating && rem<=0.25) //this might not be quite right
-            {
-              result.push(halfStar);
-            }
-            else if(i == baseRating && rem>0.25 && rem<0.75)
-            {
-              result.push(halfStar);
-            }
-            else
-            {
-              result.push(star);
-            }
+  // ratingDisplay = (rating) => {
+  //   let star = <i class="rating fa fa-star" aria-hidden="true"></i>;
+  //   let halfStar = <i class="rating fas fa-star-half-alt"></i>;
+  //   let emptyStar = <i class="rating far fa-star" aria-hidden="true"></i>;
+  //   let result = [];
+  //   if(rating%1 == 0)
+  //   {
+  //     for (let i = 1; i <= 5; i++)
+  //     {
+  //       if(i<=rating)
+  //       {
+  //         result.push(star);
+  //       }
+  //       else
+  //       {
+  //         result.push(emptyStar);
+  //       }
+  //     }
+  //   }
+  //   else
+  //   {
+  //       let rem = rating%1;
+  //       let baseRating = Math.floor(rating);
+  //       for(let i = 0; i < 5; i++)
+  //       {
+  //         if(i <= rating)
+  //         {
+  //           if(i !== baseRating)
+  //           {
+  //             result.push(star);
+  //           }
+  //           else if(i == baseRating && rem<=0.25) //this might not be quite right
+  //           {
+  //             result.push(halfStar);
+  //           }
+  //           else if(i == baseRating && rem>0.25 && rem<0.75)
+  //           {
+  //             result.push(halfStar);
+  //           }
+  //           else
+  //           {
+  //             result.push(star);
+  //           }
             
-          }
-          else
-          {
-              result.push(emptyStar);
-          }
-        }
+  //         }
+  //         else
+  //         {
+  //             result.push(emptyStar);
+  //         }
+  //       }
         
-    }
-    return result;
-  };
+  //   }
+  //   return result;
+  // };
 
   render() {
     let { error, loading, deals, userLoggedIn } = this.props;  //does this need to be const?? i changed it to let so line 56 will work
@@ -120,7 +120,6 @@ class Deals extends Component {
         <Layout>
         <div className="venues-content mb-5">
 
-
           {/* remove the cryptoranking table on the deals page until further notice
           <CryptoRankings /> */}
 
@@ -135,9 +134,6 @@ class Deals extends Component {
                       <small className="deal-description">{this.handleLongDescription(deal.deal_description)}</small>
                       {/* if seller is a vendor then display the venue name else if seller is a user then display the seller name which is the user's username */}
                       <div><small>Offered by: {deal.venue_name || deal.seller_name}</small></div>
-                      <div><small>Seller's Rating: {deal.sellers_avg_rating && this.ratingDisplay(deal.sellers_avg_rating)} {deal.sellers_avg_rating && deal.sellers_avg_rating.toFixed(1)}
-                      {!deal.sellers_avg_rating && 'N/A'}  out of 5 stars </small> </div>
-                      
                     </div>
 
                     <div className="deal-price">

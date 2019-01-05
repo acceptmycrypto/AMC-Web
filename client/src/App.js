@@ -12,6 +12,7 @@ import Settings from "./containers/UserSettings/Settings"
 
 import FeedDeals from "./containers/Deals";
 import DealItem from "./containers/Deals/DealItem";
+import Reviews from "./containers/Reviews";
 
 // import Layout from "./components/Layout";
 
@@ -39,7 +40,7 @@ class App extends Component {
 
               <Route exact path="/feed/deals" component={FeedDeals} />
               <Route path='/feed/deals/:id/:deal_name' component={DealItem}/>
-
+              <Route path='/api/reviews/sellers/:seller_id' component={Reviews}/>
 
               {/* this will redirect none of the matched above Routes to the root route (when not logged in root route is sign in page and when logged in root route is deals page)  */}
               {/* additionally when not logged in this will not allow user to access any sites other than sign in or sign up */}

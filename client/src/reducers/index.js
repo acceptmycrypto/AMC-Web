@@ -12,6 +12,7 @@ import LoadCrypto from './reducer-load-cryptos';
 import CryptoSelected from './reducer-sign-up';
 import SignInModal from './reducer-sign-in';
 import Settings from './reducer-settings';
+import Reviews from './reducer-reviews';
 
 const allReducers = combineReducers({
   matchedDeals: Deals,
@@ -26,7 +27,8 @@ const allReducers = combineReducers({
   TransactionInfo,
   Search,
   Settings,
-  Category
+  Category,
+  Reviews
 });
 
 export default allReducers;

@@ -18,7 +18,8 @@ import {
   handlePayingStep} from "../../../actions/dealItemActions";
 import { _fetchTransactionInfo } from "../../../actions/paymentActions";
 import { Carousel } from "react-responsive-carousel";
-import CustomizeOrder from "../CustomizeOrder";
+// import CustomizeOrder from "../CustomizeOrder";
+import ItemDescription from "../ItemDescription";
 import ShipOrder from "../ShipOrder";
 import PurchaseOrder from "../PurchaseOrder";
 import Layout from "../../Layout";
@@ -178,6 +179,11 @@ class DealItem extends Component {
     let halfStar = <i class="rating fas fa-star-half-alt"></i>;
     let emptyStar = <i class="rating far fa-star" aria-hidden="true"></i>;
     let result = [];
+    if(rating === 0)
+    {
+      result.push(emptyStar,emptyStar,emptyStar,emptyStar,emptyStar);
+      return result;
+    }
     if(rating%1 == 0)
     {
       for (let i = 1; i <= 5; i++)
@@ -233,6 +239,7 @@ class DealItem extends Component {
             error,
             deal_item_loading,
             dealItem,
+            reviews,
             acceptedCryptos,
             allStates,
             selectedSize,
@@ -265,7 +272,7 @@ class DealItem extends Component {
             handlePayingStep,
 
             userLoggedIn} = this.props;
-
+    // console.log('275' + reviews.allReviews);
     if (error) {
       return <div>Error! {error.message}</div>;
     }
@@ -313,7 +320,7 @@ class DealItem extends Component {
                 <div className="deal-item-name">
                   <strong>{dealItem && dealItem.deal_name}</strong> <br/>
                   <small> Offered By: {dealItem && dealItem.venue_name || dealItem && dealItem.seller_name}</small> <br/>
-                  <small> Seller's Rating: {dealItem && dealItem.sellers_avg_rating && this.ratingDisplay(dealItem.sellers_avg_rating)} {dealItem && dealItem.sellers_avg_rating && dealItem.sellers_avg_rating.toFixed(1)} {dealItem && !dealItem.sellers_avg_rating && 'N/A'} out of 5 stars </small>
+                  {/* <small> Seller's Rating: {dealItem && dealItem.sellers_avg_rating && this.ratingDisplay(dealItem.sellers_avg_rating)} {dealItem && dealItem.sellers_avg_rating && dealItem.sellers_avg_rating.toFixed(1)} {dealItem && !dealItem.sellers_avg_rating && this.ratingDisplay(0)} 0 out of 5 stars</small> */}
                  
                 </div>
                 <div className="deal-item-cost">
@@ -324,11 +331,11 @@ class DealItem extends Component {
               </div>
 
               <div className="deal-item-summary">
-                  <div className="customize-item-summary">
+                  {/* <div className="customize-item-summary">
                     <strong>Customizing</strong> <br/>
                     <small>{selectedSize}</small> <br/>
                     <small>{selectedColor}</small> <br/>
-                  </div>
+                  </div> */}
 
                   <div className="customize-item-shipping">
                     <strong>Shipping</strong> <br/>
@@ -353,11 +360,11 @@ class DealItem extends Component {
                 <a onClick={handleCustomizingStep} className={showCustomizationStep ? "active step" : "step"}>
                   <i className="edit icon"></i>
                   <div className="content">
-                    <div className="title">Customizing</div>
-                    <div className="description">Choose your size or color</div>
+                    <div className="title">Item Description</div>
+                    <div className="description">See details about this item</div>
                   </div>
                 </a>
-                <a onClick={() => this.handleCustomizationValidation() && handleShippingStep()} className={showShippingStep ? "active step" : "step"}>
+                <a onClick={() => handleShippingStep()} className={showShippingStep ? "active step" : "step"}>
                 <i className="truck icon"></i>
                   <div className="content">
                     <div className="title">Shipping</div>
@@ -395,13 +402,18 @@ class DealItem extends Component {
               <div className="deal-checkout-container mt-5">
                 <div className="step-progress">
                   {showCustomizationStep &&
-                  <CustomizeOrder
-                  handle_CustomizingSize={handleCustomizingSize}
-                  handle_CustomizingColor={handleCustomizingColor}
-                  showSelectedSize={selectedSize}
-                  showSelectedColor={selectedColor}
+                  <ItemDescription 
+                  {...dealItem}
+                  {...reviews}
+                  // <CustomizeOrder
+                  // handle_CustomizingSize={handleCustomizingSize}
+                  // handle_CustomizingColor={handleCustomizingColor}
+                  // showSelectedSize={selectedSize}
+                  // showSelectedColor={selectedColor}
                   next_step={handleShippingStep}
-                  validateCustomizationData={this.handleCustomizationValidation}/>}
+                  rating_display={this.ratingDisplay}
+                  // validateCustomizationData={this.handleCustomizationValidation}
+                  />}
 
                   {showShippingStep &&
                   <ShipOrder
@@ -451,6 +463,7 @@ class DealItem extends Component {
 
 const mapStateToProps = state => ({
   dealItem: state.DealItem.dealItem,
+  reviews: state.DealItem.reviews,
   acceptedCryptos: state.DealItem.acceptedCryptos,
   selectedSize: state.DealItem.selectedSize,
   selectedColor: state.DealItem.selectedColor,
