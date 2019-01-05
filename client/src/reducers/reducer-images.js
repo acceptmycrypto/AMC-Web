@@ -45,7 +45,6 @@ export default function imagesReducer(state = initialState, action) {
       };
 
     case "VIEW_UPLOADED_IMAGE":
-    debugger
       return {
         ...state,
         imageView: action.payload
