@@ -11,7 +11,6 @@ const handleImagesUpload = (images, imageObj) => {
 }
 
 const handleImageRemove = (images, imageKey) => {
-  debugger
   let newImageArr = images.filter(img => img.key !== imageKey);
   return newImageArr
 }
