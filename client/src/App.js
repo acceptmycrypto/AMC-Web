@@ -41,7 +41,7 @@ class App extends Component {
 
               <Route exact path="/feed/deals" component={FeedDeals} />
               <Route path='/feed/deals/:deal_name' component={DealItem}/>
-              <Route path='/listdeal' component={ListDeal}/>
+              <Route exact path='/listdeal' component={ListDeal}/>
 
 
               {/* this will redirect none of the matched above Routes to the root route (when not logged in root route is sign in page and when logged in root route is deals page)  */}
