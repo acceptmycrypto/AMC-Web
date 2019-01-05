@@ -17,6 +17,17 @@
   display: flex;
 }
 
+.select-crypto-for-deal {
+  display: flex;
+  min-height: 300px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 5px;
+  padding: 20px;
+  margin: 10px 50px;
+
+}
+
 .pricing-titles {
   font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
   font-size: 1.14285714em;
@@ -157,12 +168,9 @@
   text-align: center;
 }
 
-/* #percent-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  background: #445366;
-
-} */
+/* cryptos styling */
+.crypto-subtitle {
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+  font-weight: 600;
+  opacity: .7;
+}
