@@ -30,8 +30,8 @@ class DealItem extends Component {
     await this.props._isLoggedIn(localStorage.getItem('token'));
 
     if (await this.props.userLoggedIn) {
-      const { deal_name } = await this.props.match.params;
-      await this.props._loadDealItem(deal_name);
+      const { deal_name, id } = await this.props.match.params;
+      await this.props._loadDealItem(id, deal_name);
 
     }else{
         // localStorage.removeItem('token');
@@ -229,7 +229,7 @@ class DealItem extends Component {
               <div className="deal-item-header">
                 <div className="deal-item-name">
                   <strong>{dealItem && dealItem.deal_name}</strong> <br/>
-                  <small> Offered By: {dealItem && dealItem.venue_name}</small>
+                  <small> Offered By: {dealItem && dealItem.venue_name || dealItem && dealItem.seller_name}</small>
                 </div>
                 <div className="deal-item-cost">
                   <strong>Pay in Crypto:  ${dealItem && dealItem.pay_in_crypto.toFixed(2)}</strong>  <small className="deal-item-discount">
@@ -256,8 +256,13 @@ class DealItem extends Component {
 
                   <div className="customize-item-payment">
                     <div className="crypto_logo">
-                      <strong>Payment</strong> <br/>
-                      {selectedOption ?  <img src={selectedOption.logo} alt="cryptoLogo" /> : null}
+                      <strong>Crypto Payment</strong> <br/>
+                      {selectedOption ?  <img src={selectedOption.logo} alt="cryptoLogo" /> :
+                      <div>
+                        Powered By
+                        <img style={{width: "100px", marginTop: "0px"}} src="../../../assets/images/coin_payment.png" alt="coinpayment_logo"/>
+                      </div>
+                       }
                     </div>
                   </div>
               </div>
@@ -346,6 +351,13 @@ class DealItem extends Component {
                   transactionInfo={paymentInfo}
                   cryptoSymbol={selectedOption && selectedOption.value}
                   paymentButtonClicked={createPaymentButtonClicked}
+
+                  deal_item={dealItem}
+                  full_name={fullName}
+                  shipping_address={shippingAddress}
+                  shipping_city={shippingCity}
+                  zip_code={zipcode}
+                  shipping_state={shippingState}
 
                   showLoadingSpinner={transaction_loading}
                   timeout={paymentInfo && this.timeInMilliseconds(paymentInfo.timeout)}/>}

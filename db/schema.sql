@@ -41,7 +41,9 @@ CREATE TABLE deals (
 	date_expired DATETIME NULL,
 	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   	category VARCHAR(255) NULL, -- we need to take this out eventually
-	condition VARCHAR (255) NULL,
+	item_condition VARCHAR (255) NULL,
+-- 	deal_avg_rating FLOAT(3,2) NULL,
+-- 	total_deal_ratings INT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (venue_id) REFERENCES venues(id),
 	FOREIGN KEY (seller_id) REFERENCES users(id)
@@ -112,6 +114,7 @@ CREATE TABLE categories_deals(
 
 
 -- create a junction table for many-to-many association
+-- venues will have a set of cryptos they accept for all their deal items
 CREATE TABLE cryptos_venues (
 	crypto_id INT NOT NULL,
 	venue_id INT NOT NULL,
@@ -120,28 +123,38 @@ CREATE TABLE cryptos_venues (
 	FOREIGN KEY (venue_id) REFERENCES venues(id)
 );
 
-CREATE TABLE userInput (
-	id INT NOT NULL AUTO_INCREMENT,
-	user_email VARCHAR(255) NOT NULL UNIQUE,
-	crypto_name VARCHAR(255) NOT NULL UNIQUE,
-	venue VARCHAR(255) NOT NULL UNIQUE,
-	venue_link VARCHAR(255) NOT NULL UNIQUE,
-	PRIMARY KEY (id)
+-- create a junction table for many-to-many association
+-- sellers will specify the cryptocurrencies they will accept for each individual deal item
+CREATE TABLE cryptos_deals (
+	crypto_id INT NOT NULL,
+	deal_id INT NOT NULL,
+	PRIMARY KEY (crypto_id, deal_id),
+	FOREIGN KEY (crypto_id)  REFERENCES crypto_metadata(id),
+	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
 
-CREATE TABLE userQueries (
-	id INT NOT NULL AUTO_INCREMENT,
-	email VARCHAR(255) NOT NULL UNIQUE,
-	message VARCHAR(255) NOT NULL,
-	PRIMARY KEY (id)
-);
+-- CREATE TABLE userInput (
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	user_email VARCHAR(255) NOT NULL UNIQUE,
+-- 	crypto_name VARCHAR(255) NOT NULL UNIQUE,
+-- 	venue VARCHAR(255) NOT NULL UNIQUE,
+-- 	venue_link VARCHAR(255) NOT NULL UNIQUE,
+-- 	PRIMARY KEY (id)
+-- );
 
-CREATE TABLE admin_users (
-	id INT NOT NULL AUTO_INCREMENT,
-	email VARCHAR(255) UNIQUE,
-	password VARCHAR(255) NOT NULL UNIQUE,
-	PRIMARY KEY (id)
-);
+-- CREATE TABLE userQueries (
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	email VARCHAR(255) NOT NULL UNIQUE,
+-- 	message VARCHAR(255) NOT NULL,
+-- 	PRIMARY KEY (id)
+-- );
+
+-- CREATE TABLE admin_users (
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	email VARCHAR(255) UNIQUE,
+-- 	password VARCHAR(255) NOT NULL UNIQUE,
+-- 	PRIMARY KEY (id)
+-- );
 
 
 CREATE TABLE users(
@@ -157,6 +170,8 @@ CREATE TABLE users(
 	previous_email VARCHAR(100) NULL UNIQUE,
 	password VARCHAR(255) NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	sellers_avg_rating FLOAT(3,2) NULL,
+	total_sellers_ratings INT NULL,
 	PRIMARY KEY (id)
 );
 
@@ -312,7 +327,11 @@ CREATE TABLE buyers_reviews_sellers(
 	seller_id INT NOT NULL,
 	deal_id INT NOT NULL,
 	rating INT NOT NULL DEFAULT 0,
+	title VARCHAR (255) NOT NULL,
 	body TEXT NULL,
+	likes INT DEFAULT 0,
+	dislikes INT DEFAULT 0,
+	helpful_review INT DEFAULT 0,
 	date_reviewed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	display_review BOOLEAN NOT NULL DEFAULT FALSE,
 	PRIMARY KEY (id),

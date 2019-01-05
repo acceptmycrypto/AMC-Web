@@ -26,3 +26,8 @@
   position: absolute;
   margin: 20px 0px;
 }
+
+#payment-divider, #paypal-button {
+  text-align: center;
+  margin-bottom: 10px;
+}
