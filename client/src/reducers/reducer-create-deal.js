@@ -7,7 +7,9 @@ const initialState = {
   showPhotosStep: true,
   showPricingStep: false,
   showDescriptionStep: false,
-  discountPercent: 50
+  discountPercent: 10,
+  priceInUSD: "",
+  priceInCrypto: ""
 };
 
 const handleImagesUpload = (images, imageObj) => {
@@ -18,6 +20,10 @@ const handleImageRemove = (images, imageKey) => {
   debugger
   let newImageArr = images.filter(img => img.key !== imageKey);
   return newImageArr
+}
+
+const CalculateDiscountPrice = (basePrice, discount) => {
+  return basePrice - (basePrice * (discount/100))
 }
 
 export default function CreateDealReducer(state = initialState, action) {
@@ -50,7 +56,6 @@ export default function CreateDealReducer(state = initialState, action) {
       };
 
     case "VIEW_UPLOADED_IMAGE":
-    debugger
       return {
         ...state,
         imageView: action.payload
@@ -87,9 +92,25 @@ export default function CreateDealReducer(state = initialState, action) {
       };
 
     case "CHANGE_DISCOUNT_PERCENTAGE":
+      let discountPriceOnPercentageChange = CalculateDiscountPrice(state.priceInUSD, action.payload).toFixed(2)
       return {
         ...state,
-        discountPercent: action.payload
+        discountPercent: action.payload,
+        priceInCrypto: discountPriceOnPercentageChange
+      };
+
+    case "CHANGE_BASE_PRICE":
+      let discountPrice = CalculateDiscountPrice(action.payload, state.discountPercent).toFixed(2)
+      return {
+        ...state,
+        priceInUSD: action.payload,
+        priceInCrypto: discountPrice
+      };
+
+    case "ONBLUR_BASE_PRICE_INPUT":
+      return {
+        ...state,
+        priceInUSD: action.payload,
       };
 
     default:

@@ -100,3 +100,18 @@ export const onDiscountPercentageToChange = (event) => {
   }
 };
 
+export const OnUSDPriceChange = (event) => {
+  return {
+      type: 'CHANGE_BASE_PRICE',
+      payload: event.target.value
+  }
+};
+
+export const validateDecimalForBasePrice = (event) => {
+  let basePrice = parseFloat(event.target.value).toFixed(2);
+  return {
+      type: 'ONBLUR_BASE_PRICE_INPUT',
+      payload: basePrice
+  }
+};
+

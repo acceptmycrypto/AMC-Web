@@ -14,7 +14,11 @@ const Pricing = props => {
             autofocus="autofocus"
             className="pricing-input"
             type="number"
-            placeholder="Enter a price"
+            placeholder="Enter your base price"
+            min="0"
+            onChange={props.handlePriceUSDChange}
+            value={props.showPriceUSD}
+            onBlur={props.validateBasePrice}
           />
         </div>
         <small className="pricing-footer-note">
@@ -27,9 +31,11 @@ const Pricing = props => {
           <div className="pricing-input-row">
             <i class="fas fa-dollar-sign fa-2x" />
             <input
-              className="pricing-input pricing-input-crypto"
-              type="number"
-              placeholder="Enter a price"
+              className="pricing-input-crypto"
+              type="text"
+              placeholder="0.00"
+              min="0"
+              value={props.showPriceCrypto}
             />
           </div>
           <small className="pricing-footer-note">
@@ -50,6 +56,7 @@ const Pricing = props => {
             id="percent-slider"
           />
           <div className="pricing-slider-footer-note">
+            <div className="discount-pricing-title">Set your discount</div>
             <small>
               Minimum 10% off is required.
             </small>

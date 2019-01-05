@@ -11,7 +11,9 @@ import {
   handleUploadingPhotosStep,
   handlePricingStep,
   handleDescriptionStep,
-  onDiscountPercentageToChange
+  onDiscountPercentageToChange,
+  OnUSDPriceChange,
+  validateDecimalForBasePrice
 } from "../../actions/listDealActions";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
 import UploadingImage from "./UploadImage/UploadingImage";
@@ -78,6 +80,14 @@ class ListDeal extends Component {
     this.props._removeImage(localStorage.getItem("token"), imageKey);
   };
 
+  calculateDiscountPrice = (event, discountPercentage) => {
+    // if (basePrice !== "") {
+    //   //calculate the discount price
+    //   return basePrice * (discountPercentage / 100);
+    // }
+    console.log(event.target.value);
+  };
+
   render() {
     const {
       error,
@@ -86,12 +96,16 @@ class ListDeal extends Component {
       showPricingStep,
       showDescriptionStep,
       discountPercent,
+      priceInUSD,
 
       onSelectImageToView,
       handleUploadingPhotosStep,
       handlePricingStep,
       handleDescriptionStep,
-      onDiscountPercentageToChange
+      onDiscountPercentageToChange,
+      OnUSDPriceChange,
+      priceInCrypto,
+      validateDecimalForBasePrice
     } = this.props;
 
     if (error) {
@@ -155,7 +169,14 @@ class ListDeal extends Component {
             />
           )}
           {showPricingStep && (
-            <Pricing changeDiscountPercent={onDiscountPercentageToChange} showDiscountPercent={discountPercent}/>
+            <Pricing
+              changeDiscountPercent={onDiscountPercentageToChange}
+              showDiscountPercent={discountPercent}
+              showPriceUSD={priceInUSD}
+              showPriceCrypto={priceInCrypto}
+              handlePriceUSDChange={OnUSDPriceChange}
+              validateBasePrice={validateDecimalForBasePrice}
+            />
           )}
         </Layout>
       </div>
@@ -172,7 +193,9 @@ const mapStateToProps = state => ({
   showPhotosStep: state.CreateDeal.showPhotosStep,
   showPricingStep: state.CreateDeal.showPricingStep,
   showDescriptionStep: state.CreateDeal.showDescriptionStep,
-  discountPercent: state.CreateDeal.discountPercent
+  discountPercent: state.CreateDeal.discountPercent,
+  priceInUSD: state.CreateDeal.priceInUSD,
+  priceInCrypto: state.CreateDeal.priceInCrypto
 });
 
 const matchDispatchToProps = dispatch => {
@@ -184,7 +207,9 @@ const matchDispatchToProps = dispatch => {
       handleUploadingPhotosStep,
       handlePricingStep,
       handleDescriptionStep,
-      onDiscountPercentageToChange
+      onDiscountPercentageToChange,
+      OnUSDPriceChange,
+      validateDecimalForBasePrice
     },
     dispatch
   );
