@@ -113,6 +113,7 @@ CREATE TABLE categories_deals(
 	FOREIGN KEY (deals_id) REFERENCES deals(id)
 );
 
+
 --table to be used in the future
 -- custom options to be displayed when user is listing an item to sell eg. size, color, model etc based on the categoryies of the item
 -- CREATE TABLE customizable_option(
