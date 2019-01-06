@@ -41,12 +41,27 @@ CREATE TABLE users(
 	phone_number VARCHAR(100) NULL,
 	email VARCHAR(100) NOT NULL UNIQUE,
 	previous_email VARCHAR(100) NULL UNIQUE,
+	address VARCHAR(255) NULL,
+	city VARCHAR(255) NULL,
+	state VARCHAR(255) NULL,
+	zipcode VARCHAR(255) NULL,
 	password VARCHAR(255) NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	sellers_avg_rating FLOAT(3,2) NULL,
 	total_sellers_ratings INT NULL,
 	PRIMARY KEY (id)
 );
+
+-- buying as a guest user will not have their user purchases saved
+-- at guest checkout check if already a user
+CREATE TABLE guest_users(
+	id INT NOT NULL AUTO_INCREMENT,
+	email VARCHAR(100) NOT NULL,
+	first_name VARCHAR(255) NULL,
+	last_name VARCHAR (255) NULL,
+	phone_number VARCHAR(100) NULL,
+	PRIMARY KEY (id)
+)
 
 CREATE TABLE deals (
 	id INT NOT NULL AUTO_INCREMENT,
@@ -209,7 +224,8 @@ CREATE TABLE users_cryptos(
 
 CREATE TABLE users_purchases(
 	id INT NOT NULL AUTO_INCREMENT,
-	user_id INT NOT NULL,
+	user_id INT NULL,
+	guest_user_id INT NULL,
 	deal_id INT NOT NULL,
 	crypto_id INT NOT NULL,
 	date_purchased TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -225,6 +241,7 @@ CREATE TABLE users_purchases(
 	permission VARCHAR(255) NOT NULL DEFAULT "community",
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_id) REFERENCES users(id),
+	FOREIGN KEY (guest_user_id) REFERENCES guest_users(id),
 	FOREIGN KEY (crypto_id) REFERENCES crypto_info(id),
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
