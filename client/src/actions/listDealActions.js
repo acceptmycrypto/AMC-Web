@@ -128,25 +128,26 @@ export function _getCryptoExchange(token, crypto_symbol, price_in_crypto) {
   };
 
   return dispatch => {
-    dispatch(getRateBegin());
+    dispatch(getRateBegin(crypto_symbol));
     return fetch("/cryptocurrency/exchange", settings)
       .then(res => res.json())
       .then(jsonRate => {
         debugger
-        dispatch(getRateSuccess(jsonRate));
+        dispatch(getRateSuccess(crypto_symbol, jsonRate));
         return jsonRate;
       })
       .catch(error => dispatch(getRateFailure(error)));
   };
 }
 
-export const getRateBegin = () => ({
-  type: "GET_RATE_BEGIN"
+export const getRateBegin = crypto_symbol => ({
+  type: "GET_RATE_BEGIN",
+  payload: {crypto_symbol}
 });
 
-export const getRateSuccess = cryptoAmount => ({
+export const getRateSuccess = (crypto_symbol, crypto_amount) => ({
   type: "GET_RATE_SUCCESS",
-  payload: cryptoAmount
+  payload: {crypto_symbol, crypto_amount}
 });
 
 export const getRateFailure = error => ({

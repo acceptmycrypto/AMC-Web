@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./Pricing.css";
+import LoadingSpinner from "../../../components/UI/LoadingSpinner";
 
 const Pricing = props => {
   return (
@@ -70,12 +71,22 @@ const Pricing = props => {
           <div className="crypto-logos-for-deal-listing">
             {props.cryptoOptions.map(crypto => {
               return (
-                <div>
+                <div key={crypto.crypto_symbol}>
                   <div className="crypto-logo-image">
-                    <img onClick={props.getCryptoExchange} src={crypto.crypto_logo} data-cryptosymbol={crypto.crypto_symbol} alt="crypto_logo" />
+                    <img
+                      onClick={props.getCryptoExchange}
+                      data-cryptosymbol={crypto.crypto_symbol}
+                      src={crypto.crypto_logo}
+                      alt="crypto_logo"
+                    />
                     <p>{crypto.crypto_metadata_name}</p>
                   </div>
-                  <div className="check-crypto-amount">Loading...</div>
+                  {props.rateLoading[crypto.crypto_symbol] && (
+                    <div className="loading-spinner-on-getting-rate">
+                      <i className="fa fa-spinner fa-spin" /> Loading...
+                    </div>
+                  )}
+                  {props.showCryptoAmount[crypto.crypto_symbol] && <div className="check-crypto-amount">{props.showCryptoAmount[crypto.crypto_symbol]}</div>}
                 </div>
               );
             })}

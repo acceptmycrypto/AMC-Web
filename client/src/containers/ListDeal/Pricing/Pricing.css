@@ -204,3 +204,9 @@
   text-align: center;
   margin-top: 5px;
 }
+
+.loading-spinner-on-getting-rate {
+  text-align: center;
+  margin-top: 5px;
+  font-size: 12px;
+}

@@ -87,9 +87,33 @@ class ListDeal extends Component {
   };
 
   calculateCryptoExchange = (event) => {
+    const { _getCryptoExchange } = this.props;
+
+    // if ("not selected") {
+    //   let cryptoSymbol = event.target.getAttribute("data-cryptosymbol");
+    //   _getCryptoExchange(localStorage.getItem("token"), cryptoSymbol, this.props.priceInCrypto);
+    // } else [
+    //   //add code here to remove
+    // ]
     let cryptoSymbol = event.target.getAttribute("data-cryptosymbol");
-    this.props._getCryptoExchange(localStorage.getItem("token"), cryptoSymbol, this.props.priceInCrypto);
+    _getCryptoExchange(localStorage.getItem("token"), cryptoSymbol, this.props.priceInCrypto);
+
+
+
   }
+
+  // showCryptoAmount = () => {
+  //   debugger
+  //   const { uploading, crypto_amount } = this.props;
+  //   switch (true) {
+  //     case uploading:
+  //       return <LoadingSpinner className="check-crypto-amount" />;
+  //     case crypto_amount:
+  //       return <div className="check-crypto-amount">{crypto_amount}</div>
+  //     default:
+  //       return <div></div>
+  //   }
+  // }
 
   render() {
     const {
@@ -101,6 +125,8 @@ class ListDeal extends Component {
       discountPercent,
       priceInUSD,
       cryptoOptionsForCreatingDeal,
+      gettingRate,
+      crypto_amount,
 
       onSelectImageToView,
       handleUploadingPhotosStep,
@@ -115,7 +141,7 @@ class ListDeal extends Component {
     if (error) {
       return <div>Error! {error.message}</div>;
     }
-
+    debugger
     return (
       <div>
         {/* If user is navigating away from the page, let user know data won't be saved */}
@@ -182,6 +208,8 @@ class ListDeal extends Component {
               validateBasePrice={validateDecimalForBasePrice}
               cryptoOptions={cryptoOptionsForCreatingDeal}
               getCryptoExchange={this.calculateCryptoExchange}
+              rateLoading={gettingRate}
+              showCryptoAmount={crypto_amount}
             />
           )}
         </Layout>
@@ -202,7 +230,9 @@ const mapStateToProps = state => ({
   discountPercent: state.CreateDeal.discountPercent,
   priceInUSD: state.CreateDeal.priceInUSD,
   priceInCrypto: state.CreateDeal.priceInCrypto,
-  cryptoOptionsForCreatingDeal: state.LoadCrypto.cryptoOptionsForCreatingDeal
+  cryptoOptionsForCreatingDeal: state.LoadCrypto.cryptoOptionsForCreatingDeal,
+  gettingRate: state.CreateDeal.gettingRate,
+  crypto_amount: state.CreateDeal.crypto_amount
 });
 
 const matchDispatchToProps = dispatch => {
