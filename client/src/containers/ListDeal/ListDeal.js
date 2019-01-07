@@ -13,13 +13,19 @@ import {
   handleDescriptionStep,
   onDiscountPercentageToChange,
   OnUSDPriceChange,
-  validateDecimalForBasePrice
+  validateDecimalForBasePrice,
+  _getCryptoExchange
 } from "../../actions/listDealActions";
+import { _loadCryptocurrencies } from "../../actions/loadCryptoActions";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
 import UploadingImage from "./UploadImage/UploadingImage";
 import Pricing from "./Pricing";
 
 class ListDeal extends Component {
+
+  componentDidMount =() => {
+    this.props._loadCryptocurrencies();
+  }
   // If user refreshes the page, we warn users that data won't be saved
   componentDidUpdate = () => {
     const { images } = this.props;
@@ -80,13 +86,10 @@ class ListDeal extends Component {
     this.props._removeImage(localStorage.getItem("token"), imageKey);
   };
 
-  calculateDiscountPrice = (event, discountPercentage) => {
-    // if (basePrice !== "") {
-    //   //calculate the discount price
-    //   return basePrice * (discountPercentage / 100);
-    // }
-    console.log(event.target.value);
-  };
+  calculateCryptoExchange = (event) => {
+    let cryptoSymbol = event.target.getAttribute("data-cryptosymbol");
+    this.props._getCryptoExchange(localStorage.getItem("token"), cryptoSymbol, this.props.priceInCrypto);
+  }
 
   render() {
     const {
@@ -97,6 +100,7 @@ class ListDeal extends Component {
       showDescriptionStep,
       discountPercent,
       priceInUSD,
+      cryptoOptionsForCreatingDeal,
 
       onSelectImageToView,
       handleUploadingPhotosStep,
@@ -176,6 +180,8 @@ class ListDeal extends Component {
               showPriceCrypto={priceInCrypto}
               handlePriceUSDChange={OnUSDPriceChange}
               validateBasePrice={validateDecimalForBasePrice}
+              cryptoOptions={cryptoOptionsForCreatingDeal}
+              getCryptoExchange={this.calculateCryptoExchange}
             />
           )}
         </Layout>
@@ -195,7 +201,8 @@ const mapStateToProps = state => ({
   showDescriptionStep: state.CreateDeal.showDescriptionStep,
   discountPercent: state.CreateDeal.discountPercent,
   priceInUSD: state.CreateDeal.priceInUSD,
-  priceInCrypto: state.CreateDeal.priceInCrypto
+  priceInCrypto: state.CreateDeal.priceInCrypto,
+  cryptoOptionsForCreatingDeal: state.LoadCrypto.cryptoOptionsForCreatingDeal
 });
 
 const matchDispatchToProps = dispatch => {
@@ -209,7 +216,9 @@ const matchDispatchToProps = dispatch => {
       handleDescriptionStep,
       onDiscountPercentageToChange,
       OnUSDPriceChange,
-      validateDecimalForBasePrice
+      validateDecimalForBasePrice,
+      _loadCryptocurrencies,
+      _getCryptoExchange
     },
     dispatch
   );

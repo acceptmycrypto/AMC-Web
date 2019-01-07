@@ -5,6 +5,7 @@ const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const verifyToken =  require ("./utils/validation");
+var request = require("request");
 
 // file-type: Detect the file type of a Buffer/Uint8Array
 // multiparty: Parse http requests with content-type multipart/form-data, also known as file uploads.
@@ -74,6 +75,41 @@ router.post("/image/remove", verifyToken, function(request, response) {
 
   let user_id = request.decoded;
   console.log("imageKey", request.body.imageKey);
+
+})
+
+router.post("/cryptocurrency/exchange", verifyToken, async function(req, res) {
+  //call coinmarketcap api to get the exchange rate
+  let crypto = req.body.crypto_symbol;
+  let discountPrice = parseFloat(req.body.price_in_crypto);
+
+  let options = {
+      method: "GET",
+      qs: {
+        symbol: crypto
+      },
+      headers: {
+        "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
+        Accept: "application/json"
+      }
+    }
+  ;
+
+  //use request to call coinmarketcap endpoint
+  await request('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest', options, function (error, response, body) {
+    if (error) {
+      console.log(error);
+    }
+    console.log('body:', body); // Print the HTML for the Google homepage.
+    let rateDate = JSON.parse(body);
+    let cryptoRate = rateDate.data[crypto].quote.USD.price;
+    console.log("rate", cryptoRate);
+    let cryptoAmount = discountPrice/cryptoRate
+    console.log("discountPrice", discountPrice);
+    console.log("amount", cryptoAmount);
+    return res.status(200).json(cryptoAmount);
+  });
+
 
 })
 

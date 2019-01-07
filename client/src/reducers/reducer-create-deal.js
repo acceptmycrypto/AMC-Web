@@ -9,7 +9,8 @@ const initialState = {
   showDescriptionStep: false,
   discountPercent: 10,
   priceInUSD: "",
-  priceInCrypto: ""
+  priceInCrypto: "",
+  crypto_amount: null
 };
 
 const handleImagesUpload = (images, imageObj) => {
@@ -111,6 +112,31 @@ export default function CreateDealReducer(state = initialState, action) {
       return {
         ...state,
         priceInUSD: action.payload,
+      };
+
+    case "GET_RATE_BEGIN":
+      return {
+        ...state,
+        uploading: true,
+        error: null
+      };
+
+    case "GET_RATE_SUCCESS":
+      handleImagesUpload(state.images, action.payload);
+      return {
+        ...state,
+        uploading: false,
+        crypto_amount: action.payload
+      };
+
+    case "GET_RATE_FAILURE":
+      return {
+        ...state,
+        uploading: false,
+        error: action.payload.error,
+        imageData: null,
+        imageView: "",
+        images: []
       };
 
     default:

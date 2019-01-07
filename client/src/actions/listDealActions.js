@@ -115,3 +115,41 @@ export const validateDecimalForBasePrice = (event) => {
   }
 };
 
+//Get crypto rate
+export function _getCryptoExchange(token, crypto_symbol, price_in_crypto) {
+
+  const settings = {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({token, crypto_symbol, price_in_crypto})
+  };
+
+  return dispatch => {
+    dispatch(getRateBegin());
+    return fetch("/cryptocurrency/exchange", settings)
+      .then(res => res.json())
+      .then(jsonRate => {
+        debugger
+        dispatch(getRateSuccess(jsonRate));
+        return jsonRate;
+      })
+      .catch(error => dispatch(getRateFailure(error)));
+  };
+}
+
+export const getRateBegin = () => ({
+  type: "GET_RATE_BEGIN"
+});
+
+export const getRateSuccess = cryptoAmount => ({
+  type: "GET_RATE_SUCCESS",
+  payload: cryptoAmount
+});
+
+export const getRateFailure = error => ({
+  type: "GET_RATE_FAILURE",
+  payload: { error }
+});

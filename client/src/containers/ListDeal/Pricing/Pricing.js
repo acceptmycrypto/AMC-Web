@@ -56,17 +56,30 @@ const Pricing = props => {
             />
             <div className="pricing-slider-footer-note">
               <div className="discount-pricing-title">Set your discount</div>
-              <small>
-                Minimum 10% off is required.
-              </small>
+              <small>Minimum 10% off is required.</small>
             </div>
           </div>
         </div>
       </div>
       <div className="select-crypto-for-deal">
-        <div>
+        <div style={{ width: "100%" }}>
           <div className="pricing-titles">Accept Cryptocurrencies</div>
-          <div className="crypto-subtitle">Select one or more cryptocurrencies you want to accept as payment</div>
+          <div className="crypto-subtitle">
+            Select one or more cryptocurrencies you want to accept as payment
+          </div>
+          <div className="crypto-logos-for-deal-listing">
+            {props.cryptoOptions.map(crypto => {
+              return (
+                <div>
+                  <div className="crypto-logo-image">
+                    <img onClick={props.getCryptoExchange} src={crypto.crypto_logo} data-cryptosymbol={crypto.crypto_symbol} alt="crypto_logo" />
+                    <p>{crypto.crypto_metadata_name}</p>
+                  </div>
+                  <div className="check-crypto-amount">Loading...</div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

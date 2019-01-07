@@ -57,7 +57,7 @@ router.post('/register', function(req, res) {
       //if we find the email exists in the database, we send "Email is taken" to the client
       if (result[0]) return res.status(404).json({ usernameError: 'Username is taken'});
 
-      
+
       connection.query(
         'SELECT * FROM users WHERE email = ?',
         [req.body.email],
@@ -73,11 +73,11 @@ router.post('/register', function(req, res) {
           bcrypt.genSalt(10, function(err, salt) {
             bcrypt.hash(req.body.password, salt, function(err, password_hash) {
             //1) insert the new user into users table
-    
+
               connection.query('INSERT INTO users (email, password, username, email_verification_token) VALUES (?, ?, ?, ?)',
               [req.body.email, password_hash, req.body.username, uuidv4()],
               function (error, results, fields) {
-    
+
                 if (error) {
                   console.log(error)
                 } else {
@@ -85,9 +85,9 @@ router.post('/register', function(req, res) {
                   res.json({
                       message: "We sent you an email for email verification. Please confirm your email."
                   });
-    
+
                   let UserID; //make a available to be resused when insert into users_cryptos table
-    
+
                     //query the new inserted user to get the user-id and email verification code
                     connection.query(
                       'SELECT * FROM users WHERE email = ?',
@@ -95,10 +95,10 @@ router.post('/register', function(req, res) {
                       function(error, result, fields) {
                         if (error) throw error;
                         userID = result[0].id;
-    
+
                         let photo = ['fa-user-secret', 'fa-user-circle', 'fa-user-astronaut', 'fa-user-tie', 'fa-user'];
                         let photo_index = Math.floor(Math.random() * (4 - 0 + 1)) + 0;
-    
+
                         connection.query(
                           'INSERT INTO users_profiles (user_id, photo ) VALUES(?,?)',
                           [result[0].id, photo[photo_index], ],
@@ -106,10 +106,10 @@ router.post('/register', function(req, res) {
                             if (error) throw error;
                           }
                         );
-    
+
                         //use sendgrid to send email
                         let verify_link = process.env.BACKEND_URL+"/email-verify/" + userID + "/" + result[0].email_verification_token;
-    
+
                         const email_verification = {
                           to: req.body.email,
                           from: process.env.CUSTOMER_SUPPORT,
@@ -118,11 +118,11 @@ router.post('/register', function(req, res) {
                         };
                         sgMail.send(email_verification);
                       }
-    
-    
-    
+
+
+
                     );
-    
+
                     if(selectedCryptos.length > 0){
                                           //insert selected cryptos into users_cryptos table
                       connection.query(
@@ -131,17 +131,17 @@ router.post('/register', function(req, res) {
                         function(error, results, fields) {
                           if (error) throw error;
                           const userID_cryptoID = [];
-      
+
                           const cryptoIDs = results.map(crypto => {
                             return crypto["id"]
                           })
-      
+
                           for (let i = 0; i < cryptoIDs.length; i++) {
                             let innerArr = [];
                             innerArr.push(userID, cryptoIDs[i]);
                             userID_cryptoID.push(innerArr);
                           }
-      
+
                         //Now we insert the userID_cryptoID array into the users_cryptos table
                           connection.query(
                             'INSERT INTO users_cryptos (user_id, crypto_id) VALUES ?',
@@ -149,19 +149,19 @@ router.post('/register', function(req, res) {
                             function(error, user_cryptos, fields) {
                               if (error) throw error;
                             }
-      
-      
+
+
                           );
-      
+
                         }
                       );
 
-                    }    
+                    }
                 }
               });
-    
+
             });//bcrypt.hash closing bracket
-    
+
           }); //bcrypt.getsalt closing bracket
         }
       );
@@ -185,7 +185,7 @@ router.post('/resend-email', function(req, res) {
             message: "We sent you another email for email verification. Please confirm your email."
         });
         userID = result[0].id;
-        
+
        //use sendgrid to send email
        let verify_link = process.env.BACKEND_URL+"/email-verify/" + userID + "/" + result[0].email_verification_token;
 
@@ -196,7 +196,7 @@ router.post('/resend-email', function(req, res) {
          html: signupEmailTemplate({ email: req.body.email, verify_link })
        };
        sgMail.send(email_verification);
-        
+
       }
     );
   });
@@ -247,7 +247,7 @@ router.post('/reset-password-email', function(req, res) {
             message: "We sent you an email for password reset. Please confirm your email."
         });
         userID = result[0].id;
-        
+
        //use sendgrid to send email
        let password_reset_link = process.env.FRONTEND_URL+"/ResetPassword";
 
@@ -258,7 +258,7 @@ router.post('/reset-password-email', function(req, res) {
          html: resetPasswordEmailTemplate({ token: result[0].email_verification_token, password_reset_link })
        };
        sgMail.send(email_password_reset);
-        
+
       }
     );
   });
@@ -282,11 +282,11 @@ router.post('/reset-password-email', function(req, res) {
 
             bcrypt.genSalt(10, function(err, salt) {
                 bcrypt.hash(req.body.password1, salt, function(err, password_hash) {
-                
+
                   connection.query('UPDATE users SET ? WHERE ?',
                   [{password: password_hash}, {email_verification_token: req.body.token}],
                   function (error, results, fields) {
-                
+
                     if (error) {
                       console.log(error)
                     } else {
@@ -296,14 +296,14 @@ router.post('/reset-password-email', function(req, res) {
                       });
                     }
                   });
-        
+
                 });//bcrypt.hash closing bracket
-        
+
               }); //bcrypt.getsalt closing bracket
 
-  
+
         }
-  
+
       }
     );
   });
@@ -313,7 +313,7 @@ router.post('/reset-password-email', function(req, res) {
 router.get('/cryptocurrencies', function(req, res) {
 
   connection.query(
-    'SELECT crypto_metadata_name, crypto_symbol FROM crypto_info LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name',
+    'SELECT crypto_metadata_name, crypto_symbol, crypto_logo FROM crypto_info LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name',
     function(error, results, fields) {
 
       if (error) throw error;
