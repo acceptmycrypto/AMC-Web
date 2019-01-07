@@ -40,3 +40,6 @@ var connection = mysql.createConnection({
     password: process.env.DB_PW,
     database: process.env.DB_DB
 });
+
+
+module.exports = router;
