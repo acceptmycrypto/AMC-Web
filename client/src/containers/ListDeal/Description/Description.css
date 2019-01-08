@@ -1,5 +1,5 @@
 .deal-listing-description {
-  min-height: 500px;
+  min-height: 600px;
   margin: 0px 50px;
   margin-bottom: 10px;
   box-sizing: border-box;
@@ -42,3 +42,53 @@
 .description-title-dropdown {
   margin-bottom: 10px;
 }
+
+/* styling the detail area */
+
+.editor-wrapper {
+  width: 80%;
+  margin: auto;
+}
+div.DraftEditor-root {
+  border: solid 1px gray;
+  border-radius: 5px;
+  padding: 20px;
+  height: 200px;
+  overflow-y: auto;
+  font-size: 18px;
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+  /* height:250px;
+  overflow-y: scroll;
+  padding:20px;
+  font-size: 18px;
+  font-family: 'calibri', sans-serif; */
+}
+
+.listing-detail-buttons {
+  text-align: center;
+  margin: 10px 0px;
+}
+
+.detail-button {
+  margin-left: 5px;
+  background-color: #fff;
+  border-radius: 5px;
+}
+
+.detail-button:focus {
+  outline:0;
+}
+
+.detail-button:hover {
+  cursor: pointer;
+}
+
+.detail-title {
+  margin-top: 20px;
+}
+
+.public-DraftEditorPlaceholder-inner {
+  position: absolute;
+  color: #aaaaaa;
+}
+

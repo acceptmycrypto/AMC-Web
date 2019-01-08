@@ -15,7 +15,8 @@ import {
   OnUSDPriceChange,
   validateDecimalForBasePrice,
   _getCryptoExchange,
-  removeSelectedCrypto
+  removeSelectedCrypto,
+  onEditingDetail
 } from "../../actions/listDealActions";
 import { _loadCryptocurrencies } from "../../actions/loadCryptoActions";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
@@ -24,10 +25,9 @@ import Pricing from "./Pricing";
 import Description from "./Description";
 
 class ListDeal extends Component {
-
-  componentDidMount =() => {
+  componentDidMount = () => {
     this.props._loadCryptocurrencies();
-  }
+  };
   // If user refreshes the page, we warn users that data won't be saved
   componentDidUpdate = () => {
     const { images } = this.props;
@@ -88,17 +88,25 @@ class ListDeal extends Component {
     this.props._removeImage(localStorage.getItem("token"), imageKey);
   };
 
-  calculateCryptoExchange = (event) => {
-    const { _getCryptoExchange, crypto_amount, removeSelectedCrypto } = this.props;
+  calculateCryptoExchange = event => {
+    const {
+      _getCryptoExchange,
+      crypto_amount,
+      removeSelectedCrypto
+    } = this.props;
     let cryptoSymbol = event.target.getAttribute("data-cryptosymbol");
 
-    if (crypto_amount[cryptoSymbol]) { //if selected/true
+    if (crypto_amount[cryptoSymbol]) {
+      //if selected/true
       removeSelectedCrypto(cryptoSymbol);
     } else {
-      _getCryptoExchange(localStorage.getItem("token"), cryptoSymbol, this.props.priceInCrypto);
+      _getCryptoExchange(
+        localStorage.getItem("token"),
+        cryptoSymbol,
+        this.props.priceInCrypto
+      );
     }
-
-  }
+  };
 
   // showCryptoAmount = () => {
   //   debugger
@@ -125,6 +133,7 @@ class ListDeal extends Component {
       cryptoOptionsForCreatingDeal,
       gettingRate,
       crypto_amount,
+      editorState,
 
       onSelectImageToView,
       handleUploadingPhotosStep,
@@ -133,7 +142,8 @@ class ListDeal extends Component {
       onDiscountPercentageToChange,
       OnUSDPriceChange,
       priceInCrypto,
-      validateDecimalForBasePrice
+      validateDecimalForBasePrice,
+      onEditingDetail
     } = this.props;
 
     if (error) {
@@ -210,7 +220,9 @@ class ListDeal extends Component {
               showCryptoAmount={crypto_amount}
             />
           )}
-          {showDescriptionStep && <Description />}
+          {showDescriptionStep && (
+            <Description updateEditDetail={onEditingDetail} showEdittingState={editorState}/>
+          )}
         </Layout>
       </div>
     );
@@ -231,7 +243,8 @@ const mapStateToProps = state => ({
   priceInCrypto: state.CreateDeal.priceInCrypto,
   cryptoOptionsForCreatingDeal: state.LoadCrypto.cryptoOptionsForCreatingDeal,
   gettingRate: state.CreateDeal.gettingRate,
-  crypto_amount: state.CreateDeal.crypto_amount
+  crypto_amount: state.CreateDeal.crypto_amount,
+  editorState: state.CreateDeal.editorState
 });
 
 const matchDispatchToProps = dispatch => {
@@ -248,7 +261,8 @@ const matchDispatchToProps = dispatch => {
       validateDecimalForBasePrice,
       _loadCryptocurrencies,
       _getCryptoExchange,
-      removeSelectedCrypto
+      removeSelectedCrypto,
+      onEditingDetail
     },
     dispatch
   );

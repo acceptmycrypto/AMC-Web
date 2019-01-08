@@ -159,3 +159,8 @@ export const removeSelectedCrypto = (crypto_symbol) => ({
   type: "REMOVE_SELECTED_CRYPTO",
   payload: { crypto_symbol }
 });
+
+export const onEditingDetail = editorState => ({
+  type: "EDIT_DETAIL",
+  payload: editorState
+});

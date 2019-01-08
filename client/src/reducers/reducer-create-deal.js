@@ -1,3 +1,5 @@
+import {EditorState} from 'draft-js';
+
 const initialState = {
   imageData: {},
   images: [],
@@ -11,7 +13,8 @@ const initialState = {
   priceInUSD: "",
   priceInCrypto: "",
   crypto_amount: {},
-  gettingRate: {}
+  gettingRate: {},
+  editorState: EditorState.createEmpty()
 };
 
 const handleImagesUpload = (images, imageObj) => {
@@ -142,6 +145,12 @@ export default function CreateDealReducer(state = initialState, action) {
         ...state,
         crypto_amount: {...state.crypto_amount, [action.payload.crypto_symbol] : undefined}
       };
+
+    case "EDIT_DETAIL":
+       return {
+         ...state,
+         editorState: action.payload
+       };
 
     default:
       // ALWAYS have a default case in a reducer
