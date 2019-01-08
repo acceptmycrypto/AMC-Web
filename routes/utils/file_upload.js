@@ -22,7 +22,7 @@ const uploadFile = (buffer, name, type) => {
   const params = {
     ACL: 'public-read',
     Body: buffer,
-    Bucket: 'acceptmycrypto',
+    Bucket: process.env.AMAZON_BUCKET,
     ContentType: type.mime,
     Key: `${name}.${type.ext}`
   };

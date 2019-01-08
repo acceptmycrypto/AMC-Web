@@ -59,7 +59,7 @@ router.post("/image/upload", verifyToken, function(request, response) {
 router.post("/image/remove", verifyToken, function(request, response) {
 
   let params = {
-    Bucket: "acceptmycrypto",
+    Bucket: process.env.AMAZON_BUCKET,
     Key: request.body.imageKey
    };
 
