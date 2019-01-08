@@ -104,7 +104,7 @@ router.post("/cryptocurrency/exchange", verifyToken, async function(req, res) {
     let rateDate = JSON.parse(body);
     let cryptoRate = rateDate.data[crypto].quote.USD.price;
     console.log("rate", cryptoRate);
-    let cryptoAmount = (discountPrice/cryptoRate).toFixed(8);
+    let cryptoAmount = (discountPrice/cryptoRate).toFixed(4);
     console.log("discountPrice", discountPrice);
     console.log("amount", cryptoAmount);
     return res.status(200).json(cryptoAmount);

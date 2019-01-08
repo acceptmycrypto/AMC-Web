@@ -19,7 +19,7 @@
 
 .select-crypto-for-deal {
   display: flex;
-  min-height: 300px;
+  min-height: 350px;
   box-sizing: border-box;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   border-radius: 5px;
@@ -194,15 +194,26 @@
   text-align: center;
   width: 100px;
   height: 100px;
-  border: 2px solid #6bd9c7;
   border-radius: 10px;
   padding: 5px;
   margin-right: 5px;
 }
 
+.crypto-logo-image:hover {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  -webkit-transition: box-shadow 0.3s ease-out; /* Safari */
+  transition: box-shadow 0.3s ease-out;
+}
+
+.selected-crypto-logo-image {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
 .check-crypto-amount {
   text-align: center;
   margin-top: 5px;
+  overflow-wrap: break-word;
+  width: 100px;
 }
 
 .loading-spinner-on-getting-rate {

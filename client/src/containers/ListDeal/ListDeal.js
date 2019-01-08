@@ -14,7 +14,8 @@ import {
   onDiscountPercentageToChange,
   OnUSDPriceChange,
   validateDecimalForBasePrice,
-  _getCryptoExchange
+  _getCryptoExchange,
+  removeSelectedCrypto
 } from "../../actions/listDealActions";
 import { _loadCryptocurrencies } from "../../actions/loadCryptoActions";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
@@ -87,18 +88,14 @@ class ListDeal extends Component {
   };
 
   calculateCryptoExchange = (event) => {
-    const { _getCryptoExchange } = this.props;
-
-    // if ("not selected") {
-    //   let cryptoSymbol = event.target.getAttribute("data-cryptosymbol");
-    //   _getCryptoExchange(localStorage.getItem("token"), cryptoSymbol, this.props.priceInCrypto);
-    // } else [
-    //   //add code here to remove
-    // ]
+    const { _getCryptoExchange, crypto_amount, removeSelectedCrypto } = this.props;
     let cryptoSymbol = event.target.getAttribute("data-cryptosymbol");
-    _getCryptoExchange(localStorage.getItem("token"), cryptoSymbol, this.props.priceInCrypto);
 
-
+    if (crypto_amount[cryptoSymbol]) { //if selected/true
+      removeSelectedCrypto(cryptoSymbol);
+    } else {
+      _getCryptoExchange(localStorage.getItem("token"), cryptoSymbol, this.props.priceInCrypto);
+    }
 
   }
 
@@ -141,7 +138,7 @@ class ListDeal extends Component {
     if (error) {
       return <div>Error! {error.message}</div>;
     }
-    debugger
+    console.log("Crypto Amount", crypto_amount);
     return (
       <div>
         {/* If user is navigating away from the page, let user know data won't be saved */}
@@ -248,7 +245,8 @@ const matchDispatchToProps = dispatch => {
       OnUSDPriceChange,
       validateDecimalForBasePrice,
       _loadCryptocurrencies,
-      _getCryptoExchange
+      _getCryptoExchange,
+      removeSelectedCrypto
     },
     dispatch
   );

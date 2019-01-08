@@ -19,7 +19,6 @@ const handleImagesUpload = (images, imageObj) => {
 }
 
 const handleImageRemove = (images, imageKey) => {
-  debugger
   let newImageArr = images.filter(img => img.key !== imageKey);
   return newImageArr
 }
@@ -124,11 +123,10 @@ export default function CreateDealReducer(state = initialState, action) {
       };
 
     case "GET_RATE_SUCCESS":
-    debugger
       return {
         ...state,
         gettingRate: {[action.payload.crypto_symbol] : false},
-        crypto_amount: {[action.payload.crypto_symbol] : action.payload.crypto_amount}
+        crypto_amount: {...state.crypto_amount, [action.payload.crypto_symbol] : action.payload.crypto_amount} //this keeps adding new property to the crypto_amount object
       };
 
     case "GET_RATE_FAILURE":
@@ -136,6 +134,13 @@ export default function CreateDealReducer(state = initialState, action) {
         ...state,
         gettingRate: false,
         error: action.payload.error,
+      };
+
+    case "REMOVE_SELECTED_CRYPTO":
+     //To remove the selected crypto, set the crypto_symbol to undefined
+      return {
+        ...state,
+        crypto_amount: {...state.crypto_amount, [action.payload.crypto_symbol] : undefined}
       };
 
     default:

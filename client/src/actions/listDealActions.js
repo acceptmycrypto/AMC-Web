@@ -154,3 +154,8 @@ export const getRateFailure = error => ({
   type: "GET_RATE_FAILURE",
   payload: { error }
 });
+
+export const removeSelectedCrypto = (crypto_symbol) => ({
+  type: "REMOVE_SELECTED_CRYPTO",
+  payload: { crypto_symbol }
+});

@@ -72,7 +72,7 @@ const Pricing = props => {
             {props.cryptoOptions.map(crypto => {
               return (
                 <div key={crypto.crypto_symbol}>
-                  <div className="crypto-logo-image">
+                  <div className={props.showCryptoAmount[crypto.crypto_symbol] || props.rateLoading[crypto.crypto_symbol]  ? "crypto-logo-image selected-crypto-logo-image" : "crypto-logo-image"}>
                     <img
                       onClick={props.getCryptoExchange}
                       data-cryptosymbol={crypto.crypto_symbol}
