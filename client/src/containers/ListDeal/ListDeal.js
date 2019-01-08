@@ -21,6 +21,7 @@ import { _loadCryptocurrencies } from "../../actions/loadCryptoActions";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
 import UploadingImage from "./UploadImage/UploadingImage";
 import Pricing from "./Pricing";
+import Description from "./Description";
 
 class ListDeal extends Component {
 
@@ -209,6 +210,7 @@ class ListDeal extends Component {
               showCryptoAmount={crypto_amount}
             />
           )}
+          {showDescriptionStep && <Description />}
         </Layout>
       </div>
     );

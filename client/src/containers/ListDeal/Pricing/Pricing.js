@@ -27,7 +27,7 @@ const Pricing = props => {
         </div>
         <div className="listed-price-in-crypto">
           <div className="listed-price-in-crypto-left">
-            <div className="pricing-titles">Price in Cryptocurrency</div>
+            <div className="pricing-titles">Price after Discount</div>
             <div className="pricing-input-row">
               <i class="fas fa-dollar-sign fa-2x" />
               <input
@@ -102,6 +102,7 @@ const Pricing = props => {
               );
             })}
           </div>
+          <small class="pricing-footer-note">Please be aware that the crypto amount will be different at the time of purchase due to market volatility.</small>
           <div id="price-listing-next-button">
             <hr />
             <div id="photos-next-step">
