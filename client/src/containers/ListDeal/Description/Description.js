@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./Description.css";
 import Select from "react-select";
-import { Editor, RichUtils } from "draft-js";
+import { Editor, RichUtils, convertToRaw, convertFromRaw } from "draft-js";
 
 class Description extends Component {
   //this method is to handle cursor focus when user clicks on the text area
@@ -23,6 +23,11 @@ class Description extends Component {
     this.props.updateEditDetail(
       RichUtils.toggleInlineStyle(this.props.showEdittingState, "BOLD")
     );
+  };
+
+  handleRawText = () => {
+    const raw = convertToRaw(this.props.showEdittingState.getCurrentContent());
+
   };
 
   render() {
@@ -60,6 +65,7 @@ class Description extends Component {
             </div>
             <Select
               className="dropdown"
+              isMulti={true}
               // options={cryptoOptions}
             />
           </div>
@@ -103,7 +109,7 @@ class Description extends Component {
           <div id="price-listing-next-button">
             <hr />
             <div id="photos-next-step">
-              <button>Next</button>
+              <button>Submit Deal</button>
             </div>
           </div>
         </div>
