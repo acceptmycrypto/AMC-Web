@@ -72,7 +72,14 @@ const Pricing = props => {
             {props.cryptoOptions.map(crypto => {
               return (
                 <div key={crypto.crypto_symbol}>
-                  <div className={props.showCryptoAmount[crypto.crypto_symbol] || props.rateLoading[crypto.crypto_symbol]  ? "crypto-logo-image selected-crypto-logo-image" : "crypto-logo-image"}>
+                  <div
+                    className={
+                      props.showCryptoAmount[crypto.crypto_symbol] ||
+                      props.rateLoading[crypto.crypto_symbol]
+                        ? "crypto-logo-image selected-crypto-logo-image"
+                        : "crypto-logo-image"
+                    }
+                  >
                     <img
                       onClick={props.getCryptoExchange}
                       data-cryptosymbol={crypto.crypto_symbol}
@@ -86,10 +93,20 @@ const Pricing = props => {
                       <i className="fa fa-spinner fa-spin" /> Loading...
                     </div>
                   )}
-                  {props.showCryptoAmount[crypto.crypto_symbol] && <div className="check-crypto-amount">{props.showCryptoAmount[crypto.crypto_symbol]}</div>}
+                  {props.showCryptoAmount[crypto.crypto_symbol] && (
+                    <div className="check-crypto-amount">
+                      {props.showCryptoAmount[crypto.crypto_symbol]}
+                    </div>
+                  )}
                 </div>
               );
             })}
+          </div>
+          <div id="price-listing-next-button">
+            <hr />
+            <div id="photos-next-step">
+              <button>Next</button>
+            </div>
           </div>
         </div>
       </div>
