@@ -61,7 +61,7 @@ CREATE TABLE guest_users(
 	last_name VARCHAR (255) NULL,
 	phone_number VARCHAR(100) NULL,
 	PRIMARY KEY (id)
-)
+);
 
 CREATE TABLE deals (
 	id INT NOT NULL AUTO_INCREMENT,
@@ -91,7 +91,7 @@ CREATE TABLE deal_images (
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
 
-CREATE TABLE category ( 
+CREATE TABLE category (
 	id INT NOT NULL AUTO_INCREMENT,
 	category_name VARCHAR(100) NOT NULL,
 	PRIMARY KEY (id)
@@ -113,40 +113,6 @@ CREATE TABLE categories_deals(
 	FOREIGN KEY (deals_id) REFERENCES deals(id)
 );
 
---table to be used in the future
--- custom options to be displayed when user is listing an item to sell eg. size, color, model etc based on the categoryies of the item
--- CREATE TABLE customizable_option(
--- 	id INT NOT NULL AUTO_INCREMENT,
--- 	custom_option_name VARCHAR(100) NOT NULL,
--- 	PRIMARY KEY (id)
--- );
-
---table to be used in the future
--- many to many relationship table
--- CREATE TABLE categories_customizable_options(
--- 	category_id INT NOT NULL,
--- 	custom_option_id INT NOT NULL,
--- 	FOREIGN KEY (category_id) REFERENCES category(id),
--- 	FOREIGN KEY (custom_option_id) REFERENCES customizable_option(id)
--- );
-
---table to be used in the future
--- CREATE TABLE hashtag ( 
--- 	id INT NOT NULL AUTO_INCREMENT,
--- 	hashtag_name VARCHAR(100) NOT NULL,
--- 	PRIMARY KEY (id)
--- );
-
---table to be used in the future
--- -- many to many relationship table
--- CREATE TABLE hashtags_deals(
--- 	hashtag_id INT NOT NULL,
--- 	deals_id INT NOT NULL,
--- 	FOREIGN KEY (hashtag_id) REFERENCES hashtag(id),
--- 	FOREIGN KEY (deals_id) REFERENCES deals(id)
--- );
-
-
 -- create a junction table for many-to-many association
 -- venues will have a set of cryptos they accept for all their deal items
 CREATE TABLE cryptos_venues (
@@ -166,32 +132,6 @@ CREATE TABLE cryptos_deals (
 	FOREIGN KEY (crypto_id)  REFERENCES crypto_metadata(id),
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
-
--- CREATE TABLE userInput (
--- 	id INT NOT NULL AUTO_INCREMENT,
--- 	user_email VARCHAR(255) NOT NULL UNIQUE,
--- 	crypto_name VARCHAR(255) NOT NULL UNIQUE,
--- 	venue VARCHAR(255) NOT NULL UNIQUE,
--- 	venue_link VARCHAR(255) NOT NULL UNIQUE,
--- 	PRIMARY KEY (id)
--- );
-
--- CREATE TABLE userQueries (
--- 	id INT NOT NULL AUTO_INCREMENT,
--- 	email VARCHAR(255) NOT NULL UNIQUE,
--- 	message VARCHAR(255) NOT NULL,
--- 	PRIMARY KEY (id)
--- );
-
--- CREATE TABLE admin_users (
--- 	id INT NOT NULL AUTO_INCREMENT,
--- 	email VARCHAR(255) UNIQUE,
--- 	password VARCHAR(255) NOT NULL UNIQUE,
--- 	PRIMARY KEY (id)
--- );
-
-
-
 
 CREATE TABLE users_logins(
 	id INT NOT NULL AUTO_INCREMENT,
@@ -299,19 +239,95 @@ CREATE TABLE parents_children(
 	FOREIGN KEY (comment_child_id) REFERENCES crypto_comments(id)
 );
 
-CREATE TABLE notifications (
+CREATE TABLE buyers_reviews_sellers(
 	id INT NOT NULL AUTO_INCREMENT,
-	unread BOOLEAN NOT NULL DEFAULT TRUE,
-	user_id INT NOT NULL,
-	matched_friend_id INT NOT NULL,
-	venue_id INT NOT NULL,
+	buyer_id INT NOT NULL,
+	seller_id INT NOT NULL,
 	deal_id INT NOT NULL,
-  	PRIMARY KEY (id),
-	FOREIGN KEY (user_id) REFERENCES users(id),
-	FOREIGN KEY (matched_friend_id) REFERENCES users_matched_friends(id),
-	FOREIGN KEY (venue_id) REFERENCES venues(id),
+	rating INT NOT NULL DEFAULT 0,
+	title VARCHAR (255) NOT NULL,
+	body TEXT NULL,
+	likes INT DEFAULT 0,
+	dislikes INT DEFAULT 0,
+	helpful_review INT DEFAULT 0,
+	date_reviewed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	display_review BOOLEAN NOT NULL DEFAULT FALSE,
+	PRIMARY KEY (id),
+	FOREIGN KEY (buyer_id) REFERENCES users(id),
+	FOREIGN KEY (seller_id) REFERENCES users(id),
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
+
+-- venue can report another venue, venue can report a user, user can report another user, and user can report a venue
+CREATE TABLE flagged_users(
+	id INT NOT NULL AUTO_INCREMENT,
+	user_id INT NULL,
+	venue_id INT NULL,
+	user_reporter INT NULL,
+	venue_reporter INT NULL,
+	deal_id INT NULL,
+	review_id INT NULL,
+	txn_id VARCHAR(255) NULL,
+	reason VARCHAR(255) NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (user_id) REFERENCES users(id),
+	FOREIGN KEY (venue_id) REFERENCES venues(id),
+	FOREIGN KEY (user_reporter) REFERENCES users(id),
+	FOREIGN KEY (venue_reporter) REFERENCES venues(id),
+	FOREIGN KEY (deal_id) REFERENCES deals(id),
+	FOREIGN KEY (review_id) REFERENCES buyers_reviews_sellers(id),
+	FOREIGN KEY (txn_id) REFERENCES users_purchases(txn_id)
+);
+
+
+
+-- table to be used in the future
+-- custom options to be displayed when user is listing an item to sell eg. size, color, model etc based on the categoryies of the item
+-- CREATE TABLE customizable_option(
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	custom_option_name VARCHAR(100) NOT NULL,
+-- 	PRIMARY KEY (id)
+-- );
+
+-- table to be used in the future
+-- many to many relationship table
+-- CREATE TABLE categories_customizable_options(
+-- 	category_id INT NOT NULL,
+-- 	custom_option_id INT NOT NULL,
+-- 	FOREIGN KEY (category_id) REFERENCES category(id),
+-- 	FOREIGN KEY (custom_option_id) REFERENCES customizable_option(id)
+-- );
+
+-- table to be used in the future
+-- CREATE TABLE hashtag (
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	hashtag_name VARCHAR(100) NOT NULL,
+-- 	PRIMARY KEY (id)
+-- );
+
+-- table to be used in the future
+-- many to many relationship table
+-- CREATE TABLE hashtags_deals(
+-- 	hashtag_id INT NOT NULL,
+-- 	deals_id INT NOT NULL,
+-- 	FOREIGN KEY (hashtag_id) REFERENCES hashtag(id),
+-- 	FOREIGN KEY (deals_id) REFERENCES deals(id)
+-- );
+
+
+-- CREATE TABLE notifications (
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	unread BOOLEAN NOT NULL DEFAULT TRUE,
+-- 	user_id INT NOT NULL,
+-- 	matched_friend_id INT NOT NULL,
+-- 	venue_id INT NOT NULL,
+-- 	deal_id INT NOT NULL,
+--   	PRIMARY KEY (id),
+-- 	FOREIGN KEY (user_id) REFERENCES users(id),
+-- 	FOREIGN KEY (matched_friend_id) REFERENCES users_matched_friends(id),
+-- 	FOREIGN KEY (venue_id) REFERENCES venues(id),
+-- 	FOREIGN KEY (deal_id) REFERENCES deals(id)
+-- );
 
 -- table to be used in the future
 
@@ -343,25 +359,6 @@ CREATE TABLE notifications (
 -- 	FOREIGN KEY (review_child_id) REFERENCES buyers_reviews_deals(id)
 -- );
 
-CREATE TABLE buyers_reviews_sellers(
-	id INT NOT NULL AUTO_INCREMENT,
-	buyer_id INT NOT NULL,
-	seller_id INT NOT NULL,
-	deal_id INT NOT NULL,
-	rating INT NOT NULL DEFAULT 0,
-	title VARCHAR (255) NOT NULL,
-	body TEXT NULL,
-	likes INT DEFAULT 0,
-	dislikes INT DEFAULT 0,
-	helpful_review INT DEFAULT 0,
-	date_reviewed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	display_review BOOLEAN NOT NULL DEFAULT FALSE,
-	PRIMARY KEY (id),
-	FOREIGN KEY (buyer_id) REFERENCES users(id),
-	FOREIGN KEY (seller_id) REFERENCES users(id),
-	FOREIGN KEY (deal_id) REFERENCES deals(id)
-);
-
 -- may not need this table if we have the flagged users table
 -- CREATE TABLE sellers_reviews_buyers(
 -- 	id INT NOT NULL AUTO_INCREMENT,
@@ -375,23 +372,25 @@ CREATE TABLE buyers_reviews_sellers(
 -- 	FOREIGN KEY (seller_id) REFERENCES users(id)
 -- );
 
--- venue can report another venue, venue can report a user, user can report another user, and user can report a venue
-CREATE TABLE flagged_users(
-	id INT NOT NULL AUTO_INCREMENT,
-	user_id INT NULL,
-	venue_id INT NULL,
-	user_reporter INT NULL,
-	venue_reporter INT NULL,
-	deal_id INT NULL,
-	review_id INT NULL,
-	txn_id VARCHAR(255) NULL,
-	reason VARCHAR(255) NULL,
-	PRIMARY KEY (id),
-	FOREIGN KEY (user_id) REFERENCES users(id),
-	FOREIGN KEY (venue_id) REFERENCES venues(id),
-	FOREIGN KEY (user_reporter) REFERENCES users(id),
-	FOREIGN KEY (venue_reporter) REFERENCES venues(id),
-	FOREIGN KEY (deal_id) REFERENCES deals(id),
-	FOREIGN KEY (review_id) REFERENCES buyers_reviews_deals(id),
-	FOREIGN KEY (txn_id) REFERENCES users_purchases(txn_id)
-);
+-- CREATE TABLE userInput (
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	user_email VARCHAR(255) NOT NULL UNIQUE,
+-- 	crypto_name VARCHAR(255) NOT NULL UNIQUE,
+-- 	venue VARCHAR(255) NOT NULL UNIQUE,
+-- 	venue_link VARCHAR(255) NOT NULL UNIQUE,
+-- 	PRIMARY KEY (id)
+-- );
+
+-- CREATE TABLE userQueries (
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	email VARCHAR(255) NOT NULL UNIQUE,
+-- 	message VARCHAR(255) NOT NULL,
+-- 	PRIMARY KEY (id)
+-- );
+
+-- CREATE TABLE admin_users (
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	email VARCHAR(255) UNIQUE,
+-- 	password VARCHAR(255) NOT NULL UNIQUE,
+-- 	PRIMARY KEY (id)
+-- );
