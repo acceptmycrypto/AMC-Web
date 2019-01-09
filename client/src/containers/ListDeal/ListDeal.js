@@ -7,12 +7,27 @@ import { bindActionCreators } from "redux";
 import {
   _uploadImage,
   onSelectImageToView,
-  _removeImage
+  _removeImage,
+  handleUploadingPhotosStep,
+  handlePricingStep,
+  handleDescriptionStep,
+  onDiscountPercentageToChange,
+  OnUSDPriceChange,
+  validateDecimalForBasePrice,
+  _getCryptoExchange,
+  removeSelectedCrypto,
+  onEditingDetail
 } from "../../actions/listDealActions";
+import { _loadCryptocurrencies } from "../../actions/loadCryptoActions";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
 import UploadingImage from "./UploadImage/UploadingImage";
+import Pricing from "./Pricing";
+import Description from "./Description";
 
 class ListDeal extends Component {
+  componentDidMount = () => {
+    this.props._loadCryptocurrencies();
+  };
   // If user refreshes the page, we warn users that data won't be saved
   componentDidUpdate = () => {
     const { images } = this.props;
@@ -73,13 +88,68 @@ class ListDeal extends Component {
     this.props._removeImage(localStorage.getItem("token"), imageKey);
   };
 
+  calculateCryptoExchange = event => {
+    const {
+      _getCryptoExchange,
+      crypto_amount,
+      removeSelectedCrypto
+    } = this.props;
+    let cryptoSymbol = event.target.getAttribute("data-cryptosymbol");
+
+    if (crypto_amount[cryptoSymbol]) {
+      //if selected/true
+      removeSelectedCrypto(cryptoSymbol);
+    } else {
+      _getCryptoExchange(
+        localStorage.getItem("token"),
+        cryptoSymbol,
+        this.props.priceInCrypto
+      );
+    }
+  };
+
+  // showCryptoAmount = () => {
+  //   debugger
+  //   const { uploading, crypto_amount } = this.props;
+  //   switch (true) {
+  //     case uploading:
+  //       return <LoadingSpinner className="check-crypto-amount" />;
+  //     case crypto_amount:
+  //       return <div className="check-crypto-amount">{crypto_amount}</div>
+  //     default:
+  //       return <div></div>
+  //   }
+  // }
+
   render() {
-    const { error, images, onSelectImageToView } = this.props;
+    const {
+      error,
+      images,
+      showPhotosStep,
+      showPricingStep,
+      showDescriptionStep,
+      discountPercent,
+      priceInUSD,
+      cryptoOptionsForCreatingDeal,
+      gettingRate,
+      crypto_amount,
+      editorState,
+
+      onSelectImageToView,
+      handleUploadingPhotosStep,
+      handlePricingStep,
+      handleDescriptionStep,
+      onDiscountPercentageToChange,
+      OnUSDPriceChange,
+      priceInCrypto,
+      validateDecimalForBasePrice,
+      onEditingDetail
+    } = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
     }
-
+    console.log("Crypto Amount", crypto_amount);
     return (
       <div>
         {/* If user is navigating away from the page, let user know data won't be saved */}
@@ -90,14 +160,20 @@ class ListDeal extends Component {
         <Layout>
           <div className="deal-container">
             <div className="ui three steps">
-              <a className="active step">
+              <a
+                onClick={handleUploadingPhotosStep}
+                className={showPhotosStep ? "active step" : "step"}
+              >
                 <i className="image icon" />
                 <div className="content">
                   <div className="title">Photos</div>
                   <div className="description">Add up to six photos</div>
                 </div>
               </a>
-              <a className="step">
+              <a
+                onClick={handlePricingStep}
+                className={showPricingStep ? "active step" : "step"}
+              >
                 <i className="bitcoin icon" />
                 <div className="content">
                   <div className="title">Pricing</div>
@@ -107,7 +183,10 @@ class ListDeal extends Component {
                 </div>
               </a>
 
-              <a className="step">
+              <a
+                onClick={handleDescriptionStep}
+                className={showDescriptionStep ? "active step" : "step"}
+              >
                 <i className="edit icon" />
                 <div className="content">
                   <div className="title">Description</div>
@@ -118,13 +197,32 @@ class ListDeal extends Component {
               </a>
             </div>
           </div>
-          <UploadingImage
-            viewImage={onSelectImageToView}
-            uploadedImages={images}
-            uploadImage={this.handleImageUpload}
-            imageIsOnPreview={this.imageOnView}
-            removeImage={this.onSelectImageToReMove}
-          />
+          {showPhotosStep && (
+            <UploadingImage
+              viewImage={onSelectImageToView}
+              uploadedImages={images}
+              uploadImage={this.handleImageUpload}
+              imageIsOnPreview={this.imageOnView}
+              removeImage={this.onSelectImageToReMove}
+            />
+          )}
+          {showPricingStep && (
+            <Pricing
+              changeDiscountPercent={onDiscountPercentageToChange}
+              showDiscountPercent={discountPercent}
+              showPriceUSD={priceInUSD}
+              showPriceCrypto={priceInCrypto}
+              handlePriceUSDChange={OnUSDPriceChange}
+              validateBasePrice={validateDecimalForBasePrice}
+              cryptoOptions={cryptoOptionsForCreatingDeal}
+              getCryptoExchange={this.calculateCryptoExchange}
+              rateLoading={gettingRate}
+              showCryptoAmount={crypto_amount}
+            />
+          )}
+          {showDescriptionStep && (
+            <Description updateEditDetail={onEditingDetail} showEdittingState={editorState}/>
+          )}
         </Layout>
       </div>
     );
@@ -132,16 +230,40 @@ class ListDeal extends Component {
 }
 
 const mapStateToProps = state => ({
-  imageData: state.UploadedImages.imageData,
-  images: state.UploadedImages.images,
-  imageView: state.UploadedImages.imageView,
-  uploading: state.UploadedImages.uploading,
-  error: state.UploadedImages.error
+  imageData: state.CreateDeal.imageData,
+  images: state.CreateDeal.images,
+  imageView: state.CreateDeal.imageView,
+  uploading: state.CreateDeal.uploading,
+  error: state.CreateDeal.error,
+  showPhotosStep: state.CreateDeal.showPhotosStep,
+  showPricingStep: state.CreateDeal.showPricingStep,
+  showDescriptionStep: state.CreateDeal.showDescriptionStep,
+  discountPercent: state.CreateDeal.discountPercent,
+  priceInUSD: state.CreateDeal.priceInUSD,
+  priceInCrypto: state.CreateDeal.priceInCrypto,
+  cryptoOptionsForCreatingDeal: state.LoadCrypto.cryptoOptionsForCreatingDeal,
+  gettingRate: state.CreateDeal.gettingRate,
+  crypto_amount: state.CreateDeal.crypto_amount,
+  editorState: state.CreateDeal.editorState
 });
 
 const matchDispatchToProps = dispatch => {
   return bindActionCreators(
-    { _uploadImage, onSelectImageToView, _removeImage },
+    {
+      _uploadImage,
+      onSelectImageToView,
+      _removeImage,
+      handleUploadingPhotosStep,
+      handlePricingStep,
+      handleDescriptionStep,
+      onDiscountPercentageToChange,
+      OnUSDPriceChange,
+      validateDecimalForBasePrice,
+      _loadCryptocurrencies,
+      _getCryptoExchange,
+      removeSelectedCrypto,
+      onEditingDetail
+    },
     dispatch
   );
 };
