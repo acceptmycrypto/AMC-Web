@@ -117,15 +117,48 @@ router.post("/cryptocurrency/exchange", verifyToken, async function(req, res) {
 
 
 // api
-// router.post('/listdeal', verifyToken, function(req, res) {
-//   let id = req.decoded._id;
-//   //what is needed to insert into the tables?
+router.post('/listdeal', verifyToken, function(req, res) {
+  //info needed to insert into tables
+  let seller_id = req.decoded._id;
+
+  //deals table
+  //deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto, item_condition
+
+  //deal_images table
+  // deal_id, deal_image
+
+  //category table
+  //category_name
+
+  //categories_deals table
+  //category_id, deals_id
+
+  //cryptos_deals table
+  //crypto_id, deal_id
 
 
-//   if (id) { //if login
+
+  connection.query("INSERT INTO users_cryptos (user_id, crypto_id) VALUES ?",
+    [selectedCryptos],
+    function (error, results, fields) {
 
 
-//   }
-// });
+
+
+    res.json(results);
+
+  });
+});
+
+router.get("/category/parent", function(req, res) {
+  //The first 12 records are the parent categories
+  connection.query(
+    "SELECT * FROM category limit 12", function (error, results, fields) {
+      if (error) throw error;
+      res.json(results);
+    }
+  );
+
+})
 
 module.exports = router;

@@ -14,6 +14,8 @@ const initialState = {
   priceInCrypto: "",
   crypto_amount: {},
   gettingRate: {},
+  dealName: "",
+  parentCategory: [],
   editorState: EditorState.createEmpty()
 };
 
@@ -144,6 +146,18 @@ export default function CreateDealReducer(state = initialState, action) {
       return {
         ...state,
         crypto_amount: {...state.crypto_amount, [action.payload.crypto_symbol] : undefined}
+      };
+
+    case "EDIT_DEAL_NAME":
+      return {
+        ...state,
+        dealName: action.payload
+      };
+
+    case "FETCH_CATEGORY_SUCCESS":
+      return {
+        ...state,
+        parentCategory: action.payload.parentCategory
       };
 
     case "EDIT_DETAIL":

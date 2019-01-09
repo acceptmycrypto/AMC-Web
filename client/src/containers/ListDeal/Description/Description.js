@@ -1,9 +1,16 @@
 import React, { Component } from "react";
 import "./Description.css";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import Select from "react-select";
 import { Editor, RichUtils, convertToRaw, convertFromRaw } from "draft-js";
+import { _loadCategory } from "../../../actions/categoryActions";
 
 class Description extends Component {
+  componentDidMount = () => {
+    this.props._loadCategory();
+  };
+
   //this method is to handle cursor focus when user clicks on the text area
   focus = () => this.refs.editor.focus();
 
@@ -27,32 +34,17 @@ class Description extends Component {
 
   handleRawText = () => {
     const raw = convertToRaw(this.props.showEdittingState.getCurrentContent());
-
   };
 
   render() {
-    const { showEdittingState } = this.props;
-
-    // If the user changes block type before entering any text, we can
-    // either style the placeholder or hide it. Let's just hide it now.
-    let className = "RichEditor-editor";
-    var contentState = showEdittingState.getCurrentContent();
-    if (!contentState.hasText()) {
-      if (
-        contentState
-          .getBlockMap()
-          .first()
-          .getType() !== "unstyled"
-      ) {
-        className += " RichEditor-hidePlaceholder";
-      }
-    }
+    const { showEdittingState, parentCategory } = this.props;
 
     return (
       <div className="deal-listing-description">
         <div className="listing-description-container">
           <div className="description-titles">Give Your Listing a Name</div>
           <input
+            onChange={this.props.editDealName}
             className="description-input"
             autofocus="autofocus"
             placeholder="Enter a name that others can easily find your listing"
@@ -66,7 +58,7 @@ class Description extends Component {
             <Select
               className="dropdown"
               isMulti={true}
-              // options={cryptoOptions}
+              options={parentCategory}
             />
           </div>
 
@@ -118,4 +110,20 @@ class Description extends Component {
   }
 }
 
-export default Description;
+const mapStateToProps = state => ({
+  parentCategory: state.CreateDeal.parentCategory
+});
+
+const matchDispatchToProps = dispatch => {
+  return bindActionCreators(
+    {
+      _loadCategory
+    },
+    dispatch
+  );
+};
+
+export default connect(
+  mapStateToProps,
+  matchDispatchToProps
+)(Description);

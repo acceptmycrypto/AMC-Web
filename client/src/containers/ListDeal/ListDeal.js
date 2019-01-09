@@ -16,6 +16,7 @@ import {
   validateDecimalForBasePrice,
   _getCryptoExchange,
   removeSelectedCrypto,
+  onEditingDealName,
   onEditingDetail
 } from "../../actions/listDealActions";
 import { _loadCryptocurrencies } from "../../actions/loadCryptoActions";
@@ -108,18 +109,9 @@ class ListDeal extends Component {
     }
   };
 
-  // showCryptoAmount = () => {
-  //   debugger
-  //   const { uploading, crypto_amount } = this.props;
-  //   switch (true) {
-  //     case uploading:
-  //       return <LoadingSpinner className="check-crypto-amount" />;
-  //     case crypto_amount:
-  //       return <div className="check-crypto-amount">{crypto_amount}</div>
-  //     default:
-  //       return <div></div>
-  //   }
-  // }
+  onCreateDeal = () => {
+    const { dealName } = this.props;
+  };
 
   render() {
     const {
@@ -143,6 +135,7 @@ class ListDeal extends Component {
       OnUSDPriceChange,
       priceInCrypto,
       validateDecimalForBasePrice,
+      onEditingDealName,
       onEditingDetail
     } = this.props;
 
@@ -221,7 +214,11 @@ class ListDeal extends Component {
             />
           )}
           {showDescriptionStep && (
-            <Description updateEditDetail={onEditingDetail} showEdittingState={editorState}/>
+            <Description
+              editDealName={onEditingDealName}
+              updateEditDetail={onEditingDetail}
+              showEdittingState={editorState}
+            />
           )}
         </Layout>
       </div>
@@ -244,6 +241,7 @@ const mapStateToProps = state => ({
   cryptoOptionsForCreatingDeal: state.LoadCrypto.cryptoOptionsForCreatingDeal,
   gettingRate: state.CreateDeal.gettingRate,
   crypto_amount: state.CreateDeal.crypto_amount,
+  dealName: state.CreateDeal.dealName,
   editorState: state.CreateDeal.editorState
 });
 
@@ -262,6 +260,7 @@ const matchDispatchToProps = dispatch => {
       _loadCryptocurrencies,
       _getCryptoExchange,
       removeSelectedCrypto,
+      onEditingDealName,
       onEditingDetail
     },
     dispatch
