@@ -29,6 +29,40 @@ CREATE TABLE venues (
 	PRIMARY KEY (id)
 );
 
+-- rearrange users table location in scheme due to foreign key references in deals table
+CREATE TABLE users(
+	id INT NOT NULL AUTO_INCREMENT,
+	verified_email BOOLEAN DEFAULT FALSE,
+	-- when inserting into users table the value for email_verification_token should be uuid()
+	email_verification_token VARCHAR(255) NOT NULL,
+	username VARCHAR(30) NOT NULL UNIQUE,
+	first_name VARCHAR(255) NULL,
+	last_name VARCHAR (255) NULL,
+	phone_number VARCHAR(100) NULL,
+	email VARCHAR(100) NOT NULL UNIQUE,
+	previous_email VARCHAR(100) NULL UNIQUE,
+	address VARCHAR(255) NULL,
+	city VARCHAR(255) NULL,
+	state VARCHAR(255) NULL,
+	zipcode VARCHAR(255) NULL,
+	password VARCHAR(255) NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	sellers_avg_rating FLOAT(3,2) NULL,
+	total_sellers_ratings INT NULL,
+	PRIMARY KEY (id)
+);
+
+-- buying as a guest user will not have their user purchases saved
+-- at guest checkout check if already a user
+CREATE TABLE guest_users(
+	id INT NOT NULL AUTO_INCREMENT,
+	email VARCHAR(100) NOT NULL,
+	first_name VARCHAR(255) NULL,
+	last_name VARCHAR (255) NULL,
+	phone_number VARCHAR(100) NULL,
+	PRIMARY KEY (id)
+)
+
 CREATE TABLE deals (
 	id INT NOT NULL AUTO_INCREMENT,
 	venue_id INT NULL, -- changed venue_id to NULL because as of now we we have seeds with venue_id that reference the vendors
@@ -157,23 +191,7 @@ CREATE TABLE cryptos_deals (
 -- );
 
 
-CREATE TABLE users(
-	id INT NOT NULL AUTO_INCREMENT,
-	verified_email BOOLEAN DEFAULT FALSE,
-	-- when inserting into users table the value for email_verification_token should be uuid()
-	email_verification_token VARCHAR(255) NOT NULL,
-	username VARCHAR(30) NOT NULL UNIQUE,
-	first_name VARCHAR(255) NULL,
-	last_name VARCHAR (255) NULL,
-	phone_number VARCHAR(100) NULL,
-	email VARCHAR(100) NOT NULL UNIQUE,
-	previous_email VARCHAR(100) NULL UNIQUE,
-	password VARCHAR(255) NOT NULL,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	sellers_avg_rating FLOAT(3,2) NULL,
-	total_sellers_ratings INT NULL,
-	PRIMARY KEY (id)
-);
+
 
 CREATE TABLE users_logins(
 	id INT NOT NULL AUTO_INCREMENT,
@@ -206,7 +224,8 @@ CREATE TABLE users_cryptos(
 
 CREATE TABLE users_purchases(
 	id INT NOT NULL AUTO_INCREMENT,
-	user_id INT NOT NULL,
+	user_id INT NULL,
+	guest_user_id INT NULL,
 	deal_id INT NOT NULL,
 	crypto_id INT NOT NULL,
 	date_purchased TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -222,6 +241,7 @@ CREATE TABLE users_purchases(
 	permission VARCHAR(255) NOT NULL DEFAULT "community",
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_id) REFERENCES users(id),
+	FOREIGN KEY (guest_user_id) REFERENCES guest_users(id),
 	FOREIGN KEY (crypto_id) REFERENCES crypto_info(id),
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
@@ -293,33 +313,35 @@ CREATE TABLE notifications (
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
 
---table to be used in the future
-CREATE TABLE buyers_reviews_deals (
-	id INT NOT NULL AUTO_INCREMENT,
-	buyer_id INT NOT NULL,
-	deal_id INT NOT NULL,
-	title VARCHAR (255) NOT NULL,
-	body TEXT NULL,
-  	date_reviewed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	rating INT NOT NULL DEFAULT 0,
-	verified_purchase BOOLEAN NOT NULL DEFAULT FALSE,
-	likes INT DEFAULT 0,
-	dislikes INT DEFAULT 0,
-	helpful_review INT DEFAULT 0,
-	display_review BOOLEAN NOT NULL DEFAULT FALSE,
-	PRIMARY KEY (id),
-	FOREIGN KEY (buyer_id) REFERENCES users(id),
-	FOREIGN KEY (deal_id) REFERENCES deals(id)
-);
+-- table to be used in the future
 
---table to be used in the future
+-- CREATE TABLE buyers_reviews_deals (
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	buyer_id INT NOT NULL,
+-- 	deal_id INT NOT NULL,
+-- 	title VARCHAR (255) NOT NULL,
+-- 	body TEXT NULL,
+--   	date_reviewed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+-- 	rating INT NOT NULL DEFAULT 0,
+-- 	verified_purchase BOOLEAN NOT NULL DEFAULT FALSE,
+-- 	likes INT DEFAULT 0,
+-- 	dislikes INT DEFAULT 0,
+-- 	helpful_review INT DEFAULT 0,
+-- 	display_review BOOLEAN NOT NULL DEFAULT FALSE,
+-- 	PRIMARY KEY (id),
+-- 	FOREIGN KEY (buyer_id) REFERENCES users(id),
+-- 	FOREIGN KEY (deal_id) REFERENCES deals(id)
+-- );
+
+-- table to be used in the future
 -- many to many relationship table
-CREATE TABLE parents_children_deals_reviews(
-	review_parent_id INT NOT NULL,
-	review_child_id INT NOT NULL,
-	FOREIGN KEY (review_parent_id) REFERENCES buyers_reviews_deals(id),
-	FOREIGN KEY (review_child_id) REFERENCES buyers_reviews_deals(id)
-);
+
+-- CREATE TABLE parents_children_deals_reviews(
+-- 	review_parent_id INT NOT NULL,
+-- 	review_child_id INT NOT NULL,
+-- 	FOREIGN KEY (review_parent_id) REFERENCES buyers_reviews_deals(id),
+-- 	FOREIGN KEY (review_child_id) REFERENCES buyers_reviews_deals(id)
+-- );
 
 CREATE TABLE buyers_reviews_sellers(
 	id INT NOT NULL AUTO_INCREMENT,
