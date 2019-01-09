@@ -51,15 +51,20 @@ class Navbar extends Component {
         </div>
         <div className="Nav d-flex flex-row align-items-center">
           <li>
-            <Link onClick={this.props.resetNavbar} to="/feed/deals">
-            { window.location.pathname == "/feed/deals"
-              ? <i className="fas fa-dollar-sign fa-lg"> <h7 className="color-deepBlue font-17 teal-underline">Deals</h7></i>
-              : <i className="fas fa-dollar-sign fa-lg"> <h7 className="color-deepBlue font-17">Deals</h7></i>
-            }
+            <Link onClick={this.props.resetNavbar} to="/listdeal">
+              { window.location.pathname == "/listdeal"
+                ? <i className="fas fas fa-store fa-lg"> <h7 className="color-deepBlue font-17 teal-underline">Create a Deal</h7></i>
+                : <i className="fas fas fa-store fa-lg"> <h7 className="color-deepBlue font-17">Create a Deal</h7></i>
+              }
             </Link>
           </li>
           <li>
-            {/* <Notification /> */}
+            <Link onClick={this.props.resetNavbar} to="/feed/deals">
+            { window.location.pathname == "/feed/deals"
+              ? <i className="fas fa-dollar-sign fa-lg"> <h7 className="color-deepBlue font-17 teal-underline">All Deals</h7></i>
+              : <i className="fas fa-dollar-sign fa-lg"> <h7 className="color-deepBlue font-17">All Deals</h7></i>
+            }
+            </Link>
           </li>
           <li>
             <div className="dropdown show m-0 p-0">
