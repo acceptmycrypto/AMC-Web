@@ -5,6 +5,10 @@ import { bindActionCreators } from "redux";
 import Select from "react-select";
 import { Editor, RichUtils, convertToRaw, convertFromRaw } from "draft-js";
 import { _loadCategory } from "../../../actions/categoryActions";
+import {
+  handleSelectedCategory,
+  handleSelectedCondition
+} from "../../../actions/listDealActions";
 
 class Description extends Component {
   componentDidMount = () => {
@@ -37,7 +41,17 @@ class Description extends Component {
   };
 
   render() {
-    const { showEdittingState, parentCategory } = this.props;
+    const {
+      showEdittingState,
+      parentCategory,
+      handleSelectedCategory,
+      handleSelectedCondition
+    } = this.props;
+
+    const itemCondition = [
+      { value: "New", label: "New" },
+      { value: "Used", label: "Used" }
+    ];
 
     return (
       <div className="deal-listing-description">
@@ -59,6 +73,7 @@ class Description extends Component {
               className="dropdown"
               isMulti={true}
               options={parentCategory}
+              onChange={handleSelectedCategory}
             />
           </div>
 
@@ -68,7 +83,8 @@ class Description extends Component {
             </div>
             <Select
               className="dropdown"
-              // options={cryptoOptions}
+              options={itemCondition}
+              onChange={handleSelectedCondition}
             />
           </div>
         </div>
@@ -117,7 +133,9 @@ const mapStateToProps = state => ({
 const matchDispatchToProps = dispatch => {
   return bindActionCreators(
     {
-      _loadCategory
+      _loadCategory,
+      handleSelectedCategory,
+      handleSelectedCondition
     },
     dispatch
   );

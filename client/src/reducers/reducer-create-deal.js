@@ -16,6 +16,8 @@ const initialState = {
   gettingRate: {},
   dealName: "",
   parentCategory: [],
+  selectedCategory: null,
+  selectedCondition: null,
   editorState: EditorState.createEmpty()
 };
 
@@ -158,6 +160,18 @@ export default function CreateDealReducer(state = initialState, action) {
       return {
         ...state,
         parentCategory: action.payload.parentCategory
+      };
+
+    case "SELECT_CATEGORY":
+      return {
+        ...state,
+        selectedCategory: action.payload.selectedCategory
+      };
+
+    case "SELECT_CONDITION":
+      return {
+        ...state,
+        selectedCondition: action.payload.selectedCondition
       };
 
     case "EDIT_DETAIL":

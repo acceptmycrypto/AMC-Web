@@ -169,3 +169,17 @@ export const onEditingDetail = editorState => ({
   type: "EDIT_DETAIL",
   payload: editorState
 });
+
+export const handleSelectedCategory = (selectedCategory) => {
+  return {
+    type: 'SELECT_CATEGORY',
+    payload: {selectedCategory}
+  }
+};
+
+export const handleSelectedCondition = (selectedCondition) => {
+  return {
+    type: 'SELECT_CONDITION',
+    payload: {selectedCondition}
+  }
+};

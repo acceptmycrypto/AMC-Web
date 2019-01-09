@@ -110,7 +110,8 @@ class ListDeal extends Component {
   };
 
   onCreateDeal = () => {
-    const { dealName } = this.props;
+    const { dealName, selectedCategory, selectedCondition } = this.props;
+
   };
 
   render() {
@@ -242,6 +243,8 @@ const mapStateToProps = state => ({
   gettingRate: state.CreateDeal.gettingRate,
   crypto_amount: state.CreateDeal.crypto_amount,
   dealName: state.CreateDeal.dealName,
+  selectedCategory: state.CreateDeal.selectedCategory,
+  selectedCondition: state.CreateDeal.selectedCondition,
   editorState: state.CreateDeal.editorState
 });
 
