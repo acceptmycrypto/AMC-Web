@@ -189,7 +189,7 @@ router.post('/listdeal', verifyToken, function(req, res) {
         connection.query("INSERT INTO cryptos_deals(crypto_id, deal_id) VALUES ?", [cryptos_deals],
         function (error, results, fields) {
           if (error) res.status(400).json({message: `Failed to create deal: ${error}`});
-          res.json({message: "Successfully created deal"});
+          res.json({deal_id});
         });
       });
 

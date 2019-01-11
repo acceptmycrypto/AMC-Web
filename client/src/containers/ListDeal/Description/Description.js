@@ -15,10 +15,6 @@ import LoadingSpinner from "../../../components/UI/LoadingSpinner";
 import { Link } from "react-router-dom";
 
 class Description extends Component {
-  componentDidMount = () => {
-    this.props._loadCategory();
-  };
-
   //this method is to handle cursor focus when user clicks on the text area
   focus = () => this.refs.editor.focus();
 
@@ -49,8 +45,13 @@ class Description extends Component {
       parentCategory,
       handleSelectedCategory,
       handleSelectedCondition,
+      deal_id,
       closeModalAfterDealCreated,
-      modalVisible
+      modalVisible,
+      resetDealCreated,
+      dealNameValue,
+      selectedCategoryValue,
+      selectedConditionValue
     } = this.props;
 
     const itemCondition = [
@@ -64,6 +65,7 @@ class Description extends Component {
           <div className="description-titles">Give Your Listing a Name</div>
           <input
             onChange={this.props.editDealName}
+            value={dealNameValue}
             className="description-input"
             autofocus="autofocus"
             placeholder="Enter a name that others can easily find your listing"
@@ -76,6 +78,7 @@ class Description extends Component {
             </div>
             <Select
               className="dropdown"
+              value={selectedCategoryValue}
               isMulti={true}
               options={parentCategory}
               onChange={handleSelectedCategory}
@@ -90,6 +93,7 @@ class Description extends Component {
               className="dropdown"
               options={itemCondition}
               onChange={handleSelectedCondition}
+              value={selectedConditionValue}
             />
           </div>
         </div>
@@ -131,7 +135,9 @@ class Description extends Component {
           effect="fadeInLeft"
           onClickAway={() => {
             closeModalAfterDealCreated();
-            this.props.history.push("/");
+            resetDealCreated();
+            // this.props.history.push("/");
+            debugger
           }}
         >
           <div className="Modal">
@@ -139,11 +145,14 @@ class Description extends Component {
             <br />
             <h4>Now sit tight and wait to get paid with cryptocurrency.</h4>
             <Link
-              to={`/`}
+              to={`/feed/deals/${deal_id}/${dealNameValue}`}
               className="a-link"
               onClick={() => {
                 closeModalAfterDealCreated();
+                resetDealCreated();
+
               }}
+              onClick={resetDealCreated}
             >
               OK
             </Link>

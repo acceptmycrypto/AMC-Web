@@ -171,13 +171,9 @@ export const onEditingDetail = editorState => ({
 });
 
 export const handleSelectedCategory = (categoriesSelected) => {
-  let selectedCategory = [];
-  categoriesSelected.map(category => {
-    selectedCategory.push(category.value);
-  })
   return {
     type: 'SELECT_CATEGORY',
-    payload: {selectedCategory}
+    payload: {categoriesSelected}
   }
 };
 
@@ -188,7 +184,14 @@ export const handleSelectedCondition = (selectedCondition) => {
   }
 };
 
-export function _submitDeal(token, dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos) {
+export function _submitDeal(token, dealName, category, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos) {
+
+  //create a new array to get the value of categories: ex [value1, value2]
+  let categoriesSelected = [...category]
+  let selectedCategory = [];
+  categoriesSelected.map(categ => {
+    selectedCategory.push(categ.value);
+  })
 
   const settings = {
     method: "POST",
@@ -204,8 +207,8 @@ export function _submitDeal(token, dealName, selectedCategory, selectedCondition
     return fetch("/listdeal", settings)
       .then(res => res.json())
       .then(jsonDealCreated => {
-        debugger
         dispatch(creatingDealSuccess(jsonDealCreated));
+        debugger
         return jsonDealCreated;
       })
       .catch(error => dispatch(creatingDealFailure(error)));
@@ -230,5 +233,11 @@ export const closeModalAfterDealCreated = () => {
   return {
     type: "CLOSE_DEAL_CREATED_MODAL", //what does the action do = title of action
     payload: { modalVisible: false } // any data you need to return
+  };
+};
+
+export const resetListDeal = () => {
+  return {
+      type: "RESET_DEAL_CREATED"
   };
 };

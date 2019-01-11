@@ -22,12 +22,13 @@ import {
   onEditingDealName,
   onEditingDetail,
   _submitDeal,
-  closeModalAfterDealCreated
+  closeModalAfterDealCreated,
+  resetListDeal
 } from "../../actions/listDealActions";
 import { _loadCryptocurrencies } from "../../actions/loadCryptoActions";
 import { _loadCategory } from "../../actions/categoryActions";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
-import UploadingImage from "./UploadImage/UploadingImage";
+import UploadingImage from "./UploadImage";
 import Pricing from "./Pricing";
 import Description from "./Description";
 
@@ -153,6 +154,9 @@ class ListDeal extends Component {
       OnUSDPriceChange,
       priceInCrypto,
       validateDecimalForBasePrice,
+      dealName,
+      selectedCategory,
+      selectedCondition,
       handleSelectedCategory,
       handleSelectedCondition,
       onEditingDealName,
@@ -167,10 +171,10 @@ class ListDeal extends Component {
     return (
       <div>
         {/* If user is navigating away from the page, let user know data won't be saved */}
-        <Prompt
+        {/* <Prompt
           when={images.length > 0}
           message="Changes you made may not be saved."
-        />
+        /> */}
         <Layout>
           <div className="deal-container">
             <div className="ui three steps">
@@ -237,6 +241,9 @@ class ListDeal extends Component {
           {showDescriptionStep && (
             <Description
               editDealName={onEditingDealName}
+              dealNameValue={dealName}
+              selectedCategoryValue={selectedCategory}
+              selectedConditionValue={selectedCondition}
               categories={parentCategory}
               selectedCategory={handleSelectedCategory}
               selectedCondition={handleSelectedCondition}
@@ -245,9 +252,10 @@ class ListDeal extends Component {
               createDeal={this.onCreateDeal}
               loading_dealCreating={creatingDeal}
               error_dealCreating={creatingDealError}
-              success_dealCreating={dealCreated}
+              deal_id={dealCreated.deal_id}
               closeModal={closeModalAfterDealCreated}
               modalOpened={modalVisible}
+              resetDealCreated={resetListDeal}
             />
           )}
         </Layout>
@@ -303,7 +311,8 @@ const matchDispatchToProps = dispatch => {
       onEditingDealName,
       onEditingDetail,
       _submitDeal,
-      closeModalAfterDealCreated
+      closeModalAfterDealCreated,
+      resetListDeal
     },
     dispatch
   );

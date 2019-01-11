@@ -21,7 +21,7 @@ const initialState = {
   editorState: EditorState.createEmpty(),
   creatingDeal: false,
   creatingDealError: null,
-  dealCreated: null,
+  dealCreated: {},
   modalVisible: false
 };
 
@@ -39,7 +39,6 @@ const CalculateDiscountPrice = (basePrice, discount) => {
 }
 
 export default function CreateDealReducer(state = initialState, action) {
-
   switch(action.type) {
     case "UPLOADING_IMAGES_BEGIN":
       return {
@@ -126,7 +125,6 @@ export default function CreateDealReducer(state = initialState, action) {
       };
 
     case "GET_RATE_BEGIN":
-    debugger
       return {
         ...state,
         gettingRate: {[action.payload.crypto_symbol] : true},
@@ -169,7 +167,7 @@ export default function CreateDealReducer(state = initialState, action) {
     case "SELECT_CATEGORY":
       return {
         ...state,
-        selectedCategory: action.payload.selectedCategory
+        selectedCategory: action.payload.categoriesSelected
       };
 
     case "SELECT_CONDITION":
@@ -210,6 +208,12 @@ export default function CreateDealReducer(state = initialState, action) {
       return {
         ...state,
         modalVisible: action.payload.modalVisible
+      };
+
+    case "RESET_DEAL_CREATED":
+    debugger
+      return {
+        ...initialState
       };
 
     default:
