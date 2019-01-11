@@ -112,4 +112,16 @@ router.get('/newshipment', function (req, res) {
     });
   });
 
+
+  router.post("/tracking-info", function(req, res) {
+    console.log("117", res.req.body);
+    res.json(res.transaction_updated);
+  });
+
+  router.post("/", function (req,res){
+    console.log("123", res.req.body);
+    // res.json(res.transaction_updated.body.data);
+    res.json(res.transaction_updated);
+  })
+
 module.exports = router;
