@@ -4,6 +4,7 @@ import "./ListDeal.css";
 import Layout from "../Layout";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { convertToRaw, convertFromRaw } from "draft-js";
 import {
   _uploadImage,
   onSelectImageToView,
@@ -17,7 +18,8 @@ import {
   _getCryptoExchange,
   removeSelectedCrypto,
   onEditingDealName,
-  onEditingDetail
+  onEditingDetail,
+  _submitDeal
 } from "../../actions/listDealActions";
 import { _loadCryptocurrencies } from "../../actions/loadCryptoActions";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
@@ -109,9 +111,15 @@ class ListDeal extends Component {
     }
   };
 
-  onCreateDeal = () => {
-    const { dealName, selectedCategory, selectedCondition } = this.props;
 
+  onCreateDeal = () => {
+    const { dealName, selectedCategory, selectedCondition, _submitDeal, images, priceInUSD, priceInCrypto, crypto_amount } = this.props;
+
+    let textDetailRaw = convertToRaw(this.props.editorState.getCurrentContent());
+    let selected_cryptos = Object.keys(crypto_amount);
+
+    _submitDeal(localStorage.getItem("token"), dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos);
+   
   };
 
   render() {
@@ -137,13 +145,14 @@ class ListDeal extends Component {
       priceInCrypto,
       validateDecimalForBasePrice,
       onEditingDealName,
-      onEditingDetail
+      onEditingDetail,
+      onCreateDeal
     } = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
     }
-    console.log("Crypto Amount", crypto_amount);
+
     return (
       <div>
         {/* If user is navigating away from the page, let user know data won't be saved */}
@@ -219,6 +228,7 @@ class ListDeal extends Component {
               editDealName={onEditingDealName}
               updateEditDetail={onEditingDetail}
               showEdittingState={editorState}
+              createDeal={this.onCreateDeal}
             />
           )}
         </Layout>
@@ -264,7 +274,8 @@ const matchDispatchToProps = dispatch => {
       _getCryptoExchange,
       removeSelectedCrypto,
       onEditingDealName,
-      onEditingDetail
+      onEditingDetail,
+      _submitDeal
     },
     dispatch
   );

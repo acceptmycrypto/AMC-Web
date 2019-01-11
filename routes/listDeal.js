@@ -114,40 +114,90 @@ router.post("/cryptocurrency/exchange", verifyToken, async function(req, res) {
 })
 
 
-
-
 // api
 router.post('/listdeal', verifyToken, function(req, res) {
   //info needed to insert into tables
+  let {dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos} = req.body
   let seller_id = req.decoded._id;
 
   //deals table
   //deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto, item_condition
+  let deal_name = dealName;
+  let deal_description = JSON.stringify(textDetailRaw);
+  let item_condition;
+  if (item_condition !== null) {
+    item_condition = selectedCondition.value;
+  }
+  let featured_deal_image = images[0].Location;
+  let pay_in_dollar = priceInUSD;
+  let pay_in_crypto = priceInCrypto;
 
-  //deal_images table
-  // deal_id, deal_image
+  //First insert into deals table
+  // INSERT INTO users_shipping_address SET ?
+  let deals_rows = {seller_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto, item_condition};
 
-  //category table
-  //category_name
-
-  //categories_deals table
-  //category_id, deals_id
-
-  //cryptos_deals table
-  //crypto_id, deal_id
-
-
-
-  connection.query("INSERT INTO users_cryptos (user_id, crypto_id) VALUES ?",
-    [selectedCryptos],
+  connection.query("INSERT INTO deals SET ?",
+    deals_rows,
     function (error, results, fields) {
+      if (error) console.log(error);
+      let deal_id = results.insertId; //assign the new deal_id
 
+      //Second insert images into deal_images table
+      //create image rows with the deal id to be inserted into deal_images table
+      let imagesRow = [];
+      for (let i = 0; i < images.length; i++) {
+        let dealImageRecord = [];
+        dealImageRecord.push(deal_id, images[i].Location)
+        imagesRow.push(dealImageRecord);
+      }
+      connection.query("INSERT INTO deal_images(deal_id, deal_image)  VALUES ?", [imagesRow],
+      function (error, results, fields) {
+        if (error) console.log(error);
+        console.log(results)
+      });
 
+      //Third insert categories into categories_deals table
+      //get the cetegory_id
+      connection.query("SELECT id AS category_id FROM category WHERE category_name IN (?)", [selectedCategory],
+      function (error, results, fields) {
+        if (error) console.log(error);
 
+        let categories_deals = [];
+        for (let i = 0; i < results.length; i++) {
+          let records = [];
+          records.push(results[i].category_id, deal_id)
+          categories_deals.push(records);
 
-    res.json(results);
+        }
+
+        connection.query("INSERT INTO categories_deals(category_id, deals_id) VALUES ?", [categories_deals],
+        function (error, results, fields) {
+          if (error) console.log(error);
+          console.log(results)
+        });
+      });
+
+      //Fourth insert into cryptos_deals table
+      connection.query("SELECT id AS crypto_id FROM crypto_metadata WHERE crypto_symbol IN (?)", [selected_cryptos],
+      function (error, results, fields) {
+        if (error) console.log(error);
+
+        let cryptos_deals = [];
+        for (let i = 0; i < results.length; i++) {
+          let records = [];
+          records.push(results[i].crypto_id, deal_id)
+          cryptos_deals.push(records);
+        }
+
+        connection.query("INSERT INTO cryptos_deals(crypto_id, deal_id) VALUES ?", [cryptos_deals],
+        function (error, results, fields) {
+          if (error) console.log(error);
+          console.log(results)
+        });
+      });
 
   });
+
 });
 
 router.get("/category/parent", function(req, res) {

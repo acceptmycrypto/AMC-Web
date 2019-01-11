@@ -170,7 +170,11 @@ export const onEditingDetail = editorState => ({
   payload: editorState
 });
 
-export const handleSelectedCategory = (selectedCategory) => {
+export const handleSelectedCategory = (categoriesSelected) => {
+  let selectedCategory = [];
+  categoriesSelected.map(category => {
+    selectedCategory.push(category.value);
+  })
   return {
     type: 'SELECT_CATEGORY',
     payload: {selectedCategory}
@@ -183,3 +187,41 @@ export const handleSelectedCondition = (selectedCondition) => {
     payload: {selectedCondition}
   }
 };
+
+export function _submitDeal(token, dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos) {
+
+  const settings = {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({token, dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos})
+  };
+
+  return dispatch => {
+    dispatch(creatingDealBegin());
+    return fetch("/listdeal", settings)
+      .then(res => res.json())
+      .then(jsonDealCreated => {
+        debugger
+        dispatch(creatingDealSuccess(jsonDealCreated));
+        return jsonDealCreated;
+      })
+      .catch(error => dispatch(creatingDealFailure(error)));
+  };
+}
+
+export const creatingDealBegin = () => ({
+  type: "CREATING_DEAL_BEGIN"
+});
+
+export const creatingDealSuccess = imageData => ({
+  type: "CREATING_DEAL_SUCCESS",
+  payload: imageData
+});
+
+export const creatingDealFailure = error => ({
+  type: "CREATING_DEAL_FAILURE",
+  payload: { error }
+});

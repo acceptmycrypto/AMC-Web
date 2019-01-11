@@ -3,7 +3,7 @@ import "./Description.css";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Select from "react-select";
-import { Editor, RichUtils, convertToRaw, convertFromRaw } from "draft-js";
+import { Editor, RichUtils } from "draft-js";
 import { _loadCategory } from "../../../actions/categoryActions";
 import {
   handleSelectedCategory,
@@ -34,10 +34,6 @@ class Description extends Component {
     this.props.updateEditDetail(
       RichUtils.toggleInlineStyle(this.props.showEdittingState, "BOLD")
     );
-  };
-
-  handleRawText = () => {
-    const raw = convertToRaw(this.props.showEdittingState.getCurrentContent());
   };
 
   render() {
@@ -116,7 +112,7 @@ class Description extends Component {
           </div>
           <div id="price-listing-next-button">
             <hr />
-            <div id="photos-next-step">
+            <div onClick={this.props.createDeal} id="photos-next-step">
               <button>Submit Deal</button>
             </div>
           </div>

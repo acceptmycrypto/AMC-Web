@@ -68,7 +68,7 @@ CREATE TABLE deals (
 	venue_id INT NULL, -- changed venue_id to NULL because as of now we we have seeds with venue_id that reference the vendors
 	seller_id INT NULL, -- added this to reference users who choose to be sellers, a deal item will either have a venue_id or a seller_id
 	deal_name VARCHAR(255) NOT NULL,
-	deal_description VARCHAR(255) NOT NULL,
+	deal_description VARCHAR(10000) NOT NULL,
   	featured_deal_image VARCHAR(255) NOT NULL,
 	pay_in_dollar DECIMAL(10,2) NOT NULL,
 	pay_in_crypto DECIMAL(10, 2) NOT NULL,
