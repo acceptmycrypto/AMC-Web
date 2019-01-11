@@ -18,7 +18,11 @@ const initialState = {
   parentCategory: [],
   selectedCategory: null,
   selectedCondition: null,
-  editorState: EditorState.createEmpty()
+  editorState: EditorState.createEmpty(),
+  creatingDeal: false,
+  creatingDealError: null,
+  dealCreated: null,
+  modalVisible: false
 };
 
 const handleImagesUpload = (images, imageObj) => {
@@ -179,6 +183,34 @@ export default function CreateDealReducer(state = initialState, action) {
          ...state,
          editorState: action.payload
        };
+
+    case "CREATING_DEAL_BEGIN":
+      return {
+        ...state,
+        creatingDeal: true,
+        creatingDealError: null
+      };
+
+    case "CREATING_DEAL_SUCCESS":
+      return {
+        ...state,
+        creatingDeal: false,
+        dealCreated: action.payload,
+        modalVisible: true
+      };
+
+    case "CREATING_DEAL_FAILURE":
+      return {
+        ...state,
+        uploading: false,
+        error: action.payload.error,
+      };
+
+    case "CLOSE_DEAL_CREATED_MODAL":
+      return {
+        ...state,
+        modalVisible: action.payload.modalVisible
+      };
 
     default:
       // ALWAYS have a default case in a reducer

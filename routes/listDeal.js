@@ -153,7 +153,6 @@ router.post('/listdeal', verifyToken, function(req, res) {
       connection.query("INSERT INTO deal_images(deal_id, deal_image)  VALUES ?", [imagesRow],
       function (error, results, fields) {
         if (error) console.log(error);
-        console.log(results)
       });
 
       //Third insert categories into categories_deals table
@@ -167,13 +166,11 @@ router.post('/listdeal', verifyToken, function(req, res) {
           let records = [];
           records.push(results[i].category_id, deal_id)
           categories_deals.push(records);
-
         }
 
         connection.query("INSERT INTO categories_deals(category_id, deals_id) VALUES ?", [categories_deals],
         function (error, results, fields) {
           if (error) console.log(error);
-          console.log(results)
         });
       });
 
@@ -191,8 +188,8 @@ router.post('/listdeal', verifyToken, function(req, res) {
 
         connection.query("INSERT INTO cryptos_deals(crypto_id, deal_id) VALUES ?", [cryptos_deals],
         function (error, results, fields) {
-          if (error) console.log(error);
-          console.log(results)
+          if (error) res.status(400).json({message: `Failed to create deal: ${error}`});
+          res.json({message: "Successfully created deal"});
         });
       });
 

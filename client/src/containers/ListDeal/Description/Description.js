@@ -7,8 +7,12 @@ import { Editor, RichUtils } from "draft-js";
 import { _loadCategory } from "../../../actions/categoryActions";
 import {
   handleSelectedCategory,
-  handleSelectedCondition
+  handleSelectedCondition,
+  closeModalAfterDealCreated
 } from "../../../actions/listDealActions";
+import Modal from "react-awesome-modal";
+import LoadingSpinner from "../../../components/UI/LoadingSpinner";
+import { Link } from "react-router-dom";
 
 class Description extends Component {
   componentDidMount = () => {
@@ -36,12 +40,17 @@ class Description extends Component {
     );
   };
 
+  redirectToDealPage = () => {
+    debugger;
+  };
+
   render() {
     const {
-      showEdittingState,
       parentCategory,
       handleSelectedCategory,
-      handleSelectedCondition
+      handleSelectedCondition,
+      closeModalAfterDealCreated,
+      modalVisible
     } = this.props;
 
     const itemCondition = [
@@ -113,17 +122,41 @@ class Description extends Component {
           <div id="price-listing-next-button">
             <hr />
             <div onClick={this.props.createDeal} id="photos-next-step">
-              <button>Submit Deal</button>
+              {this.props.loading_dealCreating ? <LoadingSpinner /> : <button>Submit Deal</button>}
             </div>
           </div>
         </div>
+        <Modal
+          visible={modalVisible}
+          effect="fadeInLeft"
+          onClickAway={() => {
+            closeModalAfterDealCreated();
+            this.props.history.push("/");
+          }}
+        >
+          <div className="Modal">
+            <h4>You have successfully created a Deal! </h4>
+            <br />
+            <h4>Now sit tight and wait to get paid with cryptocurrency.</h4>
+            <Link
+              to={`/`}
+              className="a-link"
+              onClick={() => {
+                closeModalAfterDealCreated();
+              }}
+            >
+              OK
+            </Link>
+          </div>
+        </Modal>
       </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  parentCategory: state.CreateDeal.parentCategory
+  parentCategory: state.CreateDeal.parentCategory,
+  modalVisible: state.CreateDeal.modalVisible
 });
 
 const matchDispatchToProps = dispatch => {
@@ -131,7 +164,8 @@ const matchDispatchToProps = dispatch => {
     {
       _loadCategory,
       handleSelectedCategory,
-      handleSelectedCondition
+      handleSelectedCondition,
+      closeModalAfterDealCreated
     },
     dispatch
   );

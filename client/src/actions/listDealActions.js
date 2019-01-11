@@ -216,12 +216,19 @@ export const creatingDealBegin = () => ({
   type: "CREATING_DEAL_BEGIN"
 });
 
-export const creatingDealSuccess = imageData => ({
+export const creatingDealSuccess = dealCreated => ({
   type: "CREATING_DEAL_SUCCESS",
-  payload: imageData
+  payload: dealCreated
 });
 
 export const creatingDealFailure = error => ({
   type: "CREATING_DEAL_FAILURE",
   payload: { error }
 });
+
+export const closeModalAfterDealCreated = () => {
+  return {
+    type: "CLOSE_DEAL_CREATED_MODAL", //what does the action do = title of action
+    payload: { modalVisible: false } // any data you need to return
+  };
+};

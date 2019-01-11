@@ -4,7 +4,7 @@ import "./ListDeal.css";
 import Layout from "../Layout";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { convertToRaw, convertFromRaw } from "draft-js";
+import { RichUtils, convertToRaw, convertFromRaw } from "draft-js";
 import {
   _uploadImage,
   onSelectImageToView,
@@ -17,11 +17,15 @@ import {
   validateDecimalForBasePrice,
   _getCryptoExchange,
   removeSelectedCrypto,
+  handleSelectedCategory,
+  handleSelectedCondition,
   onEditingDealName,
   onEditingDetail,
-  _submitDeal
+  _submitDeal,
+  closeModalAfterDealCreated
 } from "../../actions/listDealActions";
 import { _loadCryptocurrencies } from "../../actions/loadCryptoActions";
+import { _loadCategory } from "../../actions/categoryActions";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
 import UploadingImage from "./UploadImage/UploadingImage";
 import Pricing from "./Pricing";
@@ -30,6 +34,7 @@ import Description from "./Description";
 class ListDeal extends Component {
   componentDidMount = () => {
     this.props._loadCryptocurrencies();
+    this.props._loadCategory();
   };
   // If user refreshes the page, we warn users that data won't be saved
   componentDidUpdate = () => {
@@ -111,7 +116,6 @@ class ListDeal extends Component {
     }
   };
 
-
   onCreateDeal = () => {
     const { dealName, selectedCategory, selectedCondition, _submitDeal, images, priceInUSD, priceInCrypto, crypto_amount } = this.props;
 
@@ -119,7 +123,7 @@ class ListDeal extends Component {
     let selected_cryptos = Object.keys(crypto_amount);
 
     _submitDeal(localStorage.getItem("token"), dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos);
-   
+
   };
 
   render() {
@@ -134,7 +138,12 @@ class ListDeal extends Component {
       cryptoOptionsForCreatingDeal,
       gettingRate,
       crypto_amount,
+      parentCategory,
       editorState,
+      creatingDeal,
+      creatingDealError,
+      dealCreated,
+      modalVisible,
 
       onSelectImageToView,
       handleUploadingPhotosStep,
@@ -144,9 +153,11 @@ class ListDeal extends Component {
       OnUSDPriceChange,
       priceInCrypto,
       validateDecimalForBasePrice,
+      handleSelectedCategory,
+      handleSelectedCondition,
       onEditingDealName,
       onEditingDetail,
-      onCreateDeal
+      closeModalAfterDealCreated
     } = this.props;
 
     if (error) {
@@ -226,9 +237,17 @@ class ListDeal extends Component {
           {showDescriptionStep && (
             <Description
               editDealName={onEditingDealName}
+              categories={parentCategory}
+              selectedCategory={handleSelectedCategory}
+              selectedCondition={handleSelectedCondition}
               updateEditDetail={onEditingDetail}
               showEdittingState={editorState}
               createDeal={this.onCreateDeal}
+              loading_dealCreating={creatingDeal}
+              error_dealCreating={creatingDealError}
+              success_dealCreating={dealCreated}
+              closeModal={closeModalAfterDealCreated}
+              modalOpened={modalVisible}
             />
           )}
         </Layout>
@@ -253,9 +272,14 @@ const mapStateToProps = state => ({
   gettingRate: state.CreateDeal.gettingRate,
   crypto_amount: state.CreateDeal.crypto_amount,
   dealName: state.CreateDeal.dealName,
+  parentCategory: state.CreateDeal.parentCategory,
   selectedCategory: state.CreateDeal.selectedCategory,
   selectedCondition: state.CreateDeal.selectedCondition,
-  editorState: state.CreateDeal.editorState
+  editorState: state.CreateDeal.editorState,
+  creatingDeal: state.CreateDeal.creatingDeal,
+  creatingDealError: state.CreateDeal.creatingDealError,
+  dealCreated: state.CreateDeal.dealCreated,
+  modalVisible: state.CreateDeal.modalVisible
 });
 
 const matchDispatchToProps = dispatch => {
@@ -273,9 +297,13 @@ const matchDispatchToProps = dispatch => {
       _loadCryptocurrencies,
       _getCryptoExchange,
       removeSelectedCrypto,
+      _loadCategory,
+      handleSelectedCategory,
+      handleSelectedCondition,
       onEditingDealName,
       onEditingDetail,
-      _submitDeal
+      _submitDeal,
+      closeModalAfterDealCreated
     },
     dispatch
   );
