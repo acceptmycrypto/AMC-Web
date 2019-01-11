@@ -42,4 +42,74 @@ var connection = mysql.createConnection({
 });
 
 
+router.get('/newshipment', function (req, res) {
+
+
+    var addressFrom  = {
+        "name": "Mr Shippotester",
+        "street1":"215 Clayton St.",
+        "city":"San Francisco",
+        "state":"CA",
+        "zip":"94117",
+        "country":"US",
+        "phone":"+1 555 341 9393",
+        "email":"support@goshippo.com",
+    };
+
+    var addressTo = {
+        "name": "Mr Hippo",
+        "street1": "250 Joralemon Street",
+        "street2": "",
+        "city": "Brooklyn",
+        "state": "NY",
+        "zip": " 11201",
+        "country": "US",
+        "phone": "+1 555 341 9393",
+        "email": "mrhippo@goshippo.com",
+    };
+  
+    // parcel object dict
+    var parcel = {
+        "length":"5",
+        "width":"5",
+        "height":"5",
+        "distance_unit":"in",
+        "weight":"2",
+        "mass_unit":"lb"
+    };
+  
+    shippo.shipment.create({
+        "address_from": addressFrom,
+        "address_to": addressTo,
+        "parcels": [parcel],
+        "async": false
+    }, function(err, shipment){
+        
+        // get the cheapest rate for the shipment 
+        var cheapest_rate = shipment.rates.filter(function (rate){
+            if(rate.attributes.length > 0){
+                for(var i = 0; i<rate.attributes.length; i++){
+                    if(rate.attributes[i] == "CHEAPEST"){
+                        return rate;
+                    }
+                }
+            }
+        })
+
+        // get the cheapest rate's object id to be used in the creating the shipment transaction
+        var rate_object_id = cheapest_rate[0].object_id;
+
+        shippo.transaction.create({
+            "rate": rate_object_id,
+            "label_file_type": "PDF",
+            "async": false
+        }, function(err, transaction) {
+            if(err) throw err;
+           res.json({shipment, transaction});
+           console.log(transaction);
+           
+        });
+    });
+  });
+
 module.exports = router;
