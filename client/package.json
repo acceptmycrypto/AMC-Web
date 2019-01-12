@@ -21,6 +21,7 @@
     "react-scripts": "2.0.4",
     "react-select": "^2.1.0",
     "react-timestamp": "^4.4.0",
+    "react-toastify": "^4.5.2",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "select": "^1.1.2",

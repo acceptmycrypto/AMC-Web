@@ -212,7 +212,7 @@ const UploadingImage = props => {
         </div>
         <hr />
         <div id="photos-next-step">
-          <button>Next</button>
+          <button onClick={() => props.validateImageUpload() && props.showPricingStep()}>Next</button>
         </div>
       </div>
     </div>

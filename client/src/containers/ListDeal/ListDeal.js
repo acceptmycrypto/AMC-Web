@@ -4,6 +4,8 @@ import "./ListDeal.css";
 import Layout from "../Layout";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { RichUtils, convertToRaw, convertFromRaw } from "draft-js";
 import {
   _uploadImage,
@@ -127,6 +129,32 @@ class ListDeal extends Component {
 
   };
 
+  handleImageUploadValidation = () => {
+    const validateImageUploaded = {
+      imageSRC: this.props.images[0]
+    }
+    let isDataValid = false;
+
+    //Object.keys(validateNewInput) give us an array of keys
+    //Array.every check if all indices passed the test
+    //we check if the value of each property in the the object validateNewInput is === true
+    if (Object.keys(validateImageUploaded).every((k) => {
+      return validateImageUploaded[k] ? true : false
+    })) {
+      isDataValid = true;
+    } else {
+      this.notifyImageUpload();
+    }
+
+    return isDataValid;
+  }
+
+  notifyImageUpload = () => {
+    toast.error("Please upload an image first.", {
+      position: toast.POSITION.TOP_RIGHT
+    });
+  };
+
   render() {
     const {
       error,
@@ -189,7 +217,7 @@ class ListDeal extends Component {
                 </div>
               </a>
               <a
-                onClick={handlePricingStep}
+                onClick={() => this.handleImageUploadValidation() && handlePricingStep()}
                 className={showPricingStep ? "active step" : "step"}
               >
                 <i className="bitcoin icon" />
@@ -202,7 +230,7 @@ class ListDeal extends Component {
               </a>
 
               <a
-                onClick={handleDescriptionStep}
+                onClick={() => this.handleImageUploadValidation() && handleDescriptionStep()}
                 className={showDescriptionStep ? "active step" : "step"}
               >
                 <i className="edit icon" />
@@ -222,6 +250,8 @@ class ListDeal extends Component {
               uploadImage={this.handleImageUpload}
               imageIsOnPreview={this.imageOnView}
               removeImage={this.onSelectImageToReMove}
+              validateImageUpload={this.handleImageUploadValidation}
+              showPricingStep={handlePricingStep}
             />
           )}
           {showPricingStep && (
@@ -259,6 +289,7 @@ class ListDeal extends Component {
             />
           )}
         </Layout>
+        <ToastContainer autoClose={8000} />
       </div>
     );
   }
