@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./Description.css";
+import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Select from "react-select";
@@ -36,8 +37,9 @@ class Description extends Component {
     );
   };
 
-  redirectToDealPage = () => {
-    debugger;
+  //We have access to history props from withRouter 
+  directToDealItemPage = () => {
+    this.props.history.push(`/feed/deals/${this.props.deal_id}/${this.props.dealNameValue}`);
   };
 
   render() {
@@ -135,9 +137,7 @@ class Description extends Component {
           effect="fadeInLeft"
           onClickAway={() => {
             closeModalAfterDealCreated();
-            resetDealCreated();
-            // this.props.history.push("/");
-            debugger
+            this.directToDealItemPage();
           }}
         >
           <div className="Modal">
@@ -149,8 +149,6 @@ class Description extends Component {
               className="a-link"
               onClick={() => {
                 closeModalAfterDealCreated();
-                resetDealCreated();
-
               }}
               onClick={resetDealCreated}
             >
@@ -180,7 +178,7 @@ const matchDispatchToProps = dispatch => {
   );
 };
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   matchDispatchToProps
-)(Description);
+)(Description));

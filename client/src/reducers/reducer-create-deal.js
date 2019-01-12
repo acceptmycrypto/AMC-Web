@@ -26,7 +26,9 @@ const initialState = {
 };
 
 const handleImagesUpload = (images, imageObj) => {
-  images.push(imageObj);
+  let newImageArr = [...images];
+  newImageArr.push(imageObj);
+  return newImageArr
 }
 
 const handleImageRemove = (images, imageKey) => {
@@ -48,12 +50,12 @@ export default function CreateDealReducer(state = initialState, action) {
       };
 
     case "UPLOADING_IMAGES_SUCCESS":
-      handleImagesUpload(state.images, action.payload);
       return {
         ...state,
         uploading: false,
         imageData: action.payload,
-        imageView: action.payload.Location
+        imageView: action.payload.Location,
+        images: handleImagesUpload(state.images, action.payload)
       };
 
     case "UPLOADING_IMAGES_FAILURE":

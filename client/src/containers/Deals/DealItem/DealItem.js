@@ -16,6 +16,7 @@ import {
   handleCustomizingStep,
   handleShippingStep,
   handlePayingStep} from "../../../actions/dealItemActions";
+import {resetListDeal} from "../../../actions/listDealActions";
 import { _fetchTransactionInfo } from "../../../actions/paymentActions";
 import { Carousel } from "react-responsive-carousel";
 import CustomizeOrder from "../CustomizeOrder";
@@ -219,6 +220,12 @@ class DealItem extends Component {
       return <div>Loading...</div>;
     }
 
+    //if user is redirected from the deal created page after deal is created
+    if(this.props.dealCreated.deal_id) {
+      debugger
+      this.props.resetListDeal();
+    }
+
     return (
       <div>
         <Layout>
@@ -396,7 +403,8 @@ const mapStateToProps = state => ({
   userLoggedIn: state.LoggedIn.userLoggedIn,
   showCustomizationStep: state.DealItem.showCustomizationStep,
   showShippingStep: state.DealItem.showShippingStep,
-  showPayingStep: state.DealItem.showPayingStep
+  showPayingStep: state.DealItem.showPayingStep,
+  dealCreated: state.CreateDeal.dealCreated,
 });
 
 
@@ -415,7 +423,8 @@ const matchDispatchToProps = dispatch =>{
     handleCustomizingStep,
     handleShippingStep,
     handlePayingStep,
-    _isLoggedIn}, dispatch);
+    _isLoggedIn,
+    resetListDeal}, dispatch);
 
 }
 
