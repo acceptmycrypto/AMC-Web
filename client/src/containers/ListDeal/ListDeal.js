@@ -143,14 +143,54 @@ class ListDeal extends Component {
     })) {
       isDataValid = true;
     } else {
-      this.notifyImageUpload();
+      this.notifyImageUploadError();
     }
 
     return isDataValid;
   }
 
-  notifyImageUpload = () => {
+  handlePricingValidation = () => {
+    const validatePricing = {
+      basePrice: this.props.priceInUSD,
+      selectedCrypto: Object.keys(this.props.crypto_amount).length !== 0 //check if user has selected a crypto
+    }
+    let isDataValid = false;
+
+    //Object.keys(validateNewInput) give us an array of keys
+    //Array.every check if all indices passed the test
+    //we check if the value of each property in the the object validateNewInput is === true
+    if (Object.keys(validatePricing).every((k) => {
+      return validatePricing[k] ? true : false
+    })) {
+      isDataValid = true;
+    } else {
+      // this.props.priceInUSD ? this.notifyCryptoNotSelectedError() : this.notifyBasePriceEmptyError();
+      if (!this.props.priceInUSD) {
+        this.notifyBasePriceEmptyError();
+      } else if (Object.keys(this.props.crypto_amount).length === 0) {
+        this.notifyCryptoNotSelectedError();
+      }
+
+      //if base price is not entered, notify user to enter base price.
+    }
+
+    return isDataValid;
+  }
+
+  notifyImageUploadError = () => {
     toast.error("Please upload an image first.", {
+      position: toast.POSITION.TOP_RIGHT
+    });
+  };
+
+  notifyBasePriceEmptyError = () => {
+    toast.error("Enter your base price.", {
+      position: toast.POSITION.TOP_RIGHT
+    });
+  };
+
+  notifyCryptoNotSelectedError = () => {
+    toast.error("Select at least one Cryptocurrency.", {
       position: toast.POSITION.TOP_RIGHT
     });
   };
@@ -230,7 +270,7 @@ class ListDeal extends Component {
               </a>
 
               <a
-                onClick={() => this.handleImageUploadValidation() && handleDescriptionStep()}
+                onClick={() => this.handlePricingValidation() && handleDescriptionStep()}
                 className={showDescriptionStep ? "active step" : "step"}
               >
                 <i className="edit icon" />
