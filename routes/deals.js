@@ -41,7 +41,7 @@ router.post('/api/deals', verifyToken, function (req, res) {
     // 3) query the deals that offered by those venues
     //update query to include sellers as users in addition to larger venue vendors  
     connection.query(
-      'SELECT deals.id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, venues.venue_name, venues.venue_link, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings FROM deals LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN users ON deals.seller_id = users.id WHERE venue_id IN (SELECT DISTINCT venue_id FROM cryptos_venues WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos WHERE user_id = ?)) OR seller_id IN (SELECT DISTINCT seller_id FROM cryptos_sellers WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos WHERE user_id = ?))',
+      'SELECT DISTINCT deals.id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, venues.venue_name, venues.venue_link, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings FROM deals LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN cryptos_deals ON cryptos_deals.deal_id = deals.id LEFT JOIN users ON deals.seller_id = users.id WHERE deals.venue_id IN (SELECT DISTINCT venue_id FROM cryptos_venues WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos WHERE user_id = ?)) OR deals.id IN (SELECT DISTINCT deal_id FROM cryptos_deals WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos WHERE user_id = ?))',
       [id, id],
       function (error, results, fields) {
         if (error) console.log(error);
@@ -54,7 +54,7 @@ router.post('/api/deals', verifyToken, function (req, res) {
 
 //get a deal_item api
 // include id param which references the deal id in route to account for if multiple users sell item with same deal_name 
-router.get('/api/deals/:id/:deal_name', function (req, res) {
+router.get('/api/deals/:deal_id/:deal_name', function (req, res) {
   //important! we set this venue name a here so it's available to be used for crytoAccept list querry
   let venue_name;
   let seller_name;
@@ -62,7 +62,7 @@ router.get('/api/deals/:id/:deal_name', function (req, res) {
   // specify specific column names rather than * because don't want to select all users (seller) info
   connection.query(
     'SELECT deals.id AS deal_id, deals.venue_id, deals.seller_id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, deals.deal_avg_rating, deals.total_deal_ratings, deal_images.deal_image, venues.id AS venues_id, venues.venue_name, venues.venue_description, venues.venue_link, venues.accepted_crypto, users.id AS seller_id, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings FROM deals LEFT JOIN deal_images ON deals.id = deal_images.deal_id LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN users ON deals.seller_id = users.id WHERE deals.id = ?',
-    [req.params.id],
+    [req.params.deal_id],
     function (error, deal_images_result, fields) {
 
       // console.log(deal_images_result);
@@ -121,8 +121,8 @@ router.get('/api/deals/:id/:deal_name', function (req, res) {
       }
       else {
         connection.query(
-          'SELECT * FROM cryptos_sellers LEFT JOIN users ON users.id = cryptos_sellers.seller_id LEFT JOIN crypto_metadata ON crypto_metadata.id = cryptos_sellers.crypto_id LEFT JOIN crypto_info ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE users.username = ?',
-          [seller_name],
+          'SELECT * FROM cryptos_deals LEFT JOIN crypto_metadata ON crypto_metadata.id = cryptos_deals.crypto_id LEFT JOIN crypto_info ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE cryptos_deals.deal_id = ?',
+          [req.params.deal_id],
           function (error, results, fields) {
 
             if (error) throw error;

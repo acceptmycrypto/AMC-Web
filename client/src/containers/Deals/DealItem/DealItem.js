@@ -352,8 +352,13 @@ class DealItem extends Component {
 
                   <div className="customize-item-payment">
                     <div className="crypto_logo">
-                      <strong>Payment</strong> <br/>
-                      {selectedOption ?  <img src={selectedOption.logo} alt="cryptoLogo" /> : null}
+                      <strong>Crypto Payment</strong> <br/>
+                      {selectedOption ?  <img src={selectedOption.logo} alt="cryptoLogo" /> :
+                      <div>
+                        Powered By
+                        <img style={{width: "100px", marginTop: "0px"}} src="../../../assets/images/coin_payment.png" alt="coinpayment_logo"/>
+                      </div>
+                       }
                     </div>
                   </div>
               </div>
@@ -447,6 +452,13 @@ class DealItem extends Component {
                   transactionInfo={paymentInfo}
                   cryptoSymbol={selectedOption && selectedOption.value}
                   paymentButtonClicked={createPaymentButtonClicked}
+
+                  deal_item={dealItem}
+                  full_name={fullName}
+                  shipping_address={shippingAddress}
+                  shipping_city={shippingCity}
+                  zip_code={zipcode}
+                  shipping_state={shippingState}
 
                   showLoadingSpinner={transaction_loading}
                   timeout={paymentInfo && this.timeInMilliseconds(paymentInfo.timeout)}/>}

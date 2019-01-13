@@ -264,6 +264,10 @@ router.post("/checkout/notification", function (req, res, next) {
   return next();
 });
 
+//paypal
+router.post('/paypal/execute-payment', function(req, res) {
+  console.log("paypal", req.body);
+})
 
 function createMatchedFriends(user_id, crypto_name){
   connection.query(

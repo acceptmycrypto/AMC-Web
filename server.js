@@ -33,13 +33,11 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
+    "Origin, X-Requested-With, Content-Type, Accept, Cache-Control"
   );
   res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");
   next();
 });
-
-
 
 //routers
 var navbarRoutes = require("./routes/navbar.js");
@@ -59,6 +57,8 @@ var cryptosRankingRoutes = require("./routes/cryptos_ranking.js");
 var notificationRoutes = require("./routes/cryptos_ranking.js");
 var settingsRoutes = require("./routes/settings.js");
 var reviewRoutes = require("./routes/reviews.js");
+var listDealRoutes = require("./routes/listDeal.js");
+
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -90,6 +90,7 @@ app.use("/", cryptosRankingRoutes);
 app.use("/", notificationRoutes);
 app.use("/", settingsRoutes);
 app.use("/", reviewRoutes);
+app.use("/", listDealRoutes);
 
 path.join(__dirname, "public");
 
