@@ -35,7 +35,7 @@ const Pricing = props => {
                 type="text"
                 placeholder="0.00"
                 min="0"
-                value={props.showPriceCrypto}
+                value={props.showPriceCrypto == "NaN" ? "0.00" : props.showPriceCrypto}
               />
             </div>
             <small className="pricing-footer-note">
@@ -106,7 +106,7 @@ const Pricing = props => {
           <div id="price-listing-next-button">
             <hr />
             <div id="photos-next-step">
-              <button>Next</button>
+              <button onClick={() => props.validatePricingStep() && props.showDescriptionStep()}>Next</button>
             </div>
           </div>
         </div>

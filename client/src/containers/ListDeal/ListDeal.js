@@ -165,13 +165,11 @@ class ListDeal extends Component {
       isDataValid = true;
     } else {
       // this.props.priceInUSD ? this.notifyCryptoNotSelectedError() : this.notifyBasePriceEmptyError();
-      if (!this.props.priceInUSD) {
+      if (!this.props.priceInUSD || this.props.priceInUSD === "NaN") {
         this.notifyBasePriceEmptyError();
       } else if (Object.keys(this.props.crypto_amount).length === 0) {
         this.notifyCryptoNotSelectedError();
       }
-
-      //if base price is not entered, notify user to enter base price.
     }
 
     return isDataValid;
@@ -271,7 +269,7 @@ class ListDeal extends Component {
 
               <a
                 onClick={() => this.handlePricingValidation() && handleDescriptionStep()}
-                className={showDescriptionStep ? "active step" : "step"}
+                className={"step " + (!showPricingStep && showPhotosStep ? "disabled" : showDescriptionStep ? "active" : "" )}
               >
                 <i className="edit icon" />
                 <div className="content">
@@ -306,6 +304,8 @@ class ListDeal extends Component {
               getCryptoExchange={this.calculateCryptoExchange}
               rateLoading={gettingRate}
               showCryptoAmount={crypto_amount}
+              validatePricingStep={this.handlePricingValidation}
+              showDescriptionStep={handleDescriptionStep}
             />
           )}
           {showDescriptionStep && (
