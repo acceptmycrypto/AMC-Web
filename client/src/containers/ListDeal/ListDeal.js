@@ -100,6 +100,7 @@ class ListDeal extends Component {
   };
 
   calculateCryptoExchange = event => {
+    debugger
     const {
       _getCryptoExchange,
       crypto_amount,
@@ -171,8 +172,22 @@ class ListDeal extends Component {
         this.notifyCryptoNotSelectedError();
       }
     }
-
     return isDataValid;
+  }
+
+  validateBasePriceToBeEnteredBeforeSelectCrypto = () => {
+   const basePrice = this.props.priceInUSD;
+
+   let isDataValid = false;
+
+  if (basePrice && basePrice !== "NaN" && basePrice !== "0.00") {
+    isDataValid = true;
+  } else {
+    this.notifyBasePriceEmptyError();
+  }
+  
+  return isDataValid;
+
   }
 
   notifyImageUploadError = () => {
@@ -306,6 +321,7 @@ class ListDeal extends Component {
               showCryptoAmount={crypto_amount}
               validatePricingStep={this.handlePricingValidation}
               showDescriptionStep={handleDescriptionStep}
+              validateSelectedCrypto={this.validateBasePriceToBeEnteredBeforeSelectCrypto}
             />
           )}
           {showDescriptionStep && (

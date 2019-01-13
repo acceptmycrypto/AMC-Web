@@ -35,7 +35,11 @@ const Pricing = props => {
                 type="text"
                 placeholder="0.00"
                 min="0"
-                value={props.showPriceCrypto == "NaN" ? "0.00" : props.showPriceCrypto}
+                value={
+                  props.showPriceCrypto == "NaN"
+                    ? "0.00"
+                    : props.showPriceCrypto
+                }
               />
             </div>
             <small className="pricing-footer-note">
@@ -81,7 +85,10 @@ const Pricing = props => {
                     }
                   >
                     <img
-                      onClick={props.getCryptoExchange}
+                      onClick={(event) =>
+                        props.validateSelectedCrypto() &&
+                        props.getCryptoExchange(event)
+                      }
                       data-cryptosymbol={crypto.crypto_symbol}
                       src={crypto.crypto_logo}
                       alt="crypto_logo"
@@ -102,11 +109,20 @@ const Pricing = props => {
               );
             })}
           </div>
-          <small class="pricing-footer-note">Please be aware that the crypto amount will be different at the time of purchase due to market volatility.</small>
+          <small class="pricing-footer-note">
+            Please be aware that the crypto amount will be different at the time
+            of purchase due to market volatility.
+          </small>
           <div id="price-listing-next-button">
             <hr />
             <div id="photos-next-step">
-              <button onClick={() => props.validatePricingStep() && props.showDescriptionStep()}>Next</button>
+              <button
+                onClick={() =>
+                  props.validatePricingStep() && props.showDescriptionStep()
+                }
+              >
+                Next
+              </button>
             </div>
           </div>
         </div>
