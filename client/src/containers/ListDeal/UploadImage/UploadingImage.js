@@ -28,7 +28,7 @@ const UploadingImage = props => {
                 src={uploadedImages[0].Location}
                 alt="uploaded_image"
               />
-              <div class="main-uploaded-photo">Main Photo</div>
+              <div class="main-uploaded-photo">Featured Photo</div>
             </div>
           ) : (
             <div className="deal-listing-img col-3">
