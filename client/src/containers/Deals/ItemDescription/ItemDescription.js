@@ -7,23 +7,40 @@ const ItemDescription = props => {
 //   console.log(reviews[0]);
   return (
     <div>
-        <div class="content item-description">
-            <div>Item Category: {props.category}</div> 
-            <div>Item Description: {props.deal_description}</div>
+        <div className="content item-description">
+            <div><strong>Item Category: </strong>{props.category}</div> 
+            <div><strong>Item Description: </strong><br/>{props.deal_description}</div>
             <div onClick={() => props.next_step()} id="next-step">
                 <button>Next</button>
             </div>
         </div>        
         <hr/>
       
-        <div class="content sellers-reviews">
-            <div>Seller's Average Rating is: {props.rating_display(sellers_rating)}{props.sellers_avg_rating} out of 5 stars </div>
-            <div>
-                Seller's Reviews Below:
-                <div>{props.allReviews && props.allReviews[0].rating_title}</div> 
-                <div>{props.allReviews && props.allReviews[0].rating}</div>
-                    <div>{props.allReviews && props.allReviews[0].rating_body}</div>
+        <div className="content sellers-reviews">
+            <div><strong>Seller's Average Rating is: <span className="star-space">{props.rating_display(sellers_rating)}</span></strong>{props.sellers_avg_rating} out of 5 stars </div>
+            <div>Seller's Reviews Below:</div>
+            {props.allReviews != undefined && props.allReviews.length > 0 && props.allReviews.map(reviews => (
+                 <div className="review-box">
+                 <div className="review-header">{reviews.buyer_name} purchased {reviews.deal_name}</div>
+                 <div><small className="star-space-right">{props.rating_display(reviews.rating)} </small><strong>{reviews.rating_title} </strong> <small className='float-right'> Date of Review: {reviews.rating_date_reviewed.substring(0,10)}</small></div> 
+                     <div className="review-body">{reviews.rating_body}</div>
+                     <div><a href='/'>report abuse</a></div>
+             </div>
+
+            ))}
+            {props.allReviews != undefined && props.allReviews.length == 0 && (<div>This seller has no reviews yet!</div>)}
+            {/* <div className="review-box">
+                <div className="review-header">{props.allReviews && props.allReviews[0].buyer_name} purchased {props.allReviews && props.allReviews[0].deal_name}</div>
+                <div><small className="star-space-right">{props.allReviews && props.rating_display(props.allReviews[0].rating)} </small><strong>{props.allReviews && props.allReviews[0].rating_title} </strong> <small className='float-right'> Date of Review: {props.allReviews && props.allReviews[0].rating_date_reviewed.substring(0,10)}</small></div> 
+                    <div className="review-body">{props.allReviews && props.allReviews[0].rating_body}</div>
+                    <div><a href='/'>report abuse</a></div>
             </div>
+            <div className="review-box">
+                <div className="review-header">{props.allReviews && props.allReviews[1].buyer_name} purchased {props.allReviews && props.allReviews[1].deal_name}</div>
+                <div>{props.allReviews && props.rating_display(props.allReviews[1].rating)} {props.allReviews && props.allReviews[1].rating_title} Date of Review: {props.allReviews && props.allReviews[1].rating_date_reviewed}</div> 
+                    <div className="review-body">{props.allReviews && props.allReviews[1].rating_body}</div>
+                    <div><a href='/'>report abuse</a></div>
+            </div> */}
         </div>
     </div>
   );

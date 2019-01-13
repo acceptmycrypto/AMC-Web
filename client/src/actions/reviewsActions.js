@@ -2,7 +2,7 @@ export const FETCH_REVIEWS_BEGIN = "FETCH_REVIEWS_BEGIN";
 export const FETCH_REVIEWS_SUCCESS = "FETCH_REVIEWS_SUCCESS";
 export const FETCH_REVIEWS_FAILURE = "FETCH_REVIEWS_FAILURE";
 
-export function _loadReviews(token, seller_id) {
+export function _loadReviews(seller_id) {
   console.log('load reviews');
   const Reviews = {
     method: "GET",
@@ -10,7 +10,7 @@ export function _loadReviews(token, seller_id) {
       "Accept": "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ token })
+    // body: JSON.stringify({ token })
   };
 
   return dispatch => {

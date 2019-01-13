@@ -24,6 +24,7 @@ import ShipOrder from "../ShipOrder";
 import PurchaseOrder from "../PurchaseOrder";
 import Layout from "../../Layout";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
+import { _loadReviews } from "../../../actions/reviewsActions";
 
 class DealItem extends Component {
   componentDidMount = async () => {
@@ -33,6 +34,9 @@ class DealItem extends Component {
     if (await this.props.userLoggedIn) {
       const { deal_name, id } = await this.props.match.params;
       await this.props._loadDealItem(id, deal_name);
+      console.log(this.props.dealItem.seller_id);
+      let seller_id = this.props.dealItem.seller_id || this.props.dealItem.venue_id;
+      await this.props._loadReviews(seller_id);
 
     }else{
         // localStorage.removeItem('token');
@@ -308,7 +312,7 @@ class DealItem extends Component {
     //     showLoadingSpinner={loading}
     //     timeout={paymentInfo && this.timeInMilliseconds(paymentInfo.timeout)}/> }
     // ];
-
+    console.log(reviews);
     return (
       <div>
         <Layout>
@@ -463,7 +467,7 @@ class DealItem extends Component {
 
 const mapStateToProps = state => ({
   dealItem: state.DealItem.dealItem,
-  reviews: state.DealItem.reviews,
+  reviews: state.Reviews.reviews,
   acceptedCryptos: state.DealItem.acceptedCryptos,
   selectedSize: state.DealItem.selectedSize,
   selectedColor: state.DealItem.selectedColor,
@@ -488,6 +492,7 @@ const mapStateToProps = state => ({
 
 const matchDispatchToProps = dispatch =>{
   return bindActionCreators({
+    _loadReviews,
     _loadDealItem,
     _fetchTransactionInfo,
     handleCustomizingSize,
