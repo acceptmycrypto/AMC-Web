@@ -42,6 +42,24 @@ class Description extends Component {
     this.props.history.push(`/feed/deals/${this.props.deal_id}/${this.props.dealNameValue}`);
   };
 
+  contactInfo = () => {
+    return (
+      <div>
+        <label>Contact Info</label>
+        <small>
+          To keep your account secured, please provide us your contact info.
+        </small>
+        <input
+            // onChange={}
+            // value={}
+            className="description-input"
+            autofocus="autofocus"
+            placeholder="Enter your phone number"
+          />
+      </div>
+    )
+  };
+
   render() {
     const {
       parentCategory,
@@ -134,13 +152,13 @@ class Description extends Component {
         </div>
         <Modal
           visible={modalVisible}
-          effect="fadeInLeft"
+          effect="fadeInUp"
           onClickAway={() => {
             closeModalAfterDealCreated();
             this.directToDealItemPage();
           }}
         >
-          <div className="Modal">
+          <div className="deal-created-modal">
             <h4>You have successfully created a Deal! </h4>
             <br />
             <h4>Now sit tight and wait to get paid with cryptocurrency.</h4>

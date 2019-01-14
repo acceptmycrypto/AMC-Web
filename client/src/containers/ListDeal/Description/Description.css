@@ -87,8 +87,25 @@ div.DraftEditor-root {
   margin-top: 20px;
 }
 
-.public-DraftEditorPlaceholder-inner {
-  position: absolute;
-  color: #aaaaaa;
+div.DraftEditor-root {
+  background-color: #fff;
 }
 
+.public-DraftEditorPlaceholder-inner {
+  position: absolute;
+  font-weight: 600;
+  font-size: 1em;
+  opacity: .5;
+}
+
+.deal-created-modal {
+  text-align: center;
+  width: 600px;
+  height: 400px;
+  background-color: #2E4158;
+  border: solid #199087 .5em;
+  padding: 50px 70px;
+  display: block;
+  text-transform: uppercase;
+  color: white;
+}
