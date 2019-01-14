@@ -16,8 +16,8 @@ const initialState = {
   gettingRate: {},
   dealName: "",
   parentCategory: [],
-  selectedCategory: null,
-  selectedCondition: null,
+  selectedCategory: "",
+  selectedCondition: "", //important! Selected condition cannot by null by default, otherwist app will crash.
   editorState: EditorState.createEmpty(),
   creatingDeal: false,
   creatingDealError: null,
@@ -213,7 +213,6 @@ export default function CreateDealReducer(state = initialState, action) {
       };
 
     case "RESET_DEAL_CREATED":
-    debugger
       return {
         ...initialState
       };

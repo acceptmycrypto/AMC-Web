@@ -125,7 +125,7 @@ router.post('/listdeal', verifyToken, function(req, res) {
   let deal_name = dealName;
   let deal_description = JSON.stringify(textDetailRaw);
   let item_condition;
-  if (item_condition !== null) {
+  if (item_condition) {
     item_condition = selectedCondition.value;
   }
   let featured_deal_image = images[0].Location;

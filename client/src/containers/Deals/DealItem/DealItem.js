@@ -222,7 +222,6 @@ class DealItem extends Component {
 
     //if user is redirected from the deal created page after deal is created
     if(this.props.dealCreated.deal_id) {
-      debugger
       this.props.resetListDeal();
     }
 

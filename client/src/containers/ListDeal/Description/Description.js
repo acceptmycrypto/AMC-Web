@@ -37,7 +37,7 @@ class Description extends Component {
     );
   };
 
-  //We have access to history props from withRouter 
+  //We have access to history props from withRouter
   directToDealItemPage = () => {
     this.props.history.push(`/feed/deals/${this.props.deal_id}/${this.props.dealNameValue}`);
   };
@@ -127,7 +127,7 @@ class Description extends Component {
           </div>
           <div id="price-listing-next-button">
             <hr />
-            <div onClick={this.props.createDeal} id="photos-next-step">
+            <div onClick={() => this.props.validateDescriptionStep() && this.props.createDeal()} id="photos-next-step">
               {this.props.loading_dealCreating ? <LoadingSpinner /> : <button>Submit Deal</button>}
             </div>
           </div>

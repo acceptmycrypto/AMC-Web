@@ -100,7 +100,6 @@ class ListDeal extends Component {
   };
 
   calculateCryptoExchange = event => {
-    debugger
     const {
       _getCryptoExchange,
       crypto_amount,
@@ -144,7 +143,6 @@ class ListDeal extends Component {
     })) {
       isDataValid = true;
     } else {
-      // this.notifyImageUploadError();
       //alert error message
       toast.error(this._validationErrors(validateImageUploaded).notifyImageUploadError, {
         position: toast.POSITION.TOP_RIGHT
@@ -155,7 +153,7 @@ class ListDeal extends Component {
   }
 
   handlePricingValidation = () => {
-    debugger
+
     const validatePricing = {
       basePrice: this.props.priceInUSD,
       selectedCrypto: Object.keys(this.props.crypto_amount).length !== 0 //check if user has selected a crypto
@@ -175,17 +173,56 @@ class ListDeal extends Component {
         toast.error(this._validationErrors(validatePricing).notifyBasePriceEmptyError, {
           position: toast.POSITION.TOP_RIGHT
         });
-        debugger
-        // this.notifyBasePriceEmptyError();
+
+
       } else if (Object.keys(this.props.crypto_amount).length === 0) {
-        // this.notifyCryptoNotSelectedError();
+
         toast.error(this._validationErrors(validatePricing).notifyCryptoNotSelectedError, {
           position: toast.POSITION.TOP_RIGHT
         });
-        debugger
+
       }
     }
-    debugger
+
+    return isDataValid;
+  }
+
+  handleDescriptionValidation = () => {
+    //convert Description into Text
+    let textDetailRaw = convertToRaw(this.props.editorState.getCurrentContent());
+    let detail = textDetailRaw.blocks[0].text;
+
+    const validateDescription = {
+      dealName: this.props.dealName,
+      selectedCategory: this.props.selectedCategory,
+      description: detail
+    }
+    console.log(this.props.editorState);
+    let isDataValid = false;
+
+    //Object.keys(validateNewInput) give us an array of keys
+    //Array.every check if all indices passed the test
+    //we check if the value of each property in the the object validateNewInput is === true
+    if (Object.keys(validateDescription).every((k) => {
+      return validateDescription[k] ? true : false
+    })) {
+      isDataValid = true;
+    } else {
+      if (!this.props.dealName) {
+        toast.error(this._validationErrors(validateDescription).notifyDealNameError, {
+          position: toast.POSITION.TOP_RIGHT
+        });
+      } else if (!this.props.selectedCategory) {
+        toast.error(this._validationErrors(validateDescription).notifySelectedCategoryError, {
+          position: toast.POSITION.TOP_RIGHT
+        });
+      } else if (!detail) {
+        toast.error(this._validationErrors(validateDescription).notifyDescriptionError, {
+          position: toast.POSITION.TOP_RIGHT
+        });
+      }
+    }
+
     return isDataValid;
   }
 
@@ -212,6 +249,9 @@ class ListDeal extends Component {
       notifyImageUploadError: val.imageSRC ? null : 'Please upload an image first.',
       notifyBasePriceEmptyError: val.basePrice && val.basePrice !== "NaN" && val.basePrice !== "0.00"? null : 'Please enter your base price.',
       notifyCryptoNotSelectedError: val.selectedCrypto ? null : 'Please select at least one Cryptocurrency.',
+      notifyDealNameError: val.dealName ? null : 'Please give your listing a name.',
+      notifySelectedCategoryError: val.selectedCategory ? null : 'Please select a category.',
+      notifyDescriptionError: val.description ? null : 'Please describe your listing.'
     }
 
     return errMsgs;
@@ -351,6 +391,7 @@ class ListDeal extends Component {
               closeModal={closeModalAfterDealCreated}
               modalOpened={modalVisible}
               resetDealCreated={resetListDeal}
+              validateDescriptionStep={this.handleDescriptionValidation}
             />
           )}
         </Layout>

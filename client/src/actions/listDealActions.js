@@ -132,7 +132,6 @@ export function _getCryptoExchange(token, crypto_symbol, price_in_crypto) {
     return fetch("/cryptocurrency/exchange", settings)
       .then(res => res.json())
       .then(jsonRate => {
-        debugger
         dispatch(getRateSuccess(crypto_symbol, jsonRate));
         return jsonRate;
       })
@@ -208,7 +207,6 @@ export function _submitDeal(token, dealName, category, selectedCondition, textDe
       .then(res => res.json())
       .then(jsonDealCreated => {
         dispatch(creatingDealSuccess(jsonDealCreated));
-        debugger
         return jsonDealCreated;
       })
       .catch(error => dispatch(creatingDealFailure(error)));
