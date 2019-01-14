@@ -123,6 +123,7 @@ class ListDeal extends Component {
     const { dealName, selectedCategory, selectedCondition, _submitDeal, images, priceInUSD, priceInCrypto, crypto_amount } = this.props;
 
     let textDetailRaw = convertToRaw(this.props.editorState.getCurrentContent());
+    debugger
     let selected_cryptos = Object.keys(crypto_amount);
 
     _submitDeal(localStorage.getItem("token"), dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos);

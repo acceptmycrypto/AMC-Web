@@ -102,7 +102,7 @@ const Pricing = props => {
                   )}
                   {props.showCryptoAmount[crypto.crypto_symbol] && (
                     <div className="check-crypto-amount">
-                      {props.showCryptoAmount[crypto.crypto_symbol]}
+                      {props.showCryptoAmount[crypto.crypto_symbol]} {crypto.crypto_symbol}
                     </div>
                   )}
                 </div>
