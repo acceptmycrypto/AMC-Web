@@ -110,7 +110,7 @@ router.post('/review/seller/:user_id', verifyToken, function (req, res) { //need
                 
           
                 //then update deals table with avg rating and num ratings  
-
+                
                 res.status(200).json({success: true, message: "review accepted"});  
             });
         

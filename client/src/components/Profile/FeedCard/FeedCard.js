@@ -1,10 +1,13 @@
 import React from "react";
 import "./FeedCard.css";
+import Modal from 'react-awesome-modal';
+import { openModal, closeModal } from '../../../actions/signInActions';
 import Timestamp from 'react-timestamp';
 import Countdown from 'react-countdown-now';
 import { Link } from "react-router-dom";
 
 const FeedCard = props => {
+  console.log(props);
   return (
     <div className="right">
       {props.transactions.map((transaction, i) => (
@@ -49,7 +52,17 @@ const FeedCard = props => {
                 <small><Timestamp time={transaction.date_purchased} format='full' precision={3}/></small>                
               </div>
             </div>
+            <div><button  onClick={(event) => { 
+              event.preventDefault(); 
+              alert('hi')}}>Write a Review!</button></div>
           </div>
+          <Modal visible={visible} effect="fadeInLeft" onClickAway={() => {this.props.closeModal(); }}>
+                <div className="Modal">
+                  <h4>Your Email or Password was Invalid</h4>
+                  <a className="a-link" href="javascript:void(0);" onClick={() => {this.props.closeModal(); }}>Ok</a>
+
+                </div>
+              </Modal>
         </div>
       ))}
     </div>
