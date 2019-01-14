@@ -3,8 +3,7 @@ import "./ItemDescription.css";
 
 const ItemDescription = props => {
   const sellers_rating = props.sellers_avg_rating;
-//   const reviews = props.allReviews;
-//   console.log(reviews[0]);
+
   return (
     <div>
         <div className="content item-description">
@@ -29,18 +28,7 @@ const ItemDescription = props => {
 
             ))}
             {props.allReviews != undefined && props.allReviews.length == 0 && (<div>This seller has no reviews yet!</div>)}
-            {/* <div className="review-box">
-                <div className="review-header">{props.allReviews && props.allReviews[0].buyer_name} purchased {props.allReviews && props.allReviews[0].deal_name}</div>
-                <div><small className="star-space-right">{props.allReviews && props.rating_display(props.allReviews[0].rating)} </small><strong>{props.allReviews && props.allReviews[0].rating_title} </strong> <small className='float-right'> Date of Review: {props.allReviews && props.allReviews[0].rating_date_reviewed.substring(0,10)}</small></div> 
-                    <div className="review-body">{props.allReviews && props.allReviews[0].rating_body}</div>
-                    <div><a href='/'>report abuse</a></div>
-            </div>
-            <div className="review-box">
-                <div className="review-header">{props.allReviews && props.allReviews[1].buyer_name} purchased {props.allReviews && props.allReviews[1].deal_name}</div>
-                <div>{props.allReviews && props.rating_display(props.allReviews[1].rating)} {props.allReviews && props.allReviews[1].rating_title} Date of Review: {props.allReviews && props.allReviews[1].rating_date_reviewed}</div> 
-                    <div className="review-body">{props.allReviews && props.allReviews[1].rating_body}</div>
-                    <div><a href='/'>report abuse</a></div>
-            </div> */}
+
         </div>
     </div>
   );

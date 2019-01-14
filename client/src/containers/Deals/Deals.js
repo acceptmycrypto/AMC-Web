@@ -35,61 +35,6 @@ class Deals extends Component {
     }
   }
 
-  // ratingDisplay = (rating) => {
-  //   let star = <i class="rating fa fa-star" aria-hidden="true"></i>;
-  //   let halfStar = <i class="rating fas fa-star-half-alt"></i>;
-  //   let emptyStar = <i class="rating far fa-star" aria-hidden="true"></i>;
-  //   let result = [];
-  //   if(rating%1 == 0)
-  //   {
-  //     for (let i = 1; i <= 5; i++)
-  //     {
-  //       if(i<=rating)
-  //       {
-  //         result.push(star);
-  //       }
-  //       else
-  //       {
-  //         result.push(emptyStar);
-  //       }
-  //     }
-  //   }
-  //   else
-  //   {
-  //       let rem = rating%1;
-  //       let baseRating = Math.floor(rating);
-  //       for(let i = 0; i < 5; i++)
-  //       {
-  //         if(i <= rating)
-  //         {
-  //           if(i !== baseRating)
-  //           {
-  //             result.push(star);
-  //           }
-  //           else if(i == baseRating && rem<=0.25) //this might not be quite right
-  //           {
-  //             result.push(halfStar);
-  //           }
-  //           else if(i == baseRating && rem>0.25 && rem<0.75)
-  //           {
-  //             result.push(halfStar);
-  //           }
-  //           else
-  //           {
-  //             result.push(star);
-  //           }
-            
-  //         }
-  //         else
-  //         {
-  //             result.push(emptyStar);
-  //         }
-  //       }
-        
-  //   }
-  //   return result;
-  // };
-
   render() {
     let { error, loading, deals, userLoggedIn } = this.props;  //does this need to be const?? i changed it to let so line 56 will work
 

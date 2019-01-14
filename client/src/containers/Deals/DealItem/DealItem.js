@@ -323,9 +323,7 @@ class DealItem extends Component {
               <div className="deal-item-header">
                 <div className="deal-item-name">
                   <strong>{dealItem && dealItem.deal_name}</strong> <br/>
-                  <small> Offered By: {dealItem && dealItem.venue_name || dealItem && dealItem.seller_name}</small> <br/>
-                  {/* <small> Seller's Rating: {dealItem && dealItem.sellers_avg_rating && this.ratingDisplay(dealItem.sellers_avg_rating)} {dealItem && dealItem.sellers_avg_rating && dealItem.sellers_avg_rating.toFixed(1)} {dealItem && !dealItem.sellers_avg_rating && this.ratingDisplay(0)} 0 out of 5 stars</small> */}
-                 
+                  <small> Offered By: {dealItem && dealItem.venue_name || dealItem && dealItem.seller_name}</small> <br/>                 
                 </div>
                 <div className="deal-item-cost">
                   <strong>Pay in Crypto:  ${dealItem && dealItem.pay_in_crypto.toFixed(2)}</strong>  <small className="deal-item-discount">
@@ -335,11 +333,6 @@ class DealItem extends Component {
               </div>
 
               <div className="deal-item-summary">
-                  {/* <div className="customize-item-summary">
-                    <strong>Customizing</strong> <br/>
-                    <small>{selectedSize}</small> <br/>
-                    <small>{selectedColor}</small> <br/>
-                  </div> */}
 
                   <div className="customize-item-shipping">
                     <strong>Shipping</strong> <br/>
@@ -414,14 +407,8 @@ class DealItem extends Component {
                   <ItemDescription 
                   {...dealItem}
                   {...reviews}
-                  // <CustomizeOrder
-                  // handle_CustomizingSize={handleCustomizingSize}
-                  // handle_CustomizingColor={handleCustomizingColor}
-                  // showSelectedSize={selectedSize}
-                  // showSelectedColor={selectedColor}
                   next_step={handleShippingStep}
                   rating_display={this.ratingDisplay}
-                  // validateCustomizationData={this.handleCustomizationValidation}
                   />}
 
                   {showShippingStep &&

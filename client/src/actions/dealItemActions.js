@@ -19,60 +19,6 @@ export function _loadDealItem(id, deal_name) {
   };
 }
 
-
-//   return dispatch => {
-//     dispatch(fetchDealItemBegin());
-//     return fetch(`/api/deals/${id}/${deal_name}`, settings)
-//       .then(res => res.json())
-//       .then(jsonPhoto => {
-//         let seller_id = jsonPhoto[0].seller_id;
-//         let venue_id = jsonPhoto[0].venue_id;
-// //         let res_arr = [];
-// //         res_arr.push(jsonPhoto);
-// debugger;
-//         if(seller_id != null)
-//         {
-//           fetch(`api/reviews/sellers/${seller_id}`, settings)
-//            .then(res => res.json())
-//            .then(reviews_json => {
-//           // res_arr.push(reviews_json) 
-//           dispatch(fetchDealItemSuccess(jsonPhoto, reviews_json));
-//           return [jsonPhoto, reviews_json];
-//         })
-//         }
-//         else
-//         {
-//         fetch(`api/reviews/sellers/${venue_id}`, settings)
-//            .then(res => res.json())
-//            .then(reviews_json => {
-//         // res_arr.push(reviews_json) 
-//         dispatch(fetchDealItemSuccess(jsonPhoto, reviews_json));
-//         return [jsonPhoto, reviews_json];
-//         })
-//         }
-//       })
-//       .catch(error => dispatch(fetchDealItemFailure(error)));
-//   };
-// }
-
-//   return dispatch => {
-//     dispatch(fetchDealItemBegin());
-//     return Promise.all([
-//       fetch(`/api/deals/${id}/${deal_name}`, settings),
-//       fetch(`/api/reviews/sellers/2`, settings)
-//     ])
-//       .then(([res1, res2]) => Promise.all([res1.json(), res2.json()]))
-//       .then(([deals_json, reviews_json]) => {
-//         console.log(deals_json[0].seller_id);
-//         console.log(deals_json[0].venue_id);
-//         dispatch(fetchDealItemSuccess(deals_json, reviews_json));
-//         return [deals_json, reviews_json];
-//       })
-//       .catch(error => dispatch(fetchDealItemFailure(error)));
-//   };
-// };
-
-
 export const fetchDealItemBegin = () => ({
   type: "FETCH_DEAL_ITEM_BEGIN"
 });
@@ -81,11 +27,6 @@ export const fetchDealItemSuccess = (dealItem) => ({
   type: "FETCH_DEAL_ITEM_SUCCESS",
   payload: { dealItem }
 });
-
-// export const fetchDealItemSuccess = (dealItem,reviews) => ({
-//   type: "FETCH_DEAL_ITEM_SUCCESS",
-//   payload: { dealItem, reviews }
-// });
 
 export const fetchDealItemFailure = error => ({
   type: "FETCH_DEAL_ITEM_FAILURE",
