@@ -144,17 +144,23 @@ class ListDeal extends Component {
     })) {
       isDataValid = true;
     } else {
-      this.notifyImageUploadError();
+      // this.notifyImageUploadError();
+      //alert error message
+      toast.error(this._validationErrors(validateImageUploaded).notifyImageUploadError, {
+        position: toast.POSITION.TOP_RIGHT
+      });
     }
 
     return isDataValid;
   }
 
   handlePricingValidation = () => {
+    debugger
     const validatePricing = {
       basePrice: this.props.priceInUSD,
       selectedCrypto: Object.keys(this.props.crypto_amount).length !== 0 //check if user has selected a crypto
     }
+    console.log(this.props.crypto_amount);
     let isDataValid = false;
 
     //Object.keys(validateNewInput) give us an array of keys
@@ -165,13 +171,21 @@ class ListDeal extends Component {
     })) {
       isDataValid = true;
     } else {
-      // this.props.priceInUSD ? this.notifyCryptoNotSelectedError() : this.notifyBasePriceEmptyError();
       if (!this.props.priceInUSD || this.props.priceInUSD === "NaN") {
-        this.notifyBasePriceEmptyError();
+        toast.error(this._validationErrors(validatePricing).notifyBasePriceEmptyError, {
+          position: toast.POSITION.TOP_RIGHT
+        });
+        debugger
+        // this.notifyBasePriceEmptyError();
       } else if (Object.keys(this.props.crypto_amount).length === 0) {
-        this.notifyCryptoNotSelectedError();
+        // this.notifyCryptoNotSelectedError();
+        toast.error(this._validationErrors(validatePricing).notifyCryptoNotSelectedError, {
+          position: toast.POSITION.TOP_RIGHT
+        });
+        debugger
       }
     }
+    debugger
     return isDataValid;
   }
 
@@ -183,30 +197,25 @@ class ListDeal extends Component {
   if (basePrice && basePrice !== "NaN" && basePrice !== "0.00") {
     isDataValid = true;
   } else {
-    this.notifyBasePriceEmptyError();
+    // this.notifyBasePriceEmptyError();
+    toast.error(this._validationErrors(basePrice).notifyBasePriceEmptyError, {
+      position: toast.POSITION.TOP_RIGHT
+    });
   }
-  
+
   return isDataValid;
 
   }
 
-  notifyImageUploadError = () => {
-    toast.error("Please upload an image first.", {
-      position: toast.POSITION.TOP_RIGHT
-    });
-  };
+  _validationErrors(val) {
+    const errMsgs = {
+      notifyImageUploadError: val.imageSRC ? null : 'Please upload an image first.',
+      notifyBasePriceEmptyError: val.basePrice && val.basePrice !== "NaN" && val.basePrice !== "0.00"? null : 'Please enter your base price.',
+      notifyCryptoNotSelectedError: val.selectedCrypto ? null : 'Please select at least one Cryptocurrency.',
+    }
 
-  notifyBasePriceEmptyError = () => {
-    toast.error("Enter your base price.", {
-      position: toast.POSITION.TOP_RIGHT
-    });
-  };
-
-  notifyCryptoNotSelectedError = () => {
-    toast.error("Select at least one Cryptocurrency.", {
-      position: toast.POSITION.TOP_RIGHT
-    });
-  };
+    return errMsgs;
+  }
 
   render() {
     const {
