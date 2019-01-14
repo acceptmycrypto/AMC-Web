@@ -109,7 +109,7 @@ router.post('/review/seller/:user_id', verifyToken, function (req, res) { //need
                 if (error) throw error;
                 
           
-                //then update deals table with avg rating and num ratings  
+                //then update deals table with avg rating and num ratings, this is what I will be working on  
                 
                 res.status(200).json({success: true, message: "review accepted"});  
             });
@@ -132,6 +132,7 @@ router.post('/review/seller/:user_id', verifyToken, function (req, res) { //need
 
 //route for getting the seller's rating
 //maybe actually make this a function that can be called on load deals or loading of individual deals
+//NOT USED CURRENTLY
 router.get('/review/user/:user_id', (req, res) => {
     console.log("hitting route");
     //deals table has seller id, average ratings of everything in buyers reviews sellers to get the rating of seller
@@ -154,8 +155,6 @@ router.get('/review/user/:user_id', (req, res) => {
 //        throw e;
 //    }
 //    res.send('hi');
-
-
 });
 
 sellerReviewAggregate = (user, callback) => {
@@ -185,9 +184,7 @@ sellerScoreAggregate = (user, callback) => {
     });
 };
 
-
-
-
+//function to be developed later for language check on ALL users submitted information that is then publicly visible
 languageFilter = (arg) => {
     // npm install profanities
     // https://github.com/words/profanities
