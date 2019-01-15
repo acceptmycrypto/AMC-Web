@@ -262,17 +262,21 @@ class ListDeal extends Component {
 
   contactInfo = () => {
     return (
-      <div className="creating-deal-seller-verification">
+      <form className="creating-deal-seller-verification">
         <h4 className="creating-deal-modal-header">To protect our community, we need to verify all sellers.</h4>
         <div className="creating-deal-seller-contact">
-          <label>Contact Info</label>
+          <label>Contact Info (format: xxx-xxx-xxxx)</label>
           <div>
             <input
                 // onChange={}
                 // value={}
+                type="tel"
+                pattern="^\d{3}-\d{3}-\d{4}$"
+                required
                 className="description-input"
                 autofocus="autofocus"
                 placeholder="Enter your phone number"
+
               />
           </div>
           <small>We will send you a one-time verification code.</small>
@@ -287,6 +291,7 @@ class ListDeal extends Component {
               className="description-input"
               autofocus="autofocus"
               placeholder="Address"
+              required
           />
             <div className="city-state-zipcode-flex">
               <input
@@ -296,6 +301,7 @@ class ListDeal extends Component {
                 className="description-input"
                 autofocus="autofocus"
                 placeholder="City"
+                required
               />
                <Select
                 className="create-deal-select"
@@ -311,14 +317,15 @@ class ListDeal extends Component {
                 className="description-input create-deal-zipcode-input"
                 autofocus="autofocus"
                 placeholder="Zip Code"
+                required
               />
 
             </div>
 
           </div>
 
-        <button>Verify</button>
-      </div>
+        <button type="submit">Verify</button>
+      </form>
     )
   };
 

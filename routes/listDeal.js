@@ -208,4 +208,38 @@ router.get("/category/parent", function(req, res) {
 
 })
 
+router.get("/phone_number/verification/start", verifyToken, function(req, res) {
+
+  console.log("start", req.body)
+  // let options = {
+  //   "api_key": process.env.TWILIO_API_KEY,
+  //   "phone_number": 7632679359,
+  //   "via": "SMS",
+  //   "country_code": 1,
+  //   "code_length": 4
+  // };
+
+  // request("POST", 'https://api.authy.com/protected/json/phones/verification/start', options, function (error, response, body) {
+  //   if (error) console.log(error);
+
+  //   console.log("Twilio-start", body);
+  // });
+})
+
+router.get("/phone_number/verification/check", verifyToken, function(req, res) {
+  console.log("check", req.body)
+  // let options = {
+  //   "api_key": process.env.TWILIO_API_KEY,
+  //   "verification_code": req.body.token,
+  //   "phone_number": 7632679359,
+  //   "country_code": 1
+  // };
+
+  // request("POST", 'https://api.authy.com/protected/json/phones/verification/check', options, function (error, response, body) {
+  //   if (error) console.log(error);
+
+  //   console.log("Twilio-check", body);
+  // });
+})
+
 module.exports = router;
