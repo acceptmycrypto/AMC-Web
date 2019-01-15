@@ -33,6 +33,8 @@ import LoadingSpinner from "../../components/UI/LoadingSpinner";
 import UploadingImage from "./UploadImage";
 import Pricing from "./Pricing";
 import Description from "./Description";
+import Modal from "react-awesome-modal";
+import Select from "react-select";
 
 class ListDeal extends Component {
   componentDidMount = () => {
@@ -258,6 +260,68 @@ class ListDeal extends Component {
     return errMsgs;
   }
 
+  contactInfo = () => {
+    return (
+      <div className="creating-deal-seller-verification">
+        <h4 className="creating-deal-modal-header">To protect our community, we need to verify all sellers.</h4>
+        <div className="creating-deal-seller-contact">
+          <label>Contact Info</label>
+          <div>
+            <input
+                // onChange={}
+                // value={}
+                className="description-input"
+                autofocus="autofocus"
+                placeholder="Enter your phone number"
+              />
+          </div>
+          <small>We will send you a one-time verification code.</small>
+        </div>
+
+        <div className="creating-deal-seller-address">
+          <label>Address Info</label>
+          <input
+              // onChange={}
+              // value={}
+              type="text"
+              className="description-input"
+              autofocus="autofocus"
+              placeholder="Address"
+          />
+            <div className="city-state-zipcode-flex">
+              <input
+                // onChange={}
+                // value={}
+                type="text"
+                className="description-input"
+                autofocus="autofocus"
+                placeholder="City"
+              />
+               <Select
+                className="create-deal-select"
+                options={this.props.allStates}
+                placeholder="State"
+                // onChange={handleSelectedCondition}
+                // value={selectedConditionValue}
+              />
+              <input
+                // onChange={}
+                // value={}
+                type="number"
+                className="description-input create-deal-zipcode-input"
+                autofocus="autofocus"
+                placeholder="Zip Code"
+              />
+
+            </div>
+
+          </div>
+
+        <button>Verify</button>
+      </div>
+    )
+  };
+
   render() {
     const {
       error,
@@ -397,6 +461,31 @@ class ListDeal extends Component {
           )}
         </Layout>
         <ToastContainer autoClose={8000} />
+        <Modal
+          visible={true}
+          effect="fadeInUp"
+          onClickAway={() => {
+            closeModalAfterDealCreated();
+            this.directToDealItemPage();
+          }}
+        >
+          <div className="deal-created-modal">
+            {/* <h4>You have successfully created a Deal! </h4>
+            <br />
+            <h4>Now sit tight and wait to get paid with cryptocurrency.</h4> */}
+            {/* <Link
+              to={`/feed/deals/${deal_id}/${dealNameValue}`}
+              className="a-link"
+              onClick={() => {
+                closeModalAfterDealCreated();
+              }}
+              onClick={resetDealCreated}
+            >
+              OK
+            </Link> */}
+            {this.contactInfo()}
+          </div>
+        </Modal>
       </div>
     );
   }
@@ -425,7 +514,8 @@ const mapStateToProps = state => ({
   creatingDeal: state.CreateDeal.creatingDeal,
   creatingDealError: state.CreateDeal.creatingDealError,
   dealCreated: state.CreateDeal.dealCreated,
-  modalVisible: state.CreateDeal.modalVisible
+  modalVisible: state.CreateDeal.modalVisible,
+  allStates: state.DealItem.states,
 });
 
 const matchDispatchToProps = dispatch => {

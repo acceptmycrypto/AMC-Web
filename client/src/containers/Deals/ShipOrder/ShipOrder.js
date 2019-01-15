@@ -44,7 +44,7 @@ const ShipOrder = props => {
         <div className="dealitem-error-msg" id="shipping-city-error"></div>
 
         <select
-          class="custom-select mr-sm-2"
+          className="custom-select mr-sm-2"
           id="select-color"
           onChange={props.handle_ShippingState}
           value={props.showShippingState}

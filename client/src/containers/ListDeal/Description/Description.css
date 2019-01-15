@@ -99,13 +99,69 @@ div.DraftEditor-root {
 }
 
 .deal-created-modal {
-  text-align: center;
-  width: 600px;
-  height: 400px;
+  width: 750px;
+  height: 450px;
   background-color: #2E4158;
   border: solid #199087 .5em;
-  padding: 50px 70px;
+  padding: 25px;
   display: block;
   text-transform: uppercase;
   color: white;
+}
+
+.deal-created-modal input {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid #445366;
+  margin-bottom: 0px;
+  color: #fff;
+}
+
+.creating-deal-modal-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.creating-deal-seller-contact {
+  margin-bottom: 25px;
+}
+
+.creating-deal-seller-address input {
+  margin-bottom: .5rem;
+}
+
+.city-state-zipcode-flex {
+  display: flex;
+  margin-bottom: 25px;
+}
+
+.create-deal-select{
+  width: 30%;
+  color: black;
+  margin: 10px 20px 10px;
+}
+
+.create-deal-zipcode-input {
+  width: 30%;
+}
+/*
+.creating-deal-seller-verification {
+  position: relative;
+} */
+
+.deal-created-modal button {
+  background-color: rgb(22, 190, 182);
+  color: white;
+  border: none;
+  outline: none;
+  padding: 10px 25px;
+  font-size: 1em;
+  font-weight: 500;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: 700;
+  float: right;
+  position: relative;
+  bottom: -35px;
 }

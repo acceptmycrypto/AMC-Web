@@ -45,10 +45,12 @@ class Description extends Component {
   contactInfo = () => {
     return (
       <div>
-        <label>Contact Info</label>
+        {/* <label>Contact Info</label>
         <small>
           To keep your account secured, please provide us your contact info.
-        </small>
+        </small> */}
+        <h4>To protect and boost our community, we need to verify all sellers.</h4>
+        <label>Contact Info</label>
         <input
             // onChange={}
             // value={}
@@ -56,6 +58,51 @@ class Description extends Component {
             autofocus="autofocus"
             placeholder="Enter your phone number"
           />
+        <button>Send me a text</button>
+
+        <label>Validate Phone Number</label>
+        <input
+            // onChange={}
+            // value={}
+            className="description-input"
+            autofocus="autofocus"
+            placeholder="Enter the verification codes we sent you"
+          />
+        <button>Validate</button>
+
+        <label>Shipping Address</label>
+        <input
+            // onChange={}
+            // value={}
+            className="description-input"
+            autofocus="autofocus"
+            placeholder="Enter your Address"
+        />
+        <input
+          // onChange={}
+          // value={}
+          className="description-input"
+          autofocus="autofocus"
+          placeholder="Enter your City"
+        />
+        <select
+          // onChange={props.handle_ShippingState}
+          // value={props.showShippingState}
+        >
+          <option selected>Select State</option>
+          {/* {props.listOfAllStates.map((state, i) => {
+            return (<option key={i} value={state.label}>{state.value}</option>)
+          })} */}
+        </select>
+        <input
+          // onChange={}
+          // value={}
+          className="description-input"
+          autofocus="autofocus"
+          placeholder="Enter your Zipcode"
+        />
+
+        <button>List Deal</button>
       </div>
     )
   };
@@ -159,10 +206,10 @@ class Description extends Component {
           }}
         >
           <div className="deal-created-modal">
-            <h4>You have successfully created a Deal! </h4>
+            {/* <h4>You have successfully created a Deal! </h4>
             <br />
-            <h4>Now sit tight and wait to get paid with cryptocurrency.</h4>
-            <Link
+            <h4>Now sit tight and wait to get paid with cryptocurrency.</h4> */}
+            {/* <Link
               to={`/feed/deals/${deal_id}/${dealNameValue}`}
               className="a-link"
               onClick={() => {
@@ -171,7 +218,8 @@ class Description extends Component {
               onClick={resetDealCreated}
             >
               OK
-            </Link>
+            </Link> */}
+            {this.contactInfo()}
           </div>
         </Modal>
       </div>
