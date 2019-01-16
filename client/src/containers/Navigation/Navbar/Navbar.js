@@ -66,14 +66,25 @@ class Navbar extends Component {
           </div>
         </div>
         <div className="Nav d-flex flex-row align-items-center">
-          <li>
-            <Link onClick={this.props.resetNavbar} to="/listdeal">
-              {window.location.pathname == "/listdeal"
-                ? <i className="fas fas fa-store fa-lg"> <h7 className="color-deepBlue font-17 teal-underline">Create a Deal</h7></i>
-                : <i className="fas fas fa-store fa-lg"> <h7 className="color-deepBlue font-17">Create a Deal</h7></i>
-              }
-            </Link>
-          </li>
+        {this.props.userLoggedIn
+            ? <li>
+              <Link onClick={this.props.resetNavbar} to="/listdeal">
+                {window.location.pathname == "/listdeal"
+                  ? <i className="fas fas fa-store fa-lg"> <h7 className="color-deepBlue font-17 teal-underline">Create a Deal</h7></i>
+                  : <i className="fas fas fa-store fa-lg"> <h7 className="color-deepBlue font-17">Create a Deal</h7></i>
+                }
+              </Link>
+            </li>
+            : <li>
+                <Link onClick={this.props.resetNavbar} to="/SignIn">
+                  {window.location.pathname == "/SignIn"
+                    ? <i className="fas fas fa-store fa-lg"> <h7 className="color-deepBlue font-17 teal-underline">Create a Deal</h7></i>
+                    : <i className="fas fas fa-store fa-lg"> <h7 className="color-deepBlue font-17">Create a Deal</h7></i>
+                  }
+                </Link>
+            </li>
+
+        }
           <li>
             <Link onClick={this.props.resetNavbar} to="/feed/deals">
               {window.location.pathname == "/feed/deals"
@@ -95,9 +106,9 @@ class Navbar extends Component {
                 </div>
               </div>
               : <div className="d-flex flex-row align-items-center">
-                <Link to="/SignIn"><p className="navbar-login">Sign In</p></Link>
-                <div><p className="clear-text-decoration"> / </p></div>
-                <Link to="/SignUp"><p className="navbar-login">Sign Up</p> </Link>
+                <Link to="/SignIn"><p className="navbar-login" id="nav-link-sign-in">Sign In</p></Link>
+                <div><p className="clear-text-decoration" id="nav-vertical-divider"> | </p></div>
+                <Link to="/SignUp"><p className="navbar-login" id="nav-link-sign-up">Sign Up</p> </Link>
               </div>
             }
           </li>
