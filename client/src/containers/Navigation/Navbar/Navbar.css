@@ -98,3 +98,17 @@ li {
 .category-dropdown:hover {
   cursor: pointer;
 }
+
+.navbar-login{
+  text-decoration: underline;
+  color: rgb(32, 170, 163);
+  font-size: 16px;
+  font-weight: 20;
+  
+}
+
+.clear-text-decoration{
+  text-decoration: none;
+  margin-right: 3px;
+  margin-left: 3px;
+}
