@@ -49,6 +49,9 @@ const FeedCard = props => {
                 <small><Timestamp time={transaction.date_purchased} format='full' precision={3}/></small>                
               </div>
             </div>
+            <div><button  onClick={(event) => { 
+              event.preventDefault(); 
+              alert('hi')}}>Write a Review!</button></div>
           </div>
         </div>
       ))}

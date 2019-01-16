@@ -65,7 +65,6 @@ class Deals extends Component {
         <Layout>
         <div className="venues-content mb-5">
 
-
           {/* remove the cryptoranking table on the deals page until further notice
           <CryptoRankings /> */}
 

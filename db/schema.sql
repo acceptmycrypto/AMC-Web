@@ -29,11 +29,9 @@ CREATE TABLE venues (
 	PRIMARY KEY (id)
 );
 
--- rearrange users table location in scheme due to foreign key references in deals table
 CREATE TABLE users(
 	id INT NOT NULL AUTO_INCREMENT,
 	verified_email BOOLEAN DEFAULT FALSE,
-	-- when inserting into users table the value for email_verification_token should be uuid()
 	email_verification_token VARCHAR(255) NOT NULL,
 	username VARCHAR(30) NOT NULL UNIQUE,
 	first_name VARCHAR(255) NULL,
@@ -65,8 +63,8 @@ CREATE TABLE guest_users(
 
 CREATE TABLE deals (
 	id INT NOT NULL AUTO_INCREMENT,
-	venue_id INT NULL, -- changed venue_id to NULL because as of now we we have seeds with venue_id that reference the vendors
-	seller_id INT NULL, -- added this to reference users who choose to be sellers, a deal item will either have a venue_id or a seller_id
+	venue_id INT NULL, 
+	seller_id INT NULL, 
 	deal_name VARCHAR(255) NOT NULL,
 	deal_description VARCHAR(255) NOT NULL,
   	featured_deal_image VARCHAR(255) NOT NULL,
@@ -97,7 +95,7 @@ CREATE TABLE category (
 	PRIMARY KEY (id)
 );
 
--- many to many relationship table
+
 CREATE TABLE parent_child_categories(
 	parent_category_id INT NOT NULL,
 	child_category_id INT NOT NULL,
@@ -105,7 +103,7 @@ CREATE TABLE parent_child_categories(
 	FOREIGN KEY (child_category_id) REFERENCES category(id)
 );
 
--- many to many relationship table
+
 CREATE TABLE categories_deals(
 	category_id INT NOT NULL,
 	deals_id INT NOT NULL,
@@ -113,8 +111,37 @@ CREATE TABLE categories_deals(
 	FOREIGN KEY (deals_id) REFERENCES deals(id)
 );
 
--- create a junction table for many-to-many association
--- venues will have a set of cryptos they accept for all their deal items
+CREATE TABLE customizable_option(
+	id INT NOT NULL AUTO_INCREMENT,
+	custom_option_name VARCHAR(100) NOT NULL,
+	PRIMARY KEY (id)
+);
+
+
+CREATE TABLE categories_customizable_options(
+	category_id INT NOT NULL,
+	custom_option_id INT NOT NULL,
+	FOREIGN KEY (category_id) REFERENCES category(id),
+	FOREIGN KEY (custom_option_id) REFERENCES customizable_option(id)
+);
+
+
+CREATE TABLE hashtag ( 
+	id INT NOT NULL AUTO_INCREMENT,
+	hashtag_name VARCHAR(100) NOT NULL,
+	PRIMARY KEY (id)
+);
+
+
+CREATE TABLE hashtags_deals(
+	hashtag_id INT NOT NULL,
+	deals_id INT NOT NULL,
+	FOREIGN KEY (hashtag_id) REFERENCES hashtag(id),
+	FOREIGN KEY (deals_id) REFERENCES deals(id)
+);
+
+
+
 CREATE TABLE cryptos_venues (
 	crypto_id INT NOT NULL,
 	venue_id INT NOT NULL,
@@ -239,6 +266,47 @@ CREATE TABLE parents_children(
 	FOREIGN KEY (comment_child_id) REFERENCES crypto_comments(id)
 );
 
+CREATE TABLE notifications (
+	id INT NOT NULL AUTO_INCREMENT,
+	unread BOOLEAN NOT NULL DEFAULT TRUE,
+	user_id INT NOT NULL,
+	matched_friend_id INT NOT NULL,
+	venue_id INT NOT NULL,
+	deal_id INT NOT NULL,
+  	PRIMARY KEY (id),
+	FOREIGN KEY (user_id) REFERENCES users(id),
+	FOREIGN KEY (matched_friend_id) REFERENCES users_matched_friends(id),
+	FOREIGN KEY (venue_id) REFERENCES venues(id),
+	FOREIGN KEY (deal_id) REFERENCES deals(id)
+);
+
+
+CREATE TABLE buyers_reviews_deals (
+	id INT NOT NULL AUTO_INCREMENT,
+	buyer_id INT NOT NULL,
+	deal_id INT NOT NULL,
+	title VARCHAR (255) NOT NULL,
+	body TEXT NULL,
+  	date_reviewed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	rating INT NOT NULL DEFAULT 0,
+	verified_purchase BOOLEAN NOT NULL DEFAULT FALSE,
+	likes INT DEFAULT 0,
+	dislikes INT DEFAULT 0,
+	helpful_review INT DEFAULT 0,
+	display_review BOOLEAN NOT NULL DEFAULT FALSE,
+	PRIMARY KEY (id),
+	FOREIGN KEY (buyer_id) REFERENCES users(id),
+	FOREIGN KEY (deal_id) REFERENCES deals(id)
+);
+
+
+CREATE TABLE parents_children_deals_reviews(
+	review_parent_id INT NOT NULL,
+	review_child_id INT NOT NULL,
+	FOREIGN KEY (review_parent_id) REFERENCES buyers_reviews_deals(id),
+	FOREIGN KEY (review_child_id) REFERENCES buyers_reviews_deals(id)
+);
+
 CREATE TABLE buyers_reviews_sellers(
 	id INT NOT NULL AUTO_INCREMENT,
 	buyer_id INT NOT NULL,
@@ -258,7 +326,20 @@ CREATE TABLE buyers_reviews_sellers(
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
 
--- venue can report another venue, venue can report a user, user can report another user, and user can report a venue
+
+CREATE TABLE sellers_reviews_buyers(
+	id INT NOT NULL AUTO_INCREMENT,
+	buyer_id INT NOT NULL,
+	seller_id INT NOT NULL,
+	rating INT NOT NULL DEFAULT 0,
+	body TEXT NULL,
+	date_reviewed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (id),
+	FOREIGN KEY (buyer_id) REFERENCES users(id),
+	FOREIGN KEY (seller_id) REFERENCES users(id)
+);
+
+
 CREATE TABLE flagged_users(
 	id INT NOT NULL AUTO_INCREMENT,
 	user_id INT NULL,
