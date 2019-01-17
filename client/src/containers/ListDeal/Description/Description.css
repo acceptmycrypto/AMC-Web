@@ -161,7 +161,37 @@ div.DraftEditor-root {
   cursor: pointer;
   text-transform: uppercase;
   font-weight: 700;
-  float: right;
-  position: relative;
-  bottom: -35px;
+  position: absolute;
+  bottom: 7%;
+  left: 82%;
 }
+
+.creating-deal-modal-loading-spinner {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 35%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.verified-phone-success {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.create-deal-modal-link {
+  text-decoration: none;
+  font-size: 1.5em;
+  position: absolute;
+  bottom: 7%;
+  left: 70%;
+  color: #6bd9c7;
+  text-decoration: none;
+}
+
+.create-deal-modal-link:hover {
+  color: #fff;
+}
+
+

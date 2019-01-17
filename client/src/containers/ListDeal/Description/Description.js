@@ -9,7 +9,15 @@ import { _loadCategory } from "../../../actions/categoryActions";
 import {
   handleSelectedCategory,
   handleSelectedCondition,
-  closeModalAfterDealCreated
+  closeModalAfterDealCreated,
+  onEditPhoneNumber,
+  onEditSellerAddress,
+  onEditSellerCity,
+  onEditSellerState,
+  onEditSellerZipcode,
+  _startVerificationForSeller,
+  onEditSellerVerificationToken,
+  _checkVerificationForSeller
 } from "../../../actions/listDealActions";
 import Modal from "react-awesome-modal";
 import LoadingSpinner from "../../../components/UI/LoadingSpinner";
@@ -42,69 +50,141 @@ class Description extends Component {
     this.props.history.push(`/feed/deals/${this.props.deal_id}/${this.props.dealNameValue}`);
   };
 
-  contactInfo = () => {
-    return (
-      <div>
-        {/* <label>Contact Info</label>
-        <small>
-          To keep your account secured, please provide us your contact info.
-        </small> */}
-        <h4>To protect and boost our community, we need to verify all sellers.</h4>
-        <label>Contact Info</label>
-        <input
-            // onChange={}
-            // value={}
-            className="description-input"
-            autofocus="autofocus"
-            placeholder="Enter your phone number"
-          />
-        <button>Send me a text</button>
+  onVerificationStart = (event) => {
+    event.preventDefault();
+    const {phoneNumber, sellerAddress, sellerCity, sellerState, sellerZipcode} = this.props;
 
-        <label>Validate Phone Number</label>
-        <input
-            // onChange={}
-            // value={}
-            className="description-input"
-            autofocus="autofocus"
-            placeholder="Enter the verification codes we sent you"
-          />
-        <button>Validate</button>
+    this.props._startVerificationForSeller(localStorage.getItem("token"), phoneNumber, sellerAddress, sellerCity, sellerState, sellerZipcode);
 
-        <label>Shipping Address</label>
-        <input
-            // onChange={}
-            // value={}
-            className="description-input"
-            autofocus="autofocus"
-            placeholder="Enter your Address"
-        />
-        <input
-          // onChange={}
-          // value={}
-          className="description-input"
-          autofocus="autofocus"
-          placeholder="Enter your City"
-        />
-        <select
-          // onChange={props.handle_ShippingState}
-          // value={props.showShippingState}
-        >
-          <option selected>Select State</option>
-          {/* {props.listOfAllStates.map((state, i) => {
-            return (<option key={i} value={state.label}>{state.value}</option>)
-          })} */}
-        </select>
-        <input
-          // onChange={}
-          // value={}
-          className="description-input"
-          autofocus="autofocus"
-          placeholder="Enter your Zipcode"
-        />
+  };
 
-        <button>List Deal</button>
-      </div>
-    )
+  onVerificationResult = (event) => {
+    event.preventDefault();
+
+    this.props._checkVerificationForSeller(localStorage.getItem("token"), this.props.sellerVerificationToken);
+  };
+
+  dealCreatedModal = () => {
+    const { sendingCode, sendingCodeSuccess, onEditPhoneNumber, phoneNumber, onEditSellerAddress, sellerAddress, onEditSellerCity, sellerCity, allStates, onEditSellerState, sellerState, onEditSellerZipcode, sellerZipcode, onEditSellerVerificationToken, sellerVerificationToken, checkingCodeLoading, checkingCodeSuccess, deal_id, dealNameValue, closeModalAfterDealCreated, resetDealCreated} = this.props;
+
+    switch (true) {
+      case sendingCode || checkingCodeLoading:
+        return <div className="creating-deal-modal-loading-spinner"><LoadingSpinner /></div>
+      case sendingCodeSuccess.success && checkingCodeSuccess.success === undefined:
+        return (
+          <form onSubmit={this.onVerificationResult} className="creating-deal-seller-verification">
+              <h4 className="creating-deal-modal-header">To protect our community, we need to verify all sellers. <i class="fa fa-question-circle" aria-hidden="true"></i></h4>
+              <div className="creating-deal-seller-contact">
+                <label>Enter Verification Code</label>
+                <div>
+                  <input
+                      onChange={onEditSellerVerificationToken}
+                      value={sellerVerificationToken}
+                      required
+                      className="description-input"
+                      autofocus="autofocus"
+                      placeholder="Enter your verification code"
+                    />
+                </div>
+                <small>A text message with code was sent to your phone.</small>
+              </div>
+
+              <button>Verify</button>
+          </form>
+        )
+      case checkingCodeSuccess.success:
+        return (
+          <div>
+            <div className="verified-phone-success">
+              <h4>Verified Success!</h4>
+              <div><i class="fas fa-check fa-2x"></i></div>
+              <br />
+              <h4>Now sit tight and wait to get paid with cryptocurrency.</h4>
+            </div>
+
+              <Link
+                className="create-deal-modal-link"
+                // style={{ textDecoration: 'none' }}
+                to={`/feed/deals/${deal_id}/${dealNameValue}`}
+                onClick={() => {
+                  closeModalAfterDealCreated();
+                  resetDealCreated();
+                }}
+                // onClick={resetDealCreated}
+              >
+                Show My Listing
+              </Link>
+
+          </div>
+        )
+      default:
+        return (
+          <form onSubmit={this.onVerificationStart} className="creating-deal-seller-verification">
+            <h4 className="creating-deal-modal-header">To protect our community, we need to verify all sellers. <i class="fa fa-question-circle" aria-hidden="true"></i></h4>
+            <div className="creating-deal-seller-contact">
+              <label>Contact Info (format: xxx-xxx-xxxx)</label>
+              <div>
+                <input
+                    onChange={onEditPhoneNumber}
+                    value={phoneNumber}
+                    type="tel"
+                    pattern="^\d{3}-\d{3}-\d{4}$"
+                    required
+                    className="description-input"
+                    autofocus="autofocus"
+                    placeholder="Enter your phone number"
+
+                  />
+              </div>
+              <small>We will send you a one-time verification code.</small>
+            </div>
+
+            <div className="creating-deal-seller-address">
+              <label>Address Info</label>
+              <input
+                  onChange={onEditSellerAddress}
+                  value={sellerAddress}
+                  type="text"
+                  className="description-input"
+                  autofocus="autofocus"
+                  placeholder="Address"
+                  required
+              />
+                <div className="city-state-zipcode-flex">
+                  <input
+                    onChange={onEditSellerCity}
+                    value={sellerCity}
+                    type="text"
+                    className="description-input"
+                    autofocus="autofocus"
+                    placeholder="City"
+                    required
+                  />
+                  <Select
+                    className="create-deal-select"
+                    options={allStates}
+                    placeholder="State"
+                    onChange={onEditSellerState}
+                    value={sellerState}
+                  />
+                  <input
+                    onChange={onEditSellerZipcode}
+                    value={sellerZipcode}
+                    type="number"
+                    className="description-input create-deal-zipcode-input"
+                    autofocus="autofocus"
+                    placeholder="Zip Code"
+                    required
+                  />
+
+                </div>
+
+              </div>
+
+            <button>Text Me</button>
+          </form>
+        )
+    }
   };
 
   render() {
@@ -114,13 +194,16 @@ class Description extends Component {
       handleSelectedCondition,
       deal_id,
       closeModalAfterDealCreated,
+      dealCreatedResult,
       modalVisible,
       resetDealCreated,
       dealNameValue,
       selectedCategoryValue,
-      selectedConditionValue
+      selectedConditionValue,
+      sendingCode,
+      sendingCodeSuccess
     } = this.props;
-
+    debugger
     const itemCondition = [
       { value: "New", label: "New" },
       { value: "Used", label: "Used" }
@@ -200,10 +283,10 @@ class Description extends Component {
         <Modal
           visible={modalVisible}
           effect="fadeInUp"
-          onClickAway={() => {
-            closeModalAfterDealCreated();
-            this.directToDealItemPage();
-          }}
+          // onClickAway={() => {
+          //   closeModalAfterDealCreated();
+          //   this.directToDealItemPage();
+          // }}
         >
           <div className="deal-created-modal">
             {/* <h4>You have successfully created a Deal! </h4>
@@ -219,7 +302,9 @@ class Description extends Component {
             >
               OK
             </Link> */}
-            {this.contactInfo()}
+
+            {/* if seller has not verified, then we ask seller to verified. 0 === not verified */}
+            {this.dealCreatedModal()}
           </div>
         </Modal>
       </div>
@@ -229,7 +314,20 @@ class Description extends Component {
 
 const mapStateToProps = state => ({
   parentCategory: state.CreateDeal.parentCategory,
-  modalVisible: state.CreateDeal.modalVisible
+  modalVisible: state.CreateDeal.modalVisible,
+  phoneNumber: state.CreateDeal.phoneNumber,
+  sellerAddress: state.CreateDeal.sellerAddress,
+  sellerCity: state.CreateDeal.sellerCity,
+  sellerState: state.CreateDeal.sellerState,
+  sellerZipcode: state.CreateDeal.sellerZipcode,
+  allStates: state.DealItem.states,
+  sendingCode: state.CreateDeal.sendingCode,
+  sendingCodeSuccess: state.CreateDeal.sendingCodeSuccess,
+  sendingCodeError: state.CreateDeal.sendingCodeError,
+  sellerVerificationToken: state.CreateDeal.sellerVerificationToken,
+  checkingCodeLoading: state.CreateDeal.checkingCodeLoading,
+  checkingCodeSuccess: state.CreateDeal.checkingCodeSuccess,
+  checkingCodeError: state.CreateDeal.checkingCodeError
 });
 
 const matchDispatchToProps = dispatch => {
@@ -238,7 +336,15 @@ const matchDispatchToProps = dispatch => {
       _loadCategory,
       handleSelectedCategory,
       handleSelectedCondition,
-      closeModalAfterDealCreated
+      closeModalAfterDealCreated,
+      onEditPhoneNumber,
+      onEditSellerAddress,
+      onEditSellerCity,
+      onEditSellerState,
+      onEditSellerZipcode,
+      _startVerificationForSeller,
+      onEditSellerVerificationToken,
+      _checkVerificationForSeller
     },
     dispatch
   );

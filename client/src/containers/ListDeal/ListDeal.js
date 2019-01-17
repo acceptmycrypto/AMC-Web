@@ -34,7 +34,6 @@ import UploadingImage from "./UploadImage";
 import Pricing from "./Pricing";
 import Description from "./Description";
 import Modal from "react-awesome-modal";
-import Select from "react-select";
 
 class ListDeal extends Component {
   componentDidMount = () => {
@@ -260,74 +259,84 @@ class ListDeal extends Component {
     return errMsgs;
   }
 
-  contactInfo = () => {
-    return (
-      <form className="creating-deal-seller-verification">
-        <h4 className="creating-deal-modal-header">To protect our community, we need to verify all sellers.</h4>
-        <div className="creating-deal-seller-contact">
-          <label>Contact Info (format: xxx-xxx-xxxx)</label>
-          <div>
-            <input
-                // onChange={}
-                // value={}
-                type="tel"
-                pattern="^\d{3}-\d{3}-\d{4}$"
-                required
-                className="description-input"
-                autofocus="autofocus"
-                placeholder="Enter your phone number"
+  // contactInfo = () => {
+  //   return (
+  //     <form className="creating-deal-seller-verification">
+  //       <h4 className="creating-deal-modal-header">To protect our community, we need to verify all sellers. <i class="fa fa-question-circle" aria-hidden="true"></i></h4>
+  //       <div className="creating-deal-seller-contact">
+  //         <label>Contact Info (format: xxx-xxx-xxxx)</label>
+  //         <div>
+  //           <input
+  //               onChange={this.props.onEditPhoneNumber}
+  //               value={this.props.phoneNumber}
+  //               type="tel"
+  //               pattern="^\d{3}-\d{3}-\d{4}$"
+  //               required
+  //               className="description-input"
+  //               autofocus="autofocus"
+  //               placeholder="Enter your phone number"
 
-              />
-          </div>
-          <small>We will send you a one-time verification code.</small>
-        </div>
+  //             />
+  //         </div>
+  //         <small>We will send you a one-time verification code.</small>
+  //       </div>
 
-        <div className="creating-deal-seller-address">
-          <label>Address Info</label>
-          <input
-              // onChange={}
-              // value={}
-              type="text"
-              className="description-input"
-              autofocus="autofocus"
-              placeholder="Address"
-              required
-          />
-            <div className="city-state-zipcode-flex">
-              <input
-                // onChange={}
-                // value={}
-                type="text"
-                className="description-input"
-                autofocus="autofocus"
-                placeholder="City"
-                required
-              />
-               <Select
-                className="create-deal-select"
-                options={this.props.allStates}
-                placeholder="State"
-                // onChange={handleSelectedCondition}
-                // value={selectedConditionValue}
-              />
-              <input
-                // onChange={}
-                // value={}
-                type="number"
-                className="description-input create-deal-zipcode-input"
-                autofocus="autofocus"
-                placeholder="Zip Code"
-                required
-              />
+  //       <div className="creating-deal-seller-address">
+  //         <label>Address Info</label>
+  //         <input
+  //             onChange={this.props.onEditSellerAddress}
+  //             value={this.props.sellerAddress}
+  //             type="text"
+  //             className="description-input"
+  //             autofocus="autofocus"
+  //             placeholder="Address"
+  //             required
+  //         />
+  //           <div className="city-state-zipcode-flex">
+  //             <input
+  //               onChange={this.props.onEditSellerCity}
+  //               value={this.props.sellerCity}
+  //               type="text"
+  //               className="description-input"
+  //               autofocus="autofocus"
+  //               placeholder="City"
+  //               required
+  //             />
+  //              <Select
+  //               className="create-deal-select"
+  //               options={this.props.allStates}
+  //               placeholder="State"
+  //               onChange={this.props.onEditSellerState}
+  //               value={this.props.sellerState}
+  //             />
+  //             <input
+  //               onChange={this.props.onEditSellerZipcode}
+  //               value={this.props.sellerZipcode}
+  //               type="number"
+  //               className="description-input create-deal-zipcode-input"
+  //               autofocus="autofocus"
+  //               placeholder="Zip Code"
+  //               required
+  //             />
 
-            </div>
+  //           </div>
 
-          </div>
+  //         </div>
 
-        <button type="submit">Verify</button>
-      </form>
-    )
-  };
+  //       <button onSubmit={this.handleSellerStartVerification} type="submit">Verify</button>
+  //     </form>
+  //   )
+  // };
+
+  // handleSellerStartVerification = (event) => {
+  //   event.preventDefault();
+
+  //   const { phoneNumber, sellerAddress, sellerCity, sellerState, sellerZipcode } = this.props;
+  //   debugger
+
+  //   _startVerificationForSeller(localStorage.getItem("token"), phoneNumber, sellerAddress, sellerCity, sellerState, sellerZipcode);
+
+  // };
 
   render() {
     const {
@@ -459,6 +468,7 @@ class ListDeal extends Component {
               createDeal={this.onCreateDeal}
               loading_dealCreating={creatingDeal}
               error_dealCreating={creatingDealError}
+              dealCreatedResult={dealCreated}
               deal_id={dealCreated.deal_id}
               closeModal={closeModalAfterDealCreated}
               modalOpened={modalVisible}
@@ -468,31 +478,6 @@ class ListDeal extends Component {
           )}
         </Layout>
         <ToastContainer autoClose={8000} />
-        <Modal
-          visible={true}
-          effect="fadeInUp"
-          onClickAway={() => {
-            closeModalAfterDealCreated();
-            this.directToDealItemPage();
-          }}
-        >
-          <div className="deal-created-modal">
-            {/* <h4>You have successfully created a Deal! </h4>
-            <br />
-            <h4>Now sit tight and wait to get paid with cryptocurrency.</h4> */}
-            {/* <Link
-              to={`/feed/deals/${deal_id}/${dealNameValue}`}
-              className="a-link"
-              onClick={() => {
-                closeModalAfterDealCreated();
-              }}
-              onClick={resetDealCreated}
-            >
-              OK
-            </Link> */}
-            {this.contactInfo()}
-          </div>
-        </Modal>
       </div>
     );
   }
@@ -521,8 +506,7 @@ const mapStateToProps = state => ({
   creatingDeal: state.CreateDeal.creatingDeal,
   creatingDealError: state.CreateDeal.creatingDealError,
   dealCreated: state.CreateDeal.dealCreated,
-  modalVisible: state.CreateDeal.modalVisible,
-  allStates: state.DealItem.states,
+  modalVisible: state.CreateDeal.modalVisible
 });
 
 const matchDispatchToProps = dispatch => {

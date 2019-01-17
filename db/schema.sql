@@ -39,6 +39,7 @@ CREATE TABLE users(
 	first_name VARCHAR(255) NULL,
 	last_name VARCHAR (255) NULL,
 	phone_number VARCHAR(100) NULL,
+  phone_number_verified BOOLEAN NOT NULL DEFAULT FALSE,
 	email VARCHAR(100) NOT NULL UNIQUE,
 	previous_email VARCHAR(100) NULL UNIQUE,
 	address VARCHAR(255) NULL,

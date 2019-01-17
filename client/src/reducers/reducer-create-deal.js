@@ -22,7 +22,19 @@ const initialState = {
   creatingDeal: false,
   creatingDealError: null,
   dealCreated: {},
-  modalVisible: false
+  modalVisible: false,
+  phoneNumber: null,
+  sellerAddress: null,
+  sellerCity: null,
+  sellerState: null,
+  sellerZipcode: null,
+  sendingCode: false,
+  sendingCodeSuccess: {},
+  sendingCodeError: null,
+  sellerVerificationToken: null,
+  checkingCodeLoading: false,
+  checkingCodeSuccess: {},
+  checkingCodeError: null
 };
 
 const handleImagesUpload = (images, imageObj) => {
@@ -215,6 +227,84 @@ export default function CreateDealReducer(state = initialState, action) {
     case "RESET_DEAL_CREATED":
       return {
         ...initialState
+      };
+
+    case "EDIT_PHONE_NUMBER":
+      return {
+        ...state,
+        phoneNumber: action.payload
+      };
+
+    case "EDIT_SELLER_ADDRESS":
+      return {
+        ...state,
+        sellerAddress: action.payload
+      };
+
+    case "EDIT_SELLER_CITY":
+      return {
+        ...state,
+        sellerCity: action.payload
+      };
+
+    case "EDIT_SELLER_STATE":
+      return {
+        ...state,
+        sellerState: action.payload.state
+      };
+
+    case "EDIT_SELLER_ZIPCODE":
+      return {
+        ...state,
+        sellerZipcode: action.payload
+      };
+
+    case "VERIFY_SELLER_BEGIN":
+      return {
+        ...state,
+        sendingCode: true,
+        sendingCodeError: null
+      };
+
+    case "VERIFY_SELLER_SUCCESS":
+      return {
+        ...state,
+        sendingCode: false,
+        sendingCodeSuccess: action.payload
+      };
+
+    case "VERIFY_SELLER_FAILURE":
+      return {
+        ...state,
+        sendingCode: false,
+        sendingCodeError: action.payload.error,
+      };
+
+    case "EDIT_SELLER_VERIFICATION_TOKEN":
+      return {
+        ...state,
+        sellerVerificationToken: action.payload
+      };
+
+    case "CHECK_CODE_BEGIN":
+      return {
+        ...state,
+        checkingCodeLoading: true,
+        sendingCodeError: null
+      };
+
+    case "CHECK_CODE_SUCCESS":
+      return {
+        ...state,
+        checkingCodeLoading: false,
+        checkingCodeSuccess: action.payload
+      };
+
+    case "CHECK_CODE_FAILURE":
+      return {
+        ...state,
+        checkingCodeLoading: false,
+        checkingCodeError: action.payload.error,
       };
 
     default:

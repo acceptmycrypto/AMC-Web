@@ -1,3 +1,5 @@
+import { debug } from "util";
+
 export function _uploadImage(token, imageData) {
   //once image is uploaded, push that image to the state
 
@@ -206,6 +208,7 @@ export function _submitDeal(token, dealName, category, selectedCondition, textDe
     return fetch("/listdeal", settings)
       .then(res => res.json())
       .then(jsonDealCreated => {
+        debugger
         dispatch(creatingDealSuccess(jsonDealCreated));
         return jsonDealCreated;
       })
@@ -239,3 +242,122 @@ export const resetListDeal = () => {
       type: "RESET_DEAL_CREATED"
   };
 };
+
+export const onEditPhoneNumber = (event) => {
+  return {
+      type: 'EDIT_PHONE_NUMBER',
+      payload: event.target.value
+  }
+};
+
+export const onEditSellerAddress = (event) => {
+  return {
+      type: 'EDIT_SELLER_ADDRESS',
+      payload: event.target.value
+  }
+};
+
+export const onEditSellerCity = (event) => {
+  return {
+      type: 'EDIT_SELLER_CITY',
+      payload: event.target.value
+  }
+};
+
+export const onEditSellerState = (state) => {
+  return {
+      type: 'EDIT_SELLER_STATE',
+      payload: {state}
+  }
+};
+
+export const onEditSellerZipcode = (event) => {
+  return {
+      type: 'EDIT_SELLER_ZIPCODE',
+      payload: event.target.value
+  }
+};
+
+export function _startVerificationForSeller(token, phoneNumber, sellerAddress, sellerCity, sellerState, sellerZipcode) {
+  debugger
+  const settings = {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({token, phoneNumber, sellerAddress, sellerCity, sellerState, sellerZipcode})
+  };
+
+  return dispatch => {
+    dispatch(verifySellerBegin());
+    return fetch("/verification/start", settings)
+      .then(res => res.json())
+      .then(jsonTwillio => {
+        let twillioData = JSON.parse(jsonTwillio);
+        debugger
+        dispatch(verifySellerSuccess(twillioData));
+        return twillioData;
+      })
+      .catch(error => dispatch(verifySellerFailure(error)));
+  };
+}
+
+export const verifySellerBegin = () => ({
+  type: "VERIFY_SELLER_BEGIN"
+});
+
+export const verifySellerSuccess = twilioData => ({
+  type: "VERIFY_SELLER_SUCCESS",
+  payload: twilioData
+});
+
+export const verifySellerFailure = error => ({
+  type: "VERIFY_SELLER_FAILURE",
+  payload: { error }
+});
+
+export const onEditSellerVerificationToken = (event) => {
+  return {
+      type: 'EDIT_SELLER_VERIFICATION_TOKEN',
+      payload: event.target.value
+  }
+};
+
+export function _checkVerificationForSeller(token, phoneCode) {
+  const settings = {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({token, phoneCode})
+  };
+
+  return dispatch => {
+    dispatch(checkCodeBegin());
+    return fetch("/verification/check", settings)
+      .then(res => res.json())
+      .then(codeResult => {
+        let twillioCodeResult = JSON.parse(codeResult);
+        debugger
+        dispatch(checkCodeSuccess(twillioCodeResult));
+        return twillioCodeResult;
+      })
+      .catch(error => dispatch(checkCodeFailure(error)));
+  };
+}
+
+export const checkCodeBegin = () => ({
+  type: "CHECK_CODE_BEGIN"
+});
+
+export const checkCodeSuccess = codeStatus => ({
+  type: "CHECK_CODE_SUCCESS",
+  payload: codeStatus
+});
+
+export const checkCodeFailure = error => ({
+  type: "CHECK_CODE_FAILURE",
+  payload: { error }
+});
