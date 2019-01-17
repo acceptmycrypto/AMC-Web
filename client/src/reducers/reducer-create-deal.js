@@ -204,6 +204,7 @@ export default function CreateDealReducer(state = initialState, action) {
       };
 
     case "CREATING_DEAL_SUCCESS":
+    debugger
       return {
         ...state,
         creatingDeal: false,

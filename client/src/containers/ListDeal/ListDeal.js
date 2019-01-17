@@ -469,7 +469,6 @@ class ListDeal extends Component {
               loading_dealCreating={creatingDeal}
               error_dealCreating={creatingDealError}
               dealCreatedResult={dealCreated}
-              deal_id={dealCreated.deal_id}
               closeModal={closeModalAfterDealCreated}
               modalOpened={modalVisible}
               resetDealCreated={resetListDeal}

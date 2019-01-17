@@ -113,8 +113,6 @@ router.post("/cryptocurrency/exchange", verifyToken, async function(req, res) {
 
 })
 
-
-// api
 router.post('/listdeal', verifyToken, function(req, res) {
   //info needed to insert into tables
   let {dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos} = req.body
@@ -141,9 +139,9 @@ router.post('/listdeal', verifyToken, function(req, res) {
 
       phone_number_verified = results[0].phone_number_verified;
 
-      if (phone_number_verified === 0) { //if not verified, we need to verify user
-        res.json(phone_number_verified)
-      }
+      // if (phone_number_verified === 0) { //if not verified, we need to verify user
+      //   res.json(phone_number_verified)
+      // }
 
   });
 
@@ -152,83 +150,74 @@ router.post('/listdeal', verifyToken, function(req, res) {
   // INSERT INTO users_shipping_address SET ?
   let deals_rows = {seller_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto, item_condition};
 
-  if (phone_number_verified === 1) {
+  connection.query("INSERT INTO deals SET ?",
+    deals_rows,
+    function (error, results, fields) {
+      if (error) console.log(error);
+      deal_id = results.insertId; //assign the new deal_id
 
-    connection.query("INSERT INTO deals SET ?",
-      deals_rows,
+      //Second insert images into deal_images table
+      //create image rows with the deal id to be inserted into deal_images table
+      let imagesRow = [];
+      for (let i = 0; i < images.length; i++) {
+        let dealImageRecord = [];
+        dealImageRecord.push(deal_id, images[i].Location)
+        imagesRow.push(dealImageRecord);
+      }
+      connection.query("INSERT INTO deal_images(deal_id, deal_image)  VALUES ?", [imagesRow],
       function (error, results, fields) {
         if (error) console.log(error);
-        let deal_id = results.insertId; //assign the new deal_id
+      });
 
-        //Second insert images into deal_images table
-        //create image rows with the deal id to be inserted into deal_images table
-        let imagesRow = [];
-        for (let i = 0; i < images.length; i++) {
-          let dealImageRecord = [];
-          dealImageRecord.push(deal_id, images[i].Location)
-          imagesRow.push(dealImageRecord);
+      //Third insert categories into categories_deals table
+      //get the cetegory_id
+      connection.query("SELECT id AS category_id FROM category WHERE category_name IN (?)", [selectedCategory],
+      function (error, results, fields) {
+        if (error) console.log(error);
+
+        let categories_deals = [];
+        for (let i = 0; i < results.length; i++) {
+          let records = [];
+          records.push(results[i].category_id, deal_id)
+          categories_deals.push(records);
         }
-        connection.query("INSERT INTO deal_images(deal_id, deal_image)  VALUES ?", [imagesRow],
+
+        connection.query("INSERT INTO categories_deals(category_id, deals_id) VALUES ?", [categories_deals],
         function (error, results, fields) {
           if (error) console.log(error);
         });
+      });
 
-        //Third insert categories into categories_deals table
-        //get the cetegory_id
-        connection.query("SELECT id AS category_id FROM category WHERE category_name IN (?)", [selectedCategory],
+      //Fourth insert into cryptos_deals table
+      connection.query("SELECT id AS crypto_id FROM crypto_metadata WHERE crypto_symbol IN (?)", [selected_cryptos],
+      function (error, results, fields) {
+        if (error) console.log(error);
+
+        let cryptos_deals = [];
+        for (let i = 0; i < results.length; i++) {
+          let records = [];
+          records.push(results[i].crypto_id, deal_id)
+          cryptos_deals.push(records);
+        }
+
+        connection.query("INSERT INTO cryptos_deals(crypto_id, deal_id) VALUES ?", [cryptos_deals],
         function (error, results, fields) {
-          if (error) console.log(error);
+          if (error) res.status(400).json({message: `Failed to create deal: ${error}`});
 
-          let categories_deals = [];
-          for (let i = 0; i < results.length; i++) {
-            let records = [];
-            records.push(results[i].category_id, deal_id)
-            categories_deals.push(records);
-          }
+          res.json({deal_id, phone_number_verified});
 
-          connection.query("INSERT INTO categories_deals(category_id, deals_id) VALUES ?", [categories_deals],
-          function (error, results, fields) {
-            if (error) console.log(error);
-          });
         });
+      });
 
-        //Fourth insert into cryptos_deals table
-        connection.query("SELECT id AS crypto_id FROM crypto_metadata WHERE crypto_symbol IN (?)", [selected_cryptos],
-        function (error, results, fields) {
-          if (error) console.log(error);
+  });
 
-          let cryptos_deals = [];
-          for (let i = 0; i < results.length; i++) {
-            let records = [];
-            records.push(results[i].crypto_id, deal_id)
-            cryptos_deals.push(records);
-          }
 
-          connection.query("INSERT INTO cryptos_deals(crypto_id, deal_id) VALUES ?", [cryptos_deals],
-          function (error, results, fields) {
-            if (error) res.status(400).json({message: `Failed to create deal: ${error}`});
-            res.json({deal_id});
-          });
-        });
-
-    });
-
-  }
 
 });
 
-router.get("/category/parent", function(req, res) {
-  //The first 12 records are the parent categories
-  connection.query(
-    "SELECT * FROM category limit 12", function (error, results, fields) {
-      if (error) throw error;
-      res.json(results);
-    }
-  );
-
-})
-
+//to be used for /verification/check
 let phone_number;
+
 router.post('/verification/start', verifyToken, function(req, res) {
   phone_number = parseInt(req.body.phoneNumber.replace(/[^0-9\.]+/g, "")); //replace 111-111-1111 with 1111111111
 
@@ -254,6 +243,8 @@ router.post('/verification/start', verifyToken, function(req, res) {
 
 router.post('/verification/check', verifyToken, function(req, res) {
 
+  let seller_id = req.decoded._id;
+
   let options = {
     method: "GET",
     url: "https://api.authy.com/protected/json/phones/verification/check",
@@ -268,9 +259,31 @@ router.post('/verification/check', verifyToken, function(req, res) {
   request(options, function (error, response, body) {
     if (error) console.log(error);
 
-    console.log("Twilio-check", body);
-    res.json(body);
+    //update seller to verified
+    connection.query(
+      'UPDATE users SET ? WHERE ?',
+      [{phone_number_verified: 1}, {id: seller_id}],
+      function(error, results, fields) {
+        if (error) throw error;
+
+        res.json(body);
+
+      }
+    );
+
   });
 })
+
+router.get("/category/parent", function(req, res) {
+  //The first 12 records are the parent categories
+  connection.query(
+    "SELECT * FROM category limit 12", function (error, results, fields) {
+      if (error) throw error;
+      res.json(results);
+    }
+  );
+
+})
+
 
 module.exports = router;

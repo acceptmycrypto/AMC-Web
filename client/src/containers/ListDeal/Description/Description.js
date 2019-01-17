@@ -47,94 +47,150 @@ class Description extends Component {
 
   //We have access to history props from withRouter
   directToDealItemPage = () => {
-    this.props.history.push(`/feed/deals/${this.props.deal_id}/${this.props.dealNameValue}`);
+    this.props.history.push(
+      `/feed/deals/${this.props.dealCreatedResult.deal_id}/${this.props.dealNameValue}`
+    );
   };
 
-  onVerificationStart = (event) => {
+  onVerificationStart = event => {
     event.preventDefault();
-    const {phoneNumber, sellerAddress, sellerCity, sellerState, sellerZipcode} = this.props;
+    const {
+      phoneNumber,
+      sellerAddress,
+      sellerCity,
+      sellerState,
+      sellerZipcode
+    } = this.props;
 
-    this.props._startVerificationForSeller(localStorage.getItem("token"), phoneNumber, sellerAddress, sellerCity, sellerState, sellerZipcode);
-
+    this.props._startVerificationForSeller(
+      localStorage.getItem("token"),
+      phoneNumber,
+      sellerAddress,
+      sellerCity,
+      sellerState,
+      sellerZipcode
+    );
   };
 
-  onVerificationResult = (event) => {
+  onVerificationResult = event => {
     event.preventDefault();
 
-    this.props._checkVerificationForSeller(localStorage.getItem("token"), this.props.sellerVerificationToken);
+    this.props._checkVerificationForSeller(
+      localStorage.getItem("token"),
+      this.props.sellerVerificationToken
+    );
   };
 
   dealCreatedModal = () => {
-    const { sendingCode, sendingCodeSuccess, onEditPhoneNumber, phoneNumber, onEditSellerAddress, sellerAddress, onEditSellerCity, sellerCity, allStates, onEditSellerState, sellerState, onEditSellerZipcode, sellerZipcode, onEditSellerVerificationToken, sellerVerificationToken, checkingCodeLoading, checkingCodeSuccess, deal_id, dealNameValue, closeModalAfterDealCreated, resetDealCreated} = this.props;
+    const {
+      sendingCode,
+      sendingCodeSuccess,
+      onEditPhoneNumber,
+      phoneNumber,
+      onEditSellerAddress,
+      sellerAddress,
+      onEditSellerCity,
+      sellerCity,
+      allStates,
+      onEditSellerState,
+      sellerState,
+      onEditSellerZipcode,
+      sellerZipcode,
+      onEditSellerVerificationToken,
+      sellerVerificationToken,
+      checkingCodeLoading,
+      checkingCodeSuccess,
+      dealCreatedResult,
+      dealNameValue,
+      closeModalAfterDealCreated,
+      resetDealCreated
+    } = this.props;
 
     switch (true) {
       case sendingCode || checkingCodeLoading:
-        return <div className="creating-deal-modal-loading-spinner"><LoadingSpinner /></div>
-      case sendingCodeSuccess.success && checkingCodeSuccess.success === undefined:
         return (
-          <form onSubmit={this.onVerificationResult} className="creating-deal-seller-verification">
-              <h4 className="creating-deal-modal-header">To protect our community, we need to verify all sellers. <i class="fa fa-question-circle" aria-hidden="true"></i></h4>
-              <div className="creating-deal-seller-contact">
-                <label>Enter Verification Code</label>
-                <div>
-                  <input
-                      onChange={onEditSellerVerificationToken}
-                      value={sellerVerificationToken}
-                      required
-                      className="description-input"
-                      autofocus="autofocus"
-                      placeholder="Enter your verification code"
-                    />
-                </div>
-                <small>A text message with code was sent to your phone.</small>
+          <div className="creating-deal-modal-loading-spinner">
+            <LoadingSpinner />
+          </div>
+        );
+      case sendingCodeSuccess.success &&
+        checkingCodeSuccess.success === undefined:
+        return (
+          <form
+            onSubmit={this.onVerificationResult}
+            className="creating-deal-seller-verification"
+          >
+            <h4 className="creating-deal-modal-header">
+              To protect our community, we need to verify all sellers.{" "}
+              <i class="fa fa-question-circle" aria-hidden="true" />
+            </h4>
+            <div className="creating-deal-seller-contact">
+              <label>Enter Verification Code</label>
+              <div>
+                <input
+                  onChange={onEditSellerVerificationToken}
+                  value={sellerVerificationToken}
+                  required
+                  className="description-input"
+                  autofocus="autofocus"
+                  placeholder="Enter your verification code"
+                />
               </div>
+              <small>A text message with code was sent to your phone.</small>
+            </div>
 
-              <button>Verify</button>
+            <button>Verify</button>
           </form>
-        )
+        );
       case checkingCodeSuccess.success:
         return (
           <div>
             <div className="verified-phone-success">
               <h4>Verified Success!</h4>
-              <div><i class="fas fa-check fa-2x"></i></div>
+              <div>
+                <i class="fas fa-check fa-2x" />
+              </div>
               <br />
               <h4>Now sit tight and wait to get paid with cryptocurrency.</h4>
             </div>
 
-              <Link
-                className="create-deal-modal-link"
-                // style={{ textDecoration: 'none' }}
-                to={`/feed/deals/${deal_id}/${dealNameValue}`}
-                onClick={() => {
-                  closeModalAfterDealCreated();
-                  resetDealCreated();
-                }}
-                // onClick={resetDealCreated}
-              >
-                Show My Listing
-              </Link>
-
+            <Link
+              className="create-deal-modal-link"
+              // style={{ textDecoration: 'none' }}
+              to={`/feed/deals/${dealCreatedResult.deal_id}/${dealNameValue}`}
+              onClick={() => {
+                closeModalAfterDealCreated();
+                resetDealCreated();
+              }}
+              // onClick={resetDealCreated}
+            >
+              Show My Listing
+            </Link>
           </div>
-        )
-      default:
+        );
+      case dealCreatedResult.phone_number_verified === 0:
         return (
-          <form onSubmit={this.onVerificationStart} className="creating-deal-seller-verification">
-            <h4 className="creating-deal-modal-header">To protect our community, we need to verify all sellers. <i class="fa fa-question-circle" aria-hidden="true"></i></h4>
+          <form
+            onSubmit={this.onVerificationStart}
+            className="creating-deal-seller-verification"
+          >
+            <h4 className="creating-deal-modal-header">
+              To protect our community, we need to verify all sellers.{" "}
+              <i class="fa fa-question-circle" aria-hidden="true" />
+            </h4>
             <div className="creating-deal-seller-contact">
               <label>Contact Info (format: xxx-xxx-xxxx)</label>
               <div>
                 <input
-                    onChange={onEditPhoneNumber}
-                    value={phoneNumber}
-                    type="tel"
-                    pattern="^\d{3}-\d{3}-\d{4}$"
-                    required
-                    className="description-input"
-                    autofocus="autofocus"
-                    placeholder="Enter your phone number"
-
-                  />
+                  onChange={onEditPhoneNumber}
+                  value={phoneNumber}
+                  type="tel"
+                  pattern="^\d{3}-\d{3}-\d{4}$"
+                  required
+                  className="description-input"
+                  autofocus="autofocus"
+                  placeholder="Enter your phone number"
+                />
               </div>
               <small>We will send you a one-time verification code.</small>
             </div>
@@ -142,48 +198,72 @@ class Description extends Component {
             <div className="creating-deal-seller-address">
               <label>Address Info</label>
               <input
-                  onChange={onEditSellerAddress}
-                  value={sellerAddress}
+                onChange={onEditSellerAddress}
+                value={sellerAddress}
+                type="text"
+                className="description-input"
+                autofocus="autofocus"
+                placeholder="Address"
+                required
+              />
+              <div className="city-state-zipcode-flex">
+                <input
+                  onChange={onEditSellerCity}
+                  value={sellerCity}
                   type="text"
                   className="description-input"
                   autofocus="autofocus"
-                  placeholder="Address"
+                  placeholder="City"
                   required
-              />
-                <div className="city-state-zipcode-flex">
-                  <input
-                    onChange={onEditSellerCity}
-                    value={sellerCity}
-                    type="text"
-                    className="description-input"
-                    autofocus="autofocus"
-                    placeholder="City"
-                    required
-                  />
-                  <Select
-                    className="create-deal-select"
-                    options={allStates}
-                    placeholder="State"
-                    onChange={onEditSellerState}
-                    value={sellerState}
-                  />
-                  <input
-                    onChange={onEditSellerZipcode}
-                    value={sellerZipcode}
-                    type="number"
-                    className="description-input create-deal-zipcode-input"
-                    autofocus="autofocus"
-                    placeholder="Zip Code"
-                    required
-                  />
-
-                </div>
-
+                />
+                <Select
+                  className="create-deal-select"
+                  options={allStates}
+                  placeholder="State"
+                  onChange={onEditSellerState}
+                  value={sellerState}
+                />
+                <input
+                  onChange={onEditSellerZipcode}
+                  value={sellerZipcode}
+                  type="number"
+                  className="description-input create-deal-zipcode-input"
+                  autofocus="autofocus"
+                  placeholder="Zip Code"
+                  required
+                />
               </div>
+            </div>
 
             <button>Text Me</button>
           </form>
-        )
+        );
+      default:
+        return (
+          <div>
+            <div className="verified-phone-success">
+              <h4>You have successfully created a Deal!</h4>
+              <div>
+                <i class="fas fa-check fa-2x" />
+              </div>
+              <br />
+              <h4>Now sit tight and wait to get paid with cryptocurrency.</h4>
+            </div>
+
+            <Link
+              className="create-deal-modal-link"
+              // style={{ textDecoration: 'none' }}
+              to={`/feed/deals/${dealCreatedResult.deal_id}/${dealNameValue}`}
+              onClick={() => {
+                closeModalAfterDealCreated();
+                // resetDealCreated();
+              }}
+              onClick={resetDealCreated}
+            >
+              Show My Listing
+            </Link>
+          </div>
+        );
     }
   };
 
@@ -192,7 +272,6 @@ class Description extends Component {
       parentCategory,
       handleSelectedCategory,
       handleSelectedCondition,
-      deal_id,
       closeModalAfterDealCreated,
       dealCreatedResult,
       modalVisible,
@@ -203,7 +282,7 @@ class Description extends Component {
       sendingCode,
       sendingCodeSuccess
     } = this.props;
-    debugger
+
     const itemCondition = [
       { value: "New", label: "New" },
       { value: "Used", label: "Used" }
@@ -275,11 +354,21 @@ class Description extends Component {
           </div>
           <div id="price-listing-next-button">
             <hr />
-            <div onClick={() => this.props.validateDescriptionStep() && this.props.createDeal()} id="photos-next-step">
-              {this.props.loading_dealCreating ? <LoadingSpinner /> : <button>Submit Deal</button>}
+            <div
+              onClick={() =>
+                this.props.validateDescriptionStep() && this.props.createDeal()
+              }
+              id="photos-next-step"
+            >
+              {this.props.loading_dealCreating ? (
+                <LoadingSpinner />
+              ) : (
+                <button>Submit Deal</button>
+              )}
             </div>
           </div>
         </div>
+
         <Modal
           visible={modalVisible}
           effect="fadeInUp"
@@ -290,18 +379,18 @@ class Description extends Component {
         >
           <div className="deal-created-modal">
             {/* <h4>You have successfully created a Deal! </h4>
-            <br />
-            <h4>Now sit tight and wait to get paid with cryptocurrency.</h4> */}
+              <br />
+              <h4>Now sit tight and wait to get paid with cryptocurrency.</h4> */}
             {/* <Link
-              to={`/feed/deals/${deal_id}/${dealNameValue}`}
-              className="a-link"
-              onClick={() => {
-                closeModalAfterDealCreated();
-              }}
-              onClick={resetDealCreated}
-            >
-              OK
-            </Link> */}
+                to={`/feed/deals/${deal_id}/${dealNameValue}`}
+                className="a-link"
+                onClick={() => {
+                  closeModalAfterDealCreated();
+                }}
+                onClick={resetDealCreated}
+              >
+                OK
+              </Link> */}
 
             {/* if seller has not verified, then we ask seller to verified. 0 === not verified */}
             {this.dealCreatedModal()}
@@ -350,7 +439,9 @@ const matchDispatchToProps = dispatch => {
   );
 };
 
-export default withRouter(connect(
-  mapStateToProps,
-  matchDispatchToProps
-)(Description));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    matchDispatchToProps
+  )(Description)
+);

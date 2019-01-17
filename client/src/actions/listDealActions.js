@@ -193,7 +193,7 @@ export function _submitDeal(token, dealName, category, selectedCondition, textDe
   categoriesSelected.map(categ => {
     selectedCategory.push(categ.value);
   })
-
+  debugger
   const settings = {
     method: "POST",
     headers: {
