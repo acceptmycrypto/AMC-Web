@@ -168,6 +168,35 @@ class Description extends Component {
             </Link>
           </div>
         );
+      case checkingCodeSuccess.success === false:
+
+      return (
+        <form
+          onSubmit={this.onVerificationResult}
+          className="creating-deal-seller-verification"
+        >
+          <h4 className="creating-deal-modal-header">
+            To protect our community, we need to verify all sellers.{" "}
+            <i class="fa fa-question-circle" aria-hidden="true" />
+          </h4>
+          <div className="creating-deal-seller-contact">
+            <label>Incorrect Verification Code. Please Enter the Code We Texted You.</label>
+            <div>
+              <input
+                onChange={onEditSellerVerificationToken}
+                value={sellerVerificationToken}
+                required
+                className="description-input"
+                autofocus="autofocus"
+                placeholder="Enter your verification code"
+              />
+            </div>
+            <small>A text message with code was sent to your phone.</small>
+          </div>
+
+          <button>Verify</button>
+        </form>
+      );
       case dealCreatedResult.phone_number_verified === 0:
         return (
           <form
@@ -252,7 +281,7 @@ class Description extends Component {
 
             <Link
               className="create-deal-modal-link"
-              // style={{ textDecoration: 'none' }}
+              style={{ textDecoration: 'none' }}
               to={`/feed/deals/${dealCreatedResult.deal_id}/${dealNameValue}`}
               onClick={() => {
                 closeModalAfterDealCreated();
