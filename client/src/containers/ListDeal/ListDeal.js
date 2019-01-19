@@ -154,10 +154,13 @@ class ListDeal extends Component {
   }
 
   handlePricingValidation = () => {
+    let cryptosNotSelected = Object.keys(this.props.crypto_amount).every((k) => {
+      return this.props.crypto_amount[k] === undefined ? true : false
+    })
 
     const validatePricing = {
       basePrice: this.props.priceInUSD,
-      selectedCrypto: Object.keys(this.props.crypto_amount).length !== 0 //check if user has selected a crypto
+      selectedCrypto: !cryptosNotSelected //check if user has selected a crypto
     }
 
     let isDataValid = false;
@@ -176,7 +179,7 @@ class ListDeal extends Component {
         });
 
 
-      } else if (Object.keys(this.props.crypto_amount).length === 0) {
+      } else if (cryptosNotSelected) {
 
         toast.error(this._validationErrors(validatePricing).notifyCryptoNotSelectedError, {
           position: toast.POSITION.TOP_RIGHT
@@ -294,6 +297,8 @@ class ListDeal extends Component {
       onEditingDetail,
       closeModalAfterDealCreated
     } = this.props;
+
+    console.log(crypto_amount);
 
     if (error) {
       return <div>Error! {error.message}</div>;
