@@ -100,13 +100,11 @@ router.post("/cryptocurrency/exchange", verifyToken, async function(req, res) {
     if (error) {
       console.log(error);
     }
-    console.log('body:', body); // Print the HTML for the Google homepage.
+
     let rateDate = JSON.parse(body);
     let cryptoRate = rateDate.data[crypto].quote.USD.price;
-    console.log("rate", cryptoRate);
     let cryptoAmount = (discountPrice/cryptoRate).toFixed(4);
-    console.log("discountPrice", discountPrice);
-    console.log("amount", cryptoAmount);
+
     return res.status(200).json(cryptoAmount);
   });
 
@@ -259,7 +257,6 @@ router.post('/verification/check', verifyToken, function(req, res) {
   request(options, function (error, response, body) {
     if (error) console.log(error);
 
-    console.log(body);
     //update seller to verified if code entered is correct
     if (body.success === true) {
       connection.query(
