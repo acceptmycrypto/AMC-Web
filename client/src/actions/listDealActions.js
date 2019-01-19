@@ -1,5 +1,3 @@
-import { debug } from "util";
-
 export function _uploadImage(token, imageData) {
   //once image is uploaded, push that image to the state
 
@@ -193,7 +191,6 @@ export function _submitDeal(token, dealName, category, selectedCondition, textDe
   categoriesSelected.map(categ => {
     selectedCategory.push(categ.value);
   })
-  debugger
   const settings = {
     method: "POST",
     headers: {
@@ -208,7 +205,7 @@ export function _submitDeal(token, dealName, category, selectedCondition, textDe
     return fetch("/listdeal", settings)
       .then(res => res.json())
       .then(jsonDealCreated => {
-        debugger
+
         dispatch(creatingDealSuccess(jsonDealCreated));
         return jsonDealCreated;
       })
@@ -279,7 +276,7 @@ export const onEditSellerZipcode = (event) => {
 };
 
 export function _startVerificationForSeller(token, phoneNumber, sellerAddress, sellerCity, sellerState, sellerZipcode) {
-  debugger
+
   const settings = {
     method: "POST",
     headers: {
@@ -295,7 +292,7 @@ export function _startVerificationForSeller(token, phoneNumber, sellerAddress, s
       .then(res => res.json())
       .then(jsonTwillio => {
         let twillioData = JSON.parse(jsonTwillio);
-        debugger
+
         dispatch(verifySellerSuccess(twillioData));
         return twillioData;
       })
@@ -340,7 +337,7 @@ export function _checkVerificationForSeller(token, phoneCode) {
       .then(res => res.json())
       .then(codeResult => {
         let twillioCodeResult = JSON.parse(codeResult);
-        debugger
+
         dispatch(checkCodeSuccess(twillioCodeResult));
         return twillioCodeResult;
       })

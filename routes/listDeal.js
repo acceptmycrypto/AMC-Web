@@ -259,17 +259,18 @@ router.post('/verification/check', verifyToken, function(req, res) {
   request(options, function (error, response, body) {
     if (error) console.log(error);
 
-    //update seller to verified
-    connection.query(
-      'UPDATE users SET ? WHERE ?',
-      [{phone_number_verified: 1}, {id: seller_id}],
-      function(error, results, fields) {
-        if (error) throw error;
+    //update seller to verified if code entered is correct
+    if (body.success === true) {
+      connection.query(
+        'UPDATE users SET ? WHERE ?',
+        [{phone_number_verified: 1}, {id: seller_id}],
+        function(error, results, fields) {
+          if (error) throw error;
+        }
+      );
+    }
 
-        res.json(body);
-
-      }
-    );
+    res.json(body);
 
   });
 })

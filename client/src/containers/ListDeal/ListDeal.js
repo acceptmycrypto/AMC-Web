@@ -124,7 +124,6 @@ class ListDeal extends Component {
     const { dealName, selectedCategory, selectedCondition, _submitDeal, images, priceInUSD, priceInCrypto, crypto_amount } = this.props;
 
     let textDetailRaw = convertToRaw(this.props.editorState.getCurrentContent());
-    debugger
     let selected_cryptos = Object.keys(crypto_amount);
 
     _submitDeal(localStorage.getItem("token"), dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos);
@@ -258,85 +257,6 @@ class ListDeal extends Component {
 
     return errMsgs;
   }
-
-  // contactInfo = () => {
-  //   return (
-  //     <form className="creating-deal-seller-verification">
-  //       <h4 className="creating-deal-modal-header">To protect our community, we need to verify all sellers. <i class="fa fa-question-circle" aria-hidden="true"></i></h4>
-  //       <div className="creating-deal-seller-contact">
-  //         <label>Contact Info (format: xxx-xxx-xxxx)</label>
-  //         <div>
-  //           <input
-  //               onChange={this.props.onEditPhoneNumber}
-  //               value={this.props.phoneNumber}
-  //               type="tel"
-  //               pattern="^\d{3}-\d{3}-\d{4}$"
-  //               required
-  //               className="description-input"
-  //               autofocus="autofocus"
-  //               placeholder="Enter your phone number"
-
-  //             />
-  //         </div>
-  //         <small>We will send you a one-time verification code.</small>
-  //       </div>
-
-  //       <div className="creating-deal-seller-address">
-  //         <label>Address Info</label>
-  //         <input
-  //             onChange={this.props.onEditSellerAddress}
-  //             value={this.props.sellerAddress}
-  //             type="text"
-  //             className="description-input"
-  //             autofocus="autofocus"
-  //             placeholder="Address"
-  //             required
-  //         />
-  //           <div className="city-state-zipcode-flex">
-  //             <input
-  //               onChange={this.props.onEditSellerCity}
-  //               value={this.props.sellerCity}
-  //               type="text"
-  //               className="description-input"
-  //               autofocus="autofocus"
-  //               placeholder="City"
-  //               required
-  //             />
-  //              <Select
-  //               className="create-deal-select"
-  //               options={this.props.allStates}
-  //               placeholder="State"
-  //               onChange={this.props.onEditSellerState}
-  //               value={this.props.sellerState}
-  //             />
-  //             <input
-  //               onChange={this.props.onEditSellerZipcode}
-  //               value={this.props.sellerZipcode}
-  //               type="number"
-  //               className="description-input create-deal-zipcode-input"
-  //               autofocus="autofocus"
-  //               placeholder="Zip Code"
-  //               required
-  //             />
-
-  //           </div>
-
-  //         </div>
-
-  //       <button onSubmit={this.handleSellerStartVerification} type="submit">Verify</button>
-  //     </form>
-  //   )
-  // };
-
-  // handleSellerStartVerification = (event) => {
-  //   event.preventDefault();
-
-  //   const { phoneNumber, sellerAddress, sellerCity, sellerState, sellerZipcode } = this.props;
-  //   debugger
-
-  //   _startVerificationForSeller(localStorage.getItem("token"), phoneNumber, sellerAddress, sellerCity, sellerState, sellerZipcode);
-
-  // };
 
   render() {
     const {
