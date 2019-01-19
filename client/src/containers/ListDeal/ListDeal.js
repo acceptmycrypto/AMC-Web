@@ -78,7 +78,7 @@ class ListDeal extends Component {
           <div id="uploading-image">
             <label htmlFor="photos-upload">
               <div>
-                <i class="fas fa-camera fa-7x" />
+                <i className="fas fa-camera fa-7x" />
               </div>
               <div>
                 <strong>Add a Photo</strong>
@@ -159,7 +159,7 @@ class ListDeal extends Component {
       basePrice: this.props.priceInUSD,
       selectedCrypto: Object.keys(this.props.crypto_amount).length !== 0 //check if user has selected a crypto
     }
-   
+
     let isDataValid = false;
 
     //Object.keys(validateNewInput) give us an array of keys

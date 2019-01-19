@@ -24,7 +24,7 @@ export function _loadCategory() {
         })
 
         dispatch(fetchCategorySuccess(options));
-        debugger
+        
         return options;
       })
       .catch(error => dispatch(fetchCategoryFailure(error)));

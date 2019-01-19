@@ -9,7 +9,8 @@ INSERT INTO category (category_name) VALUES ("Apparel & Accessories"),
 ("Toys, Kids & Baby"),
 ("Sports & Outdoors"),
 ("Automotive & Industrial"),
-("Others Services Charity"),
+("Services"),
+("Charity"),
 ("Women"),
 ("Men"),
 ("Girls"),
@@ -94,7 +95,7 @@ INSERT INTO category (category_name) VALUES ("Apparel & Accessories"),
 ("Vehicles"),
 ("Garage Supplies");
 
-INSERT INTO parent_child_categories (parent_category_id, child_category_id) VALUES 
+INSERT INTO parent_child_categories (parent_category_id, child_category_id) VALUES
 (1, 13),
 (1, 14),
 (1, 15),
