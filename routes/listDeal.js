@@ -259,6 +259,7 @@ router.post('/verification/check', verifyToken, function(req, res) {
   request(options, function (error, response, body) {
     if (error) console.log(error);
 
+    console.log(body);
     //update seller to verified if code entered is correct
     if (body.success === true) {
       connection.query(

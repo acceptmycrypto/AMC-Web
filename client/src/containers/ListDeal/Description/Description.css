@@ -142,6 +142,12 @@ div.DraftEditor-root {
   margin: 10px 20px 10px;
 }
 
+.create-deal-select-error {
+  border: solid red 2px;
+  border-radius: 5px;
+  animation: shake 0.5s;
+}
+
 .create-deal-zipcode-input {
   width: 30%;
 }

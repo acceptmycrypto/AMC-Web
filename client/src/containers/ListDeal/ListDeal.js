@@ -159,7 +159,7 @@ class ListDeal extends Component {
       basePrice: this.props.priceInUSD,
       selectedCrypto: Object.keys(this.props.crypto_amount).length !== 0 //check if user has selected a crypto
     }
-    console.log(this.props.crypto_amount);
+   
     let isDataValid = false;
 
     //Object.keys(validateNewInput) give us an array of keys
@@ -198,7 +198,7 @@ class ListDeal extends Component {
       selectedCategory: this.props.selectedCategory,
       description: detail
     }
-    console.log(this.props.editorState);
+
     let isDataValid = false;
 
     //Object.keys(validateNewInput) give us an array of keys

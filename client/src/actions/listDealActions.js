@@ -262,6 +262,9 @@ export const onEditSellerCity = (event) => {
 };
 
 export const onEditSellerState = (state) => {
+
+  document.querySelector("#sellerState").classList.remove("create-deal-select-error");
+
   return {
       type: 'EDIT_SELLER_STATE',
       payload: {state}

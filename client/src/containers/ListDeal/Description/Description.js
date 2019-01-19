@@ -54,6 +54,7 @@ class Description extends Component {
 
   onVerificationStart = event => {
     event.preventDefault();
+
     const {
       phoneNumber,
       sellerAddress,
@@ -62,14 +63,18 @@ class Description extends Component {
       sellerZipcode
     } = this.props;
 
-    this.props._startVerificationForSeller(
-      localStorage.getItem("token"),
-      phoneNumber,
-      sellerAddress,
-      sellerCity,
-      sellerState,
-      sellerZipcode
-    );
+    if (!sellerState) {
+      document.querySelector("#sellerState").classList.add("create-deal-select-error");
+    } else {
+      this.props._startVerificationForSeller(
+        localStorage.getItem("token"),
+        phoneNumber,
+        sellerAddress,
+        sellerCity,
+        sellerState,
+        sellerZipcode
+      );
+    }
   };
 
   onVerificationResult = event => {
@@ -247,6 +252,7 @@ class Description extends Component {
                 />
                 <Select
                   className="create-deal-select"
+                  id="sellerState"
                   options={allStates}
                   placeholder="State"
                   onChange={onEditSellerState}
@@ -281,7 +287,7 @@ class Description extends Component {
 
             <Link
               className="create-deal-modal-link"
-              style={{ textDecoration: 'none' }}
+              style={{ textDecoration: 'none' }} //make sure the link has no underline
               to={`/feed/deals/${dealCreatedResult.deal_id}/${dealNameValue}`}
               onClick={() => {
                 closeModalAfterDealCreated();
@@ -297,6 +303,7 @@ class Description extends Component {
   };
 
   render() {
+
     const {
       parentCategory,
       handleSelectedCategory,
