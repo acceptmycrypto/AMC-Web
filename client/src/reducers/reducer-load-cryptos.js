@@ -1,5 +1,6 @@
 const initialState = {
     cryptoOptions: [],
+    cryptoOptionsForCreatingDeal: [],
     loading: false,
     error: null
 }
@@ -16,15 +17,18 @@ export default function loadCryptosReducer(state = initialState, action) {
             };
 
         case "LOAD_CRYPTO_SUCCESS":
-            // All done: set loading "false".
-            // Also, replace the items with the ones from the server
-            console.log("User has successfully called!")
-            console.log(action);
             return {
                 ...state,
                 loading: false,
                 cryptoOptions: action.payload.cryptoOptions
             };
+
+        case "LOAD_CRYPTOS_FOR_CREATING_DEAL":
+          return {
+              ...state,
+              loading: false,
+              cryptoOptionsForCreatingDeal: action.payload.cryptoOptionsForCreatingDeal
+          };
 
         case "LOAD_CRYPTO_FAILURE":
             // The request failed, but it did stop, so set loading to "false".

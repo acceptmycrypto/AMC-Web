@@ -16,8 +16,8 @@ export function _loadCryptocurrencies() {
           cryptoOptions.push(optionObj);
         })
 
+        dispatch(loadCryptosForCreatingDeals(jsonLoadCrypto)); //need logos link for deal listing
         return cryptoOptions;
-
 
       }).then(cryptoOptionsArray => {
         dispatch(loadCryptoSuccess(cryptoOptionsArray));
@@ -41,4 +41,9 @@ export const loadCryptoSuccess = cryptoOptions => ({
 export const loadCryptoFailure = error => ({
   type: "LOAD_CRYPTO_FAILURE",
   payload: { error }
+});
+
+export const loadCryptosForCreatingDeals = cryptoOptionsForCreatingDeal => ({
+  type: "LOAD_CRYPTOS_FOR_CREATING_DEAL",
+  payload: { cryptoOptionsForCreatingDeal }
 });

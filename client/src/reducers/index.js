@@ -12,7 +12,10 @@ import LoadCrypto from './reducer-load-cryptos';
 import CryptoSelected from './reducer-sign-up';
 import SignInModal from './reducer-sign-in';
 import Settings from './reducer-settings';
+import CreateDeal from './reducer-create-deal';
+import Reviews from './reducer-reviews';
 import UploadedImages from './reducer-images';
+
 
 const allReducers = combineReducers({
   matchedDeals: Deals,
@@ -28,6 +31,8 @@ const allReducers = combineReducers({
   Search,
   Settings,
   Category,
+  CreateDeal,
+  Reviews,
   UploadedImages
 });
 

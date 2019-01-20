@@ -19,7 +19,7 @@ const UploadingImage = props => {
             >
               <i
                 onClick={removeImage}
-                class="fa fa-lg fa-times-circle delete-uploading-photo"
+                className="fa fa-lg fa-times-circle delete-uploading-photo"
                 aria-hidden="true"
               />
               <img
@@ -28,12 +28,12 @@ const UploadingImage = props => {
                 src={uploadedImages[0].Location}
                 alt="uploaded_image"
               />
-              <div class="main-uploaded-photo">Main Photo</div>
+              <div class="main-uploaded-photo">Featured Photo</div>
             </div>
           ) : (
             <div className="deal-listing-img col-3">
               <label htmlFor="small-photo-upload">
-                <i class="fas fa-plus fa-2x" />
+                <i className="fas fa-plus fa-2x" />
               </label>
               <input
                 type="file"
@@ -212,7 +212,7 @@ const UploadingImage = props => {
         </div>
         <hr />
         <div id="photos-next-step">
-          <button>Next</button>
+          <button onClick={() => props.validateImageUpload() && props.showPricingStep()}>Next</button>
         </div>
       </div>
     </div>

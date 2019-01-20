@@ -47,6 +47,7 @@
   max-height: 150px;
   max-width: 150px;
   padding: 5px;
+  cursor: pointer
 }
 
 .deal-uploaded-img-border {

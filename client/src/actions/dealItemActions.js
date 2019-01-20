@@ -23,8 +23,7 @@ export const fetchDealItemBegin = () => ({
   type: "FETCH_DEAL_ITEM_BEGIN"
 });
 
-
-export const fetchDealItemSuccess = dealItem => ({
+export const fetchDealItemSuccess = (dealItem) => ({
   type: "FETCH_DEAL_ITEM_SUCCESS",
   payload: { dealItem }
 });
