@@ -6,10 +6,10 @@
   "dependencies": {
     "add": "^2.0.6",
     "coin-address-validator": "^1.0.4-1",
-    "react": "^16.6.3",
+    "react": "^16.7.0",
     "react-awesome-modal": "^2.0.5",
     "react-countdown-now": "^1.3.0",
-    "react-dom": "^16.6.3",
+    "react-dom": "^16.7.0",
     "react-html-parser": "^2.0.2",
     "react-https-redirect": "^1.0.11",
     "react-paypal-express-checkout": "^1.0.5",
