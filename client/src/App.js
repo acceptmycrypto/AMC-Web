@@ -9,7 +9,7 @@ import ResetPasswordEmail from "./containers/Home/ResetPasswordEmail";
 import Profile from "./containers/Profile/UserProfile";
 import Settings from "./containers/UserSettings/Settings"
 
-
+import SearchDeals from "./containers/Deals/SearchDeals";
 import FeedDeals from "./containers/Deals";
 import DealItem from "./containers/Deals/DealItem";
 
@@ -36,7 +36,7 @@ class App extends Component {
               <Route exact path="/crypto" component={Crypto} />
 
 
-
+              <Route path='/search' component={SearchDeals}/>
               <Route exact path="/feed/deals" component={FeedDeals} />
               <Route path='/feed/deals/:deal_name' component={DealItem}/>
 

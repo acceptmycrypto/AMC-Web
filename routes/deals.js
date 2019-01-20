@@ -109,6 +109,35 @@ router.get('/api/deals/:deal_name', function(req, res) {
       );
     }
   );
+});
+
+router.get('/search', function(req, res) {
+    console.log("req search");
+    console.log(req.query);
+    var numberPerPage = 1;
+    var start = numberPerPage*(req.query.page-1);
+    connection.query(
+        'SELECT COUNT(*) FROM deals LEFT JOIN venues ON deals.venue_id = venues.id WHERE venue_id IN (SELECT DISTINCT venue_id FROM cryptos_venues WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos)) AND ( deal_name LIKE ? OR deal_description LIKE ? OR venue_name LIKE ?)',
+        ['%'+req.query.term+'%','%'+req.query.term+'%','%'+req.query.term+'%'],
+        function(error, numberOfResults, fields) {
+            if (error) console.log(error);
+            console.log('number of results');
+            console.log(numberOfResults);
+
+            connection.query(
+                'SELECT deals.id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.category, venues.venue_name, venues.venue_link FROM deals LEFT JOIN venues ON deals.venue_id = venues.id WHERE venue_id IN (SELECT DISTINCT venue_id FROM cryptos_venues WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos)) AND ( deal_name LIKE ? OR deal_description LIKE ? OR venue_name LIKE ?) LIMIT ?, ?',
+                ['%'+req.query.term+'%','%'+req.query.term+'%','%'+req.query.term+'%', start, numberPerPage],
+                function(error, results, fields) {
+                    if (error) console.log(error);
+                    console.log('search results');
+                    console.log(results);
+                    res.json({numberOfResults:numberOfResults,results:results});
+                }
+            );
+        }
+    );
+});
+
 
   //get the accepted cryptos from a venue
   // router.get('/api/deals/venue_name', function(req, res) {
@@ -155,6 +184,6 @@ router.get('/api/deals/:deal_name', function(req, res) {
   //   );
   // });
 
-});
+
 
 module.exports = router;
