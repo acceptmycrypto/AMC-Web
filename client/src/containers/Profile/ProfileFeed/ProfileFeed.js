@@ -46,7 +46,6 @@ class ProfileFeed extends Component {
         return array;
     }
 
-
     render() {
         const { deals, transactions, confirmed, pending, tx_history_view, changeTxHistoryView } = this.props
 

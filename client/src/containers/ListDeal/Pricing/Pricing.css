@@ -1,0 +1,225 @@
+.add-price-for-deal {
+  display: flex;
+}
+
+.listed-price-in-dollar, .listed-price-in-crypto {
+  min-height: 150px;
+  margin: 10px 10px 10px 50px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 5px;
+  width: 50%;
+  padding: 20px;
+}
+
+.listed-price-in-crypto {
+  margin: 10px 50px 10px 10px;
+  display: flex;
+}
+
+.select-crypto-for-deal {
+  display: flex;
+  min-height: 375px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 5px;
+  padding: 20px;
+  margin: 10px 50px;
+
+}
+
+.pricing-titles {
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+  font-size: 1.14285714em;
+  font-weight: 700;
+}
+
+.pricing-input-row {
+  display: flex;
+}
+
+.pricing-input-row .fa-dollar-sign {
+  display: flex;
+  align-items: flex-end;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.pricing-input {
+    width: 90%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #445366;
+    font-size: 1.5em;
+    font-weight: 400;
+    margin-top: 10px;
+}
+
+.pricing-input-crypto {
+  width: 50%;
+  font-size: 1.5em;
+  font-weight: 400;
+  margin-top: 10px;
+  color: transparent;
+  text-shadow: 0 0 0 #445366;
+  border: none;
+  background-color: transparent;
+  border-bottom: 1px solid #445366;
+}
+
+.pricing-input-crypto:focus {
+  outline: none;
+}
+
+.listed-price-in-crypto-left {
+  width: 70%;
+}
+
+.listed-price-in-crypto-right {
+  width: 55%;
+}
+
+.pricing-footer-note {
+  position: relative;
+  top: 30px;
+  font-size: 1em;
+}
+
+.create-deal-discount-percent {
+  font-size: 1.5em;
+  text-align: center;
+}
+
+/* Slider styling */
+
+#percent-slider {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: 100%; /* Specific width is required for Firefox. */
+  background: transparent; /* Otherwise white in Chrome */
+}
+
+#percent-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+#percent-slider:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+
+#percent-slider::-ms-track {
+  width: 100%;
+  cursor: pointer;
+
+  /* Hides the slider so custom styles can be added */
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+/* Special styling for WebKit/Blink/knob*/
+#percent-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #6bd9c7;
+  cursor: pointer;
+  margin-top: -6px;
+  border: #445366 1px solid;
+}
+
+/* All the same stuff for Firefox */
+#percent-slider::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #6bd9c7;
+  cursor: pointer;
+}
+
+/* All the same stuff for IE */
+#percent-slider::-ms-thumb {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #6bd9c7;
+  cursor: pointer;
+}
+
+#percent-slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 3px;
+  cursor: pointer;
+  background-color: #445366;
+  border-radius: 1.3px;
+}
+
+.discount-pricing-title {
+  opacity: .7;
+  font-size: 1.4em;
+  font-weight: 600;
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+
+}
+
+.pricing-slider-footer-note{
+  font-size: 1em;
+  text-align: center;
+}
+
+/* cryptos styling */
+.crypto-subtitle {
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+  font-weight: 600;
+  font-size: 1.4em;
+  opacity: .7;
+}
+
+.crypto-logos-for-deal-listing {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 20px;
+  height: 130px;
+}
+
+.crypto-logos-for-deal-listing img{
+  width: 50px;
+}
+
+.crypto-logos-for-deal-listing img:hover{
+  cursor: pointer;
+}
+
+.crypto-logo-image {
+  text-align: center;
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+  padding: 5px;
+  margin-right: 5px;
+}
+
+.crypto-logo-image:hover {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  -webkit-transition: box-shadow 0.3s ease-out; /* Safari */
+  transition: box-shadow 0.3s ease-out;
+}
+
+.selected-crypto-logo-image {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+.check-crypto-amount {
+  text-align: center;
+  margin-top: 5px;
+  overflow-wrap: break-word;
+  width: 100px;
+}
+
+.loading-spinner-on-getting-rate {
+  text-align: center;
+  margin-top: 5px;
+  font-size: 12px;
+}
+

@@ -15,23 +15,23 @@ export const searchDeals = (searchTerm, page) => {
     }
 }
 
-export const scrollDeals = (searchTerm, page, num) => {
+// export const scrollDeals = (searchTerm, page, num) => {
     
-    return dispatch => {
+//     return dispatch => {
         
-        return fetch("/search?term="+searchTerm+"&page="+(page+num), {
-            method: "GET",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-            }
-        }).then(res => res.json()).then(searchedDeals => {
-            console.log("searchedDeals");
-            console.log(searchedDeals);
-            dispatch(searchDealSuccess(searchTerm, searchedDeals.results, page+num, searchedDeals.numberOfResults[0]["COUNT(*)"]));
-        })
-    }
-}
+//         return fetch("/search?term="+searchTerm+"&page="+(page+num), {
+//             method: "GET",
+//             headers: {
+//                 "Accept": "application/json",
+//                 "Content-Type": "application/json",
+//             }
+//         }).then(res => res.json()).then(searchedDeals => {
+//             console.log("searchedDeals");
+//             console.log(searchedDeals);
+//             dispatch(searchDealSuccess(searchTerm, searchedDeals.results, page+num, searchedDeals.numberOfResults[0]["COUNT(*)"]));
+//         })
+//     }
+// }
 
 export const searchDealBegin = (searchTerm) => ({
     type: "SEARCH_DEALS_BEGIN"

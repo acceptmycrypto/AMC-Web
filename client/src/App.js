@@ -12,6 +12,9 @@ import Settings from "./containers/UserSettings/Settings"
 import SearchDeals from "./containers/Deals/SearchDeals";
 import FeedDeals from "./containers/Deals";
 import DealItem from "./containers/Deals/DealItem";
+import Reviews from "./containers/Reviews";
+
+import ListDeal from "./containers/ListDeal";
 
 // import Layout from "./components/Layout";
 
@@ -38,7 +41,11 @@ class App extends Component {
 
               <Route path='/search' component={SearchDeals}/>
               <Route exact path="/feed/deals" component={FeedDeals} />
-              <Route path='/feed/deals/:deal_name' component={DealItem}/>
+
+              <Route path='/feed/deals/:id/:deal_name' component={DealItem}/>
+              <Route path='/api/reviews/sellers/:seller_id' component={Reviews}/>
+              <Route exact path='/listdeal' component={ListDeal}/>
+
 
 
               {/* this will redirect none of the matched above Routes to the root route (when not logged in root route is sign in page and when logged in root route is deals page)  */}

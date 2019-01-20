@@ -3,6 +3,7 @@ import "./PurchaseOrder.css";
 import Select from "react-select";
 import Checkout from "../../../components/Checkout";
 import LoadingSpinner from "../../../components/UI/LoadingSpinner";
+import PaypalButton from '../PaypalButton';
 
 const PurchaseOrder = props => {
   return (
@@ -22,6 +23,19 @@ const PurchaseOrder = props => {
           </div>
           <div className="dealitem-error-msg" id="selected-payment-error"></div>
         </form>
+
+        <div id="payment-divider">OR</div>
+        <div id="paypal-button">
+          Pay in USD via Paypal
+          <PaypalButton
+            dealItemInfo={props.deal_item}
+            fullNameInfo={props.full_name}
+            shippingAddressInfo={props.shipping_address}
+            shippingCityInfo={props.shipping_city}
+            zipcodeInfo={props.zip_code}
+            shippingStateInfo={props.shipping_state}
+          />
+        </div>
 
         <div onClick={props.previous_step} id="previous-step">
           <button>Previous</button>

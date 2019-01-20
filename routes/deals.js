@@ -4,7 +4,7 @@ var router = express.Router();
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
-var verifyToken =  require ("./utils/validation");
+var verifyToken = require("./utils/validation");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -26,7 +26,7 @@ var connection = mysql.createConnection({
 });
 
 // api
-router.post('/api/deals', verifyToken, function(req, res) {
+router.post('/api/deals', verifyToken, function (req, res) {
   let id = req.decoded._id;
 
 
@@ -34,32 +34,38 @@ router.post('/api/deals', verifyToken, function(req, res) {
 
     // Create a multi nested SQL query
 
-                  //1) query the users_cryptos table to get the crypto_id that the user is interested/owned
+    //1) query the users_cryptos table to get the crypto_id that the user is interested/owned
 
-            //2) query the venues that accept those cryptos
+    //2) query the venues that accept those cryptos
 
-      // 3) query the deals that offered by those venues
-        connection.query(
-          'SELECT deals.id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.category, venues.venue_name, venues.venue_link FROM deals LEFT JOIN venues ON deals.venue_id = venues.id WHERE venue_id IN (SELECT DISTINCT venue_id FROM cryptos_venues WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos WHERE user_id = ?))',
-          [id],
-          function(error, results, fields) {
-            if (error) console.log(error);
-            res.json(results);
+    // 3) query the deals that offered by those venues
+    //update query to include sellers as users in addition to larger venue vendors
+    connection.query(
+      'SELECT DISTINCT deals.id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, venues.venue_name, venues.venue_link, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings FROM deals LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN cryptos_deals ON cryptos_deals.deal_id = deals.id LEFT JOIN users ON deals.seller_id = users.id WHERE deals.venue_id IN (SELECT DISTINCT venue_id FROM cryptos_venues WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos WHERE user_id = ?)) OR deals.id IN (SELECT DISTINCT deal_id FROM cryptos_deals WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos WHERE user_id = ? AND users.phone_number_verified = ?))',
+      [id, id, 1],
+      function (error, results, fields) {
+        if (error) console.log(error);
+        res.json(results);
 
-          }
-        );
+      }
+    );
   }
 });
 
 //get a deal_item api
-router.get('/api/deals/:deal_name', function(req, res) {
+// include id param which references the deal id in route to account for if multiple users sell item with same deal_name
+router.get('/api/deals/:deal_id/:deal_name', function (req, res) {
   //important! we set this venue name a here so it's available to be used for crytoAccept list querry
   let venue_name;
+  let seller_name;
 
+  // specify specific column names rather than * because don't want to select all users (seller) info
   connection.query(
-    'SELECT * FROM deal_images LEFT JOIN deals ON deals.id = deal_images.deal_id LEFT JOIN venues ON deals.venue_id = venues.id WHERE ?',
-    [req.params],
-    function(error, deal_images_result, fields) {
+    'SELECT deals.id AS deal_id, deals.venue_id, deals.seller_id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, deal_images.deal_image, venues.id AS venues_id, venues.venue_name, venues.venue_description, venues.venue_link, venues.accepted_crypto, users.id AS seller_id, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings FROM deals LEFT JOIN deal_images ON deals.id = deal_images.deal_id LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN users ON deals.seller_id = users.id WHERE deals.id = ?',
+    [req.params.deal_id],
+    function (error, deal_images_result, fields) {
+
+      // console.log(deal_images_result);
       if (error) throw error;
 
       let newDealItem = [];
@@ -80,33 +86,68 @@ router.get('/api/deals/:deal_name', function(req, res) {
       //assign the venue name to the variable venue_name that we defined earlier
       venue_name = newDealItem[0].venue_name;
 
-      //query the acceptedCryptos list from the given venue
-      // venues.venue_name, venues.venue_description, crypto_metadata.crypto_name, crypto_metadata.crypto_symbol
-      connection.query(
-        'SELECT * FROM cryptos_venues LEFT JOIN venues ON venues.id = cryptos_venues.venue_id LEFT JOIN crypto_metadata ON crypto_metadata.id = cryptos_venues.crypto_id LEFT JOIN crypto_info ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE venue_name = ?',
-        [venue_name],
-        function(error, results, fields) {
+      seller_name = newDealItem[0].seller_name;
 
-          if (error) throw error;
 
-          let venue = [];
+      if (venue_name !== null) {
+        //query the acceptedCryptos list from the given venue
+        // venues.venue_name, venues.venue_description, crypto_metadata.crypto_name, crypto_metadata.crypto_symbol
+        connection.query(
+          'SELECT * FROM cryptos_venues LEFT JOIN venues ON venues.id = cryptos_venues.venue_id LEFT JOIN crypto_metadata ON crypto_metadata.id = cryptos_venues.crypto_id LEFT JOIN crypto_info ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE venue_name = ?',
+          [venue_name],
+          function (error, results, fields) {
 
-          for (venueObj in results) {
-            let cryptoName = results[venueObj].crypto_name;
-            let cryptoSymbol = results[venueObj].crypto_symbol;
-            let cryptoLogo = results[venueObj].crypto_logo;
+            if (error) throw error;
 
-            let acceptedCrypto = {};
-            acceptedCrypto.crypto_name = cryptoName; //{crypto_name: "bitcoin"}
-            acceptedCrypto.crypto_symbol = cryptoSymbol; //{crypto_name: "btc", crypto_symbol: "btc"}
-            acceptedCrypto.crypto_logo = cryptoLogo;
+            let venue = [];
 
-            venue.push(acceptedCrypto);
+            for (venueObj in results) {
+              let cryptoName = results[venueObj].crypto_name;
+              let cryptoSymbol = results[venueObj].crypto_symbol;
+              let cryptoLogo = results[venueObj].crypto_logo;
+
+              let acceptedCrypto = {};
+              acceptedCrypto.crypto_name = cryptoName; //{crypto_name: "bitcoin"}
+              acceptedCrypto.crypto_symbol = cryptoSymbol; //{crypto_name: "btc", crypto_symbol: "btc"}
+              acceptedCrypto.crypto_logo = cryptoLogo;
+
+              venue.push(acceptedCrypto);
+            }
+            newDealItem.push(venue);
+            res.json(newDealItem);
           }
-          newDealItem.push(venue);
-          res.json(newDealItem);
-        }
-      );
+        );
+
+      }
+      else {
+        connection.query(
+          'SELECT * FROM cryptos_deals LEFT JOIN crypto_metadata ON crypto_metadata.id = cryptos_deals.crypto_id LEFT JOIN crypto_info ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE cryptos_deals.deal_id = ?',
+          [req.params.deal_id],
+          function (error, results, fields) {
+
+            if (error) throw error;
+
+            let seller = [];
+
+            for (sellerObj in results) {
+              let cryptoName = results[sellerObj].crypto_name;
+              let cryptoSymbol = results[sellerObj].crypto_symbol;
+              let cryptoLogo = results[sellerObj].crypto_logo;
+
+              let acceptedCrypto = {};
+              acceptedCrypto.crypto_name = cryptoName; //{crypto_name: "bitcoin"}
+              acceptedCrypto.crypto_symbol = cryptoSymbol; //{crypto_name: "btc", crypto_symbol: "btc"}
+              acceptedCrypto.crypto_logo = cryptoLogo;
+
+              seller.push(acceptedCrypto);
+            }
+            newDealItem.push(seller);
+            res.json(newDealItem);
+          }
+        );
+
+      }
+
     }
   );
 });
@@ -137,6 +178,58 @@ router.get('/search', function(req, res) {
         }
     );
 });
+
+
+  // load all reviews of a particular seller
+  router.get('/api/reviews/sellers/:seller_id', function (req, res) {
+    console.log(req.params.seller_id);
+    console.log(req.query.order);
+    let order_by = "";
+    let where_rating = "";
+    if (req.query.order == "rating" && req.query.direction == "desc") {
+      order_by = "ORDER BY buyers_reviews_sellers.rating DESC";
+    } else if (req.query.order == "rating") {
+      order_by = "ORDER BY buyers_reviews_sellers.rating";
+    } else {
+      order_by = "ORDER BY buyers_reviews_sellers.date_reviewed";
+    }
+
+    if(req.query.select_rating == "5"){
+        where_rating = "AND buyers_reviews_sellers.rating = 5 "
+    } else if(req.query.select_rating == "4"){
+      where_rating = "AND buyers_reviews_sellers.rating = 4 "
+    }else if(req.query.select_rating == "3"){
+      where_rating = "AND buyers_reviews_sellers.rating = 3 "
+    }else if(req.query.select_rating == "2"){
+      where_rating = "AND buyers_reviews_sellers.rating = 2 "
+    }else if(req.query.select_rating == "1"){
+      where_rating = "AND buyers_reviews_sellers.rating = 1 "
+    }
+
+
+    connection.query(
+      'SELECT DISTINCT seller.id AS seller_id, seller.username AS seller_name, seller.sellers_avg_rating, seller.total_sellers_ratings, buyer.username AS buyer_name, deals.deal_name, users_purchases.payment_received AS verified_purchase, buyers_reviews_sellers.id AS review_id, buyers_reviews_sellers.rating, buyers_reviews_sellers.title AS rating_title, buyers_reviews_sellers.body AS rating_body, buyers_reviews_sellers.likes AS rating_likes, buyers_reviews_sellers.dislikes AS rating_dislikes, buyers_reviews_sellers.helpful_review AS rating_helpful_review, buyers_reviews_sellers.date_reviewed AS rating_date_reviewed FROM users seller LEFT JOIN buyers_reviews_sellers ON buyers_reviews_sellers.seller_id = seller.id LEFT JOIN users buyer ON buyers_reviews_sellers.buyer_id = buyer.id LEFT JOIN deals ON deals.id = buyers_reviews_sellers.deal_id LEFT JOIN users_purchases ON users_purchases.deal_id = buyers_reviews_sellers.deal_id WHERE buyers_reviews_sellers.display_review = 1 AND seller.id = ?' + where_rating + order_by,
+      [req.params.seller_id],
+      function (error, allReviewResults, fields) {
+        if (error) console.log(error);
+
+
+
+        connection.query(
+          'SELECT rating, COUNT(rating) as num_ratings FROM buyers_reviews_sellers WHERE seller_id = ? AND display_review = 1 GROUP BY rating ORDER BY rating',
+          [req.params.seller_id],
+          function (error, categorizeResults, fields) {
+            if (error) console.log(error);
+            console.log(allReviewResults);
+            console.log(categorizeResults);
+            res.json({allReviews: allReviewResults, ratingCategories: categorizeResults});
+
+          }
+        );
+
+      }
+    );
+  });
 
 
   //get the accepted cryptos from a venue
@@ -185,5 +278,6 @@ router.get('/search', function(req, res) {
   // });
 
 
+// });
 
 module.exports = router;

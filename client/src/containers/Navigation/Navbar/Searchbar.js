@@ -12,9 +12,8 @@ class SearchBar extends Component {
     render(){
         return (
             <div className="Search d-flex flex-row align-items-center">
-                
                 <form className="search_Form" onSubmit={this.search}>
-                    <input type="text" 
+                    <input type="text"
                         placeholder="Search"
                         id = "searchbarinput"
                     />

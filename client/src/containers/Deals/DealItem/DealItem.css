@@ -1,5 +1,5 @@
 .deal-container {
-  margin: 0px 50px;;
+  margin: 0px 50px;
   margin-bottom: 10px;
 
   box-sizing: border-box;
@@ -119,6 +119,9 @@
   margin-bottom: 10px;
 }
 
+.rating{
+  color: yellow;
+}
 /*
 /* stop default stiling of ol */
 /* ol.progtrckr {
