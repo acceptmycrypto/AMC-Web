@@ -19,7 +19,7 @@
 
 .select-crypto-for-deal {
   display: flex;
-  min-height: 350px;
+  min-height: 375px;
   box-sizing: border-box;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   border-radius: 5px;
@@ -223,6 +223,3 @@
   font-size: 12px;
 }
 
-#price-listing-next-button {
-  margin-top: 40px;
-}
