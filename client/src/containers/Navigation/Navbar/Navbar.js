@@ -49,11 +49,11 @@ class Navbar extends Component {
             </div>
           </Link>
 
-          {window.location.pathname == "/feed/deals" ?
+          {window.location.pathname == "/" ?
             <SearchBar /> : null
           }
 
-          {window.location.pathname == "/feed/deals" ?
+          {window.location.pathname == "/" ?
             <Category /> : null
           }
 
