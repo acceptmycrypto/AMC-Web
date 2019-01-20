@@ -16,6 +16,7 @@ import {
   handleCustomizingStep,
   handleShippingStep,
   handlePayingStep} from "../../../actions/dealItemActions";
+import {resetListDeal} from "../../../actions/listDealActions";
 import { _fetchTransactionInfo } from "../../../actions/paymentActions";
 import { Carousel } from "react-responsive-carousel";
 // import CustomizeOrder from "../CustomizeOrder";
@@ -284,35 +285,13 @@ class DealItem extends Component {
       return <div>Loading...</div>;
     }
 
-    // const steps = [
-    //   { name: "Customizing",
-    //     component:
-    //     <CustomizeOrder
-    //     handle_CustomizingSize={this.props.handleCustomizingSize}
-    //     handle_CustomizingColor={this.props.handleCustomizingColor}/>},
-    //   { name: "Shipping",
-    //     component:
-    //     <ShipOrder
-    //     SubmitPayment={this.createPaymentHandler}
-    //     handle_ShippingFullName={this.props.handleFullNameInput}
-    //     handle_ShippingAddress={this.props.handleAddressInput}
-    //     handle_ShippingCity={this.props.handleCityInput}
-    //     handle_ShippingZipcode={this.props.handleZipcodeInput}
-    //     handle_ShippingState={this.props.handleShippingStateInput}/> },
-    //   { name: "Payment", component:
-    //     <PurchaseOrder
-    //     cryptos={acceptedCryptos && this.handleCryptoOptions(acceptedCryptos)}
-    //     selectCrypto={this.props.handleSelectedCrypto}
 
-    //     SubmitPayment={this.createPaymentHandler}
-    //     transactionInfo={paymentInfo}
-    //     cryptoSymbol={selectedOption && selectedOption.value}
-    //     paymentButtonClicked={createPaymentButtonClicked}
+    //if user is redirected from the deal created page after deal is created
+    if(this.props.dealCreated.deal_id) {
+      this.props.resetListDeal();
+    }
 
-    //     showLoadingSpinner={loading}
-    //     timeout={paymentInfo && this.timeInMilliseconds(paymentInfo.timeout)}/> }
-    // ];
-    console.log(reviews);
+
     return (
       <div>
         <Layout>
@@ -485,7 +464,8 @@ const mapStateToProps = state => ({
   userLoggedIn: state.LoggedIn.userLoggedIn,
   showCustomizationStep: state.DealItem.showCustomizationStep,
   showShippingStep: state.DealItem.showShippingStep,
-  showPayingStep: state.DealItem.showPayingStep
+  showPayingStep: state.DealItem.showPayingStep,
+  dealCreated: state.CreateDeal.dealCreated,
 });
 
 
@@ -505,7 +485,8 @@ const matchDispatchToProps = dispatch =>{
     handleCustomizingStep,
     handleShippingStep,
     handlePayingStep,
-    _isLoggedIn}, dispatch);
+    _isLoggedIn,
+    resetListDeal}, dispatch);
 
 }
 
