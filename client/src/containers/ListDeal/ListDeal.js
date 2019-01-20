@@ -375,6 +375,7 @@ class ListDeal extends Component {
               rateLoading={gettingRate}
               showCryptoAmount={crypto_amount}
               validatePricingStep={this.handlePricingValidation}
+              showUploadingPhotoStep={handleUploadingPhotosStep}
               showDescriptionStep={handleDescriptionStep}
               validateSelectedCrypto={this.validateBasePriceToBeEnteredBeforeSelectCrypto}
             />
@@ -390,6 +391,7 @@ class ListDeal extends Component {
               selectedCondition={handleSelectedCondition}
               updateEditDetail={onEditingDetail}
               showEdittingState={editorState}
+              showPricingStep={handlePricingStep}
               createDeal={this.onCreateDeal}
               loading_dealCreating={creatingDeal}
               error_dealCreating={creatingDealError}

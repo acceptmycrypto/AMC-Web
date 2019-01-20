@@ -1,12 +1,11 @@
 .deal-listing-description {
-  min-height: 600px;
+  min-height: 620px;
   margin: 0px 50px;
   margin-bottom: 10px;
   box-sizing: border-box;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-
   border-radius: 5px;
-  padding: 30px;
+  padding: 20px;
 }
 
 .listing-description-container {
@@ -198,6 +197,10 @@ div.DraftEditor-root {
 
 .create-deal-modal-link:hover {
   color: #fff;
+}
+
+.submit-listing-deal button {
+  right: 70px;
 }
 
 

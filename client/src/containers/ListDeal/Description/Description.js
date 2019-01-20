@@ -388,13 +388,18 @@ class Description extends Component {
               spellCheck={true}
             />
           </div>
-          <div id="price-listing-next-button">
-            <hr />
+          <hr className="creating-deal-hr" />
+          <div id="deal-listing-step-buttons">
+
+            <div className="creating-deal-back-step">
+              <button onClick={this.props.showPricingStep}>Previous</button>
+            </div>
+
             <div
               onClick={() =>
                 this.props.validateDescriptionStep() && this.props.createDeal()
               }
-              id="photos-next-step"
+              className="creating-deal-next-step submit-listing-deal"
             >
               {this.props.loading_dealCreating ? (
                 <LoadingSpinner />
@@ -414,21 +419,6 @@ class Description extends Component {
           // }}
         >
           <div className="deal-created-modal">
-            {/* <h4>You have successfully created a Deal! </h4>
-              <br />
-              <h4>Now sit tight and wait to get paid with cryptocurrency.</h4> */}
-            {/* <Link
-                to={`/feed/deals/${deal_id}/${dealNameValue}`}
-                className="a-link"
-                onClick={() => {
-                  closeModalAfterDealCreated();
-                }}
-                onClick={resetDealCreated}
-              >
-                OK
-              </Link> */}
-
-            {/* if seller has not verified, then we ask seller to verified. 0 === not verified */}
             {this.dealCreatedModal()}
           </div>
         </Modal>
