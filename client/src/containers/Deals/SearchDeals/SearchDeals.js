@@ -14,18 +14,19 @@ import queryString from 'query-string';
 
 class SearchDeals extends Component {
     scrollL = () => {
+        //route to url for previous page, then query db for those data
         this.props.history.push("/search?term="+this.props.searchTerm+"&page="+(parseInt(this.props.searchPage)-1));
         this.props.searchDeals(this.props.searchTerm, parseInt(this.props.searchPage)-1);
     }
     scrollR = () => {
+        //route to url for next page, then query db for those data
         this.props.history.push("/search?term="+this.props.searchTerm+"&page="+(parseInt(this.props.searchPage)+1));
         this.props.searchDeals(this.props.searchTerm, parseInt(this.props.searchPage)+1);
     }
 
   componentDidMount = () => {
+      //parse out search term and current page number from url
     let values = queryString.parse(this.props.location.search);
-    console.log("boo");
-    console.log(values);
     this.props.searchDeals(values.term, values.page);
 
   }
@@ -43,6 +44,7 @@ class SearchDeals extends Component {
 
   render() {
     let { error, loading, deals, userLoggedIn } = this.props;  //does this need to be const?? i changed it to let so line 56 will work
+    //hardcoded number of search results per page to 8.  ideally should be something like 20.
     let numberPerPage = 8;
     
     if (error) {
