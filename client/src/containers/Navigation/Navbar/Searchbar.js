@@ -1,21 +1,24 @@
 import React, {Component} from 'react';
+import { withRouter } from "react-router-dom";
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {searchDeals} from '../../../actions/searchBarActions';
 
 class SearchBar extends Component {
+    search = (event) => {
+        event.preventDefault();
+        this.props.history.push("/search?term="+event.target.children[0].value+"&page=1");
+    }
+    
     render(){
         return (
             <div className="Search d-flex flex-row align-items-center">
-                <i className="fas fa-search fa-lg mx-2"></i>
-                <input type="text"
-                    placeholder="Search"
-                    onChange={(event) => this.props.searchDeals(
-                        // localStorage.getItem('token'),
-                        event.target.value,
-                        this.props.allDeals)}
-                    value={this.props.term}
-                />
+                <form className="search_Form" onSubmit={this.search}>
+                    <input type="text"
+                        placeholder="Search"
+                        id = "searchbarinput"
+                    />
+                    <button className="search_Button"><i className="fas fa-search fa-lg" id="white"></i></button>
+                </form>
             </div>
         )
     }
@@ -23,13 +26,12 @@ class SearchBar extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        term: state.Search.searchTerm,
-        allDeals: state.matchedDeals.deals
+        searchTerm: state.Search.searchTerm,
     };
 };
 
 const matchDispatchToProps = (dispatch) => {
-    return bindActionCreators({searchDeals:searchDeals}, dispatch);
+    return bindActionCreators({}, dispatch);
 }
 
-export default connect(mapStateToProps, matchDispatchToProps)(SearchBar);
+export default withRouter(connect(mapStateToProps, matchDispatchToProps)(SearchBar));

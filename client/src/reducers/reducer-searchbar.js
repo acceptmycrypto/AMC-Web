@@ -1,6 +1,8 @@
 const initialState = {
     searchTerm: "",
-    searchedDeals: []
+    searchedDeals: [],
+    searchPage: 1,
+    numberOfResults: 0
 };
   
 export default function searchbarReducer(state = initialState, action) {
@@ -11,8 +13,10 @@ export default function searchbarReducer(state = initialState, action) {
             console.log(action.payload.searchedDeals);
             return {
                 ...state,
+                searchTerm: action.payload.searchTerm,
                 searchedDeals: action.payload.searchedDeals,
-                searchTerm: action.payload.searchTerm
+                searchPage: action.payload.searchPage,
+                numberOfResults: action.payload.numberOfResults
             };
         case "FILTER_DEALS_BY_CATEGORY":
             return initialState;
