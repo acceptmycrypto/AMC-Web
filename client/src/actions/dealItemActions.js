@@ -11,9 +11,9 @@ export function _loadDealItem(id, deal_name) {
     dispatch(fetchDealItemBegin());
     return fetch(`/api/deals/${id}/${deal_name}`, settings)
       .then(res => res.json())
-      .then(jsonPhoto => {
-        dispatch(fetchDealItemSuccess(jsonPhoto));
-        return jsonPhoto;
+      .then(jsonDeal => {
+        dispatch(fetchDealItemSuccess(jsonDeal));
+        return jsonDeal;
       })
       .catch(error => dispatch(fetchDealItemFailure(error)));
   };

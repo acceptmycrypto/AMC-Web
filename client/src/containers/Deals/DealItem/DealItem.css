@@ -1,7 +1,6 @@
 .deal-container {
   margin: 0px 50px;
   margin-bottom: 10px;
-
   box-sizing: border-box;
   box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
   display: flex;
@@ -38,7 +37,9 @@
   font-size: 12px;
   border-radius: 5px;
   margin: 0 7px;
-  padding: 0 5px;
+  padding: 5px;
+  color: #fff;
+  font-weight: 700;
 }
 
 .deal-item-summary {
@@ -77,9 +78,8 @@
 }
 
 .deal-images-container {
-  height: 100%;
   width: 35%;
-  margin-top: 25px;
+  margin: 25px;
 }
 
 .deal-checkout-container {
@@ -93,7 +93,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-
 }
 
 .thumbs.animated {
@@ -254,4 +253,24 @@ ol.progtrckr li.progtrckr-done:hover:before {
 
 .footer-buttons #next-button {
   float: right;
+}
+
+
+/* Seller Review */
+.sellers-reviews {
+  min-height: 200px;
+  margin: 0px 50px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  display: flex;
+  border-radius: 5px;
+}
+
+#seller-reviews-container {
+  padding: 20px;
+}
+
+#seller-review-label {
+  font-weight: 700;
 }

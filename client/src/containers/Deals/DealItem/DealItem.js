@@ -26,6 +26,8 @@ import PurchaseOrder from "../PurchaseOrder";
 import Layout from "../../Layout";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
 import { _loadReviews } from "../../../actions/reviewsActions";
+import { EditorState, convertFromRaw } from 'draft-js';
+import { debug } from "util";
 
 class DealItem extends Component {
   componentDidMount = async () => {
@@ -179,6 +181,7 @@ class DealItem extends Component {
 
     return errMsgs;
   }
+
   ratingDisplay = (rating) => {
     let star = <i class="rating fa fa-star" aria-hidden="true"></i>;
     let halfStar = <i class="rating fas fa-star-half-alt"></i>;
@@ -227,17 +230,26 @@ class DealItem extends Component {
             {
               result.push(star);
             }
-            
+
           }
           else
           {
               result.push(emptyStar);
           }
         }
-        
+
     }
     return result;
   };
+
+  loadDescription = (deal_description) => {
+
+    let dealDescription = convertFromRaw(JSON.parse(deal_description));
+    let editorState = EditorState.createWithContent(dealDescription);
+
+    return editorState;
+  }
+
 
   render() {
     const { //state
@@ -277,7 +289,7 @@ class DealItem extends Component {
             handlePayingStep,
 
             userLoggedIn} = this.props;
-    // console.log('275' + reviews.allReviews);
+
     if (error) {
       return <div>Error! {error.message}</div>;
     }
@@ -297,12 +309,12 @@ class DealItem extends Component {
         <Layout>
         <div>
           <div className="deal-container">
-            <div className="deal-header">
+            {/* <div className="deal-header">
 
               <div className="deal-item-header">
                 <div className="deal-item-name">
                   <strong>{dealItem && dealItem.deal_name}</strong> <br/>
-                  <small> Offered By: {dealItem && dealItem.venue_name || dealItem && dealItem.seller_name}</small> <br/>                 
+                  <small> Offered By: {dealItem && dealItem.venue_name || dealItem && dealItem.seller_name}</small> <br/>
                 </div>
                 <div className="deal-item-cost">
                   <strong>Pay in Crypto:  ${dealItem && dealItem.pay_in_crypto.toFixed(2)}</strong>  <small className="deal-item-discount">
@@ -334,10 +346,11 @@ class DealItem extends Component {
                     </div>
                   </div>
               </div>
-            </div>
-            <div>
+            </div> */}
+
+
               {/* classname is ui steps indiate using sematic ui */}
-              <div className="ui steps">
+              <div className="ui three steps">
                 <a onClick={handleCustomizingStep} className={showCustomizationStep ? "active step" : "step"}>
                   <i className="edit icon"></i>
                   <div className="content">
@@ -364,11 +377,10 @@ class DealItem extends Component {
 
             </div>
 
-            <div className="deal-main-info">
+            <div className="deal-listing-content">
               <div className="deal-images-container">
                 <Carousel
                   className="react-carousel"
-                  width={"55%"}
                   showStatus={false}>
 
                   {dealItem && dealItem.deal_image.map((img,i) => (
@@ -380,14 +392,17 @@ class DealItem extends Component {
                 </Carousel>
               </div>
 
-              <div className="deal-checkout-container mt-5">
+              <div className="deal-checkout-container mt-4">
                 <div className="step-progress">
                   {showCustomizationStep &&
-                  <ItemDescription 
+                  <ItemDescription
+                  //another way to pass in props using spread operator
                   {...dealItem}
                   {...reviews}
+                  sellerDealDescription={this.loadDescription}
                   next_step={handleShippingStep}
                   rating_display={this.ratingDisplay}
+                  calculateDiscount={this.convertToPercentage}
                   />}
 
                   {showShippingStep &&
@@ -431,11 +446,17 @@ class DealItem extends Component {
 
                 </div>
               </div>
+              </div>
 
-            </div>
-
+              <div className="sellers-reviews">
+                <div id="seller-reviews-container" className="deal-name-label">
+                  <div id="seller-review-label">
+                    Seller
+                  </div>
+                </div>
+              </div>
           </div>
-        </div>
+
         </Layout >
       </div>
     );

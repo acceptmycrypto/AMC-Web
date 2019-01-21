@@ -50,7 +50,7 @@ export default function dealItemReducer(state = initialState, action) {
         dealItem: action.payload.dealItem[0],
         acceptedCryptos: action.payload.dealItem[1],
         states: initialState.states
-      }; 
+      };
 
     case "FETCH_DEAL_ITEM_FAILURE":
       return {
