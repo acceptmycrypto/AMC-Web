@@ -43,7 +43,7 @@ class SearchDeals extends Component {
 
   render() {
     let { error, loading, deals, userLoggedIn } = this.props;  //does this need to be const?? i changed it to let so line 56 will work
-    let numberPerPage = 1;
+    let numberPerPage = 8;
     
     if (error) {
       return <div>Error! {error.message}</div>;

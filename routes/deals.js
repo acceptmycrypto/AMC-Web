@@ -155,7 +155,7 @@ router.get('/api/deals/:deal_id/:deal_name', function (req, res) {
 router.get('/search', function(req, res) {
     console.log("req search");
     console.log(req.query);
-    var numberPerPage = 1;
+    var numberPerPage = 8;
     var start = numberPerPage*(req.query.page-1);
     connection.query(
         'SELECT COUNT(*) FROM deals LEFT JOIN venues ON deals.venue_id = venues.id WHERE venue_id IN (SELECT DISTINCT venue_id FROM cryptos_venues WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos)) AND ( deal_name LIKE ? OR deal_description LIKE ? OR venue_name LIKE ?)',
