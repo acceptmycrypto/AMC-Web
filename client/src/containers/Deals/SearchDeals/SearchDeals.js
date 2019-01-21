@@ -45,6 +45,7 @@ class SearchDeals extends Component {
   render() {
     let { error, loading, deals, userLoggedIn } = this.props;  //does this need to be const?? i changed it to let so line 56 will work
     //hardcoded number of search results per page to 8.  ideally should be something like 20.
+    //this number needs to match the number in backend deals.js
     let numberPerPage = 8;
     
     if (error) {
