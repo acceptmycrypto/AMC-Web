@@ -100,7 +100,7 @@ li {
   cursor: pointer;
 }
 
-.search_Button, .scroll_Button {
+.search_Button {
     background-color: #52C4B9;
     color: white;
     border: none;
@@ -118,36 +118,6 @@ li {
     color: white;
 }
 
-.scroll_Button {
-    width: 100px;
-    border-radius: 25px;
-}
-
 .search_Form {
     display: flex;
-}
-
-.page_Number {
-    color: #52C4B9;
-    background-color: #ffffff;
-    border: #52C4B9, solid, 1px;
-    outline: none;
-    border-radius: 25px;
-    font-size: 0.8em;
-    font-weight: 500;
-    width: fit-content;
-    margin: 0px 30px;
-}
-
-.page_NavContent {
-    width: fit-content;
-    margin: auto;
-}
-
-.button_Hide_true {
-    visibility: hidden;
-}
-
-.button_Hide_false {
-    visibility: visible;
 }

@@ -10,7 +10,7 @@ export const searchDeals = (searchTerm, page) => {
         }).then(res => res.json()).then(searchedDeals => {
             console.log("searchedDeals");
             console.log(searchedDeals);
-            dispatch(searchDealSuccess(searchTerm, searchedDeals.results, page, searchedDeals.numberOfResults[0]["COUNT(*)"]));
+            dispatch(searchDealSuccess(searchTerm, searchedDeals.results, page, searchedDeals.numberOfResults[0]["COUNT(DISTINCT deals.id)"]));
         })
     }
 }
