@@ -16,6 +16,11 @@ class Navbar extends Component {
     this.props.history.push('/');
   }
 
+  resetNavbar = () => {
+      document.querySelector('#searchbarinput').value = '';
+      this.props.resetNavbar();
+  }
+
   componentDidMount() {
     this.props._loadPhoto(localStorage.getItem('token'));
   }
@@ -24,7 +29,7 @@ class Navbar extends Component {
     return (
       <header className="Toolbar">
         <div className="nav-left">
-          <Link onClick={this.props.resetNavbar} to="/feed/deals" className="Logo">
+          <Link onClick={this.resetNavbar} to="/feed/deals" className="Logo">
             <div className="font-17 color-deepBlue">
               <img className="navbar_logo" src="https://s3-us-west-1.amazonaws.com/acceptmycrypto/logo.png" alt="logo"/>
               <span className="ml-2">
@@ -32,14 +37,8 @@ class Navbar extends Component {
               </span>
             </div>
           </Link>
-
-          { window.location.pathname == "/feed/deals" ?
-            <SearchBar /> : null
-          }
-
-          { window.location.pathname == "/feed/deals" ?
-            <Category/> : null
-          }
+            <SearchBar />
+            <Category/>
 
           <div className="Feed">
             {/* <li>

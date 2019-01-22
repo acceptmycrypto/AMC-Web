@@ -39,10 +39,10 @@ router.post('/api/deals', verifyToken, function (req, res) {
     //2) query the venues that accept those cryptos
 
     // 3) query the deals that offered by those venues
-    //update query to include sellers as users in addition to larger venue vendors  
+    //update query to include sellers as users in addition to larger venue vendors
     connection.query(
-      'SELECT DISTINCT deals.id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, venues.venue_name, venues.venue_link, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings FROM deals LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN cryptos_deals ON cryptos_deals.deal_id = deals.id LEFT JOIN users ON deals.seller_id = users.id WHERE deals.venue_id IN (SELECT DISTINCT venue_id FROM cryptos_venues WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos WHERE user_id = ?)) OR deals.id IN (SELECT DISTINCT deal_id FROM cryptos_deals WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos WHERE user_id = ?))',
-      [id, id],
+      'SELECT DISTINCT deals.id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, venues.venue_name, venues.venue_link, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings FROM deals LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN cryptos_deals ON cryptos_deals.deal_id = deals.id LEFT JOIN users ON deals.seller_id = users.id WHERE deals.venue_id IN (SELECT DISTINCT venue_id FROM cryptos_venues WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos WHERE user_id = ?)) OR deals.id IN (SELECT DISTINCT deal_id FROM cryptos_deals WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos WHERE user_id = ? AND users.phone_number_verified = ?))',
+      [id, id, 1],
       function (error, results, fields) {
         if (error) console.log(error);
         res.json(results);
@@ -53,7 +53,7 @@ router.post('/api/deals', verifyToken, function (req, res) {
 });
 
 //get a deal_item api
-// include id param which references the deal id in route to account for if multiple users sell item with same deal_name 
+// include id param which references the deal id in route to account for if multiple users sell item with same deal_name
 router.get('/api/deals/:deal_id/:deal_name', function (req, res) {
   //important! we set this venue name a here so it's available to be used for crytoAccept list querry
   let venue_name;
@@ -150,7 +150,40 @@ router.get('/api/deals/:deal_id/:deal_name', function (req, res) {
 
     }
   );
-  });
+});
+
+router.get('/search', function(req, res) {
+    console.log("req search");
+    console.log(req.query);
+    //hardcoded number of search results per page to 8.  ideally should be something like 20.
+    //this number needs to match the number in frontend SearchDeals.js
+    var numberPerPage = 8;
+    //this calculates starting from which search result to give back
+    //for example, if start==0 and numberPerPage==8, then db should give back 8 results starting from result #0
+    var start = numberPerPage*(req.query.page-1);
+    connection.query(
+        //first query is to count the total number of results that satisfy the search
+        'SELECT COUNT(*) FROM deals LEFT JOIN venues ON deals.venue_id = venues.id WHERE venue_id IN (SELECT DISTINCT venue_id FROM cryptos_venues WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos)) AND ( deal_name LIKE ? OR deal_description LIKE ? OR venue_name LIKE ? OR )',
+        ['%'+req.query.term+'%','%'+req.query.term+'%','%'+req.query.term+'%'],
+        function(error, numberOfResults, fields) {
+            if (error) console.log(error);
+            console.log('number of results');
+            console.log(numberOfResults);
+
+            connection.query(
+                //second query is to give back the set of search results specified by 'start' and 'numberPerPage'
+                'SELECT deals.id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.category, venues.venue_name, venues.venue_link FROM deals LEFT JOIN venues ON deals.venue_id = venues.id WHERE venue_id IN (SELECT DISTINCT venue_id FROM cryptos_venues WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos)) AND ( deal_name LIKE ? OR deal_description LIKE ? OR venue_name LIKE ?) LIMIT ?, ?',
+                ['%'+req.query.term+'%','%'+req.query.term+'%','%'+req.query.term+'%', start, numberPerPage],
+                function(error, results, fields) {
+                    if (error) console.log(error);
+                    console.log('search results');
+                    console.log(results);
+                    res.json({numberOfResults:numberOfResults,results:results});
+                }
+            );
+        }
+    );
+});
 
 
   // load all reviews of a particular seller
@@ -187,7 +220,7 @@ router.get('/api/deals/:deal_id/:deal_name', function (req, res) {
         if (error) console.log(error);
 
 
-        
+
         connection.query(
           'SELECT rating, COUNT(rating) as num_ratings FROM buyers_reviews_sellers WHERE seller_id = ? AND display_review = 1 GROUP BY rating ORDER BY rating',
           [req.params.seller_id],
@@ -249,6 +282,7 @@ router.get('/api/deals/:deal_id/:deal_name', function (req, res) {
   //     }
   //   );
   // });
+
 
 // });
 

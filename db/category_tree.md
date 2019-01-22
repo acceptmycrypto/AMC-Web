@@ -92,4 +92,5 @@
     93. Motorcycle & Powersports
     94. Vehicles
     95. Garage Supplies
-12. Others Services Charity
+12. Services
+13. Charity

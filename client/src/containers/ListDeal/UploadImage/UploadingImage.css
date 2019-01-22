@@ -21,7 +21,7 @@
 }
 
 #shown-uploading-image {
-  max-height: 90%;
+  max-height: 445px;
   max-width: 90%;
   padding: 5px;
 }
@@ -47,6 +47,7 @@
   max-height: 150px;
   max-width: 150px;
   padding: 5px;
+  cursor: pointer
 }
 
 .deal-uploaded-img-border {
@@ -88,8 +89,8 @@
   justify-content: center;
 }
 
-.deal-listing-images hr {
-  margin-top: 2rem;
+.creating-deal-hr {
+  margin-top: 3rem;
 }
 
 #photos-next-step {
