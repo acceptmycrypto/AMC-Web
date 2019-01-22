@@ -29,7 +29,8 @@ const PurchaseOrder = props => {
           Pay in USD via Paypal
           <PaypalButton
             dealItemInfo={props.deal_item}
-            fullNameInfo={props.full_name}
+            fullNameInfo={props.first_name}
+            lastNameInfo={props.last_name}
             shippingAddressInfo={props.shipping_address}
             shippingCityInfo={props.shipping_city}
             zipcodeInfo={props.zip_code}

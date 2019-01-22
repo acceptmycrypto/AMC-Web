@@ -64,8 +64,8 @@ CREATE TABLE guest_users(
 
 CREATE TABLE deals (
 	id INT NOT NULL AUTO_INCREMENT,
-	venue_id INT NULL, 
-	seller_id INT NULL, 
+	venue_id INT NULL,
+	seller_id INT NULL,
 	deal_name VARCHAR(255) NOT NULL,
 	deal_description VARCHAR(10000) NOT NULL,
   	featured_deal_image VARCHAR(255) NOT NULL,
@@ -127,7 +127,7 @@ CREATE TABLE categories_customizable_options(
 );
 
 
-CREATE TABLE hashtag ( 
+CREATE TABLE hashtag (
 	id INT NOT NULL AUTO_INCREMENT,
 	hashtag_name VARCHAR(100) NOT NULL,
 	PRIMARY KEY (id)
@@ -217,7 +217,8 @@ CREATE TABLE users_purchases(
 CREATE TABLE users_shipping_address(
 	id INT NOT NULL AUTO_INCREMENT,
 	txn_id VARCHAR(255) NOT NULL,
-	shipping_fullname VARCHAR(255) NOT NULL,
+	shipping_firstname VARCHAR(255) NOT NULL,
+  shipping_lastname VARCHAR(255) NOT NULL,
 	shipping_address VARCHAR(255) NOT NULL,
 	shipping_city VARCHAR(255) NOT NULL,
 	shipping_state VARCHAR(255) NOT NULL,

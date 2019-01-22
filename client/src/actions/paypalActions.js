@@ -1,6 +1,7 @@
 export function _paypal(
   deal_id,
-  fullName,
+  firstName,
+  lastName,
   shippingAddress,
   shippingCity,
   shippingState,
@@ -15,7 +16,8 @@ export function _paypal(
     },
     body: JSON.stringify({
       deal_id,
-      fullName,
+      firstName,
+      lastName,
       shippingAddress,
       shippingCity,
       shippingState,

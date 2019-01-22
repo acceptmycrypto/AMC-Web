@@ -1,7 +1,8 @@
 const initialState = {
   dealItem: null,
   acceptedCryptos: null,
-  fullName: null,
+  firstName: null,
+  lastName: null,
   shippingAddress: null,
   shippingCity: null,
   zipcode: null,
@@ -62,10 +63,16 @@ export default function dealItemReducer(state = initialState, action) {
     case "LOCATION_CHANGE":
       return initialState;
 
-    case "FULL_NAME":
+    case "FIRST_NAME":
       return {
         ...state,
-        fullName: action.payload
+        firstName: action.payload
+      };
+
+    case "LAST_NAME":
+      return {
+        ...state,
+        lastName: action.payload
       };
 
     case "SHIPPING_ADDRESS":

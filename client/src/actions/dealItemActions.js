@@ -40,9 +40,16 @@ export const resetDealitemState = () => {
   }
 };
 
-export const handleFullNameInput = (event) => {
+export const handleFirstNameInput = (event) => {
   return {
-      type: 'FULL_NAME',
+      type: 'FIRST_NAME',
+      payload: event.target.value
+  }
+};
+
+export const handleLastNameInput = (event) => {
+  return {
+      type: 'LAST_NAME',
       payload: event.target.value
   }
 };

@@ -5,7 +5,8 @@ import {bindActionCreators} from 'redux';
 import { connect } from "react-redux";
 import {
   _loadDealItem,
-  handleFullNameInput,
+  handleFirstNameInput,
+  handleLastNameInput,
   handleAddressInput,
   handleCityInput,
   handleZipcodeInput,
@@ -81,7 +82,8 @@ class DealItem extends Component {
             shippingCity,
             zipcode,
             shippingState,
-            fullName} = this.props;
+            firstName,
+            lastName} = this.props;
 
     //info needed to insert into user_purchases table
     //deal_id, crypto_name, amount, and user_id
@@ -91,13 +93,14 @@ class DealItem extends Component {
     let crypto_name = selectedOption.name;
     let token = localStorage.getItem('token');
 
-    this.props._fetchTransactionInfo(crypto_name, crypto_symbol, deal_id, amount, token, shippingAddress, shippingCity, zipcode, shippingState, fullName);
+    this.props._fetchTransactionInfo(crypto_name, crypto_symbol, deal_id, amount, token, shippingAddress, shippingCity, zipcode, shippingState, firstName, lastName);
   }
 
   handleShipmentValidation = () => {
 
     const validateNewInput = {
-      enteredFullname: this.props.fullName,
+      enteredFirstname: this.props.firstName,
+      enteredLastname: this.props.lastName,
       enteredShippingAddress: this.props.shippingAddress,
       enteredShippingCity: this.props.shippingCity,
       enteredZipcode: this.props.zipcode,
@@ -111,7 +114,8 @@ class DealItem extends Component {
       isDataValid = true;
     } else {
 
-      document.getElementById("shipping-fullname-error").innerHTML = this._validationErrors(validateNewInput).fullNameValMsg;
+      document.getElementById("shipping-firstname-error").innerHTML = this._validationErrors(validateNewInput).firstNameValMsg;
+      document.getElementById("shipping-lastname-error").innerHTML = this._validationErrors(validateNewInput).lastNameValMsg;
       document.getElementById("shipping-address-error").innerHTML = this._validationErrors(validateNewInput).shippingAddressValMsg;
       document.getElementById("shipping-city-error").innerHTML = this._validationErrors(validateNewInput).shippingCityValMsg;
       document.getElementById("shipping-zipcode-error").innerHTML = this._validationErrors(validateNewInput).zipcodeValMsg;
@@ -142,7 +146,8 @@ class DealItem extends Component {
 
   _validationErrors(val) {
     const errMsgs = {
-      fullNameValMsg: val.enteredFullname ? null : 'Please enter your full name',
+      firstNameValMsg: val.enteredFirstname ? null : 'Please enter your first name',
+      lastNameValMsg: val.enteredLastname ? null : 'Please enter your last name',
       shippingAddressValMsg: val.enteredShippingAddress ? null : 'Please enter your shipping address',
       shippingCityValMsg: val.enteredShippingCity ? null : 'Please enter your shipping city',
       zipcodeValMsg: val.enteredZipcode ? null : 'Please enter your zip code',
@@ -235,7 +240,8 @@ class DealItem extends Component {
             reviews,
             acceptedCryptos,
             allStates,
-            fullName,
+            firstName,
+            lastName,
             shippingAddress,
             shippingCity,
             zipcode,
@@ -249,7 +255,8 @@ class DealItem extends Component {
             showPayingStep,
 
             //actions
-            handleFullNameInput,
+            handleFirstNameInput,
+            handleLastNameInput,
             handleAddressInput,
             handleCityInput,
             handleZipcodeInput,
@@ -380,12 +387,14 @@ class DealItem extends Component {
                   {showShippingStep &&
                   <ShipOrder
                   listOfAllStates={allStates}
-                  handle_ShippingFullName={handleFullNameInput}
+                  handle_ShippingFirstName={handleFirstNameInput}
+                  handle_ShippingLastName={handleLastNameInput}
                   handle_ShippingAddress={handleAddressInput}
                   handle_ShippingCity={handleCityInput}
                   handle_ShippingZipcode={handleZipcodeInput}
                   handle_ShippingState={handleShippingStateInput}
-                  showShippingFullName={fullName}
+                  showShippingFirstName={firstName}
+                  showShippingLastName={lastName}
                   showShippingAddress={shippingAddress}
                   showShippingCity={shippingCity}
                   showShippingState={shippingState}
@@ -407,7 +416,8 @@ class DealItem extends Component {
                   paymentButtonClicked={createPaymentButtonClicked}
 
                   deal_item={dealItem}
-                  full_name={fullName}
+                  first_name={firstName}
+                  last_name={lastName}
                   shipping_address={shippingAddress}
                   shipping_city={shippingCity}
                   zip_code={zipcode}
@@ -499,7 +509,8 @@ const mapStateToProps = state => ({
   dealItem: state.DealItem.dealItem,
   reviews: state.Reviews.reviews,
   acceptedCryptos: state.DealItem.acceptedCryptos,
-  fullName: state.DealItem.fullName,
+  firstName: state.DealItem.firstName,
+  lastName: state.DealItem.lastName,
   shippingAddress: state.DealItem.shippingAddress,
   shippingCity: state.DealItem.shippingCity,
   zipcode: state.DealItem.zipcode,
@@ -525,7 +536,8 @@ const matchDispatchToProps = dispatch =>{
     _loadReviews,
     _loadDealItem,
     _fetchTransactionInfo,
-    handleFullNameInput,
+    handleFirstNameInput,
+    handleLastNameInput,
     handleAddressInput,
     handleCityInput,
     handleZipcodeInput,

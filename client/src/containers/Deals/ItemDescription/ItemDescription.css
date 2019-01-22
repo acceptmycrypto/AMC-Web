@@ -23,7 +23,7 @@
     padding:5px 0px;
 } */
 
-.deal-name-label {
+.deal-name-label, .shipping-name-label {
   font-weight: 700;
   font-size: 1.5em;
 }
