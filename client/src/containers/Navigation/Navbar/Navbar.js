@@ -48,15 +48,8 @@ class Navbar extends Component {
               </span>
             </div>
           </Link>
-
-          {window.location.pathname == "/" ?
-            <SearchBar /> : null
-          }
-
-          {window.location.pathname == "/" ?
-            <Category /> : null
-          }
-
+            <SearchBar /> 
+            <Category /> 
           <div className="Feed">
             {/* <li>
               <Link to="/feed/deals">
@@ -85,14 +78,14 @@ class Navbar extends Component {
             </li>
 
         }
-          <li>
+          {/* <li>
             <Link onClick={this.props.resetNavbar} to="/feed/deals">
               {window.location.pathname == "/feed/deals"
                 ? <i className="fas fa-dollar-sign fa-lg"> <h7 className="color-deepBlue font-17 teal-underline">All Deals</h7></i>
                 : <i className="fas fa-dollar-sign fa-lg"> <h7 className="color-deepBlue font-17">All Deals</h7></i>
               }
             </Link>
-          </li>
+          </li> */}
           <li>
             {this.props.photo.photo
               ? <div className="dropdown show m-0 p-0">
