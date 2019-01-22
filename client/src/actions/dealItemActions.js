@@ -40,20 +40,6 @@ export const resetDealitemState = () => {
   }
 };
 
-export const handleCustomizingSize = (event) => {
-  return {
-      type: 'SELECT_SIZE',
-      payload: event.target.value
-  }
-};
-
-export const handleCustomizingColor = (event) => {
-  return {
-      type: 'SELECT_COLOR',
-      payload: event.target.value
-  }
-};
-
 export const handleFullNameInput = (event) => {
   return {
       type: 'FULL_NAME',
@@ -96,12 +82,12 @@ export const handleSelectedCrypto = (selectedOption) => {
   }
 };
 
-export const handleCustomizingStep = () => {
+export const handleDetailStep = () => {
 
   return {
-    type: "SHOW_CUSTOMIZATION",
+    type: "SHOW_DETAIL",
     payload: {
-      showCustomizationStep: true,
+      showDetailStep: true,
       showShippingStep: false,
       showPayingStep: false
     }

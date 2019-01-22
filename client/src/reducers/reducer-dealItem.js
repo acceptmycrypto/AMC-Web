@@ -1,15 +1,13 @@
 const initialState = {
   dealItem: null,
   acceptedCryptos: null,
-  selectedSize: null,
-  selectedColor: null,
   fullName: null,
   shippingAddress: null,
   shippingCity: null,
   zipcode: null,
   shippingState: null,
   selectedOption: null,
-  showCustomizationStep: true,
+  showDetailStep: true,
   showShippingStep: false,
   showPayingStep: false,
   transactionInfo: null,
@@ -64,19 +62,6 @@ export default function dealItemReducer(state = initialState, action) {
     case "LOCATION_CHANGE":
       return initialState;
 
-    case "SELECT_SIZE":
-      return {
-        ...state,
-        selectedSize: action.payload
-      };
-
-    case "SELECT_COLOR":
-      return {
-        ...state,
-        selectedColor: action.payload
-      };
-
-
     case "FULL_NAME":
       return {
         ...state,
@@ -113,10 +98,10 @@ export default function dealItemReducer(state = initialState, action) {
         selectedOption: action.payload.selectedOption
       };
 
-    case "SHOW_CUSTOMIZATION":
+    case "SHOW_DETAIL":
       return {
         ...state,
-        showCustomizationStep: action.payload.showCustomizationStep,
+        showDetailStep: action.payload.showDetailStep,
         showShippingStep: action.payload.showShippingStep,
         showPayingStep: action.payload.showPayingStep
       };
@@ -124,7 +109,7 @@ export default function dealItemReducer(state = initialState, action) {
     case "SHOW_SHIPPING":
       return {
         ...state,
-        showCustomizationStep: action.payload.showCustomizationStep,
+        showDetailStep: action.payload.showDetailStep,
         showShippingStep: action.payload.showShippingStep,
         showPayingStep: action.payload.showPayingStep
       };
@@ -132,7 +117,7 @@ export default function dealItemReducer(state = initialState, action) {
     case "SHOW_PAYING":
       return {
         ...state,
-        showCustomizationStep: action.payload.showCustomizationStep,
+        showDetailStep: action.payload.showDetailStep,
         showShippingStep: action.payload.showShippingStep,
         showPayingStep: action.payload.showPayingStep
       };

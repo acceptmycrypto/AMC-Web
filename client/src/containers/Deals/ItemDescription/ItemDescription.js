@@ -66,7 +66,7 @@ const ItemDescription = props => {
             </div>
         </div>
         <div onClick={() => props.next_step()} id="next-step">
-          <button>Next</button>
+          <button>Buy Now</button>
         </div>
       </div>
 

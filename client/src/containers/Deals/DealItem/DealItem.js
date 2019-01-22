@@ -5,21 +5,18 @@ import {bindActionCreators} from 'redux';
 import { connect } from "react-redux";
 import {
   _loadDealItem,
-  handleCustomizingSize,
-  handleCustomizingColor,
   handleFullNameInput,
   handleAddressInput,
   handleCityInput,
   handleZipcodeInput,
   handleShippingStateInput,
   handleSelectedCrypto,
-  handleCustomizingStep,
+  handleDetailStep,
   handleShippingStep,
   handlePayingStep} from "../../../actions/dealItemActions";
 import {resetListDeal} from "../../../actions/listDealActions";
 import { _fetchTransactionInfo } from "../../../actions/paymentActions";
 import { Carousel } from "react-responsive-carousel";
-// import CustomizeOrder from "../CustomizeOrder";
 import ItemDescription from "../ItemDescription";
 import ShipOrder from "../ShipOrder";
 import PurchaseOrder from "../PurchaseOrder";
@@ -84,9 +81,7 @@ class DealItem extends Component {
             shippingCity,
             zipcode,
             shippingState,
-            fullName,
-            selectedSize,
-            selectedColor } = this.props;
+            fullName} = this.props;
 
     //info needed to insert into user_purchases table
     //deal_id, crypto_name, amount, and user_id
@@ -96,31 +91,7 @@ class DealItem extends Component {
     let crypto_name = selectedOption.name;
     let token = localStorage.getItem('token');
 
-    this.props._fetchTransactionInfo(crypto_name, crypto_symbol, deal_id, amount, token, shippingAddress, shippingCity, zipcode, shippingState, fullName, selectedSize, selectedColor);
-  }
-
-  handleCustomizationValidation = () => {
-    const validateNewInput = {
-      selectedColorValue: this.props.selectedColor,
-      selectedSizeValue: this.props.selectedSize
-    }
-    let isDataValid = false;
-
-    //Object.keys(validateNewInput) give us an array of keys
-    //Array.every check if all indices passed the test
-    //we check if the value of each property in the the object validateNewInput is === true
-    if (Object.keys(validateNewInput).every((k) => {
-      return validateNewInput[k] ? true : false
-    })) {
-      isDataValid = true;
-    } else {
-      document.getElementById("select-size-error").innerHTML = this._validationErrors(validateNewInput).sizeValMsg;
-
-      document.getElementById("select-color-error").innerHTML = this._validationErrors(validateNewInput).colorValMsg;
-
-    }
-
-    return isDataValid;
+    this.props._fetchTransactionInfo(crypto_name, crypto_symbol, deal_id, amount, token, shippingAddress, shippingCity, zipcode, shippingState, fullName);
   }
 
   handleShipmentValidation = () => {
@@ -171,8 +142,6 @@ class DealItem extends Component {
 
   _validationErrors(val) {
     const errMsgs = {
-      colorValMsg: val.selectedColorValue ? null : 'Please select a color',
-      sizeValMsg: val.selectedSizeValue ? null : 'Please select a size',
       fullNameValMsg: val.enteredFullname ? null : 'Please enter your full name',
       shippingAddressValMsg: val.enteredShippingAddress ? null : 'Please enter your shipping address',
       shippingCityValMsg: val.enteredShippingCity ? null : 'Please enter your shipping city',
@@ -266,8 +235,6 @@ class DealItem extends Component {
             reviews,
             acceptedCryptos,
             allStates,
-            selectedSize,
-            selectedColor,
             fullName,
             shippingAddress,
             shippingCity,
@@ -277,13 +244,11 @@ class DealItem extends Component {
             transaction_loading,
             paymentInfo,
             createPaymentButtonClicked,
-            showCustomizationStep,
+            showDetailStep,
             showShippingStep,
             showPayingStep,
 
             //actions
-            handleCustomizingSize,
-            handleCustomizingColor,
             handleFullNameInput,
             handleAddressInput,
             handleCityInput,
@@ -291,7 +256,7 @@ class DealItem extends Component {
             handleShippingStateInput,
             handleSelectedCrypto,
 
-            handleCustomizingStep,
+            handleDetailStep,
             handleShippingStep,
             handlePayingStep,
 
@@ -358,7 +323,7 @@ class DealItem extends Component {
 
               {/* classname is ui steps indiate using sematic ui */}
               <div className="ui three steps">
-                <a onClick={handleCustomizingStep} className={showCustomizationStep ? "active step" : "step"}>
+                <a onClick={handleDetailStep} className={showDetailStep ? "active step" : "step"}>
                   <i className="edit icon"></i>
                   <div className="content">
                     <div className="title">Item Description</div>
@@ -373,7 +338,7 @@ class DealItem extends Component {
                   </div>
                 </a>
 
-                <a onClick={() => this.handleShipmentValidation() &&   handlePayingStep()} className={"step " + (!showShippingStep && showCustomizationStep ? "disabled" : showPayingStep ? "active" : "" )} >
+                <a onClick={() => this.handleShipmentValidation() &&   handlePayingStep()} className={"step " + (!showShippingStep && showDetailStep ? "disabled" : showPayingStep ? "active" : "" )} >
                 <i className="shopping cart icon"></i>
                   <div className="content">
                     <div className="title">Paying</div>
@@ -401,7 +366,7 @@ class DealItem extends Component {
 
               <div className="deal-checkout-container mt-4">
                 <div className="step-progress">
-                  {showCustomizationStep &&
+                  {showDetailStep &&
                   <ItemDescription
                   //another way to pass in props using spread operator
                   {...dealItem}
@@ -426,7 +391,7 @@ class DealItem extends Component {
                   showShippingState={shippingState}
                   showShippingZipcode={zipcode}
                   next_step={handlePayingStep}
-                  previous_step={handleCustomizingStep}
+                  previous_step={handleDetailStep}
                   validateShipmentData={this.handleShipmentValidation}/>}
 
                   {showPayingStep &&
@@ -534,8 +499,6 @@ const mapStateToProps = state => ({
   dealItem: state.DealItem.dealItem,
   reviews: state.Reviews.reviews,
   acceptedCryptos: state.DealItem.acceptedCryptos,
-  selectedSize: state.DealItem.selectedSize,
-  selectedColor: state.DealItem.selectedColor,
   fullName: state.DealItem.fullName,
   shippingAddress: state.DealItem.shippingAddress,
   shippingCity: state.DealItem.shippingCity,
@@ -549,7 +512,7 @@ const mapStateToProps = state => ({
   deal_item_loading: state.DealItem.loading,
   error: state.DealItem.error,
   userLoggedIn: state.LoggedIn.userLoggedIn,
-  showCustomizationStep: state.DealItem.showCustomizationStep,
+  showDetailStep: state.DealItem.showDetailStep,
   showShippingStep: state.DealItem.showShippingStep,
   showPayingStep: state.DealItem.showPayingStep,
   dealCreated: state.CreateDeal.dealCreated,
@@ -562,15 +525,13 @@ const matchDispatchToProps = dispatch =>{
     _loadReviews,
     _loadDealItem,
     _fetchTransactionInfo,
-    handleCustomizingSize,
-    handleCustomizingColor,
     handleFullNameInput,
     handleAddressInput,
     handleCityInput,
     handleZipcodeInput,
     handleShippingStateInput,
     handleSelectedCrypto,
-    handleCustomizingStep,
+    handleDetailStep,
     handleShippingStep,
     handlePayingStep,
     _isLoggedIn,
