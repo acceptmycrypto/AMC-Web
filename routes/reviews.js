@@ -47,7 +47,8 @@ var connection = mysql.createConnection({
 
     // Your password
     password: process.env.DB_PW,
-    database: process.env.DB_DB
+    database: process.env.DB_DB,
+    debug: true
 });
 
 //to be held off until later date
@@ -95,23 +96,53 @@ router.post('/review/buyer/:user_id', verifyToken, function (req, res) { //need 
 });
 
 //route for posting buyer review seller
-router.post('/review/seller/:user_id', verifyToken, function (req, res) { //need to think of better route name
+router.post('/review/seller/:user_id', verifyToken, function (req, res) { 
+// router.post('/review/seller/:user_id', function (req, res) {//need to think of better route name
     let buyer_id = req.decoded._id;
     let seller_id = req.params.user_id;
+    // console.log('line 102: ' + seller_id);
     let languagePass = true; //languageFilter(req.body.body);
     //
     if(languagePass)
     {
         connection.query(
-            'INSERT INTO buyers_reviews_sellers (buyer_id, deal_id, seller_id, rating, body, display_review) VALUES (?,?,?,?,?,?);',
+            'INSERT INTO buyers_reviews_sellers (buyer_id, deal_id, seller_id, title, rating, body, display_review) VALUES (?,?,?,?,?,?,?);',
             [buyer_id,req.body.deal_id,seller_id,req.body.rating,req.body.body,'1'],
+            // ['1','2',seller_id,'some title','4','some text','1'],
             function(error, response ,fields){
                 if (error) throw error;
-                
-          
+                console.log(response);
+                // debugger;
                 //then update deals table with avg rating and num ratings, this is what I will be working on  
+                //curl -d "param1=value1&param2=value2" -X POST http://localhost:3000/data
+                // curl -d -X POST http://localhost:3001/review/seller/2
+                connection.query(
+                    'SELECT sellers_avg_rating, total_sellers_ratings FROM users WHERE users.id = ?;',
+                    [seller_id],
+                    function(error, res1, fields){
+                        if (error) throw error;
+
+                        //update calculation
+                        let current_avg = res1[0].sellers_avg_rating;
+                        console.log(current_avg);
+                        let current_total = res1[0].total_sellers_ratings;
+                        console.log(current_total);
+                        console.log(req.body.rating);
+                        let new_avg_rating = ((current_avg*current_total)+4)/(current_total+1);
+                        console.log(new_avg_rating);
+                        // debugger;
+                        connection.query(
+                            'UPDATE users SET sellers_avg_rating = ?, total_sellers_ratings = ? WHERE id = ?',
+                            [new_avg_rating, current_total+1, seller_id],
+                            function(error, res_third, fields){
+                                if (error) throw error;
+                                res.status(200).json({success: true, message: "review accepted"});  
+                            });
+
+
+
+                    });
                 
-                res.status(200).json({success: true, message: "review accepted"});  
             });
         
     }
