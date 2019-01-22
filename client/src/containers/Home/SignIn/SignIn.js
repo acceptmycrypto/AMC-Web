@@ -29,7 +29,7 @@ class SignIn extends Component {
           console.log(res.token);
           // alert("You've successfully logged in");
           //redirect user to the feed/deals
-          this.props.history.push('/feed/deals');
+          this.props.history.push('/');
 
         } else {
           console.log("Login error: ", res);
