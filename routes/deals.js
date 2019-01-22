@@ -61,27 +61,30 @@ router.get('/api/deals/:deal_id/:deal_name', function (req, res) {
 
   // specify specific column names rather than * because don't want to select all users (seller) info
   connection.query(
-    'SELECT deals.id AS deal_id, deals.venue_id, deals.seller_id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, deal_images.deal_image, venues.id AS venues_id, venues.venue_name, venues.venue_description, venues.venue_link, venues.accepted_crypto, users.id AS seller_id, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings FROM deals LEFT JOIN deal_images ON deals.id = deal_images.deal_id LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN users ON deals.seller_id = users.id WHERE deals.id = ?',
+    'SELECT deals.id AS deal_id, deals.venue_id, deals.seller_id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, deal_images.deal_image, venues.id AS venues_id, venues.venue_name, venues.venue_description, venues.venue_link, venues.accepted_crypto, users.id AS seller_id, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings, category.category_name AS deal_category FROM deals LEFT JOIN deal_images ON deals.id = deal_images.deal_id LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN  category ON  category.id = categories_deals.category_id WHERE deals.id = ?',
     [req.params.deal_id],
-    function (error, deal_images_result, fields) {
-
-      // console.log(deal_images_result);
+    function (error, result, fields) {
+      console.log("categories", result);
+      // console.log(result);
       if (error) throw error;
 
       let newDealItem = [];
       let images = [];
+      let categories = [];
 
       //find images in the objects and add to images array
-      for (let i in deal_images_result) {
-        images.push(deal_images_result[i].deal_image);
+      for (let i in result) {
+        images.push(result[i].deal_image);
+        categories.push(result[i].deal_category);
       }
 
       //since every object in the array is the same, we just use the first object in the array
       //reassign the deal_image property to images array
-      deal_images_result[0].deal_image = images;
+      result[0].deal_image = images;
+      result[0].deal_category = categories;
 
       //push the first object into an emptry array so we can use it on the client side for mapping
-      newDealItem.push(deal_images_result[0]);
+      newDealItem.push(result[0]);
 
       //assign the venue name to the variable venue_name that we defined earlier
       venue_name = newDealItem[0].venue_name;

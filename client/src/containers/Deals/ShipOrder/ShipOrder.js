@@ -84,11 +84,12 @@ const ShipOrder = props => {
       </form>
       </div>
 
-      <div onClick={props.previous_step} id="previous-step">
+
+      <div onClick={props.previous_step} className="previous-step">
         <button>Previous</button>
       </div>
 
-      <div onClick={() => props.validateShipmentData() && props.next_step()} id="steps-workflow">
+      <div onClick={() => props.validateShipmentData() && props.next_step()} className="steps-workflow">
         <button>Next</button>
       </div>
     </div>

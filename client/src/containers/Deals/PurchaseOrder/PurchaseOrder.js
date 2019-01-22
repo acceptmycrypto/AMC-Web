@@ -38,12 +38,12 @@ const PurchaseOrder = props => {
           />
         </div>
 
-        <div onClick={props.previous_step} id="previous-step">
+        <div onClick={props.previous_step} className="previous-step">
           <button>Previous</button>
         </div>
 
 
-        <div onClick={() => props.validatePaymentData() && props.SubmitPayment()} id="next-step">
+        <div onClick={() => props.validatePaymentData() && props.SubmitPayment()} className="next-step">
           <button>Send Your Payment</button>
         </div>
       </div> : null}
