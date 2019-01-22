@@ -7,6 +7,7 @@ import { resetDealitemState } from "../../../actions/dealItemActions";
 import CryptoRankings from '../../CryptosRanking';
 import Layout from "../../Layout";
 import '../Deals.css';
+import './SearchDeals.css';
 import { _isLoggedIn } from '../../../actions/loggedInActions';
 import {searchDeals} from '../../../actions/searchBarActions';
 import queryString from 'query-string';
@@ -15,17 +16,19 @@ import queryString from 'query-string';
 class SearchDeals extends Component {
     scrollL = () => {
         //route to url for previous page, then query db for those data
-        this.props.history.push("/search?term="+this.props.searchTerm+"&page="+(parseInt(this.props.searchPage)-1));
         this.props.searchDeals(this.props.searchTerm, parseInt(this.props.searchPage)-1);
+        this.props.history.push("/search?term="+this.props.searchTerm+"&page="+(parseInt(this.props.searchPage)-1));
     }
     scrollR = () => {
         //route to url for next page, then query db for those data
-        this.props.history.push("/search?term="+this.props.searchTerm+"&page="+(parseInt(this.props.searchPage)+1));
         this.props.searchDeals(this.props.searchTerm, parseInt(this.props.searchPage)+1);
+        this.props.history.push("/search?term="+this.props.searchTerm+"&page="+(parseInt(this.props.searchPage)+1));
     }
 
   componentDidMount = () => {
       //parse out search term and current page number from url
+      console.log("this.props.location.search");
+      console.log(this.props.location.search);
     let values = queryString.parse(this.props.location.search);
     this.props.searchDeals(values.term, values.page);
 
@@ -69,7 +72,9 @@ class SearchDeals extends Component {
     return (
       <div>
         <Layout>
-        {this.props.searchTerm!="" && <div className="page_Nav">
+        {deals == undefined || deals.length == 0 && <div className="no_Results">No results found</div>
+        }
+        {deals != undefined && deals.length > 0 && this.props.searchTerm!="" && <div className="page_Nav">
             <div className="page_NavContent">
                 <span>
                     <button className={"scroll_Button "+("button_Hide_"+(this.props.searchPage==1))} onClick={this.scrollL}>
@@ -93,13 +98,14 @@ class SearchDeals extends Component {
           <div id="right" className="grid mx-4">
             {deals != undefined && deals.length > 0 && deals.map(deal => (
               <div key={deal.id} className="deal">
-                <Link to={`/feed/deals/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
+                <Link to={`/feed/deals/${deal.id}/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
 
-                    <div className="deal-info">
+                <div className="deal-info">
                       <img className="deal-image" src={deal.featured_deal_image} alt="deal"/>
                       <div className="mt-1">{deal.deal_name}</div>
                       <small className="deal-description">{this.handleLongDescription(deal.deal_description)}</small>
-                      <div><small>Offered by: {deal.venue_name}</small></div>
+                      {/* if seller is a vendor then display the venue name else if seller is a user then display the seller name which is the user's username */}
+                      <div><small>Offered by: {deal.venue_name || deal.seller_name}</small></div>
                     </div>
 
                     <div className="deal-price">
@@ -124,7 +130,7 @@ class SearchDeals extends Component {
           </div>
 
         </div>
-        {this.props.searchTerm!="" && <div className="page_Nav">
+        {deals != undefined && deals.length > 0 && this.props.searchTerm!="" && <div className="page_Nav">
             <div className="page_NavContent">
                 <span>
                     <button className={"scroll_Button "+("button_Hide_"+(this.props.searchPage==1))} onClick={this.scrollL}>

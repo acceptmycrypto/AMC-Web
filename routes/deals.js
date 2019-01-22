@@ -163,17 +163,20 @@ router.get('/search', function(req, res) {
     var start = numberPerPage*(req.query.page-1);
     connection.query(
         //first query is to count the total number of results that satisfy the search
-        'SELECT COUNT(*) FROM deals LEFT JOIN venues ON deals.venue_id = venues.id WHERE venue_id IN (SELECT DISTINCT venue_id FROM cryptos_venues WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos)) AND ( deal_name LIKE ? OR deal_description LIKE ? OR venue_name LIKE ? OR )',
-        ['%'+req.query.term+'%','%'+req.query.term+'%','%'+req.query.term+'%'],
+        // 'SELECT COUNT(*) FROM deals LEFT JOIN venues ON deals.venue_id = venues.id WHERE venue_id IN (SELECT DISTINCT venue_id FROM cryptos_venues WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos)) AND ( deal_name LIKE ? OR deal_description LIKE ? OR venue_name LIKE ? OR )',
+        
+        'SELECT COUNT(DISTINCT deals.id) FROM deals LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN cryptos_deals ON cryptos_deals.deal_id = deals.id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN category ON category.id = categories_deals.category_id WHERE deals.venue_id IN (SELECT DISTINCT venue_id FROM cryptos_venues) AND ( deal_name LIKE ? OR deal_description LIKE ? OR venue_name LIKE ? OR category_name LIKE ?)',
+        ['%'+req.query.term+'%','%'+req.query.term+'%','%'+req.query.term+'%','%'+req.query.term+'%'],
         function(error, numberOfResults, fields) {
             if (error) console.log(error);
             console.log('number of results');
             console.log(numberOfResults);
 
             connection.query(
+                'SELECT DISTINCT deals.id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, venues.venue_name, venues.venue_link, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings FROM deals LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN cryptos_deals ON cryptos_deals.deal_id = deals.id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN category ON category.id = categories_deals.category_id WHERE deals.venue_id IN (SELECT DISTINCT venue_id FROM cryptos_venues) AND ( deal_name LIKE ? OR deal_description LIKE ? OR venue_name LIKE ? OR category_name LIKE ?) LIMIT ?, ?',
                 //second query is to give back the set of search results specified by 'start' and 'numberPerPage'
-                'SELECT deals.id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.category, venues.venue_name, venues.venue_link FROM deals LEFT JOIN venues ON deals.venue_id = venues.id WHERE venue_id IN (SELECT DISTINCT venue_id FROM cryptos_venues WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos)) AND ( deal_name LIKE ? OR deal_description LIKE ? OR venue_name LIKE ?) LIMIT ?, ?',
-                ['%'+req.query.term+'%','%'+req.query.term+'%','%'+req.query.term+'%', start, numberPerPage],
+                // 'SELECT DISTINCT deals.id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, venues.venue_name, venues.venue_link, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings FROM deals LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN category ON category.id = categories_deals.category_id WHERE venue_id IN (SELECT DISTINCT venue_id FROM cryptos_venues WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos)) AND ( deal_name LIKE ? OR deal_description LIKE ? OR venue_name LIKE ? OR category_name LIKE ?) LIMIT ?, ?',
+                ['%'+req.query.term+'%','%'+req.query.term+'%','%'+req.query.term+'%','%'+req.query.term+'%', start, numberPerPage],
                 function(error, results, fields) {
                     if (error) console.log(error);
                     console.log('search results');
