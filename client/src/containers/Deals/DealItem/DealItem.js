@@ -46,6 +46,8 @@ class DealItem extends Component {
         await this.props.history.push('/');
     }
 
+    debugger
+
   }
 
   //set the options to select crypto from
@@ -183,9 +185,9 @@ class DealItem extends Component {
   }
 
   ratingDisplay = (rating) => {
-    let star = <i class="rating fa fa-star" aria-hidden="true"></i>;
-    let halfStar = <i class="rating fas fa-star-half-alt"></i>;
-    let emptyStar = <i class="rating far fa-star" aria-hidden="true"></i>;
+    let star = <i class="fa fa-star" aria-hidden="true"></i>;
+    let halfStar = <i class="fas fa-star-half-alt"></i>;
+    let emptyStar = <i class="far fa-star" aria-hidden="true"></i>;
     let result = [];
     if(rating === 0)
     {
@@ -248,6 +250,11 @@ class DealItem extends Component {
     let editorState = EditorState.createWithContent(dealDescription);
 
     return editorState;
+  }
+
+  showNumberOfReviews = () => {
+    debugger
+    return this.props.reviews.allReviews !== undefined ? this.props.reviews.allReviews.length : 0
   }
 
 
@@ -449,11 +456,70 @@ class DealItem extends Component {
               </div>
 
               <div className="sellers-reviews">
-                <div id="seller-reviews-container" className="deal-name-label">
-                  <div id="seller-review-label">
-                    Seller
-                  </div>
+
+                <div id="seller-review-label">
+                  Seller
                 </div>
+
+                <div id="seller-propfile-rating">
+                  <div id="seller-review-profile">
+                    <div id="seller-review-avatar">
+                      <i className={'fas py-3 px-4 user-icon-navbar ' + this.props.photo.photo}></i>
+                    </div>
+                      <div>
+                        <strong id="seller-review-name">{dealItem && dealItem.venue_name || dealItem && dealItem.seller_name}</strong>
+                        <div id="seller-review-verify">Verified: <i className="fas fa-envelope"></i> <i class="fas fa-mobile-alt"></i></div>
+                      </div>
+                  </div>
+
+                  <div id="seller-review-rating">
+                    <div>Seller's Average Rating
+                      <small className="star-space-right">
+                        {this.ratingDisplay(reviews.rating)} ({this.showNumberOfReviews()})
+                      </small>
+                    </div>
+                    <label>Reviews</label>
+                    <div id="seller-reviews-container">
+                    {reviews.allReviews !== undefined &&
+                      reviews.allReviews.length > 0 ?
+                      reviews.allReviews.map(reviews => (
+                        <div key={reviews.review_id} className="review-box">
+                          <div className="review-header-container">
+                            <div className="review-header">
+                                <div className="buyer-review-avatar">
+                                  <i className={'fas py-2 px-3 user-icon-navbar ' + reviews.buyer_photo}></i>
+                                </div>
+                                <div>
+                                  <strong className="text-secondary">{reviews.buyer_name}</strong>
+                                  <small className="star-buyer">{this.ratingDisplay(reviews.rating)}</small>
+                                </div>
+                              {/* {reviews.buyer_name} purchased {reviews.deal_name} */}
+                            </div>
+                            <small className="buyer-review-date">
+                              {reviews.rating_date_reviewed.substring(0, 10)}
+                            </small>
+                          </div>
+
+                          <div>
+                            <div className="text-secondary">{reviews.rating_title} </div>
+                          </div>
+
+                          <div className="review-body">{reviews.rating_body}</div>
+
+                          <small>
+                            <a href="/">Report abuse</a>
+                          </small>
+                          <hr/>
+                        </div>
+                      )) : <div className="text-secondary">This seller has no reviews yet!</div> }
+                    </div>
+
+                  </div>
+
+
+
+              </div>
+
               </div>
           </div>
 
@@ -487,6 +553,7 @@ const mapStateToProps = state => ({
   showShippingStep: state.DealItem.showShippingStep,
   showPayingStep: state.DealItem.showPayingStep,
   dealCreated: state.CreateDeal.dealCreated,
+  photo: state.Photo,
 });
 
 

@@ -34,7 +34,7 @@
 .deal-item-discount {
   background-color: #e63e43;
   border:  #e63e43 1px solid;
-  font-size: 12px;
+  font-size: 15px;
   border-radius: 5px;
   margin: 0 7px;
   padding: 5px;
@@ -258,19 +258,92 @@ ol.progtrckr li.progtrckr-done:hover:before {
 
 /* Seller Review */
 .sellers-reviews {
-  min-height: 200px;
+  /* min-height: 500px; */
   margin: 0px 50px;
   margin-bottom: 10px;
   box-sizing: border-box;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-  display: flex;
   border-radius: 5px;
-}
-
-#seller-reviews-container {
   padding: 20px;
+  font-weight: 700;
+  font-size: 1.5em;
 }
 
-#seller-review-label {
-  font-weight: 700;
+#seller-review-label{
+  margin-bottom: 20px;
+}
+
+#seller-review-avatar, #buyer-review-avatar {
+  margin-right: 10px;
+}
+
+#seller-review-name {
+  font-size: 1em;
+}
+
+#seller-review-verify, .buyer-review-rating {
+  font-size: .8em;
+  margin-right: 5px;
+}
+
+#seller-review-verify i {
+ margin-right: 5px;
+}
+
+#seller-propfile-rating {
+  display: flex;
+  width: 100%;
+}
+
+#seller-review-profile {
+  display: flex;
+  width: 35%;
+  margin-right: 25px;
+  padding: 0 20px;
+}
+
+#seller-review-rating {
+  width: 65%;
+  padding: 0 20px;
+  font-size: .8em;
+}
+
+.star-space{
+  padding: 0px 10px;
+}
+
+.star-space-right{
+  margin: 0 10px;
+}
+
+.star-buyer {
+  display: flex;
+}
+
+.review-header-container{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.review-header{
+  display: flex;
+}
+
+.review-header i {
+  display: flex;
+  width: 101%;
+}
+
+.buyer-review-avatar {
+  margin-right: 10px;
+}
+
+.buyer-review-date {
+  justify-content: space-between;
+}
+
+.review-body {
+  font-size: .9em;
+
 }

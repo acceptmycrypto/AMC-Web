@@ -18,6 +18,7 @@ export function _loadReviews(seller_id) {
     return fetch(`/api/reviews/sellers/${seller_id}`)
     .then(res => res.json())
     .then(resJson => {
+      debugger
       dispatch(fetchReviewsSuccess(resJson));
       return resJson;
     })
