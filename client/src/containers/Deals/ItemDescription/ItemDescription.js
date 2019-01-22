@@ -4,7 +4,7 @@ import { Editor } from 'draft-js';
 
 const ItemDescription = props => {
   const sellers_rating = props.sellers_avg_rating;
-
+  console.log(props);
   return (
     <div>
       <div className="content item-description">

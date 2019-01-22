@@ -475,7 +475,7 @@ class DealItem extends Component {
                   <div id="seller-review-rating">
                     <div>Seller's Average Rating
                       <small className="star-space-right">
-                        {this.ratingDisplay(reviews.rating)} ({this.showNumberOfReviews()})
+                        {this.ratingDisplay(dealItem && dealItem.sellers_avg_rating)} ({this.showNumberOfReviews()})
                       </small>
                     </div>
                     <label>Reviews</label>
