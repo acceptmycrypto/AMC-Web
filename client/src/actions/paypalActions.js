@@ -30,7 +30,6 @@ export function _paypal(
     return fetch("/paypal/execute-payment", settings)
       .then(res => res.json())
       .then(jsonTransaction => {
-        debugger
         dispatch(createTransactionSuccess(jsonTransaction));
         return jsonTransaction;
       })

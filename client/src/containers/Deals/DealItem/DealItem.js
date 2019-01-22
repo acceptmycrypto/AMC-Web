@@ -43,9 +43,6 @@ class DealItem extends Component {
         // localStorage.removeItem('token');
         await this.props.history.push('/');
     }
-
-    debugger
-
   }
 
   //set the options to select crypto from
@@ -227,7 +224,6 @@ class DealItem extends Component {
   }
 
   showNumberOfReviews = () => {
-    debugger
     return this.props.reviews.allReviews !== undefined ? this.props.reviews.allReviews.length : 0
   }
 
@@ -529,7 +525,6 @@ const mapStateToProps = state => ({
   dealCreated: state.CreateDeal.dealCreated,
   photo: state.Photo,
 });
-
 
 const matchDispatchToProps = dispatch =>{
   return bindActionCreators({

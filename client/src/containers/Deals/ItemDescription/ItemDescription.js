@@ -4,7 +4,6 @@ import { Editor } from 'draft-js';
 
 const ItemDescription = props => {
   const sellers_rating = props.sellers_avg_rating;
-  console.log(props);
   return (
     <div>
       <div className="content item-description">
@@ -37,16 +36,7 @@ const ItemDescription = props => {
               {props.deal_name && props.calculateDiscount(props.pay_in_dollar, props.pay_in_crypto)}% OFF</small>
               </div>
               <div className="text-dark">${props.deal_name && props.pay_in_dollar.toFixed(2)}</div>
-              {/* <div className="text-dark">
-                {props.date_created && props.date_created.substring(0, 10)}
-              </div> */}
             </div>
-
-            {/* <div>
-              <div>Pay in Crypto:  ${dealItem && dealItem.pay_in_crypto.toFixed(2)}</div>  <small className="deal-item-discount">
-              {dealItem && this.convertToPercentage(dealItem.pay_in_dollar, dealItem.pay_in_crypto)}% OFF</small> <br/>
-              <small>Pay in Dollar:  ${dealItem && dealItem.pay_in_dollar.toFixed(2)} <br/></small>
-            </div> */}
           </div>
         </div>
 
@@ -78,46 +68,6 @@ const ItemDescription = props => {
           <button>Buy Now</button>
         </div>
       </div>
-
-      {/* <div className="content sellers-reviews">
-        <div>
-          <strong>
-            Seller's Average Rating is:{" "}
-            <span className="star-space">
-              {props.rating_display(sellers_rating)}
-            </span>
-          </strong>
-          {props.sellers_avg_rating} out of 5 stars{" "}
-        </div>
-        <div>Seller's Reviews Below:</div>
-        {props.allReviews != undefined &&
-          props.allReviews.length > 0 &&
-          props.allReviews.map(reviews => (
-            <div className="review-box">
-              <div className="review-header">
-                {reviews.buyer_name} purchased {reviews.deal_name}
-              </div>
-              <div>
-                <small className="star-space-right">
-                  {props.rating_display(reviews.rating)}
-                </small>
-                <strong>{reviews.rating_title} </strong>
-                <small className="float-right">
-                  Date of Review:
-                  {reviews.rating_date_reviewed.substring(0, 10)}
-                </small>
-              </div>
-              <div className="review-body">{reviews.rating_body}</div>
-              <div>
-                <a href="/">report abuse</a>
-              </div>
-            </div>
-          ))}
-        {props.allReviews != undefined && props.allReviews.length == 0 && (
-          <div>This seller has no reviews yet!</div>
-        )}
-      </div> */}
-
     </div>
   );
 };
