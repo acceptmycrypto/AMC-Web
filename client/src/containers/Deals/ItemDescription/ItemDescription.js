@@ -13,14 +13,12 @@ const ItemDescription = props => {
           <div className="condition-category-posted-container">
             <div className="condition-category-posted">
               <div className="text-secondary">Condition</div>
-              <div className="text-secondary">Category</div>
               <div className="text-secondary">Posted</div>
             </div>
             <div className="condition-category-posted">
               <div className="text-dark">
                 {props.item_condition ? props.item_condition : "N/A"}
               </div>
-              <div className="text-dark">{props.category ? props.category : "N/A"}</div>
               <div className="text-dark">
                 {props.date_created && props.date_created.substring(0, 10)}
               </div>
@@ -49,6 +47,17 @@ const ItemDescription = props => {
               {dealItem && this.convertToPercentage(dealItem.pay_in_dollar, dealItem.pay_in_crypto)}% OFF</small> <br/>
               <small>Pay in Dollar:  ${dealItem && dealItem.pay_in_dollar.toFixed(2)} <br/></small>
             </div> */}
+          </div>
+        </div>
+
+        <div id="category-display-flex">
+          <div className="text-secondary condition-category-posted">Category</div>
+          <div id="category-span">
+           {props.deal_category !== undefined && props.deal_category.map((category) => {
+                return (
+                  <div className="text-dark">{category}</div>
+                )
+              })}
           </div>
         </div>
 
