@@ -12,7 +12,7 @@ const PurchaseOrder = props => {
       <div>
         <form>
           <div class="form-group">
-            <label className="text-capitalize" htmlFor="select_crypto">Select the Cryptocurrency to pay with</label>
+            <label className="text-capitalize payment-name-label" htmlFor="select_crypto">Select the Cryptocurrency to pay with</label>
               <Select
                 id="select_crypto"
                 required

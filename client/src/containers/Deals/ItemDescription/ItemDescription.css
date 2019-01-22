@@ -2,7 +2,7 @@
     position: static;
 }
 
-.deal-name-label, .shipping-name-label {
+.deal-name-label, .shipping-name-label, .payment-name-label {
   font-weight: 700;
   font-size: 1.5em;
 }

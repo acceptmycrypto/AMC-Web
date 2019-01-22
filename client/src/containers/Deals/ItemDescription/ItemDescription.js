@@ -32,10 +32,15 @@ const ItemDescription = props => {
             <div className="condition-category-posted">
               <div className="text-dark">
                 ${props.deal_name && props.pay_in_crypto.toFixed(2)}
-                <small className="deal-item-discount">
-              {props.deal_name && props.calculateDiscount(props.pay_in_dollar, props.pay_in_crypto)}% OFF</small>
+                {/* <small className="deal-item-discount">
+              {props.deal_name && props.calculateDiscount(props.pay_in_dollar, props.pay_in_crypto)}% OFF</small> */}
               </div>
               <div className="text-dark">${props.deal_name && props.pay_in_dollar.toFixed(2)}</div>
+            </div>
+            <div>
+              <div className="deal-item-discount">
+                {props.deal_name && props.calculateDiscount(props.pay_in_dollar, props.pay_in_crypto)}% OFF
+              </div>
             </div>
           </div>
         </div>
