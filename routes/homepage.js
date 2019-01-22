@@ -40,19 +40,19 @@ var connection = mysql.createConnection({
 
 router.get('/load/categories/list', function (req, res) {
     
-    connection.query('SELECT DISTINCT id, category_name FROM category WHERE id = 1 OR id = 2 OR id = 3 OR id = 4 OR id = 5 OR id = 6 OR id = 7 OR id = 8 OR id = 9 OR id = 10 OR id = 11 OR id = 12;', function (error, results, fields) {
+    connection.query('SELECT DISTINCT id, category_name FROM category WHERE id = 1 OR id = 3 OR id = 4 OR id = 8 OR id = 9 OR id = 10 OR id = 12;', function (error, results, fields) {
         if (error) throw error;
         console.log(results);
         res.json(results);
     });
 });
 
-router.get('home/deals/:category_id', function (req, res) {
+router.get('/home/deals/:category_id', function (req, res) {
     let category_id = req.params.category_id;
     
     connection.query(
-        'SELECT DISTINCT deals.id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, venues.venue_name, venues.venue_link, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings, category.id AS category_id, category.category_name FROM deals LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN cryptos_deals ON cryptos_deals.deal_id = deals.id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON categories_deals.deals_id = deals.id  WHERE deals.venue_id IN (SELECT DISTINCT venue_id FROM cryptos_venues WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos WHERE user_id = ?)) OR deals.id IN (SELECT DISTINCT deal_id FROM cryptos_deals WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos WHERE user_id = ?)) AND ',
-        [id, id],
+        'SELECT DISTINCT deals.id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, venues.venue_name, venues.venue_link, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings FROM deals LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN cryptos_deals ON cryptos_deals.deal_id = deals.id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON  categories_deals.deals_id = deals.id WHERE categories_deals.category_id = ?',
+        [category_id],
         function (error, results, fields) {
           if (error) console.log(error);
           res.json(results);
