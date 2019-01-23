@@ -17,7 +17,7 @@ var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 
 if (process.env.NODE_ENV === 'production') {
-  // Exprees will serve up production assets
+  // Express will serve up production assets
   app.use(express.static('client/build'));
 
   // Express serve up index.html file if it doesn't recognize route
@@ -90,6 +90,14 @@ app.use("/", cryptosRankingRoutes);
 app.use("/", notificationRoutes);
 app.use("/", landingUsersRoutes);
 app.use("/", landingResultsRoutes);
+
+if (process.env.NODE_ENV === 'production') {
+  // Express serve up index.html file if it doesn't recognize route
+
+  app.get('/*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
 
 
 path.join(__dirname, "public");
