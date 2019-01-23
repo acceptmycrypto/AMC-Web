@@ -45,8 +45,9 @@ router.get('/landing/users/dropdown', function (req, res) {
         res.json(results);
     });
 
-    res.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
-    console.log("line 49", path.resolve(__dirname, './client/build', 'index.html'))
+    console.log("line 49", path.resolve(__dirname, '../client/build', 'index.html'))
+    res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+
 });
 
 router.post('/landing/users/votes', function (req, res) {

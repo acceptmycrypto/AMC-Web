@@ -50,8 +50,8 @@ router.get('/landing/results', function (req, res) {
         res.json(results);
     });
 
-    res.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
-    console.log("line 54", path.resolve(__dirname, './client/build', 'index.html'))
+    res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+    console.log("line 54", path.resolve(__dirname, '../client/build', 'index.html'))
 });
 
 
