@@ -7072,7 +7072,7 @@ react-select@^2.1.0:
     react-input-autosize "^2.2.1"
     react-transition-group "^2.2.1"
 
-react-stepzilla@^4.7.3:
+react-stepzilla@^4.8.0:
   version "4.8.0"
   resolved "https://registry.yarnpkg.com/react-stepzilla/-/react-stepzilla-4.8.0.tgz#b775801fcc39b9852945473e5ce2410a98a0df66"
 
