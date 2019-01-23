@@ -19,12 +19,6 @@ var jwt = require('jsonwebtoken');
 if (process.env.NODE_ENV === 'production') {
   // Express will serve up production assets
   app.use(express.static('client/build'));
-
-  // Express serve up index.html file if it doesn't recognize route
-  // const path = require('path');
-  // app.get('*', (req, res) => {
-  //   res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-  // });
 }
 else app.use(express.static("public"));
 
@@ -58,8 +52,6 @@ var notificationRoutes = require("./routes/cryptos_ranking.js");
 var landingUsersRoutes = require("./routes/landing_users.js");
 var landingResultsRoutes = require("./routes/landing_results.js");
 
-
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 // app.use(express.static("public"));
@@ -92,8 +84,7 @@ app.use("/", landingUsersRoutes);
 app.use("/", landingResultsRoutes);
 
 if (process.env.NODE_ENV === 'production') {
-  // Express serve up index.html file if it doesn't recognize route
-
+  // catch all routes
   app.get('/*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });
