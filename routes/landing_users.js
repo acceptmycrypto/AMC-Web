@@ -25,22 +25,17 @@ app.use(methodOverride('_method'));
 
 var connection = mysql.createConnection({
     host: process.env.DB_HOST,
-  
+
     // Your port; if not 3306
     port: 3306,
-  
+
     // Your username
     user: process.env.DB_USER,
-  
+
     // Your password
     password: process.env.DB_PW,
     database: process.env.DB_DB
   });
-
-
-
-
-
 
 router.get('/landing/users/dropdown', function (req, res) {
 
@@ -49,6 +44,9 @@ router.get('/landing/users/dropdown', function (req, res) {
 
         res.json(results);
     });
+
+    res.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
+    console.log("line 49", path.resolve(__dirname, './client/build', 'index.html'))
 });
 
 router.post('/landing/users/votes', function (req, res) {
@@ -68,25 +66,25 @@ router.post('/landing/users/votes', function (req, res) {
             var newUserCryptoRow ="";
 
             for (var i in selectedCryptos){
-                newUserCryptoRow +=  "('" + user_id + "','" + selectedCryptos[i]  + "'),"; 
+                newUserCryptoRow +=  "('" + user_id + "','" + selectedCryptos[i]  + "'),";
             }
-            allUserCryptoRows = newUserCryptoRow.substr(0,newUserCryptoRow.length-1); 
+            allUserCryptoRows = newUserCryptoRow.substr(0,newUserCryptoRow.length-1);
             var userCryptoQuery = 'INSERT INTO landing_users_cryptos (landing_users_id, landing_cryptos_id) VALUES ' + allUserCryptoRows;
             // insertUserCryptoLanding(userCryptoQuery);
             connection.query(userCryptoQuery, function (error, results, fields) {
                 if (error) throw error;
                 console.log(results);
             });
-        
+
             }
-                        
+
         )
 
         res.json(result);
-            
+
     }
   );
-    
+
 });
 
 

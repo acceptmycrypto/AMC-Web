@@ -25,13 +25,13 @@ app.use(methodOverride('_method'));
 
 var connection = mysql.createConnection({
     host: process.env.DB_HOST,
-  
+
     // Your port; if not 3306
     port: 3306,
-  
+
     // Your username
     user: process.env.DB_USER,
-  
+
     // Your password
     password: process.env.DB_PW,
     database: process.env.DB_DB
@@ -49,6 +49,9 @@ router.get('/landing/results', function (req, res) {
 
         res.json(results);
     });
+
+    res.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
+    console.log("line 54", path.resolve(__dirname, './client/build', 'index.html'))
 });
 
 
