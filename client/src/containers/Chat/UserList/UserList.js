@@ -1,9 +1,9 @@
 import React from "react";
-import "./MessageList.css";
+import "./UserList.css";
 
 const MessageList = props => {
   return (
-    <div></div>
+    <div>User</div>
   );
 };
 

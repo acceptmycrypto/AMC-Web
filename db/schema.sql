@@ -382,8 +382,6 @@ CREATE TABLE chat_messages(
 	FOREIGN KEY (chat_session_id) REFERENCES chat_sessions(id)
 );
 
-
-
 -- table to be used in the future
 -- custom options to be displayed when user is listing an item to sell eg. size, color, model etc based on the categoryies of the item
 -- CREATE TABLE customizable_option(

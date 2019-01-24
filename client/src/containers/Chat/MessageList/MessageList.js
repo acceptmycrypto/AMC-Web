@@ -3,7 +3,7 @@ import "./MessageList.css";
 
 const MessageList = props => {
   return (
-    <div></div>
+    <div>List of messages</div>
   );
 };
 
