@@ -122,7 +122,7 @@ router.post('/listdeal', verifyToken, function(req, res) {
   let deal_name = dealName;
   let deal_description = JSON.stringify(textDetailRaw);
   let item_condition;
-  if (item_condition) {
+  if (selectedCondition.value) {
     item_condition = selectedCondition.value;
   }
   let featured_deal_image = images[0].Location;
@@ -242,6 +242,7 @@ router.post('/verification/start', verifyToken, function(req, res) {
 router.post('/verification/check', verifyToken, function(req, res) {
 
   let seller_id = req.decoded._id;
+  console.log("SELLER", seller_id);
 
   let options = {
     method: "GET",
@@ -257,8 +258,11 @@ router.post('/verification/check', verifyToken, function(req, res) {
   request(options, function (error, response, body) {
     if (error) console.log(error);
 
+    let status = JSON.parse(body);
+
     //update seller to verified if code entered is correct
-    if (body.success === true) {
+    if (status.success) {
+
       connection.query(
         'UPDATE users SET ? WHERE ?',
         [{phone_number_verified: 1}, {id: seller_id}],

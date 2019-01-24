@@ -1,6 +1,7 @@
 export function _paypal(
   deal_id,
-  fullName,
+  firstName,
+  lastName,
   shippingAddress,
   shippingCity,
   shippingState,
@@ -15,7 +16,8 @@ export function _paypal(
     },
     body: JSON.stringify({
       deal_id,
-      fullName,
+      firstName,
+      lastName,
       shippingAddress,
       shippingCity,
       shippingState,
@@ -28,7 +30,6 @@ export function _paypal(
     return fetch("/paypal/execute-payment", settings)
       .then(res => res.json())
       .then(jsonTransaction => {
-        debugger
         dispatch(createTransactionSuccess(jsonTransaction));
         return jsonTransaction;
       })
