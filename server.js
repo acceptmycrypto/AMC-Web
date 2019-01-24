@@ -18,12 +18,15 @@ var jwt = require('jsonwebtoken');
 
 if (process.env.NODE_ENV === 'production') {
   // Exprees will serve up production assets
+  console.log('line 21');
   app.use(express.static('client/build'));
-
+  
   // Express serve up index.html file if it doesn't recognize route
   // const path = require('path');
-  // app.get('*', (req, res) => {
-  //   res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  // app.get('/*', (req, res) => {
+  //   console.log("line 26");
+  //   // console.log(req);
+  //   res.sendFile(path.join(__dirname, 'client','build', 'index.html'));
   // });
 }
 else app.use(express.static("public"));
