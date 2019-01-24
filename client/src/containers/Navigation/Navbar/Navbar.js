@@ -18,13 +18,15 @@ class Navbar extends Component {
     this.props.history.push('/');
   }
 
-  componentDidMount() {
+  componentDidMount = async() => {
 
+    await this.props._isLoggedIn(localStorage.getItem('token'));
     if (this.props.userLoggedIn) {
       this.props._loadPhoto(localStorage.getItem('token'));
-    } else {
+    } 
+    // else {
 
-    }
+    // }
     // let isLoggedIn = await this.props._isLoggedIn(localStorage.getItem('token'));
     // if(isLoggedIn.message == "WrongToken"){
 
@@ -37,6 +39,7 @@ class Navbar extends Component {
   }
 
   render() {
+    console.log("user", this.props.userLoggedIn);
     return (
       <header className="Toolbar">
         <div className="nav-left">
@@ -87,7 +90,7 @@ class Navbar extends Component {
             </Link>
           </li> */}
           <li>
-            {this.props.photo.photo
+            {this.props.photo.photo 
               ? <div className="dropdown show m-0 p-0">
                 <div className="dropdown-toggle picture-toggle m-0 p-0" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i className={'fas my-1 py-2 px-3 user-icon-navbar ' + this.props.photo.photo}></i>
