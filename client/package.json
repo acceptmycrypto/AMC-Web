@@ -5,6 +5,7 @@
   "proxy": "http://localhost:3001",
   "dependencies": {
     "add": "^2.0.6",
+    "bootstrap": "^4.2.1",
     "coin-address-validator": "^1.0.4-1",
     "draft-js": "^0.10.5",
     "react": "^16.7.0",
@@ -22,6 +23,7 @@
     "react-select": "^2.1.0",
     "react-timestamp": "^4.4.0",
     "react-toastify": "^4.5.2",
+    "reactstrap": "^7.1.0",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "select": "^1.1.2",
