@@ -37,7 +37,7 @@ class DealItem extends Component {
       console.log(this.props.dealItem.seller_id);
       let seller_id = this.props.dealItem.seller_id || this.props.dealItem.venue_id;
       await this.props._loadReviews(seller_id);
-
+      
     }else{
         // localStorage.removeItem('token');
         await this.props.history.push('/');

@@ -9,15 +9,16 @@ import UserList from "./UserList";
 import MessageList from "./MessageList";
 
 class Chat extends Component {
-  componentDidMount() {
-    this.props._isLoggedIn(localStorage.getItem('token'));
 
-    if (this.props.userLoggedIn) {
-      // this.props._loadDeals(localStorage.getItem('token'));
+  componentDidMount = async () => {
+    //return the param value
+    await this.props._isLoggedIn(localStorage.getItem('token'));
+
+    if (await this.props.userLoggedIn) {
       console.log("user is login")
     }else{
         // localStorage.removeItem('token');
-        this.props.history.push('/');
+        await this.props.history.push('/');
     }
   }
 
@@ -34,7 +35,9 @@ class Chat extends Component {
   }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  userLoggedIn: state.LoggedIn.userLoggedIn,
+});
 
 const matchDispatchToProps = dispatch =>{
   return bindActionCreators({ _isLoggedIn }, dispatch);
