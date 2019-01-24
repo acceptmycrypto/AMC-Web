@@ -25,7 +25,6 @@ import Layout from "../../Layout";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
 import { _loadReviews } from "../../../actions/reviewsActions";
 import { EditorState, convertFromRaw } from 'draft-js';
-import { debug } from "util";
 
 class DealItem extends Component {
   componentDidMount = async () => {

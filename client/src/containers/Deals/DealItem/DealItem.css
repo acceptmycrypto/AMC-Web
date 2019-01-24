@@ -119,45 +119,6 @@
   margin-bottom: 10px;
 }
 
-.rating{
-  color: yellow;
-}
-
-/*Make the button stay at the bottom*/
-.footer-buttons {
-  position: absolute;
-  bottom: 0%;
-  margin: 20px 0px;
-  width: 95%;
-  z-index: 0;
-}
-
-/* overriding the default color of the react-stepzilla */
-.footer-buttons button {
-  background-color: #52C4B9;
-    color: white;
-    border: none;
-    outline: none;
-    border-radius: 25px;
-    padding: 10px 25px;
-    font-size: 1em;
-    font-weight: 500;
-}
-
-.footer-buttons button:hover {
-  background-color: #52C4B9;
-}
-
-/* !important us used to override bootstrap */
-.footer-buttons button:active {
-  background-color: #52C4B9 !important;
-}
-
-.footer-buttons #next-button {
-  float: right;
-}
-
-
 /* Seller Review */
 .sellers-reviews {
   /* min-height: 500px; */
