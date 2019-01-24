@@ -11,6 +11,7 @@ import Footer from '../../../components/Layout/Footer';
 import Layout from '../../Layout';
 import { _loadHomepage } from '../../../actions/homepageActions';
 
+import { UncontrolledCarousel } from 'reactstrap';
 
 
 
@@ -41,19 +42,47 @@ class Homepage extends Component {
       return <div>Error! {error.message}</div>;
     }
 
+    const items = [
+      {
+        // src: './assets/images/user.png',
+        src: 'https://static.bhphoto.com/images/images500x500/Rosco_102354264825_E_Colour_5426_Blueberry_Blue_1233286396000_595543.jpg',
+        altText: 'Slide 1',
+        // caption: 'Slide 1',
+        // header: 'Slide 1 Header'
+
+      },
+      {
+        // src: './assets/images/user.png',
+        src: 'https://www.solidbackgrounds.com/images/2048x1536/2048x1536-true-blue-solid-color-background.jpg',
+        altText: 'Slide 2',
+        // caption: 'Slide 2',
+        // header: 'Slide 2 Header'
+      },
+      {
+        src: './assets/images/user.png',
+        src: 'https://static.bhphoto.com/images/images500x500/Savage_36_1253_Widetone_Seamless_Background_Paper_1233087643000_486211.jpg',
+        altText: 'Slide 3',
+        // caption: 'Slide 3',
+        // header: 'Slide 3 Header'
+      }
+    ];
+    
+
     return (
       <div>
         <Layout>
           {/* <p id="homepage_title">Homepage</p> */}
-          <Menu pointing secondary className=" d-flex flex-row justify-content-center w-100">
+          <div className="menu-parent">
             {category_list != undefined && category_list.length > 0 && category_list.map(category => (
               // <Menu.Item name={category.category_name} active={activeItem === category.category_name} onClick={this.handleItemClick} />
-              <Menu.Item key={category.id} name={category.category_name} />
+                <span className="menu-item" key={category.id} category-id={category.id}>{category.category_name}</span>
+                // {/* <Menu.Item key={category.id} content={category.category_name} category-id={category.id} /> */}
             ))}
-          </Menu>
+          </div>
+          <UncontrolledCarousel items={items} indicators={false}  className="homepage-carousel" />
           <div>
-            <h3 className="ml-5">Apparel & Accessories</h3>
-            <div className="mx-4 category_div justify-content-center">
+            <h3 className="category-title-margin mb-3">Apparel & Accessories<i class="fas fa-chevron-right chevron-right"></i></h3>
+            <div className="category_div">
             {apparel_accessories != undefined && apparel_accessories.length > 0 && apparel_accessories.map(deal => (
               <div key={deal.id} className="category_item mx-2">
                 <Link to={`/feed/deals/${deal.id}/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
