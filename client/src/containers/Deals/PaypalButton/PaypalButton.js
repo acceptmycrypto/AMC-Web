@@ -8,11 +8,11 @@ import PaypalExpressBtn from 'react-paypal-express-checkout';
 class PaypalButton extends React.Component {
     render() {
 
-    const {dealItemInfo, fullNameInfo, shippingAddressInfo, shippingCityInfo, shippingStateInfo, zipcodeInfo} = this.props;
+    const {dealItemInfo, firstNameInfo, lastNameInfo, shippingAddressInfo, shippingCityInfo, shippingStateInfo, zipcodeInfo} = this.props;
 
 		const onSuccess = (payment) => {
       //make a post route to add info to users_purchase table
-      this.props._paypal(dealItemInfo.deal_id, fullNameInfo, shippingAddressInfo, shippingCityInfo, shippingStateInfo, zipcodeInfo, payment.payerID, payment.paymentID);
+      this.props._paypal(dealItemInfo.deal_id, firstNameInfo, lastNameInfo, shippingAddressInfo, shippingCityInfo, shippingStateInfo, zipcodeInfo, payment.payerID, payment.paymentID);
 
       //should redirect user to the summary page (receipt)
       //right now, we just have it redirected to the dealitem page

@@ -1,6 +1,7 @@
 .shipping-form {
-  height: 255px;
+  max-height: 400px;
   overflow-y:auto;
   overflow-x: hidden;
 }
+
 

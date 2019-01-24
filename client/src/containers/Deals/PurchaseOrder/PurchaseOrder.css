@@ -3,17 +3,14 @@
   margin-top: 10px;
 }
 
-#steps-workflow, #next-step {
+.steps-workflow, .next-step {
   display: flex;
   justify-content: flex-end;
   width: 100%;
 }
 
-#previous-step {
-  /* margin-top: 20px; */
-}
 
-#steps-workflow button, #next-step button, #previous-step button {
+.steps-workflow button, .next-step button, .previous-step button {
   background-color: rgb(22, 190, 182);
   color: white;
   border: none;

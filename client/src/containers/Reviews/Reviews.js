@@ -16,25 +16,15 @@ import { _isLoggedIn } from "../../actions/loggedInActions";
 // import { handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos } from "../../../actions/cryptoPortfolioActions";
 // import { resetDealitemState } from "../../../actions/dealItemActions";
 
-
-
-
 class Reviews extends Component {
-  
-  
+
   componentDidMount = async () => {
-    await console.log(this.props.userLoggedIn);
     await this.props._isLoggedIn(localStorage.getItem('token'));
 
-    // // await console.log(this.props.userLoggedIn);
-
-    if (await this.props.userLoggedIn) {      
+    if (await this.props.userLoggedIn) {
       await this.props._loadReviews(localStorage.getItem('token'),'2');
-      console.log('here');
-      console.log(this.props.reviews.allReviews[0]);
     }else{
-        // localStorage.removeItem('token');
-        await this.props.history.push('/');
+      await this.props.history.push('/');
     }
   };
 
@@ -50,25 +40,20 @@ class Reviews extends Component {
       return <div>Loading...</div>;
     }
 
-    //reset dealItem state when user hit deals route
-    // this.props.resetDealitemState();
-
-  
-
     return (
       <div>
         <Layout >
             This is going to be review page
-       
+
                 Review 1
             {/* LAYOUT OF PAGE */}
             {/* there should be some info of the seller:
-            such as 
+            such as
                 - name
                 - their cryptocurrencies
                 - NOT email right? */}
-          
-           
+
+
         {/* <div className="userProfile d-flex flex-row justify-content-between">
           <div className="d-flex flex-column w-25 ml-2">
             {user_info != undefined && user_info.length > 0 && <ProfileCard user_info={user_info} />}
@@ -87,22 +72,22 @@ class Reviews extends Component {
 
           <div className="w-50 mr-4 ml-5">
           { transactions != undefined && <ProfileFeed classname="w-50" />}
-            
+
           </div>
 
-          {/* <div className="width-20 mr-3">       
+          {/* <div className="width-20 mr-3">
             <FriendCard friends_array={this.state.friends_array} />
           </div> */}
 
           <CryptoRankings/>
 
 
-     
-      
+
+
         </Layout >
         </div>
-   
-      
+
+
     );
   }
 }
@@ -116,7 +101,7 @@ const mapStateToProps = state => ({
 //   tx_history_view: state.UserInfo.tx_history_view,
 //   loading: state.UserInfo.loading,
     error: state.UserInfo.error,
-    userLoggedIn: state.LoggedIn.userLoggedIn, 
+    userLoggedIn: state.LoggedIn.userLoggedIn,
     reviews: state.Reviews.reviews
 //   crypto_view: state.UserInfo.crypto_view,
 //   qr_shown: state.UserInfo.qr_shown,
