@@ -45,7 +45,7 @@ class SignIn extends Component {
     await this.props._isLoggedIn(localStorage.getItem('token'));
 
     if (await this.props.userLoggedIn) {
-      await this.props.history.push('/feed/deals');
+      await this.props.history.push('/');
     }
   }
 
@@ -66,7 +66,7 @@ class SignIn extends Component {
         <Aside />
         <div className="App__Form">
           <div className="PageSwitcher">
-            <NavLink to="/" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign In</NavLink>
+            <NavLink to="/SignIn" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign In</NavLink>
             <NavLink exact to="/SignUp" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign Up</NavLink>
           </div>
 
