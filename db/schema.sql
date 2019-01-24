@@ -362,6 +362,26 @@ CREATE TABLE flagged_users(
 	FOREIGN KEY (txn_id) REFERENCES users_purchases(txn_id)
 );
 
+CREATE TABLE chat_sessions(
+	id INT NOT NULL AUTO_INCREMENT,
+	buyer_id INT NOT NULL,
+	seller_id INT NOT NULL,
+	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (id),
+	FOREIGN KEY (buyer_id) REFERENCES users(id),
+	FOREIGN KEY (seller_id) REFERENCES users(id),
+);
+
+CREATE TABLE chat_messages(
+	id INT NOT NULL AUTO_INCREMENT,
+	chat_session_id INT NOT NULL,
+	messsage VARCHAR(255) NOT NULL,
+	date_message_sent TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  message_owner_id INT NOT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (chat_session_id) REFERENCES chat_sessions(id)
+);
+
 
 
 -- table to be used in the future
