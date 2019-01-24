@@ -217,7 +217,24 @@ router.post('/listdeal', verifyToken, function(req, res) {
 let phone_number;
 
 router.post('/verification/start', verifyToken, function(req, res) {
+  let seller_id = req.decoded._id;
+
   phone_number = parseInt(req.body.phoneNumber.replace(/[^0-9\.]+/g, "")); //replace 111-111-1111 with 1111111111
+
+  let state = req.body.sellerState.value;
+
+  let {sellerAddress, sellerCity, sellerZipcode} = req.body;
+
+  connection.query("UPDATE users SET ? WHERE ?",
+  [
+    { address: sellerAddress,
+      city: sellerCity,
+      state,
+      zipcode: sellerZipcode
+    }, {id: seller_id}],
+  function (error, results, fields) {
+    if (error) console.log(error);
+  });
 
   let options = {
     method: "POST",
