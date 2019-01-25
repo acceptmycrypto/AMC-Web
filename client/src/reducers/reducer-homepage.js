@@ -3,6 +3,9 @@ import { FETCH_HOMEPAGE_DEALS_BEGIN, FETCH_HOMEPAGE_DEALS_SUCCESS, FETCH_HOMEPAG
 const initialState = {
     category_list : [],
     apparel_accessories :[],
+    electronics: [], 
+    health_beauty: [], 
+    movies_music_games: []
   };
   export default function homepageReducer(state = initialState, action) {
     switch (action.type) {
@@ -19,7 +22,10 @@ const initialState = {
           ...state,
           loading: false,
           category_list: action.payload.category_list,
-          apparel_accessories: action.payload.apparel_accessories
+          apparel_accessories: action.payload.apparel_accessories,
+          electronics: action.payload.electronics,
+          health_beauty: action.payload.health_beauty, 
+          movies_music_games: action.payload.movies_music_games
         };
   
       case FETCH_HOMEPAGE_DEALS_FAILURE:
