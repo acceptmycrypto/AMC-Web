@@ -12,6 +12,7 @@ import Layout from '../../Layout';
 import { _loadHomepage } from '../../../actions/homepageActions';
 
 import { UncontrolledCarousel } from 'reactstrap';
+import CategoryHome from './CategoryHome/CategoryHome';
 
 
 
@@ -23,71 +24,15 @@ class Homepage extends Component {
     this.props._loadHomepage();
   }
 
-  convertToPercentage = (priceInDollar, priceInCrypto) => {
-    return parseInt(((priceInDollar - priceInCrypto) / priceInDollar) * 100)
-  }
-
-  handleLongDescription = (description) => {
-    let trimmedDescription = description.trim();
-    if (trimmedDescription.length > 125) {
-      return trimmedDescription.substring(0, trimmedDescription.indexOf(' ', 75)) + "...";
-    }
-  }
-
-  handleRightButtonClick =(event) =>{
-    event.preventDefault();
-    let containerName = event.target.parentElement.parentElement.childNodes[1].getAttribute('id');
-    if(containerName == null){
-      containerName = event.target.parentElement.childNodes[1].getAttribute('id');    
-    }
-    
-    let container = document.getElementById(containerName);
-    console.log("right", containerName, container);
-    let containerWidth = container.offsetWidth;
-    this.sideScroll(container,'right',25,100,containerWidth);
-    
-   
-
-  }
-
-  handleLeftButtonClick =(event) =>{
-    event.preventDefault();
-    let containerName = event.target.parentElement.parentElement.childNodes[1].getAttribute('id');
-    if(containerName == null){
-      containerName = event.target.parentElement.childNodes[1].getAttribute('id');    
-    }
-    let container = document.getElementById(containerName);
-    console.log("left", containerName, container);
-    let containerWidth = container.offsetWidth;
-    this.sideScroll(container,'left',25,100,containerWidth);
-    
-    
-  }
-
-  sideScroll = (element,direction,speed,distance,step) => {
-      let scrollAmount = 0;
-      let slideTimer = setInterval(function(){
-          if(direction == 'left'){
-              element.scrollLeft -= step;
-          } else {
-              element.scrollLeft += step;
-          }
-          scrollAmount += step;
-          if(scrollAmount >= distance){
-              window.clearInterval(slideTimer);
-          }
-      }, speed);
-  }
-
   render() {
-    const { error, loading, category_list, apparel_accessories } = this.props;
-    console.log(category_list, apparel_accessories);
+    const { error, loading, category_list, apparel_accessories, electronics, health_beauty, movies_music_games } = this.props;
+    // console.log(category_list, apparel_accessories, electronics);
 
     if (error) {
       return <div>Error! {error.message}</div>;
     }
 
-    const items = [
+    const carouselItems = [
       {
         // src: './assets/images/user.png',
         src: 'https://static.bhphoto.com/images/images500x500/Rosco_102354264825_E_Colour_5426_Blueberry_Blue_1233286396000_595543.jpg',
@@ -124,48 +69,11 @@ class Homepage extends Component {
                 // {/* <Menu.Item key={category.id} content={category.category_name} category-id={category.id} /> */}
             ))}
           </div>
-          <UncontrolledCarousel items={items} indicators={false}  className="homepage-carousel" />
-          <div>
-            <h3 className="category-title-margin mb-3">Apparel & Accessories<i className="fas fa-chevron-right chevron-right"></i></h3>
-            <div className="d-flex flex-row">
-              <button type="button" className="btn btn-light" id="leftCategoryButton" onClick={this.handleLeftButtonClick}><i className="fas fa-chevron-left category-icon-chevron"></i></button>
-              <div className="category_div" id="apparel-accessories">
-              {apparel_accessories != undefined && apparel_accessories.length > 0 && apparel_accessories.map(deal => (
-                <div key={deal.id} className="category_item mx-2">
-                  <Link to={`/feed/deals/${deal.id}/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
-
-                      <div className="category-info">
-                        <div className="category-image-div">
-                          <img className="category-image" src={deal.featured_deal_image} alt="deal"/>
-                        </div>
-                        <div className="mt-1">{deal.deal_name}</div>
-                        {/* <small className="deal-description">{this.handleLongDescription(deal.deal_description)}</small> */}
-                        {/* if seller is a vendor then display the venue name else if seller is a user then display the seller name which is the user's username */}
-                        <div><small>Offered by: {deal.venue_name || deal.seller_name}</small></div>
-                      </div>
-
-                      <div className="deal-price">
-                        <div className="price-differ">
-                          <div>
-                            <div className="purchase-method">Dollar</div>
-                            <div>${deal.pay_in_dollar.toFixed(2)}</div>
-                          </div>
-                          <div className="d-flex flex-column text-center justify-content-center">
-                            <div className="purchase-method">Cryptocurrency</div>
-                            <strong className="pay_in_crypto">${deal.pay_in_crypto.toFixed(2)}</strong>
-                            <small className="w-75 pay_in_crypto discount">{this.convertToPercentage(deal.pay_in_dollar, deal.pay_in_crypto)}% OFF</small>
-                            
-                          </div>
-                        </div>
-                      </div>
-
-                  </Link>
-                </div>
-              ))}
-              </div>            
-              <button type="button" className="btn btn-light" id="rightCategoryButton" onClick={this.handleRightButtonClick}><i className="fas fa-chevron-right category-icon-chevron"></i></button>
-            </div>
-          </div>
+          <UncontrolledCarousel items={carouselItems} indicators={false}  className="homepage-carousel" />
+            <CategoryHome category_collection={apparel_accessories} category_collection_name={"Apparel & Accessories"} category_collection_id={"apparel_accessories_container"}/>
+            <CategoryHome category_collection={electronics} category_collection_name={"Electronics, Computers & Office"} category_collection_id={"electronics_container"}/>
+            <CategoryHome category_collection={health_beauty} category_collection_name={"Health & Beauty"} category_collection_id={"health_beauty"}/>
+            <CategoryHome category_collection={movies_music_games} category_collection_name={"Movies, Music & Games"} category_collection_id={"movies_music_games"}/>              
         </Layout>
       </div>
     );
@@ -175,6 +83,9 @@ class Homepage extends Component {
 const mapStateToProps = state => ({
   category_list: state.Homepage.category_list,
   apparel_accessories: state.Homepage.apparel_accessories,
+  electronics: state.Homepage.electronics,
+  health_beauty: state.Homepage.health_beauty,
+  movies_music_games: state.Homepage.movies_music_games,
   error: state.Homepage.error,
   loading: state.Homepage.loading
 
