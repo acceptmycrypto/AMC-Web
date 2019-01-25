@@ -109,7 +109,8 @@ router.post("/checkout", verifyToken, function(req, res) {
                 connection.query(
                   "INSERT INTO users_shipping_address SET ?",
                   {
-                    shipping_fullname: req.body.fullName,
+                    shipping_firstname: req.body.firstName,
+                    shipping_lastname: req.body.lastName,
                     shipping_address: req.body.shippingAddress,
                     shipping_city: req.body.shippingCity,
                     shipping_state: req.body.shippingState,

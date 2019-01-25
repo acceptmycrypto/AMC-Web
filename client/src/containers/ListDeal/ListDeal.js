@@ -33,7 +33,6 @@ import LoadingSpinner from "../../components/UI/LoadingSpinner";
 import UploadingImage from "./UploadImage";
 import Pricing from "./Pricing";
 import Description from "./Description";
-import Modal from "react-awesome-modal";
 
 class ListDeal extends Component {
   componentDidMount = () => {

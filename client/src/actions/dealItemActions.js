@@ -11,9 +11,9 @@ export function _loadDealItem(id, deal_name) {
     dispatch(fetchDealItemBegin());
     return fetch(`/api/deals/${id}/${deal_name}`, settings)
       .then(res => res.json())
-      .then(jsonPhoto => {
-        dispatch(fetchDealItemSuccess(jsonPhoto));
-        return jsonPhoto;
+      .then(jsonDeal => {
+        dispatch(fetchDealItemSuccess(jsonDeal));
+        return jsonDeal;
       })
       .catch(error => dispatch(fetchDealItemFailure(error)));
   };
@@ -40,23 +40,16 @@ export const resetDealitemState = () => {
   }
 };
 
-export const handleCustomizingSize = (event) => {
+export const handleFirstNameInput = (event) => {
   return {
-      type: 'SELECT_SIZE',
+      type: 'FIRST_NAME',
       payload: event.target.value
   }
 };
 
-export const handleCustomizingColor = (event) => {
+export const handleLastNameInput = (event) => {
   return {
-      type: 'SELECT_COLOR',
-      payload: event.target.value
-  }
-};
-
-export const handleFullNameInput = (event) => {
-  return {
-      type: 'FULL_NAME',
+      type: 'LAST_NAME',
       payload: event.target.value
   }
 };
@@ -96,12 +89,12 @@ export const handleSelectedCrypto = (selectedOption) => {
   }
 };
 
-export const handleCustomizingStep = () => {
+export const handleDetailStep = () => {
 
   return {
-    type: "SHOW_CUSTOMIZATION",
+    type: "SHOW_DETAIL",
     payload: {
-      showCustomizationStep: true,
+      showDetailStep: true,
       showShippingStep: false,
       showPayingStep: false
     }

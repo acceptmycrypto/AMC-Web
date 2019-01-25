@@ -18,6 +18,7 @@ class Navbar extends Component {
     this.props.history.push('/');
   }
 
+
   componentDidMount = async() => {
 
     await this.props._isLoggedIn(localStorage.getItem('token'));
@@ -33,17 +34,23 @@ class Navbar extends Component {
     // }
     // 
 
-    console.log(this.props.photo.photo);
-
+    // console.log(this.props.photo.photo);
 
   }
+
+  resetNavbar = () => {
+      document.querySelector('#searchbarinput').value = '';
+      this.props.resetNavbar();
+  }
+
+ 
 
   render() {
     console.log("user", this.props.userLoggedIn);
     return (
       <header className="Toolbar">
         <div className="nav-left">
-          <Link onClick={this.props.resetNavbar} to="/" className="Logo">
+          <Link onClick={this.resetNavbar} to="/" className="Logo">
             <div className="font-17 color-deepBlue">
               <img className="navbar_logo" src="https://s3-us-west-1.amazonaws.com/acceptmycrypto/logo.png" alt="logo" />
               <span className="ml-2">
@@ -51,8 +58,9 @@ class Navbar extends Component {
               </span>
             </div>
           </Link>
-            <SearchBar /> 
-            <Category /> 
+            <SearchBar />
+            <Category/>
+
           <div className="Feed">
             {/* <li>
               <Link to="/feed/deals">

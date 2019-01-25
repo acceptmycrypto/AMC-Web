@@ -161,7 +161,7 @@ class Description extends Component {
 
             <Link
               className="create-deal-modal-link"
-              // style={{ textDecoration: 'none' }}
+              style={{ textDecoration: 'none' }}
               to={`/feed/deals/${dealCreatedResult.deal_id}/${dealNameValue}`}
               onClick={() => {
                 closeModalAfterDealCreated();

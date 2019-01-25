@@ -8,7 +8,8 @@ export function _fetchTransactionInfo(
   shippingCity,
   zipcode,
   shippingState,
-  fullName,
+  firstName,
+  lastName,
   selectedSize,
   selectedColor) {
   const settings = {
@@ -27,7 +28,8 @@ export function _fetchTransactionInfo(
       shippingCity,
       zipcode,
       shippingState,
-      fullName,
+      firstName,
+      lastName,
       selectedSize,
       selectedColor})
   };

@@ -1,10 +1,6 @@
 INSERT INTO deals (venue_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto, category) VALUES ("1", "Safavieh Malone Coffee Table", "Complete your living room with the Malone coffee table. A synthesis of retro and contemporary styling, this subtly glamorous table is crafted with white lacquer-like finish on its top with a bottom shelf of tempered clear glass and a chrome metal frame.", "https://ak1.ostkcdn.com/images/products/9542248/Safavieh-Malone-White-Chrome-Coffee-Table-484ef737-1052-4a6b-88ce-9eb8263250dc_600.jpg", "256.99", "224.99", "Furniture");
 
-INSERT INTO deals (seller_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto, category) VALUES ("1", "Safavieh Malone Coffee Table", "Complete your living room with the Malone coffee table. A synthesis of retro and contemporary styling, this subtly glamorous table is crafted with white lacquer-like finish on its top with a bottom shelf of tempered clear glass and a chrome metal frame.", "https://ak1.ostkcdn.com/images/products/9542248/Safavieh-Malone-White-Chrome-Coffee-Table-484ef737-1052-4a6b-88ce-9eb8263250dc_600.jpg", "256.99", "224.99", "Furniture");
-
 INSERT INTO deals (venue_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto, category) VALUES ("6", "Equal Exchange Organic Love Buzz", "1 pound, bulk packaging.", "https://images-na.ssl-images-amazon.com/images/I/51R6iGcdunL.jpg", "13.25", "9.94", "Grocery");
-
-INSERT INTO deals (seller_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto, category) VALUES ("2", "Equal Exchange Organic Love Buzz", "1 pound, bulk packaging.", "https://images-na.ssl-images-amazon.com/images/I/51R6iGcdunL.jpg", "13.25", "9.94", "Grocery");
 
 INSERT INTO deals (venue_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto, category) VALUES ("7", "eGifter Choice Cards™", "The eGifter Choice Card gives you total flexibility and choice! Redeem it for a Gift Card from hundreds of retails on eGifter.com or in our mobile apps ranging from Adidas to Whole Foods Market.", "https://pbs.twimg.com/profile_images/801156735847329792/4QOvt45k_400x400.jpg", "100.00", "90.00", "Gift Card");
 
@@ -102,7 +98,21 @@ INSERT INTO deal_images (deal_id, deal_image) VALUES
 (15,"https://i.etsystatic.com/5943938/r/il/2a5913/1376789351/il_570xN.1376789351_igdh.jpg"),
 (15,"https://i.etsystatic.com/5943938/r/il/1dc3c2/1329523668/il_570xN.1329523668_6eg4.jpg");
 
-
-
-
-
+INSERT INTO categories_deals (deals_id, category_id) VALUES
+(1,5),
+(3,7),
+(6,6),
+(7,5),
+(8,9),
+(10,5),
+(11,5),
+(11,9),
+(12,6),
+(13,5),
+(13,9),
+(14,9),
+(15,7),
+(16,7),
+(17,5),
+(17,6),
+(17,9);

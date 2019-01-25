@@ -5,27 +5,26 @@ import {bindActionCreators} from 'redux';
 import { connect } from "react-redux";
 import {
   _loadDealItem,
-  handleCustomizingSize,
-  handleCustomizingColor,
-  handleFullNameInput,
+  handleFirstNameInput,
+  handleLastNameInput,
   handleAddressInput,
   handleCityInput,
   handleZipcodeInput,
   handleShippingStateInput,
   handleSelectedCrypto,
-  handleCustomizingStep,
+  handleDetailStep,
   handleShippingStep,
   handlePayingStep} from "../../../actions/dealItemActions";
 import {resetListDeal} from "../../../actions/listDealActions";
 import { _fetchTransactionInfo } from "../../../actions/paymentActions";
 import { Carousel } from "react-responsive-carousel";
-// import CustomizeOrder from "../CustomizeOrder";
 import ItemDescription from "../ItemDescription";
 import ShipOrder from "../ShipOrder";
 import PurchaseOrder from "../PurchaseOrder";
 import Layout from "../../Layout";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
 import { _loadReviews } from "../../../actions/reviewsActions";
+import { EditorState, convertFromRaw } from 'draft-js';
 
 class DealItem extends Component {
   componentDidMount = async () => {
@@ -80,9 +79,8 @@ class DealItem extends Component {
             shippingCity,
             zipcode,
             shippingState,
-            fullName,
-            selectedSize,
-            selectedColor } = this.props;
+            firstName,
+            lastName} = this.props;
 
     //info needed to insert into user_purchases table
     //deal_id, crypto_name, amount, and user_id
@@ -92,37 +90,14 @@ class DealItem extends Component {
     let crypto_name = selectedOption.name;
     let token = localStorage.getItem('token');
 
-    this.props._fetchTransactionInfo(crypto_name, crypto_symbol, deal_id, amount, token, shippingAddress, shippingCity, zipcode, shippingState, fullName, selectedSize, selectedColor);
-  }
-
-  handleCustomizationValidation = () => {
-    const validateNewInput = {
-      selectedColorValue: this.props.selectedColor,
-      selectedSizeValue: this.props.selectedSize
-    }
-    let isDataValid = false;
-
-    //Object.keys(validateNewInput) give us an array of keys
-    //Array.every check if all indices passed the test
-    //we check if the value of each property in the the object validateNewInput is === true
-    if (Object.keys(validateNewInput).every((k) => {
-      return validateNewInput[k] ? true : false
-    })) {
-      isDataValid = true;
-    } else {
-      document.getElementById("select-size-error").innerHTML = this._validationErrors(validateNewInput).sizeValMsg;
-
-      document.getElementById("select-color-error").innerHTML = this._validationErrors(validateNewInput).colorValMsg;
-
-    }
-
-    return isDataValid;
+    this.props._fetchTransactionInfo(crypto_name, crypto_symbol, deal_id, amount, token, shippingAddress, shippingCity, zipcode, shippingState, firstName, lastName);
   }
 
   handleShipmentValidation = () => {
 
     const validateNewInput = {
-      enteredFullname: this.props.fullName,
+      enteredFirstname: this.props.firstName,
+      enteredLastname: this.props.lastName,
       enteredShippingAddress: this.props.shippingAddress,
       enteredShippingCity: this.props.shippingCity,
       enteredZipcode: this.props.zipcode,
@@ -136,7 +111,8 @@ class DealItem extends Component {
       isDataValid = true;
     } else {
 
-      document.getElementById("shipping-fullname-error").innerHTML = this._validationErrors(validateNewInput).fullNameValMsg;
+      document.getElementById("shipping-firstname-error").innerHTML = this._validationErrors(validateNewInput).firstNameValMsg;
+      document.getElementById("shipping-lastname-error").innerHTML = this._validationErrors(validateNewInput).lastNameValMsg;
       document.getElementById("shipping-address-error").innerHTML = this._validationErrors(validateNewInput).shippingAddressValMsg;
       document.getElementById("shipping-city-error").innerHTML = this._validationErrors(validateNewInput).shippingCityValMsg;
       document.getElementById("shipping-zipcode-error").innerHTML = this._validationErrors(validateNewInput).zipcodeValMsg;
@@ -167,9 +143,8 @@ class DealItem extends Component {
 
   _validationErrors(val) {
     const errMsgs = {
-      colorValMsg: val.selectedColorValue ? null : 'Please select a color',
-      sizeValMsg: val.selectedSizeValue ? null : 'Please select a size',
-      fullNameValMsg: val.enteredFullname ? null : 'Please enter your full name',
+      firstNameValMsg: val.enteredFirstname ? null : 'Please enter your first name',
+      lastNameValMsg: val.enteredLastname ? null : 'Please enter your last name',
       shippingAddressValMsg: val.enteredShippingAddress ? null : 'Please enter your shipping address',
       shippingCityValMsg: val.enteredShippingCity ? null : 'Please enter your shipping city',
       zipcodeValMsg: val.enteredZipcode ? null : 'Please enter your zip code',
@@ -179,10 +154,11 @@ class DealItem extends Component {
 
     return errMsgs;
   }
+
   ratingDisplay = (rating) => {
-    let star = <i class="rating fa fa-star" aria-hidden="true"></i>;
-    let halfStar = <i class="rating fas fa-star-half-alt"></i>;
-    let emptyStar = <i class="rating far fa-star" aria-hidden="true"></i>;
+    let star = <i class="fa fa-star" aria-hidden="true"></i>;
+    let halfStar = <i class="fas fa-star-half-alt"></i>;
+    let emptyStar = <i class="far fa-star" aria-hidden="true"></i>;
     let result = [];
     if(rating === 0)
     {
@@ -227,17 +203,30 @@ class DealItem extends Component {
             {
               result.push(star);
             }
-            
+
           }
           else
           {
               result.push(emptyStar);
           }
         }
-        
+
     }
     return result;
   };
+
+  loadDescription = (deal_description) => {
+
+    let dealDescription = convertFromRaw(JSON.parse(deal_description));
+    let editorState = EditorState.createWithContent(dealDescription);
+
+    return editorState;
+  }
+
+  showNumberOfReviews = () => {
+    return this.props.reviews.allReviews !== undefined ? this.props.reviews.allReviews.length : 0
+  }
+
 
   render() {
     const { //state
@@ -247,9 +236,8 @@ class DealItem extends Component {
             reviews,
             acceptedCryptos,
             allStates,
-            selectedSize,
-            selectedColor,
-            fullName,
+            firstName,
+            lastName,
             shippingAddress,
             shippingCity,
             zipcode,
@@ -258,26 +246,25 @@ class DealItem extends Component {
             transaction_loading,
             paymentInfo,
             createPaymentButtonClicked,
-            showCustomizationStep,
+            showDetailStep,
             showShippingStep,
             showPayingStep,
 
             //actions
-            handleCustomizingSize,
-            handleCustomizingColor,
-            handleFullNameInput,
+            handleFirstNameInput,
+            handleLastNameInput,
             handleAddressInput,
             handleCityInput,
             handleZipcodeInput,
             handleShippingStateInput,
             handleSelectedCrypto,
 
-            handleCustomizingStep,
+            handleDetailStep,
             handleShippingStep,
             handlePayingStep,
 
             userLoggedIn} = this.props;
-    // console.log('275' + reviews.allReviews);
+
     if (error) {
       return <div>Error! {error.message}</div>;
     }
@@ -297,12 +284,12 @@ class DealItem extends Component {
         <Layout>
         <div>
           <div className="deal-container">
-            <div className="deal-header">
+            {/* <div className="deal-header">
 
               <div className="deal-item-header">
                 <div className="deal-item-name">
                   <strong>{dealItem && dealItem.deal_name}</strong> <br/>
-                  <small> Offered By: {dealItem && dealItem.venue_name || dealItem && dealItem.seller_name}</small> <br/>                 
+                  <small> Offered By: {dealItem && dealItem.venue_name || dealItem && dealItem.seller_name}</small> <br/>
                 </div>
                 <div className="deal-item-cost">
                   <strong>Pay in Crypto:  ${dealItem && dealItem.pay_in_crypto.toFixed(2)}</strong>  <small className="deal-item-discount">
@@ -334,11 +321,12 @@ class DealItem extends Component {
                     </div>
                   </div>
               </div>
-            </div>
-            <div>
+            </div> */}
+
+
               {/* classname is ui steps indiate using sematic ui */}
-              <div className="ui steps">
-                <a onClick={handleCustomizingStep} className={showCustomizationStep ? "active step" : "step"}>
+              <div className="ui three steps">
+                <a onClick={handleDetailStep} className={showDetailStep ? "active step" : "step"}>
                   <i className="edit icon"></i>
                   <div className="content">
                     <div className="title">Item Description</div>
@@ -353,7 +341,7 @@ class DealItem extends Component {
                   </div>
                 </a>
 
-                <a onClick={() => this.handleShipmentValidation() &&   handlePayingStep()} className={"step " + (!showShippingStep && showCustomizationStep ? "disabled" : showPayingStep ? "active" : "" )} >
+                <a onClick={() => this.handleShipmentValidation() &&   handlePayingStep()} className={"step " + (!showShippingStep && showDetailStep ? "disabled" : showPayingStep ? "active" : "" )} >
                 <i className="shopping cart icon"></i>
                   <div className="content">
                     <div className="title">Paying</div>
@@ -364,11 +352,10 @@ class DealItem extends Component {
 
             </div>
 
-            <div className="deal-main-info">
+            <div className="deal-listing-content">
               <div className="deal-images-container">
                 <Carousel
                   className="react-carousel"
-                  width={"55%"}
                   showStatus={false}>
 
                   {dealItem && dealItem.deal_image.map((img,i) => (
@@ -380,31 +367,36 @@ class DealItem extends Component {
                 </Carousel>
               </div>
 
-              <div className="deal-checkout-container mt-5">
+              <div className="deal-checkout-container mt-4">
                 <div className="step-progress">
-                  {showCustomizationStep &&
-                  <ItemDescription 
+                  {showDetailStep &&
+                  <ItemDescription
+                  //another way to pass in props using spread operator
                   {...dealItem}
                   {...reviews}
+                  sellerDealDescription={this.loadDescription}
                   next_step={handleShippingStep}
                   rating_display={this.ratingDisplay}
+                  calculateDiscount={this.convertToPercentage}
                   />}
 
                   {showShippingStep &&
                   <ShipOrder
                   listOfAllStates={allStates}
-                  handle_ShippingFullName={handleFullNameInput}
+                  handle_ShippingFirstName={handleFirstNameInput}
+                  handle_ShippingLastName={handleLastNameInput}
                   handle_ShippingAddress={handleAddressInput}
                   handle_ShippingCity={handleCityInput}
                   handle_ShippingZipcode={handleZipcodeInput}
                   handle_ShippingState={handleShippingStateInput}
-                  showShippingFullName={fullName}
+                  showShippingFirstName={firstName}
+                  showShippingLastName={lastName}
                   showShippingAddress={shippingAddress}
                   showShippingCity={shippingCity}
                   showShippingState={shippingState}
                   showShippingZipcode={zipcode}
                   next_step={handlePayingStep}
-                  previous_step={handleCustomizingStep}
+                  previous_step={handleDetailStep}
                   validateShipmentData={this.handleShipmentValidation}/>}
 
                   {showPayingStep &&
@@ -420,7 +412,8 @@ class DealItem extends Component {
                   paymentButtonClicked={createPaymentButtonClicked}
 
                   deal_item={dealItem}
-                  full_name={fullName}
+                  first_name={firstName}
+                  last_name={lastName}
                   shipping_address={shippingAddress}
                   shipping_city={shippingCity}
                   zip_code={zipcode}
@@ -431,11 +424,76 @@ class DealItem extends Component {
 
                 </div>
               </div>
+              </div>
 
-            </div>
+              <div className="sellers-reviews">
 
+                <div id="seller-review-label">
+                  Seller
+                </div>
+
+                <div id="seller-propfile-rating">
+                  <div id="seller-review-profile">
+                    <div id="seller-review-avatar">
+                      <i className={'fas py-3 px-4 user-icon-navbar ' + this.props.photo.photo}></i>
+                    </div>
+                      <div>
+                        <strong id="seller-review-name">{dealItem && dealItem.venue_name || dealItem && dealItem.seller_name}</strong>
+                        <div id="seller-review-verify">Verified: <i className="fas fa-envelope"></i> <i class="fas fa-mobile-alt"></i></div>
+                      </div>
+                  </div>
+
+                  <div id="seller-review-rating">
+                    <div>Seller's Average Rating
+                      <small className="star-space-right">
+                        {this.ratingDisplay(dealItem && dealItem.sellers_avg_rating)} ({this.showNumberOfReviews()})
+                      </small>
+                    </div>
+                    <label>Reviews</label>
+                    <div id="seller-reviews-container">
+                    {reviews.allReviews !== undefined &&
+                      reviews.allReviews.length > 0 ?
+                      reviews.allReviews.map(reviews => (
+                        <div key={reviews.review_id} className="review-box">
+                          <div className="review-header-container">
+                            <div className="review-header">
+                                <div className="buyer-review-avatar">
+                                  <i className={'fas py-2 px-3 user-icon-navbar ' + reviews.buyer_photo}></i>
+                                </div>
+                                <div>
+                                  <strong className="text-secondary">{reviews.buyer_name}</strong>
+                                  <small className="star-buyer">{this.ratingDisplay(reviews.rating)}</small>
+                                </div>
+                              {/* {reviews.buyer_name} purchased {reviews.deal_name} */}
+                            </div>
+                            <small className="buyer-review-date">
+                              {reviews.rating_date_reviewed.substring(0, 10)}
+                            </small>
+                          </div>
+
+                          <div>
+                            <div className="text-secondary">{reviews.rating_title} </div>
+                          </div>
+
+                          <div className="review-body">{reviews.rating_body}</div>
+
+                          <small>
+                            <a href="/">Report abuse</a>
+                          </small>
+                          <hr/>
+                        </div>
+                      )) : <div className="text-secondary">This seller has no reviews yet!</div> }
+                    </div>
+
+                  </div>
+
+
+
+              </div>
+
+              </div>
           </div>
-        </div>
+
         </Layout >
       </div>
     );
@@ -447,9 +505,8 @@ const mapStateToProps = state => ({
   dealItem: state.DealItem.dealItem,
   reviews: state.Reviews.reviews,
   acceptedCryptos: state.DealItem.acceptedCryptos,
-  selectedSize: state.DealItem.selectedSize,
-  selectedColor: state.DealItem.selectedColor,
-  fullName: state.DealItem.fullName,
+  firstName: state.DealItem.firstName,
+  lastName: state.DealItem.lastName,
   shippingAddress: state.DealItem.shippingAddress,
   shippingCity: state.DealItem.shippingCity,
   zipcode: state.DealItem.zipcode,
@@ -462,27 +519,26 @@ const mapStateToProps = state => ({
   deal_item_loading: state.DealItem.loading,
   error: state.DealItem.error,
   userLoggedIn: state.LoggedIn.userLoggedIn,
-  showCustomizationStep: state.DealItem.showCustomizationStep,
+  showDetailStep: state.DealItem.showDetailStep,
   showShippingStep: state.DealItem.showShippingStep,
   showPayingStep: state.DealItem.showPayingStep,
   dealCreated: state.CreateDeal.dealCreated,
+  photo: state.Photo,
 });
-
 
 const matchDispatchToProps = dispatch =>{
   return bindActionCreators({
     _loadReviews,
     _loadDealItem,
     _fetchTransactionInfo,
-    handleCustomizingSize,
-    handleCustomizingColor,
-    handleFullNameInput,
+    handleFirstNameInput,
+    handleLastNameInput,
     handleAddressInput,
     handleCityInput,
     handleZipcodeInput,
     handleShippingStateInput,
     handleSelectedCrypto,
-    handleCustomizingStep,
+    handleDetailStep,
     handleShippingStep,
     handlePayingStep,
     _isLoggedIn,

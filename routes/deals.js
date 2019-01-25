@@ -61,27 +61,41 @@ router.get('/api/deals/:deal_id/:deal_name', function (req, res) {
 
   // specify specific column names rather than * because don't want to select all users (seller) info
   connection.query(
-    'SELECT deals.id AS deal_id, deals.venue_id, deals.seller_id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, deal_images.deal_image, venues.id AS venues_id, venues.venue_name, venues.venue_description, venues.venue_link, venues.accepted_crypto, users.id AS seller_id, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings FROM deals LEFT JOIN deal_images ON deals.id = deal_images.deal_id LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN users ON deals.seller_id = users.id WHERE deals.id = ?',
+    'SELECT deals.id AS deal_id, deals.venue_id, deals.seller_id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, deal_images.deal_image, venues.id AS venues_id, venues.venue_name, venues.venue_description, venues.venue_link, venues.accepted_crypto, users.id AS seller_id, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings, category.category_name AS deal_category FROM deals LEFT JOIN deal_images ON deals.id = deal_images.deal_id LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN  category ON  category.id = categories_deals.category_id WHERE deals.id = ?',
     [req.params.deal_id],
-    function (error, deal_images_result, fields) {
-
-      // console.log(deal_images_result);
+    function (error, result, fields) {
+      console.log("RESULT", result);
       if (error) throw error;
 
       let newDealItem = [];
+      let img = "";
       let images = [];
+      let categ = "";
+      let categories = [];
 
-      //find images in the objects and add to images array
-      for (let i in deal_images_result) {
-        images.push(deal_images_result[i].deal_image);
+      //loop through the result array
+      //if deal_image from the looping result has not been pushed to the images array
+      //Push it to the images array and assign the new image value to the global variable img
+      //same for deal_category
+      for (let i in result) {
+        if (result[i].deal_image !== img) {
+          images.push(result[i].deal_image);
+          img = result[i].deal_image;
+        }
+
+        if (result[i].deal_category !== categ) {
+          categories.push(result[i].deal_category);
+          categ = result[i].deal_category;
+        }
       }
 
       //since every object in the array is the same, we just use the first object in the array
       //reassign the deal_image property to images array
-      deal_images_result[0].deal_image = images;
+      result[0].deal_image = images;
+      result[0].deal_category = categories;
 
       //push the first object into an emptry array so we can use it on the client side for mapping
-      newDealItem.push(deal_images_result[0]);
+      newDealItem.push(result[0]);
 
       //assign the venue name to the variable venue_name that we defined earlier
       venue_name = newDealItem[0].venue_name;
@@ -150,7 +164,40 @@ router.get('/api/deals/:deal_id/:deal_name', function (req, res) {
 
     }
   );
-  });
+});
+
+router.get('/search', function(req, res) {
+    console.log("req search");
+    console.log(req.query);
+    //hardcoded number of search results per page to 8.  ideally should be something like 20.
+    //this number needs to match the number in frontend SearchDeals.js
+    var numberPerPage = 8;
+    //this calculates starting from which search result to give back
+    //for example, if start==0 and numberPerPage==8, then db should give back 8 results starting from result #0
+    var start = numberPerPage*(req.query.page-1);
+    connection.query(
+        //first query is to count the total number of results that satisfy the search
+        'SELECT COUNT(DISTINCT deals.id) FROM deals LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN cryptos_deals ON cryptos_deals.deal_id = deals.id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN category ON category.id = categories_deals.category_id WHERE ( deal_name LIKE ? OR deal_description LIKE ? OR venue_name LIKE ? OR category_name LIKE ?)',
+        ['%'+req.query.term+'%','%'+req.query.term+'%','%'+req.query.term+'%','%'+req.query.term+'%'],
+        function(error, numberOfResults, fields) {
+            if (error) console.log(error);
+            console.log('number of results');
+            console.log(numberOfResults);
+
+            connection.query(
+                //second query is to give back the set of search results specified by 'start' and 'numberPerPage'
+                'SELECT DISTINCT deals.id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, venues.venue_name, venues.venue_link, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings FROM deals LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN cryptos_deals ON cryptos_deals.deal_id = deals.id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN category ON category.id = categories_deals.category_id WHERE ( deal_name LIKE ? OR deal_description LIKE ? OR venue_name LIKE ? OR category_name LIKE ?) LIMIT ?, ?',
+                ['%'+req.query.term+'%','%'+req.query.term+'%','%'+req.query.term+'%','%'+req.query.term+'%', start, numberPerPage],
+                function(error, results, fields) {
+                    if (error) console.log(error);
+                    console.log('search results');
+                    console.log(results);
+                    res.json({numberOfResults:numberOfResults,results:results});
+                }
+            );
+        }
+    );
+});
 
 
   // load all reviews of a particular seller
@@ -181,12 +228,10 @@ router.get('/api/deals/:deal_id/:deal_name', function (req, res) {
 
 
     connection.query(
-      'SELECT DISTINCT seller.id AS seller_id, seller.username AS seller_name, seller.sellers_avg_rating, seller.total_sellers_ratings, buyer.username AS buyer_name, deals.deal_name, users_purchases.payment_received AS verified_purchase, buyers_reviews_sellers.id AS review_id, buyers_reviews_sellers.rating, buyers_reviews_sellers.title AS rating_title, buyers_reviews_sellers.body AS rating_body, buyers_reviews_sellers.likes AS rating_likes, buyers_reviews_sellers.dislikes AS rating_dislikes, buyers_reviews_sellers.helpful_review AS rating_helpful_review, buyers_reviews_sellers.date_reviewed AS rating_date_reviewed FROM users seller LEFT JOIN buyers_reviews_sellers ON buyers_reviews_sellers.seller_id = seller.id LEFT JOIN users buyer ON buyers_reviews_sellers.buyer_id = buyer.id LEFT JOIN deals ON deals.id = buyers_reviews_sellers.deal_id LEFT JOIN users_purchases ON users_purchases.deal_id = buyers_reviews_sellers.deal_id WHERE buyers_reviews_sellers.display_review = 1 AND seller.id = ?' + where_rating + order_by,
+      'SELECT DISTINCT seller.id AS seller_id, seller.username AS seller_name, seller.sellers_avg_rating, seller.total_sellers_ratings, users_profiles.photo AS buyer_photo, buyer.username AS buyer_name, deals.deal_name, users_purchases.payment_received AS verified_purchase, buyers_reviews_sellers.id AS review_id, buyers_reviews_sellers.rating, buyers_reviews_sellers.title AS rating_title, buyers_reviews_sellers.body AS rating_body, buyers_reviews_sellers.likes AS rating_likes, buyers_reviews_sellers.dislikes AS rating_dislikes, buyers_reviews_sellers.helpful_review AS rating_helpful_review, buyers_reviews_sellers.date_reviewed AS rating_date_reviewed FROM users seller LEFT JOIN buyers_reviews_sellers ON buyers_reviews_sellers.seller_id = seller.id LEFT JOIN users buyer ON buyers_reviews_sellers.buyer_id = buyer.id LEFT JOIN deals ON deals.id = buyers_reviews_sellers.deal_id LEFT JOIN users_purchases ON users_purchases.deal_id = buyers_reviews_sellers.deal_id LEFT JOIN users_profiles ON users_profiles.user_id = buyer.id WHERE buyers_reviews_sellers.display_review = 1 AND seller.id = ?' + where_rating + order_by,
       [req.params.seller_id],
       function (error, allReviewResults, fields) {
         if (error) console.log(error);
-
-
 
         connection.query(
           'SELECT rating, COUNT(rating) as num_ratings FROM buyers_reviews_sellers WHERE seller_id = ? AND display_review = 1 GROUP BY rating ORDER BY rating',
@@ -249,6 +294,7 @@ router.get('/api/deals/:deal_id/:deal_name', function (req, res) {
   //     }
   //   );
   // });
+
 
 // });
 
