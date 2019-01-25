@@ -293,7 +293,7 @@ class DealItem extends Component {
 
 
     return (
-      <div>
+      <div className="pt-5">
         <Layout>
         <div>
           <div className="deal-container">

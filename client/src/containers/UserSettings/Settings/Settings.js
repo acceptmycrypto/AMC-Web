@@ -46,7 +46,7 @@ class Settings extends Component {
         return (
 
 
-            <div>
+            <div className="pt-5">
                 <Layout >
                     <div className="mr-5 ml-5">
                         <Menu color={"teal"} inverted widths={3}>

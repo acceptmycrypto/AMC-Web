@@ -305,7 +305,7 @@ class ListDeal extends Component {
     }
 
     return (
-      <div>
+      <div className="pt-5">
         {/* If user is navigating away from the page, let user know data won't be saved */}
         {/* <Prompt
           when={images.length > 0}
