@@ -3,6 +3,7 @@ import "./DealItem.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import {bindActionCreators} from 'redux';
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   _loadDealItem,
   handleFirstNameInput,
@@ -37,7 +38,7 @@ class DealItem extends Component {
       console.log(this.props.dealItem.seller_id);
       let seller_id = this.props.dealItem.seller_id || this.props.dealItem.venue_id;
       await this.props._loadReviews(seller_id);
-      
+
     }else{
         // localStorage.removeItem('token');
         await this.props.history.push('/');
@@ -432,14 +433,23 @@ class DealItem extends Component {
                 </div>
 
                 <div id="seller-propfile-rating">
-                  <div id="seller-review-profile">
-                    <div id="seller-review-avatar">
-                      <i className={'fas py-3 px-4 user-icon-navbar ' + this.props.photo.photo}></i>
-                    </div>
+                  <div>
+                    <div id="seller-review-profile">
+                      <div id="seller-review-avatar">
+                        <i className={'fas py-3 px-4 user-icon-navbar ' + this.props.photo.photo}></i>
+                      </div>
                       <div>
                         <strong id="seller-review-name">{dealItem && dealItem.venue_name || dealItem && dealItem.seller_name}</strong>
                         <div id="seller-review-verify">Verified: <i className="fas fa-envelope"></i> <i class="fas fa-mobile-alt"></i></div>
                       </div>
+                    </div>
+                    <Link to={'/chat'}>
+                      <div id="message-seller" className="px-3">
+                        <button className="mt-3">
+                          Message Seller
+                        </button>
+                      </div>
+                    </Link>
                   </div>
 
                   <div id="seller-review-rating">

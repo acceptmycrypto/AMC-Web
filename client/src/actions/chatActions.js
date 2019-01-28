@@ -1,36 +1,32 @@
-export const ADD_MESSAGE = "ADD_MESSAGE";
+export const FETCH_CREATE_CHAT_USER_BEGIN = "FETCH_CREATE_CHAT_USER_BEGIN";
+export const FETCH_CREATE_CHAT_USER_SUCCESS = "FETCH_CREATE_CHAT_USER_SUCCESS";
+export const FETCH_CREATE_CHAT_USER_FAILURE = "FETCH_CREATE_CHAT_USER_FAILURE";
 
-// export function _loadReviews(seller_id) {
-//   const Reviews = {
-//     method: "GET",
-//     headers: {
-//       "Accept": "application/json",
-//       "Content-Type": "application/json",
-//     },
-//     // body: JSON.stringify({ token }) //no need to pass in token since everyone (signed in or not) should be able to see reviews
-//   };
+export function _createUser() {
+  return dispatch => {
+    dispatch(fetchCreateChatUserBegin());
+    return fetch(`/chat/new`)
+    .then(res => res.json())
+    .then(resJson => {
+      dispatch(fetchCreateChatUserSuccess(resJson));
+      return resJson;
+    })
+    .catch(error => dispatch(fetchCreateChatUserFailure(error)));
+  };
+}
 
-//   return dispatch => {
-//     dispatch(fetchReviewsBegin());
-//     return fetch(`/api/reviews/sellers/${seller_id}`)
-//     .then(res => res.json())
-//     .then(resJson => {
-//       dispatch(fetchReviewsSuccess(resJson));
-//       return resJson;
-//     })
-//     .catch(error => dispatch(fetchReviewsFailure(error)));
-//   };
-// }
-
-
-export const fetchReviewsBegin = () => ({
-  type: FETCH_REVIEWS_BEGIN
+export const fetchChatUserBegin = () => ({
+  type: FETCH_CREATE_CHAT_USER_BEGIN,
 });
 
-export const addMessage = (message, author) => ({
-  type: types.ADD_MESSAGE,
-  id: nextMessageId++,
-  message,
-  author
-})
+export const fetchChatUserSuccess = (new_chat_user) => ({
+  type: FETCH_CREATE_CHAT_USER_SUCCESS,
+  payload: { new_chat_user }
+});
+
+export const fetchChatUserFailure = error => ({
+  type: FETCH_CREATE_CHAT_USER_FAILURE,
+  payload: { error }
+});
+
 

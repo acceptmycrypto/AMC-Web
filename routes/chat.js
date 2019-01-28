@@ -32,7 +32,8 @@ var connection = mysql.createConnection({
     database: process.env.DB_DB
 });
 
-router.post('/chat', verifyToken, (req, res) => {
+//create new user
+router.post('/chat/new', verifyToken, (req, res) => {
   let seller_id = req.decoded._id;
   let seller_name;
 
@@ -42,22 +43,23 @@ router.post('/chat', verifyToken, (req, res) => {
       if (error) console.log(error);
 
       seller_name = results[0].username;
-
+      console.log("username", seller_name);
   });
 
-  chatkit
-    .createUser({
-      id: seller_id,
-      name: seller_name
-    })
-    .then(() => res.sendStatus(201))
-    .catch(error => {
-      if (error.error_type === 'services/chatkit/user_already_exists') {
-        res.sendStatus(200)
-      } else {
-        res.status(error.status).json(error)
-      }
-    })
+
+  // chatkit
+  //   .createUser({
+  //     id: seller_id,
+  //     name: seller_name
+  //   })
+  //   .then(() => res.sendStatus(201))
+  //   .catch(error => {
+  //     if (error.error_type === 'services/chatkit/user_already_exists') {
+  //       res.sendStatus(200)
+  //     } else {
+  //       res.status(error.status).json(error)
+  //     }
+  //   })
 })
 
 //might not needed

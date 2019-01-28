@@ -209,3 +209,15 @@
 .review-body {
   font-size: .9em;
 }
+
+#message-seller {
+  text-align: center;
+}
+
+#message-seller button{
+  border-radius: 5px;
+  width: 100%;
+  cursor: pointer;
+  background-color: green;
+  color: #fff;
+}
