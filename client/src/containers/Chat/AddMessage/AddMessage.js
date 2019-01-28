@@ -3,7 +3,15 @@ import "./AddMessage.css";
 
 const AddMessage = props => {
   return (
-    <div>Message</div>
+    <div>
+      <input type="text"
+      onKeyPress={(e) => {
+        if(e.key === "Enter") {
+          this.handleMessageSent();
+        }
+      }}
+      />
+    </div>
   );
 };
 

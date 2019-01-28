@@ -48,7 +48,7 @@ class App extends Component {
               <Route path='/api/reviews/sellers/:seller_id' component={Reviews}/>
               <Route exact path='/listdeal' component={ListDeal}/>
 
-              <Route exact path='/chat/:seller_id/:session' component={Chat}/>
+              <Route exact path='/chat/:seller_id/' component={Chat}/>
 
 
 
