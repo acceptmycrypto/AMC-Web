@@ -144,6 +144,7 @@ router.post('/listdeal', verifyToken, function(req, res) {
   });
 
 
+
   //First insert into deals table
   // INSERT INTO users_shipping_address SET ?
   let deals_rows = {seller_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto, item_condition};
@@ -285,11 +286,11 @@ router.post('/verification/check', verifyToken, function(req, res) {
         [{phone_number_verified: 1}, {id: seller_id}],
         function(error, results, fields) {
           if (error) throw error;
+          console.log(results);
+          res.json(body);
         }
       );
     }
-
-    res.json(body);
 
   });
 })
