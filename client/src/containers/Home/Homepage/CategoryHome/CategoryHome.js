@@ -61,9 +61,9 @@ class CategoryHome extends Component {
     render() {
         const{category_collection, category_collection_name, category_collection_id} = this.props;
         return (
-            <div>
+            <div className="mt-4">
             <Link to={"/category?term="+category_collection_name+"&page=1"} className="category-title-margin mb-3">{category_collection_name}<i className="fas fa-chevron-right chevron-right"></i></Link>
-            <div className="d-flex flex-row">
+            <div className="d-flex flex-row mt-3">
               <button type="button" className="btn btn-light" id="leftCategoryButton" onClick={this.handleLeftButtonClick}><i className="fas fa-chevron-left category-icon-chevron"></i></button>
               <div className="category_div" id={category_collection_id}>
               {category_collection != undefined && category_collection.length > 0 && category_collection.map(deal => (
