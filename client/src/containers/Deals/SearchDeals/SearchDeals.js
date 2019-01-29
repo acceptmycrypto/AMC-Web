@@ -11,26 +11,47 @@ import './SearchDeals.css';
 import { _isLoggedIn } from '../../../actions/loggedInActions';
 import {searchDeals} from '../../../actions/searchBarActions';
 import queryString from 'query-string';
+import { categoryDeals } from '../../../actions/categoryActions';
+
 
 
 class SearchDeals extends Component {
     scrollL = () => {
-        //route to url for previous page, then query db for those data
-        this.props.searchDeals(this.props.searchTerm, parseInt(this.props.searchPage)-1);
-        this.props.history.push("/search?term="+this.props.searchTerm+"&page="+(parseInt(this.props.searchPage)-1));
+        if(this.props.pageType === "search"){
+            //route to url for previous page, then query db for those data
+            this.props.searchDeals(this.props.searchTerm, parseInt(this.props.searchPage)-1);
+            this.props.history.push("/search?term="+this.props.searchTerm+"&page="+(parseInt(this.props.searchPage)-1));
+        }else if(this.props.pageType === "category"){
+            this.props.categoryDeals(this.props.categoryTerm, parseInt(this.props.categoryPage)-1);
+            this.props.history.push("/search?term="+this.props.categoryTerm+"&page="+(parseInt(this.categoryPage)-1));
+        }
+        
     }
     scrollR = () => {
-        //route to url for next page, then query db for those data
-        this.props.searchDeals(this.props.searchTerm, parseInt(this.props.searchPage)+1);
-        this.props.history.push("/search?term="+this.props.searchTerm+"&page="+(parseInt(this.props.searchPage)+1));
+      if(this.props.pageType === "search"){
+          //route to url for next page, then query db for those data
+          this.props.searchDeals(this.props.searchTerm, parseInt(this.props.searchPage)+1);
+          this.props.history.push("/search?term="+this.props.searchTerm+"&page="+(parseInt(this.props.searchPage)+1));
+      } else if(this.props.pageType === "category"){
+          this.props.categoryDeals(this.props.categoryTerm, parseInt(this.props.categoryPage)+1);
+          this.props.history.push("/search?term="+this.props.categoryTerm+"&page="+(parseInt(this.props.categoryPage)+1));
+      }
     }
 
   componentDidMount = () => {
       //parse out search term and current page number from url
       console.log("this.props.location.search");
       console.log(this.props.location.search);
-    let values = queryString.parse(this.props.location.search);
-    this.props.searchDeals(values.term, values.page);
+      let values = queryString.parse(this.props.location.search);
+
+      console.log("pageType", this.props.pageType);
+
+      if(this.props.pageType === "search"){
+        this.props.searchDeals(values.term, values.page);
+      }else if (this.props.pageType === "category"){
+        console.log(values.term, values.page);
+        this.props.categoryDeals(values.term, values.page);
+      }
 
   }
 
@@ -59,31 +80,45 @@ class SearchDeals extends Component {
       return <div>Loading...</div>;
     }
 
+
+    let currentTerm = "";
+    let currentPage, currentNumberOfResults;
     //filter deals by search
-    if (this.props.searchTerm!=""){
-        deals = this.props.searchedDeals;   
+    if (this.props.searchTerm!=="" && this.props.pageType === "search"){
+        deals = this.props.searchedDeals; 
+        currentTerm = this.props.searchTerm;
+        currentPage = this.props.searchPage;
+        currentNumberOfResults = this.props.numberOfResults;
+    }
+
+    if(this.props.categoryTerm!=="" && this.props.pageType === "category"){
+        deals = this.props.categoriesDeals;
+        currentTerm = this.props.categoryTerm;
+        currentPage = this.props.categoryPage;
+        currentNumberOfResults = this.props.categoryNumberOfResults;
     }
 
     //filter deals by category
-    if (this.props.category){
+    if ( this.props.category){
       deals = this.props.categorizedDeals;
     }
+    
 
     return (
       <div>
         <Layout>
         {deals == undefined || deals.length == 0 && <div className="no_Results">No results found</div>
         }
-        {deals != undefined && deals.length > 0 && this.props.searchTerm!="" && <div className="page_Nav">
+        {deals != undefined && deals.length > 0 && currentTerm !==""  && <div className="page_Nav">
             <div className="page_NavContent">
                 <span>
-                    <button className={"scroll_Button "+("button_Hide_"+(this.props.searchPage==1))} onClick={this.scrollL}>
+                    <button className={"scroll_Button "+("button_Hide_"+(currentPage==1))} onClick={this.scrollL}>
                         previous page
                     </button>
                 </span>
-                <span className="page_Number">{this.props.searchPage}/{Math.ceil(this.props.numberOfResults/numberPerPage)}</span>
+                <span className="page_Number">{currentPage}/{Math.ceil(currentNumberOfResults/numberPerPage)}</span>
                 <span>
-                    <button className={"scroll_Button "+("button_Hide_"+(this.props.searchPage==(Math.ceil(this.props.numberOfResults/numberPerPage))))} onClick={this.scrollR}>
+                    <button className={"scroll_Button "+("button_Hide_"+(currentPage==(Math.ceil(currentNumberOfResults/numberPerPage))))} onClick={this.scrollR}>
                             next page
                     </button>
                 </span>
@@ -130,16 +165,16 @@ class SearchDeals extends Component {
           </div>
 
         </div>
-        {deals != undefined && deals.length > 0 && this.props.searchTerm!="" && <div className="page_Nav">
+        {deals != undefined && deals.length > 0 && currentTerm !="" && <div className="page_Nav">
             <div className="page_NavContent">
                 <span>
-                    <button className={"scroll_Button "+("button_Hide_"+(this.props.searchPage==1))} onClick={this.scrollL}>
+                    <button className={"scroll_Button "+("button_Hide_"+(currentPage==1))} onClick={this.scrollL}>
                         previous page
                     </button>
                 </span>
-                <span className="page_Number">{this.props.searchPage}/{Math.ceil(this.props.numberOfResults/numberPerPage)}</span>
+                <span className="page_Number">{currentPage}/{Math.ceil(currentNumberOfResults/numberPerPage)}</span>
                 <span>
-                    <button className={"scroll_Button "+("button_Hide_"+(this.props.searchPage==(Math.ceil(this.props.numberOfResults/numberPerPage))))} onClick={this.scrollR}>
+                    <button className={"scroll_Button "+("button_Hide_"+(currentPage==(Math.ceil(currentNumberOfResults/numberPerPage))))} onClick={this.scrollR}>
                             next page
                     </button>
                 </span>
@@ -161,11 +196,15 @@ const mapStateToProps = state => ({
   searchPage: state.Search.searchPage,
   numberOfResults: state.Search.numberOfResults,
   category: state.Category.category,
-  categorizedDeals: state.Category.filteredCategory
+  categorizedDeals: state.Category.filteredCategory,
+  categoryTerm: state.Category.categoryTerm, 
+  categoriesDeals: state.Category.categoriesDeals,
+  categoryPage: state.Category.categoryPage,
+  categoryNumberOfResults: state.Category.categoryNumberOfResults,
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({ searchDeals, resetDealitemState, _isLoggedIn }, dispatch);
+  return bindActionCreators({ searchDeals, categoryDeals, resetDealitemState, _isLoggedIn }, dispatch);
 }
 
 export default withRouter(connect(mapStateToProps, matchDispatchToProps)(SearchDeals));

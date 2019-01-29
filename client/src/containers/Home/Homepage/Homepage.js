@@ -65,7 +65,7 @@ class Homepage extends Component {
           <div className="menu-parent">
             {category_list != undefined && category_list.length > 0 && category_list.map(category => (
               // <Menu.Item name={category.category_name} active={activeItem === category.category_name} onClick={this.handleItemClick} />
-                <span className="menu-item" key={category.id} category-id={category.id}>{category.category_name}</span>
+                <Link to={"/category?term="+category.category_name+"&page=1"} className="menu-item" key={category.id} category-id={category.id}>{category.category_name}</Link>
                 // {/* <Menu.Item key={category.id} content={category.category_name} category-id={category.id} /> */}
             ))}
           </div>

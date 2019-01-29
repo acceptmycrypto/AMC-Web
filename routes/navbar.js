@@ -53,7 +53,18 @@ router.post('/loggedIn', verifyToken, function (req, res){
     }else{
         res.status(403).json({"message": "No Token"});
     }
-})
+});
+
+router.get("/category/parent", function(req, res) {
+    //The first 13 records are the parent categories
+    connection.query(
+      "SELECT * FROM category limit 13", function (error, results, fields) {
+        if (error) throw error;
+        res.json(results);
+      }
+    );
+  
+  });
 
 
 

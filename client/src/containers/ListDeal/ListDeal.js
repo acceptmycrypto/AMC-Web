@@ -424,7 +424,7 @@ const mapStateToProps = state => ({
   gettingRate: state.CreateDeal.gettingRate,
   crypto_amount: state.CreateDeal.crypto_amount,
   dealName: state.CreateDeal.dealName,
-  parentCategory: state.CreateDeal.parentCategory,
+  parentCategory: state.Category.parentCategory,
   selectedCategory: state.CreateDeal.selectedCategory,
   selectedCondition: state.CreateDeal.selectedCondition,
   editorState: state.CreateDeal.editorState,
