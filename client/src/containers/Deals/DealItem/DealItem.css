@@ -153,14 +153,17 @@
  margin-right: 5px;
 }
 
-#seller-propfile-rating {
+#seller-profile-rating {
   display: flex;
   width: 100%;
 }
 
+.seller-review-profile-left {
+  width: 35%;
+}
+
 #seller-review-profile {
   display: flex;
-  width: 35%;
   margin-right: 25px;
   padding: 0 20px;
 }
@@ -210,13 +213,9 @@
   font-size: .9em;
 }
 
-#message-seller {
-  text-align: center;
-}
-
 #message-seller button{
   border-radius: 5px;
-  width: 100%;
+  width: 90%;
   cursor: pointer;
   background-color: green;
   color: #fff;

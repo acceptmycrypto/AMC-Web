@@ -112,6 +112,4 @@ router.post('/chat_session/messages/new', verifyToken, (req, res) => {
   });
 })
 
-
-
 module.exports = router;

@@ -1,10 +1,8 @@
-export const FETCH_CREATE_CHAT_USER_BEGIN = "FETCH_CREATE_CHAT_USER_BEGIN";
-export const FETCH_CREATE_CHAT_USER_SUCCESS = "FETCH_CREATE_CHAT_USER_SUCCESS";
-export const FETCH_CREATE_CHAT_USER_FAILURE = "FETCH_CREATE_CHAT_USER_FAILURE";
+export const FETCH_CREATE_CHAT_SESSION_BEGIN = "FETCH_CREATE_CHAT_SESSION_BEGIN";
+export const FETCH_CREATE_CHAT_SESSION_SUCCESS = "FETCH_CREATE_CHAT_SESSION_SUCCESS";
+export const FETCH_CREATE_CHAT_SESSION_FAILURE = "FETCH_CREATE_CHAT_SESSION_FAILURE";
 
-export function _createUser(token, seller_id, deal_id) {
-
-  //create seller and buyer as users in chatkit if found not existed
+export function _createChatSession(token, seller_id, deal_id) {
 
   const settings = {
     method: "POST",
@@ -16,29 +14,29 @@ export function _createUser(token, seller_id, deal_id) {
   };
 
   return dispatch => {
-    dispatch(fetchCreateChatUserBegin());
-    return fetch(`/chat/new`, settings)
+    dispatch(fetchCreateChatSessionBegin());
+    return fetch(`/chat_session/new`, settings)
     .then(res => res.json())
     .then(resJson => {
       debugger
-      dispatch(fetchCreateChatUserSuccess(resJson));
+      dispatch(fetchCreateChatSessionSuccess(resJson));
       return resJson;
     })
-    .catch(error => dispatch(fetchCreateChatUserFailure(error)));
+    .catch(error => dispatch(fetchCreateChatSessionFailure(error)));
   };
 }
 
-export const fetchCreateChatUserBegin = () => ({
-  type: FETCH_CREATE_CHAT_USER_BEGIN,
+export const fetchCreateChatSessionBegin = () => ({
+  type: FETCH_CREATE_CHAT_SESSION_BEGIN,
 });
 
-export const fetchCreateChatUserSuccess = (new_chat_user) => ({
-  type: FETCH_CREATE_CHAT_USER_SUCCESS,
+export const fetchCreateChatSessionSuccess = (new_chat_user) => ({
+  type: FETCH_CREATE_CHAT_SESSION_SUCCESS,
   payload: { new_chat_user }
 });
 
-export const fetchCreateChatUserFailure = error => ({
-  type: FETCH_CREATE_CHAT_USER_FAILURE,
+export const fetchCreateChatSessionFailure = error => ({
+  type: FETCH_CREATE_CHAT_SESSION_FAILURE,
   payload: { error }
 });
 

@@ -18,7 +18,7 @@ import {
   handlePayingStep} from "../../../actions/dealItemActions";
 import {resetListDeal} from "../../../actions/listDealActions";
 import { _fetchTransactionInfo } from "../../../actions/paymentActions";
-import { _createUser } from "../../../actions/chatActions";
+import { _createChatSession } from "../../../actions/chatActions";
 import { Carousel } from "react-responsive-carousel";
 import ItemDescription from "../ItemDescription";
 import ShipOrder from "../ShipOrder";
@@ -263,7 +263,7 @@ class DealItem extends Component {
             handleShippingStep,
             handlePayingStep,
 
-            _createUser} = this.props;
+            _createChatSession} = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -432,8 +432,8 @@ class DealItem extends Component {
                   Seller
                 </div>
 
-                <div id="seller-propfile-rating">
-                  <div>
+                <div id="seller-profile-rating">
+                  <div className="seller-review-profile-left">
                     <div id="seller-review-profile">
                       <div id="seller-review-avatar">
                         <i className={'fas py-3 px-4 user-icon-navbar ' + this.props.photo.photo}></i>
@@ -443,7 +443,8 @@ class DealItem extends Component {
                         <div id="seller-review-verify">Verified: <i className="fas fa-envelope"></i> <i class="fas fa-mobile-alt"></i></div>
                       </div>
                     </div>
-                    <Link onClick={() => { _createUser(localStorage.getItem('token'), dealItem.seller_id, dealItem.deal_id) }} to={'/chat'}>
+                    {/* onClick={() => { _createChatSession(localStorage.getItem('token'), dealItem.seller_id, dealItem.deal_id) }} */}
+                    <Link to={'/chat'}>
                       <div id="message-seller" className="px-3">
                         <button className="mt-3">
                           Message Seller
@@ -552,7 +553,7 @@ const matchDispatchToProps = dispatch =>{
     handlePayingStep,
     _isLoggedIn,
     resetListDeal,
-    _createUser}, dispatch);
+    _createChatSession}, dispatch);
 
 }
 
