@@ -1,16 +1,37 @@
-import * as types from "../actions/chatActions";
+import {
+  FETCH_CHAT_SESSIONS_BEGIN,
+  FETCH_CHAT_SESSIONS_SUCCESS,
+  FETCH_CHAT_SESSIONS_FAILURE,
+} from "../actions/chatActions";
 
 const initialState = {
-
+  loading: false,
+  error: null,
+  chat_sessions: []
 };
 
-export default function CreateDealReducer(state = initialState, action) {
-  switch(action.type) {
-    case "UPLOADING_IMAGES_BEGIN":
+export default function chatReducer(state = initialState, action) {
+  switch (action.type) {
+    case FETCH_CHAT_SESSIONS_BEGIN:
       return {
         ...state,
-        uploading: true,
+        loading: true,
         error: null
+      };
+
+    case FETCH_CHAT_SESSIONS_SUCCESS:
+      // All done with fetch call: set loading "false".
+      return {
+        ...state,
+        loading: false,
+        chat_sessions: action.payload.chat_sessions
+      };
+
+    case FETCH_CHAT_SESSIONS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
       };
 
     default:

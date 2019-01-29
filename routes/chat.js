@@ -28,13 +28,15 @@ var connection = mysql.createConnection({
 
 //get chat sessions
 router.post('/chat_sessions', verifyToken, (req, res) => {
-  let buyer_id = req.decoded._id;
+  //a user can be a buyer or seller
+  let user_id = req.decoded._id;
+  console.log(user_id);
 
-  connection.query("SELECT * FROM chat_sessions WHERE buyer_id = ? AND chat_status = ? ORDER BY date_created", [buyer_id, 'normal'],
+  connection.query("SELECT chat_sessions.id AS chat_session_id, chat_sessions.date_created AS chat_session_date, deal_name, seller.username AS seller_name, buyer.username AS buyer_name, users_profiles.photo AS buyer_photo FROM chat_sessions LEFT JOIN deals ON chat_sessions.deal_id = deals.id LEFT JOIN users buyer ON chat_sessions.buyer_id = buyer.id LEFT JOIN users seller ON chat_sessions.seller_id = seller.id LEFT JOIN users_profiles ON users_profiles.user_id = buyer.id WHERE chat_sessions.buyer_id = ? OR chat_sessions.seller_id = ? AND chat_status = ? ORDER BY chat_session_date", [user_id, user_id, 'normal'],
     function (error, results, fields) {
 
       if (error) console.log(error);
-
+      console.log(results);
       res.json(results);
   });
 })
