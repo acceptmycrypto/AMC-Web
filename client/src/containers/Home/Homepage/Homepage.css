@@ -24,6 +24,13 @@
     /* font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; */
     font-family: 'Lato', sans-serif;
     padding-bottom: 10px;
+    text-decoration: none;
+    color: white;
+}
+
+.menu-item:hover{
+    /* text-decoration: none; */
+    color: white;
 }
 
 .category_div{
@@ -101,6 +108,12 @@
     margin-bottom: 20px; */
     padding-top: 30px;
     font-family: 'Lato', sans-serif;
+    color: #2a3c51;
+    font-size: 20px;
+}
+
+.category-title-margin:hover{
+    /* text-decoration: none; */
     color: #2a3c51;
 }
 
