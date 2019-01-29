@@ -37,13 +37,13 @@ class App extends Component {
               <Route exact path ="/settings" component={Settings} />
               <Route exact path="/crypto" component={Crypto} />
 
-
-              <Route path='/search' component={SearchDeals}/>
+              <Route path="/category" render={(props) => <SearchDeals {...props} pageType="category" /> }/>
+              <Route path="/search" render={(props) => <SearchDeals {...props} pageType="search" /> }/>
               <Route exact path="/feed/deals" component={FeedDeals} />
 
-              <Route path='/feed/deals/:id/:deal_name' component={DealItem}/>
-              <Route path='/api/reviews/sellers/:seller_id' component={Reviews}/>
-              <Route exact path='/listdeal' component={ListDeal}/>
+              <Route path="/feed/deals/:id/:deal_name" component={DealItem}/>
+              <Route path="/api/reviews/sellers/:seller_id" component={Reviews}/>
+              <Route exact path="/listdeal" component={ListDeal}/>
 
 
 
