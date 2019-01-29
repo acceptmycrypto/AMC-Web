@@ -34,22 +34,67 @@ var connection = mysql.createConnection({
 
 //create new user
 router.post('/chat/new', verifyToken, (req, res) => {
-  let seller_id = req.decoded._id;
-  let seller_name;
+  let buyer_id = req.decoded._id;
+  let { seller_id } = req.body;
+  let buyer_username, buyer_firstname, seller_username, seller_firstname;
 
-  connection.query("SELECT username FROM users WHERE id = ?", [seller_id],
+  connection.query("SELECT username, first_name FROM users WHERE id IN (?, ?)", [buyer_id, seller_id],
     function (error, results, fields) {
 
       if (error) console.log(error);
 
-      seller_name = results[0].username;
-      console.log("username", seller_name);
+      buyer_username = results[0].username;
+      buyer_firstname = results[0].first_name;
+
+      seller_username = results[1].username;
+      seller_firstname = results[1].first_name;
+
+      //create buyer user if not exist
+      chatkit.getUser({
+        id: buyer_username
+      })
+        .then(user => console.log('got a user', user))
+        .catch(err => {
+          if (err.status === 404) {
+            chatkit.createUser({
+              id: buyer_username,
+              name: buyer_username,
+            })
+              .then(() => {
+                console.log('User created successfully');
+              }).catch((err) => {
+                console.log("buyer", err);
+              });
+          }
+        })
+
+      //create seller user if not exist
+      chatkit.getUser({
+        id: seller_username
+      })
+      .then(user => console.log('got a user', user))
+      .catch(err => {
+        if (err.status === 404) {
+          chatkit.createUser({
+            id: seller_username,
+            name: seller_username,
+          })
+            .then(() => {
+              console.log('User created successfully');
+            }).catch((err) => {
+              console.log("seller", err);
+            });
+        }
+      })
+      
   });
+
+
 
 
   // chatkit
   //   .createUser({
-  //     id: seller_id,
+  //     id: buyer_id,
   //     name: seller_name
   //   })
   //   .then(() => res.sendStatus(201))

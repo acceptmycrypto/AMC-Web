@@ -18,6 +18,7 @@ import {
   handlePayingStep} from "../../../actions/dealItemActions";
 import {resetListDeal} from "../../../actions/listDealActions";
 import { _fetchTransactionInfo } from "../../../actions/paymentActions";
+import { _createUser } from "../../../actions/chatActions";
 import { Carousel } from "react-responsive-carousel";
 import ItemDescription from "../ItemDescription";
 import ShipOrder from "../ShipOrder";
@@ -227,7 +228,6 @@ class DealItem extends Component {
     return this.props.reviews.allReviews !== undefined ? this.props.reviews.allReviews.length : 0
   }
 
-
   render() {
     const { //state
             error,
@@ -263,7 +263,7 @@ class DealItem extends Component {
             handleShippingStep,
             handlePayingStep,
 
-            userLoggedIn} = this.props;
+            _createUser} = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -443,7 +443,7 @@ class DealItem extends Component {
                         <div id="seller-review-verify">Verified: <i className="fas fa-envelope"></i> <i class="fas fa-mobile-alt"></i></div>
                       </div>
                     </div>
-                    <Link to={'/chat'}>
+                    <Link onClick={() => { _createUser(localStorage.getItem('token'), dealItem.seller_id) }} to={'/chat'}>
                       <div id="message-seller" className="px-3">
                         <button className="mt-3">
                           Message Seller
@@ -551,7 +551,8 @@ const matchDispatchToProps = dispatch =>{
     handleShippingStep,
     handlePayingStep,
     _isLoggedIn,
-    resetListDeal}, dispatch);
+    resetListDeal,
+    _createUser}, dispatch);
 
 }
 
