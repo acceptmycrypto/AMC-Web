@@ -295,16 +295,7 @@ router.post('/verification/check', verifyToken, function(req, res) {
   });
 })
 
-router.get("/category/parent", function(req, res) {
-  //The first 12 records are the parent categories
-  connection.query(
-    "SELECT * FROM category limit 13", function (error, results, fields) {
-      if (error) throw error;
-      res.json(results);
-    }
-  );
-
-})
+// moved route "category/parent" to navbar.js route file
 
 
 module.exports = router;
