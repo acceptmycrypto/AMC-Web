@@ -4,7 +4,8 @@ const initialState = {
     categoryTerm: "",
     categoriesDeals: [],
     categoryPage: 1,
-    categoryNumberOfResults: 0
+    categoryNumberOfResults: 0,
+    parentCategory: [],
 };
 
 export default function categoryReducer(state = initialState, action) {
@@ -26,6 +27,11 @@ export default function categoryReducer(state = initialState, action) {
                 categoriesDeals: action.payload.categoriesDeals,
                 categoryPage: action.payload.categoryPage,
                 categoryNumberOfResults: action.payload.categoryNumberOfResults
+            };
+        case "FETCH_CATEGORY_SUCCESS":
+            return {
+                ...state,
+                parentCategory: action.payload.parentCategory
             };
         default:
             return state;
