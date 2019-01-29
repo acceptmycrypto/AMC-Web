@@ -62,3 +62,34 @@ export const filterCategory = (category, allDeals) => {
       }
   }
 }
+
+export const categoryDeals = (categoryTerm, page) => {
+  return dispatch => {
+      dispatch(categoryDealsBegin());
+      return fetch("/search?term="+categoryTerm+"&page="+page, {
+          method: "GET",
+          headers: {
+              "Accept": "application/json",
+              "Content-Type": "application/json",
+          }
+      }).then(res => res.json()).then(categoriesDeals => {
+          console.log("categoriesDeals");
+          console.log(categoriesDeals);
+          dispatch(categoryDealSuccess(categoryTerm, categoriesDeals.results, page, categoriesDeals.numberOfResults[0]["COUNT(DISTINCT deals.id)"]));
+      })
+  }
+}
+
+export const categoryDealsBegin = (categoryTerm) => ({
+  type: "CATEGORIES_DEALS_BEGIN"
+});
+
+export const categoryDealSuccess = (categoryTerm, categoriesDeals, categoryPage, categoryNumberOfResults) => ({
+  type: "CATEGORIES_DEALS_SUCCESS",
+  payload: {categoryTerm, categoriesDeals, categoryPage, categoryNumberOfResults }
+});
+
+export const categoryDealsFailure = (error) => ({
+  type: "CATEGORIES_DEALS_FAILURE",
+  payload: { error }
+});
