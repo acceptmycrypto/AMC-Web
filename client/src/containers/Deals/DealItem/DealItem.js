@@ -443,7 +443,7 @@ class DealItem extends Component {
                         <div id="seller-review-verify">Verified: <i className="fas fa-envelope"></i> <i class="fas fa-mobile-alt"></i></div>
                       </div>
                     </div>
-                    <Link onClick={() => { _createUser(localStorage.getItem('token'), dealItem.seller_id) }} to={'/chat'}>
+                    <Link onClick={() => { _createUser(localStorage.getItem('token'), dealItem.seller_id, dealItem.deal_id) }} to={'/chat'}>
                       <div id="message-seller" className="px-3">
                         <button className="mt-3">
                           Message Seller

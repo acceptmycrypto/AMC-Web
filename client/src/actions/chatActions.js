@@ -2,17 +2,17 @@ export const FETCH_CREATE_CHAT_USER_BEGIN = "FETCH_CREATE_CHAT_USER_BEGIN";
 export const FETCH_CREATE_CHAT_USER_SUCCESS = "FETCH_CREATE_CHAT_USER_SUCCESS";
 export const FETCH_CREATE_CHAT_USER_FAILURE = "FETCH_CREATE_CHAT_USER_FAILURE";
 
-export function _createUser(token, seller_id) {
+export function _createUser(token, seller_id, deal_id) {
 
   //create seller and buyer as users in chatkit if found not existed
-  
+
   const settings = {
     method: "POST",
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({token, seller_id})
+    body: JSON.stringify({token, seller_id, deal_id})
   };
 
   return dispatch => {

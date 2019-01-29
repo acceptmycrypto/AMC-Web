@@ -362,14 +362,18 @@ CREATE TABLE flagged_users(
 	FOREIGN KEY (txn_id) REFERENCES users_purchases(txn_id)
 );
 
+-- chat status is 'normal', 'deleted', or 'blocked'
 CREATE TABLE chat_sessions(
 	id INT NOT NULL AUTO_INCREMENT,
+  deal_id INT NOT NULL,
 	buyer_id INT NOT NULL,
 	seller_id INT NOT NULL,
+  chat_status VARCHAR (10) DEFAULT 'normal',
 	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (id),
 	FOREIGN KEY (buyer_id) REFERENCES users(id),
 	FOREIGN KEY (seller_id) REFERENCES users(id),
+  FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
 
 CREATE TABLE chat_messages(

@@ -6,12 +6,6 @@ var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var request = require("request");//backend version of ajax, gets entire html
 var verifyToken =  require ("./utils/validation");
-const Chatkit = require('@pusher/chatkit-server')
-
-const chatkit = new Chatkit.default({
-  instanceLocator: process.env.CHATKIT_INSTANCELOCATOR,
-  key: process.env.CHATKIT_KEY
-})
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -32,11 +26,24 @@ var connection = mysql.createConnection({
     database: process.env.DB_DB
 });
 
-//create new user
-router.post('/chat/new', verifyToken, (req, res) => {
+//get chat sessions
+router.post('/chat_sessions', verifyToken, (req, res) => {
   let buyer_id = req.decoded._id;
-  let { seller_id } = req.body;
-  let buyer_username, buyer_firstname, seller_username, seller_firstname;
+
+  connection.query("SELECT * FROM chat_sessions WHERE buyer_id = ? AND chat_status = ? ORDER BY date_created", [buyer_id, 'normal'],
+    function (error, results, fields) {
+
+      if (error) console.log(error);
+
+      res.json(results);
+  });
+})
+
+//create new chat session
+router.post('/chat_session/new', verifyToken, (req, res) => {
+  let buyer_id = req.decoded._id;
+  let { seller_id, deal_id } = req.body;
+  let buyer_username, seller_username, buyer_firstname, seller_firstname;
 
   connection.query("SELECT username, first_name FROM users WHERE id IN (?, ?)", [buyer_id, seller_id],
     function (error, results, fields) {
@@ -49,69 +56,62 @@ router.post('/chat/new', verifyToken, (req, res) => {
       seller_username = results[1].username;
       seller_firstname = results[1].first_name;
 
-      //create buyer user if not exist
-      chatkit.getUser({
-        id: buyer_username
-      })
-        .then(user => console.log('got a user', user))
-        .catch(err => {
-          if (err.status === 404) {
-            chatkit.createUser({
-              id: buyer_username,
-              name: buyer_username,
-            })
-              .then(() => {
-                console.log('User created successfully');
-              }).catch((err) => {
-                console.log("buyer", err);
-              });
-          }
-        })
-
-      //create seller user if not exist
-      chatkit.getUser({
-        id: seller_username
-      })
-      .then(user => console.log('got a user', user))
-      .catch(err => {
-        if (err.status === 404) {
-          chatkit.createUser({
-            id: seller_username,
-            name: seller_username,
-          })
-            .then(() => {
-              console.log('User created successfully');
-            }).catch((err) => {
-              console.log("seller", err);
-            });
-        }
-      })
-      
+      connection.query('INSERT INTO chat_sessions (deal_id, buyer_id, seller_id) VALUES (?,?,?)',
+      [buyer_id, seller_id, deal_id],
+        function(error, response ,fields){
+            if (error) throw error;
+            res.status(200).json({success: true, message: "Chat session created"});
+        });
   });
-
-
-
-
-  // chatkit
-  //   .createUser({
-  //     id: buyer_id,
-  //     name: seller_name
-  //   })
-  //   .then(() => res.sendStatus(201))
-  //   .catch(error => {
-  //     if (error.error_type === 'services/chatkit/user_already_exists') {
-  //       res.sendStatus(200)
-  //     } else {
-  //       res.status(error.status).json(error)
-  //     }
-  //   })
 })
 
-//might not needed
-// router.post('/authenticate', (req, res) => {
-//   const authData = chatkit.authenticate({ userId: req.query.user_id })
-//   res.status(authData.status).send(authData.body)
-// })
+//delete chat session
+router.post('/chat_session/delete', verifyToken, (req, res) => {
+  let buyer_id = req.decoded._id;
+  let {id} = req.body;
+
+  //update chat session to deleted
+  connection.query(
+    'UPDATE chat_sessions SET ? WHERE ?',
+    [{chat_status: "deleted"}, {id}],
+    function (err, result){
+        if (err){
+            console.log("error during delete");
+            console.log(err);
+        }
+
+        res.json(result)
+    }
+  )
+})
+
+//get messages
+router.post('/chat_session/messages', verifyToken, (req, res) => {
+  let buyer_id = req.decoded._id;
+  let {id} = req.body;
+
+  connection.query("SELECT * FROM chat_messages LEFT JOIN chat_sessions WHERE chat_session_id = ? ORDER BY date_created", [id],
+    function (error, results, fields) {
+
+      if (error) console.log(error);
+
+      res.json(results);
+  });
+})
+
+//create new message
+router.post('/chat_session/messages/new', verifyToken, (req, res) => {
+  let {chat_session_id, message_owner_id, message} = req.body;
+
+  connection.query("INSERT INTO chat_messages (chat_session_id, message_owner_id, message) VALUES (?,?,?)", [chat_session_id, message_owner_id, message],
+    function (error, results, fields) {
+
+      if (error) console.log(error);
+
+      res.json(results);
+  });
+})
+
 
 
 module.exports = router;
