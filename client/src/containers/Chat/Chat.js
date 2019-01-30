@@ -9,6 +9,7 @@ import {
   _addChatMessage,
   onMessageEdit
 } from "../../actions/chatActions";
+import { _loadProfile } from "../../actions/userLoadActions";
 import Layout from "../Layout";
 import AddMessage from "./AddMessage";
 import UserList from "./UserList";
@@ -21,24 +22,32 @@ class Chat extends Component {
 
     if (await this.props.userLoggedIn) {
       await this.props._loadChatSessions(localStorage.getItem("token"));
+      await this.props._loadProfile(localStorage.getItem('token'));
     } else {
       // localStorage.removeItem('token');
       await this.props.history.push("/");
     }
   };
 
-  addMessage = async(event) => {
+  addMessage = async event => {
     event.preventDefault();
     let chat_session_id = this.props.chat_messages[0].chat_session_id;
 
-    await this.props._addChatMessage(localStorage.getItem("token"), chat_session_id, this.props.chatMessageValue);
+    await this.props._addChatMessage(
+      localStorage.getItem("token"),
+      chat_session_id,
+      this.props.chatMessageValue
+    );
 
-    await this.props._loadChatMessages(localStorage.getItem("token"), chat_session_id)
-  }
+    await this.props._loadChatMessages(
+      localStorage.getItem("token"),
+      chat_session_id
+    );
+  };
 
   componentDidUpdate() {
     //scroll to bottom of message list
-    const objDiv = document.getElementById('chat_messages_container');
+    const objDiv = document.getElementById("chat_messages_container");
     objDiv.scrollTop = objDiv.scrollHeight;
   }
 
@@ -48,7 +57,8 @@ class Chat extends Component {
       chat_messages,
       _loadChatMessages,
       onMessageEdit,
-      chatMessageValue
+      chatMessageValue,
+      user_info
     } = this.props;
 
     return (
@@ -59,6 +69,7 @@ class Chat extends Component {
               <UserList
                 usersList={chat_sessions}
                 _fetchMessagesList={_loadChatMessages}
+                userInfo={user_info}
               />
             </section>
 
@@ -66,7 +77,7 @@ class Chat extends Component {
               <div>
                 <MessageList messagesList={chat_messages} />
               </div>
-              <hr/>
+              <hr />
               <div>
                 <AddMessage
                   _createMessage={this.addMessage}
@@ -88,7 +99,7 @@ const mapStateToProps = state => ({
   chat_messages: state.Chat.chat_messages,
   chatMessageValue: state.Chat.chatMessageValue,
   chat_session_id: state.Chat.chat_session_id,
-  // user_id: state.UserInfo.chat_session_id,
+  user_info: state.UserInfo.user_info
 });
 
 const matchDispatchToProps = dispatch => {
@@ -98,7 +109,8 @@ const matchDispatchToProps = dispatch => {
       _loadChatSessions,
       _loadChatMessages,
       _addChatMessage,
-      onMessageEdit
+      onMessageEdit,
+      _loadProfile
     },
     dispatch
   );
