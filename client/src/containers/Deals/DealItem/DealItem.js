@@ -26,6 +26,7 @@ import PurchaseOrder from "../PurchaseOrder";
 import Layout from "../../Layout";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
 import { _loadReviews } from "../../../actions/reviewsActions";
+import { _loadProfile } from "../../../actions/userLoadActions";
 import { EditorState, convertFromRaw } from 'draft-js';
 
 class DealItem extends Component {
@@ -34,11 +35,15 @@ class DealItem extends Component {
     await this.props._isLoggedIn(localStorage.getItem('token'));
 
     if (await this.props.userLoggedIn) {
+      debugger
+      await this.props._loadProfile(localStorage.getItem('token'));
       const { deal_name, id } = await this.props.match.params;
       await this.props._loadDealItem(id, deal_name);
       console.log(this.props.dealItem.seller_id);
       let seller_id = this.props.dealItem.seller_id || this.props.dealItem.venue_id;
       await this.props._loadReviews(seller_id);
+
+
 
     }else{
         // localStorage.removeItem('token');
@@ -226,6 +231,12 @@ class DealItem extends Component {
 
   showNumberOfReviews = () => {
     return this.props.reviews.allReviews !== undefined ? this.props.reviews.allReviews.length : 0
+  }
+
+  messageSeller = async() => {
+
+    await this.props._createChatSession(localStorage.getItem("token"), this.props.dealItem.seller_id, this.props.dealItem.deal_id);
+
   }
 
   render() {
@@ -443,10 +454,10 @@ class DealItem extends Component {
                         <div id="seller-review-verify">Verified: <i className="fas fa-envelope"></i> <i class="fas fa-mobile-alt"></i></div>
                       </div>
                     </div>
-                    {/* onClick={() => { _createChatSession(localStorage.getItem('token'), dealItem.seller_id, dealItem.deal_id) }} */}
+
                     <Link to={'/chat'}>
                       <div id="message-seller" className="px-3">
-                        <button className="mt-3">
+                        <button onClick={this.messageSeller} className="mt-3">
                           Message Seller
                         </button>
                       </div>

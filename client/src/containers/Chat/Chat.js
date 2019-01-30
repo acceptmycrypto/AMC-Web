@@ -48,8 +48,6 @@ class Chat extends Component {
       chat_messages,
       _loadChatMessages,
       onMessageEdit,
-      chat_session_id,
-      _addChatMessage,
       chatMessageValue
     } = this.props;
 
@@ -68,7 +66,7 @@ class Chat extends Component {
               <div>
                 <MessageList messagesList={chat_messages} />
               </div>
-
+              <hr/>
               <div>
                 <AddMessage
                   _createMessage={this.addMessage}
@@ -90,6 +88,7 @@ const mapStateToProps = state => ({
   chat_messages: state.Chat.chat_messages,
   chatMessageValue: state.Chat.chatMessageValue,
   chat_session_id: state.Chat.chat_session_id,
+  // user_id: state.UserInfo.chat_session_id,
 });
 
 const matchDispatchToProps = dispatch => {

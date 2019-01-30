@@ -1,10 +1,12 @@
 #chat_messages_container {
   min-height: 65vh;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
   max-height: 65vh;
   overflow-y: auto;
+}
+
+#chat-messages {
+  display: flex;
+  flex-direction: column;
 }
 
 .chat-message {
@@ -20,6 +22,8 @@
 
 .seller-message-right {
   background-color: rgb(22, 190, 182);
+  align-self: flex-end;
+  margin-right: 20px;
   /* float: right; */
 }
 

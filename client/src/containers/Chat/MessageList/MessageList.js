@@ -4,8 +4,8 @@ import "./MessageList.css";
 const MessageList = props => {
   const { messagesList } = props;
   return (
-    <div id="chat_messages_container">List of messages
-      <div>
+    <div id="chat_messages_container">
+      <div id="chat-messages">
       {messagesList.map(msg => {
         return (
           <div className={msg.message_owner_id === msg.buyer_id ? "chat-message buyer-message-left" : "chat-message seller-message-right"}>
