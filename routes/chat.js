@@ -90,13 +90,13 @@ router.post('/chat_session/delete', verifyToken, (req, res) => {
 //get messages
 router.post('/chat_session/messages', verifyToken, (req, res) => {
   let buyer_id = req.decoded._id;
-  let {id} = req.body;
+  let {chat_session_id} = req.body;
 
-  connection.query("SELECT * FROM chat_messages LEFT JOIN chat_sessions WHERE chat_session_id = ? ORDER BY date_created", [id],
+  connection.query("SELECT message, date_message_sent, message_owner_id, buyer_id, seller_id FROM chat_messages LEFT JOIN chat_sessions ON chat_session_id = chat_sessions.id WHERE chat_session_id = ? ORDER BY date_created", [chat_session_id],
     function (error, results, fields) {
 
       if (error) console.log(error);
-
+      console.log(results);
       res.json(results);
   });
 })

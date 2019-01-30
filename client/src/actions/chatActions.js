@@ -40,6 +40,7 @@ export const fetchCreateChatSessionFailure = error => ({
   payload: { error }
 });
 
+//load chat sessions
 export const FETCH_CHAT_SESSIONS_BEGIN = "FETCH_CHAT_SESSIONS_BEGIN";
 export const FETCH_CHAT_SESSIONS_SUCCESS = "FETCH_CHAT_SESSIONS_SUCCESS";
 export const FETCH_CHAT_SESSIONS_FAILURE = "FETCH_CHAT_SESSIONS_FAILURE";
@@ -79,6 +80,49 @@ export const fetchChatSessionsSuccess = (chat_sessions) => ({
 
 export const fetchChatSessionsFailure = error => ({
   type: FETCH_CHAT_SESSIONS_FAILURE,
+  payload: { error }
+});
+
+//load chat messages
+export const FETCH_CHAT_MESSAGES_BEGIN = "FETCH_CHAT_MESSAGES_BEGIN";
+export const FETCH_CHAT_MESSAGES_SUCCESS = "FETCH_CHAT_MESSAGES_SUCCESS";
+export const FETCH_CHAT_MESSAGES_FAILURE = "FETCH_CHAT_MESSAGES_FAILURE";
+
+export function _loadChatMessages(token, chat_session_id) {
+  
+  const settings = {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({token, chat_session_id})
+  };
+
+  return dispatch => {
+    dispatch(fetchChatMessagesBegin());
+    return fetch('/chat_session/messages', settings)
+    .then(res => res.json())
+    .then(resJson => {
+      debugger
+      dispatch(fetchChatMessagesSuccess(resJson));
+      return resJson;
+    })
+    .catch(error => dispatch(fetchChatMessagesFailure(error)));
+  };
+}
+
+export const fetchChatMessagesBegin = () => ({
+  type: FETCH_CHAT_MESSAGES_BEGIN,
+});
+
+export const fetchChatMessagesSuccess = (chat_messages) => ({
+  type: FETCH_CHAT_MESSAGES_SUCCESS,
+  payload: { chat_messages }
+});
+
+export const fetchChatMessagesFailure = error => ({
+  type: FETCH_CHAT_MESSAGES_FAILURE,
   payload: { error }
 });
 
