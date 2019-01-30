@@ -122,7 +122,7 @@ router.post('/listdeal', verifyToken, function(req, res) {
   let deal_name = dealName;
   let deal_description = JSON.stringify(textDetailRaw);
   let item_condition;
-  if (item_condition) {
+  if (selectedCondition.value) {
     item_condition = selectedCondition.value;
   }
   let featured_deal_image = images[0].Location;
@@ -142,6 +142,7 @@ router.post('/listdeal', verifyToken, function(req, res) {
       // }
 
   });
+
 
 
   //First insert into deals table
@@ -217,7 +218,24 @@ router.post('/listdeal', verifyToken, function(req, res) {
 let phone_number;
 
 router.post('/verification/start', verifyToken, function(req, res) {
+  let seller_id = req.decoded._id;
+
   phone_number = parseInt(req.body.phoneNumber.replace(/[^0-9\.]+/g, "")); //replace 111-111-1111 with 1111111111
+
+  let state = req.body.sellerState.value;
+
+  let {sellerAddress, sellerCity, sellerZipcode} = req.body;
+
+  connection.query("UPDATE users SET ? WHERE ?",
+  [
+    { address: sellerAddress,
+      city: sellerCity,
+      state,
+      zipcode: sellerZipcode
+    }, {id: seller_id}],
+  function (error, results, fields) {
+    if (error) console.log(error);
+  });
 
   let options = {
     method: "POST",
@@ -242,6 +260,7 @@ router.post('/verification/start', verifyToken, function(req, res) {
 router.post('/verification/check', verifyToken, function(req, res) {
 
   let seller_id = req.decoded._id;
+  console.log("SELLER", seller_id);
 
   let options = {
     method: "GET",
@@ -257,32 +276,26 @@ router.post('/verification/check', verifyToken, function(req, res) {
   request(options, function (error, response, body) {
     if (error) console.log(error);
 
+    let status = JSON.parse(body);
+
     //update seller to verified if code entered is correct
-    if (body.success === true) {
+    if (status.success) {
+
       connection.query(
         'UPDATE users SET ? WHERE ?',
         [{phone_number_verified: 1}, {id: seller_id}],
         function(error, results, fields) {
           if (error) throw error;
+          console.log(results);
+          res.json(body);
         }
       );
     }
 
-    res.json(body);
-
   });
 })
 
-router.get("/category/parent", function(req, res) {
-  //The first 12 records are the parent categories
-  connection.query(
-    "SELECT * FROM category limit 13", function (error, results, fields) {
-      if (error) throw error;
-      res.json(results);
-    }
-  );
-
-})
+// moved route "category/parent" to navbar.js route file
 
 
 module.exports = router;

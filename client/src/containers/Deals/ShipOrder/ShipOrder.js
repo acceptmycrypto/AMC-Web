@@ -5,19 +5,31 @@ const ShipOrder = props => {
   return (
     <div>
       <div className="shipping-form">
-        <label className="text-capitalize" htmlFor="select_crypto">Enter Shipping Information</label>
+        <label className="text-capitalize shipping-name-label" htmlFor="select_crypto">Enter Shipping Information</label>
         <form>
         <div class="form-group mb-1">
           <input
             type="text"
             class="form-control"
-            id="fullname"
-            placeholder="Enter Full Name"
-            onChange={props.handle_ShippingFullName}
-            value={props.showShippingFullName ? props.showShippingFullName : null}
+            id="firstname"
+            placeholder="Enter First Name"
+            onChange={props.handle_ShippingFirstName}
+            value={props.showShippingFirstName ? props.showShippingFirstName : null}
           />
         </div>
-        <div className="dealitem-error-msg" id="shipping-fullname-error"></div>
+        <div className="dealitem-error-msg" id="shipping-firstname-error"></div>
+
+        <div class="form-group mb-1">
+          <input
+            type="text"
+            class="form-control"
+            id="lastname"
+            placeholder="Enter Last Name"
+            onChange={props.handle_ShippingLastName}
+            value={props.showShippingLastName ? props.showShippingLastName : null}
+          />
+        </div>
+        <div className="dealitem-error-msg" id="shipping-lastname-error"></div>
 
         <div class="form-group mb-1">
           <input
@@ -72,11 +84,12 @@ const ShipOrder = props => {
       </form>
       </div>
 
-      <div onClick={props.previous_step} id="previous-step">
+
+      <div onClick={props.previous_step} className="previous-step">
         <button>Previous</button>
       </div>
 
-      <div onClick={() => props.validateShipmentData() && props.next_step()} id="steps-workflow">
+      <div onClick={() => props.validateShipmentData() && props.next_step()} className="steps-workflow">
         <button>Next</button>
       </div>
     </div>

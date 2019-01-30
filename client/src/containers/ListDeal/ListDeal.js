@@ -33,7 +33,6 @@ import LoadingSpinner from "../../components/UI/LoadingSpinner";
 import UploadingImage from "./UploadImage";
 import Pricing from "./Pricing";
 import Description from "./Description";
-import Modal from "react-awesome-modal";
 
 class ListDeal extends Component {
   componentDidMount = () => {
@@ -305,7 +304,7 @@ class ListDeal extends Component {
     }
 
     return (
-      <div>
+      <div className="pt-5">
         {/* If user is navigating away from the page, let user know data won't be saved */}
         {/* <Prompt
           when={images.length > 0}
@@ -425,7 +424,7 @@ const mapStateToProps = state => ({
   gettingRate: state.CreateDeal.gettingRate,
   crypto_amount: state.CreateDeal.crypto_amount,
   dealName: state.CreateDeal.dealName,
-  parentCategory: state.CreateDeal.parentCategory,
+  parentCategory: state.Category.parentCategory,
   selectedCategory: state.CreateDeal.selectedCategory,
   selectedCondition: state.CreateDeal.selectedCondition,
   editorState: state.CreateDeal.editorState,

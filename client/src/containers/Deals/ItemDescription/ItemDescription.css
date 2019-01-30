@@ -1,25 +1,44 @@
-#next-step button{
+.next-step button{
     position: static;
 }
 
-.review-box{
-    box-sizing: border-box;
-    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
-    margin: 10px 0px;
-    padding: 10px 15px;
+.deal-name-label, .shipping-name-label, .payment-name-label {
+  font-weight: 700;
+  font-size: 1.5em;
 }
 
-.sellers-reviews{
-    padding: 45px 0;
-}
-.star-space{
-    padding: 0px 10px;
+#deal-item-info {
+  display: flex;
 }
 
-.star-space-right{
-    padding-right: 10px;
+.condition-category-posted {
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+  font-weight: 600;
+  font-size: 1.4em;
 }
-.review-header, .review-stars, .review-body{
-    padding:5px 0px;
+
+.condition-category-posted-container {
+  display: flex;
+  margin-bottom: 10px;
+  width: 50%;
+}
+
+.condition-category-posted {
+  margin-right: 30px;
+}
+
+.detail-wrapper {
+  max-height: 300px;
+  min-height: 200px;
+  margin-top: 10px;
+}
+
+#category-display-flex {
+  display: flex;
+}
+
+#category-span {
+  align-self: flex-end;
+  font-size: 16px;
 }
 

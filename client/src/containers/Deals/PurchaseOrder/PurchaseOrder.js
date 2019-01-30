@@ -12,7 +12,7 @@ const PurchaseOrder = props => {
       <div>
         <form>
           <div class="form-group">
-            <label className="text-capitalize" htmlFor="select_crypto">Select the Cryptocurrency to pay with</label>
+            <label className="text-capitalize payment-name-label" htmlFor="select_crypto">Select the Cryptocurrency to pay with</label>
               <Select
                 id="select_crypto"
                 required
@@ -29,7 +29,8 @@ const PurchaseOrder = props => {
           Pay in USD via Paypal
           <PaypalButton
             dealItemInfo={props.deal_item}
-            fullNameInfo={props.full_name}
+            fullNameInfo={props.first_name}
+            lastNameInfo={props.last_name}
             shippingAddressInfo={props.shipping_address}
             shippingCityInfo={props.shipping_city}
             zipcodeInfo={props.zip_code}
@@ -37,12 +38,12 @@ const PurchaseOrder = props => {
           />
         </div>
 
-        <div onClick={props.previous_step} id="previous-step">
+        <div onClick={props.previous_step} className="previous-step">
           <button>Previous</button>
         </div>
 
 
-        <div onClick={() => props.validatePaymentData() && props.SubmitPayment()} id="next-step">
+        <div onClick={() => props.validatePaymentData() && props.SubmitPayment()} className="next-step">
           <button>Send Your Payment</button>
         </div>
       </div> : null}

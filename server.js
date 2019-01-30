@@ -17,14 +17,8 @@ var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 
 if (process.env.NODE_ENV === 'production') {
-  // Exprees will serve up production assets
+  // Express will serve up production assets
   app.use(express.static('client/build'));
-
-  // Express serve up index.html file if it doesn't recognize route
-  // const path = require('path');
-  // app.get('*', (req, res) => {
-  //   res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-  // });
 }
 else app.use(express.static("public"));
 
@@ -58,6 +52,7 @@ var notificationRoutes = require("./routes/cryptos_ranking.js");
 var settingsRoutes = require("./routes/settings.js");
 var reviewRoutes = require("./routes/reviews.js");
 var listDealRoutes = require("./routes/listDeal.js");
+var homepageRoutes = require("./routes/homepage.js");
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -91,7 +86,15 @@ app.use("/", notificationRoutes);
 app.use("/", settingsRoutes);
 app.use("/", reviewRoutes);
 app.use("/", listDealRoutes);
+app.use("/", homepageRoutes);
 
+if (process.env.NODE_ENV === 'production') {
+  // catch all routes
+  app.get('/*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
+//not sure what this is, I don't we need it
 path.join(__dirname, "public");
 
 var connection = mysql.createConnection({
@@ -109,32 +112,32 @@ var connection = mysql.createConnection({
 });
 
 //pass options as a param to request
-var options = [
-  {
-    method: "GET",
-    uri: "https://pro-api.coinmarketcap.com/v1/cryptocurrency/info",
-    qs: {
-      symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,XVG,XMR"
-    },
-    headers: {
-      "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
-      Accept: "application/json"
-    }
-  },
-  {
-    method: "GET",
-    uri: "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest",
-    qs: {
-      symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,XVG,XMR"
-    },
-    headers: {
-      "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
-      Accept: "application/json"
-    }
-  }
-];
+// var options = [
+//   {
+//     method: "GET",
+//     uri: "https://pro-api.coinmarketcap.com/v1/cryptocurrency/info",
+//     qs: {
+//       symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,XVG,XMR"
+//     },
+//     headers: {
+//       "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
+//       Accept: "application/json"
+//     }
+//   },
+//   {
+//     method: "GET",
+//     uri: "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest",
+//     qs: {
+//       symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,XVG,XMR"
+//     },
+//     headers: {
+//       "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
+//       Accept: "application/json"
+//     }
+//   }
+// ];
 
-//use aynch to map two request ojects and return all results in one callback
+// //use aynch to map two request ojects and return all results in one callback
 // async.map(
 //   options,
 //   function(obj, callback) {

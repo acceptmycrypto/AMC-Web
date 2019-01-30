@@ -161,7 +161,7 @@ class Description extends Component {
 
             <Link
               className="create-deal-modal-link"
-              // style={{ textDecoration: 'none' }}
+              style={{ textDecoration: 'none' }}
               to={`/feed/deals/${dealCreatedResult.deal_id}/${dealNameValue}`}
               onClick={() => {
                 closeModalAfterDealCreated();
@@ -428,7 +428,7 @@ class Description extends Component {
 }
 
 const mapStateToProps = state => ({
-  parentCategory: state.CreateDeal.parentCategory,
+  parentCategory: state.Category.parentCategory,
   modalVisible: state.CreateDeal.modalVisible,
   phoneNumber: state.CreateDeal.phoneNumber,
   sellerAddress: state.CreateDeal.sellerAddress,
