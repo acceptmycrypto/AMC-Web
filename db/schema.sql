@@ -48,6 +48,8 @@ CREATE TABLE users(
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	sellers_avg_rating FLOAT(3,2) NULL,
 	total_sellers_ratings INT NULL,
+    reset_pw_token VARCHAR(26) NULL,
+    reset_pw_timestamp BIGINT NULL,
 	PRIMARY KEY (id)
 );
 

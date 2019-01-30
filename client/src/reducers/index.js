@@ -15,7 +15,7 @@ import Settings from './reducer-settings';
 import CreateDeal from './reducer-create-deal';
 import Reviews from './reducer-reviews';
 import UploadedImages from './reducer-images';
-
+import PasswordReset from './reducer-pw-token';
 
 const allReducers = combineReducers({
   matchedDeals: Deals,
@@ -33,7 +33,8 @@ const allReducers = combineReducers({
   Category,
   CreateDeal,
   Reviews,
-  UploadedImages
+  UploadedImages,
+  PasswordReset
 });
 
 export default allReducers;
