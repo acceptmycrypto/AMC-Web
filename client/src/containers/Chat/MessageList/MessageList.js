@@ -8,7 +8,7 @@ const MessageList = props => {
       <div>
       {messagesList.map(msg => {
         return (
-          <div className="chat-message">
+          <div className={msg.message_owner_id === msg.buyer_id ? "chat-message buyer-message-left" : "chat-message seller-message-right"}>
             {msg.message}
             <small>{msg.date_message_sent}</small>
           </div>

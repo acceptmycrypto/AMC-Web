@@ -9,18 +9,19 @@
   display: flex;
   flex-direction: column;
   margin: 10px 0;
-  background-color: rgb(22, 190, 182);
   width: fit-content;
   padding: 10px;
   border-radius: 10px;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 16px;
 }
 
-.seller-message-left {
-
+.seller-message-right {
+  background-color: rgb(22, 190, 182);
+  float: right;
 }
 
-.buyer-message-right {
-
+.buyer-message-left {
+  background-color: #2e4157;
+  color: #fff;
 }
