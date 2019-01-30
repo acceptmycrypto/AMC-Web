@@ -4,7 +4,8 @@ import {
   FETCH_CHAT_SESSIONS_FAILURE,
   FETCH_CHAT_MESSAGES_BEGIN,
   FETCH_CHAT_MESSAGES_SUCCESS,
-  FETCH_CHAT_MESSAGES_FAILURE
+  FETCH_CHAT_MESSAGES_FAILURE,
+  EDIT_CHAT_MESSAGE
 } from "../actions/chatActions";
 
 const initialState = {
@@ -13,7 +14,8 @@ const initialState = {
   chat_sessions: [],
   chat_messages_loading: false,
   chat_messages_error: null,
-  chat_messages: []
+  chat_messages: [],
+  chatMessageValue: ""
 };
 
 export default function chatReducer(state = initialState, action) {
@@ -52,7 +54,8 @@ export default function chatReducer(state = initialState, action) {
       return {
         ...state,
         chat_messages_loading: false,
-        chat_messages: action.payload.chat_messages
+        chat_messages: action.payload.chat_messages,
+        chatMessageValue: ""
       };
 
     case FETCH_CHAT_MESSAGES_FAILURE:
@@ -60,6 +63,13 @@ export default function chatReducer(state = initialState, action) {
         ...state,
         chat_messages_loading: false,
         chat_messages_error: action.payload.error,
+      };
+
+    case EDIT_CHAT_MESSAGE:
+      debugger
+      return {
+        ...state,
+        chatMessageValue: action.payload
       };
 
     default:

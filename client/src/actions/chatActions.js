@@ -89,7 +89,7 @@ export const FETCH_CHAT_MESSAGES_SUCCESS = "FETCH_CHAT_MESSAGES_SUCCESS";
 export const FETCH_CHAT_MESSAGES_FAILURE = "FETCH_CHAT_MESSAGES_FAILURE";
 
 export function _loadChatMessages(token, chat_session_id) {
-  
+
   const settings = {
     method: "POST",
     headers: {
@@ -125,5 +125,52 @@ export const fetchChatMessagesFailure = error => ({
   type: FETCH_CHAT_MESSAGES_FAILURE,
   payload: { error }
 });
+
+//add chat message
+//load chat messages
+export const ADD_CHAT_MESSAGE_SUCCESS = "ADD_CHAT_MESSAGE_SUCCESS";
+export const ADD_CHAT_MESSAGE_FAILURE = "ADD_CHAT_MESSAGE_FAILURE";
+
+export function _addChatMessage(token, chat_session_id, message) {
+  debugger
+  const settings = {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({token, chat_session_id, message})
+  };
+
+  return dispatch => {
+    return fetch('/chat_session/messages/new', settings)
+    .then(res => res.json())
+    .then(resJson => {
+      debugger
+      dispatch(addChatMessageSuccess(resJson));
+      return resJson;
+    })
+    .catch(error => dispatch(addChatMessageFailure(error)));
+  };
+}
+
+export const addChatMessageSuccess = (message_added) => ({
+  type: ADD_CHAT_MESSAGE_SUCCESS,
+  payload: { message_added }
+});
+
+export const addChatMessageFailure = error => ({
+  type: ADD_CHAT_MESSAGE_FAILURE,
+  payload: { error }
+});
+
+export const EDIT_CHAT_MESSAGE = "EDIT_CHAT_MESSAGE";
+export const onMessageEdit = (event) => {
+  return {
+      type: 'EDIT_CHAT_MESSAGE',
+      payload: event.target.value
+  }
+};
+
 
 

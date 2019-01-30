@@ -92,7 +92,7 @@ router.post('/chat_session/messages', verifyToken, (req, res) => {
   let buyer_id = req.decoded._id;
   let {chat_session_id} = req.body;
 
-  connection.query("SELECT message, date_message_sent, message_owner_id, buyer_id, seller_id FROM chat_messages LEFT JOIN chat_sessions ON chat_session_id = chat_sessions.id WHERE chat_session_id = ? ORDER BY date_created", [chat_session_id],
+  connection.query("SELECT message, date_message_sent, message_owner_id, buyer_id, seller_id, chat_session_id FROM chat_messages LEFT JOIN chat_sessions ON chat_session_id = chat_sessions.id WHERE chat_session_id = ? ORDER BY date_message_sent", [chat_session_id],
     function (error, results, fields) {
 
       if (error) console.log(error);
@@ -103,7 +103,8 @@ router.post('/chat_session/messages', verifyToken, (req, res) => {
 
 //create new message
 router.post('/chat_session/messages/new', verifyToken, (req, res) => {
-  let {chat_session_id, message_owner_id, message} = req.body;
+  let message_owner_id = req.decoded._id;
+  let {chat_session_id, message} = req.body;
 
   connection.query("INSERT INTO chat_messages (chat_session_id, message_owner_id, message) VALUES (?,?,?)", [chat_session_id, message_owner_id, message],
     function (error, results, fields) {

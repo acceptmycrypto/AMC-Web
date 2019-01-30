@@ -3,6 +3,8 @@
   display: flex;
   justify-content: space-between;
   flex-direction: column;
+  max-height: 65vh;
+  overflow-y: auto;
 }
 
 .chat-message {
@@ -18,7 +20,7 @@
 
 .seller-message-right {
   background-color: rgb(22, 190, 182);
-  float: right;
+  /* float: right; */
 }
 
 .buyer-message-left {

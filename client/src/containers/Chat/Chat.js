@@ -5,7 +5,9 @@ import { bindActionCreators } from "redux";
 import { _isLoggedIn } from "../../actions/loggedInActions";
 import {
   _loadChatSessions,
-  _loadChatMessages
+  _loadChatMessages,
+  _addChatMessage,
+  onMessageEdit
 } from "../../actions/chatActions";
 import Layout from "../Layout";
 import AddMessage from "./AddMessage";
@@ -25,8 +27,31 @@ class Chat extends Component {
     }
   };
 
+  addMessage = async(event) => {
+    event.preventDefault();
+    let chat_session_id = this.props.chat_messages[0].chat_session_id;
+
+    await this.props._addChatMessage(localStorage.getItem("token"), chat_session_id, this.props.chatMessageValue);
+
+    await this.props._loadChatMessages(localStorage.getItem("token"), chat_session_id)
+  }
+
+  componentDidUpdate() {
+    //scroll to bottom of message list
+    const objDiv = document.getElementById('chat_messages_container');
+    objDiv.scrollTop = objDiv.scrollHeight;
+  }
+
   render() {
-    const { chat_sessions, chat_messages, _loadChatMessages } = this.props;
+    const {
+      chat_sessions,
+      chat_messages,
+      _loadChatMessages,
+      onMessageEdit,
+      chat_session_id,
+      _addChatMessage,
+      chatMessageValue
+    } = this.props;
 
     return (
       <div>
@@ -45,7 +70,11 @@ class Chat extends Component {
               </div>
 
               <div>
-                <AddMessage />
+                <AddMessage
+                  _createMessage={this.addMessage}
+                  handleChatMessage={onMessageEdit}
+                  message={chatMessageValue}
+                />
               </div>
             </section>
           </div>
@@ -58,12 +87,20 @@ class Chat extends Component {
 const mapStateToProps = state => ({
   userLoggedIn: state.LoggedIn.userLoggedIn,
   chat_sessions: state.Chat.chat_sessions,
-  chat_messages: state.Chat.chat_messages
+  chat_messages: state.Chat.chat_messages,
+  chatMessageValue: state.Chat.chatMessageValue,
+  chat_session_id: state.Chat.chat_session_id,
 });
 
 const matchDispatchToProps = dispatch => {
   return bindActionCreators(
-    { _isLoggedIn, _loadChatSessions, _loadChatMessages },
+    {
+      _isLoggedIn,
+      _loadChatSessions,
+      _loadChatMessages,
+      _addChatMessage,
+      onMessageEdit
+    },
     dispatch
   );
 };
