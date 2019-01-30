@@ -107,7 +107,7 @@ class ResetPasswordEmail extends Component {
                 <button className="FormField__Button">
                   Email Instructions
                 </button>
-                <Link to="/" className="FormField__Link">
+                <Link to="/SignIn" className="FormField__Link">
                   back to sign in
                 </Link>
               </div>
