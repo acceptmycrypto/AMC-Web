@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import {bindActionCreators} from 'redux';
 import { _loadDeals } from "../../actions/dealsActions";
 import { resetDealitemState } from "../../actions/dealItemActions";
-import CryptoRankings from '../CryptosRanking';
 import Layout from "../Layout"
 import './Deals.css';
 import { _isLoggedIn } from '../../actions/loggedInActions';

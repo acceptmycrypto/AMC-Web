@@ -35,14 +35,12 @@ class DealItem extends Component {
     await this.props._isLoggedIn(localStorage.getItem('token'));
 
     if (await this.props.userLoggedIn) {
-      debugger
-      await this.props._loadProfile(localStorage.getItem('token'));
       const { deal_name, id } = await this.props.match.params;
       await this.props._loadDealItem(id, deal_name);
       console.log(this.props.dealItem.seller_id);
       let seller_id = this.props.dealItem.seller_id || this.props.dealItem.venue_id;
       await this.props._loadReviews(seller_id);
-
+      await this.props._loadProfile(localStorage.getItem('token'));
 
 
     }else{
@@ -240,6 +238,7 @@ class DealItem extends Component {
   }
 
   render() {
+
     const { //state
             error,
             deal_item_loading,
@@ -260,6 +259,7 @@ class DealItem extends Component {
             showDetailStep,
             showShippingStep,
             showPayingStep,
+            user_info,
 
             //actions
             handleFirstNameInput,
@@ -282,6 +282,8 @@ class DealItem extends Component {
     if (deal_item_loading) {
       return <div>Loading...</div>;
     }
+
+    console.log("user info", user_info);
 
 
     //if user is redirected from the deal created page after deal is created
@@ -455,13 +457,14 @@ class DealItem extends Component {
                       </div>
                     </div>
 
+                    {user_info.length > 0 && dealItem && user_info[0].id === dealItem.seller_id ?
                     <Link to={'/chat'}>
                       <div id="message-seller" className="px-3">
                         <button onClick={this.messageSeller} className="mt-3">
                           Message Seller
                         </button>
                       </div>
-                    </Link>
+                    </Link> : null}
                   </div>
 
                   <div id="seller-review-rating">
@@ -545,6 +548,7 @@ const mapStateToProps = state => ({
   showPayingStep: state.DealItem.showPayingStep,
   dealCreated: state.CreateDeal.dealCreated,
   photo: state.Photo,
+  user_info: state.UserInfo.user_info
 });
 
 const matchDispatchToProps = dispatch =>{
@@ -564,7 +568,8 @@ const matchDispatchToProps = dispatch =>{
     handlePayingStep,
     _isLoggedIn,
     resetListDeal,
-    _createChatSession}, dispatch);
+    _createChatSession,
+    _loadProfile}, dispatch);
 
 }
 
