@@ -1,0 +1,22 @@
+#user-session-container {
+  width: 100%;
+}
+
+.user-session {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 10px 10px 0px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.deal-item-user-list {
+  height: 60px;
+  width: 60px;
+}
+
+.deal-item-user-list img {
+  width: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+}

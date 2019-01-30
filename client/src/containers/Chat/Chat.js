@@ -33,7 +33,7 @@ class Chat extends Component {
 
             <section className="chat-session-left">
               <UserList
-                {...chat_sessions} />
+                usersList = {chat_sessions} />
             </section>
 
             <section className="chat-session-right">
