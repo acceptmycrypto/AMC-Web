@@ -67,14 +67,14 @@
   font-size: 16px;
 }
 
-.seller-message-right {
+.user-message-right {
   background-color: rgb(22, 190, 182);
   align-self: flex-end;
   margin-right: 20px;
   /* float: right; */
 }
 
-.buyer-message-left {
+.non-owner-message-left {
   background-color: #2e4157;
   color: #fff;
 }

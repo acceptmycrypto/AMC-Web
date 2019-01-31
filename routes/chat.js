@@ -32,8 +32,12 @@ router.post("/chat_sessions", verifyToken, (req, res) => {
   let user_id = req.decoded._id;
   console.log(user_id);
 
+  //among the result, is there any deal that created by the user
+  //If yes, is the chat session empty?
+  //if it is, do not display that
+
   connection.query(
-    "SELECT chat_sessions.buyer_id, chat_sessions.seller_id, chat_sessions.id AS chat_session_id, chat_sessions.date_created AS chat_session_date, deal_name, featured_deal_image, seller.username AS seller_name, seller_profile.photo as seller_photo, buyer.username AS buyer_name, buyer_profile.photo AS buyer_photo FROM chat_sessions LEFT JOIN deals ON chat_sessions.deal_id = deals.id LEFT JOIN users buyer ON chat_sessions.buyer_id = buyer.id LEFT JOIN users seller ON chat_sessions.seller_id = seller.id LEFT JOIN users_profiles buyer_profile ON buyer_profile.user_id = buyer.id LEFT JOIN users_profiles seller_profile ON seller_profile.user_id = seller.id WHERE chat_sessions.buyer_id = ? OR chat_sessions.seller_id = ? AND chat_status = ? ORDER BY chat_session_date",
+    "SELECT chat_sessions.buyer_id, chat_sessions.seller_id, chat_sessions.id AS chat_session_id, chat_sessions.date_created AS chat_session_date, deal_id, deal_name, featured_deal_image, seller.username AS seller_name, seller_profile.photo as seller_photo, buyer.username AS buyer_name, buyer_profile.photo AS buyer_photo FROM chat_sessions LEFT JOIN deals ON chat_sessions.deal_id = deals.id LEFT JOIN users buyer ON chat_sessions.buyer_id = buyer.id LEFT JOIN users seller ON chat_sessions.seller_id = seller.id LEFT JOIN users_profiles buyer_profile ON buyer_profile.user_id = buyer.id LEFT JOIN users_profiles seller_profile ON seller_profile.user_id = seller.id WHERE chat_sessions.buyer_id = ? OR chat_sessions.seller_id = ? AND chat_status = ? ORDER BY chat_session_date",
     [user_id, user_id, "normal"],
     function(error, results, fields) {
       if (error) console.log(error);

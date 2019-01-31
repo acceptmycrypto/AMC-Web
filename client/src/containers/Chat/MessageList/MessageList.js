@@ -84,9 +84,9 @@ const MessageList = props => {
             return (
               <div
                 className={
-                  msg.message_owner_id === msg.buyer_id
-                    ? "chat-message buyer-message-left"
-                    : "chat-message seller-message-right"
+                  msg.message_owner_id === userInfo[0].id
+                    ? "chat-message user-message-right"
+                    : "chat-message non-owner-message-left"
                 }
               >
                 <div>{msg.message}</div>
@@ -96,7 +96,9 @@ const MessageList = props => {
               </div>
             );
           }) :
-          <div className="chat-message buyer-message-left">Ask the seller something</div>
+          chatSessionInfo[0].seller_id === userInfo[0].id ?
+          <div className="chat-message non-owner-message-left">Buyer has shown interest in your listing, start a conversation with the buyer.</div> :
+          <div className="chat-message non-owner-message-left">Ask the seller something</div>
         }
       </div>
     </div>
