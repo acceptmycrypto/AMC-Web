@@ -2,10 +2,12 @@ import React from "react";
 import "./UserList.css";
 
 const UserList = props => {
-  console.log(props.usersList);
+  console.log("userlist", props);
   const { usersList, _fetchMessagesList, userInfo } = props;
   return (
-    <div id="user-session-container">
+    <div>
+      <div id="user-session-header"><i onClick={props.goBack} class="fas fa-lg fa-arrow-left"></i>  <hr/> </div>
+      <div id="user-session-container">
       {usersList.map(chat_session => {
         return (
           <div
@@ -30,7 +32,7 @@ const UserList = props => {
               />
             </div>
             <div>
-              <strong className="buyer-review-name">
+              <strong>
                 {userInfo.length > 0 &&
                 chat_session.seller_id === userInfo[0].id
                   ? chat_session.buyer_name
@@ -45,6 +47,7 @@ const UserList = props => {
           </div>
         );
       })}
+    </div>
     </div>
   );
 };

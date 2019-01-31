@@ -4,6 +4,58 @@
   overflow-y: auto;
 }
 
+.deal-item-messages-list {
+  display: flex;
+  justify-content: space-between;
+}
+
+.message-list-profile-header{
+  display: flex;
+  align-items: center;
+}
+
+.message-list-deal-name-price {
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+  font-weight: 600;
+  font-size: 1em;
+  margin-right: 20px;
+}
+
+.message-list-deal-name {
+  font-size: 1.4em;
+}
+
+.message-list-profile-header div:first-child{
+  margin-right: 10px;
+}
+
+.message-list-profile-header div:nth-child(2){
+  font-size: 20px;
+}
+
+.message-list-deal-header {
+  display: flex;
+  align-items: center;
+}
+
+.message-list-deal-dropdown {
+  
+  cursor: pointer;
+}
+
+.message-list-deal-image {
+  margin-right: 30px;
+  width: 65px;
+  height: 65px;
+  display: flex;
+  align-items: center;
+}
+
+.message-list-deal-image img {
+  border-radius: 5px;
+  width: 100%;
+}
+
 #chat-messages {
   display: flex;
   flex-direction: column;

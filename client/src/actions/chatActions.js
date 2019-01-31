@@ -116,9 +116,9 @@ export const fetchChatMessagesBegin = () => ({
   type: FETCH_CHAT_MESSAGES_BEGIN,
 });
 
-export const fetchChatMessagesSuccess = (chat_messages) => ({
+export const fetchChatMessagesSuccess = (chat_session_info) => ({
   type: FETCH_CHAT_MESSAGES_SUCCESS,
-  payload: { chat_messages }
+  payload: { chat_session_info }
 });
 
 export const fetchChatMessagesFailure = error => ({

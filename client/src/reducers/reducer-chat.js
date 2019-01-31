@@ -15,6 +15,7 @@ const initialState = {
   chat_messages_loading: false,
   chat_messages_error: null,
   chat_messages: [],
+  selected_chat_session: [],
   chatMessageValue: ""
 };
 
@@ -51,10 +52,12 @@ export default function chatReducer(state = initialState, action) {
 
     case FETCH_CHAT_MESSAGES_SUCCESS:
       // All done with fetch call: set loading "false".
+      debugger
       return {
         ...state,
         chat_messages_loading: false,
-        chat_messages: action.payload.chat_messages,
+        chat_messages: action.payload.chat_session_info.chatMessages,
+        selected_chat_session: action.payload.chat_session_info.chatSession,
         chatMessageValue: ""
       };
 

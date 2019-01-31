@@ -98,15 +98,27 @@ router.post("/chat_session/messages", verifyToken, (req, res) => {
   let buyer_id = req.decoded._id;
   let { chat_session_id } = req.body;
 
+  //get info about the selected chat session
   connection.query(
-    "SELECT message, date_message_sent, message_owner_id, buyer_id, seller_id, chat_session_id FROM chat_messages LEFT JOIN chat_sessions ON chat_session_id = chat_sessions.id WHERE chat_session_id = ? ORDER BY date_message_sent",
+    "SELECT chat_sessions.buyer_id, chat_sessions.seller_id, chat_sessions.id AS chat_session_id, chat_sessions.date_created AS chat_session_date, deal_name, pay_in_dollar, pay_in_crypto, featured_deal_image, seller.username AS seller_name, seller_profile.photo as seller_photo, buyer.username AS buyer_name, buyer_profile.photo AS buyer_photo FROM chat_sessions LEFT JOIN deals ON chat_sessions.deal_id = deals.id LEFT JOIN users buyer ON chat_sessions.buyer_id = buyer.id LEFT JOIN users seller ON chat_sessions.seller_id = seller.id LEFT JOIN users_profiles buyer_profile ON buyer_profile.user_id = buyer.id LEFT JOIN users_profiles seller_profile ON seller_profile.user_id = seller.id WHERE chat_sessions.id = ?",
     [chat_session_id],
-    function(error, results, fields) {
+    function(error, chatSession, fields) {
       if (error) console.log(error);
-      console.log(results);
-      res.json(results);
+      console.log(chatSession);
+
+      connection.query(
+        "SELECT message, date_message_sent, message_owner_id, buyer_id, seller_id, chat_session_id FROM chat_messages LEFT JOIN chat_sessions ON chat_session_id = chat_sessions.id WHERE chat_session_id = ? ORDER BY date_message_sent",
+        [chat_session_id],
+        function(error, chatMessages, fields) {
+          if (error) console.log(error);
+          console.log(chatMessages);
+          res.json({chatSession, chatMessages});
+        }
+      );
+
     }
   );
+
 });
 
 //create new message
