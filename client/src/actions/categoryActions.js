@@ -66,7 +66,7 @@ export const filterCategory = (category, allDeals) => {
 export const categoryDeals = (categoryTerm, page) => {
   return dispatch => {
       dispatch(categoryDealsBegin());
-      return fetch("/search?term="+categoryTerm+"&page="+page, {
+      return fetch("/category?term="+categoryTerm+"&page="+page, {
           method: "GET",
           headers: {
               "Accept": "application/json",
