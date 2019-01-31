@@ -1,5 +1,5 @@
 const initialState = {
-  photo: "",
+  photo: null,
   loading: false,
   error: null
 };
@@ -30,7 +30,7 @@ export default function photoReducer(state = initialState, action) {
         ...state,
         loading: false,
         error: action.payload.error,
-        photo: ""
+        photo: null
       };
 
     default:

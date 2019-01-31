@@ -37,7 +37,7 @@ CREATE TABLE users(
 	first_name VARCHAR(255) NULL,
 	last_name VARCHAR (255) NULL,
 	phone_number VARCHAR(100) NULL,
-  phone_number_verified BOOLEAN NOT NULL DEFAULT FALSE,
+  	phone_number_verified BOOLEAN NOT NULL DEFAULT FALSE,
 	email VARCHAR(100) NOT NULL UNIQUE,
 	previous_email VARCHAR(100) NULL UNIQUE,
 	address VARCHAR(255) NULL,
@@ -46,8 +46,10 @@ CREATE TABLE users(
 	zipcode VARCHAR(255) NULL,
 	password VARCHAR(255) NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	sellers_avg_rating FLOAT(3,2) NULL,
-	total_sellers_ratings INT NULL,
+    reset_pw_token VARCHAR(26) NULL,
+    reset_pw_timestamp BIGINT NULL,
+	sellers_avg_rating FLOAT(3,2) NOT NULL DEFAULT 0,
+	total_sellers_ratings INT NOT NULL DEFAULT 0,
 	PRIMARY KEY (id)
 );
 
@@ -112,34 +114,6 @@ CREATE TABLE categories_deals(
 	FOREIGN KEY (deals_id) REFERENCES deals(id)
 );
 
-CREATE TABLE customizable_option(
-	id INT NOT NULL AUTO_INCREMENT,
-	custom_option_name VARCHAR(100) NOT NULL,
-	PRIMARY KEY (id)
-);
-
-
-CREATE TABLE categories_customizable_options(
-	category_id INT NOT NULL,
-	custom_option_id INT NOT NULL,
-	FOREIGN KEY (category_id) REFERENCES category(id),
-	FOREIGN KEY (custom_option_id) REFERENCES customizable_option(id)
-);
-
-
-CREATE TABLE hashtag (
-	id INT NOT NULL AUTO_INCREMENT,
-	hashtag_name VARCHAR(100) NOT NULL,
-	PRIMARY KEY (id)
-);
-
-
-CREATE TABLE hashtags_deals(
-	hashtag_id INT NOT NULL,
-	deals_id INT NOT NULL,
-	FOREIGN KEY (hashtag_id) REFERENCES hashtag(id),
-	FOREIGN KEY (deals_id) REFERENCES deals(id)
-);
 
 
 
@@ -218,7 +192,7 @@ CREATE TABLE users_shipping_address(
 	id INT NOT NULL AUTO_INCREMENT,
 	txn_id VARCHAR(255) NOT NULL,
 	shipping_firstname VARCHAR(255) NOT NULL,
-  shipping_lastname VARCHAR(255) NOT NULL,
+  	shipping_lastname VARCHAR(255) NOT NULL,
 	shipping_address VARCHAR(255) NOT NULL,
 	shipping_city VARCHAR(255) NOT NULL,
 	shipping_state VARCHAR(255) NOT NULL,
@@ -282,32 +256,6 @@ CREATE TABLE notifications (
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
 
-
-CREATE TABLE buyers_reviews_deals (
-	id INT NOT NULL AUTO_INCREMENT,
-	buyer_id INT NOT NULL,
-	deal_id INT NOT NULL,
-	title VARCHAR (255) NOT NULL,
-	body TEXT NULL,
-  	date_reviewed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	rating INT NOT NULL DEFAULT 0,
-	verified_purchase BOOLEAN NOT NULL DEFAULT FALSE,
-	likes INT DEFAULT 0,
-	dislikes INT DEFAULT 0,
-	helpful_review INT DEFAULT 0,
-	display_review BOOLEAN NOT NULL DEFAULT FALSE,
-	PRIMARY KEY (id),
-	FOREIGN KEY (buyer_id) REFERENCES users(id),
-	FOREIGN KEY (deal_id) REFERENCES deals(id)
-);
-
-
-CREATE TABLE parents_children_deals_reviews(
-	review_parent_id INT NOT NULL,
-	review_child_id INT NOT NULL,
-	FOREIGN KEY (review_parent_id) REFERENCES buyers_reviews_deals(id),
-	FOREIGN KEY (review_child_id) REFERENCES buyers_reviews_deals(id)
-);
 
 CREATE TABLE buyers_reviews_sellers(
 	id INT NOT NULL AUTO_INCREMENT,
@@ -476,4 +424,59 @@ CREATE TABLE flagged_users(
 -- 	email VARCHAR(255) UNIQUE,
 -- 	password VARCHAR(255) NOT NULL UNIQUE,
 -- 	PRIMARY KEY (id)
+-- );
+
+-- CREATE TABLE customizable_option(
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	custom_option_name VARCHAR(100) NOT NULL,
+-- 	PRIMARY KEY (id)
+-- );
+
+
+-- CREATE TABLE categories_customizable_options(
+-- 	category_id INT NOT NULL,
+-- 	custom_option_id INT NOT NULL,
+-- 	FOREIGN KEY (category_id) REFERENCES category(id),
+-- 	FOREIGN KEY (custom_option_id) REFERENCES customizable_option(id)
+-- );
+
+
+-- CREATE TABLE hashtag (
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	hashtag_name VARCHAR(100) NOT NULL,
+-- 	PRIMARY KEY (id)
+-- );
+
+
+-- CREATE TABLE hashtags_deals(
+-- 	hashtag_id INT NOT NULL,
+-- 	deals_id INT NOT NULL,
+-- 	FOREIGN KEY (hashtag_id) REFERENCES hashtag(id),
+-- 	FOREIGN KEY (deals_id) REFERENCES deals(id)
+-- );
+
+-- CREATE TABLE buyers_reviews_deals (
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	buyer_id INT NOT NULL,
+-- 	deal_id INT NOT NULL,
+-- 	title VARCHAR (255) NOT NULL,
+-- 	body TEXT NULL,
+--   	date_reviewed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+-- 	rating INT NOT NULL DEFAULT 0,
+-- 	verified_purchase BOOLEAN NOT NULL DEFAULT FALSE,
+-- 	likes INT DEFAULT 0,
+-- 	dislikes INT DEFAULT 0,
+-- 	helpful_review INT DEFAULT 0,
+-- 	display_review BOOLEAN NOT NULL DEFAULT FALSE,
+-- 	PRIMARY KEY (id),
+-- 	FOREIGN KEY (buyer_id) REFERENCES users(id),
+-- 	FOREIGN KEY (deal_id) REFERENCES deals(id)
+-- );
+
+
+-- CREATE TABLE parents_children_deals_reviews(
+-- 	review_parent_id INT NOT NULL,
+-- 	review_child_id INT NOT NULL,
+-- 	FOREIGN KEY (review_parent_id) REFERENCES buyers_reviews_deals(id),
+-- 	FOREIGN KEY (review_child_id) REFERENCES buyers_reviews_deals(id)
 -- );

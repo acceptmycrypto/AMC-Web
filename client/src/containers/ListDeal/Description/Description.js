@@ -428,7 +428,7 @@ class Description extends Component {
 }
 
 const mapStateToProps = state => ({
-  parentCategory: state.CreateDeal.parentCategory,
+  parentCategory: state.Category.parentCategory,
   modalVisible: state.CreateDeal.modalVisible,
   phoneNumber: state.CreateDeal.phoneNumber,
   sellerAddress: state.CreateDeal.sellerAddress,

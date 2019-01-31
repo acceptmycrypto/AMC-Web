@@ -1,7 +1,7 @@
 export const searchDeals = (searchTerm, page) => {
     return dispatch => {
         dispatch(searchDealBegin());
-        return fetch("/search?term="+searchTerm+"&page="+page, {
+        return fetch("/api/search?term="+searchTerm+"&page="+page, {
             method: "GET",
             headers: {
                 "Accept": "application/json",

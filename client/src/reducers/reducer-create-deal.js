@@ -15,7 +15,6 @@ const initialState = {
   crypto_amount: {},
   gettingRate: {},
   dealName: "",
-  parentCategory: [],
   selectedCategory: "",
   selectedCondition: "", //important! Selected condition cannot by null by default, otherwist app will crash.
   editorState: EditorState.createEmpty(),
@@ -172,11 +171,6 @@ export default function CreateDealReducer(state = initialState, action) {
         dealName: action.payload
       };
 
-    case "FETCH_CATEGORY_SUCCESS":
-      return {
-        ...state,
-        parentCategory: action.payload.parentCategory
-      };
 
     case "SELECT_CATEGORY":
       return {
