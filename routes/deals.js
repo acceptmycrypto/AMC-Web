@@ -166,7 +166,7 @@ router.get('/api/deals/:deal_id/:deal_name', function (req, res) {
   );
 });
 
-router.get('/search', function(req, res) {
+router.get('/api/search', function(req, res) {
     console.log("req search");
     console.log(req.query);
     //hardcoded number of search results per page to 8.  ideally should be something like 20.
