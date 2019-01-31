@@ -49,8 +49,11 @@ class Chat extends Component {
 
   componentDidUpdate() {
     //scroll to bottom of message list
-    const objDiv = document.getElementById("chat_messages_container");
-    objDiv.scrollTop = objDiv.scrollHeight;
+    if (this.props.selected_chat_session.length > 0) {
+      const objDiv = document.getElementById("chat_messages_container");
+      objDiv.scrollTop = objDiv.scrollHeight;
+    }
+
   }
 
   render() {
@@ -79,6 +82,8 @@ class Chat extends Component {
             </section>
 
             <section className="chat-session-right">
+            {selected_chat_session.length > 0 ?
+            <div>
               <div>
                 <MessageList
                   messagesList={chat_messages}
@@ -87,15 +92,23 @@ class Chat extends Component {
                 />
               </div>
               <div>
-              <hr />
+                <hr />
+                <div>
+                  <AddMessage
+                    _createMessage={this.addMessage}
+                    handleChatMessage={onMessageEdit}
+                    message={chatMessageValue}
+                  />
+                </div>
+              </div>
+            </div> :
+            <div id="select-chat-prompt">
               <div>
-                <AddMessage
-                  _createMessage={this.addMessage}
-                  handleChatMessage={onMessageEdit}
-                  message={chatMessageValue}
-                />
+                <div><i class="fas fa-7x fa-comments"></i></div>
+                <strong>Select a conversation to start the chat</strong>
               </div>
-              </div>
+            </div>
+            }
             </section>
           </div>
         </Layout>

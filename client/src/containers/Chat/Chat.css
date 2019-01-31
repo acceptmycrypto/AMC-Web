@@ -25,3 +25,20 @@
   padding: 20px;
   width: 70%;
 }
+
+#select-chat-prompt {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 52%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+#select-chat-prompt div{
+  text-align: center;
+}
+
+#select-chat-prompt strong {
+  font-size: 18px;
+}
