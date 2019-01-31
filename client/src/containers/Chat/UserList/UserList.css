@@ -19,6 +19,14 @@
   cursor: pointer;
 }
 
+.user-session-left {
+  display: flex;
+}
+
+.user-session-left div:first-child{
+  margin-right: 10px;
+}
+
 .deal-item-user-list {
   height: 60px;
   width: 60px;

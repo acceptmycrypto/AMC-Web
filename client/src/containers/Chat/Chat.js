@@ -86,6 +86,7 @@ class Chat extends Component {
                   userInfo={user_info}
                 />
               </div>
+              <div>
               <hr />
               <div>
                 <AddMessage
@@ -93,6 +94,7 @@ class Chat extends Component {
                   handleChatMessage={onMessageEdit}
                   message={chatMessageValue}
                 />
+              </div>
               </div>
             </section>
           </div>

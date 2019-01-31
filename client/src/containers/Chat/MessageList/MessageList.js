@@ -1,5 +1,6 @@
 import React from "react";
 import "./MessageList.css";
+import Timestamp from "react-timestamp";
 
 const MessageList = props => {
   const { messagesList, chatSessionInfo, userInfo } = props;
@@ -12,7 +13,6 @@ const MessageList = props => {
             chatSessionInfo.map(chatSession => {
               return (
                 <div>
-
                   <div className="deal-item-messages-list">
                     <div className="message-list-profile-header">
                       <div>
@@ -38,9 +38,10 @@ const MessageList = props => {
                     </div>
 
                     <div className="message-list-deal-header">
-
                       <div className="message-list-deal-name-price">
-                        <div className="message-list-deal-name">{chatSession.deal_name}</div>
+                        <div className="message-list-deal-name">
+                          {chatSession.deal_name}
+                        </div>
                         <div>
                           Pay in Dollar: ${chatSession.pay_in_dollar.toFixed(2)}
                         </div>
@@ -66,10 +67,9 @@ const MessageList = props => {
                           className="dropdown-menu"
                           aria-labelledby="dropdownMenuButton"
                         >
-                        <div className="dropdown-item">Delete</div>
+                          <div className="dropdown-item">Delete</div>
+                        </div>
                       </div>
-                      </div>
-
                     </div>
                   </div>
                 </div>
@@ -88,8 +88,10 @@ const MessageList = props => {
                   : "chat-message seller-message-right"
               }
             >
-              {msg.message}
-              <small>{msg.date_message_sent}</small>
+              <div>{msg.message}</div>
+              <small>
+                <Timestamp time={msg.date_message_sent} precision={1} />
+              </small>
             </div>
           );
         })}

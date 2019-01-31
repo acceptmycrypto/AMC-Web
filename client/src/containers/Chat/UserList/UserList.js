@@ -1,5 +1,6 @@
 import React from "react";
 import "./UserList.css";
+import Timestamp from 'react-timestamp';
 
 const UserList = props => {
   console.log("userlist", props);
@@ -19,6 +20,7 @@ const UserList = props => {
             }
             className="user-session"
           >
+          <div className="user-session-left">
             <div>
               <i
                 className={
@@ -39,8 +41,9 @@ const UserList = props => {
                   : chat_session.seller_name}
               </strong>
               <div>{chat_session.deal_name}</div>
-              <small>{chat_session.chat_session_date}</small>
+              <small><Timestamp time={chat_session.chat_session_date} precision={1} /></small>
             </div>
+          </div>
             <div className="deal-item-user-list">
               <img src={chat_session.featured_deal_image} alt="deal_image" />
             </div>
