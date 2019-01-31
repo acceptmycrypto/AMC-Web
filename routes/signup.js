@@ -262,10 +262,10 @@ router.post('/reset-password-email', function(req, res) {
 
        //use sendgrid to send email
        let password_reset_link;
-        if (process.env.BACKEND_URL=="http://localhost:3001"){
-            password_reset_link = "http://localhost:3000/ResetPassword/"+token;
+       if (process.env.NODE_ENV=="development"){
+            password_reset_link = process.env.FRONTEND_URL+"/ResetPassword/"+token;
         } else {
-            password_reset_link = "https://acceptmycrypto.herokuapp.com/ResetPassword/"+token;
+            password_reset_link = process.env.BACKEND_URL+"/ResetPassword/"+token;
         }
         
        const email_password_reset = {
@@ -329,7 +329,7 @@ router.post('/reset-password-email', function(req, res) {
                       console.log(error)
                     } else {
                       //send a notificiation to the client side to let user verify their email
-                      res.json({ pw_token_validity:'valid', error_message: 'Password has been changed.' });
+                      res.json({ pw_token_validity:'valid', error_message: 'Password has been changed. Please sign in using the new password.' });
                     }
                   });
 
