@@ -9,13 +9,19 @@
 
 #user-session-container {
   width: 100%;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+#user-session-container::-webkit-scrollbar {
+  width: .3em;
 }
 
 .user-session {
   display: flex;
   justify-content: space-between;
   margin: 0 10px 10px 0px;
-  width: 100%;
+  width: 95%;
   cursor: pointer;
 }
 
