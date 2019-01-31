@@ -3,7 +3,7 @@ export const FETCH_CREATE_CHAT_SESSION_SUCCESS = "FETCH_CREATE_CHAT_SESSION_SUCC
 export const FETCH_CREATE_CHAT_SESSION_FAILURE = "FETCH_CREATE_CHAT_SESSION_FAILURE";
 
 export function _createChatSession(token, seller_id, deal_id) {
-  debugger
+
   const settings = {
     method: "POST",
     headers: {
@@ -30,9 +30,9 @@ export const fetchCreateChatSessionBegin = () => ({
   type: FETCH_CREATE_CHAT_SESSION_BEGIN,
 });
 
-export const fetchCreateChatSessionSuccess = (new_chat_user) => ({
+export const fetchCreateChatSessionSuccess = (chat_session_info) => ({
   type: FETCH_CREATE_CHAT_SESSION_SUCCESS,
-  payload: { new_chat_user }
+  payload: { chat_session_info }
 });
 
 export const fetchCreateChatSessionFailure = error => ({

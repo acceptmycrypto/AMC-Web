@@ -5,6 +5,9 @@ import {
   FETCH_CHAT_MESSAGES_BEGIN,
   FETCH_CHAT_MESSAGES_SUCCESS,
   FETCH_CHAT_MESSAGES_FAILURE,
+  FETCH_CREATE_CHAT_SESSION_BEGIN,
+  FETCH_CREATE_CHAT_SESSION_SUCCESS,
+  FETCH_CREATE_CHAT_SESSION_FAILURE,
   EDIT_CHAT_MESSAGE
 } from "../actions/chatActions";
 
@@ -42,6 +45,30 @@ export default function chatReducer(state = initialState, action) {
         chat_sessions_loading: false,
         chat_sessions_error: action.payload.error,
       };
+
+      case FETCH_CREATE_CHAT_SESSION_BEGIN:
+      return {
+        ...state,
+        chat_messages_loading: true,
+        chat_messages_error: null
+      };
+
+    case FETCH_CREATE_CHAT_SESSION_SUCCESS:
+      return {
+        ...state,
+        chat_messages_loading: false,
+        chat_messages: action.payload.chat_session_info.chatMessages,
+        selected_chat_session: action.payload.chat_session_info.chatSession,
+        chatMessageValue: ""
+      };
+
+    case FETCH_CREATE_CHAT_SESSION_FAILURE:
+      return {
+        ...state,
+        chat_messages_loading: false,
+        chat_messages_error: action.payload.error,
+      };
+    /////
 
     case FETCH_CHAT_MESSAGES_BEGIN:
       return {
