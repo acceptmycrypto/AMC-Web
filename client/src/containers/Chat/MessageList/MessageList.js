@@ -79,22 +79,25 @@ const MessageList = props => {
         <hr />
       </div>
       <div id="chat-messages">
-        {messagesList.map(msg => {
-          return (
-            <div
-              className={
-                msg.message_owner_id === msg.buyer_id
-                  ? "chat-message buyer-message-left"
-                  : "chat-message seller-message-right"
-              }
-            >
-              <div>{msg.message}</div>
-              <small>
-                <Timestamp time={msg.date_message_sent} precision={1} />
-              </small>
-            </div>
-          );
-        })}
+        {messagesList.length > 0 ?
+          messagesList.map(msg => {
+            return (
+              <div
+                className={
+                  msg.message_owner_id === msg.buyer_id
+                    ? "chat-message buyer-message-left"
+                    : "chat-message seller-message-right"
+                }
+              >
+                <div>{msg.message}</div>
+                <small>
+                  <Timestamp time={msg.date_message_sent} precision={1} />
+                </small>
+              </div>
+            );
+          }) :
+          <div className="chat-message buyer-message-left">Ask the seller something</div>
+        }
       </div>
     </div>
   );
