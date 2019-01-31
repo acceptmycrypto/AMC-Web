@@ -46,6 +46,8 @@ CREATE TABLE users(
 	zipcode VARCHAR(255) NULL,
 	password VARCHAR(255) NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    reset_pw_token VARCHAR(26) NULL,
+    reset_pw_timestamp BIGINT NULL,
 	sellers_avg_rating FLOAT(3,2) NOT NULL DEFAULT 0,
 	total_sellers_ratings INT NOT NULL DEFAULT 0,
 	PRIMARY KEY (id)

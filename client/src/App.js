@@ -30,7 +30,7 @@ class App extends Component {
               <Route exact path="/SignUp" component={SignUp} />
               <Route exact path="/ResendEmail" component={ResendEmail} />
               <Route exact path="/ResetPasswordEmail" component={ResetPasswordEmail} />
-              <Route exact path="/ResetPassword" component={ResetPassword}/>
+              <Route path="/ResetPassword/:token" component={ResetPassword}/>
               <Route exact path="/profile" component={Profile} />
 
 
@@ -38,7 +38,7 @@ class App extends Component {
               <Route exact path="/crypto" component={Crypto} />
 
               <Route path="/category" render={(props) => <SearchDeals {...props} pageType="category" /> }/>
-              <Route path="/search" render={(props) => <SearchDeals {...props} pageType="search" /> }/>
+              <Route path="/Search" render={(props) => <SearchDeals {...props} pageType="search" /> }/>
               <Route exact path="/feed/deals" component={FeedDeals} />
 
               <Route path="/feed/deals/:id/:deal_name" component={DealItem}/>

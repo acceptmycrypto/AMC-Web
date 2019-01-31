@@ -184,7 +184,7 @@ router.post('/resend-email', function(req, res) {
         res.json({
             message: "We sent you another email for email verification. Please confirm your email."
         });
-        userID = result[0].id;
+        let userID = result[0].id;
 
        //use sendgrid to send email
        let verify_link = process.env.BACKEND_URL+"/email-verify/" + userID + "/" + result[0].email_verification_token;
@@ -246,16 +246,33 @@ router.post('/reset-password-email', function(req, res) {
         res.json({
             message: "We sent you an email for password reset. Please confirm your email."
         });
-        userID = result[0].id;
+        let userID = result[0].id;
+        //generate randomized token with timestamp
+        //token will be included in password reset link
+        //timestamp puts timelimit for token usage, 3600000ms=1hr
+        let token = Math.random().toString(36).substring(2,10)+"-"+Math.random().toString(36).substring(2,10)+"-"+Math.random().toString(36).substring(2,10);
+        let timestamp = Date.now();
+        connection.query(
+            'UPDATE users SET ? WHERE email = ?',
+            [{reset_pw_token: token, reset_pw_timestamp: timestamp}, req.body.email],
+            function(error, result, fields) {
+                if (error) throw error;
+            }
+        )
 
        //use sendgrid to send email
-       let password_reset_link = process.env.FRONTEND_URL+"/ResetPassword";
-
+       let password_reset_link;
+       if (process.env.NODE_ENV=="development"){
+            password_reset_link = process.env.FRONTEND_URL+"/ResetPassword/"+token;
+        } else {
+            password_reset_link = process.env.BACKEND_URL+"/ResetPassword/"+token;
+        }
+        
        const email_password_reset = {
          to: req.body.email,
          from: process.env.CUSTOMER_SUPPORT,
          subject: 'Reset your Password',
-         html: resetPasswordEmailTemplate({ token: result[0].email_verification_token, password_reset_link })
+         html: resetPasswordEmailTemplate({ password_reset_link })
        };
        sgMail.send(email_password_reset);
 
@@ -263,37 +280,56 @@ router.post('/reset-password-email', function(req, res) {
     );
   });
 
-   //Once the user clicks on the email for password reset, we get the id and email verification params
+   
+    router.get('/validate-pw-token', function(req, res) {
+        console.log("req.query.token");
+        console.log(req.query.token);
+        let timestamp = Date.now();
+        connection.query(
+            'SELECT reset_pw_timestamp from users WHERE reset_pw_token = ?',
+            [req.query.token],
+            function(error, result, fields) {
+                if (error) throw error;
+                console.log("stored timestamp");
+                console.log(result);
+                console.log("current timestamp");
+                console.log(timestamp);
+                res.json({current:timestamp,stored:result});
+            }
+        )
+
+    })
+    // pw_token_validity: "none",
+    // error_message: ""
    router.post('/reset-password', function(req, res) {
     console.log("req");
     console.log(req);
     connection.query(
-      'SELECT * FROM users WHERE email_verification_token = ?',
+      'SELECT * FROM users WHERE reset_pw_token = ?',
       [req.body.token],
       function(error, result, fields) {
         if (error) throw error;
-        if (!result[0]) return res.status(404).json({ error: 'invalid token' });
-        if (!req.body.password1) return res.status(401).json({ error: 'you need a password' });
-        if (!req.body.password2) return res.status(401).json({ error: 'you need a password' });
-        if (req.body.password1!=req.body.password2) return res.status(401).json({ error: 'passwords do not match' });
-        if (req.body.password1.length <= 5) return res.status(401).json({ error: 'password length must be greater than 5' });
+        if (!result[0]) return res.status(404).json({ pw_token_validity:'invalid', error_message: '' });
+        if ((result[0].reset_pw_timestamp+3600000) <= Date.now()) return res.json({ pw_token_validity:'expired', error_message: '' })
+        if (!req.body.password1) return res.status(401).json({ pw_token_validity:'valid', error_message: 'Password is missing.' });
+        if (!req.body.password2) return res.status(401).json({ pw_token_validity:'valid', error_message: 'Password is missing.' });
+        if (req.body.password1!=req.body.password2) return res.status(401).json({ pw_token_validity:'valid', error_message: 'Passwords do not match.' });
+        if (req.body.password1.length <= 5) return res.status(401).json({ pw_token_validity:'valid', error_message: 'Password length must be greater than 5.' });
         //if user is verified already then send a message to user that the account is verified
-        if (result[0].email_verification_token === req.body.token) {
+        if (result[0].reset_pw_token === req.body.token) {
 
             bcrypt.genSalt(10, function(err, salt) {
                 bcrypt.hash(req.body.password1, salt, function(err, password_hash) {
 
                   connection.query('UPDATE users SET ? WHERE ?',
-                  [{password: password_hash}, {email_verification_token: req.body.token}],
+                  [{password: password_hash, reset_pw_token: null, reset_pw_timestamp: null}, {id: result[0].id}],
                   function (error, results, fields) {
 
                     if (error) {
                       console.log(error)
                     } else {
                       //send a notificiation to the client side to let user verify their email
-                      res.json({
-                          message: "Password changed."
-                      });
+                      res.json({ pw_token_validity:'valid', error_message: 'Password has been changed. Please sign in using the new password.' });
                     }
                   });
 
