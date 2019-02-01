@@ -3,6 +3,10 @@
   height: 50px;
 }
 
+#user-session-wrapper {
+  width: 100%;
+}
+
 #user-session-header i {
   cursor: pointer;
 }

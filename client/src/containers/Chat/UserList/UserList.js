@@ -6,7 +6,7 @@ const UserList = props => {
   console.log("userlist", props);
   const { usersList, _fetchMessagesList, userInfo } = props;
   return (
-    <div>
+    <div id="user-session-wrapper">
       <div id="user-session-header"><i onClick={props.goBack} class="fas fa-lg fa-arrow-left"></i>  <hr/> </div>
       <div id="user-session-container">
       {usersList.map(chat_session => {

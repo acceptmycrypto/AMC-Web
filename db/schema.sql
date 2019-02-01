@@ -366,15 +366,25 @@ CREATE TABLE flagged_users(
 CREATE TABLE chat_sessions(
 	id INT NOT NULL AUTO_INCREMENT,
   deal_id INT NOT NULL,
-	buyer_id INT NOT NULL,
-	seller_id INT NOT NULL,
-  chat_status VARCHAR (10) DEFAULT 'normal',
-  deleted_id INT DEFAULT 0,
+  session_status VARCHAR (10) DEFAULT 'normal',
 	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (id),
-	FOREIGN KEY (buyer_id) REFERENCES users(id),
-	FOREIGN KEY (seller_id) REFERENCES users(id),
   FOREIGN KEY (deal_id) REFERENCES deals(id)
+);
+
+CREATE TABLE chat_session_participants(
+	id INT NOT NULL AUTO_INCREMENT,
+  chat_session_id INT NOT NULL,
+  user_id INT NOT NULL,
+  seller_id INT NOT NULL,
+  buyer_id INT NOT NULL,
+  participant_status VARCHAR (10) DEFAULT 'normal',
+	date_joined TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (id),
+  FOREIGN KEY (chat_session_id) REFERENCES chat_sessions(id),
+	FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (seller_id) REFERENCES users(id),
+  FOREIGN KEY (buyer_id) REFERENCES users(id)
 );
 
 CREATE TABLE chat_messages(

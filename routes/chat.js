@@ -32,11 +32,9 @@ router.post("/chat_sessions", verifyToken, (req, res) => {
   let user_id = req.decoded._id;
   console.log("user id", user_id);
 
-  // chat status is 'normal', 'buyer_deleted', 'seller_deleted', 'deleted', or 'blocked'
-
   connection.query(
-    "SELECT chat_sessions.buyer_id, chat_sessions.seller_id, chat_sessions.id AS chat_session_id, chat_sessions.date_created AS chat_session_date, deal_id, deal_name, featured_deal_image, seller.username AS seller_name, seller_profile.photo as seller_photo, buyer.username AS buyer_name, buyer_profile.photo AS buyer_photo FROM chat_sessions LEFT JOIN deals ON chat_sessions.deal_id = deals.id LEFT JOIN users buyer ON chat_sessions.buyer_id = buyer.id LEFT JOIN users seller ON chat_sessions.seller_id = seller.id LEFT JOIN users_profiles buyer_profile ON buyer_profile.user_id = buyer.id LEFT JOIN users_profiles seller_profile ON seller_profile.user_id = seller.id WHERE (chat_sessions.buyer_id = ? OR chat_sessions.seller_id = ?) AND (deleted_id <> ? OR chat_status = ?) ORDER BY chat_session_date",
-    [user_id, user_id, user_id, "normal"],
+    "SELECT chat_sessions.id AS chat_session_id, chat_sessions.date_created AS chat_session_date, deal_id, date_joined, chat_session_participants.user_id, chat_session_participants.seller_id, chat_session_participants.buyer_id, deal_name, featured_deal_image, seller.username AS seller_name, seller_profile.photo as seller_photo, buyer.username AS buyer_name, buyer_profile.photo AS buyer_photo from chat_sessions LEFT JOIN chat_session_participants ON chat_sessions.id = chat_session_participants.chat_session_id LEFT JOIN deals ON chat_sessions.deal_id = deals.id LEFT JOIN users seller ON chat_session_participants.seller_id = seller.id LEFT JOIN users buyer ON chat_session_participants.buyer_id = buyer.id LEFT JOIN users_profiles buyer_profile ON buyer_profile.user_id = buyer.id LEFT JOIN users_profiles seller_profile ON seller_profile.user_id = seller.id WHERE chat_session_participants.user_id = ? AND participant_status = ?",
+    [user_id, "normal"],
     function(error, results, fields) {
       if (error) console.log(error);
       console.log(results);
@@ -44,6 +42,8 @@ router.post("/chat_sessions", verifyToken, (req, res) => {
     }
   );
 });
+
+// SELECT chat_sessions.buyer_id, chat_sessions.seller_id, chat_sessions.id AS chat_session_id, chat_sessions.date_created AS chat_session_date, deal_id, deal_name, featured_deal_image, seller.username AS seller_name, seller_profile.photo as seller_photo, buyer.username AS buyer_name, buyer_profile.photo AS buyer_photo FROM chat_sessions LEFT JOIN deals ON chat_sessions.deal_id = deals.id LEFT JOIN users buyer ON chat_sessions.buyer_id = buyer.id LEFT JOIN users seller ON chat_sessions.seller_id = seller.id LEFT JOIN users_profiles buyer_profile ON buyer_profile.user_id = buyer.id LEFT JOIN users_profiles seller_profile ON seller_profile.user_id = seller.id WHERE (chat_sessions.buyer_id = ? OR chat_sessions.seller_id = ?) AND (deleted_id <> ? OR chat_status = ?) ORDER BY chat_session_date
 
 //create new chat session
 router.post("/chat_session/new", verifyToken, (req, res) => {
@@ -53,30 +53,47 @@ router.post("/chat_session/new", verifyToken, (req, res) => {
 
   //check to see if buyer and seller has started a conversation on this deal
   connection.query(
-    "SELECT id FROM chat_sessions WHERE deal_id = ? AND buyer_id = ? AND seller_id = ? ",
+    "SELECT chat_sessions.id FROM chat_sessions LEFT JOIN chat_session_participants ON chat_sessions.id = chat_session_participants.chat_session_id WHERE deal_id = ? AND buyer_id = ? AND seller_id = ? ",
     [deal_id, buyer_id, seller_id],
     function(error, results, fields) {
       if (error) console.log(error);
 
       //if result is 0, create a new chat session
       if (results.length === 0) {
+        //create a new chat session first
         connection.query(
-          "INSERT INTO chat_sessions (deal_id, buyer_id, seller_id) VALUES (?,?,?)",
-          [deal_id, buyer_id, seller_id],
+          "INSERT INTO chat_sessions (deal_id) VALUES (?)",
+          [deal_id],
           function(error, response, fields) {
             if (error) throw error;
             //send the new chat session info to the front end
             let new_chat_session_id = response.insertId;
 
-            //get info about the new chat session
+            //create an array of two records to insert for both buyer and seller
+            let chat_participants = [
+              [new_chat_session_id, buyer_id, seller_id, buyer_id],
+              [new_chat_session_id, seller_id, seller_id, buyer_id]
+            ];
+
+            //insert the participants to the new created chat session
             connection.query(
-              "SELECT chat_sessions.buyer_id, chat_sessions.seller_id, chat_sessions.id AS chat_session_id, chat_sessions.date_created AS chat_session_date, deal_name, pay_in_dollar, pay_in_crypto, featured_deal_image, seller.username AS seller_name, seller_profile.photo as seller_photo, buyer.username AS buyer_name, buyer_profile.photo AS buyer_photo FROM chat_sessions LEFT JOIN deals ON chat_sessions.deal_id = deals.id LEFT JOIN users buyer ON chat_sessions.buyer_id = buyer.id LEFT JOIN users seller ON chat_sessions.seller_id = seller.id LEFT JOIN users_profiles buyer_profile ON buyer_profile.user_id = buyer.id LEFT JOIN users_profiles seller_profile ON seller_profile.user_id = seller.id WHERE chat_sessions.id = ?",
+              "INSERT INTO chat_session_participants (chat_session_id, user_id, seller_id, buyer_id) VALUES ?",
+              [chat_participants],
+              function(error, chatMessages, fields) {
+                if (error) console.log(error);
+
+              }
+            );
+
+            //get info about the new created record chat session
+            connection.query(
+              "SELECT DISTINCT chat_sessions.id AS chat_session_id, chat_sessions.date_created AS chat_session_date, deal_id, chat_session_participants.seller_id, chat_session_participants.buyer_id, deal_name, pay_in_dollar, pay_in_crypto,featured_deal_image, seller.username AS seller_name, seller_profile.photo as seller_photo, buyer.username AS buyer_name, buyer_profile.photo AS buyer_photo from chat_sessions LEFT JOIN chat_session_participants ON chat_sessions.id = chat_session_participants.chat_session_id LEFT JOIN deals ON chat_sessions.deal_id = deals.id LEFT JOIN users seller ON chat_session_participants.seller_id = seller.id LEFT JOIN users buyer ON chat_session_participants.buyer_id = buyer.id LEFT JOIN users_profiles buyer_profile ON buyer_profile.user_id = buyer.id LEFT JOIN users_profiles seller_profile ON seller_profile.user_id = seller.id WHERE chat_sessions.id = ?",
               [new_chat_session_id],
               function(error, chatSession, fields) {
                 if (error) console.log(error);
 
                 connection.query(
-                  "SELECT message, date_message_sent, message_owner_id, buyer_id, seller_id, chat_session_id FROM chat_messages LEFT JOIN chat_sessions ON chat_session_id = chat_sessions.id WHERE chat_session_id = ? ORDER BY date_message_sent",
+                  "SELECT DISTINCT message, date_message_sent, message_owner_id, buyer_id, seller_id, chat_messages.chat_session_id FROM chat_messages LEFT JOIN chat_sessions ON chat_messages.chat_session_id = chat_sessions.id LEFT JOIN chat_session_participants ON chat_session_participants.chat_session_id = chat_sessions.id WHERE chat_messages.chat_session_id = ? ORDER BY date_message_sent",
                   [new_chat_session_id],
                   function(error, chatMessages, fields) {
                     if (error) console.log(error);
@@ -89,19 +106,21 @@ router.post("/chat_session/new", verifyToken, (req, res) => {
           }
         );
 
+        // SELECT chat_sessions.buyer_id, chat_sessions.seller_id, chat_sessions.id AS chat_session_id, chat_sessions.date_created AS chat_session_date, deal_name, pay_in_dollar, pay_in_crypto, featured_deal_image, seller.username AS seller_name, seller_profile.photo as seller_photo, buyer.username AS buyer_name, buyer_profile.photo AS buyer_photo FROM chat_sessions LEFT JOIN deals ON chat_sessions.deal_id = deals.id LEFT JOIN users buyer ON chat_sessions.buyer_id = buyer.id LEFT JOIN users seller ON chat_sessions.seller_id = seller.id LEFT JOIN users_profiles buyer_profile ON buyer_profile.user_id = buyer.id LEFT JOIN users_profiles seller_profile ON seller_profile.user_id = seller.id WHERE chat_sessions.id = ?
+
       } else {
         //send back the existing chat session id
         let chat_session_id = results[0].id;
 
         //get info about the selected chat session
         connection.query(
-          "SELECT chat_sessions.buyer_id, chat_sessions.seller_id, chat_sessions.id AS chat_session_id, chat_sessions.date_created AS chat_session_date, deal_name, pay_in_dollar, pay_in_crypto, featured_deal_image, seller.username AS seller_name, seller_profile.photo as seller_photo, buyer.username AS buyer_name, buyer_profile.photo AS buyer_photo FROM chat_sessions LEFT JOIN deals ON chat_sessions.deal_id = deals.id LEFT JOIN users buyer ON chat_sessions.buyer_id = buyer.id LEFT JOIN users seller ON chat_sessions.seller_id = seller.id LEFT JOIN users_profiles buyer_profile ON buyer_profile.user_id = buyer.id LEFT JOIN users_profiles seller_profile ON seller_profile.user_id = seller.id WHERE chat_sessions.id = ?",
+          "SELECT DISTINCT chat_sessions.id AS chat_session_id, chat_sessions.date_created AS chat_session_date, deal_id, chat_session_participants.seller_id, chat_session_participants.buyer_id, deal_name, pay_in_dollar, pay_in_crypto,featured_deal_image, seller.username AS seller_name, seller_profile.photo as seller_photo, buyer.username AS buyer_name, buyer_profile.photo AS buyer_photo from chat_sessions LEFT JOIN chat_session_participants ON chat_sessions.id = chat_session_participants.chat_session_id LEFT JOIN deals ON chat_sessions.deal_id = deals.id LEFT JOIN users seller ON chat_session_participants.seller_id = seller.id LEFT JOIN users buyer ON chat_session_participants.buyer_id = buyer.id LEFT JOIN users_profiles buyer_profile ON buyer_profile.user_id = buyer.id LEFT JOIN users_profiles seller_profile ON seller_profile.user_id = seller.id WHERE chat_sessions.id = ?",
           [chat_session_id],
           function(error, chatSession, fields) {
             if (error) console.log(error);
 
             connection.query(
-              "SELECT message, date_message_sent, message_owner_id, buyer_id, seller_id, chat_session_id FROM chat_messages LEFT JOIN chat_sessions ON chat_session_id = chat_sessions.id WHERE chat_session_id = ? ORDER BY date_message_sent",
+              "SELECT DISTINCT message, date_message_sent, message_owner_id, buyer_id, seller_id, chat_messages.chat_session_id FROM chat_messages LEFT JOIN chat_sessions ON chat_messages.chat_session_id = chat_sessions.id LEFT JOIN chat_session_participants ON chat_session_participants.chat_session_id = chat_sessions.id WHERE chat_messages.chat_session_id = ? ORDER BY date_message_sent",
               [chat_session_id],
               function(error, chatMessages, fields) {
                 if (error) console.log(error);
@@ -173,13 +192,13 @@ router.post("/chat_session/messages", verifyToken, (req, res) => {
 
   //get info about the selected chat session
   connection.query(
-    "SELECT chat_sessions.buyer_id, chat_sessions.seller_id, chat_sessions.id AS chat_session_id, chat_sessions.date_created AS chat_session_date, deal_name, pay_in_dollar, pay_in_crypto, featured_deal_image, seller.username AS seller_name, seller_profile.photo as seller_photo, buyer.username AS buyer_name, buyer_profile.photo AS buyer_photo FROM chat_sessions LEFT JOIN deals ON chat_sessions.deal_id = deals.id LEFT JOIN users buyer ON chat_sessions.buyer_id = buyer.id LEFT JOIN users seller ON chat_sessions.seller_id = seller.id LEFT JOIN users_profiles buyer_profile ON buyer_profile.user_id = buyer.id LEFT JOIN users_profiles seller_profile ON seller_profile.user_id = seller.id WHERE chat_sessions.id = ?",
+    "SELECT DISTINCT chat_sessions.id AS chat_session_id, chat_sessions.date_created AS chat_session_date, deal_id, chat_session_participants.seller_id, chat_session_participants.buyer_id, deal_name, pay_in_dollar, pay_in_crypto,featured_deal_image, seller.username AS seller_name, seller_profile.photo as seller_photo, buyer.username AS buyer_name, buyer_profile.photo AS buyer_photo from chat_sessions LEFT JOIN chat_session_participants ON chat_sessions.id = chat_session_participants.chat_session_id LEFT JOIN deals ON chat_sessions.deal_id = deals.id LEFT JOIN users seller ON chat_session_participants.seller_id = seller.id LEFT JOIN users buyer ON chat_session_participants.buyer_id = buyer.id LEFT JOIN users_profiles buyer_profile ON buyer_profile.user_id = buyer.id LEFT JOIN users_profiles seller_profile ON seller_profile.user_id = seller.id WHERE chat_sessions.id = ?",
     [chat_session_id],
     function(error, chatSession, fields) {
       if (error) console.log(error);
 
       connection.query(
-        "SELECT message, date_message_sent, message_owner_id, buyer_id, seller_id, chat_session_id FROM chat_messages LEFT JOIN chat_sessions ON chat_session_id = chat_sessions.id WHERE chat_session_id = ? ORDER BY date_message_sent",
+        "SELECT DISTINCT message, date_message_sent, message_owner_id, buyer_id, seller_id, chat_messages.chat_session_id FROM chat_messages LEFT JOIN chat_sessions ON chat_messages.chat_session_id = chat_sessions.id LEFT JOIN chat_session_participants ON chat_session_participants.chat_session_id = chat_sessions.id WHERE chat_messages.chat_session_id = ? ORDER BY date_message_sent",
         [chat_session_id],
         function(error, chatMessages, fields) {
           if (error) console.log(error);
