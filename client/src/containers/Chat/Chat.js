@@ -7,7 +7,8 @@ import {
   _loadChatSessions,
   _loadChatMessages,
   _addChatMessage,
-  onMessageEdit
+  onMessageEdit,
+  _deleteChatSession
 } from "../../actions/chatActions";
 import { _loadProfile } from "../../actions/userLoadActions";
 import Layout from "../Layout";
@@ -32,7 +33,6 @@ class Chat extends Component {
 
   addMessage = async event => {
     event.preventDefault();
-    // let chat_session_id = this.props.chat_messages[0].chat_session_id;
     let chat_session_id = this.props.selected_chat_session[0].chat_session_id;
 
     await this.props._addChatMessage(
@@ -45,6 +45,23 @@ class Chat extends Component {
       localStorage.getItem("token"),
       chat_session_id
     );
+  };
+
+  deleteChatSession = async event => {
+
+    let chat_session_id = this.props.selected_chat_session[0].chat_session_id;
+
+    await this.props._deleteChatSession(
+      localStorage.getItem("token"),
+      chat_session_id
+    );
+
+    await this.props._loadChatSessions(localStorage.getItem("token"));
+
+    // await this.props._loadChatMessages(
+    //   localStorage.getItem("token"),
+    //   chat_session_id
+    // );
   };
 
   componentDidUpdate() {
@@ -89,6 +106,7 @@ class Chat extends Component {
                   messagesList={chat_messages}
                   chatSessionInfo={selected_chat_session}
                   userInfo={user_info}
+                  _deleteChatSession={this.deleteChatSession}
                 />
               </div>
               <div>
@@ -135,7 +153,8 @@ const matchDispatchToProps = dispatch => {
       _loadChatMessages,
       _addChatMessage,
       onMessageEdit,
-      _loadProfile
+      _loadProfile,
+      _deleteChatSession
     },
     dispatch
   );

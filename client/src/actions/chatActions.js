@@ -164,6 +164,47 @@ export const addChatMessageFailure = error => ({
   payload: { error }
 });
 
+export const DELETE_CHAT_SESSIONS_BEGIN = "DELETE_CHAT_SESSIONS_BEGIN";
+export const DELETE_CHAT_SESSIONS_SUCCESS = "DELETE_CHAT_SESSIONS_SUCCESS";
+export const DELETE_CHAT_SESSIONS_FAILURE = "DELETE_CHAT_SESSIONS_FAILURE";
+
+export function _deleteChatSession(token, chat_session_id) {
+  const settings = {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({token, chat_session_id})
+  };
+
+  return dispatch => {
+    dispatch(deleteChatSessionBegin());
+    return fetch('/chat_session/delete', settings)
+    .then(res => res.json())
+    .then(resJson => {
+      debugger
+      dispatch(deleteChatSessionSuccess(resJson));
+      return resJson;
+    })
+    .catch(error => dispatch(deleteChatSessionFailure(error)));
+  };
+}
+
+export const deleteChatSessionBegin = () => ({
+  type: DELETE_CHAT_SESSIONS_BEGIN,
+});
+
+export const deleteChatSessionSuccess = (message_deleted) => ({
+  type: DELETE_CHAT_SESSIONS_SUCCESS,
+  payload: {message_deleted}
+});
+
+export const deleteChatSessionFailure = error => ({
+  type: DELETE_CHAT_SESSIONS_FAILURE,
+  payload: { error }
+});
+
 export const EDIT_CHAT_MESSAGE = "EDIT_CHAT_MESSAGE";
 export const onMessageEdit = (event) => {
   return {

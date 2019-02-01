@@ -8,6 +8,9 @@ import {
   FETCH_CREATE_CHAT_SESSION_BEGIN,
   FETCH_CREATE_CHAT_SESSION_SUCCESS,
   FETCH_CREATE_CHAT_SESSION_FAILURE,
+  DELETE_CHAT_SESSIONS_BEGIN,
+  DELETE_CHAT_SESSIONS_SUCCESS,
+  DELETE_CHAT_SESSIONS_FAILURE,
   EDIT_CHAT_MESSAGE
 } from "../actions/chatActions";
 
@@ -46,7 +49,7 @@ export default function chatReducer(state = initialState, action) {
         chat_sessions_error: action.payload.error,
       };
 
-      case FETCH_CREATE_CHAT_SESSION_BEGIN:
+    case FETCH_CREATE_CHAT_SESSION_BEGIN:
       return {
         ...state,
         chat_messages_loading: true,
@@ -68,7 +71,6 @@ export default function chatReducer(state = initialState, action) {
         chat_messages_loading: false,
         chat_messages_error: action.payload.error,
       };
-    /////
 
     case FETCH_CHAT_MESSAGES_BEGIN:
       return {
@@ -78,8 +80,6 @@ export default function chatReducer(state = initialState, action) {
       };
 
     case FETCH_CHAT_MESSAGES_SUCCESS:
-      // All done with fetch call: set loading "false".
-      debugger
       return {
         ...state,
         chat_messages_loading: false,
@@ -95,8 +95,32 @@ export default function chatReducer(state = initialState, action) {
         chat_messages_error: action.payload.error,
       };
 
+    case DELETE_CHAT_SESSIONS_BEGIN:
+      return {
+        ...state,
+        delete_chat_session_loading: true,
+        delete_chat_session_error: null
+      };
+
+    case DELETE_CHAT_SESSIONS_SUCCESS:
+      return {
+        ...state,
+        delete_chat_session_loading: false,
+        delete_chat_session_status: action.payload.message_deleted,
+        chat_messages: [],
+        selected_chat_session: []
+      };
+
+    case DELETE_CHAT_SESSIONS_FAILURE:
+      return {
+        ...state,
+        delete_chat_session_loading: false,
+        delete_chat_session_error: action.payload.error,
+      };
+
+    ///
+
     case EDIT_CHAT_MESSAGE:
-      debugger
       return {
         ...state,
         chatMessageValue: action.payload

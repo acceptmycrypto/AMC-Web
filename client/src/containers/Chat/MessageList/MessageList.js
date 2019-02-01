@@ -3,8 +3,8 @@ import "./MessageList.css";
 import Timestamp from "react-timestamp";
 
 const MessageList = props => {
-  const { messagesList, chatSessionInfo, userInfo } = props;
-  console.log("chat session info", chatSessionInfo);
+  const { messagesList, chatSessionInfo, userInfo, _deleteChatSession } = props;
+ 
   return (
     <div id="chat_messages_container">
       <div id="chat_messages-header">
@@ -55,21 +55,11 @@ const MessageList = props => {
                           alt="deal-image"
                         />
                       </div>
-                      <div className="dropdown message-list-deal-dropdown">
-                        <i
-                          id="dropdownMenuButton"
-                          data-toggle="dropdown"
-                          aria-haspopup="true"
-                          aria-expanded="false"
-                          className="fas fa-lg fa-bars"
-                        />
-                        <div
-                          className="dropdown-menu"
-                          aria-labelledby="dropdownMenuButton"
-                        >
-                          <div className="dropdown-item">Delete</div>
-                        </div>
+
+                      <div onClick={_deleteChatSession} className="trash-icon">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
                       </div>
+
                     </div>
                   </div>
                 </div>

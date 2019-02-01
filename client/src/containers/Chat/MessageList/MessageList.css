@@ -32,9 +32,12 @@
   align-items: center;
 }
 
-.message-list-deal-dropdown {
-  align-self: flex-start;
+.trash-icon {
   cursor: pointer;
+}
+
+.trash-icon i {
+  color: black;
 }
 
 .message-list-deal-image {
