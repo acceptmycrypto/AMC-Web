@@ -18,7 +18,7 @@ export function _createChatSession(token, seller_id, deal_id) {
     return fetch(`/chat_session/new`, settings)
     .then(res => res.json())
     .then(resJson => {
-      debugger
+
       dispatch(fetchCreateChatSessionSuccess(resJson));
       return resJson;
     })
@@ -61,7 +61,7 @@ export function _loadChatSessions(token) {
     return fetch(`/chat_sessions`, settings)
     .then(res => res.json())
     .then(resJson => {
-      debugger
+
       dispatch(fetchChatSessionsSuccess(resJson));
       return resJson;
     })
@@ -104,7 +104,7 @@ export function _loadChatMessages(token, chat_session_id) {
     return fetch('/chat_session/messages', settings)
     .then(res => res.json())
     .then(resJson => {
-      debugger
+
       dispatch(fetchChatMessagesSuccess(resJson));
       return resJson;
     })
@@ -132,7 +132,7 @@ export const ADD_CHAT_MESSAGE_SUCCESS = "ADD_CHAT_MESSAGE_SUCCESS";
 export const ADD_CHAT_MESSAGE_FAILURE = "ADD_CHAT_MESSAGE_FAILURE";
 
 export function _addChatMessage(token, chat_session_id, message) {
-  debugger
+
   const settings = {
     method: "POST",
     headers: {
@@ -146,7 +146,7 @@ export function _addChatMessage(token, chat_session_id, message) {
     return fetch('/chat_session/messages/new', settings)
     .then(res => res.json())
     .then(resJson => {
-      debugger
+      
       dispatch(addChatMessageSuccess(resJson));
       return resJson;
     })
@@ -183,7 +183,7 @@ export function _deleteChatSession(token, chat_session_id) {
     return fetch('/chat_session/delete', settings)
     .then(res => res.json())
     .then(resJson => {
-      debugger
+
       dispatch(deleteChatSessionSuccess(resJson));
       return resJson;
     })

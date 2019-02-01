@@ -29,7 +29,6 @@ class Chat extends Component {
       // localStorage.removeItem('token');
       await this.props.history.push("/");
     }
-    debugger;
   };
 
   addMessage = async event => {

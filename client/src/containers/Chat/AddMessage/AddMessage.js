@@ -7,7 +7,6 @@ const AddMessage = props => {
     _createMessage,
     message
   } = props;
-  console.log("add message", props);
   return (
     <form
       id="add-message-form"

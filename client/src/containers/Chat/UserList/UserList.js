@@ -3,7 +3,6 @@ import "./UserList.css";
 import Timestamp from 'react-timestamp';
 
 const UserList = props => {
-  console.log("userlist", props);
   const { usersList, _fetchMessagesList, userInfo } = props;
   return (
     <div id="user-session-wrapper">

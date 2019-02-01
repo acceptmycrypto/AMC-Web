@@ -225,6 +225,12 @@
   color: #fff;
 }
 
-.carousel .slide {
-  background: #f8f8fa;
+.react-carousel .carousel .slide {
+  background: none;
+}
+
+.react-carousel .carousel .control-dots .dot {
+  width: 15px;
+  height: 15px;
+  background: black;
 }
