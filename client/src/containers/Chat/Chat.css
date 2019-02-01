@@ -42,3 +42,12 @@
 #select-chat-prompt strong {
   font-size: 18px;
 }
+
+#empty-chat-session {
+  position: relative;
+  left: 15%;
+}
+
+#empty-chat-session div {
+  text-align: center;
+}

@@ -3,6 +3,7 @@ import "./Chat.css";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { _isLoggedIn } from "../../actions/loggedInActions";
+import { Link } from "react-router-dom";
 import {
   _loadChatSessions,
   _loadChatMessages,
@@ -90,12 +91,22 @@ class Chat extends Component {
         <Layout>
           <div className="chat-sessions">
             <section className="chat-session-left">
+            {chat_sessions.length > 0 ?
               <UserList
                 usersList={chat_sessions}
                 _fetchMessagesList={_loadChatMessages}
                 userInfo={user_info}
                 {...history}
-              />
+              /> :
+              <div id="empty-chat-session">
+                <div>
+                  <div><i className="far fa-4x fa-envelope"></i></div>
+                  <strong>You haven't started any conversation yet.</strong>
+                  <br/>
+                  <strong> Check out these <Link to={"feed/deals"}>DEALS.</Link></strong>
+                </div>
+              </div>
+            }
             </section>
 
             <section className="chat-session-right">
