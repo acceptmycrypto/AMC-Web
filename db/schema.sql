@@ -369,6 +369,7 @@ CREATE TABLE chat_sessions(
 	buyer_id INT NOT NULL,
 	seller_id INT NOT NULL,
   chat_status VARCHAR (10) DEFAULT 'normal',
+  deleted_id INT DEFAULT 0,
 	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (id),
 	FOREIGN KEY (buyer_id) REFERENCES users(id),

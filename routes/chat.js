@@ -30,10 +30,13 @@ var connection = mysql.createConnection({
 router.post("/chat_sessions", verifyToken, (req, res) => {
   //a user can be a buyer or seller
   let user_id = req.decoded._id;
+  console.log("user id", user_id);
+
+  // chat status is 'normal', 'buyer_deleted', 'seller_deleted', 'deleted', or 'blocked'
 
   connection.query(
-    "SELECT chat_sessions.buyer_id, chat_sessions.seller_id, chat_sessions.id AS chat_session_id, chat_sessions.date_created AS chat_session_date, deal_id, deal_name, featured_deal_image, seller.username AS seller_name, seller_profile.photo as seller_photo, buyer.username AS buyer_name, buyer_profile.photo AS buyer_photo FROM chat_sessions LEFT JOIN deals ON chat_sessions.deal_id = deals.id LEFT JOIN users buyer ON chat_sessions.buyer_id = buyer.id LEFT JOIN users seller ON chat_sessions.seller_id = seller.id LEFT JOIN users_profiles buyer_profile ON buyer_profile.user_id = buyer.id LEFT JOIN users_profiles seller_profile ON seller_profile.user_id = seller.id WHERE (chat_sessions.buyer_id = ? OR chat_sessions.seller_id = ?) AND (chat_status = ?) ORDER BY chat_session_date",
-    [user_id, user_id, "normal"],
+    "SELECT chat_sessions.buyer_id, chat_sessions.seller_id, chat_sessions.id AS chat_session_id, chat_sessions.date_created AS chat_session_date, deal_id, deal_name, featured_deal_image, seller.username AS seller_name, seller_profile.photo as seller_photo, buyer.username AS buyer_name, buyer_profile.photo AS buyer_photo FROM chat_sessions LEFT JOIN deals ON chat_sessions.deal_id = deals.id LEFT JOIN users buyer ON chat_sessions.buyer_id = buyer.id LEFT JOIN users seller ON chat_sessions.seller_id = seller.id LEFT JOIN users_profiles buyer_profile ON buyer_profile.user_id = buyer.id LEFT JOIN users_profiles seller_profile ON seller_profile.user_id = seller.id WHERE (chat_sessions.buyer_id = ? OR chat_sessions.seller_id = ?) AND (deleted_id <> ? OR chat_status = ?) ORDER BY chat_session_date",
+    [user_id, user_id, user_id, "normal"],
     function(error, results, fields) {
       if (error) console.log(error);
       console.log(results);
@@ -116,23 +119,51 @@ router.post("/chat_session/new", verifyToken, (req, res) => {
 
 //delete chat session
 router.post("/chat_session/delete", verifyToken, (req, res) => {
-  let buyer_id = req.decoded._id;
+  let user_id = req.decoded._id; //user_id who's making the delete
   let { chat_session_id } = req.body;
-  console.log("chat session id", chat_session_id);
 
   //update chat session to deleted
   connection.query(
-    "UPDATE chat_sessions SET ? WHERE ?",
-    [{ chat_status: "deleted" }, { id: chat_session_id }],
+    "SELECT deleted_id FROM chat_sessions WHERE id = ?",
+    [chat_session_id],
     function(err, result) {
       if (err) {
-        console.log("error during delete");
         console.log(err);
       }
-      console.log(result);
-      res.json(result);
+      console.log("deleted ID", result[0].deleted_id);
+      //update the deleted_id to the user_id who makes the delete
+      if (result[0].deleted_id === 0) {
+        connection.query(
+          "UPDATE chat_sessions SET ? WHERE ?",
+          [{ deleted_id: user_id }, { id: chat_session_id }],
+          function(err, result) {
+            if (err) {
+              console.log("error during delete");
+              console.log(err);
+            }
+            console.log(result);
+            res.json(result);
+          }
+        );
+      } else {
+        //if both parties make the delete then we update the chat_id back to 0
+        connection.query(
+          "UPDATE chat_sessions SET ? WHERE ?",
+          [{ chat_status: "deleted" }, { id: chat_session_id }],
+          function(err, result) {
+            if (err) {
+              console.log("error during delete");
+              console.log(err);
+            }
+            console.log(result);
+            res.json(result);
+          }
+        );
+      }
+
     }
   );
+
 });
 
 //get messages
