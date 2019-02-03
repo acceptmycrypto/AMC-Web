@@ -1,10 +1,11 @@
 import React from "react";
 import "./MessageList.css";
 import Timestamp from "react-timestamp";
+import { Link } from "react-router-dom";
 
 const MessageList = props => {
   const { messagesList, chatSessionInfo, userInfo, _deleteChatSession } = props;
- 
+
   return (
     <div id="chat_messages_container">
       <div id="chat_messages-header">
@@ -39,9 +40,9 @@ const MessageList = props => {
 
                     <div className="message-list-deal-header">
                       <div className="message-list-deal-name-price">
-                        <div className="message-list-deal-name">
+                        <Link to={`/feed/deals/${chatSession.deal_id}/${chatSession.deal_name}`} className="message-list-deal-name">
                           {chatSession.deal_name}
-                        </div>
+                        </Link>
                         <div>
                           Pay in Dollar: ${chatSession.pay_in_dollar.toFixed(2)}
                         </div>
@@ -49,12 +50,14 @@ const MessageList = props => {
                           Pay in Crypto: ${chatSession.pay_in_crypto.toFixed(2)}
                         </div>
                       </div>
-                      <div className="message-list-deal-image">
-                        <img
-                          src={chatSession.featured_deal_image}
-                          alt="deal-image"
-                        />
-                      </div>
+                      <Link to={`/feed/deals/${chatSession.deal_id}/${chatSession.deal_name}`}>
+                        <div className="message-list-deal-image">
+                          <img
+                            src={chatSession.featured_deal_image}
+                            alt="deal-image"
+                          />
+                        </div>
+                      </Link>
 
                       <div onClick={_deleteChatSession} className="trash-icon">
                         <i class="fa fa-trash" aria-hidden="true"></i>

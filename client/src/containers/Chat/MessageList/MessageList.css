@@ -15,6 +15,11 @@
   margin-right: 20px;
 }
 
+.message-list-deal-name-price a{
+  text-decoration: none;
+  color: #2e4157;
+}
+
 .message-list-deal-name {
   font-size: 1.4em;
 }
