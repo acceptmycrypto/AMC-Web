@@ -66,7 +66,7 @@ export const filterCategory = (category, allDeals) => {
 export const categoryDeals = (categoryTerm, page) => {
   return dispatch => {
       dispatch(categoryDealsBegin());
-      return fetch("/category?term="+categoryTerm+"&page="+page, {
+      return fetch("/api/category?term="+categoryTerm+"&page="+page, {
           method: "GET",
           headers: {
               "Accept": "application/json",
@@ -93,3 +93,5 @@ export const categoryDealsFailure = (error) => ({
   type: "CATEGORIES_DEALS_FAILURE",
   payload: { error }
 });
+
+
