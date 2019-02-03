@@ -1,9 +1,12 @@
 import React from "react";
 import "./UserList.css";
 import Timestamp from 'react-timestamp';
+import { handleLongDescription } from '../../../utils/helper_functions';
+
 
 const UserList = props => {
-  const { usersList, _fetchMessagesList, userInfo } = props;
+  const { usersList, _fetchMessagesList, userInfo, chatSessionInfo } = props;
+  console.log(usersList, chatSessionInfo);
   return (
     <div id="user-session-wrapper">
       <div id="user-session-header"><i onClick={props.goBack} class="fas fa-lg fa-arrow-left"></i>  <hr/> </div>
@@ -17,7 +20,7 @@ const UserList = props => {
                 chat_session.chat_session_id
               )
             }
-            className="user-session"
+            className={chatSessionInfo.length > 0 && chatSessionInfo[0].chat_session_id === chat_session.chat_session_id ? "user-session selected-user-session" : "user-session"}
           >
           <div className="user-session-left">
             <div>
@@ -39,7 +42,7 @@ const UserList = props => {
                   ? chat_session.buyer_name
                   : chat_session.seller_name}
               </strong>
-              <div>{chat_session.deal_name}</div>
+              <div>{handleLongDescription(chat_session.deal_name, 30, 20)}</div>
               <small><Timestamp time={chat_session.chat_session_date} precision={1} /></small>
             </div>
           </div>

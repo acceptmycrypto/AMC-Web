@@ -166,7 +166,7 @@ router.post("/chat_session/messages", verifyToken, (req, res) => {
         [chat_session_id],
         function(error, chatMessages, fields) {
           if (error) console.log(error);
-    
+
           res.json({chatSession, chatMessages});
         }
       );

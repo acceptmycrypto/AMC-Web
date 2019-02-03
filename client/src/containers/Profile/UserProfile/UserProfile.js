@@ -17,11 +17,7 @@ import { _isLoggedIn } from "../../../actions/loggedInActions";
 import { handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos } from "../../../actions/cryptoPortfolioActions";
 import { resetDealitemState } from "../../../actions/dealItemActions";
 
-
-
-
 class UserProfile extends Component {
-
 
   componentDidMount = async () => {
     // await console.log(this.props.userLoggedIn);
@@ -52,8 +48,6 @@ class UserProfile extends Component {
 
     //reset dealItem state when user hit deals route
     this.props.resetDealitemState();
-
-
 
     return (
       <div>

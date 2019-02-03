@@ -2,6 +2,7 @@ import React from "react";
 import "./MessageList.css";
 import Timestamp from "react-timestamp";
 import { Link } from "react-router-dom";
+import { handleLongDescription } from '../../../utils/helper_functions';
 
 const MessageList = props => {
   const { messagesList, chatSessionInfo, userInfo, _deleteChatSession } = props;
@@ -41,7 +42,7 @@ const MessageList = props => {
                     <div className="message-list-deal-header">
                       <div className="message-list-deal-name-price">
                         <Link to={`/feed/deals/${chatSession.deal_id}/${chatSession.deal_name}`} className="message-list-deal-name">
-                          {chatSession.deal_name}
+                          {handleLongDescription(chatSession.deal_name, 50, 30)}
                         </Link>
                         <div>
                           Pay in Dollar: ${chatSession.pay_in_dollar.toFixed(2)}

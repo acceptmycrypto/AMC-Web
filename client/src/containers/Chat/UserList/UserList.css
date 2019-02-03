@@ -25,8 +25,10 @@
   display: flex;
   justify-content: space-between;
   margin: 0 10px 10px 0px;
-  width: 95%;
+  
   cursor: pointer;
+  padding: 10px 10px 7px 10px;
+  border-radius: 5px;
 }
 
 .user-session-left {
@@ -48,5 +50,9 @@
   width: 100%;
   object-fit: cover;
   border-radius: 5px;
+}
+
+.selected-user-session {
+  background-color: #e8e8ef;
 }
 

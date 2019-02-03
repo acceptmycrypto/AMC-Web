@@ -95,6 +95,7 @@ class Chat extends Component {
                 usersList={chat_sessions}
                 _fetchMessagesList={_loadChatMessages}
                 userInfo={user_info}
+                chatSessionInfo={selected_chat_session}
                 {...history}
               /> :
               <div id="empty-chat-session">
