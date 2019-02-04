@@ -42,16 +42,19 @@ router.post("/chat_sessions", verifyToken, (req, res) => {
 });
 
 //create new chat session
-router.post("/chat_session/new", verifyToken, (req, res) => {
-  let buyer_id = req.decoded._id;
+router.post("/chat_session/new", verifyToken, (req, res, next) => {
+  //this endpont is hit when user/buyer click "message seller"
+  let user_id = req.decoded._id;
+  let buyer_id = user_id; //buyer_id in this case is the user when Messaging the seller
   let { seller_id, deal_id } = req.body;
-  let buyer_username, seller_username, buyer_firstname, seller_firstname;
 
-  //check to see if buyer and seller has started a conversation on this deal
+  //check to see if user and seller has started a conversation on this deal
   connection.query(
-    "SELECT chat_sessions.id FROM chat_sessions LEFT JOIN chat_session_participants ON chat_sessions.id = chat_session_participants.chat_session_id WHERE deal_id = ? AND buyer_id = ? AND seller_id = ? ",
-    [deal_id, buyer_id, seller_id],
+    "SELECT chat_sessions.id, participant_status FROM chat_sessions LEFT JOIN chat_session_participants ON chat_sessions.id = chat_session_participants.chat_session_id WHERE deal_id = ? AND seller_id = ? AND user_id = ?",
+    [deal_id, seller_id, user_id],
     function(error, results, fields) {
+      let chat_session_id;
+
       if (error) console.log(error);
 
       //if result is 0, create a new chat session
@@ -101,11 +104,29 @@ router.post("/chat_session/new", verifyToken, (req, res) => {
             );
           }
         );
-      } else {
-        //send back the existing chat session id
-        let chat_session_id = results[0].id;
+      }
 
-        //get info about the selected chat session
+      if (results.length > 0 && results[0].participant_status === "deleted") {
+        //update participant_status back to normal
+        chat_session_id = results[0].id;
+
+        connection.query(
+          "UPDATE chat_session_participants SET participant_status = ? WHERE user_id = ? AND chat_session_id = ?",
+          ["normal", user_id, chat_session_id ],
+          function(err, result) {
+            if (err) {
+              console.log("error during delete");
+              console.log(err);
+            }
+          }
+        );
+        console.log("We need to update participant status back to normal for the user");
+      }
+
+      //get info about the selected chat session
+      if(results.length > 0) {
+        chat_session_id = results[0].id;
+
         connection.query(
           "SELECT DISTINCT chat_sessions.id AS chat_session_id, chat_sessions.date_created AS chat_session_date, deal_id, chat_session_participants.seller_id, chat_session_participants.buyer_id, deal_name, pay_in_dollar, pay_in_crypto,featured_deal_image, seller.username AS seller_name, seller_profile.photo as seller_photo, buyer.username AS buyer_name, buyer_profile.photo AS buyer_photo from chat_sessions LEFT JOIN chat_session_participants ON chat_sessions.id = chat_session_participants.chat_session_id LEFT JOIN deals ON chat_sessions.deal_id = deals.id LEFT JOIN users seller ON chat_session_participants.seller_id = seller.id LEFT JOIN users buyer ON chat_session_participants.buyer_id = buyer.id LEFT JOIN users_profiles buyer_profile ON buyer_profile.user_id = buyer.id LEFT JOIN users_profiles seller_profile ON seller_profile.user_id = seller.id WHERE chat_sessions.id = ?",
           [chat_session_id],
@@ -123,8 +144,9 @@ router.post("/chat_session/new", verifyToken, (req, res) => {
             );
           }
         );
-
       }
+
+
     }
   );
 });
@@ -143,23 +165,10 @@ router.post("/chat_session/delete", verifyToken, (req, res) => {
         console.log("error during delete");
         console.log(err);
       }
-
-    }
-  );
-
-  //update chat session messages to deleted
-  connection.query(
-    "UPDATE chat_messages SET message_status = ? WHERE message_owner_id = ? AND chat_session_id = ?",
-    ["deleted", user_id, chat_session_id ],
-    function(err, result) {
-      if (err) {
-        console.log("error during delete");
-        console.log(err);
-      }
       res.json(result);
+
     }
   );
-
 });
 
 //get messages

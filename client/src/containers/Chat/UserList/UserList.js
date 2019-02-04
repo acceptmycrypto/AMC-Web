@@ -6,7 +6,6 @@ import { handleLongDescription } from '../../../utils/helper_functions';
 
 const UserList = props => {
   const { usersList, _fetchMessagesList, userInfo, chatSessionInfo } = props;
-  console.log(usersList, chatSessionInfo);
   return (
     <div id="user-session-wrapper">
       <div id="user-session-header"><i onClick={props.goBack} class="fas fa-lg fa-arrow-left"></i>  <hr/> </div>
