@@ -32,7 +32,7 @@ router.post("/chat_sessions", verifyToken, (req, res) => {
   let user_id = req.decoded._id;
 
   connection.query(
-    "SELECT DISTINCT chat_sessions.id AS chat_session_id, chat_sessions.date_created AS chat_session_date, deal_id, date_joined, chat_session_participants.user_id, chat_session_participants.seller_id, chat_session_participants.buyer_id, deal_name, featured_deal_image, seller.username AS seller_name, seller_profile.photo as seller_photo, buyer.username AS buyer_name, buyer_profile.photo AS buyer_photo from chat_sessions LEFT JOIN chat_session_participants ON chat_sessions.id = chat_session_participants.chat_session_id LEFT JOIN deals ON chat_sessions.deal_id = deals.id LEFT JOIN users seller ON chat_session_participants.seller_id = seller.id LEFT JOIN users buyer ON chat_session_participants.buyer_id = buyer.id LEFT JOIN users_profiles buyer_profile ON buyer_profile.user_id = buyer.id LEFT JOIN users_profiles seller_profile ON seller_profile.user_id = seller.id WHERE chat_session_participants.user_id = ? AND participant_status = ?",
+    "SELECT DISTINCT chat_sessions.id AS chat_session_id, chat_sessions.date_created AS chat_session_date, deal_id, date_joined, chat_session_participants.user_id, chat_session_participants.seller_id, chat_session_participants.buyer_id, deal_name, featured_deal_image, seller.username AS seller_name, seller_profile.photo as seller_photo, buyer.username AS buyer_name, buyer_profile.photo AS buyer_photo from chat_sessions LEFT JOIN chat_session_participants ON chat_sessions.id = chat_session_participants.chat_session_id LEFT JOIN deals ON chat_sessions.deal_id = deals.id LEFT JOIN users seller ON chat_session_participants.seller_id = seller.id LEFT JOIN users buyer ON chat_session_participants.buyer_id = buyer.id LEFT JOIN users_profiles buyer_profile ON buyer_profile.user_id = buyer.id LEFT JOIN users_profiles seller_profile ON seller_profile.user_id = seller.id WHERE chat_session_participants.user_id = ? AND participant_status = ? ORDER BY chat_session_date DESC",
     [user_id, "normal"],
     function(error, results, fields) {
       if (error) console.log(error);
@@ -209,9 +209,24 @@ router.post("/chat_session/messages/new", verifyToken, (req, res) => {
     function(error, results, fields) {
       if (error) console.log(error);
 
-      res.json(results);
+      let message_id = results.insertId;
+      // update the date_created column to the time of message sent
+      //Double check this query to make sure it doesn't open to sql injection attack
+      connection.query(
+        "UPDATE chat_sessions, (SELECT date_message_sent FROM chat_messages WHERE chat_messages.id = ?) AS chat_message SET date_created = chat_message.date_message_sent WHERE chat_sessions.id = ?",
+        [message_id, chat_session_id ],
+        function(err, result) {
+          if (err) {
+            console.log("error during delete");
+            console.log(err);
+          }
+
+          res.json(results);
+        }
+      );
     }
   );
+
 });
 
 module.exports = router;
