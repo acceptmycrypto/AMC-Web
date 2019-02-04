@@ -391,6 +391,7 @@ CREATE TABLE chat_messages(
 	id INT NOT NULL AUTO_INCREMENT,
 	chat_session_id INT NOT NULL,
 	message VARCHAR(255) NOT NULL,
+  message_status VARCHAR (10) DEFAULT 'normal',
 	date_message_sent TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   message_owner_id INT NOT NULL,
 	PRIMARY KEY (id),
