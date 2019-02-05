@@ -43,7 +43,7 @@ class DealItem extends Component {
         this.props.dealItem.seller_id || this.props.dealItem.venue_id;
       await this.props._loadReviews(seller_id);
       await this.props._loadProfile(localStorage.getItem("token"));
-      debugger;
+
     } else {
       // localStorage.removeItem('token');
       await this.props.history.push("/");

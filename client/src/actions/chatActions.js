@@ -131,7 +131,7 @@ export const fetchChatMessagesFailure = error => ({
 export const ADD_CHAT_MESSAGE_SUCCESS = "ADD_CHAT_MESSAGE_SUCCESS";
 export const ADD_CHAT_MESSAGE_FAILURE = "ADD_CHAT_MESSAGE_FAILURE";
 
-export function _addChatMessage(token, chat_session_id, message) {
+export function _addChatMessage(token, chat_session_id, message, recipientEmailUser_id) {
 
   const settings = {
     method: "POST",
@@ -139,14 +139,14 @@ export function _addChatMessage(token, chat_session_id, message) {
       "Accept": "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({token, chat_session_id, message})
+    body: JSON.stringify({token, chat_session_id, message, recipientEmailUser_id})
   };
 
   return dispatch => {
     return fetch('/chat_session/messages/new', settings)
     .then(res => res.json())
     .then(resJson => {
-      
+
       dispatch(addChatMessageSuccess(resJson));
       return resJson;
     })

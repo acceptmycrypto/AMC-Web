@@ -6,6 +6,14 @@ var bodyParser = require("body-parser");
 var methodOverride = require("method-override");
 var request = require("request"); //backend version of ajax, gets entire html
 var verifyToken = require("./utils/validation");
+//use sendgrid
+var sgMail = require("@sendgrid/mail");
+var keys = require("../key");
+sgMail.setApiKey(keys.sendgrid);
+//email template
+var path = require("path");
+var fs = require('fs');
+var ejs = require('ejs');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -25,6 +33,10 @@ var connection = mysql.createConnection({
   password: process.env.DB_PW,
   database: process.env.DB_DB
 });
+
+//compile email template
+var chatMessageEmailTemplateText = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/chatMessage/chatMessage.ejs'), 'utf-8');
+var chatMessageEmailTemplate = ejs.compile(chatMessageEmailTemplateText);
 
 //get chat sessions
 router.post("/chat_sessions", verifyToken, (req, res) => {
@@ -120,7 +132,7 @@ router.post("/chat_session/new", verifyToken, (req, res, next) => {
             }
           }
         );
-        console.log("We need to update participant status back to normal for the user");
+
       }
 
       //get info about the selected chat session
@@ -201,7 +213,7 @@ router.post("/chat_session/messages", verifyToken, (req, res) => {
 //create new message
 router.post("/chat_session/messages/new", verifyToken, (req, res) => {
   let message_owner_id = req.decoded._id;
-  let { chat_session_id, message } = req.body;
+  let { chat_session_id, message, recipientEmailUser_id } = req.body;
 
   connection.query(
     "INSERT INTO chat_messages (chat_session_id, message_owner_id, message) VALUES (?,?,?)",
@@ -224,6 +236,31 @@ router.post("/chat_session/messages/new", verifyToken, (req, res) => {
           res.json(results);
         }
       );
+
+      //send emails to buyers and sellers
+      connection.query(
+        "Select email from users WHERE id = ?",
+        [recipientEmailUser_id],
+        function(err, result) {
+          if (err) console.log(err);
+
+          let recipientEmailUser_email = result[0].email;
+          let chatURL = process.env.FRONTEND_URL+"/chat";
+
+          //notify participant via email
+          //use sendgrid to send email
+          const chat_message_email = {
+            to: recipientEmailUser_email,
+            from: process.env.CUSTOMER_SUPPORT,
+            subject: '[AcceptMyCrypto] You have a new message.',
+            html: chatMessageEmailTemplate({ chatURL })
+          };
+
+         sgMail.send(chat_message_email);
+
+        }
+      );
+
     }
   );
 

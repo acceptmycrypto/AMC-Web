@@ -34,11 +34,23 @@ class Chat extends Component {
   addMessage = async event => {
     event.preventDefault();
     let chat_session_id = this.props.selected_chat_session[0].chat_session_id;
+    let buyer_id = this.props.selected_chat_session[0].buyer_id;
+    let seller_id = this.props.selected_chat_session[0].seller_id;
+    let user_id = this.props.user_info[0].id;
+    let recipientEmailUser_id;
+
+
+    if (buyer_id === user_id) {
+      recipientEmailUser_id = seller_id;
+    } else {
+      recipientEmailUser_id = buyer_id;
+    }
 
     await this.props._addChatMessage(
       localStorage.getItem("token"),
       chat_session_id,
-      this.props.chatMessageValue
+      this.props.chatMessageValue,
+      recipientEmailUser_id
     );
 
     await this.props._loadChatMessages(
