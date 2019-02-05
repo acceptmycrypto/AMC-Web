@@ -70,16 +70,12 @@ class Chat extends Component {
 
     await this.props._loadChatSessions(localStorage.getItem("token"));
 
-    // await this.props._loadChatMessages(
-    //   localStorage.getItem("token"),
-    //   chat_session_id
-    // );
   };
 
   componentDidUpdate() {
     //scroll to bottom of message list
     if (this.props.selected_chat_session.length > 0) {
-      const objDiv = document.getElementById("chat_messages_container");
+      const objDiv = document.getElementById("chat-messages");
       objDiv.scrollTop = objDiv.scrollHeight;
     }
 
