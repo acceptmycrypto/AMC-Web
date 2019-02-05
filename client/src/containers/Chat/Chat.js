@@ -103,7 +103,7 @@ class Chat extends Component {
                   <div><i className="far fa-4x fa-envelope"></i></div>
                   <strong>You haven't started any conversation yet.</strong>
                   <br/>
-                  <strong> Check out these <Link to={"feed/deals"}>DEALS.</Link></strong>
+                  <strong> Check out these <Link style={{textDecoration: "none"}} to={"/"}>DEALS.</Link></strong>
                 </div>
               </div>
             }
