@@ -33,11 +33,18 @@ import LoadingSpinner from "../../components/UI/LoadingSpinner";
 import UploadingImage from "./UploadImage";
 import Pricing from "./Pricing";
 import Description from "./Description";
+import { _isLoggedIn } from "../../actions/loggedInActions";
 
 class ListDeal extends Component {
-  componentDidMount = () => {
-    this.props._loadCryptocurrencies();
-    this.props._loadCategory();
+  componentDidMount = async() => {
+    await this.props._isLoggedIn(localStorage.getItem('token'));
+    if (this.props.userLoggedIn) {
+      this.props._loadCryptocurrencies();
+      this.props._loadCategory();
+    }else{
+      this.props.history.push("/SignIn");
+    }
+    
   };
   // If user refreshes the page, we warn users that data won't be saved
   componentDidUpdate = () => {
@@ -431,7 +438,8 @@ const mapStateToProps = state => ({
   creatingDeal: state.CreateDeal.creatingDeal,
   creatingDealError: state.CreateDeal.creatingDealError,
   dealCreated: state.CreateDeal.dealCreated,
-  modalVisible: state.CreateDeal.modalVisible
+  modalVisible: state.CreateDeal.modalVisible,
+  userLoggedIn: state.LoggedIn.userLoggedIn,
 });
 
 const matchDispatchToProps = dispatch => {
@@ -456,7 +464,8 @@ const matchDispatchToProps = dispatch => {
       onEditingDetail,
       _submitDeal,
       closeModalAfterDealCreated,
-      resetListDeal
+      resetListDeal, 
+      _isLoggedIn
     },
     dispatch
   );
