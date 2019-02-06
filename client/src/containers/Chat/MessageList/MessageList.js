@@ -14,7 +14,7 @@ const MessageList = props => {
           {chatSessionInfo.length > 0 &&
             chatSessionInfo.map(chatSession => {
               return (
-                <div>
+                <div key={chatSession.chat_session_id}>
                   <div className="deal-item-messages-list">
                     <div className="message-list-profile-header">
                       <div>
@@ -61,7 +61,7 @@ const MessageList = props => {
                       </Link>
 
                       <div onClick={_deleteChatSession} className="trash-icon">
-                        <i class="fa fa-trash" aria-hidden="true"></i>
+                        <i className="fa fa-trash" aria-hidden="true"></i>
                       </div>
 
                     </div>
@@ -74,9 +74,10 @@ const MessageList = props => {
       </div>
       <div id="chat-messages">
         {messagesList.length > 0 ?
-          messagesList.map(msg => {
+          messagesList.map((msg, i) => {
             return (
               <div
+                key={i}
                 className={
                   msg.message_owner_id === userInfo[0].id
                     ? "chat-message user-message-right"

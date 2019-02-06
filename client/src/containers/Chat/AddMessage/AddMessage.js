@@ -24,7 +24,7 @@ const AddMessage = props => {
         placeholder="Type your message here"
         value={message}
         required
-        autocomplete="off"
+        autoComplete="off"
       />
       <button>Send</button>
     </form>

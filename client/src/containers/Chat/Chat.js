@@ -145,7 +145,7 @@ class Chat extends Component {
             </div> :
             <div id="select-chat-prompt">
               <div>
-                <div><i class="fas fa-7x fa-comments"></i></div>
+                <div><i className="fas fa-7x fa-comments"></i></div>
                 <strong>Select a conversation to start the chat</strong>
               </div>
             </div>
