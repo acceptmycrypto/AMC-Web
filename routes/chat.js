@@ -44,7 +44,7 @@ router.post("/chat_sessions", verifyToken, (req, res) => {
   let user_id = req.decoded._id;
 
   connection.query(
-    "SELECT DISTINCT chat_sessions.id AS chat_session_id, chat_sessions.date_created AS chat_session_date, deal_id, date_joined, chat_session_participants.user_id, chat_session_participants.seller_id, chat_session_participants.buyer_id, deal_name, featured_deal_image, seller.username AS seller_name, seller_profile.photo as seller_photo, buyer.username AS buyer_name, buyer_profile.photo AS buyer_photo from chat_sessions LEFT JOIN chat_session_participants ON chat_sessions.id = chat_session_participants.chat_session_id LEFT JOIN deals ON chat_sessions.deal_id = deals.id LEFT JOIN users seller ON chat_session_participants.seller_id = seller.id LEFT JOIN users buyer ON chat_session_participants.buyer_id = buyer.id LEFT JOIN users_profiles buyer_profile ON buyer_profile.user_id = buyer.id LEFT JOIN users_profiles seller_profile ON seller_profile.user_id = seller.id WHERE chat_session_participants.user_id = ? AND participant_status = ? ORDER BY chat_session_date DESC",
+    "SELECT DISTINCT chat_sessions.id AS chat_session_id, chat_sessions.date_created AS chat_session_date, chat_session_participants.message_read, deal_id, date_joined, chat_session_participants.user_id, chat_session_participants.seller_id, chat_session_participants.buyer_id, deal_name, featured_deal_image, seller.username AS seller_name, seller_profile.photo as seller_photo, buyer.username AS buyer_name, buyer_profile.photo AS buyer_photo from chat_sessions LEFT JOIN chat_session_participants ON chat_sessions.id = chat_session_participants.chat_session_id LEFT JOIN deals ON chat_sessions.deal_id = deals.id LEFT JOIN users seller ON chat_session_participants.seller_id = seller.id LEFT JOIN users buyer ON chat_session_participants.buyer_id = buyer.id LEFT JOIN users_profiles buyer_profile ON buyer_profile.user_id = buyer.id LEFT JOIN users_profiles seller_profile ON seller_profile.user_id = seller.id WHERE chat_session_participants.user_id = ? AND participant_status = ? ORDER BY chat_session_date DESC",
     [user_id, "normal"],
     function(error, results, fields) {
       if (error) console.log(error);
@@ -188,6 +188,17 @@ router.post("/chat_session/messages", verifyToken, (req, res) => {
   let buyer_id = req.decoded._id;
   let { chat_session_id } = req.body;
 
+  //once user has read the message (selected the chat session), we update message_read to True
+  connection.query(
+    "UPDATE chat_session_participants SET message_read = ? WHERE user_id = ?",
+    [1, buyer_id ],
+    function(err, result) {
+      if (err) {
+        console.log(err);
+      }
+    }
+  );
+
   //get info about the selected chat session
   connection.query(
     "SELECT DISTINCT chat_sessions.id AS chat_session_id, chat_sessions.date_created AS chat_session_date, deal_id, chat_session_participants.seller_id, chat_session_participants.buyer_id, deal_name, pay_in_dollar, pay_in_crypto,featured_deal_image, seller.username AS seller_name, seller_profile.photo as seller_photo, buyer.username AS buyer_name, buyer_profile.photo AS buyer_photo from chat_sessions LEFT JOIN chat_session_participants ON chat_sessions.id = chat_session_participants.chat_session_id LEFT JOIN deals ON chat_sessions.deal_id = deals.id LEFT JOIN users seller ON chat_session_participants.seller_id = seller.id LEFT JOIN users buyer ON chat_session_participants.buyer_id = buyer.id LEFT JOIN users_profiles buyer_profile ON buyer_profile.user_id = buyer.id LEFT JOIN users_profiles seller_profile ON seller_profile.user_id = seller.id WHERE chat_sessions.id = ?",
@@ -229,11 +240,21 @@ router.post("/chat_session/messages/new", verifyToken, (req, res) => {
         [message_id, chat_session_id ],
         function(err, result) {
           if (err) {
-            console.log("error during delete");
             console.log(err);
           }
 
           res.json(results);
+        }
+      );
+
+      //update the message_read of message recipient to false
+      connection.query(
+        "UPDATE chat_session_participants SET message_read = ? WHERE user_id = ? AND chat_session_id = ?",
+        [0, recipientEmailUser_id, chat_session_id],
+        function(err, result) {
+          if (err) {
+            console.log(err);
+          }
         }
       );
 

@@ -5,7 +5,7 @@ import { handleLongDescription } from '../../../utils/helper_functions';
 
 
 const UserList = props => {
-  const { usersList, _fetchMessagesList, userInfo, chatSessionInfo } = props;
+  const { _loadUsersList, usersList, _fetchMessagesList, userInfo, chatSessionInfo } = props;
   return (
     <div id="user-session-wrapper">
       <div id="user-session-header"><i onClick={props.goBack} class="fas fa-lg fa-arrow-left"></i>  <hr/> </div>
@@ -14,10 +14,15 @@ const UserList = props => {
         return (
           <div
             onClick={() =>
-              _fetchMessagesList(
-                localStorage.getItem("token"),
-                chat_session.chat_session_id
-              )
+              {
+                _fetchMessagesList(
+                  localStorage.getItem("token"),
+                  chat_session.chat_session_id
+                )
+
+                //reload the users list to update that the session has read
+                _loadUsersList(localStorage.getItem("token"));
+              }
             }
             className={chatSessionInfo.length > 0 && chatSessionInfo[0].chat_session_id === chat_session.chat_session_id ? "user-session selected-user-session" : "user-session"}
           >
@@ -34,7 +39,7 @@ const UserList = props => {
                 }
               />
             </div>
-            <div>
+            <div className={chat_session.message_read === 0 ? "font-weight-unread-message" : null}>
               <strong>
                 {userInfo.length > 0 &&
                 chat_session.seller_id === userInfo[0].id
@@ -42,7 +47,7 @@ const UserList = props => {
                   : chat_session.seller_name}
               </strong>
               <div>{handleLongDescription(chat_session.deal_name, 30, 20)}</div>
-              <small><Timestamp time={chat_session.chat_session_date} precision={1} /></small>
+              <small className={chat_session.message_read === 0 ? "font-weight-unread-message" : null}><Timestamp time={chat_session.chat_session_date} precision={1} /></small>
             </div>
           </div>
             <div className="deal-item-user-list">

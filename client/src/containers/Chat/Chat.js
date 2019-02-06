@@ -46,6 +46,7 @@ class Chat extends Component {
       recipientEmailUser_id = buyer_id;
     }
 
+    //add message to the database
     await this.props._addChatMessage(
       localStorage.getItem("token"),
       chat_session_id,
@@ -53,6 +54,7 @@ class Chat extends Component {
       recipientEmailUser_id
     );
 
+    //load the messages
     await this.props._loadChatMessages(
       localStorage.getItem("token"),
       chat_session_id
@@ -84,6 +86,7 @@ class Chat extends Component {
   render() {
     const {
       chat_sessions,
+      _loadChatSessions,
       chat_messages,
       _loadChatMessages,
       onMessageEdit,
@@ -100,6 +103,7 @@ class Chat extends Component {
             <section className="chat-session-left">
             {chat_sessions.length > 0 ?
               <UserList
+                _loadUsersList={_loadChatSessions}
                 usersList={chat_sessions}
                 _fetchMessagesList={_loadChatMessages}
                 userInfo={user_info}

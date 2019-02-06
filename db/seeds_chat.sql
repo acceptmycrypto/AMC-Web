@@ -15,6 +15,7 @@ CREATE TABLE chat_session_participants(
   buyer_id INT NOT NULL,
   participant_status VARCHAR (10) DEFAULT 'normal',
 	date_joined TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  message_read BOOLEAN NOT NULL DEFAULT TRUE,
 	PRIMARY KEY (id),
   FOREIGN KEY (chat_session_id) REFERENCES chat_sessions(id),
 	FOREIGN KEY (user_id) REFERENCES users(id),
