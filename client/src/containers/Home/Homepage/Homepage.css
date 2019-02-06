@@ -177,6 +177,10 @@
     background-color: white;
 }
 
+.list-deal-category:hover{
+    cursor: pointer;
+}
+
 .margin-left-add-deal{
     margin-left: 70px;
 }
