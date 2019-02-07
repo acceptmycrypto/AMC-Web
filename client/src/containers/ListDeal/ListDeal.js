@@ -38,11 +38,11 @@ import { _isLoggedIn } from "../../actions/loggedInActions";
 class ListDeal extends Component {
   componentDidMount = async() => {
     await this.props._isLoggedIn(localStorage.getItem('token'));
-    if (this.props.userLoggedIn) {
-      this.props._loadCryptocurrencies();
-      this.props._loadCategory();
+    if (await this.props.userLoggedIn) {
+      await this.props._loadCryptocurrencies();
+      await this.props._loadCategory();
     }else{
-      this.props.history.push("/SignIn");
+      await this.props.history.push("/SignIn?redirect=ListDeal");
     }
     
   };
