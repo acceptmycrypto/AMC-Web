@@ -24,7 +24,7 @@ class Navbar extends Component {
     await this.props._isLoggedIn(localStorage.getItem('token'));
     if (this.props.userLoggedIn) {
       this.props._loadPhoto(localStorage.getItem('token'));
-    } 
+    }
     // else {
 
     // }
@@ -32,7 +32,7 @@ class Navbar extends Component {
     // if(isLoggedIn.message == "WrongToken"){
 
     // }
-    // 
+    //
 
     // console.log(this.props.photo.photo);
 
@@ -43,7 +43,7 @@ class Navbar extends Component {
       this.props.resetNavbar();
   }
 
- 
+
 
   render() {
     console.log("user", this.props.userLoggedIn);
@@ -74,16 +74,16 @@ class Navbar extends Component {
             ? <li>
               <Link onClick={this.props.resetNavbar} to="/listdeal">
                 {window.location.pathname == "/listdeal"
-                  ? <i className="fas fa-store fa-lg"> <h7 className="color-deepBlue font-17 teal-underline">Create a Deal</h7></i>
-                  : <i className="fas fa-store fa-lg"> <h7 className="color-deepBlue font-17">Create a Deal</h7></i>
+                  ? <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17 teal-underline">Create a Deal</span></i>
+                  : <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17">Create a Deal</span></i>
                 }
               </Link>
             </li>
             : <li>
                 <Link onClick={this.props.resetNavbar} to="/SignIn">
                   {window.location.pathname == "/SignIn"
-                    ? <i className="fas fa-store fa-lg"> <h7 className="color-deepBlue font-17 teal-underline">Create a Deal</h7></i>
-                    : <i className="fas fa-store fa-lg"> <h7 className="color-deepBlue font-17">Create a Deal</h7></i>
+                    ? <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17 teal-underline">Create a Deal</span></i>
+                    : <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17">Create a Deal</span></i>
                   }
                 </Link>
             </li>
@@ -99,7 +99,7 @@ class Navbar extends Component {
             </Link>
           </li> */}
           <li>
-            {this.props.photo.photo 
+            {this.props.photo.photo
               ? <div className="dropdown show m-0 p-0">
                 <div className="dropdown-toggle picture-toggle m-0 p-0" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i className={'fas my-1 py-2 px-3 user-icon-navbar ' + this.props.photo.photo}></i>
