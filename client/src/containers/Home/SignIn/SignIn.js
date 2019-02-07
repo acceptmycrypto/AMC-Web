@@ -28,24 +28,20 @@ class SignIn extends Component {
       return _login(email, password).then(res => {
         if (res.token && values.redirect == "ListDeal") {
           localStorage.setItem('token', res.token);
-          console.log(res.token);
-          // alert("You've successfully logged in");
-          //redirect user to the feed/deals
           this.props.history.push('/listdeal');
 
-        } else if (res.token && values.redirect == "chat") {
+        } else if (res.token && this.props.dealItem && values.redirect == `feed/deals/${this.props.dealItem.deal_id}/${this.props.dealItem.deal_name}`.trim()) {
+
           localStorage.setItem('token', res.token);
-          this.props.history.push('/chat');
+          this.props.history.push(`/${values.redirect}`);
 
         } else if (res.token) {
           localStorage.setItem('token', res.token);
-          console.log(res.token);
           // alert("You've successfully logged in");
           //redirect user to the feed/deals
           this.props.history.push('/');
 
         }else {
-          console.log("Login error: ", res);
           // alert(res.err);
           this.props.openModal();
         }
@@ -131,8 +127,8 @@ const mapStateToProps = state => ({
   visible: state.SignInModal.visible,
   userLoggedIn: state.LoggedIn.userLoggedIn,
   error: state.LoggedIn.error,
-  loading: state.LoggedIn.loading
-
+  loading: state.LoggedIn.loading,
+  dealItem: state.DealItem.dealItem
 });
 
 const matchDispatchToProps = dispatch =>{

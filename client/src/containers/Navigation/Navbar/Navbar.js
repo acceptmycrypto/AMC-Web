@@ -71,22 +71,33 @@ class Navbar extends Component {
         </div>
         <div className="Nav d-flex flex-row align-items-center">
         {this.props.userLoggedIn
-            ? <li>
-              <Link onClick={this.props.resetNavbar} to="/listdeal">
-                {window.location.pathname == "/listdeal"
-                  ? <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17 teal-underline">Create a Deal</span></i>
-                  : <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17">Create a Deal</span></i>
-                }
-              </Link>
-            </li>
-            : <li>
-                <Link onClick={this.props.resetNavbar} to="/SignIn">
-                  {window.location.pathname == "/SignIn"
+            ?
+            <div>
+              <li>
+                <Link onClick={this.props.resetNavbar} to="/listdeal">
+                  {window.location.pathname == "/listdeal"
                     ? <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17 teal-underline">Create a Deal</span></i>
                     : <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17">Create a Deal</span></i>
                   }
                 </Link>
-            </li>
+              </li>
+              <li>
+                <Link onClick={this.props.resetNavbar} to="/chat">
+                  <i className="fas fa-comments fa-lg"></i>
+                </Link>
+              </li>
+            </div>
+
+            : <div>
+                <li>
+                  <Link onClick={this.props.resetNavbar} to="/SignIn">
+                    {window.location.pathname == "/SignIn"
+                      ? <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17 teal-underline">Create a Deal</span></i>
+                      : <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17">Create a Deal</span></i>
+                    }
+                  </Link>
+                </li>
+            </div>
 
         }
           {/* <li>

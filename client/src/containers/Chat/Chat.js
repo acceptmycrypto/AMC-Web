@@ -26,7 +26,13 @@ class Chat extends Component {
       await this.props._loadChatSessions(localStorage.getItem("token"));
       await this.props._loadProfile(localStorage.getItem("token"));
     } else {
-      await this.props.history.push("/SignIn?redirect=chat");
+
+      if (this.props.dealItem) {
+        await this.props.history.push(`/SignIn?redirect=feed/deals/${this.props.dealItem.deal_id}/${this.props.dealItem.deal_name}`);
+      } else {
+        this.props.history.push("/");
+      }
+
     }
   };
 
@@ -75,7 +81,7 @@ class Chat extends Component {
 
   componentDidUpdate() {
     //scroll to bottom of message list
-    if (this.props.selected_chat_session.length > 0) {
+    if (this.props.chat_sessions.length > 0 && this.props.selected_chat_session.length > 0) {
       const objDiv = document.getElementById("chat-messages");
       objDiv.scrollTop = objDiv.scrollHeight;
     }
@@ -122,7 +128,7 @@ class Chat extends Component {
             </section>
 
             <section className="chat-session-right">
-            {selected_chat_session.length > 0 ?
+            {chat_sessions.length > 0 && selected_chat_session.length > 0 ?
             <div>
               <div>
                 <MessageList
@@ -166,7 +172,8 @@ const mapStateToProps = state => ({
   chatMessageValue: state.Chat.chatMessageValue,
   chat_session_id: state.Chat.chat_session_id,
   user_info: state.UserInfo.user_info,
-  selected_chat_session: state.Chat.selected_chat_session
+  selected_chat_session: state.Chat.selected_chat_session,
+  dealItem: state.DealItem.dealItem
 });
 
 const matchDispatchToProps = dispatch => {
