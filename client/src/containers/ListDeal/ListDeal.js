@@ -35,21 +35,18 @@ import UploadingImage from "./UploadImage";
 import Pricing from "./Pricing";
 import Description from "./Description";
 
+
 class ListDeal extends Component {
 
   componentDidMount = async () => {
 
     //return the param value
     await this.props._isLoggedIn(localStorage.getItem('token'));
-
     if (await this.props.userLoggedIn) {
-
       await this.props._loadCryptocurrencies();
       await this.props._loadCategory();
-
     }else{
-        // localStorage.removeItem('token');
-        await this.props.history.push('/');
+      await this.props.history.push("/SignIn?redirect=ListDeal");
     }
   }
   
@@ -471,7 +468,8 @@ const matchDispatchToProps = dispatch => {
       onEditingDetail,
       _submitDeal,
       closeModalAfterDealCreated,
-      resetListDeal
+      resetListDeal, 
+      _isLoggedIn
     },
     dispatch
   );

@@ -9,10 +9,10 @@ import { bindActionCreators } from 'redux';
 // import { _isLoggedIn } from '../../../actions/loggedInActions';
 import Footer from '../../../components/Layout/Footer';
 import Layout from '../../Layout';
-import { _loadHomepage } from '../../../actions/homepageActions';
-
+// import { _loadHomepage } from '../../../actions/homepageActions';
 import { UncontrolledCarousel } from 'reactstrap';
 import CategoryHome from './CategoryHome/CategoryHome';
+import { _loadAllHomepageDeals } from '../../../actions/homepageActions';
 
 
 
@@ -21,16 +21,20 @@ class Homepage extends Component {
 
 
   componentDidMount = () => {
-    this.props._loadHomepage();
+    // this.props._loadHomepage();
+    this.props._loadAllHomepageDeals();
   }
 
   render() {
-    const { error, loading, category_list, apparel_accessories, electronics, health_beauty, movies_music_games } = this.props;
+    const { error, loading, category_list, homepage_deals } = this.props;
     // console.log(category_list, apparel_accessories, electronics);
 
     if (error) {
       return <div>Error! {error.message}</div>;
     }
+
+    console.log("all", homepage_deals.all_results);
+    console.log("recent", homepage_deals.recent_deals);
 
     const carouselItems = [
       {
@@ -56,7 +60,7 @@ class Homepage extends Component {
         // header: 'Slide 3 Header'
       }
     ];
-    
+
 
     return (
       <div>
@@ -65,15 +69,22 @@ class Homepage extends Component {
           <div className="menu-parent">
             {category_list != undefined && category_list.length > 0 && category_list.map(category => (
               // <Menu.Item name={category.category_name} active={activeItem === category.category_name} onClick={this.handleItemClick} />
-                <Link to={"/category?term="+category.category_name+"&page=1"} className="menu-item" key={category.id} category-id={category.id}>{category.category_name}</Link>
-                // {/* <Menu.Item key={category.id} content={category.category_name} category-id={category.id} /> */}
+              <Link to={"/category?term=" + category.category_name + "&page=1"} className="menu-item" key={category.id} category-id={category.id}>{category.category_name}</Link>
+              // {/* <Menu.Item key={category.id} content={category.category_name} category-id={category.id} /> */}
             ))}
           </div>
-          <UncontrolledCarousel items={carouselItems} indicators={false}  className="homepage-carousel" />
-            <CategoryHome category_collection={apparel_accessories} category_collection_name={"Apparel & Accessories"} category_collection_id={"apparel_accessories_container"}/>
+          <UncontrolledCarousel items={carouselItems} indicators={false} className="homepage-carousel" />
+          {homepage_deals.recent_deals !== undefined && homepage_deals.recent_deals.length > 0 &&
+            <CategoryHome category_collection={homepage_deals.recent_deals} category_collection_name={"Most Recent Deals Listed"} category_collection_id={`cat_recent`}/>                                
+          }
+          {homepage_deals.all_results !== undefined && homepage_deals.all_results.length > 0 && homepage_deals.all_results.map((categorizedDealArray, i) => (
+            <CategoryHome category_collection={categorizedDealArray} category_collection_name={categorizedDealArray[0].category_name} category_collection_id={`cat_${i}`}/>            
+          ))}
+
+          {/* <CategoryHome category_collection={apparel_accessories} category_collection_name={"Apparel & Accessories"} category_collection_id={"apparel_accessories_container"}/>
             <CategoryHome category_collection={electronics} category_collection_name={"Electronics, Computers & Office"} category_collection_id={"electronics_container"}/>
             <CategoryHome category_collection={health_beauty} category_collection_name={"Health & Beauty"} category_collection_id={"health_beauty"}/>
-            <CategoryHome category_collection={movies_music_games} category_collection_name={"Movies, Music & Games"} category_collection_id={"movies_music_games"}/>              
+            <CategoryHome category_collection={movies_music_games} category_collection_name={"Movies, Music & Games"} category_collection_id={"movies_music_games"}/>               */}
         </Layout>
       </div>
     );
@@ -82,17 +93,18 @@ class Homepage extends Component {
 
 const mapStateToProps = state => ({
   category_list: state.Homepage.category_list,
-  apparel_accessories: state.Homepage.apparel_accessories,
-  electronics: state.Homepage.electronics,
-  health_beauty: state.Homepage.health_beauty,
-  movies_music_games: state.Homepage.movies_music_games,
+  homepage_deals: state.Homepage.homepage_deals,
+  // apparel_accessories: state.Homepage.apparel_accessories,
+  // electronics: state.Homepage.electronics,
+  // health_beauty: state.Homepage.health_beauty,
+  // movies_music_games: state.Homepage.movies_music_games,
   error: state.Homepage.error,
   loading: state.Homepage.loading
 
 });
 
 const matchDispatchToProps = dispatch => {
-  return bindActionCreators({ _loadHomepage }, dispatch);
+  return bindActionCreators({ _loadAllHomepageDeals}, dispatch);
 }
 
 

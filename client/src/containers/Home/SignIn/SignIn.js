@@ -11,6 +11,7 @@ import { _loadProfile } from "../../../actions/userLoadActions";
 import { _isLoggedIn } from '../../../actions/loggedInActions';
 import Footer from '../../../components/Layout/Footer';
 import Aside from '../Aside';
+import queryString from 'query-string';
 
 
 class SignIn extends Component {
@@ -19,19 +20,27 @@ class SignIn extends Component {
     e.preventDefault();
     let email = e.target.children[0].children[1].value;
     let password = e.target.children[1].children[1].value;
+    let values = queryString.parse(this.props.location.search);
 
     if (!email || !password) {
       alert("please enter in the required fields");
     } else {
       return _login(email, password).then(res => {
-        if (res.token) {
+        if (res.token && values.redirect == "ListDeal") {
+          localStorage.setItem('token', res.token);
+          console.log(res.token);
+          // alert("You've successfully logged in");
+          //redirect user to the feed/deals
+          this.props.history.push('/listdeal');
+
+        } else if (res.token) {
           localStorage.setItem('token', res.token);
           console.log(res.token);
           // alert("You've successfully logged in");
           //redirect user to the feed/deals
           this.props.history.push('/');
 
-        } else {
+        }else {
           console.log("Login error: ", res);
           // alert(res.err);
           this.props.openModal();
