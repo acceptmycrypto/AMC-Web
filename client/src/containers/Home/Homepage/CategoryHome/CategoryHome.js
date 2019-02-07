@@ -28,7 +28,7 @@ class CategoryHome extends Component {
     let container = document.getElementById(containerName);
     console.log("right", containerName, container);
     let containerWidth = container.offsetWidth - 200;
-    this.sideScroll(container, 'right', 25, 100, containerWidth);
+    this.sideScroll(container, 'right', 50, 100, containerWidth);
   }
 
   handleLeftButtonClick = (event) => {
@@ -40,7 +40,7 @@ class CategoryHome extends Component {
     let container = document.getElementById(containerName);
     console.log("left", containerName, container);
     let containerWidth = container.offsetWidth - 200;
-    this.sideScroll(container, 'left', 25, 100, containerWidth);
+    this.sideScroll(container, 'left', 50, 100, containerWidth);
 
 
   }
@@ -48,7 +48,7 @@ class CategoryHome extends Component {
   sideScroll = (element, direction, speed, distance, step) => {
     let scrollAmount = 0;
     let slideTimer = setInterval(function () {
-      if (direction == 'left') {
+      if (direction === 'left') {
         element.scrollLeft -= step;
       } else {
         element.scrollLeft += step;

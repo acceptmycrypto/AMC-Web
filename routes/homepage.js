@@ -129,7 +129,7 @@ router.get('/home/categorized/deals', function (req, res) {
                 let cat_all = []
 
                 all_results = [cat_1, cat_2, cat_3, cat_4, cat_5, cat_6, cat_7, cat_8, cat_9, cat_10, cat_11, cat_12, cat_13];
-                all_results. sort(function(a,b){
+                all_results.sort(function(a,b){
                     return b.length - a.length;
                 })
 

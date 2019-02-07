@@ -43,6 +43,7 @@
     flex-wrap: nowrap;
     overflow-x: hidden;
     align-items: center;
+    scroll-behavior: smooth;
 }
 
 .category_item{

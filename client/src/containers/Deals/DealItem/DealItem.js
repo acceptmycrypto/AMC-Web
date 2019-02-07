@@ -270,44 +270,44 @@ class DealItem extends Component {
   };
 
   render() {
-    const {
-      //state
-      error,
-      deal_item_loading,
-      dealItem,
-      reviews,
-      acceptedCryptos,
-      allStates,
-      firstName,
-      lastName,
-      shippingAddress,
-      shippingCity,
-      zipcode,
-      shippingState,
-      selectedOption,
-      transaction_loading,
-      paymentInfo,
-      createPaymentButtonClicked,
-      showDetailStep,
-      showShippingStep,
-      showPayingStep,
-      user_info,
+    const { //state
+            error,
+            deal_item_loading,
+            dealItem,
+            reviews,
+            acceptedCryptos,
+            allStates,
+            firstName,
+            lastName,
+            shippingAddress,
+            shippingCity,
+            zipcode,
+            shippingState,
+            selectedOption,
+            transaction_loading,
+            paymentInfo,
+            createPaymentButtonClicked,
+            showDetailStep,
+            showShippingStep,
+            showPayingStep,
+            user_info,
+            userLoggedIn,
 
-      //actions
-      handleFirstNameInput,
-      handleLastNameInput,
-      handleAddressInput,
-      handleCityInput,
-      handleZipcodeInput,
-      handleShippingStateInput,
-      handleSelectedCrypto,
+            //actions
+            handleFirstNameInput,
+            handleLastNameInput,
+            handleAddressInput,
+            handleCityInput,
+            handleZipcodeInput,
+            handleShippingStateInput,
+            handleSelectedCrypto,
 
-      handleDetailStep,
-      handleShippingStep,
-      handlePayingStep,
+            handleDetailStep,
+            handleShippingStep,
+            handlePayingStep,
+            } = this.props;
 
-      _createChatSession
-    } = this.props;
+    console.log("line 268", userLoggedIn);
 
     if (error) {
       return <div>Error! {error.message}</div>;
