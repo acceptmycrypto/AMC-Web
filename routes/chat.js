@@ -190,8 +190,8 @@ router.post("/chat_session/messages", verifyToken, (req, res) => {
 
   //once user has read the message (selected the chat session), we update message_read to True
   connection.query(
-    "UPDATE chat_session_participants SET message_read = ? WHERE user_id = ?",
-    [1, buyer_id ],
+    "UPDATE chat_session_participants SET message_read = ? WHERE user_id = ? AND chat_session_id = ?",
+    [1, buyer_id, chat_session_id ],
     function(err, result) {
       if (err) {
         console.log(err);
@@ -211,7 +211,7 @@ router.post("/chat_session/messages", verifyToken, (req, res) => {
         [chat_session_id],
         function(error, chatMessages, fields) {
           if (error) console.log(error);
-
+          console.log(chatSession);
           res.json({chatSession, chatMessages});
         }
       );

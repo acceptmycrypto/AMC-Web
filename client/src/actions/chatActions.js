@@ -18,7 +18,7 @@ export function _createChatSession(token, seller_id, deal_id) {
     return fetch(`/chat_session/new`, settings)
     .then(res => res.json())
     .then(resJson => {
-      debugger
+
       dispatch(fetchCreateChatSessionSuccess(resJson));
       return resJson;
     })
@@ -61,7 +61,7 @@ export function _loadChatSessions(token) {
     return fetch(`/chat_sessions`, settings)
     .then(res => res.json())
     .then(resJson => {
-      debugger
+      
       dispatch(fetchChatSessionsSuccess(resJson));
       return resJson;
     })

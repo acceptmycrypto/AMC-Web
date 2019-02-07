@@ -9,6 +9,7 @@ import SearchBar from "./Searchbar";
 import Category from "./Category";
 import { resetNavbar } from "../../../actions/navbarActions";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
+import { _loadChatSessions } from "../../../actions/chatActions";
 
 
 class Navbar extends Component {
@@ -24,6 +25,7 @@ class Navbar extends Component {
     await this.props._isLoggedIn(localStorage.getItem('token'));
     if (this.props.userLoggedIn) {
       this.props._loadPhoto(localStorage.getItem('token'));
+      this.props._loadChatSessions(localStorage.getItem("token"));
     }
     // else {
 
@@ -43,7 +45,20 @@ class Navbar extends Component {
       this.props.resetNavbar();
   }
 
+  handleMessageNotification = () => {
+    if (this.props.chat_sessions.length > 0) {
+      for (let i in this.props.chat_sessions) {
+        if (this.props.chat_sessions[i].message_read == 0) {
+          //there's at lease one message that has not read
+          return true;
+        } else {
+          //all messages have read
+          return false;
+        }
+      }
+    }
 
+  }
 
   render() {
     console.log("user", this.props.userLoggedIn);
@@ -83,6 +98,7 @@ class Navbar extends Component {
               </li>
               <li>
                 <Link onClick={this.props.resetNavbar} to="/chat">
+                  {this.handleMessageNotification() && <div className="message-notification"></div>}
                   <i className="fas fa-comments fa-lg"></i>
                 </Link>
               </li>
@@ -139,10 +155,11 @@ const mapStateToProps = state => ({
   loading: state.Photo.loading,
   error: state.Photo.error,
   userLoggedIn: state.LoggedIn.userLoggedIn,
+  chat_sessions: state.Chat.chat_sessions
 });
 
 const matchDispatchToProps = dispatch => {
-  return bindActionCreators({ _isLoggedIn, _loadPhoto, resetNavbar }, dispatch);
+  return bindActionCreators({ _isLoggedIn, _loadPhoto, resetNavbar, _loadChatSessions }, dispatch);
 }
 
 
