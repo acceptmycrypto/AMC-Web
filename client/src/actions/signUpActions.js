@@ -37,3 +37,66 @@ export const resetSelectedCryptos = () => {
     type: "RESET_SELECTED_CRYPTOS"
   };
 };
+
+export const validatePWToken = (token) => {
+    return dispatch => {
+        dispatch(validationStart());
+        return fetch("/validate-pw-token?token="+token, {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            }
+        }).then(res => res.json()).then(data => {
+            console.log("data");
+            console.log(data);
+            if (data.stored.length==0){
+                dispatch(validationDone("invalid"));
+            } else if ((data.stored[0].reset_pw_timestamp+3600000) <= data.current){
+                dispatch(validationDone("expired"));
+            } else {
+                dispatch(validationDone("valid"));
+            }
+        })
+
+    }
+    
+}
+
+export const validationStart = () => {
+    return {
+        type: "VALIDATION_START"
+    };
+}
+
+export const validationDone = (result) => {
+    return {
+        type: "VALIDATION_DONE",
+        payload: { validation_result: result}
+    }
+}
+
+export const resetPasswordDone = (data) => {
+    return {
+        type: "PASSWORD_RESET_DONE",
+        payload: data
+    }
+}
+
+export const resetPassword = (token, password1, password2) => {
+    return dispatch => {
+        dispatch(validationStart());
+        return fetch("/reset-password", {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({token, password1, password2})
+          }).then(res => res.json()).then(data => {
+            console.log("data");
+            console.log(data);
+            dispatch(resetPasswordDone(data));
+          })
+    }
+}

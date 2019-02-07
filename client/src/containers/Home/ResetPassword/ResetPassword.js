@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
-import { _resetPassword } from "../../../services/AuthService";
+// import { _resetPassword } from "../../../services/AuthService";
 import { connect } from "react-redux";
 import {bindActionCreators} from 'redux';
-import { _loadCryptocurrencies } from "../../../actions/loadCryptoActions";
-import { handleDropdownChange } from "../../../actions/signUpActions";
+import { validatePWToken, resetPassword } from "../../../actions/signUpActions";
 import Footer from "../../../components/Layout/Footer";
 import Aside from '../Aside';
 import Modal from 'react-awesome-modal';
@@ -13,48 +12,35 @@ import { openModal, closeModal } from '../../../actions/signInActions';
 class ResetPassword extends Component {
   constructor() {
     super();
-
-
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
-    this.props._loadCryptocurrencies();
+    this.props.validatePWToken(this.props.match.params.token);
   }
 
 
 
   //function to handle when user clicks submit button to register
-  handleSubmit(e) {
+  async handleSubmit(e) {
     e.preventDefault();
 
-    let code = e.target.children[0].children[1].value;
-    let password1 = e.target.children[1].children[1].value;
-    let password2 = e.target.children[2].children[1].value;
+    let password1 = e.target.children[0].children[1].value;
+    let password2 = e.target.children[1].children[1].value;
 
-    console.log(this.props);
-    //we add validation on the front end so that user has to enter in the required field before clicking submit
-    //TODO
-    if (password1!=password2) {
-      alert("Passwords do not match!");
-    } else {
-      return _resetPassword(code, password1, password2).then(res => {
-        console.log("message sent from server if success3: ", res);
+      await this.props.resetPassword(this.props.match.params.token, password1, password2);
         //TODO
         //prompt users to check their email
-        this.props.openModal();
-        document.getElementById('verificationcode').value="";
-        document.getElementById('newpassword').value="";
-        document.getElementById('confirmpassword').value="";
-      });
-    }
+        await this.props.openModal();
+        if (this.props.validity=="valid"){
+            document.getElementById('newpassword').value="";
+            document.getElementById('confirmpassword').value="";
+        }
   }
-
-
 
   render() {
 
-    const { error, loading, cryptoOptions, visible } = this.props;
+    const { error, loading, visible , validity} = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -63,12 +49,7 @@ class ResetPassword extends Component {
     if (loading) {
       return <div>Loading...</div>;
     }
-
-    // console.log("This.props" , this.props);
-
-    // if (localStorage.getItem('token')) {
-    //   this.props.history.push('/feed/deals');
-    // }
+    
     return (
       <div className="App">
         <Aside />
@@ -90,23 +71,8 @@ class ResetPassword extends Component {
               Sign Up
             </NavLink>
           </div>
-          <div className="FormCenter">
+          {validity=="valid" && <div className="FormCenter">
             <form onSubmit={this.handleSubmit} className="FormFields">
-              <div className="FormField">
-                <div>
-                    <label className="FormField__Label" htmlFor="email">
-                    Verification Code
-                    </label>
-                </div>
-                <input
-                  type="text"
-                  id="verificationcode"
-                  className="FormField__Input"
-                  placeholder="Enter your verification code from the email"
-                  name="verificationcode"
-                  required
-                />
-              </div>
               <div className="FormField">
                 <div>
                     <label className="FormField__Label" htmlFor="password">
@@ -141,19 +107,68 @@ class ResetPassword extends Component {
                 <button className="FormField__Button">
                   Reset Password
                 </button>
-                <Link to="/" className="FormField__Link">
+                <Link to="/SignIn" className="FormField__Link">
                   back to sign in
                 </Link>
               </div>
               <Modal visible={visible} effect="fadeInLeft" onClickAway={() => {this.props.closeModal(); }}>
                 <div className="Modal">
-                  <h4>Password changed.</h4>
+                  <h4>{this.props.error_message}</h4>
                   <a className="a-link" href="javascript:void(0);" onClick={() => {this.props.closeModal(); }}>Ok</a>
 
                 </div>
               </Modal>
             </form>
           </div>
+            }
+          {validity=="expired" && <div className="FormCenter">
+            <form className="FormFields">
+              <div className="FormField">
+                <div>
+                    <label className="FormField__Label">
+                    Your request to reset password has expired...
+                    </label>
+                </div>
+              </div>
+              <div className="FormField">
+                <div>
+                    <label className="FormField__Label">
+                    Please follow the link below to reset your password
+                    </label>
+                </div>
+              </div>
+              <div className="FormField buttonLink">
+                <Link to="/ResetPasswordEmail" className="FormField__Link">
+                  try again
+                </Link>
+              </div>
+            </form>
+          </div>
+            }
+            {validity=="invalid" && <div className="FormCenter">
+            <form className="FormFields">
+              <div className="FormField">
+                <div>
+                    <label className="FormField__Label">
+                    Something weird occured...
+                    </label>
+                </div>
+              </div>
+              <div className="FormField">
+                <div>
+                    <label className="FormField__Label">
+                    Please follow the link below to reset your password
+                    </label>
+                </div>
+              </div>
+              <div className="FormField buttonLink">
+                <Link to="/ResetPasswordEmail" className="FormField__Link">
+                  try again
+                </Link>
+              </div>
+            </form>
+          </div>
+            }
           <Footer/>
         </div>
       </div>
@@ -162,16 +177,15 @@ class ResetPassword extends Component {
 }
 
 const mapStateToProps = state => ({
-  cryptoOptions: state.LoadCrypto.cryptoOptions,
   loading: state.LoadCrypto.loading,
   error: state.LoadCrypto.error,
-  selectedCryptos: state.CryptoSelected.selectedCryptos,
   visible: state.SignInModal.visible,
-
+    validity: state.PasswordReset.pw_token_validity,
+    error_message: state.PasswordReset.error_message
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({openModal, closeModal, handleDropdownChange, _loadCryptocurrencies}, dispatch);
+  return bindActionCreators({openModal, closeModal, validatePWToken, resetPassword}, dispatch);
 }
 
 

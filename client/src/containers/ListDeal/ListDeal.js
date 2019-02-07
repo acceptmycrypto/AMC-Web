@@ -27,6 +27,7 @@ import {
   closeModalAfterDealCreated,
   resetListDeal
 } from "../../actions/listDealActions";
+import { _isLoggedIn } from '../../actions/loggedInActions';
 import { _loadCryptocurrencies } from "../../actions/loadCryptoActions";
 import { _loadCategory } from "../../actions/categoryActions";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
@@ -36,7 +37,10 @@ import Description from "./Description";
 import { _isLoggedIn } from "../../actions/loggedInActions";
 
 class ListDeal extends Component {
-  componentDidMount = async() => {
+
+  componentDidMount = async () => {
+
+    //return the param value
     await this.props._isLoggedIn(localStorage.getItem('token'));
     if (await this.props.userLoggedIn) {
       await this.props._loadCryptocurrencies();
@@ -44,8 +48,8 @@ class ListDeal extends Component {
     }else{
       await this.props.history.push("/SignIn?redirect=ListDeal");
     }
-    
-  };
+  }
+  
   // If user refreshes the page, we warn users that data won't be saved
   componentDidUpdate = () => {
     const { images } = this.props;
@@ -439,12 +443,12 @@ const mapStateToProps = state => ({
   creatingDealError: state.CreateDeal.creatingDealError,
   dealCreated: state.CreateDeal.dealCreated,
   modalVisible: state.CreateDeal.modalVisible,
-  userLoggedIn: state.LoggedIn.userLoggedIn,
+  userLoggedIn: state.LoggedIn.userLoggedIn
 });
 
 const matchDispatchToProps = dispatch => {
   return bindActionCreators(
-    {
+    { _isLoggedIn,
       _uploadImage,
       onSelectImageToView,
       _removeImage,

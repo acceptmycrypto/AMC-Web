@@ -46,6 +46,8 @@ CREATE TABLE users(
 	zipcode VARCHAR(255) NULL,
 	password VARCHAR(255) NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    reset_pw_token VARCHAR(26) NULL,
+    reset_pw_timestamp BIGINT NULL,
 	sellers_avg_rating FLOAT(3,2) NOT NULL DEFAULT 0,
 	total_sellers_ratings INT NOT NULL DEFAULT 0,
 	PRIMARY KEY (id)
@@ -308,7 +310,42 @@ CREATE TABLE flagged_users(
 	FOREIGN KEY (txn_id) REFERENCES users_purchases(txn_id)
 );
 
+CREATE TABLE chat_sessions(
+	id INT NOT NULL AUTO_INCREMENT,
+  deal_id INT NOT NULL,
+  session_status VARCHAR (10) DEFAULT 'normal',
+	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (id),
+  FOREIGN KEY (deal_id) REFERENCES deals(id)
+);
 
+-- participant_status is 'normal', 'deleted', or 'blocked'
+CREATE TABLE chat_session_participants(
+	id INT NOT NULL AUTO_INCREMENT,
+  chat_session_id INT NOT NULL,
+  user_id INT NOT NULL,
+  seller_id INT NOT NULL,
+  buyer_id INT NOT NULL,
+  participant_status VARCHAR (10) DEFAULT 'normal',
+	date_joined TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  message_read BOOLEAN NOT NULL DEFAULT TRUE,
+	PRIMARY KEY (id),
+  FOREIGN KEY (chat_session_id) REFERENCES chat_sessions(id),
+	FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (seller_id) REFERENCES users(id),
+  FOREIGN KEY (buyer_id) REFERENCES users(id)
+);
+
+CREATE TABLE chat_messages(
+	id INT NOT NULL AUTO_INCREMENT,
+	chat_session_id INT NOT NULL,
+	message VARCHAR(255) NOT NULL,
+  message_status VARCHAR (10) DEFAULT 'normal',
+	date_message_sent TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  message_owner_id INT NOT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (chat_session_id) REFERENCES chat_sessions(id)
+);
 
 -- table to be used in the future
 -- custom options to be displayed when user is listing an item to sell eg. size, color, model etc based on the categoryies of the item

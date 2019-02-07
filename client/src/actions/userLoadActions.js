@@ -24,12 +24,12 @@ export function _loadProfile(token) {
     ])
       .then(([res1, res2, res3]) => Promise.all([res1.json(), res2.json(), res3.json()]))
       .then(([user_info, user_crypto, transactions]) => {
-    
+
         if (transactions !== undefined && transactions.length > 0) {
           let confirmed = transactions.filter(order => order.payment_received === 1);
           let pending = transactions.filter(order => order.payment_received === 0);
           return([user_info, user_crypto, transactions, confirmed, pending]);
-          
+
         }else{
           let confirmed  = [];
           let pending = [];
@@ -47,9 +47,9 @@ export function _loadProfile(token) {
         }
 
       }).then(([user_info, user_crypto, transactions, confirmed, pending, tx_history_view]) => {
-    
+
         dispatch(fetchUserSuccess(user_info, user_crypto, transactions, confirmed, pending, tx_history_view));
-        console.log(user_info, user_crypto, transactions, confirmed, pending, tx_history_view);
+      
         return (user_info, user_crypto, transactions, confirmed, pending, tx_history_view);
       })
       .catch(error => dispatch(fetchUserFailure(error)));
@@ -82,7 +82,7 @@ export const changeTxHistoryView = (event, new_tx_state, token) =>{
       },
       body: JSON.stringify({token})
     };
-  
+
     return dispatch => {
       dispatch(fetchTransactionsBegin());
       return fetch("/profile/user/transactions", settings)
@@ -92,7 +92,7 @@ export const changeTxHistoryView = (event, new_tx_state, token) =>{
             let confirmed = transactions.filter(order => order.payment_received === 1);
             let pending = transactions.filter(order => order.payment_received === 0);
             return([transactions, confirmed, pending]);
-            
+
           }else{
             let confirmed  = [];
             let pending = [];
@@ -101,7 +101,7 @@ export const changeTxHistoryView = (event, new_tx_state, token) =>{
         }).then(([transactions, confirmed, pending])=>{
 
           console.log(transactions, confirmed, pending, new_tx_state);
-  
+
           dispatch(fetchTransactionsSuccess(transactions, confirmed, pending, new_tx_state));
           return (transactions, confirmed, pending, new_tx_state);
         })

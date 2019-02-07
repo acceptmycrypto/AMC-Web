@@ -17,19 +17,15 @@ import { _isLoggedIn } from "../../../actions/loggedInActions";
 import { handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos } from "../../../actions/cryptoPortfolioActions";
 import { resetDealitemState } from "../../../actions/dealItemActions";
 
-
-
-
 class UserProfile extends Component {
-  
-  
+
   componentDidMount = async () => {
     // await console.log(this.props.userLoggedIn);
     await this.props._isLoggedIn(localStorage.getItem('token'));
 
     // await console.log(this.props.userLoggedIn);
 
-    if (await this.props.userLoggedIn) {      
+    if (await this.props.userLoggedIn) {
       await this.props._loadProfile(localStorage.getItem('token'));
     }else{
         // localStorage.removeItem('token');
@@ -53,8 +49,6 @@ class UserProfile extends Component {
     //reset dealItem state when user hit deals route
     this.props.resetDealitemState();
 
-  
-
     return (
       <div className="pt-5">
         <Layout >
@@ -76,10 +70,10 @@ class UserProfile extends Component {
 
           <div className="w-50 mr-4 ml-5">
           { transactions != undefined && <ProfileFeed classname="w-50" />}
-            
+
           </div>
 
-          {/* <div className="width-20 mr-3">       
+          {/* <div className="width-20 mr-3">
             <FriendCard friends_array={this.state.friends_array} />
           </div> */}
 
@@ -102,7 +96,7 @@ const mapStateToProps = state => ({
   tx_history_view: state.UserInfo.tx_history_view,
   loading: state.UserInfo.loading,
   error: state.UserInfo.error,
-  userLoggedIn: state.LoggedIn.userLoggedIn, 
+  userLoggedIn: state.LoggedIn.userLoggedIn,
   crypto_view: state.UserInfo.crypto_view,
   qr_shown: state.UserInfo.qr_shown,
   address_form_shown: state.UserInfo.address_form_shown,

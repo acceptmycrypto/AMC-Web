@@ -15,6 +15,8 @@ import Settings from './reducer-settings';
 import CreateDeal from './reducer-create-deal';
 import Reviews from './reducer-reviews';
 import UploadedImages from './reducer-images';
+import Chat from './reducer-chat';
+import PasswordReset from './reducer-pw-token';
 import Homepage from './reducer-homepage';
 
 
@@ -35,6 +37,8 @@ const allReducers = combineReducers({
   CreateDeal,
   Reviews,
   UploadedImages,
+  Chat,
+  PasswordReset,
   Homepage
 });
 

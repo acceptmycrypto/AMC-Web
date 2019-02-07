@@ -16,10 +16,11 @@
 
       <mj-column>
         <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
-          Please click the button to reset your password.
+          You have a new message.
         </mj-text>
-        <mj-button background-color="#F63A4D" href="<%=password_reset_link%>">
-          Reset Password
+
+        <mj-button background-color="#F63A4D" href="<%=chatURL%>">
+          See Message
         </mj-button>
 
       </mj-column>

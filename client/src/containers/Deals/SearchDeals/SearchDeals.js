@@ -20,7 +20,7 @@ class SearchDeals extends Component {
         if(this.props.pageType === "search"){
             //route to url for previous page, then query db for those data
             this.props.searchDeals(this.props.searchTerm, parseInt(this.props.searchPage)-1);
-            this.props.history.push("/search?term="+this.props.searchTerm+"&page="+(parseInt(this.props.searchPage)-1));
+            this.props.history.push("/Search?term="+this.props.searchTerm+"&page="+(parseInt(this.props.searchPage)-1));
         }else if(this.props.pageType === "category"){
             this.props.categoryDeals(this.props.categoryTerm, parseInt(this.props.categoryPage)-1);
             this.props.history.push("/search?term="+this.props.categoryTerm+"&page="+(parseInt(this.categoryPage)-1));
@@ -31,7 +31,7 @@ class SearchDeals extends Component {
       if(this.props.pageType === "search"){
           //route to url for next page, then query db for those data
           this.props.searchDeals(this.props.searchTerm, parseInt(this.props.searchPage)+1);
-          this.props.history.push("/search?term="+this.props.searchTerm+"&page="+(parseInt(this.props.searchPage)+1));
+          this.props.history.push("/Search?term="+this.props.searchTerm+"&page="+(parseInt(this.props.searchPage)+1));
       } else if(this.props.pageType === "category"){
           this.props.categoryDeals(this.props.categoryTerm, parseInt(this.props.categoryPage)+1);
           this.props.history.push("/search?term="+this.props.categoryTerm+"&page="+(parseInt(this.props.categoryPage)+1));
