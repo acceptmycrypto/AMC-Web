@@ -290,7 +290,10 @@ class DealItem extends Component {
             showDetailStep,
             showShippingStep,
             showPayingStep,
+<<<<<<< Updated upstream
             user_info,
+=======
+>>>>>>> Stashed changes
             userLoggedIn,
 
             //actions
