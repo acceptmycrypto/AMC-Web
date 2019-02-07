@@ -34,7 +34,7 @@ import LoadingSpinner from "../../components/UI/LoadingSpinner";
 import UploadingImage from "./UploadImage";
 import Pricing from "./Pricing";
 import Description from "./Description";
-import { _isLoggedIn } from "../../actions/loggedInActions";
+
 
 class ListDeal extends Component {
 
