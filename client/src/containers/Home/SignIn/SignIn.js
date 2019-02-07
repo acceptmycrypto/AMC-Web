@@ -33,6 +33,10 @@ class SignIn extends Component {
           //redirect user to the feed/deals
           this.props.history.push('/listdeal');
 
+        } else if (res.token && values.redirect == "chat") {
+          localStorage.setItem('token', res.token);
+          this.props.history.push('/chat');
+
         } else if (res.token) {
           localStorage.setItem('token', res.token);
           console.log(res.token);
@@ -69,7 +73,7 @@ class SignIn extends Component {
     if (loading) {
       return <div>Loading...</div>;
     }
-    
+
     return (
       <div className="App">
         <Aside />

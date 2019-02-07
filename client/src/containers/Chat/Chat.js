@@ -26,8 +26,7 @@ class Chat extends Component {
       await this.props._loadChatSessions(localStorage.getItem("token"));
       await this.props._loadProfile(localStorage.getItem("token"));
     } else {
-      // localStorage.removeItem('token');
-      await this.props.history.push("/");
+      await this.props.history.push("/SignIn?redirect=chat");
     }
   };
 
