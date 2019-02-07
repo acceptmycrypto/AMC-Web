@@ -74,22 +74,23 @@ class Navbar extends Component {
             ? <li>
               <Link onClick={this.props.resetNavbar} to="/listdeal">
                 {window.location.pathname == "/listdeal"
-                  ? <i className="fas fas fa-store fa-lg"> <h7 className="color-deepBlue font-17 teal-underline">Create a Deal</h7></i>
-                  : <i className="fas fas fa-store fa-lg"> <h7 className="color-deepBlue font-17">Create a Deal</h7></i>
+                  ? <i className="fas fa-store fa-lg"> <h7 className="color-deepBlue font-17 teal-underline">Create a Deal</h7></i>
+                  : <i className="fas fa-store fa-lg"> <h7 className="color-deepBlue font-17">Create a Deal</h7></i>
                 }
               </Link>
             </li>
             : <li>
                 <Link onClick={this.props.resetNavbar} to="/SignIn">
                   {window.location.pathname == "/SignIn"
-                    ? <i className="fas fas fa-store fa-lg"> <h7 className="color-deepBlue font-17 teal-underline">Create a Deal</h7></i>
-                    : <i className="fas fas fa-store fa-lg"> <h7 className="color-deepBlue font-17">Create a Deal</h7></i>
+                    ? <i className="fas fa-store fa-lg"> <h7 className="color-deepBlue font-17 teal-underline">Create a Deal</h7></i>
+                    : <i className="fas fa-store fa-lg"> <h7 className="color-deepBlue font-17">Create a Deal</h7></i>
                   }
                 </Link>
             </li>
 
         }
           {/* <li>
+
             <Link onClick={this.props.resetNavbar} to="/feed/deals">
               {window.location.pathname == "/feed/deals"
                 ? <i className="fas fa-dollar-sign fa-lg"> <h7 className="color-deepBlue font-17 teal-underline">All Deals</h7></i>
