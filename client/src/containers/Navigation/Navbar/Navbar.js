@@ -91,8 +91,8 @@ class Navbar extends Component {
               <li>
                 <Link onClick={this.props.resetNavbar} to="/listdeal">
                   {window.location.pathname == "/listdeal"
-                    ? <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17 teal-underline">Create a Deal</span></i>
-                    : <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17">Create a Deal</span></i>
+                    ? <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17 teal-underline font-family-roboto">Create a Deal</span></i>
+                    : <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17 font-family-roboto">Create a Deal</span></i>
                   }
                 </Link>
               </li>
@@ -108,8 +108,8 @@ class Navbar extends Component {
                 <li>
                   <Link onClick={this.props.resetNavbar} to="/SignIn">
                     {window.location.pathname == "/SignIn"
-                      ? <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17 teal-underline">Create a Deal</span></i>
-                      : <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17">Create a Deal</span></i>
+                      ? <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17 teal-underline font-family-roboto">Create a Deal</span></i>
+                      : <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17 font-family-roboto">Create a Deal</span></i>
                     }
                   </Link>
                 </li>
