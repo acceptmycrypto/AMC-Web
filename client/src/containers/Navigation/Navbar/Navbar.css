@@ -100,6 +100,26 @@ li {
   cursor: pointer;
 }
 
+.navbar-login{
+  color: rgb(32, 170, 163);
+  font-size: 16px;
+  font-weight: 20;
+  
+}
+
+#nav-link-sign-in:hover, #nav-link-sign-up:hover{
+  text-decoration: underline;
+}
+
+.clear-text-decoration{
+  text-decoration: none;
+  margin-right: 3px;
+  margin-left: 3px;
+}
+
+#nav-vertical-divider{
+  font-size: 18px;
+}
 .search_Button {
     background-color: #52C4B9;
     color: white;

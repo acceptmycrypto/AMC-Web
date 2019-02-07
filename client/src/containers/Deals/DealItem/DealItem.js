@@ -35,7 +35,7 @@ class DealItem extends Component {
     //return the param value
     await this.props._isLoggedIn(localStorage.getItem("token"));
 
-    if (await this.props.userLoggedIn) {
+    // if (await this.props.userLoggedIn) {
       const { deal_name, id } = await this.props.match.params;
       await this.props._loadDealItem(id, deal_name);
       console.log(this.props.dealItem.seller_id);
@@ -44,11 +44,14 @@ class DealItem extends Component {
       await this.props._loadReviews(seller_id);
       await this.props._loadProfile(localStorage.getItem("token"));
 
-    } else {
-      // localStorage.removeItem('token');
-      await this.props.history.push("/");
-    }
-  };
+
+    // }else{
+    //     // localStorage.removeItem('token');
+    //     await this.props.history.push('/');
+    // }
+
+  }
+
 
   //set the options to select crypto from
   //this function is needed to change the format of objects to be able to used for react select
@@ -321,7 +324,7 @@ class DealItem extends Component {
     }
 
     return (
-      <div>
+      <div className="pt-5">
         <Layout>
           <div>
             <div className="deal-container">

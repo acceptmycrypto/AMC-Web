@@ -9,7 +9,7 @@ class SearchBar extends Component {
         console.log("searching!");
         event.preventDefault();
         this.props.searchDeals(event.target.children[0].value, 1);
-        this.props.history.push("/search?term="+event.target.children[0].value+"&page=1");
+        this.props.history.push("/Search?term="+event.target.children[0].value+"&page=1");
     }
     
     render(){

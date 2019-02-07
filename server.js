@@ -53,6 +53,7 @@ var settingsRoutes = require("./routes/settings.js");
 var reviewRoutes = require("./routes/reviews.js");
 var listDealRoutes = require("./routes/listDeal.js");
 var chatRoutes = require("./routes/chat.js");
+var homepageRoutes = require("./routes/homepage.js");
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -87,6 +88,7 @@ app.use("/", settingsRoutes);
 app.use("/", reviewRoutes);
 app.use("/", listDealRoutes);
 app.use("/", chatRoutes);
+app.use("/", homepageRoutes);
 
 if (process.env.NODE_ENV === 'production') {
   // catch all routes
@@ -112,32 +114,33 @@ var connection = mysql.createConnection({
 });
 
 //pass options as a param to request
-var options = [
-  {
-    method: "GET",
-    uri: "https://pro-api.coinmarketcap.com/v1/cryptocurrency/info",
-    qs: {
-      symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,XVG,XMR"
-    },
-    headers: {
-      "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
-      Accept: "application/json"
-    }
-  },
-  {
-    method: "GET",
-    uri: "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest",
-    qs: {
-      symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,XVG,XMR"
-    },
-    headers: {
-      "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
-      Accept: "application/json"
-    }
-  }
-];
+// var options = [
+//   {
+//     method: "GET",
+//     uri: "https://pro-api.coinmarketcap.com/v1/cryptocurrency/info",
+//     qs: {
+//       symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,XVG,XMR"
+//     },
+//     headers: {
+//       "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
+//       Accept: "application/json"
+//     }
+//   },
+//   {
+//     method: "GET",
+//     uri: "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest",
+//     qs: {
+//       symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,XVG,XMR"
+//     },
+//     headers: {
+//       "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
+//       Accept: "application/json"
+//     }
+//   }
+// ];
 
-//use aynch to map two request ojects and return all results in one callback
+// //use aynch to map two request ojects and return all results in one callback
+
 // async.map(
 //   options,
 //   function(obj, callback) {

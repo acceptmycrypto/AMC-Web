@@ -50,7 +50,7 @@ class UserProfile extends Component {
     this.props.resetDealitemState();
 
     return (
-      <div>
+      <div className="pt-5">
         <Layout >
         <div className="userProfile d-flex flex-row justify-content-between">
           <div className="d-flex flex-column w-25 ml-2">

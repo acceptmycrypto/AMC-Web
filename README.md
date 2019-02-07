@@ -1,10 +1,10 @@
 # About AcceptMyCrypto
-*The purpose of the app is for cryptocurrencies holders to find and purchase deals that match to the cryptocurrencies that they're interested or owned.
+*The purpose of the app is for cryptocurrencies holders to find and purchase deals that match to the cryptocurrencies that they're interested or owned.*
 
 ## API
 *AcceptMyCrypto uses coinmarketcap api to get crypto info shown below*
 * Name
-* Symple
+* Symbol
 * Price
 * Logo
 * Website URL
@@ -22,8 +22,8 @@ npm run dev
 ## Run Schema/ Seeds files:
 1. SOURCE schema.sql
 2. SOURCE seeds_venues.sql
-3. Go to : http://localhost:3001/cryptos after running `nodemon server.js` on command line
+3. Run the app
 4. SOURCE seeds_cryptos-venues.sql
-5. SOURCE seeds_deals.sql
-6. SOURCE seeds_users.sql
-7. SOURCE seeds_crypto_comments.sql
+5. SOURCE seeds_category.sql
+6. SOURCE seeds_deals.sql
+7. Run the app again
