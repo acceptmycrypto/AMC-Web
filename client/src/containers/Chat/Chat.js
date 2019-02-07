@@ -85,6 +85,7 @@ class Chat extends Component {
   render() {
     const {
       chat_sessions,
+      chat_sessions_loading,
       _loadChatSessions,
       chat_messages,
       _loadChatMessages,
@@ -160,6 +161,7 @@ class Chat extends Component {
 const mapStateToProps = state => ({
   userLoggedIn: state.LoggedIn.userLoggedIn,
   chat_sessions: state.Chat.chat_sessions,
+  chat_sessions_loading: state.Chat.chat_sessions_loading,
   chat_messages: state.Chat.chat_messages,
   chatMessageValue: state.Chat.chatMessageValue,
   chat_session_id: state.Chat.chat_session_id,

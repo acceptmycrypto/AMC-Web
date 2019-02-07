@@ -3,7 +3,6 @@ import "./UserList.css";
 import Timestamp from 'react-timestamp';
 import { handleLongDescription } from '../../../utils/helper_functions';
 
-
 const UserList = props => {
   const { _loadUsersList, usersList, _fetchMessagesList, userInfo, chatSessionInfo } = props;
   return (
