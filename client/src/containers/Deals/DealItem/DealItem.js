@@ -629,12 +629,8 @@ const mapStateToProps = state => ({
   showShippingStep: state.DealItem.showShippingStep,
   showPayingStep: state.DealItem.showPayingStep,
   dealCreated: state.CreateDeal.dealCreated,
-<<<<<<< Updated upstream
   photo: state.Photo,
   user_info: state.UserInfo.user_info
-=======
-  photo: state.Photo
->>>>>>> Stashed changes
 });
 
 const matchDispatchToProps = dispatch => {
