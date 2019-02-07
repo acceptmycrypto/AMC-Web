@@ -4,11 +4,10 @@ import { connect } from "react-redux";
 import {bindActionCreators} from 'redux';
 import { _loadDeals } from "../../actions/dealsActions";
 import { resetDealitemState } from "../../actions/dealItemActions";
-import CryptoRankings from '../CryptosRanking';
 import Layout from "../Layout"
 import './Deals.css';
 import { _isLoggedIn } from '../../actions/loggedInActions';
-
+import { handleLongDescription } from '../../utils/helper_functions';
 
 class Deals extends Component {
 
@@ -28,12 +27,12 @@ class Deals extends Component {
     return parseInt(((priceInDollar - priceInCrypto) / priceInDollar) * 100)
   }
 
-  handleLongDescription = (description) => {
-    let trimmedDescription = description.trim();
-    if (trimmedDescription.length > 125) {
-      return trimmedDescription.substring(0, trimmedDescription.indexOf(' ', 75)) + "...";
-    }
-  }
+  // handleLongDescription = (description, char, index) => {
+  //   let trimmedDescription = description.trim();
+  //   if (trimmedDescription.length > char) {
+  //     return trimmedDescription.substring(0, trimmedDescription.indexOf(' ', index)) + "...";
+  //   }
+  // }
 
   render() {
     let { error, loading, deals, userLoggedIn } = this.props;  //does this need to be const?? i changed it to let so line 56 will work
@@ -76,7 +75,7 @@ class Deals extends Component {
                     <div className="deal-info">
                       <img className="deal-image" src={deal.featured_deal_image} alt="deal"/>
                       <div className="mt-1">{deal.deal_name}</div>
-                      <small className="deal-description">{this.handleLongDescription(deal.deal_description)}</small>
+                      <small className="deal-description">{handleLongDescription(deal.deal_description, 125, 75)}</small>
                       {/* if seller is a vendor then display the venue name else if seller is a user then display the seller name which is the user's username */}
                       <div><small>Offered by: {deal.venue_name || deal.seller_name}</small></div>
                     </div>
