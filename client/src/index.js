@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+// import bootstrap css for reactstrap package used to create carousel on homepage
 import 'bootstrap/dist/css/bootstrap.css';
 import './index.css';
 import App from './App';

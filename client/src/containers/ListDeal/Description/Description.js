@@ -313,7 +313,8 @@ class Description extends Component {
       modalVisible,
       resetDealCreated,
       dealNameValue,
-      selectedCategoryValue,
+      // selectedCategoryValue,
+      selectedCategory,
       selectedConditionValue,
       sendingCode,
       sendingCodeSuccess
@@ -343,7 +344,7 @@ class Description extends Component {
             </div>
             <Select
               className="dropdown"
-              value={selectedCategoryValue}
+              value={selectedCategory}
               isMulti={true}
               options={parentCategory}
               onChange={handleSelectedCategory}
@@ -442,7 +443,8 @@ const mapStateToProps = state => ({
   sellerVerificationToken: state.CreateDeal.sellerVerificationToken,
   checkingCodeLoading: state.CreateDeal.checkingCodeLoading,
   checkingCodeSuccess: state.CreateDeal.checkingCodeSuccess,
-  checkingCodeError: state.CreateDeal.checkingCodeError
+  checkingCodeError: state.CreateDeal.checkingCodeError, 
+  selectedCategory: state.CreateDeal.selectedCategory
 });
 
 const matchDispatchToProps = dispatch => {

@@ -1,0 +1,26 @@
+#add-message-form {
+  display: flex;
+}
+
+#chat-message-input {
+  width: 100%;
+  color: rgb(117, 117, 117);
+  font-size: 15px;
+  padding: 12px;
+  background: rgb(244, 244, 244);
+  border-radius: 10px;
+  border-style: none;
+  outline: none;
+}
+
+#add-message-form button{
+  margin-left: 30px;
+  margin-right: 10px;
+  border: none;
+  background: none;
+  font-weight: 700;
+  outline: none;
+  font-size: 18px;
+  color: #2e4157;
+  cursor: pointer;
+}

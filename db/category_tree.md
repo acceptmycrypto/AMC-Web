@@ -1,96 +1,96 @@
 1. Apparel & Accessories
-    13. Women
-    14. Men
-    15. Girls
-    16. Boys
-    17. Baby
-    18. Luggage
+    14. Women
+    15. Men
+    16. Girls
+    17. Boys
+    18. Baby
+    19. Luggage
 2. Books & Audible
-    19. Books
-    20. Children's Books
-    21. Comics & Graphic Novels
-    22. Magazines
-    23. Textbooks
-    24. Audiobooks
-3. Movies, Music & Games
-    25. Movies & TV Shows
-    26. Blu-ray
-    27. CDs & Vinyl
-    28. Digital Music
-    29. Musical Instruments
-    30. Video Games
-    31. PC Games
+    20. Books
+    21. Children's Books
+    22. Comics & Graphic Novels
+    23. Magazines
+    24. Textbooks
+    25. Audiobooks
+3. Movies, Music & Games  
+    26. Movies & TV Shows <-
+    27. Blu-ray
+    28. CDs & Vinyl
+    29. Digital Music
+    30. Musical Instruments
+    31. Video Games
+    32. PC Games
 4. Electronics, Computers & Office
-    32. TV & Video
-    33. Home Audio & Theater
-    34. Headphones
-    35. Camera, Photo & Video
-    36. Cell Phones & Accessories
-    37. Bluetooth & Wireless Speakers
-    38. Car Electronics
-    39. Wearable Technology
-    40. Computer & Office
-        41. Computers, Tablets & PC Products
-        42. Monitors
-        43. Accessories
-        44. Networking
-        45. Drives & Storage
-        46. Computer Parts & Components
-        47. Software
-        48. Printers & Ink
-        49. Office & School Supplies
+    33. TV & Video
+    34. Home Audio & Theater
+    35. Headphones
+    36. Camera, Photo & Video
+    37. Cell Phones & Accessories
+    38. Bluetooth & Wireless Speakers
+    39. Car Electronics
+    40. Wearable Technology
+    41. Computer & Office
+        42. Computers, Tablets & PC Products
+        43. Monitors
+        44. Accessories
+        45. Networking
+        46. Drives & Storage
+        47. Computer Parts & Components
+        48. Software
+        49. Printers & Ink
+        50. Office & School Supplies
 5. Home, Garden & Tools
-    50. Home Decor
-    51. Furniture
-    52. Kitchen & Dining
-    53. Bed & Bath
-    54. Garden & Outdoors
-    55. Mattresses
-    56. Lighting
-    57. Storage & Organization
-    58. Appliances
-    59. Fine Arts
-    60. Collectibles
-    61. Arts, Crafts & Sewing
-    62. Event & Party Supplies
-    63. Home Improvement
-    64. Power & Hand Tools
-    65. Lamps & Light Fixtures
-    66. Kitchen & Bath Fixtures
-    67. Hardware
-    68. Smart Home
+    51. Home Decor
+    52. Furniture
+    53. Kitchen & Dining
+    54. Bed & Bath
+    55. Garden & Outdoors
+    56. Mattresses
+    57. Lighting
+    58. Storage & Organization
+    59. Appliances
+    60. Fine Arts
+    61. Collectibles
+    62. Arts, Crafts & Sewing
+    63. Event & Party Supplies
+    64. Home Improvement
+    65. Power & Hand Tools
+    66. Lamps & Light Fixtures
+    67. Kitchen & Bath Fixtures
+    68. Hardware
+    69. Smart Home
 6. Pet Supplies
-    69. Dog Food & Supplies
-    70. Cat Food & Supplies
-    71. Fish & Aquatic Pets
-    72. Small Animals
-    73. Birds
+    70. Dog Food & Supplies
+    71. Cat Food & Supplies
+    72. Fish & Aquatic Pets
+    73. Small Animals
+    74. Birds
 7. Food & Grocery
 8. Health & Beauty
-    74. Beauty Products
-    75. Health & Wellness
+    75. Beauty Products
+    76. Health & Wellness
 9. Toys, Kids & Baby
-    76. Toys & Games
-    77. Baby Products
+    77. Toys & Games
+    78. Baby Products
 10. Sports & Outdoors
-    78. Exercise & Fitness
-    79. Hunting & Fishing
-    80. Team Sports
-    81. Golf
-    82. Leisure Sports & Game Room
-    83. Sports Collectibles
-    84. Camping & Hiking
-    85. Cycling & Scooters
-    86. Skateboards & Skates
-    87. Water Sports
-    88. Winter Sports
-    89. Climbing
+    79. Exercise & Fitness
+    80. Hunting & Fishing
+    81. Team Sports
+    82. Golf
+    83. Leisure Sports & Game Room
+    84. Sports Collectibles
+    85. Camping & Hiking
+    86. Cycling & Scooters
+    87. Skateboards & Skates
+    88. Water Sports
+    89. Winter Sports
+    90. Climbing
 11. Automotive
-    90. Automotive Parts & Accessories
-    91. Automotive Tools & Equipment
-    92. Tires & Wheels
-    93. Motorcycle & Powersports
-    94. Vehicles
-    95. Garage Supplies
+    91. Automotive Parts & Accessories
+    92. Automotive Tools & Equipment
+    93. Tires & Wheels
+    94. Motorcycle & Powersports
+    95. Vehicles
+    96. Garage Supplies
 12. Services
 13. Charity

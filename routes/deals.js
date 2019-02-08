@@ -64,7 +64,7 @@ router.get('/api/deals/:deal_id/:deal_name', function (req, res) {
     'SELECT deals.id AS deal_id, deals.venue_id, deals.seller_id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, deal_images.deal_image, venues.id AS venues_id, venues.venue_name, venues.venue_description, venues.venue_link, venues.accepted_crypto, users.id AS seller_id, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings, category.category_name AS deal_category FROM deals LEFT JOIN deal_images ON deals.id = deal_images.deal_id LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN  category ON  category.id = categories_deals.category_id WHERE deals.id = ?',
     [req.params.deal_id],
     function (error, result, fields) {
-      console.log("RESULT", result);
+
       if (error) throw error;
 
       let newDealItem = [];
@@ -167,8 +167,8 @@ router.get('/api/deals/:deal_id/:deal_name', function (req, res) {
 });
 
 router.get('/api/search', function(req, res) {
-    console.log("req search");
-    console.log(req.query);
+//     console.log("req search");
+//     console.log(req.query);
     //hardcoded number of search results per page to 8.  ideally should be something like 20.
     //this number needs to match the number in frontend SearchDeals.js
     var numberPerPage = 8;
@@ -181,8 +181,8 @@ router.get('/api/search', function(req, res) {
         ['%'+req.query.term+'%','%'+req.query.term+'%','%'+req.query.term+'%','%'+req.query.term+'%'],
         function(error, numberOfResults, fields) {
             if (error) console.log(error);
-            console.log('number of results');
-            console.log(numberOfResults);
+            // console.log('number of results');
+            // console.log(numberOfResults);
 
             connection.query(
                 //second query is to give back the set of search results specified by 'start' and 'numberPerPage'
@@ -190,8 +190,8 @@ router.get('/api/search', function(req, res) {
                 ['%'+req.query.term+'%','%'+req.query.term+'%','%'+req.query.term+'%','%'+req.query.term+'%', start, numberPerPage],
                 function(error, results, fields) {
                     if (error) console.log(error);
-                    console.log('search results');
-                    console.log(results);
+                    // console.log('search results');
+                    // console.log(results);
                     res.json({numberOfResults:numberOfResults,results:results});
                 }
             );
@@ -202,8 +202,8 @@ router.get('/api/search', function(req, res) {
 
   // load all reviews of a particular seller
   router.get('/api/reviews/sellers/:seller_id', function (req, res) {
-    console.log(req.params.seller_id);
-    console.log(req.query.order);
+    // console.log(req.params.seller_id);
+    // console.log(req.query.order);
     let order_by = "";
     let where_rating = "";
     if (req.query.order == "rating" && req.query.direction == "desc") {
@@ -238,8 +238,8 @@ router.get('/api/search', function(req, res) {
           [req.params.seller_id],
           function (error, categorizeResults, fields) {
             if (error) console.log(error);
-            console.log(allReviewResults);
-            console.log(categorizeResults);
+            // console.log(allReviewResults);
+            // console.log(categorizeResults);
             res.json({allReviews: allReviewResults, ratingCategories: categorizeResults});
 
           }

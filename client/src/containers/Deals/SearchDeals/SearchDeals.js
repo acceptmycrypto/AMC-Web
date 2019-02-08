@@ -44,12 +44,10 @@ class SearchDeals extends Component {
       console.log(this.props.location.search);
       let values = queryString.parse(this.props.location.search);
 
-      console.log("pageType", this.props.pageType);
 
       if(this.props.pageType === "search"){
         this.props.searchDeals(values.term, values.page);
       }else if (this.props.pageType === "category"){
-        console.log(values.term, values.page);
         this.props.categoryDeals(values.term, values.page);
       }
 
