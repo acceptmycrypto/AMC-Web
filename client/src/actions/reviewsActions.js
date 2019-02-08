@@ -3,7 +3,6 @@ export const FETCH_REVIEWS_SUCCESS = "FETCH_REVIEWS_SUCCESS";
 export const FETCH_REVIEWS_FAILURE = "FETCH_REVIEWS_FAILURE";
 
 export function _loadReviews(seller_id) {
-  console.log('load reviews');
   const Reviews = {
     method: "GET",
     headers: {
