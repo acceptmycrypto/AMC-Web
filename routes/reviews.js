@@ -63,7 +63,7 @@ router.post('/review/deal/:deal_name', verifyToken, function (req, res) {
             //then update display_review to 1
             if(pass)
             {
-                
+
             }
             //then update deals table with avg rating and num ratings
             res.status(200).json({"success": true});
@@ -84,7 +84,7 @@ router.post('/review/buyer/:user_id', verifyToken, function (req, res) { //need 
             //
             if(pass)
             {
-                
+
             }
             else{
                 //insert incident into flagged user
@@ -95,25 +95,24 @@ router.post('/review/buyer/:user_id', verifyToken, function (req, res) { //need 
 });
 
 //route for posting buyer review seller
-router.post('/review/seller/:user_id', verifyToken, function (req, res) { //need to think of better route name
+router.post('/seller-review/new', verifyToken, function (req, res) {
     let buyer_id = req.decoded._id;
-    let seller_id = req.params.user_id;
+    let { seller_id, deal_id, rating, review_body} = req.body;
+
     let languagePass = true; //languageFilter(req.body.body);
     //
     if(languagePass)
     {
         connection.query(
             'INSERT INTO buyers_reviews_sellers (buyer_id, deal_id, seller_id, rating, body, display_review) VALUES (?,?,?,?,?,?);',
-            [buyer_id,req.body.deal_id,seller_id,req.body.rating,req.body.body,'1'],
+            [buyer_id, deal_id, seller_id, rating, review_body, '1'],
             function(error, response ,fields){
                 if (error) throw error;
-                
-          
-                //then update deals table with avg rating and num ratings, this is what I will be working on  
-                
-                res.status(200).json({success: true, message: "review accepted"});  
+                //then update deals table with avg rating and num ratings, this is what I will be working on
+
+                res.json({success: true, message: "review accepted"});
             });
-        
+
     }
     else{
         //insert incident into flagged user
@@ -122,12 +121,12 @@ router.post('/review/seller/:user_id', verifyToken, function (req, res) { //need
             [req.decoded.id,req.body.deal_id,seller_id,req.body.rating,req.body.body,'0'],
             function(error, response ,fields){
                 if (error) throw error;
-                
-                res.status(200).json({success: true, message: "submission under review"});    
+
+                res.status(200).json({success: true, message: "submission under review"});
             });
 
     }
-  
+
 });
 
 //route for getting the seller's rating
@@ -144,7 +143,7 @@ router.get('/review/user/:user_id', (req, res) => {
         sellerScoreAggregate(seller_id, function(result){
             avg_rating = result;
             res.json({reviews, avg_rating});
-        }); 
+        });
     });
 //     try{
 //         let results = await sellerReviewAggregate(seller_id);
@@ -163,12 +162,12 @@ sellerReviewAggregate = (user, callback) => {
             connection.query('SELECT * FROM buyers_reviews_sellers WHERE seller_id = ?',[user], function (error, response, fields){
                 if(error) throw error;
                 //add deal id
-                //join deals table 
+                //join deals table
                 //join user table to get buyer name
                 // console.log('response: ' + response);
                 return callback(response);
             });
-      
+
     // res.json(result);
 };
 
@@ -176,7 +175,7 @@ sellerScoreAggregate = (user, callback) => {
     connection.query('SELECT ROUND(AVG(buyers_reviews_sellers.rating),1) AS Average_Rating  FROM buyers_reviews_sellers WHERE seller_id = ?',[user], function (error, response, fields){
         if(error) throw error;
         //add deal id
-        //join deals table 
+        //join deals table
         //join user table to get buyer name
         // console.log(response);
 
@@ -211,6 +210,6 @@ languageFilter = (arg) => {
 //      - not thought up in depth yet
 
 //users should be led to our sites as often as possible
-//  - 
+//  -
 
 module.exports = router;

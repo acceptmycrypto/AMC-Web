@@ -45,6 +45,20 @@
   display: flex;
   flex-direction: column;
   margin-right: 20px;
+
+
+}
+
+.user-info div {
+  display: flex;
+  height: 75px;
+  width: 75px;
+}
+
+.user-info img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* Changed the classes to a  user-icon-background user-icon and  */

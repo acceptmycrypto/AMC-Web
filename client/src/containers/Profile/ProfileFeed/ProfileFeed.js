@@ -6,8 +6,9 @@ import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import { _loadDeals } from "../../../actions/dealsActions";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
+import { openModal, closeModal } from "../../../actions/signInActions";
 import { changeTxHistoryView } from '../../../actions/userLoadActions';
-
+import { selectTransaction } from '../../../actions/reviewsActions';
 
 class ProfileFeed extends Component {
     componentDidMount = async () => {
@@ -46,8 +47,19 @@ class ProfileFeed extends Component {
         return array;
     }
 
+    selectedTransaction = (event) => {
+
+      let soldBy = event.target.getAttribute("data-soldby");
+      this.props.selectTransaction(soldBy);
+
+      //open modal
+      this.props.openModal();
+
+      debugger
+    }
+
     render() {
-        const { deals, transactions, confirmed, pending, tx_history_view, changeTxHistoryView } = this.props
+        const { deals, transactions, confirmed, pending, tx_history_view, changeTxHistoryView, modalVisible, openModal, closeModal, selectedTransactionForReview } = this.props
 
         const dealsRecommended = this.shuffle(deals).slice(0, 4);
 
@@ -75,7 +87,7 @@ class ProfileFeed extends Component {
                         <div className="overflow-y">
                             {tx_history_view === "pending"
                                 ? <FeedCard transactions={pending} orderType={"pending"} />
-                                : <FeedCard transactions={confirmed} orderType={"confirmed"} />
+                                : <FeedCard selectedTransaction={selectedTransactionForReview} handleReviewModal={this.selectedTransaction} modalDisplay={modalVisible} _openModal={openModal} _closeModal={closeModal} transactions={confirmed} orderType={"confirmed"} />
                             }
                         </div>
                     </div>
@@ -131,12 +143,14 @@ const mapStateToProps = state => ({
     confirmed: state.UserInfo.confirmed,
     pending: state.UserInfo.pending,
     tx_history_view: state.UserInfo.tx_history_view,
-    userLoggedIn: state.LoggedIn.userLoggedIn, 
+    userLoggedIn: state.LoggedIn.userLoggedIn,
+    modalVisible: state.Reviews.modalVisible,
+    selectedTransactionForReview: state.Reviews.selectedTransactionForReview,
 });
 
 const matchDispatchToProps = dispatch => {
 
-    return bindActionCreators({ _loadDeals, changeTxHistoryView, _isLoggedIn }, dispatch);
+    return bindActionCreators({ _loadDeals, changeTxHistoryView, _isLoggedIn, openModal, closeModal, selectTransaction }, dispatch);
 
 }
 

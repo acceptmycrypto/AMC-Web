@@ -69,7 +69,7 @@ class SignIn extends Component {
     if (loading) {
       return <div>Loading...</div>;
     }
-    
+
     return (
       <div className="App">
         <Aside />
@@ -106,7 +106,7 @@ class SignIn extends Component {
               </div>
 
               <Modal visible={visible} effect="fadeInLeft" onClickAway={() => {this.props.closeModal(); }}>
-                <div className="Modal">
+                <div className="deal-created-modal">
                   <h4>Your Email or Password was Invalid</h4>
                   <a className="a-link" href="javascript:void(0);" onClick={() => {this.props.closeModal(); }}>Ok</a>
 

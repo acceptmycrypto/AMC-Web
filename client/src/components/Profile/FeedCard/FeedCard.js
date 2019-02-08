@@ -3,6 +3,7 @@ import "./FeedCard.css";
 import Timestamp from 'react-timestamp';
 import Countdown from 'react-countdown-now';
 import { Link } from "react-router-dom";
+import Modal from 'react-awesome-modal';
 
 const FeedCard = props => {
   return (
@@ -22,10 +23,28 @@ const FeedCard = props => {
               {/* <div className="user-name">{transaction.username}</div> */}
             </div>
             <div className="user-transaction-info">
-              {transaction.status === "100" && <div>
-                <div>Purchased <Link to={`/feed/deals/${transaction.deal_id}/${transaction.deal_name}`} ><span className="blueText">{transaction.deal_name}</span></Link></div>
-                <div>For <span className="greenText">{transaction.amount + " "}</span><span className="greenText">{transaction.crypto_symbol}</span></div>
-                <div>Sold By <span className="blueText">{transaction.venue_name || transaction.seller_name }</span></div>
+              {transaction.status === "100" &&
+              <div>
+
+                <div>
+                  Purchased <Link to={`/feed/deals/${transaction.deal_id}/${transaction.deal_name}`} >
+                    <span className="blueText">{transaction.deal_name}</span>
+                  </Link>
+                </div>
+
+                <div>
+                  For <span className="greenText">{transaction.amount + " "}</span>
+                  <span className="greenText">{transaction.crypto_symbol}</span>
+                </div>
+
+                <div>
+                  Sold By <span className="blueText">{transaction.venue_name || transaction.seller_name }</span>
+                </div>
+
+                <div className="write-review">
+                  <button data-soldby={transaction.venue_name || transaction.seller_name } onClick={props.handleReviewModal}>Write a Review</button>
+                </div>
+
               </div>}
               {transaction.status === "1" && <div>
                 <div>Processing Payment:</div>
@@ -50,17 +69,45 @@ const FeedCard = props => {
               </div>
             </div>
 
-              {transaction.status = 100 &&
+              {/* {transaction.status = 100 &&
               <div className="write-review">
-                <button onClick={(event) => {
-                event.preventDefault();
-                alert('hi')}}>Write a Review</button>
+                <button onClick={props.handleReviewModal}>Write a Review</button>
               </div>
-              }
+              } */}
 
           </div>
         </div>
       ))}
+
+        <Modal visible={props.modalDisplay} effect="fadeInUp" onClickAway={() => {props._closeModal()}}>
+          <div className="main-modal">
+            <form
+              // onSubmit={}
+            >
+              <h4 className="main-modal-header">
+                How was your experience with {props.selectedTransaction.soldBy}?
+                <div>ICON</div>
+              </h4>
+
+              <div className="creating-deal-seller-contact">
+                <label>Incorrect Verification Code. Please Enter the Code We Texted You.</label>
+                <div>
+                  <input
+                    // onChange={onEditSellerVerificationToken}
+                    // value={sellerVerificationToken}
+                    required
+                    className="description-input"
+                    autofocus="autofocus"
+                    placeholder="Enter your verification code"
+                  />
+                </div>
+                <small>A text message with code was sent to your phone.</small>
+              </div>
+
+              <button onClick={() => {props._closeModal()}}>Send</button>
+            </form>
+          </div>
+        </Modal>
     </div>
   );
 };

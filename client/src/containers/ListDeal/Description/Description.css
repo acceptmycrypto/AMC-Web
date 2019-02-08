@@ -97,7 +97,7 @@ div.DraftEditor-root {
   opacity: .5;
 }
 
-.deal-created-modal {
+.deal-created-modal, .main-modal {
   width: 750px;
   height: 450px;
   background-color: #2E4158;
@@ -117,7 +117,7 @@ div.DraftEditor-root {
   color: #fff;
 }
 
-.creating-deal-modal-header {
+.creating-deal-modal-header, .main-modal-header {
   text-align: center;
   margin-bottom: 30px;
 }

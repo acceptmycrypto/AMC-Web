@@ -2,12 +2,20 @@ import {
     FETCH_REVIEWS_BEGIN,
     FETCH_REVIEWS_FAILURE,
     FETCH_REVIEWS_SUCCESS,
+    SELECT_TRANSACTION
   } from "../actions/reviewsActions";
+
+import {
+    OPEN_MODAL,
+    CLOSE_MODAL
+  } from "../actions/signInActions";
 
 const initialState = {
     loading: false,
     error: null,
     reviews: {},
+    modalVisible: false,
+    selectedTransactionForReview: {}
   };
 
 export default function reviewReducer(state = initialState, action) {
@@ -33,6 +41,24 @@ export default function reviewReducer(state = initialState, action) {
           loading: false,
           error: action.payload.error,
         };
+
+      case SELECT_TRANSACTION:
+      debugger
+        return {
+            ...state,
+            selectedTransactionForReview: action.payload
+        }
+
+      case OPEN_MODAL:
+          return {
+              ...state,
+              modalVisible: action.payload.visible
+          }
+      case CLOSE_MODAL:
+          return {
+              ...state,
+              modalVisible: action.payload.visible
+          }
 
       default:
         // ALWAYS have a default case in a reducer
