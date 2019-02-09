@@ -90,14 +90,14 @@ export const selectedTransactionError = error => ({
 
 /////////
 
-export function _reviewSeller(token, seller_id, deal_id, rating, reviewBody) {
+export function _reviewSeller(token, seller_id, deal_id, rating, review_body, title) {
   const settings = {
     method: "POST",
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ token,  seller_id, deal_id, rating, reviewBody})
+    body: JSON.stringify({ token,  seller_id, deal_id, rating, review_body, title})
   };
 
   return dispatch => {

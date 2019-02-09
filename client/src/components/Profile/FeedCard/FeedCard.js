@@ -133,7 +133,7 @@ const FeedCard = props => {
                     onChange={props.editReviewBody}
                     value={props.reviewContent}
                     className="review-text-area" rows="4" cols="95"
-                    placeholder="Enter your review">
+                    placeholder="Write your review">
                   </textArea>
                 </div>
 

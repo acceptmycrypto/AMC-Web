@@ -97,15 +97,16 @@ router.post('/review/buyer/:user_id', verifyToken, function (req, res) { //need 
 //route for posting buyer review seller
 router.post('/seller-review/new', verifyToken, function (req, res) {
     let buyer_id = req.decoded._id;
-    let { seller_id, deal_id, rating, review_body} = req.body;
+    let { seller_id, deal_id, rating, review_body, title} = req.body;
+    console.log(seller_id, deal_id, rating, review_body, title);
 
     let languagePass = true; //languageFilter(req.body.body);
     //
     if(languagePass)
     {
         connection.query(
-            'INSERT INTO buyers_reviews_sellers (buyer_id, deal_id, seller_id, rating, body, display_review) VALUES (?,?,?,?,?,?);',
-            [buyer_id, deal_id, seller_id, rating, review_body, '1'],
+            'INSERT INTO buyers_reviews_sellers (buyer_id, deal_id, seller_id, rating, body, title, display_review) VALUES (?,?,?,?,?,?,?);',
+            [buyer_id, deal_id, seller_id, rating, review_body, title, '1'],
             function(error, response ,fields){
                 if (error) throw error;
                 //then update deals table with avg rating and num ratings, this is what I will be working on

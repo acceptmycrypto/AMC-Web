@@ -48,24 +48,22 @@ class ProfileFeed extends Component {
     }
 
     selectedTransactionForReview = async (txn_id) => {
-
-      // let soldBy = event.target.getAttribute("data-soldby");
-      // let featureDealImage = event.target.getAttribute("data-featureimage");
-      // let seller_id = event.target.getAttribute("data-sellerid");
-      // let deal_id = event.target.getAttribute("data-dealid");
-
       await this.props._selectedTransaction(localStorage.getItem("token"), txn_id);
 
       //open modal
-      await this.props.openModal();
+      this.props.openModal();
 
     }
 
-    submitReview = () => {
-      let {rating, review_body} = this.props;
-      let {seller_id, deal_id, soldBy} = this.props.selectedTransactionForReview;
+    submitReview = (event) => {
+      event.preventDefault();
 
-      this.props._reviewSeller(seller_id, deal_id, rating, review_body, soldBy);
+      let {rating, review_body} = this.props;
+      let {seller_id, seller_name, deal_id, deal_name} = this.props.selectedTransaction[0];
+
+      let title = `${seller_name} purchased ${deal_name}`;
+
+      this.props._reviewSeller(localStorage.getItem("token"), seller_id, deal_id, rating, review_body, title);
     }
 
 
