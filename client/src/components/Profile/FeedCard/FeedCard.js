@@ -42,7 +42,7 @@ const FeedCard = props => {
                 </div>
 
                 <div className="write-review">
-                  <button data-soldby={transaction.venue_name || transaction.seller_name } onClick={props.handleReviewModal}>Write a Review</button>
+                  <button data-soldby={transaction.venue_name || transaction.seller_name } onClick={props.handleReviewModal} data-featureimage={transaction.featured_deal_image}>Write a Review</button>
                 </div>
 
               </div>}
@@ -86,25 +86,63 @@ const FeedCard = props => {
             >
               <h4 className="main-modal-header">
                 How was your experience with {props.selectedTransaction.soldBy}?
-                <div>ICON</div>
+                <div className="main-modal-deal-image">
+                  <img src={props.selectedTransaction.featureDealImage} alt="dealImage"/>
+                </div>
               </h4>
 
-              <div className="creating-deal-seller-contact">
-                <label>Incorrect Verification Code. Please Enter the Code We Texted You.</label>
+              <div className="review-rating-wrapper">
+                <div className="review-rating">
+                  <label>
+                    <input type="radio" name="stars" value="1" />
+                    <span class="icon">★</span>
+                  </label>
+                  <label>
+                    <input type="radio" name="stars" value="2" />
+                    <span class="icon">★</span>
+                    <span class="icon">★</span>
+                  </label>
+                  <label>
+                    <input type="radio" name="stars" value="3" />
+                    <span class="icon">★</span>
+                    <span class="icon">★</span>
+                    <span class="icon">★</span>
+                  </label>
+                  <label>
+                    <input type="radio" name="stars" value="4" />
+                    <span class="icon">★</span>
+                    <span class="icon">★</span>
+                    <span class="icon">★</span>
+                    <span class="icon">★</span>
+                  </label>
+                  <label>
+                  <input type="radio" name="stars" value="5" />
+                  <span class="icon">★</span>
+                  <span class="icon">★</span>
+                  <span class="icon">★</span>
+                  <span class="icon">★</span>
+                  <span class="icon">★</span>
+                </label>
+              </div>
+              </div>
+
+              <div>
+                <label>Describe your experience (optional)</label>
                 <div>
-                  <input
+                  {/* <input
                     // onChange={onEditSellerVerificationToken}
                     // value={sellerVerificationToken}
                     required
                     className="description-input"
                     autofocus="autofocus"
                     placeholder="Enter your verification code"
-                  />
+                  /> */}
+                  <textArea className="review-text-area" rows="4" cols="95"></textArea>
                 </div>
-                <small>A text message with code was sent to your phone.</small>
+
               </div>
 
-              <button onClick={() => {props._closeModal()}}>Send</button>
+              <button style={{left: "84%"}} onClick={() => {props._closeModal()}}>Send</button>
             </form>
           </div>
         </Modal>

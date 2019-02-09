@@ -42,9 +42,9 @@ export const fetchReviewsFailure = error => ({
   payload: { error }
 });
 
-export const selectTransaction =(soldBy) => ({
+export const selectTransaction =(soldBy, featureDealImage) => ({
   type: SELECT_TRANSACTION,
-  payload: { soldBy }
+  payload: { soldBy, featureDealImage }
 });
 
 export function _reviewSeller(token, seller_id, deal_id, rating, review_body) {

@@ -117,7 +117,7 @@ div.DraftEditor-root {
   color: #fff;
 }
 
-.creating-deal-modal-header, .main-modal-header {
+.creating-deal-modal-header {
   text-align: center;
   margin-bottom: 30px;
 }
@@ -155,7 +155,7 @@ div.DraftEditor-root {
   position: relative;
 } */
 
-.deal-created-modal button {
+.deal-created-modal button, .main-modal button {
   background-color: rgb(22, 190, 182);
   color: white;
   border: none;

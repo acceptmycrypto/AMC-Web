@@ -43,7 +43,6 @@ export default function reviewReducer(state = initialState, action) {
         };
 
       case SELECT_TRANSACTION:
-      debugger
         return {
             ...state,
             selectedTransactionForReview: action.payload

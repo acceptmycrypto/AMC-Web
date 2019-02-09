@@ -50,7 +50,8 @@ class ProfileFeed extends Component {
     selectedTransaction = (event) => {
 
       let soldBy = event.target.getAttribute("data-soldby");
-      this.props.selectTransaction(soldBy);
+      let featureDealImage = event.target.getAttribute("data-featureimage");
+      this.props.selectTransaction(soldBy, featureDealImage);
 
       //open modal
       this.props.openModal();

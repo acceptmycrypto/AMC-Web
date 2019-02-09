@@ -136,5 +136,103 @@
   cursor: pointer;
 }
 
+.main-modal-deal-image {
+  width: 100px;
+  height: 100px;
+  margin: 20px auto;
+}
+
+.main-modal-deal-image img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* stars rating */
+.review-rating-wrapper {
+  width: 100%;
+  text-align: center;
+}
 
 
+.review-rating {
+  display: inline-block;
+  position: relative;
+  height: 30px;
+  line-height: 30px;
+  font-size: 30px;
+}
+
+.review-rating label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  cursor: pointer;
+}
+
+.review-rating label:last-child {
+  position: static;
+}
+
+.review-rating label:nth-child(1) {
+  z-index: 5;
+}
+
+.review-rating label:nth-child(2) {
+  z-index: 4;
+}
+
+.review-rating label:nth-child(3) {
+  z-index: 3;
+}
+
+.review-rating label:nth-child(4) {
+  z-index: 2;
+}
+
+.review-rating label:nth-child(5) {
+  z-index: 1;
+}
+
+.review-rating label input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+.review-rating label .icon {
+  float: left;
+  color: transparent;
+}
+
+.review-rating label:last-child .icon {
+  color: #fff;
+}
+
+.review-rating:not(:hover) label input:checked ~ .icon,
+.review-rating:hover label:hover input ~ .icon {
+  color: rgb(22, 190, 182);
+}
+
+.review-rating label input:focus:not(:checked) ~ .icon:last-child {
+  color: #fff;
+  text-shadow: 0 0 5px rgb(22, 190, 182);
+}
+
+/* ////////////// */
+
+.review-text-area {
+
+  resize: none;
+  border-radius: 5px;
+}
+
+.review-text-area:focus {
+  outline: none;
+}
+
+.main-modal-header {
+  text-align: center;
+}
