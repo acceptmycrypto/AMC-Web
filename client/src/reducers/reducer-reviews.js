@@ -2,7 +2,11 @@ import {
     FETCH_REVIEWS_BEGIN,
     FETCH_REVIEWS_FAILURE,
     FETCH_REVIEWS_SUCCESS,
-    SELECT_TRANSACTION
+    SELECTED_TRANSACTION_BEGIN,
+    SELECTED_TRANSACTION_FAILURE,
+    SELECTED_TRANSACTION_SUCCESS,
+    REVIEW_RATING,
+    EDIT_REVIEW_BODY
   } from "../actions/reviewsActions";
 
 import {
@@ -15,7 +19,11 @@ const initialState = {
     error: null,
     reviews: {},
     modalVisible: false,
-    selectedTransactionForReview: {}
+    selectedTransactionLoading: false,
+    selectedTransactionError: null,
+    selectedTransaction: [],
+    rating: null,
+    review_body: null
   };
 
 export default function reviewReducer(state = initialState, action) {
@@ -42,22 +50,50 @@ export default function reviewReducer(state = initialState, action) {
           error: action.payload.error,
         };
 
-      case SELECT_TRANSACTION:
+      case SELECTED_TRANSACTION_BEGIN:
         return {
-            ...state,
-            selectedTransactionForReview: action.payload
-        }
+          ...state,
+          selectedTransactionLoading: true,
+          selectedTransactionError: null
+        };
+
+      case SELECTED_TRANSACTION_SUCCESS:
+        // All done with fetch call: set loading "false".
+        return {
+          ...state,
+          selectedTransactionLoading: false,
+          selectedTransaction: action.payload.selectedTransaction
+        };
+
+      case SELECTED_TRANSACTION_FAILURE:
+        return {
+          ...state,
+          selectedTransactionLoading: false,
+          selectedTransactionError: action.payload.error,
+        };
 
       case OPEN_MODAL:
-          return {
-              ...state,
-              modalVisible: action.payload.visible
-          }
+        return {
+            ...state,
+            modalVisible: action.payload.visible
+        }
       case CLOSE_MODAL:
-          return {
-              ...state,
-              modalVisible: action.payload.visible
-          }
+        return {
+            ...state,
+            modalVisible: action.payload.visible
+        }
+
+      case REVIEW_RATING:
+        return {
+            ...state,
+            rating: action.payload
+        }
+
+      case EDIT_REVIEW_BODY:
+        return {
+            ...state,
+            review_body: action.payload
+        }
 
       default:
         // ALWAYS have a default case in a reducer

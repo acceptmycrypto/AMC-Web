@@ -42,7 +42,7 @@ const FeedCard = props => {
                 </div>
 
                 <div className="write-review">
-                  <button data-soldby={transaction.venue_name || transaction.seller_name } onClick={props.handleReviewModal} data-featureimage={transaction.featured_deal_image}>Write a Review</button>
+                  <button onClick={() => props.handleReviewModal(transaction.txn_id)} >Write a Review</button>
                 </div>
 
               </div>}
@@ -82,41 +82,41 @@ const FeedCard = props => {
         <Modal visible={props.modalDisplay} effect="fadeInUp" onClickAway={() => {props._closeModal()}}>
           <div className="main-modal">
             <form
-              // onSubmit={}
+              onSubmit={props.handleReviewSeller}
             >
               <h4 className="main-modal-header">
-                How was your experience with {props.selectedTransaction.soldBy}?
+                How was your experience with {props.selected_transaction.length > 0 && props.selected_transaction[0].seller_name}?
                 <div className="main-modal-deal-image">
-                  <img src={props.selectedTransaction.featureDealImage} alt="dealImage"/>
+                  <img src={props.selected_transaction.length > 0 && props.selected_transaction[0].featured_deal_image} alt="dealImage"/>
                 </div>
               </h4>
 
               <div className="review-rating-wrapper">
                 <div className="review-rating">
                   <label>
-                    <input type="radio" name="stars" value="1" />
+                    <input onChange={props.starRating} type="radio" name="stars" value="1" />
                     <span class="icon">★</span>
                   </label>
                   <label>
-                    <input type="radio" name="stars" value="2" />
-                    <span class="icon">★</span>
-                    <span class="icon">★</span>
-                  </label>
-                  <label>
-                    <input type="radio" name="stars" value="3" />
-                    <span class="icon">★</span>
+                    <input onChange={props.starRating} type="radio" name="stars" value="2" />
                     <span class="icon">★</span>
                     <span class="icon">★</span>
                   </label>
                   <label>
-                    <input type="radio" name="stars" value="4" />
-                    <span class="icon">★</span>
+                    <input onChange={props.starRating} type="radio" name="stars" value="3" />
                     <span class="icon">★</span>
                     <span class="icon">★</span>
                     <span class="icon">★</span>
                   </label>
                   <label>
-                  <input type="radio" name="stars" value="5" />
+                    <input onChange={props.starRating} type="radio" name="stars" value="4" />
+                    <span class="icon">★</span>
+                    <span class="icon">★</span>
+                    <span class="icon">★</span>
+                    <span class="icon">★</span>
+                  </label>
+                  <label>
+                  <input onChange={props.starRating} type="radio" name="stars" value="5" />
                   <span class="icon">★</span>
                   <span class="icon">★</span>
                   <span class="icon">★</span>
@@ -129,15 +129,12 @@ const FeedCard = props => {
               <div>
                 <label>Describe your experience (optional)</label>
                 <div>
-                  {/* <input
-                    // onChange={onEditSellerVerificationToken}
-                    // value={sellerVerificationToken}
-                    required
-                    className="description-input"
-                    autofocus="autofocus"
-                    placeholder="Enter your verification code"
-                  /> */}
-                  <textArea className="review-text-area" rows="4" cols="95"></textArea>
+                  <textArea
+                    onChange={props.editReviewBody}
+                    value={props.reviewContent}
+                    className="review-text-area" rows="4" cols="95"
+                    placeholder="Enter your review">
+                  </textArea>
                 </div>
 
               </div>

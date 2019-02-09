@@ -4,7 +4,12 @@ export const FETCH_REVIEWS_FAILURE = "FETCH_REVIEWS_FAILURE";
 export const REVIEW_SELLER_BEGIN = "REVIEW_SELLER_BEGIN";
 export const REVIEW_SELLER_SUCCESS = "REVIEW_SELLER_SUCCESS";
 export const REVIEW_SELLER_FAILURE = "REVIEW_SELLER_FAILURE";
-export const SELECT_TRANSACTION = "SELECT_TRANSACTION";
+export const SELECTED_TRANSACTION_BEGIN = "SELECTED_TRANSACTION_BEGIN";
+export const SELECTED_TRANSACTION_SUCCESS = "SELECTED_TRANSACTION_SUCCESS";
+export const SELECTED_TRANSACTION_FAILURE = "SELECTED_TRANSACTION_FAILURE";
+export const REVIEW_RATING = "REVIEW_RATING";
+export const EDIT_REVIEW_BODY = "EDIT_REVIEW_BODY";
+
 
 export function _loadReviews(seller_id) {
   const Reviews = {
@@ -42,19 +47,57 @@ export const fetchReviewsFailure = error => ({
   payload: { error }
 });
 
-export const selectTransaction =(soldBy, featureDealImage) => ({
-  type: SELECT_TRANSACTION,
-  payload: { soldBy, featureDealImage }
-});
+// export const selectTransaction =(soldBy, featureDealImage, seller_id, deal_id) => ({
+//   type: SELECT_TRANSACTION,
+//   payload: { soldBy, featureDealImage, seller_id, deal_id }
+// });
 
-export function _reviewSeller(token, seller_id, deal_id, rating, review_body) {
+export function _selectedTransaction(token, txn_id) {
   const settings = {
     method: "POST",
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ token,  seller_id, deal_id, rating, review_body})
+    body: JSON.stringify({ token, txn_id})
+  };
+
+  return dispatch => {
+    dispatch(selectedTransactionBegin());
+    return fetch("/profile/user/transaction-review", settings)
+    .then(res => res.json())
+    .then(resJson => {
+      dispatch(selectedTransactionSuccess(resJson));
+      return resJson;
+    })
+    .catch(error => dispatch(selectedTransactionError(error)));
+  };
+}
+
+export const selectedTransactionBegin = () => ({
+  type: SELECTED_TRANSACTION_BEGIN
+});
+
+export const selectedTransactionSuccess = (selectedTransaction) => ({
+  type: SELECTED_TRANSACTION_SUCCESS,
+  payload: { selectedTransaction }
+});
+
+export const selectedTransactionError = error => ({
+  type: SELECTED_TRANSACTION_FAILURE,
+  payload: { error }
+});
+
+/////////
+
+export function _reviewSeller(token, seller_id, deal_id, rating, reviewBody) {
+  const settings = {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ token,  seller_id, deal_id, rating, reviewBody})
   };
 
   return dispatch => {
@@ -82,4 +125,14 @@ export const reviewSellerSuccess = (newReview) => ({
 export const reviewSellerError = error => ({
   type: REVIEW_SELLER_FAILURE,
   payload: { error }
+});
+
+export const _handleStarRating = event => ({
+  type: REVIEW_RATING,
+  payload: event.target.value
+});
+
+export const _handleReviewBody = event => ({
+  type: EDIT_REVIEW_BODY,
+  payload: event.target.value
 });

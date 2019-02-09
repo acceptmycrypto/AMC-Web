@@ -8,7 +8,7 @@ import { _loadDeals } from "../../../actions/dealsActions";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
 import { openModal, closeModal } from "../../../actions/signInActions";
 import { changeTxHistoryView } from '../../../actions/userLoadActions';
-import { selectTransaction } from '../../../actions/reviewsActions';
+import { _selectedTransaction, _handleStarRating, _handleReviewBody, _reviewSeller } from '../../../actions/reviewsActions';
 
 class ProfileFeed extends Component {
     componentDidMount = async () => {
@@ -47,20 +47,30 @@ class ProfileFeed extends Component {
         return array;
     }
 
-    selectedTransaction = (event) => {
+    selectedTransactionForReview = async (txn_id) => {
 
-      let soldBy = event.target.getAttribute("data-soldby");
-      let featureDealImage = event.target.getAttribute("data-featureimage");
-      this.props.selectTransaction(soldBy, featureDealImage);
+      // let soldBy = event.target.getAttribute("data-soldby");
+      // let featureDealImage = event.target.getAttribute("data-featureimage");
+      // let seller_id = event.target.getAttribute("data-sellerid");
+      // let deal_id = event.target.getAttribute("data-dealid");
+
+      await this.props._selectedTransaction(localStorage.getItem("token"), txn_id);
 
       //open modal
-      this.props.openModal();
+      await this.props.openModal();
 
-      debugger
     }
 
+    submitReview = () => {
+      let {rating, review_body} = this.props;
+      let {seller_id, deal_id, soldBy} = this.props.selectedTransactionForReview;
+
+      this.props._reviewSeller(seller_id, deal_id, rating, review_body, soldBy);
+    }
+
+
     render() {
-        const { deals, transactions, confirmed, pending, tx_history_view, changeTxHistoryView, modalVisible, openModal, closeModal, selectedTransactionForReview } = this.props
+        const { deals, transactions, confirmed, pending, tx_history_view, changeTxHistoryView, modalVisible, openModal, closeModal, selectedTransaction, _handleStarRating, _handleReviewBody, reviewBody } = this.props
 
         const dealsRecommended = this.shuffle(deals).slice(0, 4);
 
@@ -88,7 +98,7 @@ class ProfileFeed extends Component {
                         <div className="overflow-y">
                             {tx_history_view === "pending"
                                 ? <FeedCard transactions={pending} orderType={"pending"} />
-                                : <FeedCard selectedTransaction={selectedTransactionForReview} handleReviewModal={this.selectedTransaction} modalDisplay={modalVisible} _openModal={openModal} _closeModal={closeModal} transactions={confirmed} orderType={"confirmed"} />
+                                : <FeedCard handleReviewSeller={this.submitReview} reviewContent={reviewBody} editReviewBody={_handleReviewBody} starRating={_handleStarRating} selected_transaction={selectedTransaction} handleReviewModal={this.selectedTransactionForReview} modalDisplay={modalVisible} _openModal={openModal} _closeModal={closeModal} transactions={confirmed} orderType={"confirmed"} />
                             }
                         </div>
                     </div>
@@ -146,12 +156,14 @@ const mapStateToProps = state => ({
     tx_history_view: state.UserInfo.tx_history_view,
     userLoggedIn: state.LoggedIn.userLoggedIn,
     modalVisible: state.Reviews.modalVisible,
-    selectedTransactionForReview: state.Reviews.selectedTransactionForReview,
+    selectedTransaction: state.Reviews.selectedTransaction,
+    rating: state.Reviews.rating,
+    review_body: state.Reviews.review_body
 });
 
 const matchDispatchToProps = dispatch => {
 
-    return bindActionCreators({ _loadDeals, changeTxHistoryView, _isLoggedIn, openModal, closeModal, selectTransaction }, dispatch);
+    return bindActionCreators({ _loadDeals, changeTxHistoryView, _isLoggedIn, openModal, closeModal, _selectedTransaction, _handleStarRating, _handleReviewBody, _reviewSeller }, dispatch);
 
 }
 

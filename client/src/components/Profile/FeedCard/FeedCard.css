@@ -224,7 +224,8 @@
 /* ////////////// */
 
 .review-text-area {
-
+  letter-spacing: .1em;
+  padding: 5px;
   resize: none;
   border-radius: 5px;
 }
