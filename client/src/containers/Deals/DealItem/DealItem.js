@@ -323,6 +323,7 @@ class DealItem extends Component {
       this.props.resetListDeal();
     }
 
+  
     return (
       <div className="pt-5">
         <Layout>
@@ -460,6 +461,7 @@ class DealItem extends Component {
                       next_step={handlePayingStep}
                       previous_step={handleDetailStep}
                       validateShipmentData={this.handleShipmentValidation}
+                      user_status={this.userLoggedIn ? "user" :"guest" }
                     />
                   )}
 
