@@ -88,10 +88,7 @@ export const selectedTransactionError = error => ({
   payload: { error }
 });
 
-/////////
-
 export function _reviewSeller(token, seller_id, deal_id, rating, review_body, title, users_purchases_id) {
-  debugger
   const settings = {
     method: "POST",
     headers: {
@@ -106,7 +103,7 @@ export function _reviewSeller(token, seller_id, deal_id, rating, review_body, ti
     return fetch("/seller-review/new", settings)
     .then(res => res.json())
     .then(resJson => {
-      debugger
+
       dispatch(reviewSellerSuccess(resJson));
       return resJson;
     })

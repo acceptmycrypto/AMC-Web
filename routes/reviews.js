@@ -99,7 +99,6 @@ router.post('/seller-review/new', verifyToken, function (req, res) {
     let buyer_id = req.decoded._id;
     let { seller_id, deal_id, review_body, title, users_purchases_id} = req.body;
     let rating = parseInt(req.body.rating);
-    console.log(seller_id, deal_id, rating, review_body, title, users_purchases_id);
 
     let languagePass = true; //languageFilter(req.body.body);
 
