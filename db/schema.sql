@@ -114,9 +114,6 @@ CREATE TABLE categories_deals(
 	FOREIGN KEY (deals_id) REFERENCES deals(id)
 );
 
-
-
-
 CREATE TABLE cryptos_venues (
 	crypto_id INT NOT NULL,
 	venue_id INT NOT NULL,
@@ -162,6 +159,25 @@ CREATE TABLE users_cryptos(
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_id) REFERENCES users(id),
 	FOREIGN KEY (crypto_id) REFERENCES crypto_info(id)
+);
+
+CREATE TABLE buyers_reviews_sellers(
+	id INT NOT NULL AUTO_INCREMENT,
+	buyer_id INT NOT NULL,
+	seller_id INT NOT NULL,
+	deal_id INT NOT NULL,
+	rating INT NOT NULL DEFAULT 0,
+	title VARCHAR (255) NOT NULL,
+	body TEXT NULL,
+	likes INT DEFAULT 0,
+	dislikes INT DEFAULT 0,
+	helpful_review INT DEFAULT 0,
+	date_reviewed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	display_review BOOLEAN NOT NULL DEFAULT FALSE,
+	PRIMARY KEY (id),
+	FOREIGN KEY (buyer_id) REFERENCES users(id),
+	FOREIGN KEY (seller_id) REFERENCES users(id),
+	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
 
 CREATE TABLE users_purchases(
@@ -257,27 +273,6 @@ CREATE TABLE notifications (
 	FOREIGN KEY (venue_id) REFERENCES venues(id),
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
-
-
-CREATE TABLE buyers_reviews_sellers(
-	id INT NOT NULL AUTO_INCREMENT,
-	buyer_id INT NOT NULL,
-	seller_id INT NOT NULL,
-	deal_id INT NOT NULL,
-	rating INT NOT NULL DEFAULT 0,
-	title VARCHAR (255) NOT NULL,
-	body TEXT NULL,
-	likes INT DEFAULT 0,
-	dislikes INT DEFAULT 0,
-	helpful_review INT DEFAULT 0,
-	date_reviewed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	display_review BOOLEAN NOT NULL DEFAULT FALSE,
-	PRIMARY KEY (id),
-	FOREIGN KEY (buyer_id) REFERENCES users(id),
-	FOREIGN KEY (seller_id) REFERENCES users(id),
-	FOREIGN KEY (deal_id) REFERENCES deals(id)
-);
-
 
 CREATE TABLE sellers_reviews_buyers(
 	id INT NOT NULL AUTO_INCREMENT,

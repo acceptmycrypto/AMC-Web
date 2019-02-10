@@ -41,7 +41,10 @@ const FeedCard = props => {
                 </div>
 
                 {
-                  props.reviewedSubmitted && props.reviewedSubmitted.updated_reviewed_id === transaction.users_purchases_id ? null :
+                  props.reviewedSubmitted && props.reviewedSubmitted.updated_reviewed_id === transaction.users_purchases_id ?
+                  <div className="review-submitted">
+                    <button >Review Submitted</button>
+                  </div> :
                   !transaction.date_reviewed &&
                   <div className="write-review">
                     <button onClick={() => props.handleReviewModal(transaction.txn_id)} >Write a Review</button>
