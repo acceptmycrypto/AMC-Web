@@ -65,6 +65,8 @@ class ProfileFeed extends Component {
       let title = `${seller_name} purchased ${deal_name}`;
 
       this.props._reviewSeller(localStorage.getItem("token"), seller_id, deal_id, rating, review_body, title);
+
+      this.props.closeModal();
     }
 
 
@@ -153,7 +155,7 @@ class ProfileFeed extends Component {
                     <div className="review-rating-wrapper">
                       <div className="review-rating">
                         <label>
-                          <input onChange={_handleStarRating} type="radio" name="stars" value="1" />
+                          <input onChange={_handleStarRating} type="radio" required name="stars" value="1" />
                           <span class="icon">★</span>
                         </label>
                         <label>
@@ -198,7 +200,7 @@ class ProfileFeed extends Component {
 
                     </div>
 
-                    <button style={{left: "84%"}} onClick={() => {closeModal()}}>Send</button>
+                    <button style={{left: "84%"}}>Send</button>
                   </form>
                 </div>
               </Modal>
