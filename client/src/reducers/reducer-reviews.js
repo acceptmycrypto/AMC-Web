@@ -5,6 +5,9 @@ import {
     SELECTED_TRANSACTION_BEGIN,
     SELECTED_TRANSACTION_FAILURE,
     SELECTED_TRANSACTION_SUCCESS,
+    REVIEW_SELLER_BEGIN,
+    REVIEW_SELLER_SUCCESS,
+    REVIEW_SELLER_FAILURE,
     REVIEW_RATING,
     EDIT_REVIEW_BODY
   } from "../actions/reviewsActions";
@@ -22,6 +25,9 @@ const initialState = {
     selectedTransactionLoading: false,
     selectedTransactionError: null,
     selectedTransaction: [],
+    reviewedSellerLoading: false,
+    reviewedSellerSuccess: null,
+    reviewedSellerError: false,
     rating: null,
     review_body: null
   };
@@ -70,6 +76,27 @@ export default function reviewReducer(state = initialState, action) {
           ...state,
           selectedTransactionLoading: false,
           selectedTransactionError: action.payload.error,
+        };
+
+      case REVIEW_SELLER_BEGIN:
+        return {
+          ...state,
+          reviewedSellerLoading: true,
+          reviewedSellerError: null
+        };
+
+      case REVIEW_SELLER_SUCCESS:
+        return {
+          ...state,
+          reviewedSellerLoading: false,
+          reviewedSellerSuccess: action.payload.newReview
+        };
+
+      case REVIEW_SELLER_FAILURE:
+        return {
+          ...state,
+          reviewedSellerLoading: false,
+          reviewedSellerError: action.payload.error,
         };
 
       case OPEN_MODAL:

@@ -40,9 +40,13 @@ const FeedCard = props => {
                   Sold By <span className="blueText">{transaction.venue_name || transaction.seller_name }</span>
                 </div>
 
-                <div className="write-review">
-                  <button onClick={() => props.handleReviewModal(transaction.txn_id)} >Write a Review</button>
-                </div>
+                {
+                  props.reviewedSubmitted && props.reviewedSubmitted.updated_reviewed_id === transaction.users_purchases_id ? null :
+                  !transaction.date_reviewed &&
+                  <div className="write-review">
+                    <button onClick={() => props.handleReviewModal(transaction.txn_id)} >Write a Review</button>
+                  </div>
+                }
 
               </div>}
               {transaction.status === "1" && <div>

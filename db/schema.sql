@@ -170,6 +170,7 @@ CREATE TABLE users_purchases(
 	guest_user_id INT NULL,
 	deal_id INT NOT NULL,
 	crypto_id INT NOT NULL,
+  buyers_reviews_sellers_id INT NULL,
 	date_purchased TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	amount DECIMAL(20, 8) NOT NULL,
 	txn_id VARCHAR(255) NOT NULL UNIQUE,
@@ -185,7 +186,8 @@ CREATE TABLE users_purchases(
 	FOREIGN KEY (user_id) REFERENCES users(id),
 	FOREIGN KEY (guest_user_id) REFERENCES guest_users(id),
 	FOREIGN KEY (crypto_id) REFERENCES crypto_info(id),
-	FOREIGN KEY (deal_id) REFERENCES deals(id)
+	FOREIGN KEY (deal_id) REFERENCES deals(id),
+  FOREIGN KEY (buyers_reviews_sellers_id) REFERENCES buyers_reviews_sellers(id)
 );
 
 CREATE TABLE users_shipping_address(

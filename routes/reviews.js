@@ -97,12 +97,12 @@ router.post('/review/buyer/:user_id', verifyToken, function (req, res) { //need 
 //route for posting buyer review seller
 router.post('/seller-review/new', verifyToken, function (req, res) {
     let buyer_id = req.decoded._id;
-    let { seller_id, deal_id, review_body, title} = req.body;
+    let { seller_id, deal_id, review_body, title, users_purchases_id} = req.body;
     let rating = parseInt(req.body.rating);
-    console.log(seller_id, deal_id, rating, review_body, title);
+    console.log(seller_id, deal_id, rating, review_body, title, users_purchases_id);
 
     let languagePass = true; //languageFilter(req.body.body);
-    
+
     if(languagePass)
     {
         connection.query(
@@ -110,6 +110,14 @@ router.post('/seller-review/new', verifyToken, function (req, res) {
             [buyer_id, deal_id, seller_id, rating, review_body, title, '1'],
             function(error, response ,fields){
                 if (error) throw error;
+
+                //updat users_purchases table that this txn_id has been reviewed
+                connection.query(
+                  'UPDATE users_purchases SET buyers_reviews_sellers_id = ? WHERE id = ?',
+                  [response.insertId, users_purchases_id],
+                  function(error, users_purchases_reviewed_id, fields){
+                      if (error) throw error;
+                  });
 
                 connection.query(
                   'SELECT sellers_avg_rating, total_sellers_ratings FROM users WHERE users.id = ?;',
@@ -129,7 +137,7 @@ router.post('/seller-review/new', verifyToken, function (req, res) {
                       [new_avg_rating, current_total+1, seller_id],
                       function(error, res_third, fields){
                           if (error) throw error;
-                          res.status(200).json({success: true, message: "review accepted"});
+                          res.status(200).json({updated_reviewed_id: users_purchases_id, message: "review accepted"});
                       });
                   });
 

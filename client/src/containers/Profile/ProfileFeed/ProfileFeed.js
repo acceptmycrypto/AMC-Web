@@ -19,6 +19,7 @@ class ProfileFeed extends Component {
             await this.props._loadDeals(localStorage.getItem('token'));
         }
     }
+
     convertToPercentage = (priceInDollar, priceInCrypto) => {
         return parseInt(((priceInDollar - priceInCrypto) / priceInDollar) * 100)
     }
@@ -60,18 +61,18 @@ class ProfileFeed extends Component {
       event.preventDefault();
 
       let {rating, review_body} = this.props;
-      let {seller_id, seller_name, deal_id, deal_name} = this.props.selectedTransaction[0];
+      let {seller_id, seller_name, deal_id, deal_name, users_purchases_id} = this.props.selectedTransaction[0];
 
       let title = `${seller_name} purchased ${deal_name}`;
 
-      this.props._reviewSeller(localStorage.getItem("token"), seller_id, deal_id, rating, review_body, title);
+      this.props._reviewSeller(localStorage.getItem("token"), seller_id, deal_id, rating, review_body, title, users_purchases_id);
 
       this.props.closeModal();
     }
 
 
     render() {
-        const { deals, transactions, confirmed, pending, tx_history_view, changeTxHistoryView, modalVisible, openModal, closeModal, selectedTransaction, _handleStarRating, _handleReviewBody, reviewBody } = this.props
+        const { deals, transactions, confirmed, pending, tx_history_view, changeTxHistoryView, modalVisible, openModal, closeModal, selectedTransaction, _handleStarRating, _handleReviewBody, reviewBody, reviewedSellerLoading, reviewedSellerSuccess } = this.props
 
         const dealsRecommended = this.shuffle(deals).slice(0, 4);
 
@@ -99,7 +100,7 @@ class ProfileFeed extends Component {
                         <div className="overflow-y">
                             {tx_history_view === "pending"
                                 ? <FeedCard transactions={pending} orderType={"pending"} />
-                                : <FeedCard handleReviewModal={this.selectedTransactionForReview} transactions={confirmed} orderType={"confirmed"} />
+                                : <FeedCard handleReviewModal={this.selectedTransactionForReview} transactions={confirmed} reviewedSubmitted={reviewedSellerSuccess} orderType={"confirmed"} />
                             }
                         </div>
                     </div>
@@ -222,7 +223,9 @@ const mapStateToProps = state => ({
     modalVisible: state.Reviews.modalVisible,
     selectedTransaction: state.Reviews.selectedTransaction,
     rating: state.Reviews.rating,
-    review_body: state.Reviews.review_body
+    review_body: state.Reviews.review_body,
+    reviewedSellerLoading: state.Reviews.reviewedSellerLoading,
+    reviewedSellerSuccess: state.Reviews.reviewedSellerSuccess
 });
 
 const matchDispatchToProps = dispatch => {
