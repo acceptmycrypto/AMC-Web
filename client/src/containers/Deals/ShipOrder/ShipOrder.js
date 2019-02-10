@@ -2,6 +2,7 @@ import React from "react";
 import "./ShipOrder.css";
 
 const ShipOrder = props => {
+  console.log("STATUS", this.props.user_status)
   return (
     <div>
       <div className="shipping-form">
