@@ -3,7 +3,6 @@ import "./FeedCard.css";
 import Timestamp from 'react-timestamp';
 import Countdown from 'react-countdown-now';
 import { Link } from "react-router-dom";
-import Modal from 'react-awesome-modal';
 
 const FeedCard = props => {
   return (
@@ -69,80 +68,10 @@ const FeedCard = props => {
               </div>
             </div>
 
-              {/* {transaction.status = 100 &&
-              <div className="write-review">
-                <button onClick={props.handleReviewModal}>Write a Review</button>
-              </div>
-              } */}
-
           </div>
         </div>
       ))}
 
-        <Modal visible={props.modalDisplay} effect="fadeInUp" onClickAway={() => {props._closeModal()}}>
-          <div className="main-modal">
-            <form
-              onSubmit={props.handleReviewSeller}
-            >
-              <h4 className="main-modal-header">
-                How was your experience with {props.selected_transaction.length > 0 && props.selected_transaction[0].seller_name}?
-                <div className="main-modal-deal-image">
-                  <img src={props.selected_transaction.length > 0 && props.selected_transaction[0].featured_deal_image} alt="dealImage"/>
-                </div>
-              </h4>
-
-              <div className="review-rating-wrapper">
-                <div className="review-rating">
-                  <label>
-                    <input onChange={props.starRating} type="radio" name="stars" value="1" />
-                    <span class="icon">★</span>
-                  </label>
-                  <label>
-                    <input onChange={props.starRating} type="radio" name="stars" value="2" />
-                    <span class="icon">★</span>
-                    <span class="icon">★</span>
-                  </label>
-                  <label>
-                    <input onChange={props.starRating} type="radio" name="stars" value="3" />
-                    <span class="icon">★</span>
-                    <span class="icon">★</span>
-                    <span class="icon">★</span>
-                  </label>
-                  <label>
-                    <input onChange={props.starRating} type="radio" name="stars" value="4" />
-                    <span class="icon">★</span>
-                    <span class="icon">★</span>
-                    <span class="icon">★</span>
-                    <span class="icon">★</span>
-                  </label>
-                  <label>
-                  <input onChange={props.starRating} type="radio" name="stars" value="5" />
-                  <span class="icon">★</span>
-                  <span class="icon">★</span>
-                  <span class="icon">★</span>
-                  <span class="icon">★</span>
-                  <span class="icon">★</span>
-                </label>
-              </div>
-              </div>
-
-              <div>
-                <label>Describe your experience (optional)</label>
-                <div>
-                  <textArea
-                    onChange={props.editReviewBody}
-                    value={props.reviewContent}
-                    className="review-text-area" rows="4" cols="95"
-                    placeholder="Write your review">
-                  </textArea>
-                </div>
-
-              </div>
-
-              <button style={{left: "84%"}} onClick={() => {props._closeModal()}}>Send</button>
-            </form>
-          </div>
-        </Modal>
     </div>
   );
 };

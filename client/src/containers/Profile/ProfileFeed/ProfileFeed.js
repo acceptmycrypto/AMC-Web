@@ -9,6 +9,7 @@ import { _isLoggedIn } from "../../../actions/loggedInActions";
 import { openModal, closeModal } from "../../../actions/signInActions";
 import { changeTxHistoryView } from '../../../actions/userLoadActions';
 import { _selectedTransaction, _handleStarRating, _handleReviewBody, _reviewSeller } from '../../../actions/reviewsActions';
+import Modal from 'react-awesome-modal';
 
 class ProfileFeed extends Component {
     componentDidMount = async () => {
@@ -96,7 +97,7 @@ class ProfileFeed extends Component {
                         <div className="overflow-y">
                             {tx_history_view === "pending"
                                 ? <FeedCard transactions={pending} orderType={"pending"} />
-                                : <FeedCard handleReviewSeller={this.submitReview} reviewContent={reviewBody} editReviewBody={_handleReviewBody} starRating={_handleStarRating} selected_transaction={selectedTransaction} handleReviewModal={this.selectedTransactionForReview} modalDisplay={modalVisible} _openModal={openModal} _closeModal={closeModal} transactions={confirmed} orderType={"confirmed"} />
+                                : <FeedCard handleReviewModal={this.selectedTransactionForReview} transactions={confirmed} orderType={"confirmed"} />
                             }
                         </div>
                     </div>
@@ -135,9 +136,72 @@ class ProfileFeed extends Component {
                             ))}
                         </div>
                     </div>
-
                 }
 
+              <Modal visible={modalVisible} effect="fadeInUp" onClickAway={() => {closeModal()}}>
+                <div className="main-modal">
+                  <form
+                    onSubmit={this.submitReview}
+                  >
+                    <h4 className="main-modal-header">
+                      How was your experience with {selectedTransaction.length > 0 && selectedTransaction[0].seller_name}?
+                      <div className="main-modal-deal-image">
+                        <img src={selectedTransaction.length > 0 && selectedTransaction[0].featured_deal_image} alt="dealImage"/>
+                      </div>
+                    </h4>
+
+                    <div className="review-rating-wrapper">
+                      <div className="review-rating">
+                        <label>
+                          <input onChange={_handleStarRating} type="radio" name="stars" value="1" />
+                          <span class="icon">★</span>
+                        </label>
+                        <label>
+                          <input onChange={_handleStarRating} type="radio" name="stars" value="2" />
+                          <span class="icon">★</span>
+                          <span class="icon">★</span>
+                        </label>
+                        <label>
+                          <input onChange={_handleStarRating} type="radio" name="stars" value="3" />
+                          <span class="icon">★</span>
+                          <span class="icon">★</span>
+                          <span class="icon">★</span>
+                        </label>
+                        <label>
+                          <input onChange={_handleStarRating} type="radio" name="stars" value="4" />
+                          <span class="icon">★</span>
+                          <span class="icon">★</span>
+                          <span class="icon">★</span>
+                          <span class="icon">★</span>
+                        </label>
+                        <label>
+                        <input onChange={_handleStarRating} type="radio" name="stars" value="5" />
+                        <span class="icon">★</span>
+                        <span class="icon">★</span>
+                        <span class="icon">★</span>
+                        <span class="icon">★</span>
+                        <span class="icon">★</span>
+                      </label>
+                    </div>
+                    </div>
+
+                    <div>
+                      <label>Describe your experience (optional)</label>
+                      <div>
+                        <textArea
+                          onChange={_handleReviewBody}
+                          value={reviewBody}
+                          className="review-text-area" rows="4" cols="95"
+                          placeholder="Write your review">
+                        </textArea>
+                      </div>
+
+                    </div>
+
+                    <button style={{left: "84%"}} onClick={() => {closeModal()}}>Send</button>
+                  </form>
+                </div>
+              </Modal>
             </div>
         );
     }
