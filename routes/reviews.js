@@ -109,17 +109,37 @@ router.post('/seller-review/new', verifyToken, function (req, res) {
             [buyer_id, deal_id, seller_id, rating, review_body, title, '1'],
             function(error, response ,fields){
                 if (error) throw error;
-                //then update deals table with avg rating and num ratings, this is what I will be working on
 
-                res.json({success: true, message: "review accepted"});
+                connection.query(
+                  'SELECT sellers_avg_rating, total_sellers_ratings FROM users WHERE users.id = ?;',
+                  [seller_id],
+                  function(error, res1, fields){
+                    if (error) throw error;
+                    //update calculation
+                    let current_avg = res1[0].sellers_avg_rating;
+                    // console.log(current_avg);
+                    let current_total = res1[0].total_sellers_ratings;
+                    // console.log(current_total);
+                    // console.log(rating);
+                    let new_avg_rating = ((current_avg*current_total)+rating)/(current_total+1);
+
+                    connection.query(
+                      'UPDATE users SET sellers_avg_rating = ?, total_sellers_ratings = ? WHERE id = ?',
+                      [new_avg_rating, current_total+1, seller_id],
+                      function(error, res_third, fields){
+                          if (error) throw error;
+                          res.status(200).json({success: true, message: "review accepted"});
+                      });
+                  });
+
             });
 
     }
     else{
         //insert incident into flagged user
         connection.query(
-            'INSERT INTO buyers_reviews_sellers (buyer_id, deal_id, seller_id, rating, body, display_review) VALUES (?,?,?,?,?,?);',
-            [req.decoded.id,req.body.deal_id,seller_id,req.body.rating,req.body.body,'0'],
+            'INSERT INTO buyers_reviews_sellers (buyer_id, deal_id, seller_id, rating, body, title, display_review) VALUES (?,?,?,?,?,?,?);',
+            [buyer_id, deal_id, seller_id, rating, review_body, title, '0'],
             function(error, response ,fields){
                 if (error) throw error;
 
