@@ -26,8 +26,13 @@ class Chat extends Component {
       await this.props._loadChatSessions(localStorage.getItem("token"));
       await this.props._loadProfile(localStorage.getItem("token"));
     } else {
-      // localStorage.removeItem('token');
-      await this.props.history.push("/");
+
+      if (this.props.dealItem) {
+        await this.props.history.push(`/SignIn?redirect=feed/deals/${this.props.dealItem.deal_id}/${this.props.dealItem.deal_name}`);
+      } else {
+        this.props.history.push("/");
+      }
+
     }
   };
 
@@ -76,7 +81,7 @@ class Chat extends Component {
 
   componentDidUpdate() {
     //scroll to bottom of message list
-    if (this.props.selected_chat_session.length > 0) {
+    if (this.props.chat_sessions.length > 0 && this.props.selected_chat_session.length > 0) {
       const objDiv = document.getElementById("chat-messages");
       objDiv.scrollTop = objDiv.scrollHeight;
     }
@@ -86,6 +91,7 @@ class Chat extends Component {
   render() {
     const {
       chat_sessions,
+      chat_sessions_loading,
       _loadChatSessions,
       chat_messages,
       _loadChatMessages,
@@ -122,7 +128,7 @@ class Chat extends Component {
             </section>
 
             <section className="chat-session-right">
-            {selected_chat_session.length > 0 ?
+            {chat_sessions.length > 0 && selected_chat_session.length > 0 ?
             <div>
               <div>
                 <MessageList
@@ -161,11 +167,13 @@ class Chat extends Component {
 const mapStateToProps = state => ({
   userLoggedIn: state.LoggedIn.userLoggedIn,
   chat_sessions: state.Chat.chat_sessions,
+  chat_sessions_loading: state.Chat.chat_sessions_loading,
   chat_messages: state.Chat.chat_messages,
   chatMessageValue: state.Chat.chatMessageValue,
   chat_session_id: state.Chat.chat_session_id,
   user_info: state.UserInfo.user_info,
-  selected_chat_session: state.Chat.selected_chat_session
+  selected_chat_session: state.Chat.selected_chat_session,
+  dealItem: state.DealItem.dealItem
 });
 
 const matchDispatchToProps = dispatch => {
