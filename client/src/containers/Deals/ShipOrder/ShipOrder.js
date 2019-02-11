@@ -89,7 +89,7 @@ const ShipOrder = props => {
         <button>Previous</button>
       </div>
 
-      <div onClick={() => props.validateShipmentData() && props.next_step()} className="steps-workflow">
+      <div onClick={() => props.validateShipmentData() && props.next_step()} className="next-step">
         <button>Next</button>
       </div>
     </div>

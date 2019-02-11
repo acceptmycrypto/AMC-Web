@@ -9,7 +9,7 @@ const PurchaseOrder = props => {
   return (
     <div>
       {!props.paymentButtonClicked ?
-      <div>
+      <div className="payment-form">
         <form>
           <div class="form-group">
             <label className="text-capitalize payment-name-label" htmlFor="select_crypto">Select the Cryptocurrency to pay with</label>
@@ -43,7 +43,7 @@ const PurchaseOrder = props => {
         </div>
 
 
-        <div onClick={() => props.validatePaymentData() && props.SubmitPayment()} className="next-step">
+        <div onClick={() => props.validatePaymentData() && props.SubmitPayment()} className="submit_payment">
           <button>Send Your Payment</button>
         </div>
       </div> : null}
