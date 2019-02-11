@@ -20,6 +20,7 @@
   "license": "ISC",
   "dependencies": {
     "@sendgrid/mail": "^6.3.1",
+    "ajv": "^6.8.1",
     "async": "^2.6.1",
     "aws-sdk": "^2.380.0",
     "bcrypt": "^3.0.2",

@@ -3,7 +3,6 @@ import "./UserList.css";
 import Timestamp from 'react-timestamp';
 import { handleLongDescription } from '../../../utils/helper_functions';
 
-
 const UserList = props => {
   const { _loadUsersList, usersList, _fetchMessagesList, userInfo, chatSessionInfo } = props;
   return (
@@ -41,12 +40,12 @@ const UserList = props => {
               />
             </div>
             <div className={chat_session.message_read === 0 ? "font-weight-unread-message" : null}>
-              <strong>
+              <div className={chat_session.message_read === 1 ? "font-weight-500" : null}>
                 {userInfo.length > 0 &&
                 chat_session.seller_id === userInfo[0].id
                   ? chat_session.buyer_name
                   : chat_session.seller_name}
-              </strong>
+              </div>
               <div>{handleLongDescription(chat_session.deal_name, 30, 20)}</div>
               <small className={chat_session.message_read === 0 ? "font-weight-unread-message" : null}><Timestamp time={chat_session.chat_session_date} precision={1} /></small>
             </div>

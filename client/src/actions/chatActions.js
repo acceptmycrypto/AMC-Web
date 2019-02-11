@@ -61,7 +61,7 @@ export function _loadChatSessions(token) {
     return fetch(`/chat_sessions`, settings)
     .then(res => res.json())
     .then(resJson => {
-
+      
       dispatch(fetchChatSessionsSuccess(resJson));
       return resJson;
     })
