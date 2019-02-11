@@ -1,7 +1,25 @@
+.shipping-name-label {
+  margin-bottom: 10px;
+}
+
 .shipping-form {
-  height: 400px;
+  height: 375px;
   overflow-y:auto;
   overflow-x: hidden;
 }
 
+.shipping-form input {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid #445366;
+  margin-bottom: 0px;
+  width: 100%;
+}
 
+.shipping-form label {
+  display: block;
+  text-transform: uppercase;
+  font-size: .9em;
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+}

@@ -11,3 +11,12 @@
 .payment-form {
   height: 400px;
 }
+
+/* z-index only works for relative position */
+.payment-form form {
+  position: relative;
+}
+
+#select_crypto {
+  z-index: 1000 !important;
+}

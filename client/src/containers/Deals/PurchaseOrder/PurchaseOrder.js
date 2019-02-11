@@ -37,14 +37,13 @@ const PurchaseOrder = props => {
             shippingStateInfo={props.shipping_state}
           />
         </div>
-
-        <div onClick={props.previous_step} className="previous-step">
-          <button>Previous</button>
-        </div>
-
-
-        <div onClick={() => props.validatePaymentData() && props.SubmitPayment()} className="submit_payment">
+        <div className="payment-step-buttons">
+          <div onClick={props.previous_step} className="payment-previous-step button">
+            <button>Previous</button>
+          </div>
+          <div onClick={() => props.validatePaymentData() && props.SubmitPayment()}     className="submit_payment">
           <button>Send Your Payment</button>
+          </div>
         </div>
       </div> : null}
 
