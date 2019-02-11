@@ -32,7 +32,6 @@
 
 .nav-left {
   display: flex;
-  max-width: 100%;
 }
 
 .Logo {
@@ -143,10 +142,6 @@
 ::placeholder {
     color: white;
     opacity: 1;
-}
-
-#dropdownMenuLink {
-    float: right;
 }
 
 #white {
