@@ -31,6 +31,30 @@ export default function paymentTransactionReducer(state = initialState, action) 
         createPaymentButtonClicked: false,
       };
 
+      case "CREATE_GUEST_TRANSACTION_BEGIN":
+      return {
+        ...state,
+        loading: true,
+        error: null
+      };
+
+    case "CREATE_GUEST_TRANSACTION_SUCCESS":
+      return {
+        ...state,
+        loading: false,
+        transactionInfo: action.payload.transactionInfo,
+        createPaymentButtonClicked: true,
+      };
+
+    case "CREATE_GUEST_TRANSACTION_FAILURE":
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+        transactionInfo: null,
+        createPaymentButtonClicked: false,
+      };
+
     case "LOCATION_CHANGE":
       return initialState;
 
