@@ -37,7 +37,7 @@ CREATE TABLE users(
 	first_name VARCHAR(255) NULL,
 	last_name VARCHAR (255) NULL,
 	phone_number VARCHAR(100) NULL,
-  	phone_number_verified BOOLEAN NOT NULL DEFAULT FALSE,
+  phone_number_verified BOOLEAN NOT NULL DEFAULT FALSE,
 	email VARCHAR(100) NOT NULL UNIQUE,
 	previous_email VARCHAR(100) NULL UNIQUE,
 	address VARCHAR(255) NULL,
@@ -46,8 +46,8 @@ CREATE TABLE users(
 	zipcode VARCHAR(255) NULL,
 	password VARCHAR(255) NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    reset_pw_token VARCHAR(26) NULL,
-    reset_pw_timestamp BIGINT NULL,
+  reset_pw_token VARCHAR(26) NULL,
+  reset_pw_timestamp BIGINT NULL,
 	sellers_avg_rating FLOAT(3,2) NOT NULL DEFAULT 0,
 	total_sellers_ratings INT NOT NULL DEFAULT 0,
 	PRIMARY KEY (id)
@@ -70,12 +70,12 @@ CREATE TABLE deals (
 	seller_id INT NULL,
 	deal_name VARCHAR(255) NOT NULL,
 	deal_description VARCHAR(10000) NOT NULL,
-  	featured_deal_image VARCHAR(255) NOT NULL,
+  featured_deal_image VARCHAR(255) NOT NULL,
 	pay_in_dollar DECIMAL(10,2) NOT NULL,
 	pay_in_crypto DECIMAL(10, 2) NOT NULL,
 	date_expired DATETIME NULL,
 	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  	category VARCHAR(255) NULL, -- we need to take this out eventually
+  category VARCHAR(255) NULL, -- we need to take this out eventually
 	item_condition VARCHAR (255) NULL,
 -- 	deal_avg_rating FLOAT(3,2) NULL,
 -- 	total_deal_ratings INT NULL,
@@ -86,8 +86,8 @@ CREATE TABLE deals (
 
 CREATE TABLE deal_images (
 	id INT NOT NULL AUTO_INCREMENT,
-  	deal_id INT NOT NULL,
-  	deal_image VARCHAR(255) NOT NULL,
+  deal_id INT NOT NULL,
+  deal_image VARCHAR(255) NOT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
@@ -178,7 +178,7 @@ CREATE TABLE users_purchases(
 	timeout INT NOT NULL,
 	status_url VARCHAR(255) NULL,
 	qrcode_url VARCHAR(255) NOT NULL,
-  	status VARCHAR(255) NOT NULL DEFAULT "0",
+  status VARCHAR(255) NOT NULL DEFAULT "0",
 	payment_received BOOLEAN NOT NULL DEFAULT FALSE,
 	permission VARCHAR(255) NOT NULL DEFAULT "community",
 	PRIMARY KEY (id),
@@ -192,7 +192,7 @@ CREATE TABLE users_shipping_address(
 	id INT NOT NULL AUTO_INCREMENT,
 	txn_id VARCHAR(255) NOT NULL,
 	shipping_firstname VARCHAR(255) NOT NULL,
-  	shipping_lastname VARCHAR(255) NOT NULL,
+  shipping_lastname VARCHAR(255) NOT NULL,
 	shipping_address VARCHAR(255) NOT NULL,
 	shipping_city VARCHAR(255) NOT NULL,
 	shipping_state VARCHAR(255) NOT NULL,
@@ -225,14 +225,14 @@ CREATE TABLE users_matched_friends(
 CREATE TABLE crypto_comments(
 	id INT NOT NULL AUTO_INCREMENT,
 	user_id INT NOT NULL,
-  	crypto_id INT NOT NULL,
-  	body TEXT NOT NULL,
-  	date_commented TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  	comment_status VARCHAR (10) DEFAULT 'normal',
-  	points INT DEFAULT 0,
+	crypto_id INT NOT NULL,
+	body TEXT NOT NULL,
+	date_commented TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	comment_status VARCHAR (10) DEFAULT 'normal',
+	points INT DEFAULT 0,
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_id) REFERENCES users(id),
-  	FOREIGN KEY (crypto_id) REFERENCES crypto_info(id)
+	FOREIGN KEY (crypto_id) REFERENCES crypto_info(id)
 );
 
 CREATE TABLE parents_children(
@@ -249,7 +249,7 @@ CREATE TABLE notifications (
 	matched_friend_id INT NOT NULL,
 	venue_id INT NOT NULL,
 	deal_id INT NOT NULL,
-  	PRIMARY KEY (id),
+	PRIMARY KEY (id),
 	FOREIGN KEY (user_id) REFERENCES users(id),
 	FOREIGN KEY (matched_friend_id) REFERENCES users_matched_friends(id),
 	FOREIGN KEY (venue_id) REFERENCES venues(id),
