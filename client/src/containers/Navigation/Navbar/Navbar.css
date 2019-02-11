@@ -32,6 +32,7 @@
 
 .nav-left {
   display: flex;
+  max-width: 100%;
 }
 
 .Logo {
@@ -128,10 +129,24 @@ li {
     padding: 6px 12px;
     font-size: 0.8em;
     font-weight: 500;
-  }
-
-.search_Button {
+    border-radius: 0px 15px 15px 0px;
     width: fit-content;
+}
+
+#searchbarinput {
+    background-color: #52C4B9;
+    border: none;
+    border-radius: 15px 0px 0px 15px;
+    color: white;
+}
+
+::placeholder {
+    color: white;
+    opacity: 1;
+}
+
+#dropdownMenuLink {
+    float: right;
 }
 
 #white {

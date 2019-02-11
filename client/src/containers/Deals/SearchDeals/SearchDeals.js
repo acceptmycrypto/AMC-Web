@@ -16,29 +16,19 @@ import { categoryDeals } from '../../../actions/categoryActions';
 
 
 class SearchDeals extends Component {
-    scrollL = () => {
+    goToSearchPage = (page) => {
         if(this.props.pageType === "search"){
-            //route to url for previous page, then query db for those data
-            this.props.searchDeals(this.props.searchTerm, parseInt(this.props.searchPage)-1);
-            this.props.history.push("/Search?term="+this.props.searchTerm+"&page="+(parseInt(this.props.searchPage)-1));
-        }else if(this.props.pageType === "category"){
-            this.props.categoryDeals(this.props.categoryTerm, parseInt(this.props.categoryPage)-1);
-            this.props.history.push("/search?term="+this.props.categoryTerm+"&page="+(parseInt(this.categoryPage)-1));
+            //route to url specified page, then query db for those data
+            this.props.searchDeals(this.props.searchTerm, parseInt(page));
+            this.props.history.push("/Search?term="+this.props.searchTerm+"&page="+(parseInt(page)));
+        } else if(this.props.pageType === "category"){
+            this.props.categoryDeals(this.props.categoryTerm, parseInt(this.props.categoryPage)+2);
+            this.props.history.push("/search?term="+this.props.categoryTerm+"&page="+(parseInt(page)));
         }
-        
-    }
-    scrollR = () => {
-      if(this.props.pageType === "search"){
-          //route to url for next page, then query db for those data
-          this.props.searchDeals(this.props.searchTerm, parseInt(this.props.searchPage)+1);
-          this.props.history.push("/Search?term="+this.props.searchTerm+"&page="+(parseInt(this.props.searchPage)+1));
-      } else if(this.props.pageType === "category"){
-          this.props.categoryDeals(this.props.categoryTerm, parseInt(this.props.categoryPage)+1);
-          this.props.history.push("/search?term="+this.props.categoryTerm+"&page="+(parseInt(this.props.categoryPage)+1));
-      }
     }
 
   componentDidMount = () => {
+    //   debugger;
       //parse out search term and current page number from url
       console.log("this.props.location.search");
       console.log(this.props.location.search);
@@ -70,7 +60,7 @@ class SearchDeals extends Component {
     let { error, loading, deals, userLoggedIn } = this.props;  //does this need to be const?? i changed it to let so line 56 will work
     //hardcoded number of search results per page to 8.  ideally should be something like 20.
     //this number needs to match the number in backend deals.js
-    let numberPerPage = 8;
+    let numberPerPage = 4;
     
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -110,16 +100,40 @@ class SearchDeals extends Component {
         {deals == undefined || deals.length == 0 && <div className="no_Results">No results found</div>
         }
         {deals != undefined && deals.length > 0 && currentTerm !==""  && <div className="page_Nav">
-            <div className="page_NavContent">
+        <div className="page_NavContent">
                 <span>
-                    <button className={"scroll_Button "+("button_Hide_"+(currentPage==1))} onClick={this.scrollL}>
-                        previous page
+                    <button className={"scroll_Button "+("button_Hide_"+(parseInt(currentPage)==1))} onClick={()=>this.goToSearchPage(1)}>
+                        First Page
                     </button>
                 </span>
-                <span className="page_Number">{currentPage}/{Math.ceil(currentNumberOfResults/numberPerPage)}</span>
                 <span>
-                    <button className={"scroll_Button "+("button_Hide_"+(currentPage==(Math.ceil(currentNumberOfResults/numberPerPage))))} onClick={this.scrollR}>
-                            next page
+                    <button className={"page_Number "+("button_Hide_"+((parseInt(currentPage)-2)<1))} onClick={()=>this.goToSearchPage(parseInt(currentPage)-2)}>
+                        {parseInt(currentPage)-2}
+                    </button>
+                </span>
+                <span>
+                    <button className={"page_Number "+("button_Hide_"+((parseInt(currentPage)-1)<1))} onClick={()=>this.goToSearchPage(parseInt(currentPage)-1)}>
+                        {parseInt(currentPage)-1}
+                    </button>
+                </span>
+                <span>
+                    <button className="page_Number ">
+                        {currentPage}
+                    </button>
+                </span>
+                <span>
+                    <button className={"page_Number "+("button_Hide_"+((parseInt(currentPage)+1)>Math.ceil(currentNumberOfResults/numberPerPage)))} onClick={()=>this.goToSearchPage(parseInt(currentPage)+1)}>
+                        {parseInt(currentPage)+1}
+                    </button>
+                </span>
+                <span>
+                    <button className={"page_Number "+("button_Hide_"+((parseInt(currentPage)+2)>Math.ceil(currentNumberOfResults/numberPerPage)))} onClick={()=>this.goToSearchPage(parseInt(currentPage)+2)}>
+                        {parseInt(currentPage)+2}
+                    </button>
+                </span>
+                <span>
+                    <button className={"scroll_Button "+("button_Hide_"+(parseInt(currentPage)==(Math.ceil(currentNumberOfResults/numberPerPage))))} onClick={()=>this.goToSearchPage(Math.ceil(currentNumberOfResults/numberPerPage))}>
+                            Last Page
                     </button>
                 </span>
             </div>
@@ -168,14 +182,38 @@ class SearchDeals extends Component {
         {deals != undefined && deals.length > 0 && currentTerm !="" && <div className="page_Nav">
             <div className="page_NavContent">
                 <span>
-                    <button className={"scroll_Button "+("button_Hide_"+(currentPage==1))} onClick={this.scrollL}>
-                        previous page
+                    <button className={"scroll_Button "+("button_Hide_"+(parseInt(currentPage)==1))} onClick={()=>this.goToSearchPage(1)}>
+                        First Page
                     </button>
                 </span>
-                <span className="page_Number">{currentPage}/{Math.ceil(currentNumberOfResults/numberPerPage)}</span>
                 <span>
-                    <button className={"scroll_Button "+("button_Hide_"+(currentPage==(Math.ceil(currentNumberOfResults/numberPerPage))))} onClick={this.scrollR}>
-                            next page
+                    <button className={"page_Number "+("button_Hide_"+((parseInt(currentPage)-2)<1))} onClick={()=>this.goToSearchPage(parseInt(currentPage)-2)}>
+                        {parseInt(currentPage)-2}
+                    </button>
+                </span>
+                <span>
+                    <button className={"page_Number "+("button_Hide_"+((parseInt(currentPage)-1)<1))} onClick={()=>this.goToSearchPage(parseInt(currentPage)-1)}>
+                        {parseInt(currentPage)-1}
+                    </button>
+                </span>
+                <span>
+                    <button className="page_Number ">
+                        {currentPage}
+                    </button>
+                </span>
+                <span>
+                    <button className={"page_Number "+("button_Hide_"+((parseInt(currentPage)+1)>Math.ceil(currentNumberOfResults/numberPerPage)))} onClick={()=>this.goToSearchPage(parseInt(currentPage)+1)}>
+                        {parseInt(currentPage)+1}
+                    </button>
+                </span>
+                <span>
+                    <button className={"page_Number "+("button_Hide_"+((parseInt(currentPage)+2)>Math.ceil(currentNumberOfResults/numberPerPage)))} onClick={()=>this.goToSearchPage(parseInt(currentPage)+2)}>
+                        {parseInt(currentPage)+2}
+                    </button>
+                </span>
+                <span>
+                    <button className={"scroll_Button "+("button_Hide_"+(parseInt(currentPage)==(Math.ceil(currentNumberOfResults/numberPerPage))))} onClick={()=>this.goToSearchPage(Math.ceil(currentNumberOfResults/numberPerPage))}>
+                            Last Page
                     </button>
                 </span>
             </div>
