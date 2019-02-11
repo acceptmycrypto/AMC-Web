@@ -11,6 +11,7 @@ import { _loadProfile } from "../../../actions/userLoadActions";
 import { _isLoggedIn } from '../../../actions/loggedInActions';
 import Footer from '../../../components/Layout/Footer';
 import Aside from '../Aside';
+import queryString from 'query-string';
 
 
 class SignIn extends Component {
@@ -19,20 +20,28 @@ class SignIn extends Component {
     e.preventDefault();
     let email = e.target.children[0].children[1].value;
     let password = e.target.children[1].children[1].value;
+    let values = queryString.parse(this.props.location.search);
 
     if (!email || !password) {
       alert("please enter in the required fields");
     } else {
       return _login(email, password).then(res => {
-        if (res.token) {
+        if (res.token && values.redirect == "ListDeal") {
           localStorage.setItem('token', res.token);
-          console.log(res.token);
+          this.props.history.push('/listdeal');
+
+        } else if (res.token && this.props.dealItem && values.redirect == `feed/deals/${this.props.dealItem.deal_id}/${this.props.dealItem.deal_name}`.trim()) {
+
+          localStorage.setItem('token', res.token);
+          this.props.history.push(`/${values.redirect}`);
+
+        } else if (res.token) {
+          localStorage.setItem('token', res.token);
           // alert("You've successfully logged in");
           //redirect user to the feed/deals
           this.props.history.push('/');
 
-        } else {
-          console.log("Login error: ", res);
+        }else {
           // alert(res.err);
           this.props.openModal();
         }
@@ -60,7 +69,7 @@ class SignIn extends Component {
     if (loading) {
       return <div>Loading...</div>;
     }
-    
+
     return (
       <div className="App">
         <Aside />
@@ -118,8 +127,8 @@ const mapStateToProps = state => ({
   visible: state.SignInModal.visible,
   userLoggedIn: state.LoggedIn.userLoggedIn,
   error: state.LoggedIn.error,
-  loading: state.LoggedIn.loading
-
+  loading: state.LoggedIn.loading,
+  dealItem: state.DealItem.dealItem
 });
 
 const matchDispatchToProps = dispatch =>{

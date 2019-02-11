@@ -42,6 +42,8 @@
     flex-direction: row;
     flex-wrap: nowrap;
     overflow-x: hidden;
+    align-items: center;
+    scroll-behavior: smooth;
 }
 
 .category_item{
@@ -62,6 +64,7 @@
     font-family: 'Lato', sans-serif;
     
 }
+
 
 /* .category-info{
     position: absolute;
@@ -158,4 +161,35 @@
 
 .category-icon-chevron{
     font-size: 20px;
+}
+
+.list-deal-category{
+    border: grey dashed 1px;
+    border-radius: 5px;
+    min-height: 150px;
+    min-width: 200px;
+    max-height: 150px;
+    max-width: 200px;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+}
+
+.list-deal-category:hover{
+    cursor: pointer;
+}
+
+.margin-left-add-deal{
+    margin-left: 70px;
+}
+
+.list-deal-category-label{
+    padding: 10px;
+    text-align: center;
+    color: #2a3c51;
+    font-weight: bold;
+    font-size: 14px;
 }

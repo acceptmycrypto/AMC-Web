@@ -1,0 +1,90 @@
+.deal-item-messages-list {
+  display: flex;
+  justify-content: space-between;
+}
+
+.message-list-profile-header{
+  display: flex;
+  align-items: center;
+}
+
+.message-list-deal-name-price {
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+  font-weight: 600;
+  font-size: 1em;
+  margin: 0 20px;
+}
+
+.message-list-deal-name-price a{
+  text-decoration: none;
+  color: #2e4157;
+}
+
+.message-list-deal-name {
+  font-size: 1.4em;
+}
+
+.message-list-profile-header div:first-child{
+  margin-right: 10px;
+}
+
+.message-list-profile-header div:nth-child(2){
+  font-size: 20px;
+}
+
+.message-list-deal-header {
+  display: flex;
+  align-items: center;
+}
+
+.trash-icon {
+  cursor: pointer;
+}
+
+.trash-icon i {
+  color: black;
+}
+
+.message-list-deal-image {
+  margin-right: 30px;
+  width: 65px;
+  height: 65px;
+  display: flex;
+  align-items: center;
+}
+
+.message-list-deal-image img {
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#chat-messages {
+  display: flex;
+  flex-direction: column;
+  max-height: 50vh;
+  min-height: 50vh;
+  overflow-y: auto;
+}
+
+.chat-message {
+  margin: 10px 0;
+  width: fit-content;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.user-message-right {
+  background-color: rgb(111, 226, 220);
+  align-self: flex-end;
+  margin-right: 20px;
+  /* float: right; */
+}
+
+.non-owner-message-left {
+  background-color: #2e4157;
+  color: #fff;
+}

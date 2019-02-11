@@ -52,6 +52,7 @@ var notificationRoutes = require("./routes/cryptos_ranking.js");
 var settingsRoutes = require("./routes/settings.js");
 var reviewRoutes = require("./routes/reviews.js");
 var listDealRoutes = require("./routes/listDeal.js");
+var chatRoutes = require("./routes/chat.js");
 var homepageRoutes = require("./routes/homepage.js");
 
 
@@ -86,6 +87,7 @@ app.use("/", notificationRoutes);
 app.use("/", settingsRoutes);
 app.use("/", reviewRoutes);
 app.use("/", listDealRoutes);
+app.use("/", chatRoutes);
 app.use("/", homepageRoutes);
 
 if (process.env.NODE_ENV === 'production') {
@@ -138,6 +140,7 @@ var connection = mysql.createConnection({
 // ];
 
 // //use aynch to map two request ojects and return all results in one callback
+
 // async.map(
 //   options,
 //   function(obj, callback) {
@@ -205,7 +208,7 @@ var connection = mysql.createConnection({
 // set the view engine to ejs
 app.set("view engine", "ejs");
 
-//Heroku tells us which port our app to use. For production, we use Heroku port. For development, we use 3000
+//Heroku tells us which port our app to use. For production, we use Heroku port. For development, we use 3001
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, function() {
   console.log("Backend server is listening on 3001");

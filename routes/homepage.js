@@ -47,6 +47,7 @@ router.get('/load/categories/list', function (req, res) {
     });
 });
 
+// comment out later
 router.get('/home/deals/:category_id', function (req, res) {
     let category_id = req.params.category_id;
     
@@ -59,6 +60,133 @@ router.get('/home/deals/:category_id', function (req, res) {
   
         }
       );
+});
+
+
+
+router.get('/home/categorized/deals', function (req, res) {
+    // let category_id = req.params.category_id;
+    
+    let select_statement = 'DISTINCT category.category_name AS category_name, category.id AS category_id, deals.id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, venues.venue_name, venues.venue_link, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings FROM category LEFT JOIN categories_deals ON category.id = categories_deals.category_id LEFT JOIN deals ON categories_deals.deals_id = deals.id LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN cryptos_deals ON cryptos_deals.deal_id = deals.id LEFT JOIN users ON deals.seller_id = users.id'
+
+    let recent_select_statement = 'DISTINCT deals.id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, venues.venue_name, venues.venue_link, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings FROM deals LEFT JOIN categories_deals ON categories_deals.deals_id = deals.id LEFT JOIN category ON category.id = categories_deals.category_id LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN cryptos_deals ON cryptos_deals.deal_id = deals.id LEFT JOIN users ON deals.seller_id = users.id'
+
+    let query_statement = "";
+    for(let i = 0; i < 14; i++){
+        query_statement += `(SELECT ${select_statement} WHERE category.id = ${i} ORDER BY deals.date_created DESC LIMIT 15)`
+        if(i !== 13){
+            query_statement += ` UNION ALL `
+        }
+    }
+    connection.query(
+       query_statement,
+        function (error, results, fields) {
+          if (error) console.log(error);
+          let cat_1 =[], cat_2 =[], cat_3 =[], cat_4 = [], cat_5 = [], cat_6 = [], cat_7 = [], cat_8 = [], cat_9 =[], cat_10 =[], cat_11=[], cat_12=[], cat_13 =[];
+            for(let i = 0; i< results.length; i++){
+                switch(results[i].category_id){
+                    case 1:
+                        cat_1.push(results[i]);
+                        break;
+                    case 2:
+                        cat_2.push(results[i]);
+                        break;
+                    case 3:
+                        cat_3.push(results[i]);
+                        break;
+                    case 4:
+                        cat_4.push(results[i]);
+                        break;
+                    case 5:
+                        cat_5.push(results[i]);
+                        break;
+                    case 6:
+                        cat_6.push(results[i]);
+                        break;
+                    case 7:
+                        cat_7.push(results[i]);
+                        break;
+                    case 8:
+                        cat_8.push(results[i]);
+                        break;
+                    case 9:
+                        cat_9.push(results[i]);
+                        break;
+                    case 10:
+                        cat_10.push(results[i]);
+                        break;
+                    case 11:
+                        cat_11.push(results[i]);
+                        break;
+                    case 12:
+                        cat_12.push(results[i]);
+                        break;
+                    default: 
+                        cat_13.push(results[i]);
+                        break;
+                }
+            }
+                let cat_all = []
+
+                all_results = [cat_1, cat_2, cat_3, cat_4, cat_5, cat_6, cat_7, cat_8, cat_9, cat_10, cat_11, cat_12, cat_13];
+                all_results.sort(function(a,b){
+                    return b.length - a.length;
+                })
+
+                // let category_list =[];
+                // for(let j = 0; j<7; j++){
+                //     category_list.push(all_results[j][0].category_name);
+
+                // }
+
+                connection.query( `(SELECT ${recent_select_statement} ORDER BY deals.date_created DESC LIMIT 15)`,
+                    function(error, recent_deals, fields) {
+                        // if (error) console.log(error);
+                        // console.log('search results');
+                        // console.log(results);
+                        res.json({recent_deals, all_results});
+                    }
+                );
+                
+
+                // res.json(all_results);
+                
+        }
+      );
+});
+
+
+router.get('/api/category', function(req, res) {
+    console.log("req search");
+    console.log(req.query);
+    //hardcoded number of search results per page to 8.  ideally should be something like 20.
+    //this number needs to match the number in frontend SearchDeals.js
+    var numberPerPage = 8;
+    //this calculates starting from which search result to give back
+    //for example, if start==0 and numberPerPage==8, then db should give back 8 results starting from result #0
+    var start = numberPerPage*(req.query.page-1);
+    connection.query(
+        //first query is to count the total number of results that satisfy the search
+        'SELECT COUNT(DISTINCT deals.id) FROM deals LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN cryptos_deals ON cryptos_deals.deal_id = deals.id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN category ON category.id = categories_deals.category_id WHERE ( category_name LIKE ?)',
+        ['%'+req.query.term+'%'],
+        function(error, numberOfResults, fields) {
+            if (error) console.log(error);
+            console.log('number of results');
+            console.log(numberOfResults);
+
+            connection.query(
+                //second query is to give back the set of search results specified by 'start' and 'numberPerPage'
+                'SELECT DISTINCT deals.id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, venues.venue_name, venues.venue_link, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings FROM deals LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN cryptos_deals ON cryptos_deals.deal_id = deals.id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN category ON category.id = categories_deals.category_id WHERE (category_name LIKE ?) LIMIT ?, ?',
+                ['%'+req.query.term+'%', start, numberPerPage],
+                function(error, results, fields) {
+                    if (error) console.log(error);
+                    console.log('search results');
+                    console.log(results);
+                    res.json({numberOfResults:numberOfResults,results:results});
+                }
+            );
+        }
+    );
 });
 
 
