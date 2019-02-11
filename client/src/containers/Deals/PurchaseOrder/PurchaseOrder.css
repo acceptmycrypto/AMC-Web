@@ -13,10 +13,7 @@
 }
 
 /* z-index only works for relative position */
-.payment-form form {
+.paypal-button {
   position: relative;
-}
-
-#select_crypto {
-  z-index: 1000 !important;
+  z-index: 0 !important;
 }

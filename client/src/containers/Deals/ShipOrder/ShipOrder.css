@@ -4,8 +4,6 @@
 
 .shipping-form {
   height: 375px;
-  overflow-y:auto;
-  overflow-x: hidden;
 }
 
 .shipping-form input {
@@ -13,8 +11,12 @@
   border: none;
   outline: none;
   border-bottom: 1px solid #445366;
-  margin-bottom: 0px;
+  margin-bottom: 10px;
   width: 100%;
+}
+
+#shipping-state {
+  margin-bottom: 10px;
 }
 
 .shipping-form label {
@@ -23,3 +25,15 @@
   font-size: .9em;
   font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
 }
+
+.shipping-error::placeholder {
+  color: red;
+  opacity: 1; /* Firefox */
+}
+
+.shipping-state-error {
+  border: solid red 1px;
+  border-radius: 5px;
+}
+
+

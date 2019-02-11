@@ -121,7 +121,7 @@ class DealItem extends Component {
       enteredShippingAddress: this.props.shippingAddress,
       enteredShippingCity: this.props.shippingCity,
       enteredZipcode: this.props.zipcode,
-      selectedShippingState: this.props.shippingState
+      selectedShippingState: this.props.shippingState.value
     };
     let isDataValid = false;
 
@@ -133,27 +133,23 @@ class DealItem extends Component {
       isDataValid = true;
     } else {
       document.getElementById(
-        "shipping-firstname-error"
-      ).innerHTML = this._validationErrors(validateNewInput).firstNameValMsg;
+        "shipping-firstname"
+      ).classList.add("shipping-error");
       document.getElementById(
-        "shipping-lastname-error"
-      ).innerHTML = this._validationErrors(validateNewInput).lastNameValMsg;
+        "shipping-lastname"
+      ).classList.add("shipping-error");
       document.getElementById(
-        "shipping-address-error"
-      ).innerHTML = this._validationErrors(
-        validateNewInput
-      ).shippingAddressValMsg;
+        "shipping-address"
+      ).classList.add("shipping-error");
       document.getElementById(
-        "shipping-city-error"
-      ).innerHTML = this._validationErrors(validateNewInput).shippingCityValMsg;
+        "shipping-city"
+      ).classList.add("shipping-error");
       document.getElementById(
-        "shipping-zipcode-error"
-      ).innerHTML = this._validationErrors(validateNewInput).zipcodeValMsg;
+        "shipping-zipcode"
+      ).classList.add("shipping-error");
       document.getElementById(
-        "shipping-state-error"
-      ).innerHTML = this._validationErrors(
-        validateNewInput
-      ).shippingStateValMsg;
+        "shipping-state"
+      ).classList.add("shipping-state-error");
     }
 
     return isDataValid;
@@ -184,22 +180,6 @@ class DealItem extends Component {
 
   _validationErrors(val) {
     const errMsgs = {
-      firstNameValMsg: val.enteredFirstname
-        ? null
-        : "Please enter your first name",
-      lastNameValMsg: val.enteredLastname
-        ? null
-        : "Please enter your last name",
-      shippingAddressValMsg: val.enteredShippingAddress
-        ? null
-        : "Please enter your shipping address",
-      shippingCityValMsg: val.enteredShippingCity
-        ? null
-        : "Please enter your shipping city",
-      zipcodeValMsg: val.enteredZipcode ? null : "Please enter your zip code",
-      shippingStateValMsg: val.selectedShippingState
-        ? null
-        : "Please select your state",
       selectedPaymentValMsg: val.selectedPaymentOption
         ? null
         : "Please select your payment option"
