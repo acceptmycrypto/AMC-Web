@@ -61,9 +61,9 @@ class ProfileFeed extends Component {
       event.preventDefault();
 
       let {rating, review_body} = this.props;
-      let {seller_id, seller_name, deal_id, deal_name, users_purchases_id} = this.props.selectedTransaction[0];
+      let {seller_id, username, deal_id, deal_name, users_purchases_id} = this.props.selectedTransaction[0];
 
-      let title = `${seller_name} purchased ${deal_name}`;
+      let title = `${username} purchased ${deal_name}`;
 
       this.props._reviewSeller(localStorage.getItem("token"), seller_id, deal_id, rating, review_body, title, users_purchases_id);
 
