@@ -38,7 +38,7 @@ class DealItem extends Component {
     // if (await this.props.userLoggedIn) {
       const { deal_name, id } = await this.props.match.params;
       await this.props._loadDealItem(id, deal_name);
-      console.log(this.props.dealItem.seller_id);
+
       let seller_id =
         this.props.dealItem.seller_id || this.props.dealItem.venue_id;
       await this.props._loadReviews(seller_id);
@@ -213,6 +213,7 @@ class DealItem extends Component {
     let halfStar = <i class="fas fa-star-half-alt" />;
     let emptyStar = <i class="far fa-star" aria-hidden="true" />;
     let result = [];
+
     if (rating === 0) {
       result.push(emptyStar, emptyStar, emptyStar, emptyStar, emptyStar);
       return result;
@@ -245,6 +246,7 @@ class DealItem extends Component {
         }
       }
     }
+    
     return result;
   };
 
@@ -540,7 +542,7 @@ class DealItem extends Component {
                     <small className="star-space-right">
                       {this.ratingDisplay(
                         dealItem && dealItem.sellers_avg_rating
-                      )}{" "}
+                      )}
                       ({this.showNumberOfReviews()})
                     </small>
                   </div>
@@ -585,9 +587,9 @@ class DealItem extends Component {
                             {reviews.rating_body}
                           </div>
 
-                          <small>
+                          {/* <small>
                             <a href="/">Report abuse</a>
-                          </small>
+                          </small> */}
                           <hr />
                         </div>
                       ))

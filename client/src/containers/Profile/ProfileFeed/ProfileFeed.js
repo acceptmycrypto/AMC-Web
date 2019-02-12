@@ -6,8 +6,10 @@ import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import { _loadDeals } from "../../../actions/dealsActions";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
+import { openModal, closeModal } from "../../../actions/signInActions";
 import { changeTxHistoryView } from '../../../actions/userLoadActions';
-
+import { _selectedTransaction, _handleStarRating, _handleReviewBody, _reviewSeller } from '../../../actions/reviewsActions';
+import Modal from 'react-awesome-modal';
 
 class ProfileFeed extends Component {
     componentDidMount = async () => {
@@ -17,6 +19,7 @@ class ProfileFeed extends Component {
             await this.props._loadDeals(localStorage.getItem('token'));
         }
     }
+
     convertToPercentage = (priceInDollar, priceInCrypto) => {
         return parseInt(((priceInDollar - priceInCrypto) / priceInDollar) * 100)
     }
@@ -46,8 +49,30 @@ class ProfileFeed extends Component {
         return array;
     }
 
+    selectedTransactionForReview = async (txn_id) => {
+      await this.props._selectedTransaction(localStorage.getItem("token"), txn_id);
+
+      //open modal
+      this.props.openModal();
+
+    }
+
+    submitReview = (event) => {
+      event.preventDefault();
+
+      let {rating, review_body} = this.props;
+      let {seller_id, username, deal_id, deal_name, users_purchases_id} = this.props.selectedTransaction[0];
+
+      let title = `${username} purchased ${deal_name}`;
+
+      this.props._reviewSeller(localStorage.getItem("token"), seller_id, deal_id, rating, review_body, title, users_purchases_id);
+
+      this.props.closeModal();
+    }
+
+
     render() {
-        const { deals, transactions, confirmed, pending, tx_history_view, changeTxHistoryView } = this.props
+        const { deals, transactions, confirmed, pending, tx_history_view, changeTxHistoryView, modalVisible, openModal, closeModal, selectedTransaction, _handleStarRating, _handleReviewBody, reviewBody, reviewedSellerLoading, reviewedSellerSuccess } = this.props
 
         const dealsRecommended = this.shuffle(deals).slice(0, 4);
 
@@ -75,7 +100,7 @@ class ProfileFeed extends Component {
                         <div className="overflow-y">
                             {tx_history_view === "pending"
                                 ? <FeedCard transactions={pending} orderType={"pending"} />
-                                : <FeedCard transactions={confirmed} orderType={"confirmed"} />
+                                : <FeedCard handleReviewModal={this.selectedTransactionForReview} transactions={confirmed} reviewedSubmitted={reviewedSellerSuccess} orderType={"confirmed"} />
                             }
                         </div>
                     </div>
@@ -114,9 +139,72 @@ class ProfileFeed extends Component {
                             ))}
                         </div>
                     </div>
-
                 }
 
+              <Modal visible={modalVisible} effect="fadeInUp" onClickAway={() => {closeModal()}}>
+                <div className="main-modal">
+                  <form
+                    onSubmit={this.submitReview}
+                  >
+                    <h4 className="main-modal-header">
+                      How was your experience with {selectedTransaction.length > 0 && selectedTransaction[0].seller_name}?
+                      <div className="main-modal-deal-image">
+                        <img src={selectedTransaction.length > 0 && selectedTransaction[0].featured_deal_image} alt="dealImage"/>
+                      </div>
+                    </h4>
+
+                    <div className="review-rating-wrapper">
+                      <div className="review-rating">
+                        <label>
+                          <input onChange={_handleStarRating} type="radio" required name="stars" value="1" />
+                          <span class="icon">★</span>
+                        </label>
+                        <label>
+                          <input onChange={_handleStarRating} type="radio" name="stars" value="2" />
+                          <span class="icon">★</span>
+                          <span class="icon">★</span>
+                        </label>
+                        <label>
+                          <input onChange={_handleStarRating} type="radio" name="stars" value="3" />
+                          <span class="icon">★</span>
+                          <span class="icon">★</span>
+                          <span class="icon">★</span>
+                        </label>
+                        <label>
+                          <input onChange={_handleStarRating} type="radio" name="stars" value="4" />
+                          <span class="icon">★</span>
+                          <span class="icon">★</span>
+                          <span class="icon">★</span>
+                          <span class="icon">★</span>
+                        </label>
+                        <label>
+                        <input onChange={_handleStarRating} type="radio" name="stars" value="5" />
+                        <span class="icon">★</span>
+                        <span class="icon">★</span>
+                        <span class="icon">★</span>
+                        <span class="icon">★</span>
+                        <span class="icon">★</span>
+                      </label>
+                    </div>
+                    </div>
+
+                    <div>
+                      <label>Describe your experience (optional)</label>
+                      <div>
+                        <textArea
+                          onChange={_handleReviewBody}
+                          value={reviewBody}
+                          className="review-text-area" rows="4" cols="95"
+                          placeholder="Write your review">
+                        </textArea>
+                      </div>
+
+                    </div>
+
+                    <button style={{left: "84%"}}>Send</button>
+                  </form>
+                </div>
+              </Modal>
             </div>
         );
     }
@@ -131,12 +219,18 @@ const mapStateToProps = state => ({
     confirmed: state.UserInfo.confirmed,
     pending: state.UserInfo.pending,
     tx_history_view: state.UserInfo.tx_history_view,
-    userLoggedIn: state.LoggedIn.userLoggedIn, 
+    userLoggedIn: state.LoggedIn.userLoggedIn,
+    modalVisible: state.Reviews.modalVisible,
+    selectedTransaction: state.Reviews.selectedTransaction,
+    rating: state.Reviews.rating,
+    review_body: state.Reviews.review_body,
+    reviewedSellerLoading: state.Reviews.reviewedSellerLoading,
+    reviewedSellerSuccess: state.Reviews.reviewedSellerSuccess
 });
 
 const matchDispatchToProps = dispatch => {
 
-    return bindActionCreators({ _loadDeals, changeTxHistoryView, _isLoggedIn }, dispatch);
+    return bindActionCreators({ _loadDeals, changeTxHistoryView, _isLoggedIn, openModal, closeModal, _selectedTransaction, _handleStarRating, _handleReviewBody, _reviewSeller }, dispatch);
 
 }
 
