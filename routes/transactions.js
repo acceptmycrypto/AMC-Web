@@ -130,7 +130,7 @@ router.post("/checkout", verifyToken, function(req, res) {
                     }
 
                      //send the paymentInfo to the client side
-                    res.json({paymentInfo, deal_status: "paying"});
+                    res.json({paymentInfo, deal_status: "reserved"});
                   }
                 );
 
