@@ -363,7 +363,7 @@ class DealItem extends Component {
                 </a>
                 <a
                   onClick={() => handleShippingStep()}
-                  className={showShippingStep ? "active step" : "step"}
+                  className={dealItem && dealItem.deal_status === "available" ? showShippingStep ? "active step" : "step" : "step disabled"}
                 >
                   <i className="truck icon" />
                   <div className="content">

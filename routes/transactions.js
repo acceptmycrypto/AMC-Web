@@ -120,7 +120,7 @@ router.post("/checkout", verifyToken, function(req, res) {
                   }
                 );
 
-                //update deal item to paying
+                //update deal item to reserved
                 connection.query(
                   "UPDATE deals SET deal_status = ? WHERE id = ?",
                   ["paying", req.body.deal_id],
@@ -128,7 +128,6 @@ router.post("/checkout", verifyToken, function(req, res) {
                     if (err) {
                       console.log(err);
                     }
-
                      //send the paymentInfo to the client side
                     res.json({paymentInfo, deal_status: "reserved"});
                   }
@@ -188,7 +187,7 @@ router.post("/checkout/notification", function (req, res, next) {
 }, function (req, res, next) {
   //handle events
   connection.query(
-    'SELECT status, email, amount, crypto_symbol, deal_name FROM users_purchases LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE txn_id = ?',
+    'SELECT status, email, amount, crypto_symbol, deal_name, users_purchases.deal_id FROM users_purchases LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE txn_id = ?',
     [req.body.txn_id],
     function(err, data_status, fields) {
       let current_status = data_status[0].status;
@@ -224,6 +223,20 @@ router.post("/checkout/notification", function (req, res, next) {
         [req.body.status, 1, { txn_id: req.body.txn_id }],
         function (error, results, fields) {
           if (error) throw error;
+
+          //update the deal item to sold
+          connection.query(
+            "UPDATE deals SET deal_status = ? WHERE id = ?",
+            ["sold", data_status[0].deal_id],
+            function(err, result) {
+              if (err) {
+                console.log(err);
+              }
+               //send the paymentInfo to the client side
+              res.json({deal_status: "sold"});
+            }
+          );
+
           const confirm_payment_with_customer = {
             to: data_status[0].email,
             from: process.env.CUSTOMER_SUPPORT,
@@ -242,6 +255,20 @@ router.post("/checkout/notification", function (req, res, next) {
         [{ status: req.body.status}, { txn_id: req.body.txn_id }],
         function (error, results, fields) {
           if (error) throw error;
+
+          //update the deal item back to available
+          connection.query(
+            "UPDATE deals SET deal_status = ? WHERE id = ?",
+            ["available", data_status[0].deal_id],
+            function(err, result) {
+              if (err) {
+                console.log(err);
+              }
+               //send the paymentInfo to the client side
+              res.json({deal_status: "available"});
+            }
+          );
+
           const cancel_order = {
             to: data_status[0].email,
             from: process.env.CUSTOMER_SUPPORT,

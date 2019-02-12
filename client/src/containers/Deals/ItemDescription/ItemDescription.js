@@ -4,6 +4,22 @@ import { Editor } from 'draft-js';
 
 const ItemDescription = props => {
   const sellers_rating = props.sellers_avg_rating;
+
+  const handleBuyNowButton = () => {
+    switch (true) {
+      case props.deal_name && props.deal_status === "reserved":
+        return (
+          <button disabled>Waiting for Payment</button>
+        );
+      case props.deal_name && props.deal_status === "sold":
+        return (
+          <button disabled>Sold</button>
+        );
+      default:
+        return <button>Buy Now</button>
+    }
+  };
+
   return (
     <div>
       <div className="content item-description">
@@ -70,7 +86,7 @@ const ItemDescription = props => {
             </div>
         </div>
         <div onClick={() => props.next_step()} className="buy-now">
-          <button>Buy Now</button>
+          {handleBuyNowButton()}
         </div>
       </div>
     </div>
