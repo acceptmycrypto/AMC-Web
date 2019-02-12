@@ -284,13 +284,13 @@
   position: absolute;
   top: 110%;
   left: 74%;
-  z-index: 1;
+
 }
 
 .payment-previous-step button {
   position: absolute;
   top: 110%;
   left: 3%;
-  z-index: 1;
+  
 }
 

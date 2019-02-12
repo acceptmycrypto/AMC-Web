@@ -37,7 +37,7 @@ const PurchaseOrder = props => {
             shippingStateInfo={props.shipping_state}
           />
         </div>
-        <div className="payment-step-buttons">
+        <div>
           <div onClick={props.previous_step} className="payment-previous-step button">
             <button>Previous</button>
           </div>

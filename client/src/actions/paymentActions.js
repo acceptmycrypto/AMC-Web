@@ -37,6 +37,7 @@ export function _fetchTransactionInfo(
     return fetch("/checkout", settings)
       .then(res => res.json())
       .then(jsonTransaction => {
+        debugger
         dispatch(createTransactionSuccess(jsonTransaction));
         return jsonTransaction;
       })

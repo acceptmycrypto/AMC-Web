@@ -77,8 +77,6 @@ router.post("/checkout", verifyToken, function(req, res) {
       if (err) {
         console.log("coinpayment error: ", err);
       } else {
-        //send the paymentInfo to the client side
-        res.json(paymentInfo);
 
         connection.query(
           'SELECT crypto_info.id FROM crypto_info LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE crypto_name = ?',
@@ -119,6 +117,20 @@ router.post("/checkout", verifyToken, function(req, res) {
                   },
                   function(err, shipping_data, fields) {
                     if (err) throw err;
+                  }
+                );
+
+                //update deal item to paying
+                connection.query(
+                  "UPDATE deals SET deal_status = ? WHERE id = ?",
+                  ["paying", req.body.deal_id],
+                  function(err, result) {
+                    if (err) {
+                      console.log(err);
+                    }
+
+                     //send the paymentInfo to the client side
+                    res.json({paymentInfo, deal_status: "paying"});
                   }
                 );
 

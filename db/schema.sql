@@ -70,13 +70,14 @@ CREATE TABLE deals (
 	seller_id INT NULL,
 	deal_name VARCHAR(255) NOT NULL,
 	deal_description VARCHAR(10000) NOT NULL,
-  	featured_deal_image VARCHAR(255) NOT NULL,
+  featured_deal_image VARCHAR(255) NOT NULL,
 	pay_in_dollar DECIMAL(10,2) NOT NULL,
 	pay_in_crypto DECIMAL(10, 2) NOT NULL,
 	date_expired DATETIME NULL,
 	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  	category VARCHAR(255) NULL, -- we need to take this out eventually
+  category VARCHAR(255) NULL, -- we need to take this out eventually
 	item_condition VARCHAR (255) NULL,
+  deal_status VARCHAR (10) DEFAULT 'available', -- status: available, sold, paying, expired, pending (pending is for deal that's not get displayed due to seller's verification)
 -- 	deal_avg_rating FLOAT(3,2) NULL,
 -- 	total_deal_ratings INT NULL,
 	PRIMARY KEY (id),
