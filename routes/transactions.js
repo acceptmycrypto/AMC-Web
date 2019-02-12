@@ -113,24 +113,11 @@ router.post("/checkout", verifyToken, function(req, res) {
                     shipping_lastname: req.body.lastName,
                     shipping_address: req.body.shippingAddress,
                     shipping_city: req.body.shippingCity,
-                    shipping_state: req.body.shippingState,
+                    shipping_state: req.body.shippingState.value,
                     shipping_zipcode: req.body.zipcode,
                     txn_id: paymentInfo.txn_id
                   },
                   function(err, shipping_data, fields) {
-                    if (err) throw err;
-                  }
-                );
-
-                //insert purchase customization into table
-                connection.query(
-                  "INSERT INTO users_purchase_customization SET ?",
-                  {
-                    color: req.body.selectedColor,
-                    size: req.body.selectedSize,
-                    txn_id: paymentInfo.txn_id
-                  },
-                  function(err, custom_data, fields) {
                     if (err) throw err;
                   }
                 );

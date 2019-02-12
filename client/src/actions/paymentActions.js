@@ -9,9 +9,9 @@ export function _fetchTransactionInfo(
   zipcode,
   shippingState,
   firstName,
-  lastName,
-  selectedSize,
-  selectedColor) {
+  lastName) {
+
+    debugger
   const settings = {
     method: "POST",
     headers: {
@@ -29,9 +29,7 @@ export function _fetchTransactionInfo(
       zipcode,
       shippingState,
       firstName,
-      lastName,
-      selectedSize,
-      selectedColor})
+      lastName})
   };
 
   return dispatch => {

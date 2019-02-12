@@ -45,13 +45,10 @@ const PurchaseOrder = props => {
           <button>Send Your Payment</button>
           </div>
         </div>
-      </div> : null}
-
-      {props.paymentButtonClicked ?
-      <Checkout showTimeout={props.timeout} showTransaction={props.transactionInfo} showPaidIn={props.cryptoSymbol}/> : null}
-
-      {props.showLoadingSpinner ? <LoadingSpinner /> : null}
-
+        {props.showLoadingSpinner ? <LoadingSpinner /> : null}
+      </div> :
+        <Checkout showTimeout={props.timeout} showTransaction={props.transactionInfo} showPaidIn={props.cryptoSymbol}/>
+      }
     </div>
   );
 };
