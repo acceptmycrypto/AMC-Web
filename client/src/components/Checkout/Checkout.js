@@ -3,7 +3,7 @@ import "./Checkout.css";
 import Countdown from 'react-countdown-now';
 
 const Checkout = props => (
-  <div>
+  <div style={{textAlign: "center"}}>
     <div className="send-payment-header">
       <h3>Scan QR code or copy/paste payment address into wallet</h3>
       <h5 className="send-crypto-amount">Please send <strong>{props.showTransaction.amount} <span>{props.showPaidIn}
@@ -19,7 +19,11 @@ const Checkout = props => (
           <p>AcceptMyCrpto Payment Address:</p>
           <strong><p id="coinpayment-address">{props.showTransaction.address}</p></strong>
         </div>
-        <p className="payment-timeout">*If no payment received in <strong ><Countdown date={Date.now() + props.showTimeout} /></strong>, the purchase order will be canceled.</p>
+        <div className="payment-timeout">*If no payment received in <strong ><Countdown date={Date.now() + props.showTimeout} /></strong>, the purchase order will be canceled.</div>
+        <div>Once payment has received, we'll email you the order transaction.</div>
+        <div className="done-sending-payment">
+          <button>Done</button>
+        </div>
 
       </div>
     </div>

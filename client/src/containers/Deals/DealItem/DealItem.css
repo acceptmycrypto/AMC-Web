@@ -246,7 +246,7 @@
   width: 100%;
 } */
 
-.next-step button, .previous-step button, .buy-now button, .submit_payment button, .payment-previous-step button{
+.next-step button, .previous-step button, .buy-now button, .submit_payment button, .payment-previous-step button, .done-sending-payment button{
   background-color: rgb(22, 190, 182);
   color: white;
   border: none;
@@ -258,12 +258,18 @@
   cursor: pointer;
 }
 
-.buy-now {
+.buy-now, .done-sending-payment {
   text-align: center;
 }
 .buy-now button {
   width: 85%;
   margin-top: 30px;
+  font-size: 1.5em;
+}
+
+.done-sending-payment button {
+  width: 85%;
+  margin-top: 10px;
   font-size: 1.5em;
 }
 
@@ -291,6 +297,5 @@
   position: absolute;
   top: 110%;
   left: 3%;
-  
 }
 

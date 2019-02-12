@@ -123,7 +123,7 @@ router.post("/checkout", verifyToken, function(req, res) {
                 //update deal item to reserved
                 connection.query(
                   "UPDATE deals SET deal_status = ? WHERE id = ?",
-                  ["paying", req.body.deal_id],
+                  ["reserved", req.body.deal_id],
                   function(err, result) {
                     if (err) {
                       console.log(err);

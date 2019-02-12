@@ -6,6 +6,7 @@ const ItemDescription = props => {
   const sellers_rating = props.sellers_avg_rating;
 
   const handleBuyNowButton = () => {
+    console.log(props.transactionStatus);
     switch (true) {
       case props.deal_name && props.deal_status === "reserved":
         return (

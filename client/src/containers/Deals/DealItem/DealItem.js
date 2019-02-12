@@ -4,6 +4,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import LoadingSpinner from "../../../components/UI/LoadingSpinner";
 import {
   _loadDealItem,
   handleFirstNameInput,
@@ -38,7 +39,7 @@ class DealItem extends Component {
     // if (await this.props.userLoggedIn) {
       const { deal_name, id } = await this.props.match.params;
       await this.props._loadDealItem(id, deal_name);
-      console.log(this.props.dealItem.seller_id);
+
       let seller_id =
         this.props.dealItem.seller_id || this.props.dealItem.venue_id;
       await this.props._loadReviews(seller_id);
@@ -266,6 +267,7 @@ class DealItem extends Component {
             selectedOption,
             transaction_loading,
             paymentInfo,
+            transaction_status,
             createPaymentButtonClicked,
             showDetailStep,
             showShippingStep,
@@ -293,7 +295,7 @@ class DealItem extends Component {
       return <div>Error! {error.message}</div>;
     }
     if (deal_item_loading) {
-      return <div>Loading...</div>;
+      return <div className="page-loading"><LoadingSpinner /></div>
     }
 
     console.log("user info", user_info);
@@ -415,6 +417,7 @@ class DealItem extends Component {
                       //another way to pass in props using spread operator
                       {...dealItem}
                       {...reviews}
+                      transactionStatus={transaction_status}
                       sellerDealDescription={this.loadDescription}
                       next_step={handleShippingStep}
                       rating_display={this.ratingDisplay}
@@ -600,6 +603,7 @@ const mapStateToProps = state => ({
   selectedOption: state.DealItem.selectedOption,
   allStates: state.DealItem.states,
   paymentInfo: state.TransactionInfo.transactionInfo,
+  transaction_status: state.TransactionInfo.deal_status,
   createPaymentButtonClicked: state.TransactionInfo.createPaymentButtonClicked,
   transaction_loading: state.TransactionInfo.loading,
   deal_item_loading: state.DealItem.loading,
