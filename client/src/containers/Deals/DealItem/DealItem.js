@@ -40,7 +40,7 @@ class DealItem extends Component {
     // if (await this.props.userLoggedIn) {
     const { deal_name, id } = await this.props.match.params;
     await this.props._loadDealItem(id, deal_name);
-    console.log(this.props.dealItem.seller_id);
+    // console.log(this.props.dealItem.seller_id);
     let seller_id =
       this.props.dealItem.seller_id || this.props.dealItem.venue_id;
     await this.props._loadReviews(seller_id);
