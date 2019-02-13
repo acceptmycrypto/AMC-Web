@@ -147,6 +147,10 @@ router.post("/checkout", verifyToken, function (req, res) {
 
 });
 
+//this email template is sent to customer if payment has received
+var guest_checkout_ET = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/guestCheckout/guestCheckout.ejs'), 'utf-8');
+var guest_checkout_emailTemplate = ejs.compile(guest_checkout_ET);
+
 
 //coinpayment
 router.post("/guestCheckout", function (req, res) {
@@ -207,6 +211,8 @@ router.post("/guestCheckout", function (req, res) {
                       console.log(err);
                     }
 
+                    let time_left_hrs = paymentInfo.timeout / 60 / 60;
+
                     //insert shipping address into table
                     connection.query(
                       "INSERT INTO users_shipping_address SET ?",
@@ -223,6 +229,42 @@ router.post("/guestCheckout", function (req, res) {
                         if (err) throw err;
                       }
                     );
+
+                    
+
+                    connection.query('SELECT deals.deal_name, users.username AS seller_name FROM deals LEFT JOIN users ON deals.seller_id = users.id WHERE deals.id = ?',
+                      [req.body.deal_id],
+                      function (error, res, fields) {
+                        if (error) throw error;
+
+                        console.log(res[0]);
+
+                        
+
+                        let view_deal;
+                        if (process.env.NODE_ENV=="development"){
+                             view_deal = `${process.env.FRONTEND_URL}/feed/deals/${req.body.deal_id}/${res[0].deal_name}`;
+                         } else {
+                             view_deal = `${process.env.BACKEND_URL}/feed/deals/${req.body.deal_id}/${res[0].deal_name}`;
+                         }
+
+                        const guest_checkout = {
+                          to: req.body.email,
+                          from: process.env.CUSTOMER_SUPPORT,
+                          subject: 'You Reserved a Deal',
+                          html: guest_checkout_emailTemplate(
+                            {
+                              deal_name: res[0].deal_name,
+                              seller_name: res[0].seller_name,
+                              time_left: time_left_hrs,
+                              amount: paymentInfo.amount,
+                              crypto: req.body.crypto_name,
+                              address: paymentInfo.address,
+                              view_deal: view_deal
+                            })
+                        };
+                        sgMail.send(guest_checkout);
+                      });
 
                     //insert purchase customization into table
                     // connection.query(
@@ -299,6 +341,7 @@ router.post("/checkout/notification", function (req, res, next) {
     [req.body.txn_id],
     function (err, data_status, fields) {
       let current_status = data_status[0].status;
+      let deal_name = data_status[0].deal_name; 
 
       if (current_status === "0" && req.body.status === "1") {
         //update the status in the table to "1"
@@ -313,10 +356,11 @@ router.post("/checkout/notification", function (req, res, next) {
               to: process.env.CUSTOMER_SUPPORT,
               from: process.env.CUSTOMER_SUPPORT,
               subject: 'Item Ordered',
-              html: item_ordered_emailTemplate({ txn_id: req.body.txn_id })
+              html: item_ordered_emailTemplate({ txn_id: req.body.txn_id, deal_name: req.body.deal_name })
             };
             sgMail.send(handle_order);
           });
+
       }
 
       if (current_status === "1" && req.body.status === "100") {
@@ -335,7 +379,7 @@ router.post("/checkout/notification", function (req, res, next) {
               to: data_status[0].email,
               from: process.env.CUSTOMER_SUPPORT,
               subject: 'Order Confirmation',
-              html: customer_invoice_emailTemplate({ txn_id: req.body.txn_id, view_order })
+              html: customer_invoice_emailTemplate({ deal_name: req.body.deal_name, txn_id: req.body.txn_id, view_order })
             };
             sgMail.send(confirm_payment_with_customer);
           });
