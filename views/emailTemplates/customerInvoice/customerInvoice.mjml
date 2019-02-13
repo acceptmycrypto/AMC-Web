@@ -16,7 +16,7 @@
 
       <mj-column>
         <mj-text color="#fff" font-size="20px" align="center" line-height="20px">
-          Thank You for Your Purchase
+          Thank You for Your Purchase of <%=deal_name%>
         </mj-text>
         <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
           Your order number is <%= txn_id %>
