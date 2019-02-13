@@ -1,0 +1,51 @@
+<mjml>
+  <mj-body>
+
+    <!-- Company Header -->
+    <mj-section background-color="#6bd9c7">
+      <mj-column>
+        <mj-text font-size="20px" color="#626e7e" align="center">
+          AcceptMyCrypto
+        </mj-text>
+        <mj-image width="80px" src="https://s3-us-west-1.amazonaws.com/acceptmycrypto/logo.png" />
+      </mj-column>
+    </mj-section>
+
+    <!-- verifying section -->
+    <mj-section background-color="#2e4157">
+
+      <mj-column>
+        <mj-text color="#fff" font-size="20px" align="center" line-height="20px">
+          Thank You for Your Interest In
+          <%= deal_name %>
+        </mj-text>
+        <mj-text color="#fff" font-size="20px" align="center" line-height="20px">
+          Sold by
+          <%= seller_name%>
+        </mj-text>
+        <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
+          The Deal is Reserved for you for <%= time_left%> hours.
+        </mj-text>
+        <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
+          Please send <%= amount %> <%=crypto%>
+        </mj-text>
+        <mj-text color="#fff" font-size="15px" align="center" line-height="15px">
+          To the Address: <%= address%>
+        </mj-text>
+
+        <mj-button background-color="#6bd9c7" color="#2e4157" href="<%=view_deal%>">
+          View The Deal
+        </mj-button>
+
+        <mj-text color="#fff" font-size="15px" align="center" line-height="15px">
+          Please contact support@acceptmycrypto.com for any questions or concerns.
+        </mj-text>
+
+      </mj-column>
+
+    </mj-section>
+
+
+
+  </mj-body>
+</mjml>
