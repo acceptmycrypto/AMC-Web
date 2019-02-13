@@ -98,7 +98,7 @@ router.post('/profile/matched/friends', verifyToken, function (req, res) {
 router.post("/profile/user/transactions", verifyToken, function (req, res) {
     let id = req.decoded._id;
     connection.query(
-        'SELECT users_purchases.date_purchased, users_purchases.amount, deals.deal_name, deals.id AS deal_id, deals.featured_deal_image, buyer.username, users_profiles.photo, venues.venue_name, crypto_metadata.crypto_symbol AS crypto_symbol, users_purchases.txn_id, users_purchases.qrcode_url, users_purchases.status, users_purchases.payment_received, users_purchases.timeout, users_purchases.address, seller.id AS seller_id, seller.username AS seller_name FROM users_purchases LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN users buyer ON users_purchases.user_id = buyer.id LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata_name = crypto_metadata.crypto_name LEFT JOIN venues ON venue_id = venues.id LEFT JOIN users_profiles ON users_profiles.user_id = buyer.id LEFT JOIN users seller ON deals.seller_id = seller.id WHERE buyer.id = ? ORDER BY users_purchases.date_purchased DESC',
+        'SELECT users_purchases.id AS users_purchases_id, users_purchases.date_purchased, users_purchases.amount, users_purchases.buyers_reviews_sellers_id, deals.deal_name, deals.id AS deal_id, deals.featured_deal_image, buyer.username, users_profiles.photo, venues.venue_name, crypto_metadata.crypto_symbol AS crypto_symbol, users_purchases.txn_id, users_purchases.qrcode_url, users_purchases.status, users_purchases.payment_received, users_purchases.timeout, users_purchases.address, seller.id AS seller_id, seller.username AS seller_name FROM users_purchases LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN users buyer ON users_purchases.user_id = buyer.id LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata_name = crypto_metadata.crypto_name LEFT JOIN venues ON venue_id = venues.id LEFT JOIN users_profiles ON users_profiles.user_id = buyer.id LEFT JOIN users seller ON deals.seller_id = seller.id WHERE buyer.id = ? ORDER BY users_purchases.date_purchased DESC',
         //   [id, 1], //1 is true for payment received
         [id],
         function (error, results, fields) {
@@ -106,6 +106,19 @@ router.post("/profile/user/transactions", verifyToken, function (req, res) {
             res.json(results);
         }
     );
+});
+
+router.post("/profile/user/transaction-review", verifyToken, function (req, res) {
+  let id = req.decoded._id;
+  let {txn_id} = req.body;
+  connection.query(
+      'SELECT users_purchases.id AS users_purchases_id, users_purchases.date_purchased, users_purchases.amount, deals.deal_name, deals.id AS deal_id, deals.featured_deal_image, buyer.username, users_profiles.photo, venues.venue_name, crypto_metadata.crypto_symbol AS crypto_symbol, users_purchases.txn_id, users_purchases.qrcode_url, users_purchases.status, users_purchases.payment_received, users_purchases.timeout, users_purchases.address, seller.id AS seller_id, seller.username AS seller_name FROM users_purchases LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN users buyer ON users_purchases.user_id = buyer.id LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata_name = crypto_metadata.crypto_name LEFT JOIN venues ON venue_id = venues.id LEFT JOIN users_profiles ON users_profiles.user_id = buyer.id LEFT JOIN users seller ON deals.seller_id = seller.id WHERE txn_id = ?',
+      [txn_id],
+      function (error, results, fields) {
+          if (error) console.log(error);
+          res.json(results);
+      }
+  );
 });
 
 
@@ -145,14 +158,14 @@ router.post("/add/cryptos", verifyToken, function (req, res) {
         connection.query(cryptoQuery, function (error, results, fields) {
             if (error) throw error;
             console.log("line 147 Results", results)
-                
+
 
         });
 
         res.json(results);
-    
+
     });
-        
+
     }
 );
 

@@ -38,13 +38,13 @@ class DealItem extends Component {
     await this.props._isLoggedIn(localStorage.getItem("token"));
 
     // if (await this.props.userLoggedIn) {
-    const { deal_name, id } = await this.props.match.params;
-    await this.props._loadDealItem(id, deal_name);
-    // console.log(this.props.dealItem.seller_id);
-    let seller_id =
-      this.props.dealItem.seller_id || this.props.dealItem.venue_id;
-    await this.props._loadReviews(seller_id);
-    await this.props._loadProfile(localStorage.getItem("token"));
+      const { deal_name, id } = await this.props.match.params;
+      await this.props._loadDealItem(id, deal_name);
+
+      let seller_id =
+        this.props.dealItem.seller_id || this.props.dealItem.venue_id;
+      await this.props._loadReviews(seller_id);
+      await this.props._loadProfile(localStorage.getItem("token"));
 
 
     // }else{
@@ -247,6 +247,7 @@ class DealItem extends Component {
     let halfStar = <i class="fas fa-star-half-alt" />;
     let emptyStar = <i class="far fa-star" aria-hidden="true" />;
     let result = [];
+
     if (rating === 0) {
       result.push(emptyStar, emptyStar, emptyStar, emptyStar, emptyStar);
       return result;
@@ -279,6 +280,7 @@ class DealItem extends Component {
         }
       }
     }
+    
     return result;
   };
 
@@ -585,7 +587,7 @@ class DealItem extends Component {
                     <small className="star-space-right">
                       {this.ratingDisplay(
                         dealItem && dealItem.sellers_avg_rating
-                      )}{" "}
+                      )}
                       ({this.showNumberOfReviews()})
                     </small>
                   </div>
@@ -635,10 +637,23 @@ class DealItem extends Component {
                             </small>
                             <hr />
                           </div>
+<<<<<<< HEAD
                         ))
                       ) : (
                         <div className="text-secondary">
                           This seller has no reviews yet!
+=======
+
+                          {/* <small>
+                            <a href="/">Report abuse</a>
+                          </small> */}
+                          <hr />
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-secondary">
+                        This seller has no reviews yet!
+>>>>>>> d0424ac83f6ab16ebd17f40dfc5360ef63be522e
                       </div>
                       )}
                   </div>

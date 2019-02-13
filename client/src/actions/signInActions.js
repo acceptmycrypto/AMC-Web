@@ -1,16 +1,14 @@
-export const openModal = () => {
+export const OPEN_MODAL = "OPEN_MODAL";
+export const CLOSE_MODAL = "CLOSE_MODAL";
 
-    // action
-        // made up of two parts 1. type 2. payload
+export const openModal = () => {
     return {
-        type: 'OPEN_MODAL', //what does the action do = title of action
-        payload: {visible: true} // any data you need to return
+        type: 'OPEN_MODAL',
+        payload: {visible: true}
     }
 };
 
-
 export const closeModal = () => {
-
     // action
         // made up of two parts 1. type 2. payload
     return {

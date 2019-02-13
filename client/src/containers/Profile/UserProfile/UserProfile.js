@@ -33,7 +33,6 @@ class UserProfile extends Component {
     }
   }
 
-
   render() {
 
     const { error, loading, user_info, user_crypto, transactions, confirmed, pending, tx_history_view, userLoggedIn, crypto_view, address_form_shown, qr_shown, users_cryptos_id, current_crypto_name, handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos} = this.props;
