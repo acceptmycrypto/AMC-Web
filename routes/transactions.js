@@ -145,6 +145,43 @@ router.post("/checkout", verifyToken, function(req, res) {
 
 });
 
+//payout
+//once we verified that the item has been shipped to the buyer
+//this route needs to be programatically called once tracking number has been verified
+//we need to listen to shippo for the endpoint
+router.get("/payout", function(req, res) {
+  //sample txn_id (needs to query the right one)
+  let txn_id = "CPDB7P3MAVEJMZ7N73TNSX2KBX";
+  let user_id = 1;
+  let crypto_id = 1;
+
+  //get the balance from our database
+  connection.query(
+    "SELECT amount, crypto_symbol, payment_received, users_purchases.user_id, users_purchases.crypto_id, users_cryptos.crypto_address, users_cryptos.id AS users_cryptos_id from users_purchases LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN users_cryptos ON users_cryptos.crypto_id = crypto_info.id where txn_id = ? AND users_purchases.user_id = ? AND users_purchases.crypto_id = ?",
+    [txn_id, user_id, crypto_id],
+    function(error, result, fields) {
+      if (error) throw error;
+
+      let {amount, crypto_symbol, payment_received, crypto_address, users_cryptos_id} = result[0];
+      console.log(result[0]);
+      //update the crypto balance of the seller
+      if (payment_received === 100) {
+        connection.query(
+          "UPDATE users_cryptos SET crypto_balance = ? WHERE id = ?",
+          [amount, users_cryptos_id],
+          function(err, result) {
+            if (err) {
+              console.log(err);
+            }
+          }
+        );
+      }
+
+    }
+  );
+});
+
+
 
 //compile email template
 //this email template is sent to customer if payment has received

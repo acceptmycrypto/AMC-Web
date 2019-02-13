@@ -116,8 +116,6 @@ CREATE TABLE categories_deals(
 );
 
 
-
-
 CREATE TABLE cryptos_venues (
 	crypto_id INT NOT NULL,
 	venue_id INT NOT NULL,
@@ -160,6 +158,7 @@ CREATE TABLE users_cryptos(
 	user_id INT NOT NULL,
 	crypto_id INT NOT NULL,
 	crypto_address VARCHAR(255) NULL,
+  crypto_balance DECIMAL(20, 8) NOT NULL DEFAULT 0,
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_id) REFERENCES users(id),
 	FOREIGN KEY (crypto_id) REFERENCES crypto_info(id)
@@ -179,7 +178,7 @@ CREATE TABLE users_purchases(
 	timeout INT NOT NULL,
 	status_url VARCHAR(255) NULL,
 	qrcode_url VARCHAR(255) NOT NULL,
-  	status VARCHAR(255) NOT NULL DEFAULT "0",
+  status VARCHAR(255) NOT NULL DEFAULT "0",
 	payment_received BOOLEAN NOT NULL DEFAULT FALSE,
 	permission VARCHAR(255) NOT NULL DEFAULT "community",
 	PRIMARY KEY (id),

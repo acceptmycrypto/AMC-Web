@@ -289,16 +289,12 @@ class DealItem extends Component {
             handlePayingStep,
             } = this.props;
 
-    console.log("line 268", userLoggedIn);
-
     if (error) {
       return <div>Error! {error.message}</div>;
     }
     if (deal_item_loading) {
       return <div className="page-loading"><LoadingSpinner /></div>
     }
-
-    console.log("user info", user_info);
 
     //if user is redirected from the deal created page after deal is created
     if (this.props.dealCreated.deal_id) {
