@@ -184,6 +184,29 @@ router.get("/payout", function(req, res) {
   );
 });
 
+router.get("/withdraw/initiate", function(req, res) {
+  //sample txn_id (needs to query the right one)
+  let txn_id = "CPDB7P3MAVEJMZ7N73TNSX2KBX";
+  let user_id = 1;
+  let crypto_id = 1;
+
+  //send an email to the seller with a confirmation code
+  let token = Math.random().toString(36).substring(2,6)+"-"+Math.random().toString(36).substring(2,6)+"-"+Math.random().toString(36).substring(2,6);
+  let timestamp = Date.now();
+  console.log(token);
+
+  connection.query(
+    'UPDATE users SET ? WHERE email = ?',
+    [{reset_pw_token: token, reset_pw_timestamp: timestamp}, req.body.email],
+    function(error, result, fields) {
+        if (error) throw error;
+    }
+  )
+
+
+});
+
+
 
 
 //compile email template
