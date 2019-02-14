@@ -166,8 +166,8 @@ router.get("/payout", function(req, res) {
       console.log(result[0]);
       //update the crypto balance of the seller
       if (payment_received === 100) {
-        
-        let newBalance = crypto_balance + amount;
+        let amountAfterFee = amount * (0.98) //since coinpase already takes .5%, we're taking 2% (totoal is 2.5%)
+        let newBalance = crypto_balance + amountAfterFee;
 
         connection.query(
           "UPDATE users_cryptos SET crypto_balance = ? WHERE id = ?",

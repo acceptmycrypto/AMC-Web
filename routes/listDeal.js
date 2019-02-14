@@ -187,17 +187,30 @@ router.post('/listdeal', verifyToken, function(req, res) {
         });
       });
 
-      //Fourth insert into cryptos_deals table
+      //Fourth insert into cryptos_deals table and users_cryptos
       connection.query("SELECT id AS crypto_id FROM crypto_metadata WHERE crypto_symbol IN (?)", [selected_cryptos],
       function (error, results, fields) {
         if (error) console.log(error);
 
         let cryptos_deals = [];
+        let users_cryptos = [];
         for (let i = 0; i < results.length; i++) {
-          let records = [];
-          records.push(results[i].crypto_id, deal_id)
-          cryptos_deals.push(records);
+          let cryptosDeals_records = [];
+          let usersCryptos_records = [];
+          cryptosDeals_records.push(results[i].crypto_id, deal_id)
+          usersCryptos_records.push(results[i].crypto_id, seller_id)
+
+          cryptos_deals.push(cryptosDeals_records);
+          users_cryptos.push(usersCryptos_records);
         }
+
+        // connection.query("INSERT INTO users_cryptos (crypto_id, user_id) VALUES ? WHERE NOT EXISTS (SELECT crypto_id, user_id from users_cryptos WHERE crypto_id = ? AND user_id = ?", [users_cryptos, users_cryptos],
+        // function (error, results, fields) {
+        //   if (error) res.status(400).json({message: `Failed to create deal: ${error}`});
+
+        //   console.log(error);
+
+        // });
 
         connection.query("INSERT INTO cryptos_deals(crypto_id, deal_id) VALUES ?", [cryptos_deals],
         function (error, results, fields) {
