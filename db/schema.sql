@@ -164,6 +164,18 @@ CREATE TABLE users_cryptos(
 	FOREIGN KEY (crypto_id) REFERENCES crypto_info(id)
 );
 
+-- keep track of how many times users withdraw
+CREATE TABLE cryptos_withdraw(
+	id INT NOT NULL AUTO_INCREMENT,
+	users_cryptos_id INT NOT NULL,
+  withdraw_token VARCHAR(26) NOT NULL,
+  withdraw_token_timestamp BIGINT NOT NULL,
+  withdraw_amount DECIMAL(20, 8) NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (users_cryptos_id) REFERENCES users_cryptos(id)
+);
+
+
 CREATE TABLE users_purchases(
 	id INT NOT NULL AUTO_INCREMENT,
 	user_id INT NULL,
