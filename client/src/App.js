@@ -14,6 +14,8 @@ import DealItem from "./containers/Deals/DealItem";
 import Reviews from "./containers/Reviews";
 import ListDeal from "./containers/ListDeal";
 
+import Faq from "./containers/Faq/Faq"
+
 import Chat from "./containers/Chat";
 
 // import Layout from "./components/Layout";
@@ -48,6 +50,9 @@ class App extends Component {
               <Route exact path="/listdeal" component={ListDeal}/>
 
               <Route exact path='/chat' component={Chat}/>
+
+              <Route exact path='/Faq' component={Faq}/>
+
 
 
 

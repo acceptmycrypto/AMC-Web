@@ -56,6 +56,8 @@ var chatRoutes = require("./routes/chat.js");
 var homepageRoutes = require("./routes/homepage.js");
 
 
+
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 // app.use(express.static("public"));
@@ -89,6 +91,7 @@ app.use("/", reviewRoutes);
 app.use("/", listDealRoutes);
 app.use("/", chatRoutes);
 app.use("/", homepageRoutes);
+
 
 if (process.env.NODE_ENV === 'production') {
   // catch all routes

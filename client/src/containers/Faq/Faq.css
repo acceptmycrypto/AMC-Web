@@ -1,0 +1,156 @@
+/* header, footer{
+  background: linear-gradient(-85deg, #49cdb7, #1ab7db); 
+  border-radius: 5px;
+  box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+  text-align: center;
+  font-size: 1.5rem;
+  color: white;
+  width: 100%;
+  padding: 10px;
+} */
+
+ul{
+    margin: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+  }
+  
+.answer{
+    font-size: 20px;
+  }
+#amh{
+    padding: 20px;
+    text-align: center;
+    font-size: 27px;
+  }
+Button{
+    position: flex;
+  }
+  
+.App {
+    height: 100vh;
+    display: flex;
+    color: #2E4158;
+    padding-top: 54px;
+    min-height: calc(100vh - 50px);
+  }
+  
+.App_Aside {
+    width: 100%;
+    background-color: white;
+    position: absolute;
+    padding-top: 75px;
+    padding-bottom: 75px;
+   
+  }
+  
+/* .FormCenter {
+    margin-bottom: 100px;
+  }
+  
+.FormTitle {
+    color: #707C8B;
+    font-weight: 300;
+    margin-bottom: 50px;
+  }
+  
+.FormTitle__Link {
+    color: #707C8B;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1.7em;
+    margin: 0 10px;
+    padding-bottom: 5px;
+  }
+  
+.FormTitle__Link:first-child {
+    margin-left: 0;
+  }
+  
+.FormTitle__Link--Active {
+    color: white;
+    border-bottom: 1px solid #199087;
+  }
+  
+.FormField {
+    margin-bottom: 40px;
+    color: black;
+  }
+  
+.FormField__Label {
+    display: block;
+    text-transform: uppercase;
+    font-size: .9em;
+    color: black;
+  }
+.FormField-button{
+    justify-content: flex-end;
+    display: flex;
+    padding: 20px;
+  }
+  
+.FormField__Button {
+    background-color: #2E4158;
+    color: white;
+    border: none;
+    outline: none;
+    border-radius: 25px;
+    padding: 15px 70px;
+    font-size: .8em;
+    font-weight: 500;
+  }
+   */
+  
+/* p{
+    text-align: center;
+    padding-top: 30px;
+    font-size: 1em;
+  } */
+/* h2{
+    padding: 20px;
+    text-align: center;
+  } */
+/* h3{
+    text-align: center;
+  } */
+  
+/* h4{
+    text-align: center;
+  } */
+  
+.menu {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+
+    overflow-x: auto;
+    border-bottom: 3px solid #d6d4d4;
+    background-color: #199087;
+    color: #fff;
+    padding-top: 15px;
+    padding-left: 90px;
+    padding-right: 70px;
+    position: fixed;
+    margin-top: 0;
+    z-index: 2;
+  }
+.menuItem{
+    font-size: 15.5px;
+    padding-left: 50px;
+    padding-right: 50px;
+    font-family: Lato,sans-serif;
+    padding-bottom: 10px;
+    text-decoration: none;
+    color: #fff;
+    margin: 0px 97px 0px 83px;
+    color: #2a3c51;
+    font-size: 17px;
+    
+      
+  }
+  
+.menu-item:hover{
+    color: white;
+  }
+  
+  
