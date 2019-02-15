@@ -236,11 +236,11 @@ router.get("/withdraw/confirm", function(req, res) {
 
           //verify if there is money in users_cryptos. We checked at the endpoint withdraw/initiate already, but we're double checking again when user hit this withdraw/confirm
           connection.query(
-            'SELECT id AS users_cryptos_id, crypto_address, crypto_balance FROM users_cryptos WHERE user_id = ? AND crypto_id = ?',
+            'SELECT id AS users_cryptos_id, crypto_address, crypto_balance, crypto_symbol FROM users_cryptos LEFT JOIN crypto_info ON users_cryptos.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name WHERE users_cryptos.user_id = ? AND users_cryptos.crypto_id = ?',
             [user_id, crypto_id],
             function(error, users_cryptos_result, fields) {
                 if (error) throw error;
-                let {users_cryptos_id, crypto_address, crypto_balance} = users_cryptos_result[0];
+                let {users_cryptos_id, crypto_address, crypto_balance, crypto_symbol} = users_cryptos_result[0];
                 console.log(users_cryptos_result);
 
                 if (crypto_balance > 0) {
@@ -268,6 +268,15 @@ router.get("/withdraw/confirm", function(req, res) {
                   );
 
                   console.log("call coinpayment")
+                  // let optons = {
+                  //   amount: crypto_balance,
+                  //   currency: crypto_symbol,
+                  //   address: crypto_address
+                  // };
+                  // client.createWithdrawal(options, function(error, transferResult) {
+                  //   if (error) console.log(error);
+                  //   console.log(transferResult);
+                  // });
                 }
 
             }
