@@ -225,7 +225,7 @@
   color: #fff;
 }
 
-.react-carousel .carousel .slide {
+.react-carousel .carousel .slide, .react-carousel .carousel .slider {
   background: none;
 }
 

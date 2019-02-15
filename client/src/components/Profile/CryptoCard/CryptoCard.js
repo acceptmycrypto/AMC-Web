@@ -41,7 +41,8 @@ const CryptoCard = props => {
                                             {props.qr_shown &&
                                             <div className="crypto-balance">
                                               <div>Balance: {crypto.crypto_balance}</div>
-                                              {crypto.crypto_balance > 0 && <button onClick={() => props.initiateWithdraw(crypto.crypto_id)}>Withdraw</button>}
+                                              {crypto.crypto_balance > 0 && <button onClick={() => props.initiateWithdraw(crypto.crypto_id, crypto.crypto_metadata_name,
+                                              crypto.crypto_symbol, crypto.crypto_balance, crypto.crypto_address )}>Withdraw</button>}
                                             </div>
                                             }
 

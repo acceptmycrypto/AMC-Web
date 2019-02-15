@@ -194,6 +194,7 @@ class DealItem extends Component {
     let halfStar = <i class="fas fa-star-half-alt" />;
     let emptyStar = <i class="far fa-star" aria-hidden="true" />;
     let result = [];
+
     if (rating === 0) {
       result.push(emptyStar, emptyStar, emptyStar, emptyStar, emptyStar);
       return result;
@@ -226,6 +227,7 @@ class DealItem extends Component {
         }
       }
     }
+    
     return result;
   };
 
@@ -519,7 +521,7 @@ class DealItem extends Component {
                     <small className="star-space-right">
                       {this.ratingDisplay(
                         dealItem && dealItem.sellers_avg_rating
-                      )}{" "}
+                      )}
                       ({this.showNumberOfReviews()})
                     </small>
                   </div>
@@ -564,9 +566,9 @@ class DealItem extends Component {
                             {reviews.rating_body}
                           </div>
 
-                          <small>
+                          {/* <small>
                             <a href="/">Report abuse</a>
-                          </small>
+                          </small> */}
                           <hr />
                         </div>
                       ))

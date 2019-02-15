@@ -24,6 +24,7 @@ export const FETCH_UPDATE_CRYPTO_FAILURE = "FETCH_UPDATE_CRYPTO_FAILURE";
 export const INITIATE_WITHDRAW_BEGIN = "INITIATE_WITHDRAW_BEGIN";
 export const INITIATE_WITHDRAW_SUCCESS = "INITIATE_WITHDRAW_SUCCESS";
 export const INITIATE_WITHDRAW_FAILURE = "INITIATE_WITHDRAW_FAILURE";
+export const OPEN_WITHDRAW_MODAL = "OPEN_WITHDRAW_MODAL";
 
 
 /**
@@ -387,3 +388,10 @@ export const initiateWithdrawFailure = error => ({
   type: INITIATE_WITHDRAW_FAILURE,
   payload: { error }
 });
+
+export const openWithdrawModal = (crypto_id, crypto_name, crypto_symbol, crypto_balance, crypto_address) => {
+  return {
+      type: 'OPEN_WITHDRAW_MODAL',
+      payload: {visible: true, crypto_id, crypto_name, crypto_symbol, crypto_balance, crypto_address}
+  }
+};

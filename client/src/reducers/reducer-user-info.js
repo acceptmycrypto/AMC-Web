@@ -10,7 +10,8 @@ import {
   FETCH_UPDATE_CRYPTO_FAILURE,
   INITIATE_WITHDRAW_BEGIN,
   INITIATE_WITHDRAW_SUCCESS,
-  INITIATE_WITHDRAW_FAILURE
+  INITIATE_WITHDRAW_FAILURE,
+  OPEN_WITHDRAW_MODAL
 
 } from "../actions/cryptoPortfolioActions";
 import {
@@ -23,6 +24,9 @@ import {
   FETCH_TRANSACTIONS_FAILURE,
 } from "../actions/userLoadActions";
 
+import {
+  CLOSE_MODAL
+} from "../actions/signInActions";
 
 const initialState = {
   user_info: [],
@@ -40,7 +44,9 @@ const initialState = {
   tx_history_view: null,
   initiateWithdrawLoading: false,
   initiateWithdrawError: null,
-  initiateWithdraw: null
+  initiateWithdraw: null,
+  modalVisible: false,
+  selectedWithdrawCrypto: {}
 };
 
 export default function userInfoReducer(state = initialState, action) {
@@ -174,6 +180,17 @@ export default function userInfoReducer(state = initialState, action) {
         ...state,
         initiateWithdrawLoading: false,
         initiateWithdrawError: action.payload.error
+      }
+    case OPEN_WITHDRAW_MODAL:
+      return {
+          ...state,
+          modalVisible: action.payload.visible,
+          selectedWithdrawCrypto: action.payload
+      }
+    case CLOSE_MODAL:
+      return {
+          ...state,
+          modalVisible: action.payload.visible
       }
 
     default:
