@@ -7,18 +7,20 @@ import {
   SHOW_QR,
   FETCH_UPDATE_CRYPTO_BEGIN,
   FETCH_UPDATE_CRYPTO_SUCCESS,
-  FETCH_UPDATE_CRYPTO_FAILURE, 
- 
+  FETCH_UPDATE_CRYPTO_FAILURE,
+  INITIATE_WITHDRAW_BEGIN,
+  INITIATE_WITHDRAW_SUCCESS,
+  INITIATE_WITHDRAW_FAILURE
 
 } from "../actions/cryptoPortfolioActions";
-import { 
-  FETCH_USER_BEGIN, 
-  FETCH_USER_FAILURE, 
+import {
+  FETCH_USER_BEGIN,
+  FETCH_USER_FAILURE,
   FETCH_USER_SUCCESS,
   UPDATE_TX_HISTORY_VIEW,
   FETCH_TRANSACTIONS_BEGIN,
   FETCH_TRANSACTIONS_SUCCESS,
-  FETCH_TRANSACTIONS_FAILURE, 
+  FETCH_TRANSACTIONS_FAILURE,
 } from "../actions/userLoadActions";
 
 
@@ -32,10 +34,13 @@ const initialState = {
   address_form_shown: false,
   qr_shown: false,
   users_cryptos_id: null,
-  current_crypto_name: null, 
+  current_crypto_name: null,
   confirmed: [],
   pending: [],
-  tx_history_view: null
+  tx_history_view: null,
+  initiateWithdrawLoading: false,
+  initiateWithdrawError: null,
+  initiateWithdraw: null
 };
 
 export default function userInfoReducer(state = initialState, action) {
@@ -54,9 +59,9 @@ export default function userInfoReducer(state = initialState, action) {
         loading: false,
         user_info: action.payload.user_info,
         user_crypto: action.payload.user_crypto,
-        transactions: action.payload.transactions, 
+        transactions: action.payload.transactions,
         confirmed:action.payload.confirmed,
-        pending: action.payload.pending, 
+        pending: action.payload.pending,
         tx_history_view: action.payload.tx_history_view
       };
 
@@ -131,7 +136,7 @@ export default function userInfoReducer(state = initialState, action) {
         loading: false,
         error: action.payload.error
       }
-      case FETCH_TRANSACTIONS_BEGIN:
+    case FETCH_TRANSACTIONS_BEGIN:
       return {
         ...state,
         loading: true,
@@ -141,16 +146,34 @@ export default function userInfoReducer(state = initialState, action) {
       return {
         ...state,
         loading: false,
-        transactions: action.payload.transactions, 
-        confirmed: action.payload.confirmed, 
-        pending: action.payload.pending, 
-        tx_history_view: action.payload.tx_history_view, 
+        transactions: action.payload.transactions,
+        confirmed: action.payload.confirmed,
+        pending: action.payload.pending,
+        tx_history_view: action.payload.tx_history_view,
       };
     case FETCH_TRANSACTIONS_FAILURE:
       return {
         ...state,
         loading: false,
         error: action.payload.error
+      }
+    case INITIATE_WITHDRAW_BEGIN:
+      return {
+        ...state,
+        initiateWithdrawLoading: true,
+        initiateWithdrawError: null
+      };
+    case INITIATE_WITHDRAW_SUCCESS:
+      return {
+        ...state,
+        initiateWithdrawLoading: false,
+        initiateWithdraw: action.payload.initiateWithdraw
+      };
+    case FETCH_UPDATE_CRYPTO_FAILURE:
+      return {
+        ...state,
+        initiateWithdrawLoading: false,
+        initiateWithdrawError: action.payload.error
       }
 
     default:

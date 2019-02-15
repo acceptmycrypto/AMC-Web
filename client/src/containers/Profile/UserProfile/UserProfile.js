@@ -14,8 +14,9 @@ import { bindActionCreators } from 'redux';
 import { _updateCryptoTable, _verifyUser } from "../../../services/UserProfileService";
 import { _loadProfile } from "../../../actions/userLoadActions";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
-import { handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos } from "../../../actions/cryptoPortfolioActions";
+import { handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos, _handleInitiateWithdraw } from "../../../actions/cryptoPortfolioActions";
 import { resetDealitemState } from "../../../actions/dealItemActions";
+import Modal from "react-awesome-modal";
 
 class UserProfile extends Component {
 
@@ -31,6 +32,12 @@ class UserProfile extends Component {
         // localStorage.removeItem('token');
         await this.props.history.push('/');
     }
+  }
+
+  handleInitiateWithdraw = (crypto_id) => {
+    this.props._handleInitiateWithdraw(localStorage.getItem('token'), crypto_id);
+
+    //modal here
   }
 
   render() {
@@ -56,7 +63,7 @@ class UserProfile extends Component {
             {user_info != undefined && user_info.length > 0 && <ProfileCard user_info={user_info} />}
 
             {user_crypto != undefined &&
-              <CryptoCard handleToggleChange={handleToggleChange} address_form_shown={address_form_shown} handleAddressFormChange={handleAddressFormChange} handleQRChange={handleQRChange} qr_shown={qr_shown} crypto_view={crypto_view} user_crypto={user_crypto}>
+              <CryptoCard handleToggleChange={handleToggleChange} address_form_shown={address_form_shown} handleAddressFormChange={handleAddressFormChange} handleQRChange={handleQRChange} qr_shown={qr_shown} crypto_view={crypto_view} user_crypto={user_crypto} initiateWithdraw={this.handleInitiateWithdraw}>
 
                 {address_form_shown &&
                   <CryptoAddress updateCryptos={updateCryptos} crypto_id={users_cryptos_id} current_crypto_name={current_crypto_name} token={localStorage.getItem('token')} />
@@ -78,7 +85,18 @@ class UserProfile extends Component {
 
           <CryptoRankings/>
 
-
+          <Modal
+            visible={true}
+            effect="fadeInUp"
+            // onClickAway={() => {
+            //   closeModalAfterDealCreated();
+            //   this.directToDealItemPage();
+            // }}
+          >
+            <div className="deal-created-modal">
+              {/* {this.dealCreatedModal()} */}
+            </div>
+          </Modal>
         </div>
         </Layout >
       </div>
@@ -104,7 +122,7 @@ const mapStateToProps = state => ({
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({_isLoggedIn, _loadProfile, handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos, resetDealitemState}, dispatch);
+  return bindActionCreators({_isLoggedIn, _loadProfile, handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos, resetDealitemState, _handleInitiateWithdraw}, dispatch);
 }
 
 
