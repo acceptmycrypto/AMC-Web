@@ -51,7 +51,7 @@ router.post('/profile', verifyToken, function (req, res) {
 
 router.post('/profile/crypto', verifyToken, function (req, res) {
     let id = req.decoded._id;
-    connection.query('SELECT users_cryptos.id, users_cryptos.user_id, users_cryptos.crypto_id, users_cryptos.crypto_address, crypto_info.crypto_metadata_name, crypto_info.crypto_logo, crypto_info.crypto_link, crypto_metadata.crypto_symbol, crypto_metadata.crypto_price   FROM users_cryptos LEFT JOIN crypto_info ON users_cryptos.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE users_cryptos.user_id = ?;', [id], function (error, results, fields) {
+    connection.query('SELECT users_cryptos.id, users_cryptos.user_id, users_cryptos.crypto_balance, users_cryptos.crypto_id, users_cryptos.crypto_address, crypto_info.crypto_metadata_name, crypto_info.crypto_logo, crypto_info.crypto_link, crypto_metadata.crypto_symbol, crypto_metadata.crypto_price   FROM users_cryptos LEFT JOIN crypto_info ON users_cryptos.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE users_cryptos.user_id = ?;', [id], function (error, results, fields) {
         if (error) throw error;
         res.json(results);
     });
@@ -145,14 +145,14 @@ router.post("/add/cryptos", verifyToken, function (req, res) {
         connection.query(cryptoQuery, function (error, results, fields) {
             if (error) throw error;
             console.log("line 147 Results", results)
-                
+
 
         });
 
         res.json(results);
-    
+
     });
-        
+
     }
 );
 

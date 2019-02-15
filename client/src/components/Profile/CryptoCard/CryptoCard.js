@@ -40,7 +40,7 @@ const CryptoCard = props => {
                                             <br></br>
                                             {props.qr_shown &&
                                             <div className="crypto-balance">
-                                              <div>Balance: 0</div>
+                                              <div>Balance: {crypto.crypto_balance}</div>
                                               <button>Withdraw</button>
                                             </div>
                                             }

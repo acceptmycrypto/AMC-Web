@@ -184,11 +184,11 @@ router.get("/payout", function(req, res) {
   );
 });
 
-router.get("/withdraw/initiate", function(req, res) {
+router.post("/withdraw/initiate", verifyToken, function(req, res) {
   //sample txn_id (needs to query the right one)
   let txn_id = "CPDB7P3MAVEJMZ7N73TNSX2KBX";
-  let user_id = 1;
-  let crypto_id = 1;
+  let user_id = req.decoded._id;
+  let {crypto_id} = req.body;
 
   //send an email to the seller with a confirmation code
   let withdraw_token = Math.random().toString(36).substring(2,6)+"-"+Math.random().toString(36).substring(2,6)+"-"+Math.random().toString(36).substring(2,6);
