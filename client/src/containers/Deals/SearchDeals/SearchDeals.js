@@ -28,7 +28,6 @@ class SearchDeals extends Component {
     }
 
   componentDidMount = () => {
-    //   debugger;
       //parse out search term and current page number from url
       console.log("this.props.location.search");
       console.log(this.props.location.search);

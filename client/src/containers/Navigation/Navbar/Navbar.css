@@ -139,6 +139,14 @@
     color: white;
 }
 
+#searchbarinput:-webkit-autofill,
+#searchbarinput:-webkit-autofill:hover, 
+#searchbarinput:-webkit-autofill:focus, 
+#searchbarinput:-webkit-autofill:active  {
+    -webkit-box-shadow: 0 0 0 30px #52C4B9 inset !important;
+    -webkit-text-fill-color: white !important;
+}
+
 ::placeholder {
     color: white;
     opacity: 1;
