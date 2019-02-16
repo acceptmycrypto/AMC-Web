@@ -36,6 +36,15 @@ class UserProfile extends Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+
+  //if withdrawn success and user closes the modal, we update the balance by calling _loadProfile action
+   if (prevProps.confirmWithdraw.success) {
+    this.props._loadProfile(localStorage.getItem('token'));
+   }
+
+  }
+
   cryptoWithdrawModal = () => {
     const {
       crypto_id, crypto_name, crypto_symbol, crypto_balance, crypto_address
@@ -77,7 +86,7 @@ class UserProfile extends Component {
         case confirmWithdraw.success:
           return (
             <div>
-              <div style={{textAlign: "center"}} className="withdraw-modal">
+              <div className="withdraw-modal-success-transfered">
                 <h4>Successfully Transfered!</h4>
                 <div>
                   <i class="fas fa-check fa-2x" />
@@ -109,7 +118,7 @@ class UserProfile extends Component {
 
   render() {
 
-    const { error, loading, user_info, user_crypto, transactions, confirmed, pending, tx_history_view, userLoggedIn, crypto_view, address_form_shown, qr_shown, users_cryptos_id, current_crypto_name, handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos, modalVisible, openWithdrawModal, closeModal} = this.props;
+    const { error, loading, user_info, user_crypto, transactions, confirmed, pending, tx_history_view, userLoggedIn, crypto_view, address_form_shown, qr_shown, users_cryptos_id, current_crypto_name, handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos, modalVisible, openWithdrawModal, closeModal, confirmWithdraw} = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -130,7 +139,7 @@ class UserProfile extends Component {
             {user_info != undefined && user_info.length > 0 && <ProfileCard user_info={user_info} />}
 
             {user_crypto != undefined &&
-              <CryptoCard handleToggleChange={handleToggleChange} address_form_shown={address_form_shown} handleAddressFormChange={handleAddressFormChange} handleQRChange={handleQRChange} qr_shown={qr_shown} crypto_view={crypto_view} user_crypto={user_crypto} initiateWithdraw={openWithdrawModal}>
+              <CryptoCard handleToggleChange={handleToggleChange} address_form_shown={address_form_shown} handleAddressFormChange={handleAddressFormChange} handleQRChange={handleQRChange} qr_shown={qr_shown} crypto_view={crypto_view} user_crypto={user_crypto} initiateWithdraw={openWithdrawModal} withdrawStatus={confirmWithdraw}>
 
                 {address_form_shown &&
                   <CryptoAddress updateCryptos={updateCryptos} crypto_id={users_cryptos_id} current_crypto_name={current_crypto_name} token={localStorage.getItem('token')} />
