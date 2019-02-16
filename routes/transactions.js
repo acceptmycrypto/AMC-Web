@@ -43,6 +43,10 @@ var connection = mysql.createConnection({
   database: process.env.DB_DB
 });
 
+//compile email template for withdraw token
+var cryptoWithdrawEmailTemplateText = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/cryptoWithdrawConfirmation/cryptoWithdrawConfirmation.ejs'), 'utf-8');
+var cryptoWithdrawEmailTemplate = ejs.compile(cryptoWithdrawEmailTemplateText);
+
 // api
 //get list of transactions that are shared to the community and have received the payment.
 //info we need to send to the client: the deal name, the user name, the crypto symbol, the venue name, date purchased
@@ -185,24 +189,19 @@ router.get("/payout", function(req, res) {
 });
 
 router.post("/withdraw/initiate", verifyToken, function(req, res) {
-  //sample txn_id (needs to query the right one)
-  let txn_id = "CPDB7P3MAVEJMZ7N73TNSX2KBX";
   let user_id = req.decoded._id;
-  let {crypto_id} = req.body;
-
+  let {crypto_id, crypto_symbol, user_email} = req.body;
+  console.log(req.body);
   //send an email to the seller with a confirmation code
-  let withdraw_token = Math.random().toString(36).substring(2,6)+"-"+Math.random().toString(36).substring(2,6)+"-"+Math.random().toString(36).substring(2,6);
+  let withdraw_token = Math.random().toString(36).substring(2,10)+"-"+Math.random().toString(36).substring(2,10)+"-"+Math.random().toString(36).substring(2,10);
   let withdraw_token_timestamp = Date.now();
 
-  //use sendgrid here
-  console.log(withdraw_token);
-
   connection.query(
-    'SELECT id AS users_cryptos_id FROM users_cryptos WHERE user_id = ? AND crypto_id = ?',
+    'SELECT id AS users_cryptos_id, crypto_balance, crypto_address FROM users_cryptos WHERE user_id = ? AND crypto_id = ?',
     [user_id, crypto_id],
     function(error, result, fields) {
         if (error) throw error;
-        let users_cryptos_id = result[0].users_cryptos_id;
+        let {users_cryptos_id, crypto_balance, crypto_address} = result[0];
 
         //insert new token in the withdraw table
         connection.query(
@@ -210,21 +209,32 @@ router.post("/withdraw/initiate", verifyToken, function(req, res) {
           {withdraw_token, withdraw_token_timestamp, users_cryptos_id},
           function(error, result, fields) {
               if (error) throw error;
-              res.json({success: "true", message: "Please check your email for the withdraw confirmation code."})
+
+              //use sendgrid here
+              const withdraw_confirmation = {
+                to: user_email,
+                from: process.env.CUSTOMER_SUPPORT,
+                subject: "You've initiated a fund transfer from AcceptMyCrypto",
+                html: cryptoWithdrawEmailTemplate({ crypto_balance, crypto_address, crypto_symbol, withdraw_token })
+              };
+              sgMail.send(withdraw_confirmation);
+
+              console.log(withdraw_token);
+              res.json({success: true, message: "Please check your email for the transfer confirmation token."})
           }
         )
+
     }
   )
 });
 
-router.get("/withdraw/confirm", function(req, res) {
+router.post("/withdraw/confirm", verifyToken, function(req, res) {
   let user_id = 1;
-  let crypto_id = 1;
-  let withdraw_token_input = "n3rj-mwu1-eeup";
-
+  let {crypto_id, withdraw_confirmation_token} = req.body;
+  console.log(req.body);
   connection.query(
-    'SELECT withdraw_token, withdraw_token_timestamp from cryptos_withdraw WHERE withdraw_token = ?',
-    [withdraw_token_input],
+    'SELECT withdraw_token, withdraw_token_timestamp, withdraw_confirmed from cryptos_withdraw WHERE withdraw_token = ?',
+    [withdraw_confirmation_token],
     function(error, cryptos_withdraw_result, fields) {
         if (error) throw error;
         console.log(cryptos_withdraw_result);
@@ -232,11 +242,11 @@ router.get("/withdraw/confirm", function(req, res) {
         console.log(cryptos_withdraw_result[0].withdraw_token_timestamp);
         console.log("time now", Date.now());
 
-        if (cryptos_withdraw_result.length > 0 && (cryptos_withdraw_result[0].withdraw_token_timestamp + 300000) >= Date.now()) {
+        if (cryptos_withdraw_result.length > 0 && (cryptos_withdraw_result[0].withdraw_token_timestamp + 300000  >= Date.now() && cryptos_withdraw_result[0].withdraw_confirmed) !== 1) {
 
           //verify if there is money in users_cryptos. We checked at the endpoint withdraw/initiate already, but we're double checking again when user hit this withdraw/confirm
           connection.query(
-            'SELECT id AS users_cryptos_id, crypto_address, crypto_balance, crypto_symbol FROM users_cryptos LEFT JOIN crypto_info ON users_cryptos.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name WHERE users_cryptos.user_id = ? AND users_cryptos.crypto_id = ?',
+            'SELECT users_cryptos.id AS users_cryptos_id, crypto_address, crypto_balance, crypto_symbol FROM users_cryptos LEFT JOIN crypto_info ON users_cryptos.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name WHERE users_cryptos.user_id = ? AND users_cryptos.crypto_id = ?',
             [user_id, crypto_id],
             function(error, users_cryptos_result, fields) {
                 if (error) throw error;
@@ -258,8 +268,8 @@ router.get("/withdraw/confirm", function(req, res) {
 
                   //update the cryptos_withdraw table the amount of cryptos withdraw
                   connection.query(
-                    "UPDATE cryptos_withdraw SET withdraw_amount = ? WHERE withdraw_token = ?",
-                    [crypto_balance, cryptos_withdraw_result[0].withdraw_token],
+                    "UPDATE cryptos_withdraw SET withdraw_amount = ?, withdraw_confirmed = ? WHERE withdraw_token = ?",
+                    [crypto_balance, 1, cryptos_withdraw_result[0].withdraw_token],
                     function(err, result) {
                       if (err) {
                         console.log(err);
@@ -268,6 +278,7 @@ router.get("/withdraw/confirm", function(req, res) {
                   );
 
                   console.log("call coinpayment")
+                  res.json({success: true, message: "Successfully Transfered"})
                   // let optons = {
                   //   amount: crypto_balance,
                   //   currency: crypto_symbol,

@@ -25,7 +25,10 @@ export const INITIATE_WITHDRAW_BEGIN = "INITIATE_WITHDRAW_BEGIN";
 export const INITIATE_WITHDRAW_SUCCESS = "INITIATE_WITHDRAW_SUCCESS";
 export const INITIATE_WITHDRAW_FAILURE = "INITIATE_WITHDRAW_FAILURE";
 export const OPEN_WITHDRAW_MODAL = "OPEN_WITHDRAW_MODAL";
-
+export const WITHDRAW_CONFIRM_BEGIN = "WITHDRAW_CONFIRM_BEGIN";
+export const WITHDRAW_CONFIRM_SUCCESS = "WITHDRAW_CONFIRM_SUCCESS";
+export const WITHDRAW_CONFIRM_FAILURE = "WITHDRAW_CONFIRM_FAILURE";
+export const EDIT_WITHDRAW_CONFIRMATION_TOKEN = "EDIT_WITHDRAW_CONFIRMATION_TOKEN";
 
 /**
  * action creators return actions
@@ -352,15 +355,15 @@ export const hideOrShowAddress = (status, address) => {
   * @member {function} initiateWithdrawSuccess
   * @member {function} initiateWithdrawFailure
 */
-export function _handleInitiateWithdraw(token, crypto_id) {
-
+export function _handleInitiateWithdraw(token, crypto_id, crypto_symbol, user_email) {
+  debugger
   const settings = {
       method: "POST",
       headers: {
           "Accept": "application/json",
           "Content-Type": "application/json",
       },
-      body: JSON.stringify({ token, crypto_id })
+      body: JSON.stringify({ token, crypto_id, crypto_symbol, user_email })
   };
 
   return dispatch => {
@@ -368,6 +371,7 @@ export function _handleInitiateWithdraw(token, crypto_id) {
     return fetch("/withdraw/initiate", settings)
       .then(res => res.json())
       .then(jsonWithdrawInitiate => {
+        debugger
         dispatch(initiateWithdrawSuccess(jsonWithdrawInitiate));
         return jsonWithdrawInitiate;
       })
@@ -393,5 +397,51 @@ export const openWithdrawModal = (crypto_id, crypto_name, crypto_symbol, crypto_
   return {
       type: 'OPEN_WITHDRAW_MODAL',
       payload: {visible: true, crypto_id, crypto_name, crypto_symbol, crypto_balance, crypto_address}
+  }
+};
+
+export function _handleConfirmedWithdraw(token, crypto_id, withdraw_confirmation_token) {
+
+  debugger
+  const settings = {
+      method: "POST",
+      headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token, crypto_id, withdraw_confirmation_token })
+  };
+
+  return dispatch => {
+    dispatch(confirmWithdrawBegin());
+    return fetch("/withdraw/confirm", settings)
+      .then(res => res.json())
+      .then(jsonConfirmWithdraw => {
+        debugger
+        dispatch(confirmWithdrawSuccess(jsonConfirmWithdraw));
+        return jsonConfirmWithdraw;
+      })
+      .catch(error => dispatch(confirmWithdrawFailure(error)));
+  };
+}
+
+export const confirmWithdrawBegin = () => ({
+  type: WITHDRAW_CONFIRM_BEGIN,
+});
+
+export const confirmWithdrawSuccess = (confirmWithdraw) => ({
+  type: WITHDRAW_CONFIRM_SUCCESS,
+  payload: { confirmWithdraw }
+});
+
+export const confirmWithdrawFailure = error => ({
+  type: WITHDRAW_CONFIRM_FAILURE,
+  payload: { error }
+});
+
+export const onEditWithdrawConfirmationToken = (event) => {
+  return {
+      type: EDIT_WITHDRAW_CONFIRMATION_TOKEN,
+      payload: event.target.value
   }
 };

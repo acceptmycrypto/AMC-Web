@@ -11,7 +11,11 @@ import {
   INITIATE_WITHDRAW_BEGIN,
   INITIATE_WITHDRAW_SUCCESS,
   INITIATE_WITHDRAW_FAILURE,
-  OPEN_WITHDRAW_MODAL
+  WITHDRAW_CONFIRM_BEGIN,
+  WITHDRAW_CONFIRM_SUCCESS,
+  WITHDRAW_CONFIRM_FAILURE,
+  OPEN_WITHDRAW_MODAL,
+  EDIT_WITHDRAW_CONFIRMATION_TOKEN
 
 } from "../actions/cryptoPortfolioActions";
 import {
@@ -44,9 +48,13 @@ const initialState = {
   tx_history_view: null,
   initiateWithdrawLoading: false,
   initiateWithdrawError: null,
-  initiateWithdraw: null,
+  initiateWithdraw: {},
+  confirmWithdrawLoading: false,
+  confirmWithdrawError: null,
+  confirmWithdraw: {},
   modalVisible: false,
-  selectedWithdrawCrypto: {}
+  selectedWithdrawCrypto: {},
+  withdrawConfirmationToken: null
 };
 
 export default function userInfoReducer(state = initialState, action) {
@@ -175,11 +183,30 @@ export default function userInfoReducer(state = initialState, action) {
         initiateWithdrawLoading: false,
         initiateWithdraw: action.payload.initiateWithdraw
       };
-    case FETCH_UPDATE_CRYPTO_FAILURE:
+    case INITIATE_WITHDRAW_FAILURE:
       return {
         ...state,
         initiateWithdrawLoading: false,
         initiateWithdrawError: action.payload.error
+      }
+    case WITHDRAW_CONFIRM_BEGIN:
+      return {
+        ...state,
+        confirmWithdrawLoading: true,
+        confirmWithdrawError: null
+      };
+    case WITHDRAW_CONFIRM_SUCCESS:
+      return {
+        ...state,
+        initiateWithdraw: {success: false},
+        confirmWithdrawLoading: false,
+        confirmWithdraw: action.payload.confirmWithdraw
+      };
+    case WITHDRAW_CONFIRM_FAILURE:
+      return {
+        ...state,
+        confirmWithdrawLoading: false,
+        confirmWithdrawError: action.payload.error
       }
     case OPEN_WITHDRAW_MODAL:
       return {
@@ -191,6 +218,11 @@ export default function userInfoReducer(state = initialState, action) {
       return {
           ...state,
           modalVisible: action.payload.visible
+      }
+    case EDIT_WITHDRAW_CONFIRMATION_TOKEN:
+      return {
+          ...state,
+          withdrawConfirmationToken: action.payload
       }
 
     default:

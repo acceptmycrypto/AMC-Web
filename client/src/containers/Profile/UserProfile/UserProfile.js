@@ -14,7 +14,7 @@ import { bindActionCreators } from 'redux';
 import { _updateCryptoTable, _verifyUser } from "../../../services/UserProfileService";
 import { _loadProfile } from "../../../actions/userLoadActions";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
-import { handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos, _handleInitiateWithdraw, openWithdrawModal } from "../../../actions/cryptoPortfolioActions";
+import { handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos, _handleInitiateWithdraw, openWithdrawModal, _handleConfirmedWithdraw,  onEditWithdrawConfirmationToken } from "../../../actions/cryptoPortfolioActions";
 import { resetDealitemState } from "../../../actions/dealItemActions";
 import Modal from "react-awesome-modal";
 import { closeModal } from "../../../actions/signInActions";
@@ -36,25 +36,56 @@ class UserProfile extends Component {
     }
   }
 
-  // handleInitiateWithdraw = (crypto_id, crypto_name, crypto_symbol, crypto_balance, crypto_address) => {
-  //   // this.props._handleInitiateWithdraw(localStorage.getItem('token'), crypto_id);
-
-  //   //modal here
-  //   this.props.openWithdrawModal(crypto_id, crypto_name, crypto_symbol, crypto_balance, crypto_address);
-  // }
-
   cryptoWithdrawModal = () => {
     const {
-      crypto_name, crypto_symbol, crypto_balance, crypto_address
+      crypto_id, crypto_name, crypto_symbol, crypto_balance, crypto_address
     } = this.props.selectedWithdrawCrypto;
 
+    const {initiateWithdrawLoading, initiateWithdraw, _handleInitiateWithdraw, user_info, confirmWithdrawLoading, confirmWithdraw, _handleConfirmedWithdraw, onEditWithdrawConfirmationToken, withdrawConfirmationToken, closeModal} = this.props;
+    debugger
     switch (true) {
-      case false:
+      case initiateWithdrawLoading || confirmWithdrawLoading:
         return (
           <div className="creating-deal-modal-loading-spinner">
             <LoadingSpinner />
           </div>
         );
+      case initiateWithdraw.success:
+        return (
+          <div>
+            <div className="withdraw-modal">
+              <h4>Send {crypto_name} ({crypto_symbol})</h4>
+              <br />
+              <div className="creating-deal-seller-contact">
+                <label>Please enter the transfer confirmation token we just emailed you.</label>
+                <div>
+                  <input
+                    onChange={onEditWithdrawConfirmationToken}
+                    value={withdrawConfirmationToken}
+                    required
+                    className="description-input"
+                    autofocus="autofocus"
+                    placeholder="Enter your verification code"
+                  />
+                </div>
+                <small>A text message with code was sent to your phone.</small>
+              </div>
+            </div>
+            <button onClick={() => _handleConfirmedWithdraw(localStorage.getItem('token'), crypto_id, withdrawConfirmationToken)} style={{left: "80%"}}>Continue</button>
+          </div>
+        );
+        case confirmWithdraw.success:
+          return (
+            <div>
+              <div style={{textAlign: "center"}} className="withdraw-modal">
+                <h4>Successfully Transfered!</h4>
+                <div>
+                  <i class="fas fa-check fa-2x" />
+                </div>
+              </div>
+              <button onClick={() => closeModal()}>Close</button>
+            </div>
+          );
       default:
         return (
           <div>
@@ -66,11 +97,11 @@ class UserProfile extends Component {
                 {crypto_balance}
               </h4>
               <br/>
-              <div>Address to be Send To</div>
+              <div>Sending to Address</div>
               <h4 style={{color: "#49cdb7", letterSpacing: "1.5px"}}>{crypto_address}</h4>
               <small>*Please make sure this is {crypto_symbol} address.</small>
             </div>
-            <button style={{left: "80%"}}>Continue</button>
+            <button style={{left: "80%"}} onClick={() => _handleInitiateWithdraw(localStorage.getItem('token'), crypto_id, crypto_symbol, user_info[0].email)}>Continue</button>
           </div>
         );
     }
@@ -153,11 +184,17 @@ const mapStateToProps = state => ({
   users_cryptos_id: state.UserInfo.users_cryptos_id,
   current_crypto_name: state.UserInfo.current_crypto_name,
   modalVisible: state.UserInfo.modalVisible,
-  selectedWithdrawCrypto: state.UserInfo.selectedWithdrawCrypto
+  selectedWithdrawCrypto: state.UserInfo.selectedWithdrawCrypto,
+  initiateWithdraw: state.UserInfo.initiateWithdraw,
+  initiateWithdrawLoading: state.UserInfo.initiateWithdrawLoading,
+  confirmWithdraw: state.UserInfo.confirmWithdraw,
+  confirmWithdrawLoading: state.UserInfo.confirmWithdrawLoading,
+  confirmWithdrawError: state.UserInfo.confirmWithdrawError,
+  withdrawConfirmationToken: state.UserInfo.withdrawConfirmationToken
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({_isLoggedIn, _loadProfile, handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos, resetDealitemState, _handleInitiateWithdraw, openWithdrawModal, closeModal}, dispatch);
+  return bindActionCreators({_isLoggedIn, _loadProfile, handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos, resetDealitemState, _handleInitiateWithdraw, openWithdrawModal, closeModal, onEditWithdrawConfirmationToken, _handleConfirmedWithdraw}, dispatch);
 }
 
 
