@@ -94,7 +94,6 @@ export default function dealItemReducer(state = initialState, action) {
       };
 
     case "SHIPPING_STATE":
-    debugger
       return {
         ...state,
         shippingState: action.payload.selectedState

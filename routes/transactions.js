@@ -154,7 +154,7 @@ router.post("/checkout", verifyToken, function(req, res) {
 //this route needs to be programatically called once tracking number has been verified
 //we need to listen to shippo for the endpoint
 router.get("/payout", function(req, res) {
-  //sample txn_id (needs to query the right one)
+  //sample txn_id, user_id, and crypto_id (needs to query the right one)
   let txn_id = "CPDB7P3MAVEJMZ7N73TNSX2KBX";
   let user_id = 1;
   let crypto_id = 1;
@@ -191,7 +191,7 @@ router.get("/payout", function(req, res) {
 router.post("/withdraw/initiate", verifyToken, function(req, res) {
   let user_id = req.decoded._id;
   let {crypto_id, crypto_symbol, user_email} = req.body;
-  console.log(req.body);
+
   //send an email to the seller with a confirmation code
   let withdraw_token = Math.random().toString(36).substring(2,10)+"-"+Math.random().toString(36).substring(2,10)+"-"+Math.random().toString(36).substring(2,10);
   let withdraw_token_timestamp = Date.now();
@@ -296,16 +296,12 @@ router.post("/withdraw/confirm", verifyToken, function(req, res) {
           )
         } else {
           res.status(403).json({message: "Invalid Confirmation Token"});
-          console.log("You either entered the incorrect confirmation token or your token has expired.")
         }
     }
   )
 
 
 });
-
-
-
 
 //compile email template
 //this email template is sent to customer if payment has received

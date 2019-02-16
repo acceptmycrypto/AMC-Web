@@ -356,7 +356,6 @@ export const hideOrShowAddress = (status, address) => {
   * @member {function} initiateWithdrawFailure
 */
 export function _handleInitiateWithdraw(token, crypto_id, crypto_symbol, user_email) {
-  debugger
   const settings = {
       method: "POST",
       headers: {
@@ -371,7 +370,7 @@ export function _handleInitiateWithdraw(token, crypto_id, crypto_symbol, user_em
     return fetch("/withdraw/initiate", settings)
       .then(res => res.json())
       .then(jsonWithdrawInitiate => {
-        debugger
+
         dispatch(initiateWithdrawSuccess(jsonWithdrawInitiate));
         return jsonWithdrawInitiate;
       })
@@ -402,7 +401,6 @@ export const openWithdrawModal = (crypto_id, crypto_name, crypto_symbol, crypto_
 
 export function _handleConfirmedWithdraw(token, crypto_id, withdraw_confirmation_token) {
 
-  debugger
   const settings = {
       method: "POST",
       headers: {
@@ -417,12 +415,12 @@ export function _handleConfirmedWithdraw(token, crypto_id, withdraw_confirmation
     return fetch("/withdraw/confirm", settings)
       .then(res => res.json())
       .then(jsonConfirmWithdraw => {
-        debugger
+
         dispatch(confirmWithdrawSuccess(jsonConfirmWithdraw));
         return jsonConfirmWithdraw;
       })
       .catch(error => {
-        debugger
+        
         dispatch(confirmWithdrawFailure(error))
       } );
   };

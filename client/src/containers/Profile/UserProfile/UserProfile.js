@@ -51,7 +51,7 @@ class UserProfile extends Component {
     } = this.props.selectedWithdrawCrypto;
 
     const {initiateWithdrawLoading, initiateWithdraw, _handleInitiateWithdraw, user_info, confirmWithdrawLoading, confirmWithdraw, confirmWithdrawError, _handleConfirmedWithdraw, onEditWithdrawConfirmationToken, withdrawConfirmationToken, closeModal} = this.props;
-    debugger
+    
     console.log(confirmWithdrawError);
     switch (true) {
       case initiateWithdrawLoading || confirmWithdrawLoading:
