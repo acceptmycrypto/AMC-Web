@@ -9,10 +9,15 @@
   padding: 10px;
 } */
 
-ul{
+.qnaList{
     margin: 10px;
     padding-bottom: 10px;
     padding-top: 10px;
+    text-align: center;
+  }
+
+  .faqMenuTitle{
+    text-align: center;
   }
   
 .answer{
