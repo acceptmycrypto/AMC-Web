@@ -60,7 +60,7 @@ class UserProfile extends Component {
             <LoadingSpinner />
           </div>
         );
-      case initiateWithdraw.success:
+      case initiateWithdraw.success || confirmWithdraw.message === "Invalid Confirmation Token":
         return (
           <div>
             <div className="withdraw-modal">
@@ -77,6 +77,7 @@ class UserProfile extends Component {
                     autofocus="autofocus"
                     placeholder="Enter your verification code"
                   />
+                  <div style={{color: "red"}}>{confirmWithdraw.message}</div>
                 </div>
               </div>
             </div>

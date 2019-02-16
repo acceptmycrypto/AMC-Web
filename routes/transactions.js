@@ -231,7 +231,7 @@ router.post("/withdraw/initiate", verifyToken, function(req, res) {
 router.post("/withdraw/confirm", verifyToken, function(req, res) {
   let user_id = 1;
   let {crypto_id, withdraw_confirmation_token} = req.body;
-  
+
   connection.query(
     'SELECT withdraw_token, withdraw_token_timestamp from cryptos_withdraw WHERE withdraw_token = ?',
     [withdraw_confirmation_token],
@@ -290,12 +290,12 @@ router.post("/withdraw/confirm", verifyToken, function(req, res) {
 
                   });
 
-
                 }
 
             }
           )
         } else {
+          res.status(403).json({message: "Invalid Confirmation Token"});
           console.log("You either entered the incorrect confirmation token or your token has expired.")
         }
     }

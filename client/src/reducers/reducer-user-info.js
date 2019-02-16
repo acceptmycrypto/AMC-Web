@@ -217,7 +217,9 @@ export default function userInfoReducer(state = initialState, action) {
     case CLOSE_MODAL:
       return {
           ...state,
-          modalVisible: action.payload.visible
+          modalVisible: action.payload.visible,
+          confirmWithdraw: {},
+          withdrawConfirmationToken: null
       }
     case EDIT_WITHDRAW_CONFIRMATION_TOKEN:
       return {
