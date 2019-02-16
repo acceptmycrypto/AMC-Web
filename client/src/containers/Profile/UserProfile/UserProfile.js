@@ -50,8 +50,9 @@ class UserProfile extends Component {
       crypto_id, crypto_name, crypto_symbol, crypto_balance, crypto_address
     } = this.props.selectedWithdrawCrypto;
 
-    const {initiateWithdrawLoading, initiateWithdraw, _handleInitiateWithdraw, user_info, confirmWithdrawLoading, confirmWithdraw, _handleConfirmedWithdraw, onEditWithdrawConfirmationToken, withdrawConfirmationToken, closeModal} = this.props;
+    const {initiateWithdrawLoading, initiateWithdraw, _handleInitiateWithdraw, user_info, confirmWithdrawLoading, confirmWithdraw, confirmWithdrawError, _handleConfirmedWithdraw, onEditWithdrawConfirmationToken, withdrawConfirmationToken, closeModal} = this.props;
     debugger
+    console.log(confirmWithdrawError);
     switch (true) {
       case initiateWithdrawLoading || confirmWithdrawLoading:
         return (
@@ -77,7 +78,6 @@ class UserProfile extends Component {
                     placeholder="Enter your verification code"
                   />
                 </div>
-                <small>A text message with code was sent to your phone.</small>
               </div>
             </div>
             <button onClick={() => _handleConfirmedWithdraw(localStorage.getItem('token'), crypto_id, withdrawConfirmationToken)} style={{left: "80%"}}>Continue</button>
@@ -91,6 +91,20 @@ class UserProfile extends Component {
                 <div>
                   <i class="fas fa-check fa-2x" />
                 </div>
+              </div>
+              <button onClick={() => closeModal()}>Close</button>
+            </div>
+          );
+        case confirmWithdraw.error:
+          return (
+            <div>
+              <div className="withdraw-modal-success-transfered">
+                <h4>Failed to Transfer</h4>
+                <div>
+                <i class="fas fa-exclamation-triangle fa-2x"></i>
+                </div>
+                <br/>
+                <h4>{confirmWithdraw.message}</h4>
               </div>
               <button onClick={() => closeModal()}>Close</button>
             </div>

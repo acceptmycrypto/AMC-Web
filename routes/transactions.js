@@ -231,18 +231,16 @@ router.post("/withdraw/initiate", verifyToken, function(req, res) {
 router.post("/withdraw/confirm", verifyToken, function(req, res) {
   let user_id = 1;
   let {crypto_id, withdraw_confirmation_token} = req.body;
-  console.log(req.body);
+  
   connection.query(
-    'SELECT withdraw_token, withdraw_token_timestamp, withdraw_confirmed from cryptos_withdraw WHERE withdraw_token = ?',
+    'SELECT withdraw_token, withdraw_token_timestamp from cryptos_withdraw WHERE withdraw_token = ?',
     [withdraw_confirmation_token],
     function(error, cryptos_withdraw_result, fields) {
         if (error) throw error;
-        console.log(cryptos_withdraw_result);
-        //5 minutes = 300,000 ms
-        console.log(cryptos_withdraw_result[0].withdraw_token_timestamp);
-        console.log("time now", Date.now());
 
-        if (cryptos_withdraw_result.length > 0 && (cryptos_withdraw_result[0].withdraw_token_timestamp + 300000  >= Date.now() && cryptos_withdraw_result[0].withdraw_confirmed) !== 1) {
+        //5 minutes = 300,000 ms
+
+        if (cryptos_withdraw_result.length > 0 && (cryptos_withdraw_result[0].withdraw_token_timestamp + 300000)  >= Date.now()) {
 
           //verify if there is money in users_cryptos. We checked at the endpoint withdraw/initiate already, but we're double checking again when user hit this withdraw/confirm
           connection.query(
@@ -251,43 +249,48 @@ router.post("/withdraw/confirm", verifyToken, function(req, res) {
             function(error, users_cryptos_result, fields) {
                 if (error) throw error;
                 let {users_cryptos_id, crypto_address, crypto_balance, crypto_symbol} = users_cryptos_result[0];
-                console.log(users_cryptos_result);
 
                 if (crypto_balance > 0) {
-
-                  //update the the user's cryptos table so the new balance is now 0
-                  connection.query(
-                    "UPDATE users_cryptos SET crypto_balance = ? WHERE id = ?",
-                    [0, users_cryptos_id],
-                    function(err, result) {
-                      if (err) {
-                        console.log(err);
-                      }
-                    }
-                  );
-
-                  //update the cryptos_withdraw table the amount of cryptos withdraw
-                  connection.query(
-                    "UPDATE cryptos_withdraw SET withdraw_amount = ?, withdraw_confirmed = ? WHERE withdraw_token = ?",
-                    [crypto_balance, 1, cryptos_withdraw_result[0].withdraw_token],
-                    function(err, result) {
-                      if (err) {
-                        console.log(err);
-                      }
-                    }
-                  );
-
                   console.log("call coinpayment")
-                  res.json({success: true, message: "Successfully Transfered"})
-                  // let optons = {
-                  //   amount: crypto_balance,
-                  //   currency: crypto_symbol,
-                  //   address: crypto_address
-                  // };
-                  // client.createWithdrawal(options, function(error, transferResult) {
-                  //   if (error) console.log(error);
-                  //   console.log(transferResult);
-                  // });
+                  let options = {
+                    amount: crypto_balance,
+                    currency: crypto_symbol,
+                    address: crypto_address
+                  };
+
+                  client.createWithdrawal(options, function(error, transferResult) {
+                    if (error) {
+                      //forbidden if minimum amount does not meet
+                      res.status(403).json({error: true, message: error});
+                      console.log("error", error);
+                    } else if (transferResult.status === 1) {
+                        //update the the user's cryptos table so the new balance is now 0
+                        connection.query(
+                          "UPDATE users_cryptos SET crypto_balance = ? WHERE id = ?",
+                          [0, users_cryptos_id],
+                          function(err, result) {
+                            if (err) {
+                              console.log(err);
+                            }
+                            res.json({success: true, message: "Successfully Transfered"})
+                          }
+                        );
+
+                        //update the cryptos_withdraw table the amount of cryptos withdraw
+                        connection.query(
+                          "UPDATE cryptos_withdraw SET withdraw_amount = ?, coinpayment_withdraw_id = ? WHERE withdraw_token = ?",
+                          [crypto_balance, 1, cryptos_withdraw_result[0].withdraw_token, transferResult.id],
+                          function(err, result) {
+                            if (err) {
+                              console.log(err);
+                            }
+                          }
+                        );
+                    }
+
+                  });
+
+
                 }
 
             }

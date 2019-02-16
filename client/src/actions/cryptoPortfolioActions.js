@@ -421,7 +421,10 @@ export function _handleConfirmedWithdraw(token, crypto_id, withdraw_confirmation
         dispatch(confirmWithdrawSuccess(jsonConfirmWithdraw));
         return jsonConfirmWithdraw;
       })
-      .catch(error => dispatch(confirmWithdrawFailure(error)));
+      .catch(error => {
+        debugger
+        dispatch(confirmWithdrawFailure(error))
+      } );
   };
 }
 
