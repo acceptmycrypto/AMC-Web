@@ -4,6 +4,7 @@ import './Faq.css';
 // import { BrowserRouter as Link } from 'react-router-dom';
 import { UncontrolledCollapse, Button, CardBody, Card, Collapse } from 'reactstrap';
 import Navbar from '../Navigation/Navbar/Navbar';
+// Will keep these imports for possible future use. Will delete when found unnecessary.
 // import * as Scroll from 'react-scroll';
 // import { Link, Element , Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 // import {TextFilter} from 'react-text-filter';
@@ -11,8 +12,6 @@ import Navbar from '../Navigation/Navbar/Navbar';
 
 
 class Faq extends Component {
-  // constructor(props) {
-  //   super(props);
     
 render() {
 
@@ -23,14 +22,6 @@ render() {
         <Navbar/>
          
          <div className="Faq-menu">
-
-{/* <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" 
-      integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" 
-      crossorigin="anonymous"></link>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-    </head> */}
 
     <title> AcceptMyCrypto FAQs </title> 
          
@@ -55,7 +46,6 @@ render() {
          </div>
     
         <div className="Faq-mainContent">
-        {/* <div className="back_to_home"> <i className="fas fa-arrow-left" id="back-arrow"></i> <span>Home</span></div> */}
           <div className="font-17 color-deepBlue">
               <div className="ml-2" id="Faq-amh">
                 AcceptMyHelp
@@ -92,7 +82,7 @@ render() {
 <UncontrolledCollapse toggler="#togglerQuestion2">
       <CardBody>
           <ul className="Faq-qnaList">  
-            <li className="Faq-answer">Acceptmycrypto.com is a marketplace to allows sellers to list items/services in crypto currencies or US dollars. It was created to assist in the acceptance of cryptocurrencies as a viable form of payment , which is why listings have a lower price in cryptocurrency.</li>
+            <li className="Faq-answer">If you would like to have a listing then yes you would need to create an account.There is an option for guest checkout as a buyer, however, we advise you to create a profile for a more complete experience.</li>
           </ul>
       </CardBody>
 
@@ -246,9 +236,6 @@ render() {
 </UncontrolledCollapse>
 </UncontrolledCollapse>
 </div>
-
-
-{/* <div className="FormField"> */}
             
 <UncontrolledCollapse toggler="#seller">
 
@@ -352,7 +339,7 @@ render() {
 
 </UncontrolledCollapse>
 
-<CardBody>
+        <CardBody>
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerSellerQues7">Do you offer fraud protection?</Button></h4></li>
           </ul>
@@ -368,7 +355,7 @@ render() {
 
 </UncontrolledCollapse>
 
-<CardBody>
+        <CardBody>
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerSellerQues8">How do I get paid?</Button></h4></li>
           </ul>
@@ -388,7 +375,7 @@ render() {
 
 </UncontrolledCollapse>
 
-<CardBody>
+        <CardBody>
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerSellerQues9">How much does it cost to sell on AcceptMyCrypto?</Button></h4></li>
           </ul>
@@ -504,8 +491,6 @@ render() {
 </UncontrolledCollapse>
 </UncontrolledCollapse>
          
-
-          {/* <div className="FormField"> */}
 <UncontrolledCollapse toggler="togglerBuyers">
 
         <h4 className="faqMenuTitle">Buyers</h4>
@@ -526,7 +511,7 @@ render() {
 
 </UncontrolledCollapse>
 
-<CardBody>
+        <CardBody>
             <ul className="Faq-qnaList">
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerBuyersQues2">Lost/Stolen/Damaged products, what can I do?</Button></h4></li>
             </ul>
@@ -535,15 +520,15 @@ render() {
 <UncontrolledCollapse toggler="#togglerBuyersQues2">
  
         <CardBody>
-        <ul className="Faq-qnaList">
-                  <li className="Faq-answer">The details of returns, exchanges and other issues that may arise are listed under our Returns/Refunds section in the footer of the Home page.</li>
-                  <li className="Faq-answer">Typically any issues that may arise are handled between the buyer and the seller. If communications between the buyer and seller becomes unproductive and/of volatile AcceptMyCrypto will step in and attempt to mediate and resolve the issue. AcceptMyCrypto does not condone ANY acts of discrimination or violence (written or otherwise). Any account suspected of such acts will be deactivated and the user blocked from the platform.</li>
-                </ul>
+              <ul className="Faq-qnaList">
+                <li className="Faq-answer">The details of returns, exchanges and other issues that may arise are listed under our Returns/Refunds section in the footer of the Home page.</li>
+                <li className="Faq-answer">Typically any issues that may arise are handled between the buyer and the seller. If communications between the buyer and seller becomes unproductive and/of volatile AcceptMyCrypto will step in and attempt to mediate and resolve the issue. AcceptMyCrypto does not condone ANY acts of discrimination or violence (written or otherwise). Any account suspected of such acts will be deactivated and the user blocked from the platform.</li>
+              </ul>
         </CardBody>
 
 </UncontrolledCollapse>
 
-<CardBody>
+        <CardBody>
             <ul className="Faq-qnaList">
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerBuyersQues3">How do I request a refund/return?</Button></h4></li>
             </ul>
@@ -552,16 +537,16 @@ render() {
 <UncontrolledCollapse toggler="#togglerBuyersQues3">
  
         <CardBody>
-        <ul className="Faq-qnaList">
-                  <li className="Faq-answer">Each individual seller will have their own Return/Refund policy. Some may offer returns and some may not. For more information on this topic please refer to the individual seller and/or thier listing. You may also refer to our Return/Refund policy located in the footer of the Home page or click the link provided.</li>
-                  <li className="Faq-answer">For fraudulent listings, If we determine that a listing is fake and/or fraudulent in any way we will make all efforts to ensure you receive your funds back (if a successful payment has already been processed).</li>
-                  <li className="Faq-answer">For any accepted Returns/Refunds AcceptMyCrypto will subtract a 2.5% processing fee from the amount of the refund. These are charges that AcceptMyCrypto has incurred for processing the transaction.</li>
-                </ul>
+              <ul className="Faq-qnaList">
+                <li className="Faq-answer">Each individual seller will have their own Return/Refund policy. Some may offer returns and some may not. For more information on this topic please refer to the individual seller and/or thier listing. You may also refer to our Return/Refund policy located in the footer of the Home page or click the link provided.</li>
+                <li className="Faq-answer">For fraudulent listings, If we determine that a listing is fake and/or fraudulent in any way we will make all efforts to ensure you receive your funds back (if a successful payment has already been processed).</li>
+                <li className="Faq-answer">For any accepted Returns/Refunds AcceptMyCrypto will subtract a 2.5% processing fee from the amount of the refund. These are charges that AcceptMyCrypto has incurred for processing the transaction.</li>
+              </ul>
         </CardBody>
 
 </UncontrolledCollapse>
 
-<CardBody>
+        <CardBody>
             <ul className="Faq-qnaList">
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerBuyersQues4">Can I cancel my order?</Button></h4></li>
             </ul>
@@ -570,15 +555,15 @@ render() {
 <UncontrolledCollapse toggler="#togglerBuyersQues4">
  
         <CardBody>
-        <ul className="Faq-qnaList">
-                  <li className="Faq-answer">The buyer has 15 minutes to pay for the item(s)/service(s) before the transaction auto-cancels. If payment has not been received in this window of time the transaction will be canceled and the item(s)/service(s) will become available for purchase again.</li>
-                  <li className="Faq-answer">If the payment has been accepted and received, please refer to our Return/Refund policy in the footer of the Home page or click the link provided for further instructions.</li>
-                </ul>
+              <ul className="Faq-qnaList">
+                <li className="Faq-answer">The buyer has 15 minutes to pay for the item(s)/service(s) before the transaction auto-cancels. If payment has not been received in this window of time the transaction will be canceled and the item(s)/service(s) will become available for purchase again.</li>
+                <li className="Faq-answer">If the payment has been accepted and received, please refer to our Return/Refund policy in the footer of the Home page or click the link provided for further instructions.</li>
+              </ul>
         </CardBody>
 
 </UncontrolledCollapse>
 
-<CardBody>
+        <CardBody>
             <ul className="Faq-qnaList">
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerBuyersQues5">Do I have a purchase history?</Button></h4></li>
             </ul>
@@ -611,15 +596,11 @@ render() {
 </UncontrolledCollapse>
 </UncontrolledCollapse>
 
-
-
-          {/* </div> */}
-            {/* <div className="FormField"> */}
 <UncontrolledCollapse toggler="togglerGuest">
 
       <h4 className="faqMenuTitle">Buying as a Guest</h4>
 
-      <CardBody>
+        <CardBody>
             <ul className="Faq-qnaList">
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerGuestQues1">How can I purchase an item on AcceptMyCrypto as a guest?</Button></h4></li>
             </ul>
@@ -701,52 +682,7 @@ render() {
 </UncontrolledCollapse>
 </UncontrolledCollapse>
             </div>
-
-   
-        {/* </div>
-        <div className="App__Form">
-        <div className="FormCenter">
-        <form className="FormFields">
-        
-        <div className="FormField">
-            <label className="FormField__Label"></label>
-            <UncontrolledCollapse toggler="togglerQuestion1">
-  <Card>
-      <CardBody>
-          <ul className="Faq-qnaList">
-            <li><h4>What is acceptmycrypto.com?</h4></li>
-              <ul className="Faq-qnaList">
-                <li >Acceptmycrypto.com is a marketplace to allows sellers to list items/services in crypto currencies or US dollars. It was created to assist in the acceptance of cryptocurrencies as a viable form of payment , which is why listings have a lower price in cryptocurrency.</li>
-              </ul>
-</ul>
-</CardBody>
- </Card>
-</UncontrolledCollapse> 
-
-             <UncontrolledCollapse toggler="togglerQuestion2">
-  <Card>
-      <CardBody>
-        <ul className="Faq-qnaList">
-            <li><h4>Do I need to create an account?</h4></li>
-              <ul className="Faq-qnaList">
-                <li>If you would like to have a listing then yes you would need to create an account.There is an option for guest checkout as a buyer, however, we advise you to create a profile for a more complete experience</li>
-              </ul>
-            </ul>
-              </CardBody>
-              </Card>
-              </UncontrolledCollapse>
-
-  
-          </div>
-
-          
-        </form>
-      </div> */}
-        </div>
-      // </div>
-      
-      
-      
+        </div>      
     );
 }
 }
