@@ -221,17 +221,14 @@ router.post('/listdeal', verifyToken, function(req, res) {
 
           //compare two arrays to find the unique cryptos_ids
           //use filtering for both ways
-          let unique1 = cryptoPorfolioIds_arr.filter(function(obj) { return selectedCryptosIds_arr.indexOf(obj) == -1; });
           let unique2 = selectedCryptosIds_arr.filter(function(obj) { return cryptoPorfolioIds_arr.indexOf(obj) == -1; });
 
-          //unique cryptos_ids to be inserted into users_cryptos
-          let newPorfolioCryptos = unique1.concat(unique2);
 
           //create a nested array for insertion [[1,1], [2,1]] where seller_id is the second indexof inner nested array
-          for (let j = 0; j < newPorfolioCryptos.length; j++) {
+          for (let j = 0; j < unique2.length; j++) {
             let usersCryptos_records = [];
 
-            usersCryptos_records.push(newPorfolioCryptos[j], seller_id)
+            usersCryptos_records.push(unique2[j], seller_id)
 
             users_cryptos.push(usersCryptos_records);
           }
