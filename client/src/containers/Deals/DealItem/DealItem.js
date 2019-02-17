@@ -637,23 +637,10 @@ class DealItem extends Component {
                             </small>
                             <hr />
                           </div>
-<<<<<<< HEAD
                         ))
                       ) : (
                         <div className="text-secondary">
                           This seller has no reviews yet!
-=======
-
-                          {/* <small>
-                            <a href="/">Report abuse</a>
-                          </small> */}
-                          <hr />
-                        </div>
-                      ))
-                    ) : (
-                      <div className="text-secondary">
-                        This seller has no reviews yet!
->>>>>>> d0424ac83f6ab16ebd17f40dfc5360ef63be522e
                       </div>
                       )}
                   </div>
