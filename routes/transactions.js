@@ -47,6 +47,10 @@ var connection = mysql.createConnection({
 var cryptoWithdrawEmailTemplateText = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/cryptoWithdrawConfirmation/cryptoWithdrawConfirmation.ejs'), 'utf-8');
 var cryptoWithdrawEmailTemplate = ejs.compile(cryptoWithdrawEmailTemplateText);
 
+//compile email template for balance deposited updated
+var balanceDepositedEmailTemplateText = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/balanceDeposited/balanceDeposited.ejs'), 'utf-8');
+var balanceDepositedEmailTemplate = ejs.compile(balanceDepositedEmailTemplateText);
+
 // api
 //get list of transactions that are shared to the community and have received the payment.
 //info we need to send to the client: the deal name, the user name, the crypto symbol, the venue name, date purchased
@@ -161,12 +165,12 @@ router.get("/payout", function(req, res) {
 
   //get the balance and amount of the transaction from our database
   connection.query(
-    "SELECT amount, crypto_symbol, payment_received, users_purchases.user_id, users_purchases.crypto_id, users_cryptos.crypto_address, users_cryptos.id AS users_cryptos_id, crypto_balance from users_purchases LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN users_cryptos ON users_cryptos.crypto_id = crypto_info.id where txn_id = ? AND users_purchases.user_id = ? AND users_purchases.crypto_id = ?",
+    "SELECT amount, crypto_symbol, payment_received, users_purchases.user_id, users_purchases.crypto_id, users_cryptos.crypto_address, users_cryptos.id AS users_cryptos_id, crypto_balance, deal_name, email AS user_email from users_purchases LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN users_cryptos ON users_cryptos.crypto_id = crypto_info.id LEFT JOIN deals ON users_purchases.deal_id = deals.id where txn_id = ? AND users_purchases.user_id = ? AND users_purchases.crypto_id = ?",
     [txn_id, user_id, crypto_id],
     function(error, result, fields) {
       if (error) throw error;
 
-      let {amount, crypto_symbol, payment_received, crypto_address, users_cryptos_id, crypto_balance} = result[0];
+      let {amount, crypto_symbol, payment_received, crypto_address, users_cryptos_id, crypto_balance, deal_name, user_email} = result[0];
       console.log(result[0]);
       //update the crypto balance of the seller
       if (payment_received === 100) {
@@ -180,6 +184,15 @@ router.get("/payout", function(req, res) {
             if (err) {
               console.log(err);
             }
+
+            const balance_deposited = {
+              to: user_email,
+              from: process.env.CUSTOMER_SUPPORT,
+              subject: '[AcceptMyCrypto Notification] Cryptocurrency Deposited!',
+              html: balanceDepositedEmailTemplate({ crypto_symbol, amountAfterFee, deal_name })
+            };
+            sgMail.send(balance_deposited);
+
           }
         );
       }
