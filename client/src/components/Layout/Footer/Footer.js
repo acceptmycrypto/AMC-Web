@@ -8,7 +8,7 @@ const Footer = props => {
 
      
       
-      <div className="links">
+      <div className="Footer-links">
 
       <Link to="/Faq">FAQ</Link>
       <div className="copyrightFooter">AcceptMyCrypto © 2018</div>
