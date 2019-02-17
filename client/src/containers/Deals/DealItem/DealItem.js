@@ -16,7 +16,7 @@ import {
   handleSelectedCrypto,
   handleDetailStep,
   handleShippingStep,
-  handlePayingStep
+  handlePayingStep,
 } from "../../../actions/dealItemActions";
 import { resetListDeal } from "../../../actions/listDealActions";
 import { _fetchTransactionInfo } from "../../../actions/paymentActions";
@@ -227,7 +227,7 @@ class DealItem extends Component {
         }
       }
     }
-    
+
     return result;
   };
 

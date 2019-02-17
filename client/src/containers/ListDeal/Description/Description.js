@@ -443,7 +443,7 @@ const mapStateToProps = state => ({
   sellerVerificationToken: state.CreateDeal.sellerVerificationToken,
   checkingCodeLoading: state.CreateDeal.checkingCodeLoading,
   checkingCodeSuccess: state.CreateDeal.checkingCodeSuccess,
-  checkingCodeError: state.CreateDeal.checkingCodeError, 
+  checkingCodeError: state.CreateDeal.checkingCodeError,
   selectedCategory: state.CreateDeal.selectedCategory
 });
 

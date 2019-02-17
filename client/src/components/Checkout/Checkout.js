@@ -1,6 +1,7 @@
 import React from "react";
 import "./Checkout.css";
 import Countdown from 'react-countdown-now';
+import { Link } from "react-router-dom";
 
 const Checkout = props => (
   <div style={{textAlign: "center"}}>
@@ -21,9 +22,12 @@ const Checkout = props => (
         </div>
         <div className="payment-timeout">*If no payment received in <strong ><Countdown date={Date.now() + props.showTimeout} /></strong>, the purchase order will be canceled.</div>
         <div>Once payment has received, we'll email you the order transaction.</div>
-        <div className="done-sending-payment">
-          <button>Done</button>
-        </div>
+
+        <Link to="/profile">
+          <div className="done-sending-payment">
+            <button>Done</button>
+          </div>
+        </Link>
 
       </div>
     </div>

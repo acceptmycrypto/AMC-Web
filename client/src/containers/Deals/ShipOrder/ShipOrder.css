@@ -15,6 +15,14 @@
   width: 100%;
 }
 
+.shipping-form input:-webkit-autofill,
+.shipping-form input:-webkit-autofill:hover,
+.shipping-form input:-webkit-autofill:focus,
+.shipping-form input:-webkit-autofill:active  {
+    box-shadow: 0 0 0 30px #f8f8fa;
+    -webkit-box-shadow: 0 0 0 30px #f8f8fa inset !important;
+}
+
 #shipping-state {
   margin-bottom: 10px;
 }
