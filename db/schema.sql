@@ -77,6 +77,10 @@ CREATE TABLE deals (
 	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   category VARCHAR(255) NULL, -- we need to take this out eventually
 	item_condition VARCHAR (255) NULL,
+	length INT NULL, --in inches
+	width INT NULL, --in inches
+	height INT NULL, --in inches
+	weight INT NULL, -- in lb (pounds)
 -- 	deal_avg_rating FLOAT(3,2) NULL,
 -- 	total_deal_ratings INT NULL,
 	PRIMARY KEY (id),
