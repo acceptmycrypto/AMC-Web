@@ -23,6 +23,8 @@ const initialState = {
   dealCreated: {},
   modalVisible: false,
   phoneNumber: null,
+  sellerFirstname: null,
+  sellerLastname: null,
   sellerAddress: null,
   sellerCity: null,
   sellerState: null,
@@ -228,6 +230,18 @@ export default function CreateDealReducer(state = initialState, action) {
       return {
         ...state,
         phoneNumber: action.payload
+      };
+
+      case "EDIT_SELLER_FIRSTNAME":
+      return {
+        ...state,
+        sellerFirstname: action.payload
+      };
+
+      case "EDIT_SELLER_LASTNAME":
+      return {
+        ...state,
+        sellerLastname: action.payload
       };
 
     case "EDIT_SELLER_ADDRESS":
