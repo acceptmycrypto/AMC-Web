@@ -113,6 +113,7 @@ router.post("/cryptocurrency/exchange", verifyToken, async function(req, res) {
 
 router.post('/listdeal', verifyToken, function(req, res) {
   //info needed to insert into tables
+  
   let {dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos} = req.body
   let seller_id = req.decoded._id;
   let phone_number_verified;
@@ -224,11 +225,13 @@ router.post('/verification/start', verifyToken, function(req, res) {
 
   let state = req.body.sellerState.value;
 
-  let {sellerAddress, sellerCity, sellerZipcode} = req.body;
+  let {firstName, lastName, sellerAddress, sellerCity, sellerZipcode} = req.body;
 
   connection.query("UPDATE users SET ? WHERE ?",
   [
-    { address: sellerAddress,
+    { first_name: firstName,
+      last_name: lastName,
+      address: sellerAddress,
       city: sellerCity,
       state,
       zipcode: sellerZipcode
