@@ -72,7 +72,7 @@ class DealItem extends Component {
   };
 
   convertToPercentage = (priceInDollar, priceInCrypto) => {
-    return parseInt(((priceInDollar - priceInCrypto) / priceInDollar) * 100);
+    return Math.ceil(((priceInDollar - priceInCrypto) / priceInDollar) * 100);
   };
 
   timeInMilliseconds = sec => {

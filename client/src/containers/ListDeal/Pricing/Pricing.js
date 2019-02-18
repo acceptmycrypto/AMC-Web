@@ -48,7 +48,7 @@ const Pricing = props => {
           </div>
           <div className="listed-price-in-crypto-right">
             <div className="create-deal-discount-percent">
-              {props.showDiscountPercent}% OFF
+              {Math.ceil(props.showDiscountPercent)}% OFF
             </div>
             <input
               onChange={props.changeDiscountPercent}

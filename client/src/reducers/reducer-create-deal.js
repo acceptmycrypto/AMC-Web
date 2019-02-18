@@ -308,7 +308,7 @@ export default function CreateDealReducer(state = initialState, action) {
       };
 
     case "EDIT_LISTING":
-      let {deal_name, pay_in_crypto, pay_in_dollar, deal_image} = action.payload.dealItem;
+      let {deal_name, pay_in_crypto, pay_in_dollar, deal_image, deal_image_object} = action.payload.dealItem;
 
     debugger
       return {
@@ -317,7 +317,9 @@ export default function CreateDealReducer(state = initialState, action) {
         priceInUSD: pay_in_dollar,
         priceInCrypto: pay_in_crypto,
         discountPercent: CalculateDiscountPercentage(pay_in_dollar, pay_in_crypto),
-        images: deal_image
+        images: deal_image_object,
+        imageData: deal_image_object[0],
+        imageView: deal_image_object[0].Location
       };
 
     default:
