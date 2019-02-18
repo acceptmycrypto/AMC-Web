@@ -1,4 +1,4 @@
-import {EditorState} from 'draft-js';
+import {EditorState, convertFromRaw} from 'draft-js';
 
 const initialState = {
   imageData: {},
@@ -151,6 +151,7 @@ export default function CreateDealReducer(state = initialState, action) {
       };
 
     case "GET_RATE_SUCCESS":
+    debugger
       return {
         ...state,
         gettingRate: {[action.payload.crypto_symbol] : false},
@@ -309,7 +310,27 @@ export default function CreateDealReducer(state = initialState, action) {
       };
 
     case "EDIT_LISTING":
-      let {deal_name, pay_in_crypto, pay_in_dollar, deal_image, deal_image_object} = action.payload.dealItem;
+      let {deal_name, pay_in_crypto, pay_in_dollar, deal_category, item_condition,deal_image_object, deal_description} = action.payload.dealItem;
+
+      let deal_selected_cryptos = {};
+      for (let crypto in action.payload.acceptedCryptos) {
+        let cryptoSymbol = action.payload.acceptedCryptos[crypto].crypto_symbol
+        deal_selected_cryptos = {...deal_selected_cryptos, [cryptoSymbol] : ""}
+      }
+
+      let deal_selected_category = [];
+      let categoryObj = {};
+      for (let category in deal_category) {
+        let value = deal_category[category];
+        let label = deal_category[category];
+        categoryObj = {...categoryObj, label, value}
+        deal_selected_category.push(categoryObj);
+      }
+
+      let deal_item_condition = {label: item_condition, value: item_condition}
+
+      let dealDescription = convertFromRaw(JSON.parse(deal_description));
+      let editorState = EditorState.createWithContent(dealDescription);
 
     debugger
       return {
@@ -321,7 +342,11 @@ export default function CreateDealReducer(state = initialState, action) {
         discountPercent: CalculateDiscountPercentage(pay_in_dollar, pay_in_crypto),
         images: deal_image_object,
         imageData: deal_image_object[0],
-        imageView: deal_image_object[0].Location
+        imageView: deal_image_object[0].Location,
+        crypto_amount: deal_selected_cryptos,
+        selectedCategory: deal_selected_category,
+        selectedCondition: deal_item_condition,
+        editorState
       };
 
     default:

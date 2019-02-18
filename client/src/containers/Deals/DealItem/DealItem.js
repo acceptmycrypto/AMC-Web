@@ -530,7 +530,7 @@ class DealItem extends Component {
                   user_info[0].id === dealItem.seller_id ?
                   <Link to={"/listdeal"}>
                     <div className="px-3 message-seller">
-                      <button onClick={() => editListing(dealItem)} className="mt-3">
+                      <button onClick={() => editListing(dealItem, acceptedCryptos)} className="mt-3">
                       Edit Listing
                       </button>
                     </div>

@@ -78,7 +78,7 @@ const Pricing = props => {
                 <div key={crypto.crypto_symbol}>
                   <div
                     className={
-                      props.showCryptoAmount[crypto.crypto_symbol] ||
+                      props.showCryptoAmount[crypto.crypto_symbol] !== undefined ||
                       props.rateLoading[crypto.crypto_symbol]
                         ? "crypto-logo-image selected-crypto-logo-image"
                         : "crypto-logo-image"
@@ -102,7 +102,7 @@ const Pricing = props => {
                   )}
                   {props.showCryptoAmount[crypto.crypto_symbol] && (
                     <div className="check-crypto-amount">
-                      {props.showCryptoAmount[crypto.crypto_symbol]}{" "}
+                      {props.showCryptoAmount[crypto.crypto_symbol]}
                       {crypto.crypto_symbol}
                     </div>
                   )}

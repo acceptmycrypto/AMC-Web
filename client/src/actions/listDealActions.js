@@ -137,6 +137,7 @@ export function _getCryptoExchange(token, crypto_symbol, price_in_crypto) {
     return fetch("/cryptocurrency/exchange", settings)
       .then(res => res.json())
       .then(jsonRate => {
+        debugger
         dispatch(getRateSuccess(crypto_symbol, jsonRate));
         return jsonRate;
       })
@@ -367,7 +368,7 @@ export const checkCodeFailure = error => ({
   payload: { error }
 });
 
-export const editListing = (dealItem) => ({
+export const editListing = (dealItem, acceptedCryptos) => ({
   type: "EDIT_LISTING",
-  payload: {dealItem}
+  payload: {dealItem, acceptedCryptos}
 });
