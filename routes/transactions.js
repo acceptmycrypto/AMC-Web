@@ -13,6 +13,9 @@ var IPN_SECRET = keys.coinpayment.IPN_SECRET;
 var { verify } = require(`coinpayments-ipn`);
 var CoinpaymentsIPNError = require(`coinpayments-ipn/lib/error`);
 
+//shippo
+var shippo = require('shippo')(process.env.SHIPMENT_KEY);
+
 //use sendgrid
 var sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(keys.sendgrid);
@@ -60,12 +63,12 @@ router.get("/api/transactions/community/payment_received", function (req, res) {
 //coinpayment
 router.post("/checkout", verifyToken, function (req, res) {
   //Inserting to user_purchases table, this doens't mean purchase is successful
-  //Need to listen to IPA when payment has recieved and then update payment_recieved to true
+  //Need to listen to IPN (instant payment notification) when payment has recieved and then update payment_recieved to true
 
   let user_id = req.decoded._id;
   let crypto_name = req.body.crypto_name;
 
-  createMatchedFriends(user_id, crypto_name);
+  // createMatchedFriends(user_id, crypto_name);
 
   client.createTransaction(
     {
@@ -121,20 +124,6 @@ router.post("/checkout", verifyToken, function (req, res) {
                     if (err) throw err;
                   }
                 );
-
-                //insert purchase customization into table
-                // connection.query(
-                //   "INSERT INTO users_purchase_customization SET ?",
-                //   {
-                //     color: req.body.selectedColor,
-                //     size: req.body.selectedSize,
-                //     txn_id: paymentInfo.txn_id
-                //   },
-                //   function(err, custom_data, fields) {
-                //     if (err) throw err;
-                //   }
-                // );
-
               }
             );
 
@@ -230,7 +219,7 @@ router.post("/guestCheckout", function (req, res) {
                       }
                     );
 
-                    
+
 
                     connection.query('SELECT deals.deal_name, users.username AS seller_name FROM deals LEFT JOIN users ON deals.seller_id = users.id WHERE deals.id = ?',
                       [req.body.deal_id],
@@ -239,14 +228,14 @@ router.post("/guestCheckout", function (req, res) {
 
                         console.log(res[0]);
 
-                        
+
 
                         let view_deal;
-                        if (process.env.NODE_ENV=="development"){
-                             view_deal = `${process.env.FRONTEND_URL}/feed/deals/${req.body.deal_id}/${res[0].deal_name}`;
-                         } else {
-                             view_deal = `${process.env.BACKEND_URL}/feed/deals/${req.body.deal_id}/${res[0].deal_name}`;
-                         }
+                        if (process.env.NODE_ENV == "development") {
+                          view_deal = `${process.env.FRONTEND_URL}/feed/deals/${req.body.deal_id}/${res[0].deal_name}`;
+                        } else {
+                          view_deal = `${process.env.BACKEND_URL}/feed/deals/${req.body.deal_id}/${res[0].deal_name}`;
+                        }
 
                         const guest_checkout = {
                           to: req.body.email,
@@ -265,19 +254,6 @@ router.post("/guestCheckout", function (req, res) {
                         };
                         sgMail.send(guest_checkout);
                       });
-
-                    //insert purchase customization into table
-                    // connection.query(
-                    //   "INSERT INTO users_purchase_customization SET ?",
-                    //   {
-                    //     color: req.body.selectedColor,
-                    //     size: req.body.selectedSize,
-                    //     txn_id: paymentInfo.txn_id
-                    //   },
-                    //   function(err, custom_data, fields) {
-                    //     if (err) throw err;
-                    //   }
-                    // );
 
                   }
                 );
@@ -309,7 +285,7 @@ var item_ordered_emailTemplate = ejs.compile(item_ordered_ET);
 var item_canceled_ET = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/itemCanceled/itemCanceled.ejs'), 'utf-8');
 var item_canceled_emailTemplate = ejs.compile(item_canceled_ET);
 
-//ipa (listen to coinpayment's events)
+//ipn (listen to coinpayment's events) - instant payment notification
 router.post("/checkout/notification", function (req, res, next) {
   if (!req.get(`HMAC`) || !req.body || !req.body.ipn_mode || req.body.ipn_mode !== `hmac` || MERCHANT_ID !== req.body.merchant) {
     return next(new Error(`Invalid request`));
@@ -337,11 +313,12 @@ router.post("/checkout/notification", function (req, res, next) {
 }, function (req, res, next) {
   //handle events
   connection.query(
-    'SELECT status, email, amount, crypto_symbol, deal_name FROM users_purchases LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE txn_id = ?',
+    'SELECT status, email, amount, crypto_symbol, deal_name, deals.id AS deal_id FROM users_purchases LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE txn_id = ?',
     [req.body.txn_id],
     function (err, data_status, fields) {
       let current_status = data_status[0].status;
-      let deal_name = data_status[0].deal_name; 
+      let deal_name = data_status[0].deal_name;
+      let deal_id = data_status[0].deal_id;
 
       if (current_status === "0" && req.body.status === "1") {
         //update the status in the table to "1"
@@ -383,6 +360,8 @@ router.post("/checkout/notification", function (req, res, next) {
             };
             sgMail.send(confirm_payment_with_customer);
           });
+
+        createShippmentInfo(req.body.txn_id, deal_id);
       }
 
       if (current_status === "0" && req.body.status === "-1") {
@@ -415,6 +394,91 @@ router.post("/checkout/notification", function (req, res, next) {
 
   return next();
 });
+
+
+router.get('/newShippingLabel/:txn_id', function (req, res) {
+  let txn_id = req.params.txn_id;
+  createShippmentInfo(txn_id);
+  res.end();
+  
+})
+
+function createShippmentInfo(txn_id, deal_id) {
+  
+  connection.query("SELECT users_shipping_address.shipping_firstname AS buyer_firstname, users_shipping_address.shipping_lastname AS buyer_lastname, users_shipping_address.shipping_address AS buyer_address, users_shipping_address.shipping_city AS buyer_city, users_shipping_address.shipping_state AS buyer_state, users_shipping_address.shipping_zipcode AS buyer_zipcode, seller.first_name AS seller_firstname, seller.last_name AS seller_lastname, seller.address AS seller_address, seller.city AS seller_city, seller.state AS seller_state,seller.zipcode AS seller_zipcode FROM users_shipping_address LEFT JOIN users_purchases ON  users_shipping_address.txn_id = users_purchases.txn_id LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN users seller ON deals.seller_id = seller.id WHERE users_shipping_address.txn_id = ?",
+    [txn_id],
+    function (err, shipping_data, fields) {
+      if (err) throw err;
+      shipping_data = shipping_data[0];
+      let addressFrom = {
+        "name": `${shipping_data.seller_firstname} ${shipping_data.seller_lastname}`,
+        "street1": shipping_data.seller_address,
+        "city": shipping_data.seller_city,
+        "state": shipping_data.seller_state,
+        "zip": shipping_data.seller_zipcode,
+        "country": "US"
+      };
+
+      let addressTo = {
+        "name": `${shipping_data.buyer_firstname} ${shipping_data.buyer_lastname}`,
+        "street1": shipping_data.buyer_address,
+        "city": shipping_data.buyer_city,
+        "state": shipping_data.buyer_state,
+        "zip": shipping_data.buyer_zipcode,
+        "country": "US"
+      };
+
+      let parcel = {
+        "length": "5",
+        "width": "5",
+        "height": "5",
+        "distance_unit": "in",
+        "weight": "2",
+        "mass_unit": "lb"
+      };
+
+
+      shippo.shipment.create({
+        "address_from": addressFrom,
+        "address_to": addressTo,
+        "address_return" : addressFrom,
+        "parcels": [parcel],
+        "async": false
+      }, function (err, shipment) {
+
+        // get the cheapest rate for the shipment 
+        let cheapest_rate = shipment.rates.filter(function (rate) {
+          if (rate.attributes.length > 0) {
+            for (let i = 0; i < rate.attributes.length; i++) {
+              if (rate.attributes[i] == "CHEAPEST") {
+                return rate;
+              }
+            }
+          }
+        })
+
+        // get the cheapest rate's object id to be used in the creating the shipment transaction
+        let rate_object_id = cheapest_rate[0].object_id;
+      
+      
+        shippo.transaction.create({
+          "rate": rate_object_id,
+          "label_file_type": "PDF",
+          "async": false
+        }, function (err, transaction) {
+          if (err) throw err;
+          console.log({shipment, transaction});
+          // res.json({ shipment, transaction });
+          // console.log(transaction);
+
+        });
+      });
+
+
+    }
+  );
+
+}
 
 //paypal
 router.post('/paypal/execute-payment', function (req, res) {
