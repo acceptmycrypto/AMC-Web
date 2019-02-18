@@ -13,7 +13,6 @@ const initialState = {
   showDetailStep: true,
   showShippingStep: false,
   showPayingStep: false,
-  transactionInfo: null,
   paidIn: null,
   purchasing: false,
   transactionLoading: false,
