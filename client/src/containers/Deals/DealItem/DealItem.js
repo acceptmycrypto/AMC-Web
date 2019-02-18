@@ -17,7 +17,7 @@ import {
   handleShippingStep,
   handlePayingStep
 } from "../../../actions/dealItemActions";
-import { resetListDeal } from "../../../actions/listDealActions";
+import { resetListDeal, editListing } from "../../../actions/listDealActions";
 import { _fetchTransactionInfo } from "../../../actions/paymentActions";
 import { _createChatSession } from "../../../actions/chatActions";
 import { Carousel } from "react-responsive-carousel";
@@ -246,7 +246,7 @@ class DealItem extends Component {
         }
       }
     }
-    
+
     return result;
   };
 
@@ -307,6 +307,8 @@ class DealItem extends Component {
             handleDetailStep,
             handleShippingStep,
             handlePayingStep,
+
+            editListing
             } = this.props;
 
     console.log("line 268", userLoggedIn);
@@ -525,9 +527,17 @@ class DealItem extends Component {
 
                   {user_info.length > 0 &&
                   dealItem &&
-                  user_info[0].id === dealItem.seller_id ? null : (
+                  user_info[0].id === dealItem.seller_id ?
+                  <Link to={"/listdeal"}>
+                    <div className="px-3 message-seller">
+                      <button onClick={() => editListing(dealItem)} className="mt-3">
+                      Edit Listing
+                      </button>
+                    </div>
+                  </Link> :
+                  (
                     <Link to={"/chat"}>
-                      <div id="message-seller" className="px-3">
+                      <div className="px-3 message-seller">
                         <button onClick={this.messageSeller} className="mt-3">
                           Message Seller
                         </button>
@@ -654,7 +664,8 @@ const matchDispatchToProps = dispatch => {
       _isLoggedIn,
       resetListDeal,
       _createChatSession,
-      _loadProfile
+      _loadProfile,
+      editListing
     },
     dispatch
   );

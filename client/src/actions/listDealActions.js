@@ -1,6 +1,6 @@
 export function _uploadImage(token, imageData) {
   //once image is uploaded, push that image to the state
-
+  debugger
   const settings = {
     method: "POST",
     headers: {
@@ -184,7 +184,7 @@ export const handleSelectedCondition = (selectedCondition) => {
 };
 
 export function _submitDeal(token, dealName, category, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos) {
-
+  debugger
   //create a new array to get the value of categories: ex [value1, value2]
   let categoriesSelected = [...category]
   let selectedCategory = [];
@@ -360,4 +360,9 @@ export const checkCodeSuccess = codeStatus => ({
 export const checkCodeFailure = error => ({
   type: "CHECK_CODE_FAILURE",
   payload: { error }
+});
+
+export const editListing = (dealItem) => ({
+  type: "EDIT_LISTING",
+  payload: {dealItem}
 });

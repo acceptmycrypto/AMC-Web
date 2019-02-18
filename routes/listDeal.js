@@ -38,7 +38,6 @@ const connection = mysql.createConnection({
 
 router.post("/image/upload", verifyToken, function(request, response) {
   let user_id = request.decoded._id;
-  console.log("this is my user ID", user_id);
 
   const form = new multiparty.Form(); // parse a file upload
     form.parse(request, async (error, fields, files) => {
@@ -158,10 +157,11 @@ router.post('/listdeal', verifyToken, function(req, res) {
       let imagesRow = [];
       for (let i = 0; i < images.length; i++) {
         let dealImageRecord = [];
-        dealImageRecord.push(deal_id, images[i].Location)
+        let imageObj = JSON.stringify(images[i])
+        dealImageRecord.push(deal_id, images[i].Location, imageObj) //image[i].Location is the image url
         imagesRow.push(dealImageRecord);
       }
-      connection.query("INSERT INTO deal_images(deal_id, deal_image)  VALUES ?", [imagesRow],
+      connection.query("INSERT INTO deal_images(deal_id, deal_image, deal_image_object)  VALUES ?", [imagesRow],
       function (error, results, fields) {
         if (error) console.log(error);
       });
@@ -210,23 +210,27 @@ router.post('/listdeal', verifyToken, function(req, res) {
 
 });
 
-router.post('/listdeal/edit', verifyToken, function(req, res) {
+router.get('/listdeal/edit', function(req, res) {
   // dealName, category, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos
 
   //info needed to insert into tables
-  let {deal_id} = req.body
-  let seller_id = req.decoded._id;
+  // let {deal_id} = req.body
+  // let seller_id = req.decoded._id;
 
-  connection.query("SELECT deals.deal_name AS dealName, category_name AS category, item_condition AS selectedCondition, deal_description AS textDetailRaw, deal_image AS images, pay_in_dollar AS priceInUSD, pay_in_crypto AS priceInCrypto FROM deals LEFT JOIN deal_images ON deal_images.deal_id = deals.id LEFT JOIN categories_deals ON category.deal_id =  WHERE id = ?", [seller_id],
-    function (error, results, fields) {
+  let deal_id = 37;
+
+  connection.query("SELECT deals.deal_name AS dealName, category_name AS category, item_condition AS selectedCondition, deal_description AS textDetailRaw, pay_in_dollar AS priceInUSD, pay_in_crypto AS priceInCrypto FROM deals LEFT JOIN categories_deals ON categories_deals.deals_id = deals.id LEFT JOIN category ON categories_deals.category_id = category.id WHERE deals.id = ?", [deal_id],
+    function (error, dealResult, fields) {
 
       if (error) console.log(error);
 
-      phone_number_verified = results[0].phone_number_verified;
+      connection.query("SELECT deal_image AS images FROM deals LEFT JOIN deal_images ON deal_images.deal_id = deals.id WHERE deals.id = ?", [deal_id],
+        function (error, dealImages, fields) {
 
-      // if (phone_number_verified === 0) { //if not verified, we need to verify user
-      //   res.json(phone_number_verified)
-      // }
+        if (error) console.log(error);
+        res.json({dealResult, dealImages});
+
+      });
 
   });
 

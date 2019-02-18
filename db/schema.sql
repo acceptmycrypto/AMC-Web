@@ -86,8 +86,9 @@ CREATE TABLE deals (
 
 CREATE TABLE deal_images (
 	id INT NOT NULL AUTO_INCREMENT,
-  	deal_id INT NOT NULL,
-  	deal_image VARCHAR(255) NOT NULL,
+  deal_id INT NOT NULL,
+  deal_image VARCHAR(255) NOT NULL,
+  deal_image_object VARCHAR(10000) NOT NULL, --storing image object
 	PRIMARY KEY (id),
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );

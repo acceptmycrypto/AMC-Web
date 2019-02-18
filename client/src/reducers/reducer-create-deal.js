@@ -39,6 +39,7 @@ const initialState = {
 const handleImagesUpload = (images, imageObj) => {
   let newImageArr = [...images];
   newImageArr.push(imageObj);
+  debugger
   return newImageArr
 }
 
@@ -49,6 +50,10 @@ const handleImageRemove = (images, imageKey) => {
 
 const CalculateDiscountPrice = (basePrice, discount) => {
   return basePrice - (basePrice * (discount/100))
+}
+
+const CalculateDiscountPercentage = (basePrice, discountPrice) => {
+  return ((basePrice - discountPrice) / basePrice) * 100
 }
 
 export default function CreateDealReducer(state = initialState, action) {
@@ -198,7 +203,7 @@ export default function CreateDealReducer(state = initialState, action) {
       };
 
     case "CREATING_DEAL_SUCCESS":
-    
+
       return {
         ...state,
         creatingDeal: false,
@@ -300,6 +305,19 @@ export default function CreateDealReducer(state = initialState, action) {
         ...state,
         checkingCodeLoading: false,
         checkingCodeError: action.payload.error,
+      };
+
+    case "EDIT_LISTING":
+      let {deal_name, pay_in_crypto, pay_in_dollar, deal_image} = action.payload.dealItem;
+
+    debugger
+      return {
+        ...state,
+        dealName: deal_name,
+        priceInUSD: pay_in_dollar,
+        priceInCrypto: pay_in_crypto,
+        discountPercent: CalculateDiscountPercentage(pay_in_dollar, pay_in_crypto),
+        images: deal_image
       };
 
     default:

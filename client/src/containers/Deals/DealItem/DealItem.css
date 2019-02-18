@@ -217,7 +217,7 @@
   font-size: .9em;
 }
 
-#message-seller button{
+.message-seller button{
   border-radius: 5px;
   width: 90%;
   cursor: pointer;

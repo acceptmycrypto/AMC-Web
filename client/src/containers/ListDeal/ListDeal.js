@@ -49,7 +49,7 @@ class ListDeal extends Component {
       await this.props.history.push("/SignIn?redirect=ListDeal");
     }
   }
-  
+
   // If user refreshes the page, we warn users that data won't be saved
   componentDidUpdate = () => {
     const { images } = this.props;
@@ -468,7 +468,7 @@ const matchDispatchToProps = dispatch => {
       onEditingDetail,
       _submitDeal,
       closeModalAfterDealCreated,
-      resetListDeal, 
+      resetListDeal,
       _isLoggedIn
     },
     dispatch
