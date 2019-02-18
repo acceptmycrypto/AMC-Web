@@ -19,6 +19,7 @@ const initialState = {
   selectedCondition: "", //important! Selected condition cannot by null by default, otherwist app will crash.
   editorState: EditorState.createEmpty(),
   creatingDeal: false,
+  editingDeal: false,
   creatingDealError: null,
   dealCreated: {},
   modalVisible: false,
@@ -313,6 +314,7 @@ export default function CreateDealReducer(state = initialState, action) {
     debugger
       return {
         ...state,
+        editingDeal: true,
         dealName: deal_name,
         priceInUSD: pay_in_dollar,
         priceInCrypto: pay_in_crypto,

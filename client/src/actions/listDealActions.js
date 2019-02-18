@@ -42,7 +42,9 @@ export const onSelectImageToView = (event) => {
   }
 };
 
-export function _removeImage(token, imageKey) {
+export function _removeImage(token, imageKey, deal_editing) {
+  //this action is being called when user's click X on image
+
   const settings = {
     method: "POST",
     headers: {
@@ -52,7 +54,10 @@ export function _removeImage(token, imageKey) {
     body: JSON.stringify({token, imageKey})
   };
 
-  fetch("/image/remove", settings).then(res => res.json());
+  //if this listing deal is being creating, not editing, then we remove the image on the backend as well
+  if(!deal_editing) {
+    fetch("/image/remove", settings).then(res => res.json());
+  }
 
   return {
     type: 'REMOVE_UPLOADED_IMAGE',

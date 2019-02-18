@@ -107,7 +107,7 @@ class ListDeal extends Component {
 
   onSelectImageToReMove = e => {
     let imageKey = e.target.parentElement.getAttribute("data-imagekey");
-    this.props._removeImage(localStorage.getItem("token"), imageKey);
+    this.props._removeImage(localStorage.getItem("token"), imageKey, this.props.editingDeal);
   };
 
   calculateCryptoExchange = event => {
@@ -443,7 +443,8 @@ const mapStateToProps = state => ({
   creatingDealError: state.CreateDeal.creatingDealError,
   dealCreated: state.CreateDeal.dealCreated,
   modalVisible: state.CreateDeal.modalVisible,
-  userLoggedIn: state.LoggedIn.userLoggedIn
+  userLoggedIn: state.LoggedIn.userLoggedIn,
+  editingDeal: state.CreateDeal.editingDeal
 });
 
 const matchDispatchToProps = dispatch => {

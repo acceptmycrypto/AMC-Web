@@ -48,7 +48,9 @@ class Description extends Component {
   //We have access to history props from withRouter
   directToDealItemPage = () => {
     this.props.history.push(
-      `/feed/deals/${this.props.dealCreatedResult.deal_id}/${this.props.dealNameValue}`
+      `/feed/deals/${this.props.dealCreatedResult.deal_id}/${
+        this.props.dealNameValue
+      }`
     );
   };
 
@@ -64,7 +66,9 @@ class Description extends Component {
     } = this.props;
 
     if (!sellerState) {
-      document.querySelector("#sellerState").classList.add("create-deal-select-error");
+      document
+        .querySelector("#sellerState")
+        .classList.add("create-deal-select-error");
     } else {
       this.props._startVerificationForSeller(
         localStorage.getItem("token"),
@@ -161,7 +165,7 @@ class Description extends Component {
 
             <Link
               className="create-deal-modal-link"
-              style={{ textDecoration: 'none' }}
+              style={{ textDecoration: "none" }}
               to={`/feed/deals/${dealCreatedResult.deal_id}/${dealNameValue}`}
               onClick={() => {
                 closeModalAfterDealCreated();
@@ -174,34 +178,36 @@ class Description extends Component {
           </div>
         );
       case checkingCodeSuccess.success === false:
-
-      return (
-        <form
-          onSubmit={this.onVerificationResult}
-          className="creating-deal-seller-verification"
-        >
-          <h4 className="creating-deal-modal-header">
-            To protect our community, we need to verify all sellers.{" "}
-            <i class="fa fa-question-circle" aria-hidden="true" />
-          </h4>
-          <div className="creating-deal-seller-contact">
-            <label>Incorrect Verification Code. Please Enter the Code We Texted You.</label>
-            <div>
-              <input
-                onChange={onEditSellerVerificationToken}
-                value={sellerVerificationToken}
-                required
-                className="description-input"
-                autofocus="autofocus"
-                placeholder="Enter your verification code"
-              />
+        return (
+          <form
+            onSubmit={this.onVerificationResult}
+            className="creating-deal-seller-verification"
+          >
+            <h4 className="creating-deal-modal-header">
+              To protect our community, we need to verify all sellers.{" "}
+              <i class="fa fa-question-circle" aria-hidden="true" />
+            </h4>
+            <div className="creating-deal-seller-contact">
+              <label>
+                Incorrect Verification Code. Please Enter the Code We Texted
+                You.
+              </label>
+              <div>
+                <input
+                  onChange={onEditSellerVerificationToken}
+                  value={sellerVerificationToken}
+                  required
+                  className="description-input"
+                  autofocus="autofocus"
+                  placeholder="Enter your verification code"
+                />
+              </div>
+              <small>A text message with code was sent to your phone.</small>
             </div>
-            <small>A text message with code was sent to your phone.</small>
-          </div>
 
-          <button>Verify</button>
-        </form>
-      );
+            <button>Verify</button>
+          </form>
+        );
       case dealCreatedResult.phone_number_verified === 0:
         return (
           <form
@@ -287,7 +293,7 @@ class Description extends Component {
 
             <Link
               className="create-deal-modal-link"
-              style={{ textDecoration: 'none' }} //make sure the link has no underline
+              style={{ textDecoration: "none" }} //make sure the link has no underline
               to={`/feed/deals/${dealCreatedResult.deal_id}/${dealNameValue}`}
               onClick={() => {
                 closeModalAfterDealCreated();
@@ -303,7 +309,6 @@ class Description extends Component {
   };
 
   render() {
-
     const {
       parentCategory,
       handleSelectedCategory,
@@ -317,7 +322,8 @@ class Description extends Component {
       selectedCategory,
       selectedConditionValue,
       sendingCode,
-      sendingCodeSuccess
+      sendingCodeSuccess,
+      editingDeal
     } = this.props;
 
     const itemCondition = [
@@ -391,23 +397,36 @@ class Description extends Component {
           </div>
           <hr className="creating-deal-hr" />
           <div id="deal-listing-step-buttons">
-
             <div className="creating-deal-back-step">
               <button onClick={this.props.showPricingStep}>Previous</button>
             </div>
 
-            <div
-              onClick={() =>
-                this.props.validateDescriptionStep() && this.props.createDeal()
-              }
-              className="creating-deal-next-step submit-listing-deal"
-            >
-              {this.props.loading_dealCreating ? (
-                <LoadingSpinner />
-              ) : (
-                <button>Submit Deal</button>
-              )}
-            </div>
+            {editingDeal ? (
+              <div
+                onClick={() => this.props.validateDescriptionStep()}
+                className="creating-deal-next-step submit-listing-deal"
+              >
+                {this.props.loading_dealCreating ? (
+                  <LoadingSpinner />
+                ) : (
+                  <button>Update Deal</button>
+                )}
+              </div>
+            ) : (
+              <div
+                onClick={() =>
+                  this.props.validateDescriptionStep() &&
+                  this.props.createDeal()
+                }
+                className="creating-deal-next-step submit-listing-deal"
+              >
+                {this.props.loading_dealCreating ? (
+                  <LoadingSpinner />
+                ) : (
+                  <button>Submit Deal</button>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
@@ -419,9 +438,7 @@ class Description extends Component {
           //   this.directToDealItemPage();
           // }}
         >
-          <div className="deal-created-modal">
-            {this.dealCreatedModal()}
-          </div>
+          <div className="deal-created-modal">{this.dealCreatedModal()}</div>
         </Modal>
       </div>
     );
@@ -443,8 +460,9 @@ const mapStateToProps = state => ({
   sellerVerificationToken: state.CreateDeal.sellerVerificationToken,
   checkingCodeLoading: state.CreateDeal.checkingCodeLoading,
   checkingCodeSuccess: state.CreateDeal.checkingCodeSuccess,
-  checkingCodeError: state.CreateDeal.checkingCodeError, 
-  selectedCategory: state.CreateDeal.selectedCategory
+  checkingCodeError: state.CreateDeal.checkingCodeError,
+  selectedCategory: state.CreateDeal.selectedCategory,
+  editingDeal: state.CreateDeal.editingDeal
 });
 
 const matchDispatchToProps = dispatch => {
