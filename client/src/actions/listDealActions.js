@@ -247,6 +247,20 @@ export const onEditPhoneNumber = (event) => {
   }
 };
 
+export const onEditSellerFirstname = (event) => {
+  return {
+      type: 'EDIT_SELLER_FIRSTNAME',
+      payload: event.target.value
+  }
+};
+
+export const onEditSellerLastname = (event) => {
+  return {
+      type: 'EDIT_SELLER_LASTNAME',
+      payload: event.target.value
+  }
+};
+
 export const onEditSellerAddress = (event) => {
   return {
       type: 'EDIT_SELLER_ADDRESS',
@@ -278,7 +292,7 @@ export const onEditSellerZipcode = (event) => {
   }
 };
 
-export function _startVerificationForSeller(token, phoneNumber, sellerAddress, sellerCity, sellerState, sellerZipcode) {
+export function _startVerificationForSeller(token,firstName, lastName, phoneNumber, sellerAddress, sellerCity, sellerState, sellerZipcode) {
 
   const settings = {
     method: "POST",
@@ -286,7 +300,7 @@ export function _startVerificationForSeller(token, phoneNumber, sellerAddress, s
       "Accept": "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({token, phoneNumber, sellerAddress, sellerCity, sellerState, sellerZipcode})
+    body: JSON.stringify({token, firstName, lastName, phoneNumber, sellerAddress, sellerCity, sellerState, sellerZipcode})
   };
 
   return dispatch => {
