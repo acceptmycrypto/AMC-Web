@@ -5,19 +5,19 @@
     text-align: center;
   }
 
-  .faqMenuTitle{
+.faqMenuTitle{
     text-align: center;
   }
   
 .Faq-answer{
     font-size: 20px;
   }
-#amh{
+#Faq-amh{
     padding: 20px;
     text-align: center;
     font-size: 27px;
   }
-Button{
+.Faq-button{
     position: flex;
   }
   
