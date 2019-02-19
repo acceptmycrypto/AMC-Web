@@ -170,7 +170,7 @@ CREATE TABLE cryptos_withdraw(
   withdraw_token VARCHAR(26) NOT NULL,
   withdraw_token_timestamp BIGINT NOT NULL,
   withdraw_amount DECIMAL(20, 8) NULL,
-  coinpayment_withdraw_id VARCHAR(26) NULL;
+  coinpayment_withdraw_id VARCHAR(26) NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (users_cryptos_id) REFERENCES users_cryptos(id)
 );
