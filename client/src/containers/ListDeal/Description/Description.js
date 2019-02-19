@@ -401,7 +401,10 @@ class Description extends Component {
               value={selectedConditionValue}
             />
           </div>
+          
         </div>
+
+    
 
         <div>
           <div className="description-titles detail-title">Details</div>
