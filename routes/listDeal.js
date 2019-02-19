@@ -255,6 +255,7 @@ router.post('/listdeal/edit', verifyToken, function(req, res) {
       cryptos_deals.push(records);
     }
 
+
     connection.query("INSERT INTO cryptos_deals(crypto_id, deal_id) VALUES ? ON DUPLICATE KEY UPDATE crypto_id=VALUES(crypto_id),deal_id=VALUES(deal_id)",
     [cryptos_deals], //cryptos_deals = [[1,2], [3, 2]]
     function (error, results, fields) {
