@@ -77,6 +77,7 @@ CREATE TABLE deals (
 	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   category VARCHAR(255) NULL, -- we need to take this out eventually
 	item_condition VARCHAR (255) NULL,
+  deal_status VARCHAR (10) DEFAULT 'available', -- status: available, sold, reserved (paying item), expired, pending (pending is for deal that's not get displayed due to seller's verification)
 -- 	deal_avg_rating FLOAT(3,2) NULL,
 -- 	total_deal_ratings INT NULL,
 	PRIMARY KEY (id),
@@ -156,10 +157,24 @@ CREATE TABLE users_cryptos(
 	user_id INT NOT NULL,
 	crypto_id INT NOT NULL,
 	crypto_address VARCHAR(255) NULL,
+  crypto_balance DECIMAL(20, 8) NOT NULL DEFAULT 0,
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_id) REFERENCES users(id),
 	FOREIGN KEY (crypto_id) REFERENCES crypto_info(id)
 );
+
+-- keep track of how many times users withdraw
+CREATE TABLE cryptos_withdraw(
+	id INT NOT NULL AUTO_INCREMENT,
+	users_cryptos_id INT NOT NULL,
+  withdraw_token VARCHAR(26) NOT NULL,
+  withdraw_token_timestamp BIGINT NOT NULL,
+  withdraw_amount DECIMAL(20, 8) NULL,
+  coinpayment_withdraw_id VARCHAR(26) NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (users_cryptos_id) REFERENCES users_cryptos(id)
+);
+
 
 CREATE TABLE buyers_reviews_sellers(
 	id INT NOT NULL AUTO_INCREMENT,

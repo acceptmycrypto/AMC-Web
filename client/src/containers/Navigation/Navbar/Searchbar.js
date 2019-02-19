@@ -17,7 +17,7 @@ class SearchBar extends Component {
             <div className="Search d-flex flex-row align-items-center">
                 <form className="search_Form" onSubmit={this.search}>
                     <input type="text"
-                        placeholder="Search"
+                        placeholder="Search for Deals"
                         id = "searchbarinput"
                         defaultValue = {this.props.searchTerm}
                     />

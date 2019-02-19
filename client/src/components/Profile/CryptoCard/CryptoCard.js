@@ -34,10 +34,18 @@ const CryptoCard = props => {
                                 {
                                     (crypto.crypto_address !== null)
                                         ? <div className="mx-1 my-2 cryptos">
-                                            <a className="blueText cryptoText link" href={crypto.crypto_link} target="_blank">{crypto.crypto_metadata_name}</a>
+                                            <a className="blueText cryptoText link header" href={crypto.crypto_link} target="_blank">{crypto.crypto_metadata_name}</a>
                                             <br></br>
                                             <img className="cryptoImage" data-name={crypto.crypto_metadata_name} data-address={crypto.crypto_address} data-id={crypto.id} src={crypto.crypto_logo} onClick={(event) =>{props.handleQRChange(event, props.qr_shown)}}></img>
                                             <br></br>
+                                            {props.qr_shown &&
+                                            <div className="crypto-balance">
+                                              <div>Balance: {crypto.crypto_balance}</div>
+                                              {crypto.crypto_balance > 0 && <button onClick={() => props.initiateWithdraw(crypto.crypto_id, crypto.crypto_metadata_name,
+                                              crypto.crypto_symbol, crypto.crypto_balance, crypto.crypto_address )}>Withdraw</button>}
+                                            </div>
+                                            }
+
                                         </div>
                                         : null
                                 }

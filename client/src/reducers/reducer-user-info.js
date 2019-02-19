@@ -7,20 +7,30 @@ import {
   SHOW_QR,
   FETCH_UPDATE_CRYPTO_BEGIN,
   FETCH_UPDATE_CRYPTO_SUCCESS,
-  FETCH_UPDATE_CRYPTO_FAILURE, 
- 
+  FETCH_UPDATE_CRYPTO_FAILURE,
+  INITIATE_WITHDRAW_BEGIN,
+  INITIATE_WITHDRAW_SUCCESS,
+  INITIATE_WITHDRAW_FAILURE,
+  WITHDRAW_CONFIRM_BEGIN,
+  WITHDRAW_CONFIRM_SUCCESS,
+  WITHDRAW_CONFIRM_FAILURE,
+  OPEN_WITHDRAW_MODAL,
+  EDIT_WITHDRAW_CONFIRMATION_TOKEN
 
 } from "../actions/cryptoPortfolioActions";
-import { 
-  FETCH_USER_BEGIN, 
-  FETCH_USER_FAILURE, 
+import {
+  FETCH_USER_BEGIN,
+  FETCH_USER_FAILURE,
   FETCH_USER_SUCCESS,
   UPDATE_TX_HISTORY_VIEW,
   FETCH_TRANSACTIONS_BEGIN,
   FETCH_TRANSACTIONS_SUCCESS,
-  FETCH_TRANSACTIONS_FAILURE, 
+  FETCH_TRANSACTIONS_FAILURE,
 } from "../actions/userLoadActions";
 
+import {
+  CLOSE_MODAL
+} from "../actions/signInActions";
 
 const initialState = {
   user_info: [],
@@ -32,10 +42,19 @@ const initialState = {
   address_form_shown: false,
   qr_shown: false,
   users_cryptos_id: null,
-  current_crypto_name: null, 
+  current_crypto_name: null,
   confirmed: [],
   pending: [],
-  tx_history_view: null
+  tx_history_view: null,
+  initiateWithdrawLoading: false,
+  initiateWithdrawError: null,
+  initiateWithdraw: {},
+  confirmWithdrawLoading: false,
+  confirmWithdrawError: null,
+  confirmWithdraw: {},
+  modalVisible: false,
+  selectedWithdrawCrypto: {},
+  withdrawConfirmationToken: null
 };
 
 export default function userInfoReducer(state = initialState, action) {
@@ -54,9 +73,9 @@ export default function userInfoReducer(state = initialState, action) {
         loading: false,
         user_info: action.payload.user_info,
         user_crypto: action.payload.user_crypto,
-        transactions: action.payload.transactions, 
+        transactions: action.payload.transactions,
         confirmed:action.payload.confirmed,
-        pending: action.payload.pending, 
+        pending: action.payload.pending,
         tx_history_view: action.payload.tx_history_view
       };
 
@@ -131,7 +150,7 @@ export default function userInfoReducer(state = initialState, action) {
         loading: false,
         error: action.payload.error
       }
-      case FETCH_TRANSACTIONS_BEGIN:
+    case FETCH_TRANSACTIONS_BEGIN:
       return {
         ...state,
         loading: true,
@@ -141,16 +160,71 @@ export default function userInfoReducer(state = initialState, action) {
       return {
         ...state,
         loading: false,
-        transactions: action.payload.transactions, 
-        confirmed: action.payload.confirmed, 
-        pending: action.payload.pending, 
-        tx_history_view: action.payload.tx_history_view, 
+        transactions: action.payload.transactions,
+        confirmed: action.payload.confirmed,
+        pending: action.payload.pending,
+        tx_history_view: action.payload.tx_history_view,
       };
     case FETCH_TRANSACTIONS_FAILURE:
       return {
         ...state,
         loading: false,
         error: action.payload.error
+      }
+    case INITIATE_WITHDRAW_BEGIN:
+      return {
+        ...state,
+        initiateWithdrawLoading: true,
+        initiateWithdrawError: null
+      };
+    case INITIATE_WITHDRAW_SUCCESS:
+      return {
+        ...state,
+        initiateWithdrawLoading: false,
+        initiateWithdraw: action.payload.initiateWithdraw
+      };
+    case INITIATE_WITHDRAW_FAILURE:
+      return {
+        ...state,
+        initiateWithdrawLoading: false,
+        initiateWithdrawError: action.payload.error
+      }
+    case WITHDRAW_CONFIRM_BEGIN:
+      return {
+        ...state,
+        confirmWithdrawLoading: true,
+        confirmWithdrawError: null
+      };
+    case WITHDRAW_CONFIRM_SUCCESS:
+      return {
+        ...state,
+        initiateWithdraw: {success: false},
+        confirmWithdrawLoading: false,
+        confirmWithdraw: action.payload.confirmWithdraw
+      };
+    case WITHDRAW_CONFIRM_FAILURE:
+      return {
+        ...state,
+        confirmWithdrawLoading: false,
+        confirmWithdrawError: action.payload.error
+      }
+    case OPEN_WITHDRAW_MODAL:
+      return {
+          ...state,
+          modalVisible: action.payload.visible,
+          selectedWithdrawCrypto: action.payload
+      }
+    case CLOSE_MODAL:
+      return {
+          ...state,
+          modalVisible: action.payload.visible,
+          confirmWithdraw: {},
+          withdrawConfirmationToken: null
+      }
+    case EDIT_WITHDRAW_CONFIRMATION_TOKEN:
+      return {
+          ...state,
+          withdrawConfirmationToken: action.payload
       }
 
     default:

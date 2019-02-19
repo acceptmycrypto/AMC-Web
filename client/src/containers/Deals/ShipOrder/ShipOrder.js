@@ -1,130 +1,137 @@
 import React from "react";
 import "./ShipOrder.css";
+import Select from "react-select";
 
 const ShipOrder = props => {
   
   return (
     <div>
-      <div className="shipping-form">
-        <label className="text-capitalize shipping-name-label" htmlFor="select_crypto">Enter Shipping Information</label>
-        <form>
-          <div class="form-group mb-1">
+
+      <div>
+        <div className="text-capitalize shipping-name-label">Enter Shipping Information</div>
+        <form className="shipping-form">
+
+          <div>
+            <label htmlFor="shipping-firstname">First Name</label>
             <input
               type="text"
-              class="form-control"
-              id="firstname"
+              id="shipping-firstname"
               placeholder="Enter First Name"
               onChange={props.handle_ShippingFirstName}
               value={props.showShippingFirstName ? props.showShippingFirstName : null}
             />
           </div>
-          <div className="dealitem-error-msg" id="shipping-firstname-error"></div>
 
-          <div class="form-group mb-1">
+          {/* <div className="dealitem-error-msg" id="shipping-firstname-error"></div> */}
+
+          <div>
+            <label htmlFor="shipping-lastname">Last Name</label>
             <input
               type="text"
-              class="form-control"
-              id="lastname"
+              id="shipping-lastname"
               placeholder="Enter Last Name"
               onChange={props.handle_ShippingLastName}
               value={props.showShippingLastName ? props.showShippingLastName : null}
             />
           </div>
-          <div className="dealitem-error-msg" id="shipping-lastname-error"></div>
 
-          <div class="form-group mb-1">
+          {/* <div className="dealitem-error-msg" id="shipping-lastname-error"></div> */}
+
+          <div>
+            <label htmlFor="shipping-address">Address</label>
             <input
               type="text"
-              class="form-control"
-              id="address"
+              id="shipping-address"
               placeholder="Enter Address"
               onChange={props.handle_ShippingAddress}
               value={props.showShippingAddress ? props.showShippingAddress : null}
             />
           </div>
-          <div className="dealitem-error-msg" id="shipping-address-error"></div>
 
-          <div class="form-group mb-1">
+          {/* <div className="dealitem-error-msg" id="shipping-address-error"></div> */}
+
+          <div>
+            <label htmlFor="shipping-city">City</label>
             <input
               type="text"
-              class="form-control"
-              id="address"
+              id="shipping-city"
               placeholder="Enter City"
               onChange={props.handle_ShippingCity}
               value={props.showShippingCity ? props.showShippingCity : null}
             />
           </div>
-          <div className="dealitem-error-msg" id="shipping-city-error"></div>
 
-          <select
-            className="custom-select mr-sm-2"
-            id="select-color"
-            onChange={props.handle_ShippingState}
-            value={props.showShippingState}
-          >
-            <option selected>Select State</option>
-            {props.listOfAllStates.map((state, i) => {
-              return (<option key={i} value={state.label}>{state.value}</option>)
-            })}
-          </select>
+          {/* <div className="dealitem-error-msg" id="shipping-city-error"></div> */}
 
-          <div className="dealitem-error-msg" id="shipping-state-error"></div>
+          <div className="shipping-state">
+            <label htmlFor="selectstate">State</label>
+            <Select
+              id="shipping-state"
+              options={props.listOfAllStates}
+              placeholder="Select State"
+              onChange={props.handle_ShippingState}
+              value={props.showShippingState}
+            >
 
-          <div class="form-group mb-1">
+            </Select>
+          </div>
+          {/* <div className="dealitem-error-msg" id="shipping-state-error"></div> */}
+
+          <div>
+            <label htmlFor="shipping-zipcode">Zip Code</label>
             <input
               type="text"
-              class="form-control"
-              id="address"
+              id="shipping-zipcode"
               placeholder="Enter Postal Code"
               onChange={props.handle_ShippingZipcode}
               value={props.showShippingZipcode ? props.showShippingZipcode : null}
             />
           </div>
-          <div className="dealitem-error-msg" id="shipping-zipcode-error"></div>
 
 
           {props.user_status === "guest" &&
+    
             <div>
-              <div class="form-group mb-1">
+              <div>
+                 <label htmlFor="shipping-email">Zip Code</label>
                 <input
                   type="text"
-                  class="form-control"
-                  id="email"
+                  id="shipping-email"
                   placeholder="Enter Email"
                   onChange={props.handle_ShippingEmail}
                   value={props.showShippingEmail ? props.showShippingEmail : null}
                 />
               </div>
-              <div className="dealitem-error-msg" id="shipping-email-error"></div>
 
-              <div class="form-group mb-1">
+              <div>
+                 <label htmlFor="shipping-phone-number">Zip Code</label>
                 <input
                   type="text"
-                  class="form-control"
-                  id="phone_number"
+                  id="shipping-phone-number"
                   placeholder="Enter Phone Number"
                   onChange={props.handle_ShippingPhoneNumber}
                   value={props.showShippingPhoneNumber ? props.showShippingPhoneNumber : null}
                 />
               </div>
-              <div className="dealitem-error-msg" id="shipping-phone-number-error"></div>
-
-
             </div>
 
           }
 
         </form>
+
       </div>
 
+        <div className="shipping-step-buttons">
 
-      <div onClick={props.previous_step} className="previous-step">
-        <button>Previous</button>
-      </div>
+          <div onClick={props.previous_step} className="previous-step">
+            <button>Previous</button>
+          </div>
 
-      <div onClick={() => props.validateShipmentData() && props.next_step()} className="steps-workflow">
-        <button>Next</button>
-      </div>
+          <div onClick={() => props.validateShipmentData() && props.next_step()} className="next-step">
+            <button>Next</button>
+          </div>
+        </div>
+
     </div>
   );
 };

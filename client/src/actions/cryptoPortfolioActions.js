@@ -1,6 +1,6 @@
 /**
- * @file User Redux Actions 
- * @desc Export Functions that are Action Creators which return Actions. 
+ * @file User Redux Actions
+ * @desc Export Functions that are Action Creators which return Actions.
  * Actions are javascript objects that are payloads of information that send data from the application to the store.
  * @prop {string} type -Actions have a type property that indicates the type of action being performed
  * @prop {object}  payload -The payload property holds data that will be sent to the store
@@ -21,7 +21,14 @@ export const SHOW_QR = "SHOW_QR";
 export const FETCH_UPDATE_CRYPTO_BEGIN = "FETCH_UPDATE_CRYPTO_BEGIN";
 export const FETCH_UPDATE_CRYPTO_SUCCESS = "FETCH_UPDATE_CRYPTO_SUCCESS";
 export const FETCH_UPDATE_CRYPTO_FAILURE = "FETCH_UPDATE_CRYPTO_FAILURE";
-
+export const INITIATE_WITHDRAW_BEGIN = "INITIATE_WITHDRAW_BEGIN";
+export const INITIATE_WITHDRAW_SUCCESS = "INITIATE_WITHDRAW_SUCCESS";
+export const INITIATE_WITHDRAW_FAILURE = "INITIATE_WITHDRAW_FAILURE";
+export const OPEN_WITHDRAW_MODAL = "OPEN_WITHDRAW_MODAL";
+export const WITHDRAW_CONFIRM_BEGIN = "WITHDRAW_CONFIRM_BEGIN";
+export const WITHDRAW_CONFIRM_SUCCESS = "WITHDRAW_CONFIRM_SUCCESS";
+export const WITHDRAW_CONFIRM_FAILURE = "WITHDRAW_CONFIRM_FAILURE";
+export const EDIT_WITHDRAW_CONFIRMATION_TOKEN = "EDIT_WITHDRAW_CONFIRMATION_TOKEN";
 
 /**
  * action creators return actions
@@ -29,13 +36,13 @@ export const FETCH_UPDATE_CRYPTO_FAILURE = "FETCH_UPDATE_CRYPTO_FAILURE";
  */
 
 
-/** 
-  * @func handleToggleChange 
+/**
+  * @func handleToggleChange
   * @summary function is invoked onChange of the checkbox, #ownedInterestedToggleButton in CryptoCard.js
   * @desc  function updates the crypto_view state: if checkbox is checked the function returns as the payload {crypto_view: interested} and if not checked {crypto_view: owned} and resets the rest of store to initial values
   * @param {boolean} qr_shown - if the QR code is shown qr_shown= true else qr_shown=false
   * @member {boolean} isChecked @desc if checkbox has property checked, isChecked = true else isChecked = false;
-  * @member {function} hideOrShowCryptos @param {string} status -hide or show, @param {boolean} [qr_shown] 
+  * @member {function} hideOrShowCryptos @param {string} status -hide or show, @param {boolean} [qr_shown]
   * @member {function} hideOrShowAddress @param {string} status -hide or show
   * @returns {object} - returns an action
     * @prop {string} crypto_view - if isChecked = true, crypto_view: "interested" else if isChecked = false, crypto_view: "owned"
@@ -80,19 +87,19 @@ export const handleToggleChange = (isChecked, qr_shown) => {
 }
 
 
-/** 
-  * @func handleAddressFormChange 
+/**
+  * @func handleAddressFormChange
   * @summary function is invoked onClick of image: .interested .cryptoImage in CryptoCard.js
-  * @desc  function updates the address_form_shown state: if @param address_form_shown is true the function returns as the payload {address_form_shown: false} and if @param address_form_shown is false function returns {address_form_shown: true} 
+  * @desc  function updates the address_form_shown state: if @param address_form_shown is true the function returns as the payload {address_form_shown: false} and if @param address_form_shown is false function returns {address_form_shown: true}
   * @param {boolean} address_form_shown - if the address form is shown address_form_shown= true else address_form_shown=false
   * @member {DOM element img} cryptoImage - crypto image the user clicks on in crypto portfolio
   * @member {DOM element div} parentDiv - parent div of the cryptoImage
   * @member {(null|number)} users_cryptos_id -id of the cryptocurrency
   * @member {(null|string)} current_crypto_name - name of the cryptocurrency
   * @member {function} hideOrShowCryptos @param {string} status -hide or show, @param {boolean} [qr_shown], @param {DOM element} [parentDiv]
-  * @returns {object} - returns action 
-  *     @prop {boolean} address_form_shown 
-  *     @prop {(null|number)} [users_cryptos_id] 
+  * @returns {object} - returns action
+  *     @prop {boolean} address_form_shown
+  *     @prop {(null|number)} [users_cryptos_id]
   *     @prop {(null|string)} [current_crypto_name]
 */
 
@@ -126,17 +133,17 @@ export const handleAddressFormChange = (event, address_form_shown) => {
     }
 }
 
-/** 
-  * @func handleQRChange 
+/**
+  * @func handleQRChange
   * @summary function is invoked onClick of image: .owned .cryptoImage in CryptoCard.js
-  * @desc  function updates the qr_shown state: if @param qr_shown is true the function returns as the payload {qr_shown: false} and if @param qr_shown is false function returns {qr_shown: true} 
+  * @desc  function updates the qr_shown state: if @param qr_shown is true the function returns as the payload {qr_shown: false} and if @param qr_shown is false function returns {qr_shown: true}
   * @param {boolean} qr_shown - if the QR code is shown qr_shown= true else qr_shown=false
   * @member {DOM element img} cryptoImage - crypto image the user clicks on in crypto portfolio
   * @member {DOM element div} parentDiv  - parent div of the cryptoImage
   * @member {string} address - address of cryptocurrency
   * @member {function} hideOrShowCryptos @param {string} status -hide or show, @param {boolean} [qr_shown], @param {DOM element} [parentDiv]
   * @member {function} hideOrShowAddress @param {string} status -hide or show
-  *  @returns {object}  - returns action 
+  *  @returns {object}  - returns action
   *     @prop {boolean} qr_shown
 */
 
@@ -167,8 +174,8 @@ export const handleQRChange = (event, qr_shown) => {
     }
 }
 
-/** 
-  * @func updateCryptos 
+/**
+  * @func updateCryptos
   * @summary function is invoked in CryptoAddress component when Add Address form is submitted
   * @desc  function will update users_crypto in state with new crypto address the user has entered
   * @param {event} event - event occurs onSubmit of the addAddress form
@@ -176,7 +183,7 @@ export const handleQRChange = (event, qr_shown) => {
   * @param {string} current_crypto_name - crypto name of the interested cryptocurrency that the user will be adding address for
   * @param {string} token - the user's token that is stored in local storage after user has logged in
   * @member {function} fetchCryptoUpdateBegin
-  * @member {function} fetchCryptoUpdateSuccess 
+  * @member {function} fetchCryptoUpdateSuccess
   * @member {function} fetchCryptoUpdateFailure
 */
 export function updateCryptos(event, id, current_crypto_name, token) {
@@ -220,8 +227,8 @@ export function updateCryptos(event, id, current_crypto_name, token) {
     };
 }
 
-/** 
-  * @func fetchCryptoUpdateBegin 
+/**
+  * @func fetchCryptoUpdateBegin
   * @summary function is invoked in @func updateCryptos
   * @desc returns action with type: FETCH_UPDATE_CRYPTO_BEGIN before the post routes are complete
 */
@@ -230,8 +237,8 @@ export const fetchCryptoUpdateBegin = () => ({
     type: FETCH_UPDATE_CRYPTO_BEGIN,
 });
 
-/** 
-* @func fetchCryptoUpdateSuccess 
+/**
+* @func fetchCryptoUpdateSuccess
 * @summary function is invoked in @func updateCryptos
 * @desc returns action with type: FETCH_UPDATE_CRYPTO_SUCCESS and payload to update the store after the post routes are complete
 */
@@ -242,8 +249,8 @@ export const fetchCryptoUpdateSuccess = (user_crypto) => ({
 });
 
 
-/** 
-* @func fetchCryptoUpdateFailure 
+/**
+* @func fetchCryptoUpdateFailure
 * @summary function is invoked in @func updateCryptos
 * @desc returns action with type: FETCH_UPDATE_CRYPTO_FAILURE and payload: error to update the store if the post routes fail due to error
 */
@@ -260,8 +267,8 @@ export const fetchCryptoUpdateFailure = error => ({
 */
 
 
-/** 
-  * @func hideOrShowCryptos 
+/**
+  * @func hideOrShowCryptos
   * @summary function is invoked in @example handleToggleChange and handleAddressFormChange
   * @desc  if @param {string} [status=show] , all cryptos in wallet will be shown but if @param {string} [status=hide] , all cryptos but the one clicked on by user in crypto portfolio will be hidden
   * @param {string} status - show or hide (will result in the all cryptos being shown or hidden respectively)
@@ -269,7 +276,7 @@ export const fetchCryptoUpdateFailure = error => ({
   * @param {DOM element div} parentDiv - refers to parent div of the crypto the user has clicked on
   * @member {DOM element div} surroundingDiv - refers to the div surrounding all cryptos
   * @member {array} allChildren - array of all children (cryptos) in surroundingDiv
-  * @member {function} hideOrShowAddress @param {string} status -hide or show 
+  * @member {function} hideOrShowAddress @param {string} status -hide or show
 */
 
 
@@ -302,8 +309,8 @@ export const hideOrShowCryptos = (status, qr_shown, parentDiv) => {
 }
 
 
-/** 
-  * @func hideOrShowAddress 
+/**
+  * @func hideOrShowAddress
   * @summary function is invoked in @example hideOrShowCryptos
   * @desc  if @param {string} [status=show] , the QR code and Wallet Address will be shown, but if @param {string} [status=hide] , the QR code and Wallet Address will be removed from DOM
   * @param {string} status - show or hide (will result in the all cryptos being shown or hidden respectively)
@@ -337,3 +344,105 @@ export const hideOrShowAddress = (status, address) => {
 
     }
 }
+
+/**
+  * @func _handleInitiateWithdraw
+  * @summary function is invoked in CryptoCard component when user clicks withdraw button
+  * @desc  function will send user an email with confirmation token
+  * @param {string} token - the user's token that is stored in local storage after user has logged in
+  * @param {number} crypto_id - crypto id of the crypto that's being withdrawn
+  * @member {function} initiateWithdrawBegin
+  * @member {function} initiateWithdrawSuccess
+  * @member {function} initiateWithdrawFailure
+*/
+export function _handleInitiateWithdraw(token, crypto_id, crypto_symbol, user_email) {
+  const settings = {
+      method: "POST",
+      headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token, crypto_id, crypto_symbol, user_email })
+  };
+
+  return dispatch => {
+    dispatch(initiateWithdrawBegin());
+    return fetch("/withdraw/initiate", settings)
+      .then(res => res.json())
+      .then(jsonWithdrawInitiate => {
+
+        dispatch(initiateWithdrawSuccess(jsonWithdrawInitiate));
+        return jsonWithdrawInitiate;
+      })
+      .catch(error => dispatch(initiateWithdrawFailure(error)));
+  };
+}
+
+export const initiateWithdrawBegin = () => ({
+  type: INITIATE_WITHDRAW_BEGIN,
+});
+
+export const initiateWithdrawSuccess = (initiateWithdraw) => ({
+  type: INITIATE_WITHDRAW_SUCCESS,
+  payload: { initiateWithdraw }
+});
+
+export const initiateWithdrawFailure = error => ({
+  type: INITIATE_WITHDRAW_FAILURE,
+  payload: { error }
+});
+
+export const openWithdrawModal = (crypto_id, crypto_name, crypto_symbol, crypto_balance, crypto_address) => {
+  return {
+      type: 'OPEN_WITHDRAW_MODAL',
+      payload: {visible: true, crypto_id, crypto_name, crypto_symbol, crypto_balance, crypto_address}
+  }
+};
+
+export function _handleConfirmedWithdraw(token, crypto_id, withdraw_confirmation_token) {
+
+  const settings = {
+      method: "POST",
+      headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token, crypto_id, withdraw_confirmation_token })
+  };
+
+  return dispatch => {
+    dispatch(confirmWithdrawBegin());
+    return fetch("/withdraw/confirm", settings)
+      .then(res => res.json())
+      .then(jsonConfirmWithdraw => {
+
+        dispatch(confirmWithdrawSuccess(jsonConfirmWithdraw));
+        return jsonConfirmWithdraw;
+      })
+      .catch(error => {
+        
+        dispatch(confirmWithdrawFailure(error))
+      } );
+  };
+}
+
+export const confirmWithdrawBegin = () => ({
+  type: WITHDRAW_CONFIRM_BEGIN,
+});
+
+export const confirmWithdrawSuccess = (confirmWithdraw) => ({
+  type: WITHDRAW_CONFIRM_SUCCESS,
+  payload: { confirmWithdraw }
+});
+
+export const confirmWithdrawFailure = error => ({
+  type: WITHDRAW_CONFIRM_FAILURE,
+  payload: { error }
+});
+
+export const onEditWithdrawConfirmationToken = (event) => {
+  return {
+      type: EDIT_WITHDRAW_CONFIRMATION_TOKEN,
+      payload: event.target.value
+  }
+};

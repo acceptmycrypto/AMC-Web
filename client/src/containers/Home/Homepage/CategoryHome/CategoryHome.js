@@ -93,6 +93,13 @@ class CategoryHome extends Component {
                   <div className="category-info">
                     <div className="category-image-div">
                       <img className="category-image" src={deal.featured_deal_image} alt="deal" />
+                      {deal.deal_status !== "available" &&
+                      <div class="deal-status">
+                        <div style={{textTransform: "uppercase"}}>
+                          {deal.deal_status}
+                        </div>
+                      </div>
+                      }
                     </div>
                     <div className="mt-1">{deal.deal_name}</div>
                     {/* <small className="deal-description">{this.handleLongDescription(deal.deal_description)}</small> */}
