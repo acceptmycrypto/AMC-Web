@@ -220,4 +220,8 @@
   font-size: 2.75rem;
 }
 
+.carousel-caption p {
+  font-weight: 500;
+}
+
 

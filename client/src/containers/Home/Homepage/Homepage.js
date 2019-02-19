@@ -43,7 +43,6 @@ class Homepage extends Component {
         altText: 'Slide 1',
         caption: 'AcceptMyCrypto is the easiest marketplace to buy and sell discounted items for cryptocurrency',
         header: 'Buy and Sell Anything for Cryptocurrency'
-
       },
       {
         src: './assets/images/banner2.svg',
