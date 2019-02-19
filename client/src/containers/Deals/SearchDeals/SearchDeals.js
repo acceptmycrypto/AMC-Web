@@ -22,8 +22,8 @@ class SearchDeals extends Component {
             this.props.searchDeals(this.props.searchTerm, parseInt(page));
             this.props.history.push("/Search?term="+this.props.searchTerm+"&page="+(parseInt(page)));
         } else if(this.props.pageType === "category"){
-            this.props.categoryDeals(this.props.categoryTerm, parseInt(this.props.categoryPage)+2);
-            this.props.history.push("/search?term="+this.props.categoryTerm+"&page="+(parseInt(page)));
+            this.props.categoryDeals(this.props.categoryTerm, parseInt(page));
+            this.props.history.push("/category?term="+this.props.categoryTerm+"&page="+(parseInt(page)));
         }
     }
 
