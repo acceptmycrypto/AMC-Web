@@ -14,6 +14,9 @@ const initialState = {
   priceInCrypto: "",
   crypto_amount: {},
   gettingRate: {},
+  shippingLabelSelection: "",
+  shippingWeightSelection: null,
+  shippingPriceSelection: null,
   dealName: "",
   selectedCategory: "",
   selectedCondition: "", //important! Selected condition cannot by null by default, otherwist app will crash.
@@ -166,6 +169,50 @@ export default function CreateDealReducer(state = initialState, action) {
         ...state,
         crypto_amount: {...state.crypto_amount, [action.payload.crypto_symbol] : undefined}
       };
+
+    case "SELECT_LABEL_OPTION_PREPAID":
+      return {
+        ...state,
+        shippingLabelSelection: action.payload,
+        modalVisible: true
+      };
+
+    case "SELECT_LABEL_OPTION_SELLER":
+      return {
+        ...state,
+        shippingLabelSelection: action.payload,
+        shippingWeightSelection: null,
+        shippingPriceSelection: null,
+        modalVisible: false,
+      };
+    case "SELECT_WEIGHT_OPTION":
+      return {
+        ...state,
+        shippingWeightSelection: action.payload.shippingWeightSelection,
+        shippingPriceSelection: action.payload.shippingPriceSelection,
+      };
+    
+    case "EXIT_SHIPPING_MODAL":
+      return {
+        ...state,
+        shippingLabelSelection: "",
+        shippingWeightSelection: null,
+        shippingPriceSelection: null,
+        modalVisible: false
+      };
+
+    case "SAVE_SHIPPING_MODAL":
+      return {
+        ...state,
+        modalVisible: false
+      };
+
+    case "SHOW_WEIGHT_MODAL":
+      return {
+        ...state,
+        modalVisible: true
+      };
+    
 
     case "EDIT_DEAL_NAME":
       return {
