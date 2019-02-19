@@ -86,6 +86,16 @@
   justify-content: center;
 }
 
+.guest-images-container {
+  min-height: 590px;
+  max-height: 590px;
+  width: 35%;
+  margin: 25px 25px 25px 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .deal-checkout-container {
   padding: 0 20px;
   position: relative;
@@ -284,6 +294,10 @@
 }
 .shipping-step-buttons {
   margin-top: 20px;
+}
+
+.guest-shipping-step-buttons {
+  margin-top: 130px;
 }
 
 .submit_payment button {

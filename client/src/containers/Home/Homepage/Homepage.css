@@ -201,10 +201,27 @@
   background-color: #2e4157;
   color: #fff;
   font-weight: 700;
-  
+
   text-align: center;
 }
 
 .deal-status div {
   padding: 5px;
 }
+
+.carousel-caption {
+  bottom: 100px;
+  color: #000;
+  font-family: Roboto,sans-serif;
+  font-size: 20px;
+}
+
+.carousel-caption h3 {
+  font-size: 2.75rem;
+}
+
+.carousel-caption p {
+  font-weight: 500;
+}
+
+

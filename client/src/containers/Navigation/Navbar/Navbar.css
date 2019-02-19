@@ -140,15 +140,15 @@
 }
 
 #searchbarinput:-webkit-autofill,
-#searchbarinput:-webkit-autofill:hover, 
-#searchbarinput:-webkit-autofill:focus, 
+#searchbarinput:-webkit-autofill:hover,
+#searchbarinput:-webkit-autofill:focus,
 #searchbarinput:-webkit-autofill:active  {
     box-shadow: 0 0 0 30px #52C4B9;
     -webkit-box-shadow: 0 0 0 30px #52C4B9 inset !important;
     -webkit-text-fill-color: white !important;
 }
 
-::placeholder {
+#searchbarinput::placeholder {
     color: white;
     opacity: 1;
 }

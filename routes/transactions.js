@@ -127,7 +127,7 @@ router.post("/checkout", verifyToken, function (req, res) {
                     if (err) throw err;
                   }
                 );
-                
+
                 connection.query(
                   "UPDATE deals SET deal_status = ? WHERE id = ?",
                   ["reserved", req.body.deal_id],
@@ -167,7 +167,6 @@ router.post("/guestCheckout", function (req, res) {
 
   let crypto_name = req.body.crypto_name;
 
-
   client.createTransaction(
     {
       currency1: "USD",
@@ -179,7 +178,7 @@ router.post("/guestCheckout", function (req, res) {
         console.log("coinpayment error: ", err);
       } else {
         //send the paymentInfo to the client side
-        
+
 
         connection.query(
           'SELECT crypto_info.id FROM crypto_info LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE crypto_name = ?',
@@ -238,8 +237,6 @@ router.post("/guestCheckout", function (req, res) {
                       }
                     );
 
-                    
-
                     connection.query('SELECT deals.deal_name, users.username AS seller_name FROM deals LEFT JOIN users ON deals.seller_id = users.id WHERE deals.id = ?',
                       [req.body.deal_id],
                       function (error, res, fields) {
@@ -247,60 +244,53 @@ router.post("/guestCheckout", function (req, res) {
 
                         console.log(res[0]);
 
-                        
-
                         let view_deal;
                         if (process.env.NODE_ENV=="development"){
-                             view_deal = `${process.env.FRONTEND_URL}/feed/deals/${req.body.deal_id}/${res[0].deal_name}`;
-                         } else {
-                             view_deal = `${process.env.BACKEND_URL}/feed/deals/${req.body.deal_id}/${res[0].deal_name}`;
-                         }
+                              view_deal = `${process.env.FRONTEND_URL}/feed/deals/${req.body.deal_id}/${res[0].deal_name}`;
+                          } else {
+                              view_deal = `${process.env.BACKEND_URL}/feed/deals/${req.body.deal_id}/${res[0].deal_name}`;
+                          }
 
-                        const guest_checkout = {
-                          to: req.body.email,
-                          from: process.env.CUSTOMER_SUPPORT,
-                          subject: 'You Reserved a Deal',
-                          html: guest_checkout_emailTemplate(
-                            {
-                              deal_name: res[0].deal_name,
-                              seller_name: res[0].seller_name,
-                              time_left: time_left_hrs,
-                              amount: paymentInfo.amount,
-                              crypto: req.body.crypto_name,
-                              address: paymentInfo.address,
-                              view_deal: view_deal
-                            })
-                        };
-                        sgMail.send(guest_checkout);
+                          const guest_checkout = {
+                            to: req.body.email,
+                            from: process.env.CUSTOMER_SUPPORT,
+                            subject: 'You Reserved a Deal',
+                            html: guest_checkout_emailTemplate(
+                              {
+                                deal_name: res[0].deal_name,
+                                seller_name: res[0].seller_name,
+                                time_left: time_left_hrs,
+                                amount: paymentInfo.amount,
+                                crypto: req.body.crypto_name,
+                                address: paymentInfo.address,
+                                view_deal: view_deal
+                              })
+                          };
+                          sgMail.send(guest_checkout);
                       });
 
+                    //update deal item to reserved
+                    connection.query(
+                      "UPDATE deals SET deal_status = ? WHERE id = ?",
+                      ["reserved", req.body.deal_id],
+                      function(err, result) {
+                        if (err) {
+                          console.log(err);
+                        }
+                        //send the paymentInfo to the client side
+                        res.json({paymentInfo, deal_status: "reserved"});
 
-
-                //update deal item to reserved
-                connection.query(
-                  "UPDATE deals SET deal_status = ? WHERE id = ?",
-                  ["reserved", req.body.deal_id],
-                  function(err, result) {
-                    if (err) {
-                      console.log(err);
-                    }
-                     //send the paymentInfo to the client side
-                    res.json({paymentInfo, deal_status: "reserved"});
+                      }
+                    );
 
                   }
                 );
-
-
-
               }
             );
-
-          }
-        );
+          })
 
       }
-    }
-  );
+    });
 
 });
 
@@ -514,7 +504,7 @@ router.post("/checkout/notification", function (req, res, next) {
     [req.body.txn_id],
     function (err, data_status, fields) {
       let current_status = data_status[0].status;
-      let deal_name = data_status[0].deal_name; 
+      let deal_name = data_status[0].deal_name;
 
       if (current_status === "0" && req.body.status === "1") {
         //update the status in the table to "1"
