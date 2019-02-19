@@ -210,29 +210,63 @@ router.post('/listdeal', verifyToken, function(req, res) {
 
 });
 
-router.get('/listdeal/edit', function(req, res) {
-  // dealName, category, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos
+router.post('/listdeal/edit', verifyToken, function(req, res) {
+   //info needed to insert into tables
+   let {dealName, selectedCategory, editingDealId, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos} = req.body
+   let seller_id = req.decoded._id;
+   let phone_number_verified;
+   console.log(req.body);
 
-  //info needed to insert into tables
-  // let {deal_id} = req.body
-  // let seller_id = req.decoded._id;
+   //deals table
+   //deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto, item_condition
+   let deal_name = dealName;
+   let deal_description = JSON.stringify(textDetailRaw);
+   let item_condition;
+   if (selectedCondition.value) {
+     item_condition = selectedCondition.value;
+   }
+   let featured_deal_image = images[0].Location;
+   let pay_in_dollar = priceInUSD;
+   let pay_in_crypto = priceInCrypto;
 
-  let deal_id = 37;
-
-  connection.query("SELECT deals.deal_name AS dealName, category_name AS category, item_condition AS selectedCondition, deal_description AS textDetailRaw, pay_in_dollar AS priceInUSD, pay_in_crypto AS priceInCrypto FROM deals LEFT JOIN categories_deals ON categories_deals.deals_id = deals.id LEFT JOIN category ON categories_deals.category_id = category.id WHERE deals.id = ?", [deal_id],
-    function (error, dealResult, fields) {
-
-      if (error) console.log(error);
-
-      connection.query("SELECT deal_image AS images FROM deals LEFT JOIN deal_images ON deal_images.deal_id = deals.id WHERE deals.id = ?", [deal_id],
-        function (error, dealImages, fields) {
-
+   //update deals table
+   connection.query("UPDATE deals SET ? WHERE ?",
+  [
+    { deal_name,
+      deal_description,
+      featured_deal_image,
+      item_condition,
+      pay_in_dollar,
+      pay_in_crypto
+    }, {id: editingDealId}],
+      function (error, results, fields) {
         if (error) console.log(error);
-        res.json({dealResult, dealImages});
-
-      });
-
   });
+
+  //update cryptos_deals
+  connection.query("SELECT id AS crypto_id FROM crypto_metadata WHERE crypto_symbol IN (?)", [selected_cryptos],
+  function (error, results, fields) {
+    if (error) console.log(error);
+
+    let cryptos_deals = [];
+    for (let i = 0; i < results.length; i++) {
+      let records = [];
+      records.push(results[i].crypto_id, deal_id)
+      cryptos_deals.push(records);
+    }
+
+    connection.query("INSERT INTO cryptos_deals(crypto_id, deal_id) VALUES ? ON DUPLICATE KEY UPDATE crypto_id=VALUES(crypto_id),deal_id=VALUES(deal_id)",
+    [cryptos_deals], //cryptos_deals = [[1,2], [3, 2]]
+    function (error, results, fields) {
+      if (error) console.log(error);
+    });
+  });
+
+
+  //update deal_images
+  //update category deals
+
+
 
 
 })

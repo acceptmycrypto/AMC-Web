@@ -403,7 +403,10 @@ class Description extends Component {
 
             {editingDeal ? (
               <div
-                onClick={() => this.props.validateDescriptionStep()}
+                onClick={() =>
+                  this.props.validateDescriptionStep() &&
+                  this.props.updateDeal()
+                }
                 className="creating-deal-next-step submit-listing-deal"
               >
                 {this.props.loading_dealCreating ? (

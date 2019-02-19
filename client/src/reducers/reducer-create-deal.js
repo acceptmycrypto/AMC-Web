@@ -20,6 +20,7 @@ const initialState = {
   editorState: EditorState.createEmpty(),
   creatingDeal: false,
   editingDeal: false,
+  editingDealId: null,
   creatingDealError: null,
   dealCreated: {},
   modalVisible: false,
@@ -310,7 +311,7 @@ export default function CreateDealReducer(state = initialState, action) {
       };
 
     case "EDIT_LISTING":
-      let {deal_name, pay_in_crypto, pay_in_dollar, deal_category, item_condition,deal_image_object, deal_description} = action.payload.dealItem;
+      let {deal_name, pay_in_crypto, pay_in_dollar, deal_category, item_condition,deal_image_object, deal_description, deal_id} = action.payload.dealItem;
 
       let deal_selected_cryptos = {};
       for (let crypto in action.payload.acceptedCryptos) {
@@ -336,6 +337,7 @@ export default function CreateDealReducer(state = initialState, action) {
       return {
         ...state,
         editingDeal: true,
+        editingDealId: deal_id,
         dealName: deal_name,
         priceInUSD: pay_in_dollar,
         priceInCrypto: pay_in_crypto,

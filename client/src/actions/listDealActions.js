@@ -233,6 +233,54 @@ export const creatingDealFailure = error => ({
   payload: { error }
 });
 
+/////////////////
+
+export function _updateEditingDeal(token, editingDealId, dealName, category, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos) {
+  debugger
+  //create a new array to get the value of categories: ex [value1, value2]
+  let categoriesSelected = [...category]
+  let selectedCategory = [];
+  categoriesSelected.map(categ => {
+    selectedCategory.push(categ.value);
+  })
+  const settings = {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({token, editingDealId, dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos})
+  };
+
+  return dispatch => {
+    dispatch(editingDealBegin());
+    return fetch("/listdeal/edit", settings)
+      .then(res => res.json())
+      .then(jsonDealEdited => {
+
+        dispatch(editingDealSuccess(jsonDealEdited));
+        return jsonDealEdited;
+      })
+      .catch(error => dispatch(editingDealFailure(error)));
+  };
+}
+
+export const editingDealBegin = () => ({
+  type: "EDITING_DEAL_BEGIN"
+});
+
+export const editingDealSuccess = dealEdited => ({
+  type: "EDITING_DEAL_SUCCESS",
+  payload: dealEdited
+});
+
+export const editingDealFailure = error => ({
+  type: "EDITING_DEAL_FAILURE",
+  payload: { error }
+});
+
+///////////
+
 export const closeModalAfterDealCreated = () => {
   return {
     type: "CLOSE_DEAL_CREATED_MODAL", //what does the action do = title of action

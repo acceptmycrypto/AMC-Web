@@ -24,6 +24,7 @@ import {
   onEditingDealName,
   onEditingDetail,
   _submitDeal,
+  _updateEditingDeal,
   closeModalAfterDealCreated,
   resetListDeal
 } from "../../actions/listDealActions";
@@ -137,6 +138,16 @@ class ListDeal extends Component {
     let selected_cryptos = Object.keys(crypto_amount);
 
     _submitDeal(localStorage.getItem("token"), dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos);
+
+  };
+
+  onUpdatingDeal = () => {
+    const { dealName, selectedCategory, selectedCondition, _updateEditingDeal, images, priceInUSD, priceInCrypto, crypto_amount, editingDealId } = this.props;
+
+    let textDetailRaw = convertToRaw(this.props.editorState.getCurrentContent());
+    let selected_cryptos = Object.keys(crypto_amount);
+
+    _updateEditingDeal(localStorage.getItem("token"), editingDealId, dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos);
 
   };
 
@@ -403,6 +414,7 @@ class ListDeal extends Component {
               showEdittingState={editorState}
               showPricingStep={handlePricingStep}
               createDeal={this.onCreateDeal}
+              updateDeal={this.onUpdatingDeal}
               loading_dealCreating={creatingDeal}
               error_dealCreating={creatingDealError}
               dealCreatedResult={dealCreated}
@@ -444,7 +456,8 @@ const mapStateToProps = state => ({
   dealCreated: state.CreateDeal.dealCreated,
   modalVisible: state.CreateDeal.modalVisible,
   userLoggedIn: state.LoggedIn.userLoggedIn,
-  editingDeal: state.CreateDeal.editingDeal
+  editingDeal: state.CreateDeal.editingDeal,
+  editingDealId: state.CreateDeal.editingDealId
 });
 
 const matchDispatchToProps = dispatch => {
@@ -468,6 +481,7 @@ const matchDispatchToProps = dispatch => {
       onEditingDealName,
       onEditingDetail,
       _submitDeal,
+      _updateEditingDeal,
       closeModalAfterDealCreated,
       resetListDeal,
       _isLoggedIn
