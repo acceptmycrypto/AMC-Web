@@ -159,6 +159,59 @@ export const removeSelectedCrypto = (crypto_symbol) => ({
   payload: { crypto_symbol }
 });
 
+
+export const shippingLabelOption = event => {
+  if(event.target.value === "prepaid"){
+    return({
+      type: "SELECT_LABEL_OPTION_PREPAID",
+      payload: event.target.value
+    });
+  }else{
+    return({
+      type: "SELECT_LABEL_OPTION_SELLER",
+      payload: event.target.value
+    });
+  }
+  
+}
+
+export const weightOption = event => {
+  let shippingPriceSelection;
+
+  if(event.target.value == 1){
+    shippingPriceSelection = 6.50;
+  }else if (event.target.value == 3){
+    shippingPriceSelection = 8.00;
+  }else if (event.target.value == 10){
+    shippingPriceSelection = 13.00;
+  }else if (event.target.value == 20){
+    shippingPriceSelection = 20.00;
+  }else if (event.target.value == 40){
+    shippingPriceSelection = 30.00;
+  }else if (event.target.value == 70){
+    shippingPriceSelection= 40.00;
+  }
+  return({
+    type: "SELECT_WEIGHT_OPTION",
+    payload: {shippingWeightSelection: event.target.value, shippingPriceSelection}
+  });
+  
+};
+
+export const _exitShippingModal = () => ({
+  type: "EXIT_SHIPPING_MODAL",
+});
+
+export const _saveShippingModal = () => ({
+  type: "SAVE_SHIPPING_MODAL",
+});
+
+
+export const _showWeightModal = () => ({
+  type: "SHOW_WEIGHT_MODAL",
+});
+
+
 export const onEditingDealName = event => ({
   type: "EDIT_DEAL_NAME",
   payload: event.target.value
@@ -183,7 +236,7 @@ export const handleSelectedCondition = (selectedCondition) => {
   }
 };
 
-export function _submitDeal(token, dealName, category, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos) {
+export function _submitDeal(token, dealName, category, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos, label_status, weight, shipping_cost) {
 
   //create a new array to get the value of categories: ex [value1, value2]
   let categoriesSelected = [...category]
@@ -197,7 +250,7 @@ export function _submitDeal(token, dealName, category, selectedCondition, textDe
       "Accept": "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({token, dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos})
+    body: JSON.stringify({token, dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos, label_status, weight, shipping_cost})
   };
 
   return dispatch => {
@@ -375,3 +428,4 @@ export const checkCodeFailure = error => ({
   type: "CHECK_CODE_FAILURE",
   payload: { error }
 });
+
