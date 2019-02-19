@@ -259,10 +259,17 @@ router.post('/listdeal/edit', verifyToken, function(req, res) {
     }
 
     //delete the crypto_id that users de-select
-    connection.query("DELETE FROM cryptos_deals WHERE crypto_id NOT IN (?) AND deal_id = ?", [toBeKeptCryptosArr, editingDealId],
+    if (toBeKeptCryptosArr.length > 0) {
+      connection.query("DELETE FROM cryptos_deals WHERE crypto_id NOT IN (?) AND deal_id = ?", [toBeKeptCryptosArr, editingDealId],
       function (error, exisitingCryptoResult, fields) {
         if (error) console.log(error);
-    });
+      });
+    } else {
+      connection.query("DELETE FROM cryptos_deals WHERE deal_id = ?", [editingDealId],
+      function (error, exisitingCryptoResult, fields) {
+        if (error) console.log(error);
+      });
+    }
 
     //insert new cryptos_ids into cryptos_deals
     connection.query(newCryptosID, [selected_cryptos],
@@ -286,6 +293,51 @@ router.post('/listdeal/edit', verifyToken, function(req, res) {
 
 
   //update category deals
+  let toBeKeptCategoryID = "SELECT category_id FROM categories_deals LEFT JOIN category ON categories_deals.category_id = category.id WHERE category_name IN (?) AND categories_deals.deals_id = ?";
+  let newCategoryID = "SELECT id AS category_id FROM category WHERE category_name IN (?)"
+
+  connection.query(toBeKeptCategoryID, [selectedCategory, editingDealId],
+    function (error, toBeKeptCategoryResult, fields) {
+      if (error) console.log(error);
+
+      let toBeKeptCategoryArr = [];
+      for (let i = 0; i < toBeKeptCategoryResult.length; i++) {
+        toBeKeptCategoryArr.push(toBeKeptCategoryResult[i].category_id);
+      }
+
+      if (toBeKeptCategoryArr.length > 0) {
+        connection.query("DELETE FROM categories_deals WHERE category_id NOT IN (?) AND categories_deals.deals_id = ?", [toBeKeptCategoryArr, editingDealId],
+        function (error, exisitingCetegoryResult, fields) {
+          if (error) console.log(error);
+        });
+      } else {
+        connection.query("DELETE FROM categories_deals WHERE categories_deals.deals_id = ?", [editingDealId],
+        function (error, exisitingCetegoryResult, fields) {
+          if (error) console.log(error);
+        });
+      }
+
+      connection.query(newCategoryID, [selectedCategory],
+        function (error, newCategoryResult, fields) {
+          if (error) console.log(error);
+
+          let category_deals = [];
+          for (let i = 0; i < newCategoryResult.length; i++) {
+            let records = [];
+            records.push(newCategoryResult[i].category_id, editingDealId)
+            category_deals.push(records);
+          }
+
+          connection.query("INSERT INTO categories_deals(category_id, deals_id) VALUES ? ON DUPLICATE KEY UPDATE category_id=VALUES(category_id),deals_id=VALUES(deals_id)",
+          [category_deals],
+          function (error, results, fields) {
+            if (error) console.log(error);
+          });
+      });
+    });
+
+
+  console.log("selected category", selectedCategory);
   //update deal_images
 
 
