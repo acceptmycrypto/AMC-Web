@@ -145,7 +145,15 @@ class ListDeal extends Component {
     const { dealName, selectedCategory, selectedCondition, _updateEditingDeal, images, priceInUSD, priceInCrypto, crypto_amount, editingDealId } = this.props;
 
     let textDetailRaw = convertToRaw(this.props.editorState.getCurrentContent());
-    let selected_cryptos = Object.keys(crypto_amount);
+
+    let selected_cryptos = [];
+    for (let cryptoSymbol in crypto_amount) {
+      if (crypto_amount[cryptoSymbol] !== undefined) {
+        selected_cryptos.push(cryptoSymbol)
+      }
+    }
+
+    debugger
 
     _updateEditingDeal(localStorage.getItem("token"), editingDealId, dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos);
 

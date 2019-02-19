@@ -244,28 +244,52 @@ router.post('/listdeal/edit', verifyToken, function(req, res) {
   });
 
   //update cryptos_deals
-  connection.query("SELECT id AS crypto_id FROM crypto_metadata WHERE crypto_symbol IN (?)", [selected_cryptos],
-  function (error, results, fields) {
+  let toBeKeptCryptosID = "SELECT crypto_id, crypto_symbol FROM cryptos_deals LEFT JOIN crypto_metadata ON cryptos_deals.crypto_id = crypto_metadata.id WHERE crypto_symbol IN (?) AND deal_id = ?";
+  let newCryptosID = "SELECT id AS crypto_id FROM crypto_metadata WHERE crypto_symbol IN (?)"
+
+  //query the crypto_ids needed to be kept
+  connection.query(toBeKeptCryptosID, [selected_cryptos, editingDealId],
+  function (error, toBeKeptCryptoResult, fields) {
     if (error) console.log(error);
 
-    let cryptos_deals = [];
-    for (let i = 0; i < results.length; i++) {
-      let records = [];
-      records.push(results[i].crypto_id, deal_id)
-      cryptos_deals.push(records);
+    let toBeKeptCryptosArr = [];
+    for (let i = 0; i < toBeKeptCryptoResult.length; i++) {
+      toBeKeptCryptosArr.push(toBeKeptCryptoResult[i].crypto_id); //cryptos_ids [2,3]
+      console.log(toBeKeptCryptosArr);
     }
 
+    //delete the crypto_id that users de-select
+    connection.query("DELETE FROM cryptos_deals WHERE crypto_id NOT IN (?) AND deal_id = ?", [toBeKeptCryptosArr, editingDealId],
+      function (error, exisitingCryptoResult, fields) {
+        if (error) console.log(error);
+    });
 
-    connection.query("INSERT INTO cryptos_deals(crypto_id, deal_id) VALUES ? ON DUPLICATE KEY UPDATE crypto_id=VALUES(crypto_id),deal_id=VALUES(deal_id)",
-    [cryptos_deals], //cryptos_deals = [[1,2], [3, 2]]
-    function (error, results, fields) {
-      if (error) console.log(error);
+    //insert new cryptos_ids into cryptos_deals
+    connection.query(newCryptosID, [selected_cryptos],
+      function (error, newCryptoResult, fields) {
+        if (error) console.log(error);
+
+        let cryptos_deals = [];
+        for (let i = 0; i < newCryptoResult.length; i++) {
+          let records = [];
+          records.push(newCryptoResult[i].crypto_id, editingDealId)
+          cryptos_deals.push(records);
+        }
+
+        connection.query("INSERT INTO cryptos_deals(crypto_id, deal_id) VALUES ? ON DUPLICATE KEY UPDATE crypto_id=VALUES(crypto_id),deal_id=VALUES(deal_id)",
+        [cryptos_deals], //cryptos_deals = [[1,2], [3, 2]]
+        function (error, results, fields) {
+          if (error) console.log(error);
+        });
     });
   });
 
 
-  //update deal_images
   //update category deals
+  //update deal_images
+
+
+
 
 
 
