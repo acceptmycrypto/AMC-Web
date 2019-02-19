@@ -45,7 +45,8 @@ export default function paymentTransactionReducer(state = initialState, action) 
       return {
         ...state,
         loading: false,
-        transactionInfo: action.payload.transactionInfo,
+        transactionInfo: action.payload.transactionInfo.paymentInfo,
+        deal_status: action.payload.transactionInfo.deal_status,
         createPaymentButtonClicked: true,
       };
 
@@ -56,6 +57,7 @@ export default function paymentTransactionReducer(state = initialState, action) 
         error: action.payload.error,
         transactionInfo: null,
         createPaymentButtonClicked: false,
+        deal_status: null,
       };
 
     case "LOCATION_CHANGE":

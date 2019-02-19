@@ -92,7 +92,7 @@ class DealItem extends Component {
       shippingState,
       firstName,
       lastName,
-      email, 
+      email,
       phoneNumber
     } = this.props;
 
@@ -134,7 +134,7 @@ class DealItem extends Component {
         phoneNumber
       );
     }
-    
+
   };
 
   handleShipmentValidation = () => {
@@ -190,10 +190,10 @@ class DealItem extends Component {
       document.getElementById(
         "shipping-state"
       ).classList.add("shipping-state-error");
-      
+
       if (!this.props.userLoggedIn) {
-        document.getElementById("shipping-email").classList.add("shipping-state-error");
-        document.getElementById("shipping-phone-number").classList.add("shipping-state-error");
+        document.getElementById("shipping-email").classList.add("shipping-error");
+        document.getElementById("shipping-phone-number").classList.add("shipping-error");
       }
 
     }
@@ -340,7 +340,7 @@ class DealItem extends Component {
       handleShippingStateInput,
       handleSelectedCrypto,
       handleShippingEmail,
-      handleShippingPhoneNumber, 
+      handleShippingPhoneNumber,
       handleDetailStep,
       handleShippingStep,
       handlePayingStep,
@@ -454,7 +454,7 @@ class DealItem extends Component {
             </div>
 
             <div className="deal-listing-content">
-              <div className="deal-images-container">
+              <div className={!userLoggedIn && showShippingStep ?  "guest-images-container" : "deal-images-container"}>
                 <Carousel className="react-carousel" showStatus={false}>
                   {dealItem &&
                     dealItem.deal_image.map((img, i) => (

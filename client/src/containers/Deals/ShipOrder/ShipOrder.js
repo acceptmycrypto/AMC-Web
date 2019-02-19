@@ -3,7 +3,7 @@ import "./ShipOrder.css";
 import Select from "react-select";
 
 const ShipOrder = props => {
-  
+
   return (
     <div>
 
@@ -22,8 +22,6 @@ const ShipOrder = props => {
             />
           </div>
 
-          {/* <div className="dealitem-error-msg" id="shipping-firstname-error"></div> */}
-
           <div>
             <label htmlFor="shipping-lastname">Last Name</label>
             <input
@@ -34,8 +32,6 @@ const ShipOrder = props => {
               value={props.showShippingLastName ? props.showShippingLastName : null}
             />
           </div>
-
-          {/* <div className="dealitem-error-msg" id="shipping-lastname-error"></div> */}
 
           <div>
             <label htmlFor="shipping-address">Address</label>
@@ -48,8 +44,6 @@ const ShipOrder = props => {
             />
           </div>
 
-          {/* <div className="dealitem-error-msg" id="shipping-address-error"></div> */}
-
           <div>
             <label htmlFor="shipping-city">City</label>
             <input
@@ -60,8 +54,6 @@ const ShipOrder = props => {
               value={props.showShippingCity ? props.showShippingCity : null}
             />
           </div>
-
-          {/* <div className="dealitem-error-msg" id="shipping-city-error"></div> */}
 
           <div className="shipping-state">
             <label htmlFor="selectstate">State</label>
@@ -75,7 +67,6 @@ const ShipOrder = props => {
 
             </Select>
           </div>
-          {/* <div className="dealitem-error-msg" id="shipping-state-error"></div> */}
 
           <div>
             <label htmlFor="shipping-zipcode">Zip Code</label>
@@ -88,12 +79,10 @@ const ShipOrder = props => {
             />
           </div>
 
-
           {props.user_status === "guest" &&
-    
             <div>
               <div>
-                 <label htmlFor="shipping-email">Zip Code</label>
+                 <label htmlFor="shipping-email">Email</label>
                 <input
                   type="text"
                   id="shipping-email"
@@ -104,7 +93,7 @@ const ShipOrder = props => {
               </div>
 
               <div>
-                 <label htmlFor="shipping-phone-number">Zip Code</label>
+                 <label htmlFor="shipping-phone-number">Phone Number</label>
                 <input
                   type="text"
                   id="shipping-phone-number"
@@ -121,7 +110,7 @@ const ShipOrder = props => {
 
       </div>
 
-        <div className="shipping-step-buttons">
+        <div className={props.user_status === "guest" ? "guest-shipping-step-buttons" : "shipping-step-buttons"}>
 
           <div onClick={props.previous_step} className="previous-step">
             <button>Previous</button>
