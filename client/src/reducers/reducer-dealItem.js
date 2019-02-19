@@ -6,7 +6,7 @@ const initialState = {
   shippingAddress: null,
   shippingCity: null,
   zipcode: null,
-  shippingState: null,
+  shippingState: "",
   selectedOption: null,
   showDetailStep: true,
   showShippingStep: false,
@@ -96,7 +96,7 @@ export default function dealItemReducer(state = initialState, action) {
     case "SHIPPING_STATE":
       return {
         ...state,
-        shippingState: action.payload
+        shippingState: action.payload.selectedState
       };
 
     case "SELECT_PAYMENT":

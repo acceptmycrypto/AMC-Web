@@ -4,6 +4,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import LoadingSpinner from "../../../components/UI/LoadingSpinner";
 import {
   _loadDealItem,
   handleFirstNameInput,
@@ -15,7 +16,7 @@ import {
   handleSelectedCrypto,
   handleDetailStep,
   handleShippingStep,
-  handlePayingStep
+  handlePayingStep,
 } from "../../../actions/dealItemActions";
 import { resetListDeal } from "../../../actions/listDealActions";
 import { _fetchTransactionInfo } from "../../../actions/paymentActions";
@@ -121,7 +122,7 @@ class DealItem extends Component {
       enteredShippingAddress: this.props.shippingAddress,
       enteredShippingCity: this.props.shippingCity,
       enteredZipcode: this.props.zipcode,
-      selectedShippingState: this.props.shippingState
+      selectedShippingState: this.props.shippingState.value
     };
     let isDataValid = false;
 
@@ -133,27 +134,23 @@ class DealItem extends Component {
       isDataValid = true;
     } else {
       document.getElementById(
-        "shipping-firstname-error"
-      ).innerHTML = this._validationErrors(validateNewInput).firstNameValMsg;
+        "shipping-firstname"
+      ).classList.add("shipping-error");
       document.getElementById(
-        "shipping-lastname-error"
-      ).innerHTML = this._validationErrors(validateNewInput).lastNameValMsg;
+        "shipping-lastname"
+      ).classList.add("shipping-error");
       document.getElementById(
-        "shipping-address-error"
-      ).innerHTML = this._validationErrors(
-        validateNewInput
-      ).shippingAddressValMsg;
+        "shipping-address"
+      ).classList.add("shipping-error");
       document.getElementById(
-        "shipping-city-error"
-      ).innerHTML = this._validationErrors(validateNewInput).shippingCityValMsg;
+        "shipping-city"
+      ).classList.add("shipping-error");
       document.getElementById(
-        "shipping-zipcode-error"
-      ).innerHTML = this._validationErrors(validateNewInput).zipcodeValMsg;
+        "shipping-zipcode"
+      ).classList.add("shipping-error");
       document.getElementById(
-        "shipping-state-error"
-      ).innerHTML = this._validationErrors(
-        validateNewInput
-      ).shippingStateValMsg;
+        "shipping-state"
+      ).classList.add("shipping-state-error");
     }
 
     return isDataValid;
@@ -184,22 +181,6 @@ class DealItem extends Component {
 
   _validationErrors(val) {
     const errMsgs = {
-      firstNameValMsg: val.enteredFirstname
-        ? null
-        : "Please enter your first name",
-      lastNameValMsg: val.enteredLastname
-        ? null
-        : "Please enter your last name",
-      shippingAddressValMsg: val.enteredShippingAddress
-        ? null
-        : "Please enter your shipping address",
-      shippingCityValMsg: val.enteredShippingCity
-        ? null
-        : "Please enter your shipping city",
-      zipcodeValMsg: val.enteredZipcode ? null : "Please enter your zip code",
-      shippingStateValMsg: val.selectedShippingState
-        ? null
-        : "Please select your state",
       selectedPaymentValMsg: val.selectedPaymentOption
         ? null
         : "Please select your payment option"
@@ -246,7 +227,7 @@ class DealItem extends Component {
         }
       }
     }
-    
+
     return result;
   };
 
@@ -288,6 +269,7 @@ class DealItem extends Component {
             selectedOption,
             transaction_loading,
             paymentInfo,
+            transaction_status,
             createPaymentButtonClicked,
             showDetailStep,
             showShippingStep,
@@ -309,16 +291,12 @@ class DealItem extends Component {
             handlePayingStep,
             } = this.props;
 
-    console.log("line 268", userLoggedIn);
-
     if (error) {
       return <div>Error! {error.message}</div>;
     }
     if (deal_item_loading) {
-      return <div>Loading...</div>;
+      return <div className="page-loading"><LoadingSpinner /></div>
     }
-
-    console.log("user info", user_info);
 
     //if user is redirected from the deal created page after deal is created
     if (this.props.dealCreated.deal_id) {
@@ -385,7 +363,7 @@ class DealItem extends Component {
                 </a>
                 <a
                   onClick={() => handleShippingStep()}
-                  className={showShippingStep ? "active step" : "step"}
+                  className={dealItem && dealItem.deal_status === "available" ? showShippingStep ? "active step" : "step" : "step disabled"}
                 >
                   <i className="truck icon" />
                   <div className="content">
@@ -437,6 +415,7 @@ class DealItem extends Component {
                       //another way to pass in props using spread operator
                       {...dealItem}
                       {...reviews}
+                      transactionStatus={transaction_status}
                       sellerDealDescription={this.loadDescription}
                       next_step={handleShippingStep}
                       rating_display={this.ratingDisplay}
@@ -622,6 +601,7 @@ const mapStateToProps = state => ({
   selectedOption: state.DealItem.selectedOption,
   allStates: state.DealItem.states,
   paymentInfo: state.TransactionInfo.transactionInfo,
+  transaction_status: state.TransactionInfo.deal_status,
   createPaymentButtonClicked: state.TransactionInfo.createPaymentButtonClicked,
   transaction_loading: state.TransactionInfo.loading,
   deal_item_loading: state.DealItem.loading,

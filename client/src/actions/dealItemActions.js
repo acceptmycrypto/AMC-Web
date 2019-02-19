@@ -75,10 +75,11 @@ export const handleZipcodeInput = (event) => {
   }
 };
 
-export const handleShippingStateInput = (event) => {
+export const handleShippingStateInput = (selectedState) => {
+  document.querySelector("#shipping-state").classList.remove("shipping-state-error");
   return {
       type: 'SHIPPING_STATE',
-      payload: event.target.value
+      payload: {selectedState}
   }
 };
 

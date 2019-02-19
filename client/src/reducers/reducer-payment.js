@@ -2,7 +2,8 @@ const initialState = {
   transactionInfo: null,
   createPaymentButtonClicked: false,
   loading: false,
-  error: null
+  error: null,
+  deal_status: null
 };
 
 export default function paymentTransactionReducer(state = initialState, action) {
@@ -18,7 +19,8 @@ export default function paymentTransactionReducer(state = initialState, action) 
       return {
         ...state,
         loading: false,
-        transactionInfo: action.payload.transactionInfo,
+        transactionInfo: action.payload.transactionInfo.paymentInfo,
+        deal_status: action.payload.transactionInfo.deal_status,
         createPaymentButtonClicked: true,
       };
 
@@ -28,6 +30,7 @@ export default function paymentTransactionReducer(state = initialState, action) 
         loading: false,
         error: action.payload.error,
         transactionInfo: null,
+        deal_status: null,
         createPaymentButtonClicked: false,
       };
 

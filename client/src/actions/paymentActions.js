@@ -9,9 +9,9 @@ export function _fetchTransactionInfo(
   zipcode,
   shippingState,
   firstName,
-  lastName,
-  selectedSize,
-  selectedColor) {
+  lastName) {
+
+
   const settings = {
     method: "POST",
     headers: {
@@ -29,9 +29,7 @@ export function _fetchTransactionInfo(
       zipcode,
       shippingState,
       firstName,
-      lastName,
-      selectedSize,
-      selectedColor})
+      lastName})
   };
 
   return dispatch => {
@@ -39,6 +37,7 @@ export function _fetchTransactionInfo(
     return fetch("/checkout", settings)
       .then(res => res.json())
       .then(jsonTransaction => {
+
         dispatch(createTransactionSuccess(jsonTransaction));
         return jsonTransaction;
       })
