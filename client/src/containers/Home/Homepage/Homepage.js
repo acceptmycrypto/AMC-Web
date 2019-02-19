@@ -41,8 +41,8 @@ class Homepage extends Component {
         src: './assets/images/banner1.svg',
         // src: 'https://static.bhphoto.com/images/images500x500/Rosco_102354264825_E_Colour_5426_Blueberry_Blue_1233286396000_595543.jpg',
         altText: 'Slide 1',
-        // caption: 'Slide 1',
-        // header: 'Slide 1 Header'
+        caption: 'AcceptMyCrypto is the easiest marketplace to buy and sell discounted items for cryptocurrency',
+        header: 'Buy and Sell Anything for Cryptocurrency'
 
       },
       {
@@ -75,10 +75,10 @@ class Homepage extends Component {
           </div>
           <UncontrolledCarousel items={carouselItems} indicators={false} className="homepage-carousel" />
           {homepage_deals.recent_deals !== undefined && homepage_deals.recent_deals.length > 0 &&
-            <CategoryHome category_collection={homepage_deals.recent_deals} category_collection_name={"Most Recent Deals Listed"} category_collection_id={`cat_recent`}/>                                
+            <CategoryHome category_collection={homepage_deals.recent_deals} category_collection_name={"Most Recent Deals Listed"} category_collection_id={`cat_recent`}/>
           }
           {homepage_deals.all_results !== undefined && homepage_deals.all_results.length > 0 && homepage_deals.all_results.map((categorizedDealArray, i) => (
-            <CategoryHome category_collection={categorizedDealArray} category_collection_name={categorizedDealArray[0].category_name} category_collection_id={`cat_${i}`}/>            
+            <CategoryHome category_collection={categorizedDealArray} category_collection_name={categorizedDealArray[0].category_name} category_collection_id={`cat_${i}`}/>
           ))}
 
           {/* <CategoryHome category_collection={apparel_accessories} category_collection_name={"Apparel & Accessories"} category_collection_id={"apparel_accessories_container"}/>
