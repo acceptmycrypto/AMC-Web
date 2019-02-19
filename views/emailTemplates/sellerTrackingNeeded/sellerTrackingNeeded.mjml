@@ -1,0 +1,68 @@
+<mjml>
+  <mj-body>
+
+    <!-- Company Header -->
+    <mj-section background-color="#6bd9c7">
+      <mj-column>
+        <mj-text font-size="20px" color="#626e7e" align="center">
+          AcceptMyCrypto
+        </mj-text>
+        <mj-image width="80px" src="https://s3-us-west-1.amazonaws.com/acceptmycrypto/logo.png" />
+      </mj-column>
+    </mj-section>
+
+    <!-- verifying section -->
+    <mj-section background-color="#2e4157">
+
+      <mj-column>
+        <mj-text color="#fff" font-size="20px" align="center" line-height="20px">
+          A User Has Purched Your Item: 
+          <%= deal_name %>
+        </mj-text>
+    
+        <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
+          You Have 48 hrs to Ship the Item and Submit the Tracking Number
+        </mj-text>
+        <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
+          Once the User Receives the Item Your AcceptMyCrypto Account Balance Will Be Updated With Your Payment
+        </mj-text>
+
+        <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
+          Here is the User's Shipping Details:
+        </mj-text>
+        <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
+          User's Name: <%=shipping_firstname%> <%=shipping_lastname%>
+          
+        </mj-text>
+        <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
+          Address: <%=shipping_address%>
+        </mj-text>
+
+        <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
+          City: <%=shipping_city%>
+        </mj-text>
+
+        <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
+           State: <%=shipping_state%>
+        </mj-text>
+
+        <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
+          Zipcode: <%=shipping_zipcode%>
+        </mj-text>
+
+        <mj-button background-color="#6bd9c7" color="#2e4157" href="<%= supply_tracking_number_link%>">
+          Submit Tracking Number
+        </mj-button>
+
+        <mj-text color="#fff" font-size="15px" align="center" line-height="15px">
+          Please contact support@acceptmycrypto.com for any questions or concerns.
+        </mj-text>
+
+      </mj-column>
+
+    </mj-section>
+
+
+
+  </mj-body>
+</mjml>
