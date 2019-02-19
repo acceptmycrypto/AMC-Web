@@ -81,6 +81,8 @@ CREATE TABLE deals (
 	width INT NULL, --in inches
 	height INT NULL, --in inches
 	weight INT NULL, -- in lb (pounds)
+	shipping_label_status VARCHAR(20) NULL, --prepaid or seller
+	shipment_cost DECIMAL(10, 2) NULL, -- USD
 -- 	deal_avg_rating FLOAT(3,2) NULL,
 -- 	total_deal_ratings INT NULL,
 	PRIMARY KEY (id),
@@ -160,6 +162,7 @@ CREATE TABLE users_cryptos(
 	user_id INT NOT NULL,
 	crypto_id INT NOT NULL,
 	crypto_address VARCHAR(255) NULL,
+	crypto_balance DECIMAL(20, 8) NOT NULL DEFAULT 0,
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_id) REFERENCES users(id),
 	FOREIGN KEY (crypto_id) REFERENCES crypto_info(id)
@@ -202,6 +205,15 @@ CREATE TABLE users_purchases(
   status VARCHAR(255) NOT NULL DEFAULT "0",
 	payment_received BOOLEAN NOT NULL DEFAULT FALSE,
 	permission VARCHAR(255) NOT NULL DEFAULT "community",
+	shipment_date VARCHAR (255) NULL,
+	shipping_label_url VARCHAR(500) NULL, -- if prepaid this is link to shipping label
+	shippo_shipment_price DECIMAL (10,2) NULL,
+	tracking_number VARCHAR(255) NULL, -- shipment tracking number
+	tracking_status VARCHAR(100) NULL,
+	tracking_url_provider VARCHAR (500) NULL, -- link to track package online
+	eta VARCHAR (255) NULL,
+	shippo_shipment_id VARCHAR(255) NULL,
+	shippo_transaction_id VARCHAR(255) NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_id) REFERENCES users(id),
 	FOREIGN KEY (guest_user_id) REFERENCES guest_users(id),
