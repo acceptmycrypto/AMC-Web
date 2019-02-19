@@ -298,4 +298,20 @@ router.get('/api/search', function(req, res) {
 
 // });
 
+//  update tracking number for deal
+router.post('/update_tracking_number', verifyToken, function (req, res) {
+  let id = req.decoded._id;
+
+  let {txn_id, trackingNumber} = req.body;
+
+    connection.query(
+      'UPDATE users_purchases SET tracking_number = ? WHERE txn_id = ?',
+      [trackingNumber, txn_id],
+      function (error, results, fields) {
+        if (error) console.log(error);
+        res.json(results);
+      }
+    );
+});
+
 module.exports = router;
