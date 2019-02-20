@@ -68,14 +68,48 @@
   }
 
 .teamPic{
-    width: 50%;
-    height: 450px;
+    width: 20%;
+    height: 300px;
     display: block;
     margin-left: auto;
     margin-right: auto;
-    border-radius: 10px;
+    border-radius: 50%;
     border: 1px solid #ddd;
     padding: 5px;
   }
+
+  .avanikaPic{
+    width: 20%;
+    height: 300px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 50%;
+    /* border: 1px solid #ddd; */
+    padding: 5px;
+  }
+
+  .jasonPic{
+    width: 20%;
+    height: 300px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 50%;
+    /* border: 1px solid #ddd; */
+    padding: 5px;
+  }
+
+  .simonPic{
+    width: 20%;
+    height: 300px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 50%;
+    /* border: 1px solid #ddd; */
+    padding: 5px;
+  }
+  
   
   

@@ -4,6 +4,7 @@ import './AboutUs.css';
 // import { BrowserRouter as Link } from 'react-router-dom';
 import { UncontrolledCollapse, Button, CardBody, Card, Collapse } from 'reactstrap';
 import Navbar from '../../Navigation/Navbar/Navbar';
+import Footer from '../../../components/Layout/Footer';
 // Will keep these imports for possible future use. Will delete when found unnecessary.
 // import * as Scroll from 'react-scroll';
 // import { Link, Element , Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
@@ -30,17 +31,17 @@ render() {
                   The Team
             </a>
 
-            <a className="aboutUs-menuItem" id="avanika">
+            <a className="aboutUs-menuItem" id="avanikaK">
 
                   Avanika Krishnaswamy
                   </a>
 
-           <a className="aboutUs-menuItem" id="jason">
+           <a className="aboutUs-menuItem" id="jasonN">
 
                   Jason Neitro 
            </a>
            
-           <a className="aboutUs-menuItem" id="simon">
+           <a className="aboutUs-menuItem" id="simonN">
 
                   Simon Nguyen
            </a>
@@ -72,6 +73,56 @@ render() {
       </CardBody>
 
 </UncontrolledCollapse>
+
+<UncontrolledCollapse toggler="#avanikaK">
+
+      <h4 className="aboutUsMenuTitle">Avanika Krishnaswamy</h4>
+
+
+      <CardBody>
+          <ul>
+              <li><img className="avanikaPic" src={"../../assets/images/avanikaPic.jpg"}></img></li>
+          </ul>
+          <ul className="aboutUs-list">
+            <li className="aboutUs-listItem">Avanika K. ... </li>
+          </ul>
+      </CardBody>
+
+</UncontrolledCollapse>
+
+<UncontrolledCollapse toggler="#jasonN">
+
+      <h4 className="aboutUsMenuTitle">Jason Neitro</h4>
+
+
+      <CardBody>
+          <ul>
+              <li><img className="jasonPic" src={"../../assets/images/jasonPic.jpg"}></img></li>
+          </ul>
+          <ul className="aboutUs-list">
+            <li className="aboutUs-listItem">Jason N. ... </li>
+          </ul>
+      </CardBody>
+
+</UncontrolledCollapse>
+
+<UncontrolledCollapse toggler="#simonN">
+
+      <h4 className="aboutUsMenuTitle">Simon Nguyen</h4>
+
+
+      <CardBody>
+          <ul>
+              <li><img className="simonPic" src={"../../assets/images/simonPic.jpg"}></img></li>
+          </ul>
+          <ul className="aboutUs-list">
+            <li className="aboutUs-listItem">Simon N. ... </li>
+          </ul>
+      </CardBody>
+
+</UncontrolledCollapse>
+
+<Footer/>
 
 
 </div>

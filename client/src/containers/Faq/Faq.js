@@ -4,6 +4,7 @@ import './Faq.css';
 // import { BrowserRouter as Link } from 'react-router-dom';
 import { UncontrolledCollapse, Button, CardBody, Card, Collapse } from 'reactstrap';
 import Navbar from '../Navigation/Navbar/Navbar';
+import Footer from '../../components/Layout/Footer';
 // Will keep these imports for possible future use. Will delete when found unnecessary.
 // import * as Scroll from 'react-scroll';
 // import { Link, Element , Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
@@ -20,6 +21,7 @@ render() {
 
         <div className="Faq-page">
         <Navbar/>
+        
          
          <div className="Faq-menu">
 
@@ -90,7 +92,7 @@ render() {
 
       <CardBody>
           <ul className="Faq-qnaList">
-            <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion3">Who should I contact to ask questions about listing deals or services?</Button></h4></li>
+            <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion3">How do I contact AccpetMyCrypto?</Button></h4></li>
           </ul>
       </CardBody>
 
@@ -112,7 +114,7 @@ render() {
  
       <CardBody>
           <ul className="Faq-qnaList">
-            <li className="Faq-answer">Please click the Contact us link in the footer of the Home page and send us an email. We will respond within 24 hours.</li>
+            <li className="Faq-answer">Please click the Contact us link in the footer of the Home page and send us an email. We will respond within 2 buisness days.</li>
             <li className="Faq-answer">If for any reason the Contact us link doesn’t open an email box or you are unable to locate the link, please use our support email: support@acceptmycrypto.com</li>
           </ul>
       </CardBody>
@@ -130,7 +132,7 @@ render() {
       <CardBody>
           <ul className="Faq-qnaList">
             <li className="Faq-answer">Our users have the option of utilizing Coinpayments.com and Paypal. We offer the benefit of processing payments in Us dollars (through Paypal) and Cryptocurrency (through Coinpayments).</li>
-            <li className="Faq-answer">The use of CoinPayments will incur a (Non-refundable) processing fee of 4.5%.</li>
+            <li className="Faq-answer">The use of CoinPayments will incur a (Non-refundable) processing fee of 2.5%.</li>
           </ul>
       </CardBody>
               
@@ -211,7 +213,7 @@ render() {
       <CardBody>
           <ul className="Faq-qnaList">
             <li className="Faq-answer">AcceptMyCrypto can only offer domestic shipping, at this time. International shipping through our platform will not be accepted.</li>
-            <li className="Faq-answer">Once we have received the funds from the buyer we will create a printing label for the seller.</li>
+            <li className="Faq-answer">Once we have received the funds from the buyer we will create a shipping label for the seller.</li>
             <li className="Faq-answer">AcceptMyCrypto does not cover any shipping costs on behalf of the buyer or seller. All sellers are hereby advised, they will be responsible for any shipping fee/costs. Sellers will have the ability to add such fees/costs to the price of the item being sent or cover the fees/costs all together to provide free shipping to their customers. This is at the full discretion of the seller.</li>
           </ul>
       </CardBody>
@@ -301,6 +303,7 @@ render() {
  
       <CardBody>
           <ul className="Faq-qnaList">
+          <li className="Faq-answer">In order to provide an accurate and fair search function on our site, prior approval may be required to list certain products in certain categories. </li>
          </ul> 
       </CardBody>
 
@@ -402,14 +405,14 @@ render() {
  
         <CardBody>
             <ul className="Faq-qnaList">
-              <li className="Faq-answer">AcceptMyCrypto will provide the appropriate tax documents for your confirmed sales (incl. returns/refunds) no later than January 31st of current tax year.</li>
+              <li className="Faq-answer">AcceptMyCrypto will provide a history of your confirmed sales (incl. returns/refunds).</li>
             </ul>
        
         </CardBody>
 
 </UncontrolledCollapse>
 
-          {/* <CardBody>
+          <CardBody>
             <ul className="Faq-qnaList">
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerSellerQue11">Can I cancel/delete a listing I have already posted?</Button></h4></li>
             </ul>
@@ -419,11 +422,11 @@ render() {
  
         <CardBody>
             <ul className="Faq-qnaList">
-              <li></li>
+              <li>Yes. You are able to cancel or delete a listing as long as the listing is not in a "pending" or "sold" state.</li>
             </ul>
         </CardBody>
 
-</UncontrolledCollapse> */}
+</UncontrolledCollapse>
 
           <CardBody>
             <ul className="Faq-qnaList">
@@ -506,6 +509,8 @@ render() {
         <CardBody>
             <ul className="Faq-qnaList">
               <li className="Faq-answer">While we make every effort to allow the use of the most popular coins, each seller chooses which coins he or she accepts for their individual listings. AccpetMyCrypto has no control over which type Cryptocurrency the seller will accept.</li>
+              <li className="Faq-answer">Currently, we allow each seller the ability to accept up to 10 different cryptocurrencies. If your Cryptocurrency of choice is not listed, please submit a "AcceptMyCrypto" request.</li>
+              <li className="Faq-answer">If there is a high demand for any given Crypto, then, where possible, we will be sure to add it as an "AcceptedCrypto"</li>
             </ul>
         </CardBody>
 
@@ -651,7 +656,7 @@ render() {
 
         <CardBody>
             <ul className="Faq-qnaList">
-              <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerGuestQues4">How do guest returns work?</Button></h4></li>
+              <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerGuestQues4">Can I return something if I checked out as a guest?</Button></h4></li>
             </ul>
         </CardBody>
 
@@ -681,8 +686,12 @@ render() {
 
 </UncontrolledCollapse>
 </UncontrolledCollapse>
+
+<Footer/>
             </div>
-        </div>      
+        </div> 
+       
+             
     );
 }
 }
