@@ -336,13 +336,56 @@ router.post('/listdeal/edit', verifyToken, function(req, res) {
       });
     });
 
-
-  console.log("selected category", selectedCategory);
   //update deal_images
+  let toBeKeptImageID = "SELECT id As deal_image_id FROM deal_images WHERE deal_image IN (?) AND deal_id = ?";
+  // let newCryptosID = "SELECT id AS crypto_id FROM crypto_metadata WHERE crypto_symbol IN (?)"
 
+  let newImageURLS = [];
+  for (let i in images) {
+    newImageURLS.push(images[i].Location);
+  }
+  console.log("images", images);
+  connection.query(toBeKeptImageID, [newImageURLS, editingDealId],
+  function (error, toBeKeptImageResult, fields) {
+    if (error) console.log(error);
 
+    let toBeKeptImageArr = [];
+    for (let i = 0; i < toBeKeptImageResult.length; i++) {
+      toBeKeptImageArr.push(toBeKeptImageResult[i].crypto_id);
+    }
 
+    //delete the crypto_id that users de-select
+    if (toBeKeptCryptosArr.length > 0) {
+      connection.query("DELETE FROM cryptos_deals WHERE crypto_id NOT IN (?) AND deal_id = ?", [toBeKeptCryptosArr, editingDealId],
+      function (error, exisitingCryptoResult, fields) {
+        if (error) console.log(error);
+      });
+    } else {
+      connection.query("DELETE FROM cryptos_deals WHERE deal_id = ?", [editingDealId],
+      function (error, exisitingCryptoResult, fields) {
+        if (error) console.log(error);
+      });
+    }
 
+    //insert new cryptos_ids into cryptos_deals
+    connection.query(newCryptosID, [selected_cryptos],
+      function (error, newCryptoResult, fields) {
+        if (error) console.log(error);
+
+        let cryptos_deals = [];
+        for (let i = 0; i < newCryptoResult.length; i++) {
+          let records = [];
+          records.push(newCryptoResult[i].crypto_id, editingDealId)
+          cryptos_deals.push(records);
+        }
+
+        connection.query("INSERT INTO cryptos_deals(crypto_id, deal_id) VALUES ? ON DUPLICATE KEY UPDATE crypto_id=VALUES(crypto_id),deal_id=VALUES(deal_id)",
+        [cryptos_deals], //cryptos_deals = [[1,2], [3, 2]]
+        function (error, results, fields) {
+          if (error) console.log(error);
+        });
+    });
+  });
 
 
 
