@@ -11,7 +11,8 @@ const Footer = props => {
       
       <div className="Footer-links">
 
-      <Link to="/Faq">FAQ</Link>
+      <Link className="Faq-footer" to="/Faq">FAQ</Link>
+      <Link className="AboutUs-footer" to="/AboutUs">About Us</Link>
       <div className="copyrightFooter">AcceptMyCrypto © 2018</div>
       
       </div>

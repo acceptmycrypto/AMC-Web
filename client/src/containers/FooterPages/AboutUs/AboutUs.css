@@ -1,0 +1,81 @@
+.aboutUs-list{
+    margin: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    text-align: center;
+  }
+
+.aboutUsMenuTitle{
+    text-align: center;
+  }
+  
+.aboutUs-listItem{
+    font-size: 20px;
+  }
+#AboutUs-amh{
+    padding: 20px;
+    text-align: center;
+    font-size: 27px;
+  }
+  
+.AboutUs-page {
+    height: 100vh;
+    display: flex;
+    color: #2E4158;
+    padding-top: 54px;
+    min-height: calc(100vh - 50px);
+  }
+  
+.aboutUs-mainContent {
+    width: 100%;
+    background-color: white;
+    position: absolute;
+    padding-top: 75px;
+    padding-bottom: 75px;
+   
+  }
+    
+.AboutUs-menu {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    border-bottom: 3px solid #d6d4d4;
+    background-color: #199087;
+    color: #fff;
+    padding-top: 15px;
+    padding-left: 90px;
+    padding-right: 70px;
+    position: fixed;
+    margin-top: 0;
+    z-index: 2;
+  }
+.aboutUs-menuItem{
+    font-size: 15.5px;
+    padding-left: 30px;
+    padding-right: 30px;
+    font-family: Lato,sans-serif;
+    padding-bottom: 10px;
+    text-decoration: none;
+    color: #fff;
+    margin: 0px 97px 0px 83px;
+    color: #2a3c51;
+    font-size: 17px; 
+  }
+  
+.aboutUs-menuItem:hover{
+    color: white;
+  }
+
+.teamPic{
+    width: 50%;
+    height: 450px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    padding: 5px;
+  }
+  
+  
