@@ -20,9 +20,14 @@
     display: flex;
     justify-content: center;
     color: white;
-    background-image: linear-gradient(-85deg, #49cdb7, #1ab7db); 
+    background-image: linear-gradient(-85deg, #49cdb7, #1ab7db);
     width: 100%;
     /* font-size: 40px; */
     font-size: 2.5rem;
     border-radius: 5px;
+}
+
+.withdraw-modal-success-transfered {
+  text-align: center;
+  margin-top: 30px;
 }

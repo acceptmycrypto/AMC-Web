@@ -9,7 +9,7 @@ const PurchaseOrder = props => {
   return (
     <div>
       {!props.paymentButtonClicked ?
-      <div>
+      <div className="payment-form">
         <form>
           <div class="form-group">
             <label className="text-capitalize payment-name-label" htmlFor="select_crypto">Select the Cryptocurrency to pay with</label>
@@ -37,22 +37,18 @@ const PurchaseOrder = props => {
             shippingStateInfo={props.shipping_state}
           />
         </div>
-
-        <div onClick={props.previous_step} className="previous-step">
-          <button>Previous</button>
-        </div>
-
-
-        <div onClick={() => props.validatePaymentData() && props.SubmitPayment()} className="next-step">
+        <div>
+          <div onClick={props.previous_step} className="payment-previous-step button">
+            <button>Previous</button>
+          </div>
+          <div onClick={() => props.validatePaymentData() && props.SubmitPayment()}     className="submit_payment">
           <button>Send Your Payment</button>
+          </div>
         </div>
-      </div> : null}
-
-      {props.paymentButtonClicked ?
-      <Checkout showTimeout={props.timeout} showTransaction={props.transactionInfo} showPaidIn={props.cryptoSymbol}/> : null}
-
-      {props.showLoadingSpinner ? <LoadingSpinner /> : null}
-
+        {props.showLoadingSpinner ? <LoadingSpinner /> : null}
+      </div> :
+        <Checkout showTimeout={props.timeout} showTransaction={props.transactionInfo} showPaidIn={props.cryptoSymbol}/>
+      }
     </div>
   );
 };

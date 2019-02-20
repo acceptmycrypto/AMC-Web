@@ -46,6 +46,14 @@ var connection = mysql.createConnection({
   database: process.env.DB_DB
 });
 
+//compile email template for withdraw token
+var cryptoWithdrawEmailTemplateText = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/cryptoWithdrawConfirmation/cryptoWithdrawConfirmation.ejs'), 'utf-8');
+var cryptoWithdrawEmailTemplate = ejs.compile(cryptoWithdrawEmailTemplateText);
+
+//compile email template for balance deposited updated
+var balanceDepositedEmailTemplateText = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/balanceDeposited/balanceDeposited.ejs'), 'utf-8');
+var balanceDepositedEmailTemplate = ejs.compile(balanceDepositedEmailTemplateText);
+
 // api
 //get list of transactions that are shared to the community and have received the payment.
 //info we need to send to the client: the deal name, the user name, the crypto symbol, the venue name, date purchased
@@ -80,8 +88,6 @@ router.post("/checkout", verifyToken, function (req, res) {
       if (err) {
         console.log("coinpayment error: ", err);
       } else {
-        //send the paymentInfo to the client side
-        res.json(paymentInfo);
 
         connection.query(
           'SELECT crypto_info.id FROM crypto_info LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE crypto_name = ?',
@@ -116,12 +122,24 @@ router.post("/checkout", verifyToken, function (req, res) {
                     shipping_lastname: req.body.lastName,
                     shipping_address: req.body.shippingAddress,
                     shipping_city: req.body.shippingCity,
-                    shipping_state: req.body.shippingState,
+                    shipping_state: req.body.shippingState.value,
                     shipping_zipcode: req.body.zipcode,
                     txn_id: paymentInfo.txn_id
                   },
                   function (err, shipping_data, fields) {
                     if (err) throw err;
+                  }
+                );
+
+                connection.query(
+                  "UPDATE deals SET deal_status = ? WHERE id = ?",
+                  ["reserved", req.body.deal_id],
+                  function(err, result) {
+                    if (err) {
+                      console.log(err);
+                    }
+                     //send the paymentInfo to the client side
+                    res.json({paymentInfo, deal_status: "reserved"});
                   }
                 );
               }
@@ -148,7 +166,6 @@ router.post("/guestCheckout", function (req, res) {
 
   let crypto_name = req.body.crypto_name;
 
-
   client.createTransaction(
     {
       currency1: "USD",
@@ -160,7 +177,7 @@ router.post("/guestCheckout", function (req, res) {
         console.log("coinpayment error: ", err);
       } else {
         //send the paymentInfo to the client side
-        res.json(paymentInfo);
+
 
         connection.query(
           'SELECT crypto_info.id FROM crypto_info LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE crypto_name = ?',
@@ -219,8 +236,6 @@ router.post("/guestCheckout", function (req, res) {
                       }
                     );
 
-
-
                     connection.query('SELECT deals.deal_name, users.username AS seller_name FROM deals LEFT JOIN users ON deals.seller_id = users.id WHERE deals.id = ?',
                       [req.body.deal_id],
                       function (error, res, fields) {
@@ -228,49 +243,220 @@ router.post("/guestCheckout", function (req, res) {
 
                         console.log(res[0]);
 
-
-
                         let view_deal;
-                        if (process.env.NODE_ENV == "development") {
-                          view_deal = `${process.env.FRONTEND_URL}/feed/deals/${req.body.deal_id}/${res[0].deal_name}`;
-                        } else {
-                          view_deal = `${process.env.BACKEND_URL}/feed/deals/${req.body.deal_id}/${res[0].deal_name}`;
-                        }
+                        if (process.env.NODE_ENV=="development"){
+                              view_deal = `${process.env.FRONTEND_URL}/feed/deals/${req.body.deal_id}/${res[0].deal_name}`;
+                          } else {
+                              view_deal = `${process.env.BACKEND_URL}/feed/deals/${req.body.deal_id}/${res[0].deal_name}`;
+                          }
 
-                        const guest_checkout = {
-                          to: req.body.email,
-                          from: process.env.CUSTOMER_SUPPORT,
-                          subject: 'You Reserved a Deal',
-                          html: guest_checkout_emailTemplate(
-                            {
-                              deal_name: res[0].deal_name,
-                              seller_name: res[0].seller_name,
-                              time_left: time_left_hrs,
-                              amount: paymentInfo.amount,
-                              crypto: req.body.crypto_name,
-                              address: paymentInfo.address,
-                              view_deal: view_deal
-                            })
-                        };
-                        sgMail.send(guest_checkout);
+                          const guest_checkout = {
+                            to: req.body.email,
+                            from: process.env.CUSTOMER_SUPPORT,
+                            subject: 'You Reserved a Deal',
+                            html: guest_checkout_emailTemplate(
+                              {
+                                deal_name: res[0].deal_name,
+                                seller_name: res[0].seller_name,
+                                time_left: time_left_hrs,
+                                amount: paymentInfo.amount,
+                                crypto: req.body.crypto_name,
+                                address: paymentInfo.address,
+                                view_deal: view_deal
+                              })
+                          };
+                          sgMail.send(guest_checkout);
                       });
+
+                    //update deal item to reserved
+                    connection.query(
+                      "UPDATE deals SET deal_status = ? WHERE id = ?",
+                      ["reserved", req.body.deal_id],
+                      function(err, result) {
+                        if (err) {
+                          console.log(err);
+                        }
+                        //send the paymentInfo to the client side
+                        res.json({paymentInfo, deal_status: "reserved"});
+
+                      }
+                    );
 
                   }
                 );
-
-
-
               }
             );
+          })
+
+      }
+    });
+
+});
+
+
+//payout
+//once we verified that the item has been shipped to the buyer
+//this route needs to be programatically called once tracking number has been verified
+//we need to listen to shippo for the endpoint
+router.get("/payout", function(req, res) {
+  //sample txn_id, user_id, and crypto_id (needs to query the right one)
+  let txn_id = "CPDB7P3MAVEJMZ7N73TNSX2KBX";
+  let user_id = 1;
+  let crypto_id = 1;
+
+  //get the balance and amount of the transaction from our database
+  connection.query(
+    "SELECT amount, crypto_symbol, payment_received, users_purchases.user_id, users_purchases.crypto_id, users_cryptos.crypto_address, users_cryptos.id AS users_cryptos_id, crypto_balance, deal_name, email AS user_email from users_purchases LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN users_cryptos ON users_cryptos.crypto_id = crypto_info.id LEFT JOIN deals ON users_purchases.deal_id = deals.id where txn_id = ? AND users_purchases.user_id = ? AND users_purchases.crypto_id = ?",
+    [txn_id, user_id, crypto_id],
+    function(error, result, fields) {
+      if (error) throw error;
+
+      let {amount, crypto_symbol, payment_received, crypto_address, users_cryptos_id, crypto_balance, deal_name, user_email} = result[0];
+      console.log(result[0]);
+      //update the crypto balance of the seller
+      if (payment_received === 100) {
+        let amountAfterFee = amount * (0.98) //since coinpase already takes .5%, we're taking 2% (totoal is 2.5%)
+        let newBalance = crypto_balance + amountAfterFee;
+
+        connection.query(
+          "UPDATE users_cryptos SET crypto_balance = ? WHERE id = ?",
+          [newBalance, users_cryptos_id],
+          function(err, result) {
+            if (err) {
+              console.log(err);
+            }
+
+            const balance_deposited = {
+              to: user_email,
+              from: process.env.CUSTOMER_SUPPORT,
+              subject: '[AcceptMyCrypto Notification] Cryptocurrency Deposited!',
+              html: balanceDepositedEmailTemplate({ crypto_symbol, amountAfterFee, deal_name })
+            };
+            sgMail.send(balance_deposited);
 
           }
         );
-
       }
+
     }
   );
+});
+
+router.post("/withdraw/initiate", verifyToken, function(req, res) {
+  let user_id = req.decoded._id;
+  let {crypto_id, crypto_symbol, user_email} = req.body;
+
+  //send an email to the seller with a confirmation code
+  let withdraw_token = Math.random().toString(36).substring(2,10)+"-"+Math.random().toString(36).substring(2,10)+"-"+Math.random().toString(36).substring(2,10);
+  let withdraw_token_timestamp = Date.now();
+
+  connection.query(
+    'SELECT id AS users_cryptos_id, crypto_balance, crypto_address FROM users_cryptos WHERE user_id = ? AND crypto_id = ?',
+    [user_id, crypto_id],
+    function(error, result, fields) {
+        if (error) throw error;
+        let {users_cryptos_id, crypto_balance, crypto_address} = result[0];
+
+        //insert new token in the withdraw table
+        connection.query(
+          'INSERT INTO cryptos_withdraw SET ?',
+          {withdraw_token, withdraw_token_timestamp, users_cryptos_id},
+          function(error, result, fields) {
+              if (error) throw error;
+
+              //use sendgrid here
+              const withdraw_confirmation = {
+                to: user_email,
+                from: process.env.CUSTOMER_SUPPORT,
+                subject: "You've initiated a fund transfer from AcceptMyCrypto",
+                html: cryptoWithdrawEmailTemplate({ crypto_balance, crypto_address, crypto_symbol, withdraw_token })
+              };
+              sgMail.send(withdraw_confirmation);
+
+              console.log(withdraw_token);
+              res.json({success: true, message: "Please check your email for the transfer confirmation token."})
+          }
+        )
+
+    }
+  )
+});
+
+router.post("/withdraw/confirm", verifyToken, function(req, res) {
+  let user_id = 1;
+  let {crypto_id, withdraw_confirmation_token} = req.body;
+
+  connection.query(
+    'SELECT withdraw_token, withdraw_token_timestamp from cryptos_withdraw WHERE withdraw_token = ?',
+    [withdraw_confirmation_token],
+    function(error, cryptos_withdraw_result, fields) {
+        if (error) throw error;
+
+        //5 minutes = 300,000 ms
+
+        if (cryptos_withdraw_result.length > 0 && (cryptos_withdraw_result[0].withdraw_token_timestamp + 300000)  >= Date.now()) {
+
+          //verify if there is money in users_cryptos. We checked at the endpoint withdraw/initiate already, but we're double checking again when user hit this withdraw/confirm
+          connection.query(
+            'SELECT users_cryptos.id AS users_cryptos_id, crypto_address, crypto_balance, crypto_symbol FROM users_cryptos LEFT JOIN crypto_info ON users_cryptos.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name WHERE users_cryptos.user_id = ? AND users_cryptos.crypto_id = ?',
+            [user_id, crypto_id],
+            function(error, users_cryptos_result, fields) {
+                if (error) throw error;
+                let {users_cryptos_id, crypto_address, crypto_balance, crypto_symbol} = users_cryptos_result[0];
+
+                if (crypto_balance > 0) {
+                  console.log("call coinpayment")
+                  let options = {
+                    amount: crypto_balance,
+                    currency: crypto_symbol,
+                    address: crypto_address
+                  };
+
+                  client.createWithdrawal(options, function(error, transferResult) {
+                    if (error) {
+                      //forbidden if minimum amount does not meet
+                      res.status(403).json({error: true, message: error});
+                      console.log("error", error);
+                    } else if (transferResult.status === 1) {
+                        //update the the user's cryptos table so the new balance is now 0
+                        connection.query(
+                          "UPDATE users_cryptos SET crypto_balance = ? WHERE id = ?",
+                          [0, users_cryptos_id],
+                          function(err, result) {
+                            if (err) {
+                              console.log(err);
+                            }
+                            res.json({success: true, message: "Successfully Transfered"})
+                          }
+                        );
+
+                        //update the cryptos_withdraw table the amount of cryptos withdraw
+                        connection.query(
+                          "UPDATE cryptos_withdraw SET withdraw_amount = ?, coinpayment_withdraw_id = ? WHERE withdraw_token = ?",
+                          [crypto_balance, 1, cryptos_withdraw_result[0].withdraw_token, transferResult.id],
+                          function(err, result) {
+                            if (err) {
+                              console.log(err);
+                            }
+                          }
+                        );
+                    }
+
+                  });
+
+                }
+
+            }
+          )
+        } else {
+          res.status(403).json({message: "Invalid Confirmation Token"});
+        }
+    }
+  )
+
 
 });
+
 
 //compile email template
 //this email template is sent to customer if payment has received
@@ -325,7 +511,7 @@ router.post("/checkout/notification", function (req, res, next) {
 }, function (req, res, next) {
   //handle events
   connection.query(
-    'SELECT status, users.email, users.username guest_users.email AS guest_email, amount, crypto_symbol, deal_name, deals.seller_id, deals.shipping_label_status deals.id AS deal_id, seller.email AS seller_email, shipping_firstname, shipping_lastname, shipping_address, shipping_city, shipping_state, shipping_zipcode  FROM users_purchases LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN guest_users ON users_purchases.guest_user_id = guest_users.id LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name LEFT JOIN users seller ON deals.seller_id = users.id LEFT JOIN users_shipping_address ON users_shipping_address.txn_id = users_purchases.txn_id WHERE txn_id = ?',
+    'SELECT status, users.email, users.username guest_users.email AS guest_email, amount, crypto_symbol, deal_name, deals.seller_id, deals.shipping_label_status, users_purchases.deal_id, seller.email AS seller_email, shipping_firstname, shipping_lastname, shipping_address, shipping_city, shipping_state, shipping_zipcode  FROM users_purchases LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN guest_users ON users_purchases.guest_user_id = guest_users.id LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name LEFT JOIN users seller ON deals.seller_id = users.id LEFT JOIN users_shipping_address ON users_shipping_address.txn_id = users_purchases.txn_id WHERE txn_id = ?',
     [req.body.txn_id],
     function (err, data_status, fields) {
       let current_status = data_status[0].status;
@@ -368,6 +554,19 @@ router.post("/checkout/notification", function (req, res, next) {
           [req.body.status, 1, { txn_id: req.body.txn_id }],
           function (error, results, fields) {
             if (error) throw error;
+
+            connection.query(
+              "UPDATE deals SET deal_status = ? WHERE id = ?",
+              ["sold", data_status[0].deal_id],
+              function(err, result) {
+                if (err) {
+                  console.log(err);
+                }
+                 //send the paymentInfo to the client side
+                res.json({deal_status: "sold"});
+              }
+            );
+            
             const confirm_payment_with_customer = {
               to: email,
               from: process.env.CUSTOMER_SUPPORT,
@@ -407,6 +606,20 @@ router.post("/checkout/notification", function (req, res, next) {
           [{ status: req.body.status }, { txn_id: req.body.txn_id }],
           function (error, results, fields) {
             if (error) throw error;
+
+          //update the deal item back to available
+          connection.query(
+            "UPDATE deals SET deal_status = ? WHERE id = ?",
+            ["available", data_status[0].deal_id],
+            function(err, result) {
+              if (err) {
+                console.log(err);
+              }
+               //send the paymentInfo to the client side
+              res.json({deal_status: "available"});
+            }
+          );
+
             const cancel_order = {
               to: email,
               from: process.env.CUSTOMER_SUPPORT,
