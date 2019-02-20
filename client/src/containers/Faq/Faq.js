@@ -106,11 +106,28 @@ render() {
 
       <CardBody>
           <ul className="Faq-qnaList">
-            <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion4">How do I contact AcceptMyCrypto?</Button></h4></li>
+            <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion4">Why do I need to verify my phone number?</Button></h4></li>
           </ul>
       </CardBody>
 
 <UncontrolledCollapse toggler="#togglerQuestion4">
+      <CardBody>
+            <ul className="Faq-qnaList">
+              <li className="Faq-answer">At AcceptMyCrypto we ask all users to verify their phone numbers to confirm they’re a real person as well as to help in the recovery of a lost account.</li>
+              {/* <li className="Faq-answer">To verify your phone number, just enter your phone number during the signup process or by going to My Page > Settings > Confirm Your Identity, and you’ll receive an automated message with a 4-digit verification code.</li> */}
+              <li className="Faq-answer">After verifying your phone number, you will not receive any calls or text messages from AcceptMyCrypto.</li>
+              <li className="Faq-answer">-- Note -- that we are unable to verify international, prepaid, or VoIP phone numbers.</li>
+            </ul>
+      </CardBody>
+</UncontrolledCollapse>
+
+      <CardBody>
+          <ul className="Faq-qnaList">
+            <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion5">How do I contact AcceptMyCrypto?</Button></h4></li>
+          </ul>
+      </CardBody>
+
+<UncontrolledCollapse toggler="#togglerQuestion5">
  
       <CardBody>
           <ul className="Faq-qnaList">
@@ -123,11 +140,11 @@ render() {
 
       <CardBody>
           <ul className="Faq-qnaList">
-            <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion5">How do you process payments?</Button></h4></li>
+            <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion6">How do you process payments?</Button></h4></li>
           </ul>
       </CardBody>
 
-<UncontrolledCollapse toggler="#togglerQuestion5">
+<UncontrolledCollapse toggler="#togglerQuestion6">
          
       <CardBody>
           <ul className="Faq-qnaList">
@@ -140,11 +157,11 @@ render() {
 
       <CardBody>
           <ul className="Faq-qnaList">
-            <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion6">How does AcceptMyCrypto deal with cryptocurrency fluctuation?</Button></h4></li>
+            <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion7">How does AcceptMyCrypto deal with cryptocurrency fluctuation?</Button></h4></li>
           </ul>
       </CardBody>
 
-<UncontrolledCollapse toggler="#togglerQuestion6">
+<UncontrolledCollapse toggler="#togglerQuestion7">
  
       <CardBody>
           <ul className="Faq-qnaList">
@@ -156,11 +173,11 @@ render() {
 
       <CardBody>
           <ul className="Faq-qnaList">
-            <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion7">Is there an age limit to list a deal item or service?</Button></h4></li>
+            <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion8">Is there an age limit to list a deal item or service?</Button></h4></li>
           </ul>
       </CardBody>
 
-<UncontrolledCollapse toggler="#togglerQuestion7">
+<UncontrolledCollapse toggler="#togglerQuestion8">
  
       <CardBody>
           <ul className="Faq-qnaList">
@@ -172,11 +189,11 @@ render() {
 
       <CardBody>
           <ul className="Faq-qnaList">
-            <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion8">Is there an age limit to purchase an item?</Button></h4></li>
+            <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion9">Is there an age limit to purchase an item?</Button></h4></li>
           </ul>
       </CardBody>
 
-<UncontrolledCollapse toggler="#togglerQuestion8">
+<UncontrolledCollapse toggler="#togglerQuestion9">
  
       {/* <CardBody>
           <ul className="Faq-qnaList">
@@ -188,11 +205,11 @@ render() {
 
       <CardBody>
           <ul className="Faq-qnaList">
-            <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion9">Who’s responsible for sale tax?</Button></h4></li>
+            <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion10">Who’s responsible for sale tax?</Button></h4></li>
           </ul>
       </CardBody>
 
-<UncontrolledCollapse toggler="#togglerQuestion9">
+<UncontrolledCollapse toggler="#togglerQuestion10">
  
       <CardBody>
           <ul className="Faq-qnaList">
@@ -204,11 +221,11 @@ render() {
 
       <CardBody>
           <ul className="Faq-qnaList">
-            <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion10">How does shipping work?</Button></h4></li>
+            <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion11">How does shipping work?</Button></h4></li>
           </ul>
       </CardBody>
 
-<UncontrolledCollapse toggler="#togglerQuestion10">
+<UncontrolledCollapse toggler="#togglerQuestion11">
  
       <CardBody>
           <ul className="Faq-qnaList">
@@ -222,11 +239,11 @@ render() {
 
       <CardBody>
           <ul className="Faq-qnaList">
-            <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion11">How do I close/cancel my account</Button></h4></li>
+            <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion12">How do I close/cancel my account</Button></h4></li>
           </ul>
       </CardBody>
 
-<UncontrolledCollapse toggler="#togglerQuestion11">
+<UncontrolledCollapse toggler="#togglerQuestion12">
  
       <CardBody>
           <ul className="Faq-qnaList">
@@ -414,7 +431,7 @@ render() {
 
           <CardBody>
             <ul className="Faq-qnaList">
-              <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerSellerQue11">Can I cancel/delete a listing I have already posted?</Button></h4></li>
+              <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerSellerQues11">Can I cancel/delete a listing I have already posted?</Button></h4></li>
             </ul>
           </CardBody>
 

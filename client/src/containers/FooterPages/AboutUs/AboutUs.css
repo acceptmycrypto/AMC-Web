@@ -11,6 +11,10 @@
   
 .aboutUs-listItem{
     font-size: 20px;
+    text-align: center;
+    padding: 25px;
+    padding-left: 10%;
+    padding-right: 10%;
   }
 #AboutUs-amh{
     padding: 20px;
