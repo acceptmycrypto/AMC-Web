@@ -158,10 +158,10 @@ router.post('/listdeal', verifyToken, function(req, res) {
       for (let i = 0; i < images.length; i++) {
         let dealImageRecord = [];
         let imageObj = JSON.stringify(images[i])
-        dealImageRecord.push(deal_id, images[i].Location, imageObj) //image[i].Location is the image url
+        dealImageRecord.push(deal_id, images[i].Location, images[i].Key, imageObj) //image[i].Location is the image url
         imagesRow.push(dealImageRecord);
       }
-      connection.query("INSERT INTO deal_images(deal_id, deal_image, deal_image_object)  VALUES ?", [imagesRow],
+      connection.query("INSERT INTO deal_images(deal_id, deal_image, deal_image_key, deal_image_object)  VALUES ?", [imagesRow],
       function (error, results, fields) {
         if (error) console.log(error);
       });
@@ -337,65 +337,128 @@ router.post('/listdeal/edit', verifyToken, function(req, res) {
     });
 
   //update deal_images
-  let toBeKeptImageID = "SELECT deal_image FROM deal_images WHERE deal_image IN (?) AND deal_id = ?";
-  let newImageURLS = [];
+  let toBeKeptImageID = "SELECT deal_image_key FROM deal_images WHERE deal_image_key IN (?) AND deal_id = ?";
+  let newImageKeys = [];
   for (let i in images) {
-    newImageURLS.push(images[i].Location);
+    newImageKeys.push(images[i].Key);
+    console.log("deal_image_key", newImageKeys);
   }
 
-  connection.query(toBeKeptImageID, [newImageURLS, editingDealId],
+  connection.query(toBeKeptImageID, [newImageKeys, editingDealId],
   function (error, toBeKeptImageResult, fields) {
     if (error) console.log(error);
 
     let toBeKeptImageArr = [];
     for (let i = 0; i < toBeKeptImageResult.length; i++) {
-      toBeKeptImageArr.push(toBeKeptImageResult[i].deal_image);
+      toBeKeptImageArr.push(toBeKeptImageResult[i].deal_image_key);
+      console.log("image to be kept", toBeKeptImageArr);
     }
+
+     //prep for inserting new images
+     let imagesRow = [];
+     for (let i = 0; i < images.length; i++) {
+       let dealImageRecord = [];
+       let imageObj = JSON.stringify(images[i])
+       dealImageRecord.push(images[i].Location, images[i].Key, editingDealId, imageObj) //image[i].Location is the image url
+       imagesRow.push(dealImageRecord);
+       console.log("new image to be inserted", imagesRow);
+     }
 
     //delete images that users removed
     if (toBeKeptImageArr.length > 0) {
-      connection.query("DELETE FROM deal_images WHERE deal_image NOT IN (?) AND deal_id = ?", [toBeKeptImageArr, editingDealId],
-      function (error, exisitingCryptoResult, fields) {
+
+      connection.query("SELECT * FROM deal_images WHERE deal_image_key NOT IN (?) AND deal_id = ?", [toBeKeptImageArr, editingDealId],
+      function (error, imagesToBeRemoved, fields) {
         if (error) console.log(error);
+
+        //delete images users removed from the database
+        connection.query("DELETE FROM deal_images WHERE deal_image_key NOT IN (?) AND deal_id = ?",
+        [toBeKeptImageArr, editingDealId],
+        function (error, result, fields) {
+          if (error) console.log(error);
+        });
+
+        //inserting new images user selects
+        //It's important to have insertion query here
+        connection.query("INSERT IGNORE INTO deal_images(deal_image, deal_image_key, deal_id, deal_image_object) VALUES ?",
+        [imagesRow],
+        function (error, results, fields) {
+          if (error) console.log(error);
+        });
+
+        //delete images from s3
+        let keysArr = [];
+        for (let i in imagesToBeRemoved) {
+          let keyObj = {Key: imagesToBeRemoved[i].deal_image_key}
+          keysArr.push(keyObj);
+        }
+
+        let params = {
+          Bucket: process.env.AMAZON_BUCKET,
+          Delete: {
+            Objects: keysArr
+          }
+         };
+
+         s3.deleteObjects(params, function (err, data) {
+          console.log()
+          if (data) {
+              console.log("File deleted successfully");
+          }
+          else {
+              console.log(err);
+          }
+        });
       });
 
-
-      let params = {
-        Bucket: process.env.AMAZON_BUCKET,
-        Key: request.body.imageKey
-       };
-
-       s3.deleteObject(params, function (err, data) {
-        if (data) {
-            console.log("File deleted successfully");
-        }
-        else {
-            console.log("Check if you have sufficient permissions : "+err);
-        }
-      });
-      
     } else {
-      connection.query("DELETE FROM deal_images WHERE deal_id = ?", [editingDealId],
-      function (error, exisitingCryptoResult, fields) {
+      connection.query("SELECT * FROM deal_images WHERE deal_id = ?", [editingDealId],
+        function (error, imagesToBeRemoved, fields) {
+
         if (error) console.log(error);
-      });
+
+        //delete images users removed from the database
+        connection.query("DELETE FROM deal_images WHERE deal_id = ?",
+        [editingDealId],
+        function (error, result, fields) {
+          if (error) console.log(error);
+        });
+
+         //inserting new images
+         //It's important to have insertion query here
+        connection.query("INSERT IGNORE INTO deal_images(deal_image, deal_image_key, deal_id, deal_image_object) VALUES ?",
+        [imagesRow],
+        function (error, results, fields) {
+          if (error) console.log(error);
+          console.log("Images inserted", results);
+        });
+
+          //delete images from s3
+          let keysArr = [];
+          for (let i in imagesToBeRemoved) {
+            let keyObj = {Key: imagesToBeRemoved[i].deal_image_key}
+            keysArr.push(keyObj);
+          }
+
+          let params = {
+            Bucket: process.env.AMAZON_BUCKET,
+            Delete: {
+              Objects: keysArr
+            }
+          };
+
+          s3.deleteObjects(params, function (err, data) {
+            console.log()
+            if (data) {
+                console.log("File deleted successfully");
+            }
+            else {
+                console.log(err);
+            }
+          });
+
+        });
     }
-
-    //insert new images
-    let imagesRow = [];
-    for (let i = 0; i < images.length; i++) {
-      let dealImageRecord = [];
-      let imageObj = JSON.stringify(images[i])
-      dealImageRecord.push(images[i].Location, editingDealId, imageObj) //image[i].Location is the image url
-      imagesRow.push(dealImageRecord);
-    }
-
-    connection.query("INSERT IGNORE INTO deal_images(deal_image, deal_id, deal_image_object) VALUES ?",
-    [imagesRow],
-    function (error, results, fields) {
-      if (error) console.log(error);
-    });
-
 
   });
 
