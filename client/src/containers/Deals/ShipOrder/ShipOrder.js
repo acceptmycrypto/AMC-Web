@@ -3,8 +3,10 @@ import "./ShipOrder.css";
 import Select from "react-select";
 
 const ShipOrder = props => {
+
   return (
     <div>
+
       <div>
         <div className="text-capitalize shipping-name-label">Enter Shipping Information</div>
         <form className="shipping-form">
@@ -19,7 +21,6 @@ const ShipOrder = props => {
               value={props.showShippingFirstName ? props.showShippingFirstName : null}
             />
           </div>
-          {/* <div className="dealitem-error-msg" id="shipping-firstname-error"></div> */}
 
           <div>
             <label htmlFor="shipping-lastname">Last Name</label>
@@ -31,7 +32,6 @@ const ShipOrder = props => {
               value={props.showShippingLastName ? props.showShippingLastName : null}
             />
           </div>
-          {/* <div className="dealitem-error-msg" id="shipping-lastname-error"></div> */}
 
           <div>
             <label htmlFor="shipping-address">Address</label>
@@ -43,7 +43,6 @@ const ShipOrder = props => {
               value={props.showShippingAddress ? props.showShippingAddress : null}
             />
           </div>
-          {/* <div className="dealitem-error-msg" id="shipping-address-error"></div> */}
 
           <div>
             <label htmlFor="shipping-city">City</label>
@@ -55,7 +54,6 @@ const ShipOrder = props => {
               value={props.showShippingCity ? props.showShippingCity : null}
             />
           </div>
-          {/* <div className="dealitem-error-msg" id="shipping-city-error"></div> */}
 
           <div className="shipping-state">
             <label htmlFor="selectstate">State</label>
@@ -69,7 +67,6 @@ const ShipOrder = props => {
 
             </Select>
           </div>
-          {/* <div className="dealitem-error-msg" id="shipping-state-error"></div> */}
 
           <div>
             <label htmlFor="shipping-zipcode">Zip Code</label>
@@ -81,12 +78,39 @@ const ShipOrder = props => {
               value={props.showShippingZipcode ? props.showShippingZipcode : null}
             />
           </div>
-          {/* <div className="dealitem-error-msg" id="shipping-zipcode-error"></div> */}
 
-      </form>
+          {props.user_status === "guest" &&
+            <div>
+              <div>
+                 <label htmlFor="shipping-email">Email</label>
+                <input
+                  type="text"
+                  id="shipping-email"
+                  placeholder="Enter Email"
+                  onChange={props.handle_ShippingEmail}
+                  value={props.showShippingEmail ? props.showShippingEmail : null}
+                />
+              </div>
+
+              <div>
+                 <label htmlFor="shipping-phone-number">Phone Number</label>
+                <input
+                  type="text"
+                  id="shipping-phone-number"
+                  placeholder="Enter Phone Number"
+                  onChange={props.handle_ShippingPhoneNumber}
+                  value={props.showShippingPhoneNumber ? props.showShippingPhoneNumber : null}
+                />
+              </div>
+            </div>
+
+          }
+
+        </form>
+
       </div>
 
-        <div className="shipping-step-buttons">
+        <div className={props.user_status === "guest" ? "guest-shipping-step-buttons" : "shipping-step-buttons"}>
 
           <div onClick={props.previous_step} className="previous-step">
             <button>Previous</button>

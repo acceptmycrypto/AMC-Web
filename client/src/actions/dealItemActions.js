@@ -83,6 +83,20 @@ export const handleShippingStateInput = (selectedState) => {
   }
 };
 
+export const handleShippingEmail = (event) => {
+  return {
+      type: 'SHIPPING_EMAIL',
+      payload: event.target.value
+  }
+};
+
+export const handleShippingPhoneNumber = (event) => {
+  return {
+      type: 'SHIPPING_PHONE_NUMBER',
+      payload: event.target.value
+  }
+};
+
 export const handleSelectedCrypto = (selectedOption) => {
   return {
       type: 'SELECT_PAYMENT',

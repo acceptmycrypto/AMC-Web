@@ -13,13 +13,15 @@ import {
   handleCityInput,
   handleZipcodeInput,
   handleShippingStateInput,
+  handleShippingEmail,
+  handleShippingPhoneNumber,
   handleSelectedCrypto,
   handleDetailStep,
   handleShippingStep,
   handlePayingStep,
 } from "../../../actions/dealItemActions";
 import { resetListDeal } from "../../../actions/listDealActions";
-import { _fetchTransactionInfo } from "../../../actions/paymentActions";
+import { _fetchTransactionInfo, _fetchGuestTransactionInfo } from "../../../actions/paymentActions";
 import { _createChatSession } from "../../../actions/chatActions";
 import { Carousel } from "react-responsive-carousel";
 import ItemDescription from "../ItemDescription";
@@ -89,7 +91,9 @@ class DealItem extends Component {
       zipcode,
       shippingState,
       firstName,
-      lastName
+      lastName,
+      email,
+      phoneNumber
     } = this.props;
 
     //info needed to insert into user_purchases table
@@ -100,30 +104,65 @@ class DealItem extends Component {
     let crypto_name = selectedOption.name;
     let token = localStorage.getItem("token");
 
-    this.props._fetchTransactionInfo(
-      crypto_name,
-      crypto_symbol,
-      deal_id,
-      amount,
-      token,
-      shippingAddress,
-      shippingCity,
-      zipcode,
-      shippingState,
-      firstName,
-      lastName
-    );
+    if(this.props.userLoggedIn){
+      this.props._fetchTransactionInfo(
+        crypto_name,
+        crypto_symbol,
+        deal_id,
+        amount,
+        token,
+        shippingAddress,
+        shippingCity,
+        zipcode,
+        shippingState,
+        firstName,
+        lastName
+      );
+    }else{
+      this.props._fetchGuestTransactionInfo(
+        crypto_name,
+        crypto_symbol,
+        deal_id,
+        amount,
+        shippingAddress,
+        shippingCity,
+        zipcode,
+        shippingState,
+        firstName,
+        lastName,
+        email,
+        phoneNumber
+      );
+    }
+
   };
 
   handleShipmentValidation = () => {
-    const validateNewInput = {
-      enteredFirstname: this.props.firstName,
-      enteredLastname: this.props.lastName,
-      enteredShippingAddress: this.props.shippingAddress,
-      enteredShippingCity: this.props.shippingCity,
-      enteredZipcode: this.props.zipcode,
-      selectedShippingState: this.props.shippingState.value
-    };
+
+    let validateNewInput;
+    if (this.props.userLoggedIn) {
+      validateNewInput = {
+        enteredFirstname: this.props.firstName,
+        enteredLastname: this.props.lastName,
+        enteredShippingAddress: this.props.shippingAddress,
+        enteredShippingCity: this.props.shippingCity,
+        enteredZipcode: this.props.zipcode,
+        selectedShippingState: this.props.shippingState.value,
+      };
+    } else {
+      validateNewInput = {
+        enteredFirstname: this.props.firstName,
+        enteredLastname: this.props.lastName,
+        enteredShippingAddress: this.props.shippingAddress,
+        enteredShippingCity: this.props.shippingCity,
+        enteredZipcode: this.props.zipcode,
+        selectedShippingState: this.props.shippingState.value,
+        enteredEmail: this.props.email,
+        enteredPhoneNumber: this.props.phoneNumber,
+      };
+    }
+
+
     let isDataValid = false;
 
     if (
@@ -151,6 +190,12 @@ class DealItem extends Component {
       document.getElementById(
         "shipping-state"
       ).classList.add("shipping-state-error");
+
+      if (!this.props.userLoggedIn) {
+        document.getElementById("shipping-email").classList.add("shipping-error");
+        document.getElementById("shipping-phone-number").classList.add("shipping-error");
+      }
+
     }
 
     return isDataValid;
@@ -183,7 +228,13 @@ class DealItem extends Component {
     const errMsgs = {
       selectedPaymentValMsg: val.selectedPaymentOption
         ? null
-        : "Please select your payment option"
+        : "Please select your payment option",
+      shippingEmailValMsg: val.enteredEmail
+        ? null
+        : "Please enter your email",
+      shippingPhoneNumberValMsg: val.enteredPhoneNumber
+        ? null
+        : "Please enter your phone number"
     };
 
     return errMsgs;
@@ -254,42 +305,47 @@ class DealItem extends Component {
 
   render() {
     const { //state
-            error,
-            deal_item_loading,
-            dealItem,
-            reviews,
-            acceptedCryptos,
-            allStates,
-            firstName,
-            lastName,
-            shippingAddress,
-            shippingCity,
-            zipcode,
-            shippingState,
-            selectedOption,
-            transaction_loading,
-            paymentInfo,
-            transaction_status,
-            createPaymentButtonClicked,
-            showDetailStep,
-            showShippingStep,
-            showPayingStep,
-            user_info,
-            userLoggedIn,
 
-            //actions
-            handleFirstNameInput,
-            handleLastNameInput,
-            handleAddressInput,
-            handleCityInput,
-            handleZipcodeInput,
-            handleShippingStateInput,
-            handleSelectedCrypto,
+      error,
+      deal_item_loading,
+      dealItem,
+      reviews,
+      acceptedCryptos,
+      allStates,
+      firstName,
+      lastName,
+      shippingAddress,
+      shippingCity,
+      zipcode,
+      shippingState,
+      email,
+      phoneNumber,
+      selectedOption,
+      transaction_loading,
+      paymentInfo,
+      transaction_status,
+      createPaymentButtonClicked,
+      showDetailStep,
+      showShippingStep,
+      showPayingStep,
+      user_info,
+      userLoggedIn,
 
-            handleDetailStep,
-            handleShippingStep,
-            handlePayingStep,
-            } = this.props;
+      //actions
+      handleFirstNameInput,
+      handleLastNameInput,
+      handleAddressInput,
+      handleCityInput,
+      handleZipcodeInput,
+      handleShippingStateInput,
+      handleSelectedCrypto,
+      handleShippingEmail,
+      handleShippingPhoneNumber,
+      handleDetailStep,
+      handleShippingStep,
+      handlePayingStep,
+    } = this.props;
+
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -302,6 +358,7 @@ class DealItem extends Component {
     if (this.props.dealCreated.deal_id) {
       this.props.resetListDeal();
     }
+
 
     return (
       <div className="pt-5">
@@ -383,8 +440,8 @@ class DealItem extends Component {
                     (!showShippingStep && showDetailStep
                       ? "disabled"
                       : showPayingStep
-                      ? "active"
-                      : "")
+                        ? "active"
+                        : "")
                   }
                 >
                   <i className="shopping cart icon" />
@@ -397,7 +454,7 @@ class DealItem extends Component {
             </div>
 
             <div className="deal-listing-content">
-              <div className="deal-images-container">
+              <div className={!userLoggedIn && showShippingStep ?  "guest-images-container" : "deal-images-container"}>
                 <Carousel className="react-carousel" showStatus={false}>
                   {dealItem &&
                     dealItem.deal_image.map((img, i) => (
@@ -432,15 +489,20 @@ class DealItem extends Component {
                       handle_ShippingCity={handleCityInput}
                       handle_ShippingZipcode={handleZipcodeInput}
                       handle_ShippingState={handleShippingStateInput}
+                      handle_ShippingEmail={handleShippingEmail}
+                      handle_ShippingPhoneNumber={handleShippingPhoneNumber}
                       showShippingFirstName={firstName}
                       showShippingLastName={lastName}
                       showShippingAddress={shippingAddress}
                       showShippingCity={shippingCity}
                       showShippingState={shippingState}
                       showShippingZipcode={zipcode}
+                      showShippingEmail={email}
+                      showShippingPhoneNumber={phoneNumber}
                       next_step={handlePayingStep}
                       previous_step={handleDetailStep}
                       validateShipmentData={this.handleShipmentValidation}
+                      user_status={userLoggedIn ? "user" : "guest"}
                     />
                   )}
 
@@ -465,6 +527,8 @@ class DealItem extends Component {
                       shipping_city={shippingCity}
                       zip_code={zipcode}
                       shipping_state={shippingState}
+                      email={email}
+                      phoneNumber={phoneNumber}
                       showLoadingSpinner={transaction_loading}
                       timeout={
                         paymentInfo &&
@@ -503,16 +567,16 @@ class DealItem extends Component {
                   </div>
 
                   {user_info.length > 0 &&
-                  dealItem &&
-                  user_info[0].id === dealItem.seller_id ? null : (
-                    <Link to={"/chat"}>
-                      <div id="message-seller" className="px-3">
-                        <button onClick={this.messageSeller} className="mt-3">
-                          Message Seller
+                    dealItem &&
+                    user_info[0].id === dealItem.seller_id ? null : (
+                      <Link to={"/chat"}>
+                        <div id="message-seller" className="px-3">
+                          <button onClick={this.messageSeller} className="mt-3">
+                            Message Seller
                         </button>
-                      </div>
-                    </Link>
-                  )}
+                        </div>
+                      </Link>
+                    )}
                 </div>
 
                 <div id="seller-review-rating">
@@ -528,55 +592,55 @@ class DealItem extends Component {
                   <label>Reviews</label>
                   <div id="seller-reviews-container">
                     {reviews.allReviews !== undefined &&
-                    reviews.allReviews.length > 0 ? (
-                      reviews.allReviews.map(reviews => (
-                        <div key={reviews.review_id} className="review-box">
-                          <div className="review-header-container">
-                            <div className="review-header">
-                              <div className="buyer-review-avatar">
-                                <i
-                                  className={
-                                    "fas py-2 px-3 user-icon-navbar " +
-                                    reviews.buyer_photo
-                                  }
-                                />
+                      reviews.allReviews.length > 0 ? (
+                        reviews.allReviews.map(reviews => (
+                          <div key={reviews.review_id} className="review-box">
+                            <div className="review-header-container">
+                              <div className="review-header">
+                                <div className="buyer-review-avatar">
+                                  <i
+                                    className={
+                                      "fas py-2 px-3 user-icon-navbar " +
+                                      reviews.buyer_photo
+                                    }
+                                  />
+                                </div>
+                                <div>
+                                  <strong className="text-secondary">
+                                    {reviews.buyer_name}
+                                  </strong>
+                                  <small className="star-buyer">
+                                    {this.ratingDisplay(reviews.rating)}
+                                  </small>
+                                </div>
+                                {/* {reviews.buyer_name} purchased {reviews.deal_name} */}
                               </div>
-                              <div>
-                                <strong className="text-secondary">
-                                  {reviews.buyer_name}
-                                </strong>
-                                <small className="star-buyer">
-                                  {this.ratingDisplay(reviews.rating)}
-                                </small>
-                              </div>
-                              {/* {reviews.buyer_name} purchased {reviews.deal_name} */}
+                              <small className="buyer-review-date">
+                                {reviews.rating_date_reviewed.substring(0, 10)}
+                              </small>
                             </div>
-                            <small className="buyer-review-date">
-                              {reviews.rating_date_reviewed.substring(0, 10)}
+
+                            <div>
+                              <div className="text-secondary">
+                                {reviews.rating_title}{" "}
+                              </div>
+                            </div>
+
+                            <div className="review-body">
+                              {reviews.rating_body}
+                            </div>
+
+                            <small>
+                              <a href="/">Report abuse</a>
                             </small>
+                            <hr />
                           </div>
-
-                          <div>
-                            <div className="text-secondary">
-                              {reviews.rating_title}{" "}
-                            </div>
-                          </div>
-
-                          <div className="review-body">
-                            {reviews.rating_body}
-                          </div>
-
-                          {/* <small>
-                            <a href="/">Report abuse</a>
-                          </small> */}
-                          <hr />
-                        </div>
-                      ))
-                    ) : (
-                      <div className="text-secondary">
-                        This seller has no reviews yet!
+                        ))
+                      ) : (
+                        <div className="text-secondary">
+                          This seller has no reviews yet!
                       </div>
-                    )}
+                      )}
                   </div>
                 </div>
               </div>
@@ -598,6 +662,8 @@ const mapStateToProps = state => ({
   shippingCity: state.DealItem.shippingCity,
   zipcode: state.DealItem.zipcode,
   shippingState: state.DealItem.shippingState,
+  email: state.DealItem.email,
+  phoneNumber: state.DealItem.phoneNumber,
   selectedOption: state.DealItem.selectedOption,
   allStates: state.DealItem.states,
   paymentInfo: state.TransactionInfo.transactionInfo,
@@ -621,12 +687,15 @@ const matchDispatchToProps = dispatch => {
       _loadReviews,
       _loadDealItem,
       _fetchTransactionInfo,
+      _fetchGuestTransactionInfo,
       handleFirstNameInput,
       handleLastNameInput,
       handleAddressInput,
       handleCityInput,
       handleZipcodeInput,
       handleShippingStateInput,
+      handleShippingEmail,
+      handleShippingPhoneNumber,
       handleSelectedCrypto,
       handleDetailStep,
       handleShippingStep,

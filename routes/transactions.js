@@ -17,7 +17,7 @@ var CoinpaymentsIPNError = require(`coinpayments-ipn/lib/error`);
 var sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(keys.sendgrid);
 
-var verifyToken =  require ("./utils/validation");
+var verifyToken = require("./utils/validation");
 
 //email template
 var path = require("path");
@@ -54,11 +54,11 @@ var balanceDepositedEmailTemplate = ejs.compile(balanceDepositedEmailTemplateTex
 // api
 //get list of transactions that are shared to the community and have received the payment.
 //info we need to send to the client: the deal name, the user name, the crypto symbol, the venue name, date purchased
-router.get("/api/transactions/community/payment_received", function(req, res) {
+router.get("/api/transactions/community/payment_received", function (req, res) {
   connection.query(
     "SELECT users_purchases.date_purchased, users_purchases.amount, deals.deal_name, users.username, users_profiles.photo, venues.venue_name, crypto_metadata.crypto_symbol AS crypto_symbol FROM users_purchases LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata_name = crypto_metadata.crypto_name LEFT JOIN venues ON venue_id = venues.id LEFT JOIN users_profiles ON users_profiles.user_id = users.id WHERE permission = ? AND payment_received = ? ORDER BY users_purchases.date_purchased DESC",
     ["community", 1], //1 is true for payment received //community means any user on acceptmycrypto platform
-    function(error, results, fields) {
+    function (error, results, fields) {
       if (error) throw error;
       res.json(results);
     }
@@ -66,7 +66,7 @@ router.get("/api/transactions/community/payment_received", function(req, res) {
 });
 
 //coinpayment
-router.post("/checkout", verifyToken, function(req, res) {
+router.post("/checkout", verifyToken, function (req, res) {
   //Inserting to user_purchases table, this doens't mean purchase is successful
   //Need to listen to IPA when payment has recieved and then update payment_recieved to true
 
@@ -81,7 +81,7 @@ router.post("/checkout", verifyToken, function(req, res) {
       currency2: req.body.crypto_symbol, // The currency the buyer will be sending.
       amount: req.body.amount // Expected amount to pay, where the price is expressed in currency1
     },
-    function(err, paymentInfo) {
+    function (err, paymentInfo) {
       if (err) {
         console.log("coinpayment error: ", err);
       } else {
@@ -89,7 +89,7 @@ router.post("/checkout", verifyToken, function(req, res) {
         connection.query(
           'SELECT crypto_info.id FROM crypto_info LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE crypto_name = ?',
           [req.body.crypto_name],
-          function(error, cryptoID, fields) {
+          function (error, cryptoID, fields) {
             if (error) console.log(error);
 
             connection.query(
@@ -106,7 +106,7 @@ router.post("/checkout", verifyToken, function(req, res) {
                 status_url: paymentInfo.status_url,
                 qrcode_url: paymentInfo.qrcode_url
               },
-              function(err, transactionInitiated) {
+              function (err, transactionInitiated) {
                 if (err) {
                   console.log(err);
                 }
@@ -123,12 +123,11 @@ router.post("/checkout", verifyToken, function(req, res) {
                     shipping_zipcode: req.body.zipcode,
                     txn_id: paymentInfo.txn_id
                   },
-                  function(err, shipping_data, fields) {
+                  function (err, shipping_data, fields) {
                     if (err) throw err;
                   }
                 );
 
-                //update deal item to reserved
                 connection.query(
                   "UPDATE deals SET deal_status = ? WHERE id = ?",
                   ["reserved", req.body.deal_id],
@@ -141,6 +140,9 @@ router.post("/checkout", verifyToken, function(req, res) {
                   }
                 );
 
+
+
+
               }
             );
 
@@ -152,6 +154,146 @@ router.post("/checkout", verifyToken, function(req, res) {
   );
 
 });
+
+//this email template is sent to customer if payment has received
+var guest_checkout_ET = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/guestCheckout/guestCheckout.ejs'), 'utf-8');
+var guest_checkout_emailTemplate = ejs.compile(guest_checkout_ET);
+
+
+//coinpayment
+router.post("/guestCheckout", function (req, res) {
+  //Inserting to user_purchases table, this doens't mean purchase is successful
+  //Need to listen to IPA when payment has recieved and then update payment_recieved to true
+
+  let crypto_name = req.body.crypto_name;
+
+  client.createTransaction(
+    {
+      currency1: "USD",
+      currency2: req.body.crypto_symbol, // The currency the buyer will be sending.
+      amount: req.body.amount // Expected amount to pay, where the price is expressed in currency1
+    },
+    function (err, paymentInfo) {
+      if (err) {
+        console.log("coinpayment error: ", err);
+      } else {
+        //send the paymentInfo to the client side
+
+
+        connection.query(
+          'SELECT crypto_info.id FROM crypto_info LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE crypto_name = ?',
+          [req.body.crypto_name],
+          function (error, cryptoID, fields) {
+            if (error) console.log(error);
+
+            connection.query(
+              "INSERT INTO guest_users SET ?",
+              {
+                email: req.body.email,
+                first_name: req.body.firstName,
+                last_name: req.body.lastName,
+                phone_number: req.body.phoneNumber
+              },
+              function (error, results, fields) {
+                if (error) throw error;
+                let guest_user_id = results.insertId;
+
+
+                connection.query(
+                  "INSERT INTO users_purchases SET ?",
+                  {
+                    guest_user_id: guest_user_id,
+                    deal_id: req.body.deal_id,
+                    crypto_id: cryptoID[0].id,
+                    amount: paymentInfo.amount,
+                    txn_id: paymentInfo.txn_id, //coinpayment transaction address
+                    address: paymentInfo.address, //coinpayment temporary address
+                    confirms_needed: paymentInfo.confirms_needed,
+                    timeout: paymentInfo.timeout, //in seconds
+                    status_url: paymentInfo.status_url,
+                    qrcode_url: paymentInfo.qrcode_url
+                  },
+                  function (err, transactionInitiated) {
+                    if (err) {
+                      console.log(err);
+                    }
+
+                    let time_left_hrs = paymentInfo.timeout / 60 / 60;
+
+                    //insert shipping address into table
+                    connection.query(
+                      "INSERT INTO users_shipping_address SET ?",
+                      {
+                        shipping_firstname: req.body.firstName,
+                        shipping_lastname: req.body.lastName,
+                        shipping_address: req.body.shippingAddress,
+                        shipping_city: req.body.shippingCity,
+                        shipping_state: req.body.shippingState,
+                        shipping_zipcode: req.body.zipcode,
+                        txn_id: paymentInfo.txn_id
+                      },
+                      function (err, shipping_data, fields) {
+                        if (err) throw err;
+                      }
+                    );
+
+                    connection.query('SELECT deals.deal_name, users.username AS seller_name FROM deals LEFT JOIN users ON deals.seller_id = users.id WHERE deals.id = ?',
+                      [req.body.deal_id],
+                      function (error, res, fields) {
+                        if (error) throw error;
+
+                        console.log(res[0]);
+
+                        let view_deal;
+                        if (process.env.NODE_ENV=="development"){
+                              view_deal = `${process.env.FRONTEND_URL}/feed/deals/${req.body.deal_id}/${res[0].deal_name}`;
+                          } else {
+                              view_deal = `${process.env.BACKEND_URL}/feed/deals/${req.body.deal_id}/${res[0].deal_name}`;
+                          }
+
+                          const guest_checkout = {
+                            to: req.body.email,
+                            from: process.env.CUSTOMER_SUPPORT,
+                            subject: 'You Reserved a Deal',
+                            html: guest_checkout_emailTemplate(
+                              {
+                                deal_name: res[0].deal_name,
+                                seller_name: res[0].seller_name,
+                                time_left: time_left_hrs,
+                                amount: paymentInfo.amount,
+                                crypto: req.body.crypto_name,
+                                address: paymentInfo.address,
+                                view_deal: view_deal
+                              })
+                          };
+                          sgMail.send(guest_checkout);
+                      });
+
+                    //update deal item to reserved
+                    connection.query(
+                      "UPDATE deals SET deal_status = ? WHERE id = ?",
+                      ["reserved", req.body.deal_id],
+                      function(err, result) {
+                        if (err) {
+                          console.log(err);
+                        }
+                        //send the paymentInfo to the client side
+                        res.json({paymentInfo, deal_status: "reserved"});
+
+                      }
+                    );
+
+                  }
+                );
+              }
+            );
+          })
+
+      }
+    });
+
+});
+
 
 //payout
 //once we verified that the item has been shipped to the buyer
@@ -316,6 +458,7 @@ router.post("/withdraw/confirm", verifyToken, function(req, res) {
 
 });
 
+
 //compile email template
 //this email template is sent to customer if payment has received
 var customer_invoice_ET = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/customerInvoice/customerInvoice.ejs'), 'utf-8');
@@ -331,7 +474,7 @@ var item_canceled_emailTemplate = ejs.compile(item_canceled_ET);
 
 //ipa (listen to coinpayment's events)
 router.post("/checkout/notification", function (req, res, next) {
-  if(!req.get(`HMAC`) || !req.body || !req.body.ipn_mode || req.body.ipn_mode !== `hmac` || MERCHANT_ID !== req.body.merchant) {
+  if (!req.get(`HMAC`) || !req.body || !req.body.ipn_mode || req.body.ipn_mode !== `hmac` || MERCHANT_ID !== req.body.merchant) {
     return next(new Error(`Invalid request`));
   }
 
@@ -359,26 +502,28 @@ router.post("/checkout/notification", function (req, res, next) {
   connection.query(
     'SELECT status, email, amount, crypto_symbol, deal_name, users_purchases.deal_id FROM users_purchases LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE txn_id = ?',
     [req.body.txn_id],
-    function(err, data_status, fields) {
+    function (err, data_status, fields) {
       let current_status = data_status[0].status;
+      let deal_name = data_status[0].deal_name;
 
       if (current_status === "0" && req.body.status === "1") {
         //update the status in the table to "1"
         //meaning: Funds received and confirmed, sending to you shortly...
         //send email to acceptmycrypto's support to notify user has sent the payment
         connection.query('UPDATE users_purchases SET ? WHERE ?',
-        [{ status: req.body.status}, { txn_id: req.body.txn_id }],
-        function (error, results, fields) {
-          if (error) throw error;
+          [{ status: req.body.status }, { txn_id: req.body.txn_id }],
+          function (error, results, fields) {
+            if (error) throw error;
 
-          const handle_order = {
-            to: process.env.CUSTOMER_SUPPORT,
-            from: process.env.CUSTOMER_SUPPORT,
-            subject: 'Item Ordered',
-            html: item_ordered_emailTemplate({ txn_id: req.body.txn_id })
-          };
-          sgMail.send(handle_order);
-        });
+            const handle_order = {
+              to: process.env.CUSTOMER_SUPPORT,
+              from: process.env.CUSTOMER_SUPPORT,
+              subject: 'Item Ordered',
+              html: item_ordered_emailTemplate({ txn_id: req.body.txn_id, deal_name: req.body.deal_name })
+            };
+            sgMail.send(handle_order);
+          });
+
       }
 
       if (current_status === "1" && req.body.status === "100") {
@@ -390,6 +535,7 @@ router.post("/checkout/notification", function (req, res, next) {
         let view_order = process.env.BACKEND_URL + "/profile/";
 
         connection.query('UPDATE users_purchases SET status = ?, payment_received = ? WHERE ?',
+
         [req.body.status, 1, { txn_id: req.body.txn_id }],
         function (error, results, fields) {
           if (error) throw error;
@@ -422,6 +568,7 @@ router.post("/checkout/notification", function (req, res, next) {
         //meaning: payment has been timeout
         //send an email to user saying the payment has been canceled
         connection.query('UPDATE users_purchases SET ? WHERE ?',
+
         [{ status: req.body.status}, { txn_id: req.body.txn_id }],
         function (error, results, fields) {
           if (error) throw error;
@@ -462,46 +609,46 @@ router.post("/checkout/notification", function (req, res, next) {
 });
 
 //paypal
-router.post('/paypal/execute-payment', function(req, res) {
+router.post('/paypal/execute-payment', function (req, res) {
   console.log("paypal", req.body);
 })
 
-function createMatchedFriends(user_id, crypto_name){
+function createMatchedFriends(user_id, crypto_name) {
   connection.query(
-    "SELECT id FROM crypto_metadata WHERE ?", [{crypto_name}], function(error, results, fields) {
+    "SELECT id FROM crypto_metadata WHERE ?", [{ crypto_name }], function (error, results, fields) {
       if (error) throw error;
       let crypto_id = results[0].id;
 
       connection.query(
         "SELECT DISTINCT user_id, date_purchased FROM users_purchases WHERE ? AND payment_received = 1 AND user_id NOT IN (SELECT matched_friend_id FROM users_matched_friends WHERE user_id = ?) AND NOT ? ORDER BY users_purchases.date_purchased DESC",
-         [{crypto_id}, {user_id}, {user_id}],
-         function(error, results, fields) {
+        [{ crypto_id }, { user_id }, { user_id }],
+        function (error, results, fields) {
           if (error) throw error;
 
-          else if(results.length > 0){
+          else if (results.length > 0) {
             let matches = [];
 
-            let limitedIDArray = results.slice(0,3);
+            let limitedIDArray = results.slice(0, 3);
 
             console.log(JSON.stringify(limitedIDArray));
 
 
-            for (let j = 0; j< limitedIDArray.length; j++){
-                matches.push([user_id, limitedIDArray[j].user_id]);
-                matches.push([limitedIDArray[j].user_id, user_id]);
+            for (let j = 0; j < limitedIDArray.length; j++) {
+              matches.push([user_id, limitedIDArray[j].user_id]);
+              matches.push([limitedIDArray[j].user_id, user_id]);
             }
 
-            let sql =  "INSERT INTO users_matched_friends (user_id, matched_friend_id) VALUES ?"
+            let sql = "INSERT INTO users_matched_friends (user_id, matched_friend_id) VALUES ?"
 
-            connection.query( sql, [matches], function(error, results, fields) {
-                if (error) throw error;
-                console.log("Number of records inserted: " + results.affectedRows);
+            connection.query(sql, [matches], function (error, results, fields) {
+              if (error) throw error;
+              console.log("Number of records inserted: " + results.affectedRows);
 
-              }
+            }
             );
 
           }
-          else{
+          else {
             console.log('No Matches');
           }
 

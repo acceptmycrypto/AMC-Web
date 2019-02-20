@@ -196,32 +196,53 @@
                 <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%">
                   <tr>
                     <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
-                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:20px;line-height:20px;text-align:center;color:#ffffff;"> Thank You for Your Purchase of
-                        <%=deal_name%>
+                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:20px;line-height:20px;text-align:center;color:#ffffff;"> Thank You for Your Interest In
+                        <%= deal_name %>
                       </div>
                     </td>
                   </tr>
                   <tr>
                     <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
-                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;line-height:20px;text-align:center;color:#ffffff;"> Your order number is
-                        <%= txn_id %>
+                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:20px;line-height:20px;text-align:center;color:#ffffff;"> Sold by
+                        <%= seller_name%>
                       </div>
                     </td>
                   </tr>
                   <tr>
                     <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
-                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;line-height:15px;text-align:center;color:#ffffff;"> Your order has been processed. An email will be sent to you when your order ships. </div>
+                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;line-height:20px;text-align:center;color:#ffffff;"> The Deal is Reserved for you for
+                        <%= time_left%> hours. </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;line-height:20px;text-align:center;color:#ffffff;"> Please send
+                        <%= amount %>
+                        <%=crypto%>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;line-height:15px;text-align:center;color:#ffffff;"> To the Address:
+                        <%= address%>
+                      </div>
                     </td>
                   </tr>
                   <tr>
                     <td align="center" vertical-align="middle" style="font-size:0px;padding:10px 25px;word-break:break-word;">
                       <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;line-height:100%;">
                         <tr>
-                          <td align="center" bgcolor="#F63A4D" role="presentation" style="border:none;border-radius:3px;cursor:auto;padding:10px 25px;background:#F63A4D;" valign="middle">
-                            <a href="<%=view_order%>" style="background:#F63A4D;color:#ffffff;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;font-weight:normal;line-height:120%;Margin:0;text-decoration:none;text-transform:none;" target="_blank"> View Your Order </a>
+                          <td align="center" bgcolor="#6bd9c7" role="presentation" style="border:none;border-radius:3px;cursor:auto;padding:10px 25px;background:#6bd9c7;" valign="middle">
+                            <a href="<%=view_deal%>" style="background:#6bd9c7;color:#2e4157;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;font-weight:normal;line-height:120%;Margin:0;text-decoration:none;text-transform:none;" target="_blank"> View The Deal </a>
                           </td>
                         </tr>
                       </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;line-height:15px;text-align:center;color:#ffffff;"> Please contact support@acceptmycrypto.com for any questions or concerns. </div>
                     </td>
                   </tr>
                 </table>
