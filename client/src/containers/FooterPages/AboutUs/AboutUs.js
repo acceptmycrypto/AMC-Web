@@ -25,7 +25,7 @@ render() {
         <div className="aboutUs-mainContent">
           <div className="font-17 color-deepBlue">
               <div className="ml-2" id="AboutUs-amh">
-                AboutUs
+                AcceptMyStory
               </div>
             </div>
           <hr className="star-light"></hr>
