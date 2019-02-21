@@ -643,7 +643,7 @@ router.post("/checkout/notification", function (req, res, next) {
   return next();
 });
 
-
+// route for testing
 router.get('/newShippingLabel/:txn_id/:deal_name', function (req, res) {
   let {txn_id, deal_name} = req.params;
   let seller_email = "avanika@acceptmycrypto.com";
@@ -881,6 +881,13 @@ function createShippmentInfo(txn_id, deal_name, seller_email, buyer_email) {
   );
 
 }
+
+//route for tracking shipment
+
+router.post("/tracking-info/:TrackingNumber", function(req, res) {
+  console.log("117", res.req.body);
+  res.json(JSON.stringify(res.tracking_status));
+});
 
 //paypal
 router.post('/paypal/execute-payment', function (req, res) {

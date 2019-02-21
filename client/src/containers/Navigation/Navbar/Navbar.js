@@ -63,7 +63,6 @@ class Navbar extends Component {
   }
 
   render() {
-    console.log("user", this.props.userLoggedIn);
     return (
       <header className="Toolbar">
         <div className="nav-left">
