@@ -68,6 +68,68 @@ render() {
             <li className="aboutUs-listItem">Simon N. ... </li>
           </ul>
 
+          <h4 className="aboutUsMenuTitle">Alex</h4>
+
+          <ul>
+              <li><img className="alexPic" src={"../../assets/images/alexPic.jpg"}></img></li>
+          </ul>
+          <ul className="aboutUs-list">
+            <li className="aboutUs-listItem">Alex ... </li>
+          </ul>
+
+          <h4 className="aboutUsMenuTitle">Ashley</h4>
+
+          <ul>
+              <li><img className="ashleyPic" src={"../../assets/images/ashleyPic.jpg"}></img></li>
+          </ul>
+          <ul className="aboutUs-list">
+            <li className="aboutUs-listItem">Ashley ... </li>
+          </ul>
+
+          <h4 className="aboutUsMenuTitle">Austin</h4>
+
+          <ul>
+              <li><img className="austinPic" src={"../../assets/images/austinPic.jpg"}></img></li>
+          </ul>
+          <ul className="aboutUs-list">
+            <li className="aboutUs-listItem">Austin ... </li>
+          </ul>
+
+          <h4 className="aboutUsMenuTitle">Lawrence </h4>
+
+          <ul>
+              <li><img className="lawrencePic" src={"../../assets/images/lawrencePic.jpg"}></img></li>
+          </ul>
+          <ul className="aboutUs-list">
+            <li className="aboutUs-listItem">Lawrence ... </li>
+          </ul>
+
+          <h4 className="aboutUsMenuTitle">Isaac  </h4>
+
+          <ul>
+              <li><img className="isaacPic" src={"../../assets/images/isaacPic.jpg"}></img></li>
+          </ul>
+          <ul className="aboutUs-list">
+            <li className="aboutUs-listItem">Isaac ... </li>
+          </ul>
+
+          <h4 className="aboutUsMenuTitle">Taylor A.  </h4>
+
+          <ul>
+              <li><img className="taylorPic" src={"../../assets/images/taylorPic.jpg"}></img></li>
+          </ul>
+          <ul className="aboutUs-list">
+            <li className="aboutUs-listItem">Taylor A. ... </li>
+          </ul>
+
+          <h4 className="aboutUsMenuTitle">Yannan  </h4>
+
+          <ul>
+              <li><img className="yannanPic" src={"../../assets/images/yannanPic.jpg"}></img></li>
+          </ul>
+          <ul className="aboutUs-list">
+            <li className="aboutUs-listItem">Yannan ... </li>
+          </ul>
 <Footer/>
 
 </div>
