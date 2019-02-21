@@ -153,8 +153,6 @@ class ListDeal extends Component {
       }
     }
 
-    debugger
-
     _updateEditingDeal(localStorage.getItem("token"), editingDealId, dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos);
 
   };
@@ -227,7 +225,7 @@ class ListDeal extends Component {
 
     const validateDescription = {
       dealName: this.props.dealName,
-      selectedCategory: this.props.selectedCategory,
+      selectedCategory: this.props.selectedCategory.length > 0,
       description: detail
     }
 
@@ -245,7 +243,7 @@ class ListDeal extends Component {
         toast.error(this._validationErrors(validateDescription).notifyDealNameError, {
           position: toast.POSITION.TOP_RIGHT
         });
-      } else if (!this.props.selectedCategory) {
+      } else if (this.props.selectedCategory.length === 0) {
         toast.error(this._validationErrors(validateDescription).notifySelectedCategoryError, {
           position: toast.POSITION.TOP_RIGHT
         });
@@ -433,7 +431,7 @@ class ListDeal extends Component {
             />
           )}
         </Layout>
-        <ToastContainer autoClose={8000} />
+        <ToastContainer autoClose={5000} />
       </div>
     );
   }

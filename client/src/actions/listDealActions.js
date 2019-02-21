@@ -1,6 +1,9 @@
+export const UPDATING_EDITING_DEAL_BEGIN = "UPDATING_EDITING_DEAL_BEGIN";
+export const UPDATING_EDITING_DEAL_SUCCESS = "UPDATING_EDITING_DEAL_SUCCESS";
+export const UPDATING_EDITING_DEAL_FAILURE = "UPDATING_EDITING_DEAL_FAILURE";
+
 export function _uploadImage(token, imageData) {
   //once image is uploaded, push that image to the state
-  debugger
   const settings = {
     method: "POST",
     headers: {
@@ -137,7 +140,7 @@ export function _getCryptoExchange(token, crypto_symbol, price_in_crypto) {
     return fetch("/cryptocurrency/exchange", settings)
       .then(res => res.json())
       .then(jsonRate => {
-        debugger
+
         dispatch(getRateSuccess(crypto_symbol, jsonRate));
         return jsonRate;
       })
@@ -190,7 +193,7 @@ export const handleSelectedCondition = (selectedCondition) => {
 };
 
 export function _submitDeal(token, dealName, category, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos) {
-  debugger
+
   //create a new array to get the value of categories: ex [value1, value2]
   let categoriesSelected = [...category]
   let selectedCategory = [];
@@ -233,10 +236,8 @@ export const creatingDealFailure = error => ({
   payload: { error }
 });
 
-/////////////////
-
 export function _updateEditingDeal(token, editingDealId, dealName, category, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos) {
-  debugger
+
   //create a new array to get the value of categories: ex [value1, value2]
   let categoriesSelected = [...category]
   let selectedCategory = [];
@@ -257,7 +258,7 @@ export function _updateEditingDeal(token, editingDealId, dealName, category, sel
     return fetch("/listdeal/edit", settings)
       .then(res => res.json())
       .then(jsonDealEdited => {
-
+     
         dispatch(editingDealSuccess(jsonDealEdited));
         return jsonDealEdited;
       })
@@ -266,20 +267,18 @@ export function _updateEditingDeal(token, editingDealId, dealName, category, sel
 }
 
 export const editingDealBegin = () => ({
-  type: "EDITING_DEAL_BEGIN"
+  type: UPDATING_EDITING_DEAL_BEGIN
 });
 
 export const editingDealSuccess = dealEdited => ({
-  type: "EDITING_DEAL_SUCCESS",
+  type: UPDATING_EDITING_DEAL_SUCCESS,
   payload: dealEdited
 });
 
 export const editingDealFailure = error => ({
-  type: "EDITING_DEAL_FAILURE",
+  type: UPDATING_EDITING_DEAL_FAILURE,
   payload: { error }
 });
-
-///////////
 
 export const closeModalAfterDealCreated = () => {
   return {
@@ -419,4 +418,8 @@ export const checkCodeFailure = error => ({
 export const editListing = (dealItem, acceptedCryptos) => ({
   type: "EDIT_LISTING",
   payload: {dealItem, acceptedCryptos}
+});
+
+export const resetEditListing = () => ({
+  type: "RESET_EDIT_LISTING"
 });

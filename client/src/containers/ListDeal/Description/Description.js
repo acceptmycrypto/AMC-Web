@@ -46,10 +46,10 @@ class Description extends Component {
   };
 
   //We have access to history props from withRouter
-  directToDealItemPage = () => {
+  directToDealItemPage = (deal_id, deal_name) => {
     this.props.history.push(
-      `/feed/deals/${this.props.dealCreatedResult.deal_id}/${
-        this.props.dealNameValue
+      `/feed/deals/${deal_id}/${
+        deal_name
       }`
     );
   };
@@ -404,12 +404,17 @@ class Description extends Component {
             {editingDeal ? (
               <div
                 onClick={() =>
-                  this.props.validateDescriptionStep() &&
-                  this.props.updateDeal()
+                  {
+                    if (this.props.validateDescriptionStep()) {
+                      this.props.updateDeal();
+                      this.directToDealItemPage(this.props.editingDealId, this.props.dealName);
+                    }
+
+                  }
                 }
                 className="creating-deal-next-step submit-listing-deal"
               >
-                {this.props.loading_dealCreating ? (
+                {this.props.updateEditingLoading ? (
                   <LoadingSpinner />
                 ) : (
                   <button>Update Deal</button>
@@ -423,11 +428,7 @@ class Description extends Component {
                 }
                 className="creating-deal-next-step submit-listing-deal"
               >
-                {this.props.loading_dealCreating ? (
-                  <LoadingSpinner />
-                ) : (
-                  <button>Submit Deal</button>
-                )}
+                <button>Submit Deal</button>
               </div>
             )}
           </div>
@@ -465,7 +466,11 @@ const mapStateToProps = state => ({
   checkingCodeSuccess: state.CreateDeal.checkingCodeSuccess,
   checkingCodeError: state.CreateDeal.checkingCodeError,
   selectedCategory: state.CreateDeal.selectedCategory,
-  editingDeal: state.CreateDeal.editingDeal
+  editingDeal: state.CreateDeal.editingDeal,
+  editingDealId: state.CreateDeal.editingDealId,
+  dealName: state.CreateDeal.dealName,
+  updateEditingLoading: state.CreateDeal.updateEditingLoading,
+  dealEdited: state.CreateDeal.dealEdited
 });
 
 const matchDispatchToProps = dispatch => {

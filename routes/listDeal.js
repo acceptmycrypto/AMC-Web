@@ -415,6 +415,8 @@ router.post('/listdeal/edit', verifyToken, function(req, res) {
 
         //delete image on AWS
         removeImageOnAWS(imagesToBeRemoved);
+
+        res.json({success: true, message: "Updated Successfully."});
       });
 
     } else {
@@ -436,12 +438,11 @@ router.post('/listdeal/edit', verifyToken, function(req, res) {
           //delete image on AWS
           removeImageOnAWS(imagesToBeRemoved);
 
+          res.json({success: true, message: "Updated Successfully."});
         });
     }
 
   });
-
-
 
 })
 

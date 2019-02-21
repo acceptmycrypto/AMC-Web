@@ -1,4 +1,9 @@
 import {EditorState, convertFromRaw} from 'draft-js';
+import {
+  UPDATING_EDITING_DEAL_BEGIN,
+  UPDATING_EDITING_DEAL_SUCCESS,
+  UPDATING_EDITING_DEAL_FAILURE
+} from "../actions/listDealActions";
 
 const initialState = {
   imageData: {},
@@ -21,6 +26,9 @@ const initialState = {
   creatingDeal: false,
   editingDeal: false,
   editingDealId: null,
+  updateEditingLoading: false,
+  dealEdited: {},
+  dealEditedError: null,
   creatingDealError: null,
   dealCreated: {},
   modalVisible: false,
@@ -41,7 +49,7 @@ const initialState = {
 const handleImagesUpload = (images, imageObj) => {
   let newImageArr = [...images];
   newImageArr.push(imageObj);
-  debugger
+
   return newImageArr
 }
 
@@ -152,7 +160,7 @@ export default function CreateDealReducer(state = initialState, action) {
       };
 
     case "GET_RATE_SUCCESS":
-    debugger
+
       return {
         ...state,
         gettingRate: {[action.payload.crypto_symbol] : false},
@@ -206,7 +214,6 @@ export default function CreateDealReducer(state = initialState, action) {
       };
 
     case "CREATING_DEAL_SUCCESS":
-
       return {
         ...state,
         creatingDeal: false,
@@ -225,6 +232,33 @@ export default function CreateDealReducer(state = initialState, action) {
       return {
         ...state,
         modalVisible: action.payload.modalVisible
+      };
+
+    case UPDATING_EDITING_DEAL_BEGIN:
+      return {
+        ...state,
+        updateEditingLoading: true,
+        dealEditedError: null
+      };
+
+    case UPDATING_EDITING_DEAL_SUCCESS:
+      return {
+        ...state,
+        updateEditingLoading: false,
+        editingDeal: false,
+        dealEdited: action.payload
+      };
+
+    case UPDATING_EDITING_DEAL_FAILURE:
+      return {
+        ...state,
+        updateEditingLoading: false,
+        dealEdited: action.payload.error,
+      };
+
+    case "RESET_EDIT_LISTING":
+      return {
+        ...initialState
       };
 
     case "RESET_DEAL_CREATED":
@@ -333,7 +367,7 @@ export default function CreateDealReducer(state = initialState, action) {
       let dealDescription = convertFromRaw(JSON.parse(deal_description));
       let editorState = EditorState.createWithContent(dealDescription);
 
-    debugger
+
       return {
         ...state,
         editingDeal: true,

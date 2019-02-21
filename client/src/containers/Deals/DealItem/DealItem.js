@@ -4,6 +4,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
 import {
   _loadDealItem,
   handleFirstNameInput,
@@ -17,7 +18,7 @@ import {
   handleShippingStep,
   handlePayingStep
 } from "../../../actions/dealItemActions";
-import { resetListDeal, editListing } from "../../../actions/listDealActions";
+import { resetListDeal, editListing, resetEditListing } from "../../../actions/listDealActions";
 import { _fetchTransactionInfo } from "../../../actions/paymentActions";
 import { _createChatSession } from "../../../actions/chatActions";
 import { Carousel } from "react-responsive-carousel";
@@ -36,14 +37,24 @@ class DealItem extends Component {
     await this.props._isLoggedIn(localStorage.getItem("token"));
 
     // if (await this.props.userLoggedIn) {
-      const { deal_name, id } = await this.props.match.params;
-      await this.props._loadDealItem(id, deal_name);
+    const { deal_name, id } = await this.props.match.params;
+    await this.props._loadDealItem(id, deal_name);
 
-      let seller_id =
-        this.props.dealItem.seller_id || this.props.dealItem.venue_id;
-      await this.props._loadReviews(seller_id);
-      await this.props._loadProfile(localStorage.getItem("token"));
+    let seller_id =
+      this.props.dealItem.seller_id || this.props.dealItem.venue_id;
+    await this.props._loadReviews(seller_id);
+    await this.props._loadProfile(localStorage.getItem("token"));
 
+
+    if (this.props.dealEdited.success && !this.props.editingDeal) {
+
+      toast.success(this.props.dealEdited.message, {
+        position: toast.POSITION.TOP_RIGHT
+      });
+
+      //reset editing deal reducer
+      this.props.resetEditListing();
+    }
 
     // }else{
     //     // localStorage.removeItem('token');
@@ -294,6 +305,7 @@ class DealItem extends Component {
             showPayingStep,
             user_info,
             userLoggedIn,
+            dealEdited,
 
             //actions
             handleFirstNameInput,
@@ -311,16 +323,12 @@ class DealItem extends Component {
             editListing
             } = this.props;
 
-    console.log("line 268", userLoggedIn);
-
     if (error) {
       return <div>Error! {error.message}</div>;
     }
     if (deal_item_loading) {
       return <div>Loading...</div>;
     }
-
-    console.log("user info", user_info);
 
     //if user is redirected from the deal created page after deal is created
     if (this.props.dealCreated.deal_id) {
@@ -614,6 +622,8 @@ class DealItem extends Component {
             </div>
           </div>
         </Layout>
+
+        <ToastContainer autoClose={5000} />
       </div>
     );
   }
@@ -642,7 +652,9 @@ const mapStateToProps = state => ({
   showPayingStep: state.DealItem.showPayingStep,
   dealCreated: state.CreateDeal.dealCreated,
   photo: state.Photo,
-  user_info: state.UserInfo.user_info
+  user_info: state.UserInfo.user_info,
+  dealEdited: state.CreateDeal.dealEdited,
+  editingDeal: state.CreateDeal.editingDeal
 });
 
 const matchDispatchToProps = dispatch => {
@@ -665,7 +677,8 @@ const matchDispatchToProps = dispatch => {
       resetListDeal,
       _createChatSession,
       _loadProfile,
-      editListing
+      editListing,
+      resetEditListing
     },
     dispatch
   );
