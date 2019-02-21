@@ -29,6 +29,7 @@ const initialState = {
   updateEditingLoading: false,
   dealEdited: {},
   dealEditedError: null,
+  alertEditCancelModalVisible: false,
   creatingDealError: null,
   dealCreated: {},
   modalVisible: false,
@@ -254,6 +255,18 @@ export default function CreateDealReducer(state = initialState, action) {
         ...state,
         updateEditingLoading: false,
         dealEdited: action.payload.error,
+      };
+
+    case "OPEN_ALERT_EDIT_CANCEL_MODAL":
+      return {
+        ...state,
+        alertEditCancelModalVisible: action.payload.visible
+      };
+
+    case "CLOSE_ALERT_EDIT_CANCEL_MODAL":
+      return {
+        ...state,
+        alertEditCancelModalVisible: action.payload.visible
       };
 
     case "RESET_EDIT_LISTING":

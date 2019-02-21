@@ -258,7 +258,7 @@ export function _updateEditingDeal(token, editingDealId, dealName, category, sel
     return fetch("/listdeal/edit", settings)
       .then(res => res.json())
       .then(jsonDealEdited => {
-     
+
         dispatch(editingDealSuccess(jsonDealEdited));
         return jsonDealEdited;
       })
@@ -422,4 +422,56 @@ export const editListing = (dealItem, acceptedCryptos) => ({
 
 export const resetEditListing = () => ({
   type: "RESET_EDIT_LISTING"
+});
+
+export const openAlertEditCancelModal = () => {
+  return {
+      type: 'OPEN_ALERT_EDIT_CANCEL_MODAL',
+      payload: {visible: true}
+  }
+};
+
+export const closeAlertEditCancelModal = () => {
+  return {
+      type: 'CLOSE_ALERT_EDIT_CANCEL_MODAL',
+      payload: {visible: false}
+  }
+};
+
+export function _deleteDeal(token, dealItem) {
+
+  const settings = {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({token, dealItem})
+  };
+
+  return dispatch => {
+    dispatch(deleteDealBegin());
+    return fetch("/listdeal", settings)
+      .then(res => res.json())
+      .then(jsonDealDeleted => {
+
+        dispatch(deleteDealSuccess(jsonDealDeleted));
+        return jsonDealDeleted;
+      })
+      .catch(error => dispatch(deleteDealFailure(error)));
+  };
+}
+
+export const deleteDealBegin = () => ({
+  type: "DELETE_DEAL_BEGIN"
+});
+
+export const deleteDealSuccess = dealCreated => ({
+  type: "DELETE_DEAL_SUCCESS",
+  payload: dealCreated
+});
+
+export const deleteDealFailure = error => ({
+  type: "DELETE_DEAL_FAILURE",
+  payload: { error }
 });

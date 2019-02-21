@@ -18,7 +18,7 @@ import {
   handleShippingStep,
   handlePayingStep
 } from "../../../actions/dealItemActions";
-import { resetListDeal, editListing, resetEditListing } from "../../../actions/listDealActions";
+import { resetListDeal, editListing, resetEditListing, deleteListing } from "../../../actions/listDealActions";
 import { _fetchTransactionInfo } from "../../../actions/paymentActions";
 import { _createChatSession } from "../../../actions/chatActions";
 import { Carousel } from "react-responsive-carousel";
@@ -55,6 +55,7 @@ class DealItem extends Component {
       //reset editing deal reducer
       this.props.resetEditListing();
     }
+
 
     // }else{
     //     // localStorage.removeItem('token');
@@ -541,6 +542,9 @@ class DealItem extends Component {
                       <button onClick={() => editListing(dealItem, acceptedCryptos)} className="mt-3">
                       Edit Listing
                       </button>
+                      <button onClick={() => deleteListing(dealItem)} className="mt-3">
+                      Delete Listing
+                      </button>
                     </div>
                   </Link> :
                   (
@@ -678,6 +682,7 @@ const matchDispatchToProps = dispatch => {
       _createChatSession,
       _loadProfile,
       editListing,
+      deleteListing,
       resetEditListing
     },
     dispatch

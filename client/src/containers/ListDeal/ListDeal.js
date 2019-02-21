@@ -26,12 +26,17 @@ import {
   _submitDeal,
   _updateEditingDeal,
   closeModalAfterDealCreated,
-  resetListDeal
+  resetListDeal,
+  resetEditListing,
+  openAlertEditCancelModal,
+  closeAlertEditCancelModal
 } from "../../actions/listDealActions";
+import { closeModal } from '../../actions/signInActions';
 import { _isLoggedIn } from '../../actions/loggedInActions';
 import { _loadCryptocurrencies } from "../../actions/loadCryptoActions";
 import { _loadCategory } from "../../actions/categoryActions";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
+import AlertModal from "../../components/UI/Alert";
 import UploadingImage from "./UploadImage";
 import Pricing from "./Pricing";
 import Description from "./Description";
@@ -305,7 +310,10 @@ class ListDeal extends Component {
       creatingDeal,
       creatingDealError,
       dealCreated,
+      editingDeal,
       modalVisible,
+      alertEditCancelModalVisible,
+      closeAlertEditCancelModal,
 
       onSelectImageToView,
       handleUploadingPhotosStep,
@@ -322,10 +330,10 @@ class ListDeal extends Component {
       handleSelectedCondition,
       onEditingDealName,
       onEditingDetail,
-      closeModalAfterDealCreated
+      closeModalAfterDealCreated,
+      openAlertEditCancelModal,
+      resetEditListing
     } = this.props;
-
-    console.log(crypto_amount);
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -339,6 +347,18 @@ class ListDeal extends Component {
           message="Changes you made may not be saved."
         /> */}
         <Layout>
+          {editingDeal &&
+            <div onClick={openAlertEditCancelModal} className="closing-icon">
+              <i className="fas fa-times fa-2x"></i>
+            </div>
+          }
+
+          <AlertModal
+            alertEditModalVisible={alertEditCancelModalVisible}
+            closeEditModal={closeAlertEditCancelModal}
+            discardEditChanges={resetEditListing}
+            />
+
           <div className="deal-container">
             <div className="ui three steps">
               <a
@@ -463,7 +483,8 @@ const mapStateToProps = state => ({
   modalVisible: state.CreateDeal.modalVisible,
   userLoggedIn: state.LoggedIn.userLoggedIn,
   editingDeal: state.CreateDeal.editingDeal,
-  editingDealId: state.CreateDeal.editingDealId
+  editingDealId: state.CreateDeal.editingDealId,
+  alertEditCancelModalVisible: state.CreateDeal.alertEditCancelModalVisible
 });
 
 const matchDispatchToProps = dispatch => {
@@ -490,7 +511,10 @@ const matchDispatchToProps = dispatch => {
       _updateEditingDeal,
       closeModalAfterDealCreated,
       resetListDeal,
-      _isLoggedIn
+      resetEditListing,
+      _isLoggedIn,
+      openAlertEditCancelModal,
+      closeAlertEditCancelModal
     },
     dispatch
   );

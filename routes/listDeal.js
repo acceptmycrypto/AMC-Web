@@ -446,6 +446,11 @@ router.post('/listdeal/edit', verifyToken, function(req, res) {
 
 })
 
+router.post('listdeal/delete', verifyToken, function(req, res) {
+  let user_id = req.decoded._id;
+  let {deal_id} = req.body.deal_id;
+})
+
 
 //to be used for /verification/check
 let phone_number;
