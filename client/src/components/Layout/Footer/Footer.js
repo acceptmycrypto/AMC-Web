@@ -11,8 +11,13 @@ const Footer = props => {
       
       <div className="Footer-links">
 
-      <Link className="Faq-footer" to="/Faq">FAQ</Link>
-      <Link className="AboutUs-footer" to="/AboutUs">About Us</Link>
+      <div className="Footer-company">
+      <h4 className="Footer-linkTitle">Company</h4>
+      <span><Link className="Faq-footer" to="/Faq">AcceptMyHelp</Link></span>
+      <span><Link className="AboutUs-footer" to="/AboutUs">About Us</Link></span>
+      </div>
+
+      
       <div className="copyrightFooter">AcceptMyCrypto © 2018</div>
       
       </div>
