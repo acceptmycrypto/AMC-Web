@@ -18,7 +18,7 @@ import {
   handleShippingStep,
   handlePayingStep
 } from "../../../actions/dealItemActions";
-import { resetListDeal, editListing, resetEditListing, deleteListing } from "../../../actions/listDealActions";
+import { resetListDeal, editListing, resetEditListing, _deleteDeal } from "../../../actions/listDealActions";
 import { _fetchTransactionInfo } from "../../../actions/paymentActions";
 import { _createChatSession } from "../../../actions/chatActions";
 import { Carousel } from "react-responsive-carousel";
@@ -542,7 +542,7 @@ class DealItem extends Component {
                       <button onClick={() => editListing(dealItem, acceptedCryptos)} className="mt-3">
                       Edit Listing
                       </button>
-                      <button onClick={() => deleteListing(dealItem)} className="mt-3">
+                      <button style={{backgroundColor: "#9b0739"}} onClick={() => _deleteDeal(dealItem)} className="mt-3">
                       Delete Listing
                       </button>
                     </div>
@@ -682,7 +682,7 @@ const matchDispatchToProps = dispatch => {
       _createChatSession,
       _loadProfile,
       editListing,
-      deleteListing,
+      _deleteDeal,
       resetEditListing
     },
     dispatch
