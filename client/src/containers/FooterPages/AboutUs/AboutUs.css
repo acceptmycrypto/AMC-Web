@@ -1,12 +1,13 @@
 .aboutUs-list{
     margin: 10px;
     padding-bottom: 10px;
-    padding-top: 10px;
+    padding-top: 20px;
     text-align: center;
   }
 
 .aboutUsMenuTitle{
     text-align: center;
+    padding: 20px;
   }
   
 .aboutUs-listItem{
@@ -89,6 +90,7 @@
     margin-left: auto;
     margin-right: auto;
     border-radius: 50%;
+    border: 1px solid #ddd;
     padding: 5px;
   }
 
@@ -99,6 +101,7 @@
     margin-left: auto;
     margin-right: auto;
     border-radius: 50%;
+    border: 1px solid #ddd;
     padding: 5px;
   }
 
@@ -109,6 +112,7 @@
     margin-left: auto;
     margin-right: auto;
     border-radius: 50%;
+    border: 1px solid #ddd;
     padding: 5px;
   }
   
@@ -119,6 +123,7 @@
     margin-left: auto;
     margin-right: auto;
     border-radius: 50%;
+    border: 1px solid #ddd;
     padding: 5px;
   }
 
@@ -129,6 +134,7 @@
     margin-left: auto;
     margin-right: auto;
     border-radius: 50%;
+    border: 1px solid #ddd;
     padding: 5px;
   }
 
@@ -139,6 +145,7 @@
     margin-left: auto;
     margin-right: auto;
     border-radius: 50%;
+    border: 1px solid #ddd;
     padding: 5px;
   }
 
@@ -149,6 +156,7 @@
     margin-left: auto;
     margin-right: auto;
     border-radius: 50%;
+    border: 1px solid #ddd;
     padding: 5px;
   }
 
@@ -159,6 +167,7 @@
     margin-left: auto;
     margin-right: auto;
     border-radius: 50%;
+    border: 1px solid #ddd;
     padding: 5px;
   }
 
@@ -169,6 +178,7 @@
     margin-left: auto;
     margin-right: auto;
     border-radius: 50%;
+    border: 1px solid #ddd;
     padding: 5px;
   }
 
@@ -179,6 +189,7 @@
     margin-left: auto;
     margin-right: auto;
     border-radius: 50%;
+    border: 1px solid #ddd;
     padding: 5px;
   }
   
