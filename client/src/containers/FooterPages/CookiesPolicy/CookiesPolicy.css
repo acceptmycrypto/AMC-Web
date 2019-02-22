@@ -1,24 +1,25 @@
-.retunsItem-list{
+.cookiesItem-list{
     margin: 10px;
     padding-bottom: 10px;
     padding-top: 10px;
     text-align: center;
   }
 
-.returnsMenuTitle{
+.cookiesMenuTitle{
     text-align: center;
     padding: 10px;
+    font-weight: bold;
   }
   
-.returns-listItem{
+.cookies-listItem{
     font-size: 20px;
-    text-align: center;
+    text-align: left;
     padding: 10px;
     padding-left: 10%;
     padding-right: 10%;
   }
 
-  #returns-listSubItem{
+  #cookies-listSubItem{
     font-size: 20px;
     text-align: center;
     padding: 10px;
@@ -26,13 +27,14 @@
     padding-right: 10%;
     font-weight: bold;
   }
-#returns-amr{
+#cookies-amc{
     padding: 10px;
+    
     text-align: center;
     font-size: 27px;
   }
   
-.Returns-page {
+.Cookies-page {
     height: 100vh;
     display: flex;
     color: #2E4158;
@@ -40,7 +42,7 @@
     min-height: calc(100vh - 50px);
   }
   
-.Returns-mainContent {
+.Cookies-mainContent {
     width: 100%;
     background-color: white;
     position: absolute;

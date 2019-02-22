@@ -22,9 +22,9 @@ render() {
         <div className="returns-page">
         <Navbar/>
          
-        <div className="returns-mainContent">
+        <div className="Returns-mainContent">
           <div className="font-17 color-deepBlue">
-              <div className="ml-2" id="returns-amh">
+              <div className="ml-2" id="returns-amr">
                 AcceptMyReturns
               </div>
             </div>

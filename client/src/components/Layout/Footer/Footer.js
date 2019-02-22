@@ -16,6 +16,7 @@ const Footer = props => {
       <span><Link className="Faq-footer" to="/Faq">AcceptMyHelp</Link></span>
       <span><Link className="AboutUs-footer" to="/AboutUs">AcceptMyStory</Link></span>
       <span><Link className="Returns-footer" to="/Returns">AcceptMyReturns</Link></span>
+      <span><Link className="Cookies-footer" to="/CookiesPolicy">AcceptMyCookies</Link></span>
       </div>
 
       

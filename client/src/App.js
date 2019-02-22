@@ -18,6 +18,7 @@ import Faq from "./containers/Faq/Faq"
 
 import AboutUs from "./containers/FooterPages/AboutUs/AboutUs"
 import Returns from "./containers/FooterPages/Returns/Returns"
+import CookiesPolicy from "./containers/FooterPages/CookiesPolicy/CookiesPolicy"
 
 import Chat from "./containers/Chat";
 
@@ -58,6 +59,7 @@ class App extends Component {
 
               <Route exact path='/Faq' component={Faq}/>
               <Route exact path='/Returns' component={Returns}/>
+              <Route exact path='/CookiesPolicy' component={CookiesPolicy}/>
 
 
 
