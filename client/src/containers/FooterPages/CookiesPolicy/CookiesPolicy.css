@@ -19,13 +19,22 @@
     padding-right: 10%;
   }
 
+  #cookies-listBoldItem{
+    font-size: 20px;
+    text-align: left;
+    padding: 10px;
+    /* padding-left: 10%;
+    padding-right: 10%; */
+    font-weight: bold;
+    list-style: disc outside;
+  }
+
   #cookies-listSubItem{
     font-size: 20px;
-    text-align: center;
+    text-align: left;
     padding: 10px;
     padding-left: 10%;
     padding-right: 10%;
-    font-weight: bold;
   }
 #cookies-amc{
     padding: 10px;

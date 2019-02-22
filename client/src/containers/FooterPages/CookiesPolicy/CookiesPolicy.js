@@ -57,16 +57,16 @@ render() {
 
           <ul className="cookies-listItem">
               <li>You will be presented with Internet cookies whichever browser you use (Internet Explorer, Chrome, Mozilla etc.). Although there are no absolute solutions, you can consider the following:</li>
-              <ul className="cookies-listItem">
-                  <li id="cookies-listSubItem">Erase cookies: </li>
+                <ul id="cookies-listSubItem">
+                  <li id="cookies-listBoldItem">Erase cookies: </li>
                   <li>all you need to do is find the folder/file where cookies are stored on your computer and delete them. If you do this by hand, you need to remember to do it regularly.</li>
-                  <li id="cookies-listSubItem">Block cookies:</li>
+                  <li id="cookies-listBoldItem">Block cookies:</li>
                   <li>if you want to block website's cookies, you need to configure your browser to categorically refuse all cookies that try to access your computer. The only disadvantage of this option is that you will no longer be recognised automatically on your favourite online. You need to be careful, though, because categorically blocking certain cookies may mean that you are no longer able to shop online</li>
-                  <li id="cookies-listSubItem">Set your browser’s alert system:</li>
+                  <li id="cookies-listBoldItem">Set your browser’s alert system:</li>
                   <li> you simply need to configure your browser to warn you each time a cookie is sent, letting you decide whether to allow the cookie or not. The only disadvantage of this solution is that you will spend more time refusing or accepting cookies than actually surfing the web</li>
-                  <li id="cookies-listSubItem">Use specialist software:</li>
+                  <li id="cookies-listBoldItem">Use specialist software:</li>
                   <li>you can download software that protects you against cookies. These software programmes, can be configured to let you change the content of the cookies that apply to you. These programmes, some of which are free, can be downloaded on the Internet</li>
-              </ul>
+                </ul>
           </ul>
 
 <Footer/>
