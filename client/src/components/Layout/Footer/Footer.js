@@ -16,12 +16,12 @@ const Footer = props => {
       <span><Link className="Footer-link" to="/Faq">AcceptMyHelp</Link></span>
       <span><Link className="Footer-link" to="/AboutUs">AcceptMyStory</Link></span>
       <span><Link className="Footer-link" to="/Returns">AcceptMyReturns</Link></span>
-      <span><Link className="Footer-link" to="/CookiesPolicy">AcceptMyCookies</Link></span>
       </div>
 
       <div className="Footer-terms">
       <h4 className="Footer-linkTitle">Terms</h4>
       <span className="Footer-link">AcceptMyTerms</span>
+      <span><Link className="Footer-link" to="/CookiesPolicy">AcceptMyCookies</Link></span>
       
       
       </div>
