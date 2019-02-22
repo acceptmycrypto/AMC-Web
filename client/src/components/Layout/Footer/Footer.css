@@ -1,4 +1,4 @@
-.Footer-links{
+.Footer{
   text-align:  center;
   background-color: #2E4158;
   flex-direction: column;
@@ -17,24 +17,13 @@
   color: white;
 }
 
-.Faq-footer{
+.Footer-link{
   padding: 10px;
   color: whitesmoke;
 }
 
-.AboutUs-footer{
-  padding: 10px;
-  color: whitesmoke;
-}
-
-.Returns-footer{
-  padding: 10px;
-  color: whitesmoke;
-}
-
-.Cookies-footer{
-  padding: 10px;
-  color: whitesmoke;
+.Footer-link:hover{
+  color: white;
 }
 
 .copyrightFooter{

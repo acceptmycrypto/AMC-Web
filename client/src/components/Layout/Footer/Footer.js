@@ -9,14 +9,14 @@ const Footer = props => {
 
      
       
-      <div className="Footer-links">
+      <div className="Footer">
 
       <div className="Footer-company">
       <h4 className="Footer-linkTitle">Company</h4>
-      <span><Link className="Faq-footer" to="/Faq">AcceptMyHelp</Link></span>
-      <span><Link className="AboutUs-footer" to="/AboutUs">AcceptMyStory</Link></span>
-      <span><Link className="Returns-footer" to="/Returns">AcceptMyReturns</Link></span>
-      <span><Link className="Cookies-footer" to="/CookiesPolicy">AcceptMyCookies</Link></span>
+      <span><Link className="Footer-link" to="/Faq">AcceptMyHelp</Link></span>
+      <span><Link className="Footer-link" to="/AboutUs">AcceptMyStory</Link></span>
+      <span><Link className="Footer-link" to="/Returns">AcceptMyReturns</Link></span>
+      <span><Link className="Footer-link" to="/CookiesPolicy">AcceptMyCookies</Link></span>
       </div>
 
       
