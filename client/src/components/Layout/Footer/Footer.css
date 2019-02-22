@@ -9,8 +9,12 @@
 }
 
 .Footer-company{
-  text-align: center;
   padding-bottom: 30px;
+}
+
+.Footer-terms{
+  padding-bottom: 30px;
+
 }
 
 .Footer-linkTitle{

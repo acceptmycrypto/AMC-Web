@@ -19,6 +19,13 @@ const Footer = props => {
       <span><Link className="Footer-link" to="/CookiesPolicy">AcceptMyCookies</Link></span>
       </div>
 
+      <div className="Footer-terms">
+      <h4 className="Footer-linkTitle">Terms</h4>
+      <span className="Footer-link">AcceptMyTerms</span>
+      
+      
+      </div>
+
       
       <div className="copyrightFooter">AcceptMyCrypto © 2018</div>
       
