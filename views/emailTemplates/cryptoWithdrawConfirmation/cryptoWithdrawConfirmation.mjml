@@ -15,25 +15,18 @@
     <mj-section background-color="#2e4157">
 
       <mj-column>
-        <mj-text color="#fff" font-size="20px" align="center" line-height="20px">
-          Thank You for Your Purchase of <%=deal_name%>
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="20px">
+          You've initiated a transfer of <%= crypto_balance %> <%= crypto_symbol %> to address <%= crypto_address %>
         </mj-text>
-        <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
-          Your order number is <%= txn_id %>
+         <mj-text color="#fff" letter-spacing="1.2px" font-size="20px" align="center" line-height="20px">
+          Confirmation Token
         </mj-text>
-        <mj-text color="#fff" font-size="15px" align="center" line-height="15px">
-          Your order has been processed. An email will be sent to you when your order ships.
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="20px" align="center" line-height="20px">
+          <%= withdraw_token %>
         </mj-text>
-
-        <mj-button background-color="#F63A4D" href="<%=view_order%>">
-          View Your Order
-        </mj-button>
-
       </mj-column>
 
     </mj-section>
-
-
 
   </mj-body>
 </mjml>

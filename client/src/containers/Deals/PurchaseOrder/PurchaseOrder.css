@@ -3,28 +3,17 @@
   margin-top: 10px;
 }
 
-.steps-workflow, .next-step {
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-}
-
-
-.steps-workflow button, .next-step button, .previous-step button {
-  background-color: rgb(22, 190, 182);
-  color: white;
-  border: none;
-  outline: none;
-  border-radius: 25px;
-  padding: 10px 25px;
-  font-size: 1em;
-  font-weight: 500;
-  cursor: pointer;
-  position: absolute;
-  margin: 20px 0px;
-}
-
 #payment-divider, #paypal-button {
   text-align: center;
   margin-bottom: 10px;
+}
+
+.payment-form {
+  height: 400px;
+}
+
+/* z-index only works for relative position */
+.paypal-button {
+  position: relative;
+  z-index: 0 !important;
 }

@@ -38,23 +38,22 @@ class Homepage extends Component {
 
     const carouselItems = [
       {
-        // src: './assets/images/user.png',
-        src: 'https://static.bhphoto.com/images/images500x500/Rosco_102354264825_E_Colour_5426_Blueberry_Blue_1233286396000_595543.jpg',
+        src: './assets/images/banner1.svg',
+        // src: 'https://static.bhphoto.com/images/images500x500/Rosco_102354264825_E_Colour_5426_Blueberry_Blue_1233286396000_595543.jpg',
         altText: 'Slide 1',
-        // caption: 'Slide 1',
-        // header: 'Slide 1 Header'
-
+        caption: 'AcceptMyCrypto is the easiest marketplace to buy and sell discounted items for cryptocurrency',
+        header: 'Buy and Sell Anything for Cryptocurrency'
       },
       {
-        // src: './assets/images/user.png',
-        src: 'https://www.solidbackgrounds.com/images/2048x1536/2048x1536-true-blue-solid-color-background.jpg',
+        src: './assets/images/banner2.svg',
+        // src: 'https://www.solidbackgrounds.com/images/2048x1536/2048x1536-true-blue-solid-color-background.jpg',
         altText: 'Slide 2',
         // caption: 'Slide 2',
         // header: 'Slide 2 Header'
       },
       {
-        src: './assets/images/user.png',
-        src: 'https://static.bhphoto.com/images/images500x500/Savage_36_1253_Widetone_Seamless_Background_Paper_1233087643000_486211.jpg',
+        src: './assets/images/banner3.svg',
+        // src: 'https://static.bhphoto.com/images/images500x500/Savage_36_1253_Widetone_Seamless_Background_Paper_1233087643000_486211.jpg',
         altText: 'Slide 3',
         // caption: 'Slide 3',
         // header: 'Slide 3 Header'
@@ -75,10 +74,10 @@ class Homepage extends Component {
           </div>
           <UncontrolledCarousel items={carouselItems} indicators={false} className="homepage-carousel" />
           {homepage_deals.recent_deals !== undefined && homepage_deals.recent_deals.length > 0 &&
-            <CategoryHome category_collection={homepage_deals.recent_deals} category_collection_name={"Most Recent Deals Listed"} category_collection_id={`cat_recent`}/>                                
+            <CategoryHome category_collection={homepage_deals.recent_deals} category_collection_name={"Most Recent Deals Listed"} category_collection_id={`cat_recent`}/>
           }
           {homepage_deals.all_results !== undefined && homepage_deals.all_results.length > 0 && homepage_deals.all_results.map((categorizedDealArray, i) => (
-            <CategoryHome category_collection={categorizedDealArray} category_collection_name={categorizedDealArray[0].category_name} category_collection_id={`cat_${i}`}/>            
+            <CategoryHome category_collection={categorizedDealArray} category_collection_name={categorizedDealArray[0].category_name} category_collection_id={`cat_${i}`}/>
           ))}
 
           {/* <CategoryHome category_collection={apparel_accessories} category_collection_name={"Apparel & Accessories"} category_collection_id={"apparel_accessories_container"}/>

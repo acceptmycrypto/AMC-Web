@@ -185,18 +185,65 @@ router.post('/listdeal', verifyToken, function(req, res) {
         });
       });
 
-      //Fourth insert into cryptos_deals table
+      //Fourth insert into cryptos_deals table and users_cryptos
       connection.query("SELECT id AS crypto_id FROM crypto_metadata WHERE crypto_symbol IN (?)", [selected_cryptos],
-      function (error, results, fields) {
+      function (error, selectedCryptoIds, fields) {
         if (error) console.log(error);
 
-        let cryptos_deals = [];
-        for (let i = 0; i < results.length; i++) {
-          let records = [];
-          records.push(results[i].crypto_id, deal_id)
-          cryptos_deals.push(records);
+        let cryptos_deals = []; //[[1,1], [2,1]] for inserting into crypto_deals
+        let selectedCryptosIds_arr = []; //[1,2] used in the filter function
+
+        //create a nested array for insertion into cryptos_deals table
+        for (let i = 0; i < selectedCryptoIds.length; i++) {
+          let cryptosDeals_records = [];
+
+          cryptosDeals_records.push(selectedCryptoIds[i].crypto_id, deal_id)
+          cryptos_deals.push(cryptosDeals_records);
+
+          //used in filter function
+          selectedCryptosIds_arr.push(selectedCryptoIds[i].crypto_id);
         }
 
+        //create an array of cryptos id that are not existed yet in users_cryptos
+        //Then insert into users_cryptos table where selected cryptos are not existed yet in the user's portfolio
+        connection.query("SELECT crypto_id from users_cryptos where user_id = ?", [seller_id],
+        function (error, results, fields) {
+          if (error) res.status(400).json({message: `Failed to create deal: ${error}`});
+
+          let users_cryptos = []; //for inserting into users_cryptos
+          let cryptoPorfolioIds_arr = []; //making a array of cryptos ids [1, 2]
+
+          for (let i = 0; i < results.length; i++) {
+            cryptoPorfolioIds_arr.push(results[i].crypto_id);
+          }
+
+          //compare two arrays to find the unique cryptos_ids
+          //use filtering for both ways
+          let unique2 = selectedCryptosIds_arr.filter(function(obj) { return cryptoPorfolioIds_arr.indexOf(obj) == -1; });
+
+
+          //create a nested array for insertion [[1,1], [2,1]] where seller_id is the second indexof inner nested array
+          for (let j = 0; j < unique2.length; j++) {
+            let usersCryptos_records = [];
+
+            usersCryptos_records.push(unique2[j], seller_id)
+
+            users_cryptos.push(usersCryptos_records);
+          }
+
+          //insert into users_cryptos if there is a new crypto that has not yet existed in users's crypto portfolio
+          if (users_cryptos.length > 0) {
+            console.log("executed");
+            connection.query("INSERT INTO users_cryptos(crypto_id, user_id) VALUES ?", [users_cryptos],
+            function (error, results, fields) {
+              if (error) console.log(error);
+              console.log(results);
+            });
+          }
+
+        });
+
+        //insert into cryptos_deals
         connection.query("INSERT INTO cryptos_deals(crypto_id, deal_id) VALUES ?", [cryptos_deals],
         function (error, results, fields) {
           if (error) res.status(400).json({message: `Failed to create deal: ${error}`});
