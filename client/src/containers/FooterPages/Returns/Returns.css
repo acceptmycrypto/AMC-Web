@@ -45,38 +45,4 @@
     background-color: white;
     position: absolute;
     padding-top: 75px;
-    padding-bottom: 75px;
-   
   }
-    
-/* .Returns-menu {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    overflow-x: auto;
-    border-bottom: 3px solid #d6d4d4;
-    background-color: #199087;
-    color: #fff;
-    padding-top: 15px;
-    padding-left: 90px;
-    padding-right: 70px;
-    position: fixed;
-    margin-top: 0;
-    z-index: 2;
-  }
-.returns-menuItem{
-    font-size: 15.5px;
-    padding-left: 30px;
-    padding-right: 30px;
-    font-family: Lato,sans-serif;
-    padding-bottom: 10px;
-    text-decoration: none;
-    color: #fff;
-    margin: 0px 97px 0px 83px;
-    color: #2a3c51;
-    font-size: 17px; 
-  }
-  
-.returns-menuItem:hover{
-    color: white;
-  } */
