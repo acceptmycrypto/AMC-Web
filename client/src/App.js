@@ -14,7 +14,7 @@ import DealItem from "./containers/Deals/DealItem";
 import Reviews from "./containers/Reviews";
 import ListDeal from "./containers/ListDeal";
 
-import Faq from "./containers/Faq/Faq"
+import Faq from "./containers/FooterPages/Faq/Faq"
 
 import AboutUs from "./containers/FooterPages/AboutUs/AboutUs"
 import Returns from "./containers/FooterPages/Returns/Returns"

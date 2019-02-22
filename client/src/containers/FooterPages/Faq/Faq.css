@@ -1,7 +1,4 @@
 .Faq-qnaList{
-    margin: 10px;
-    padding-bottom: 10px;
-    padding-top: 10px;
     text-align: center;
   }
 
@@ -12,13 +9,15 @@
 .Faq-answer{
     font-size: 20px;
   }
+
 #Faq-amh{
     padding: 20px;
     text-align: center;
     font-size: 27px;
   }
+
 .Faq-button{
-    position: flex;
+    font-weight: 500;
   }
   
 .Faq-page {
@@ -54,6 +53,7 @@
     margin-top: 0;
     z-index: 2;
   }
+
 .Faq-menuItem{
     font-size: 15.5px;
     padding-left: 50px;
@@ -64,9 +64,7 @@
     color: #fff;
     margin: 0px 97px 0px 83px;
     color: #2a3c51;
-    font-size: 17px;
-    
-      
+    font-size: 17px;   
   }
   
 .Faq-menuItem:hover{

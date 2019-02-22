@@ -3,8 +3,8 @@ import './Faq.css';
 // Router and Route is never being called, but at the same time must not be deleted. If deleted, it thows an error.
 // import { BrowserRouter as Link } from 'react-router-dom';
 import { UncontrolledCollapse, Button, CardBody, Card, Collapse } from 'reactstrap';
-import Navbar from '../Navigation/Navbar/Navbar';
-import Footer from '../../components/Layout/Footer';
+import Navbar from '../../Navigation/Navbar/Navbar';
+import Footer from '../../../components/Layout/Footer';
 // Will keep these imports for possible future use. Will delete when found unnecessary.
 // import * as Scroll from 'react-scroll';
 // import { Link, Element , Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
