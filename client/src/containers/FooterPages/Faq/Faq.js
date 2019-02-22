@@ -36,11 +36,11 @@ render() {
                   Sellers
            </a>
 
-           <a className="Faq-menuItem" id="togglerBuyers">
+           <a className="Faq-menuItem" id="buyers">
                   Buyers
            </a>
            
-           <a className="Faq-menuItem" id="togglerGuest">
+           <a className="Faq-menuItem" id="guest">
                   Buying as a Guest
            </a>
          
@@ -60,11 +60,11 @@ render() {
       <h4 className="faqMenuTitle">General</h4>
 
 
-      <CardBody>
+      
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion1">What is acceptmycrypto.com?</Button></h4></li>
           </ul>
-      </CardBody>
+     
 
 <UncontrolledCollapse toggler="#togglerQuestion1">
       <CardBody>
@@ -75,11 +75,11 @@ render() {
       </CardBody>
 </UncontrolledCollapse>
 
-      <CardBody>
+      
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion2">Do I need to create an account? </Button></h4></li>
           </ul>
-      </CardBody>
+      
 
 <UncontrolledCollapse toggler="#togglerQuestion2">
       <CardBody>
@@ -90,11 +90,11 @@ render() {
 
 </UncontrolledCollapse>
 
-      <CardBody>
+     
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion3">How do I contact AccpetMyCrypto?</Button></h4></li>
           </ul>
-      </CardBody>
+     
 
 <UncontrolledCollapse toggler="#togglerQuestion3">
       <CardBody>
@@ -104,11 +104,11 @@ render() {
       </CardBody>
 </UncontrolledCollapse>
 
-      <CardBody>
+      
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion4">Why do I need to verify my phone number?</Button></h4></li>
           </ul>
-      </CardBody>
+     
 
 <UncontrolledCollapse toggler="#togglerQuestion4">
       <CardBody>
@@ -121,11 +121,11 @@ render() {
       </CardBody>
 </UncontrolledCollapse>
 
-      <CardBody>
+      
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion5">How do I contact AcceptMyCrypto?</Button></h4></li>
           </ul>
-      </CardBody>
+      
 
 <UncontrolledCollapse toggler="#togglerQuestion5">
  
@@ -138,11 +138,11 @@ render() {
            
 </UncontrolledCollapse>
 
-      <CardBody>
+     
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion6">How do you process payments?</Button></h4></li>
           </ul>
-      </CardBody>
+     
 
 <UncontrolledCollapse toggler="#togglerQuestion6">
          
@@ -155,11 +155,11 @@ render() {
               
 </UncontrolledCollapse>
 
-      <CardBody>
+     
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion7">How does AcceptMyCrypto deal with cryptocurrency fluctuation?</Button></h4></li>
           </ul>
-      </CardBody>
+     
 
 <UncontrolledCollapse toggler="#togglerQuestion7">
  
@@ -171,11 +171,11 @@ render() {
               
 </UncontrolledCollapse>
 
-      <CardBody>
+      
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion8">Is there an age limit to list a deal item or service?</Button></h4></li>
           </ul>
-      </CardBody>
+      
 
 <UncontrolledCollapse toggler="#togglerQuestion8">
  
@@ -187,11 +187,11 @@ render() {
               
 </UncontrolledCollapse>
 
-      <CardBody>
+      
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion9">Is there an age limit to purchase an item?</Button></h4></li>
           </ul>
-      </CardBody>
+      
 
 <UncontrolledCollapse toggler="#togglerQuestion9">
  
@@ -203,11 +203,11 @@ render() {
             
 </UncontrolledCollapse>
 
-      <CardBody>
+     
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion10">Who’s responsible for sale tax?</Button></h4></li>
           </ul>
-      </CardBody>
+     
 
 <UncontrolledCollapse toggler="#togglerQuestion10">
  
@@ -219,11 +219,11 @@ render() {
               
 </UncontrolledCollapse>
 
-      <CardBody>
+    
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion11">How does shipping work?</Button></h4></li>
           </ul>
-      </CardBody>
+     
 
 <UncontrolledCollapse toggler="#togglerQuestion11">
  
@@ -237,11 +237,11 @@ render() {
               
 </UncontrolledCollapse>
 
-      <CardBody>
+     
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion12">How do I close/cancel my account</Button></h4></li>
           </ul>
-      </CardBody>
+      
 
 <UncontrolledCollapse toggler="#togglerQuestion12">
  
@@ -260,11 +260,11 @@ render() {
 
       <h4 className="faqMenuTitle">Sellers</h4>
 
-      <CardBody>
+    
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerSellerQues1">Why should I sell something on AcceptMyCrypto?</Button></h4></li>
           </ul>
-      </CardBody>
+      
 
 <UncontrolledCollapse toggler="#togglerSellerQues1">
  
@@ -276,11 +276,11 @@ render() {
     
 </UncontrolledCollapse>
 
-      <CardBody>
+     
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerSellerQues2">How do I get started?</Button></h4></li>
           </ul>
-      </CardBody>
+     
 
 <UncontrolledCollapse toggler="#togglerSellerQues2">
  
@@ -293,11 +293,11 @@ render() {
     
 </UncontrolledCollapse>
 
-      <CardBody>
+      
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerSellerQues3">How do I list an Item/service?</Button></h4></li>
           </ul>
-      </CardBody>
+     
 
 <UncontrolledCollapse toggler="#togglerSellerQues3">
  
@@ -310,11 +310,11 @@ render() {
     
 </UncontrolledCollapse>
 
-      <CardBody>
+     
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerSellerQues4">Can I list my product/service in all categories on AcceptMyCrypto?</Button></h4></li>
           </ul>
-      </CardBody>
+     
 
 <UncontrolledCollapse toggler="#togglerSellerQues4">
  
@@ -327,11 +327,11 @@ render() {
 </UncontrolledCollapse>
 
 
-        <CardBody>
+       
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerSellerQues5">What type of Deals can I not post on AcceptMyCrypto?</Button></h4></li>
           </ul>
-        </CardBody>
+       
 
 <UncontrolledCollapse toggler="#togglerSellerQues5">
  
@@ -343,11 +343,11 @@ render() {
 
 </UncontrolledCollapse>
 
-        <CardBody>
+       
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerSellerQues6">What’s this about a cryptocurrency discount?</Button></h4></li>
           </ul>
-        </CardBody>
+        
       
 <UncontrolledCollapse toggler="#togglerSellerQues6">
  
@@ -359,11 +359,11 @@ render() {
 
 </UncontrolledCollapse>
 
-        <CardBody>
+        
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerSellerQues7">Do you offer fraud protection?</Button></h4></li>
           </ul>
-        </CardBody>
+        
 
         <UncontrolledCollapse toggler="#togglerSellerQues7">
  
@@ -375,11 +375,11 @@ render() {
 
 </UncontrolledCollapse>
 
-        <CardBody>
+        
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerSellerQues8">How do I get paid?</Button></h4></li>
           </ul>
-        </CardBody>
+       
 
 <UncontrolledCollapse toggler="#togglerSellerQues8">
  
@@ -395,11 +395,11 @@ render() {
 
 </UncontrolledCollapse>
 
-        <CardBody>
+        
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerSellerQues9">How much does it cost to sell on AcceptMyCrypto?</Button></h4></li>
           </ul>
-        </CardBody>
+        
 
 <UncontrolledCollapse toggler="#togglerSellerQues9">
  
@@ -412,11 +412,11 @@ render() {
 
 </UncontrolledCollapse>
 
-        <CardBody>
+        
             <ul className="Faq-qnaList">
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerSellerQues10">Does AcceptMyCyrpto provide tax documents at the end of the year?</Button></h4></li>
             </ul>
-        </CardBody>
+       
 
 <UncontrolledCollapse toggler="#togglerSellerQues10">
  
@@ -429,11 +429,11 @@ render() {
 
 </UncontrolledCollapse>
 
-          <CardBody>
+          
             <ul className="Faq-qnaList">
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerSellerQues11">Can I cancel/delete a listing I have already posted?</Button></h4></li>
             </ul>
-          </CardBody>
+          
 
 <UncontrolledCollapse toggler="#togglerSellerQues11">
  
@@ -445,12 +445,12 @@ render() {
 
 </UncontrolledCollapse>
 
-          <CardBody>
+         
             <ul className="Faq-qnaList">
               {/* <li><h4>Sell Your Items</h4></li> */}
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerSellerQues12">How do I manage my selling account?</Button></h4></li>
             </ul>
-          </CardBody>
+          
 
 <UncontrolledCollapse toggler="#togglerSellerQues12">
  
@@ -462,11 +462,11 @@ render() {
 
 </UncontrolledCollapse>
 
-        <CardBody>
+       
             <ul className="Faq-qnaList">
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerSellerQues13">How do I add inventory?</Button></h4></li>
             </ul>
-        </CardBody>
+        
 
 <UncontrolledCollapse toggler="#togglerSellerQues13">
  
@@ -478,11 +478,11 @@ render() {
 
 </UncontrolledCollapse>
 
-        <CardBody>
+        
             <ul className="Faq-qnaList">
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerSellerQues14">How will I know when I have a sale?</Button></h4></li>
             </ul>
-        </CardBody>
+       
 
 <UncontrolledCollapse toggler="#togglerSellerQues14">
  
@@ -494,11 +494,11 @@ render() {
 
 </UncontrolledCollapse>
 
-        <CardBody>
+       
             <ul className="Faq-qnaList">
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerSellerQues15">Can I offer gift-wrap and gift messaging services to my customers on AcceptMyCrypto.com?</Button></h4></li>
             </ul>
-        </CardBody>
+        
 
 <UncontrolledCollapse toggler="#togglerSellerQues15">
  
@@ -511,15 +511,15 @@ render() {
 </UncontrolledCollapse>
 </UncontrolledCollapse>
          
-<UncontrolledCollapse toggler="togglerBuyers">
+<UncontrolledCollapse toggler="buyers">
 
         <h4 className="faqMenuTitle">Buyers</h4>
 
-          <CardBody>
+         
             <ul className="Faq-qnaList">
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerBuyersQues1">The cryptocurrency I want to use is not supported on your site, what can I do?</Button></h4></li>
             </ul>
-        </CardBody>
+       
 
 <UncontrolledCollapse toggler="#togglerBuyersQues1">
  
@@ -533,11 +533,11 @@ render() {
 
 </UncontrolledCollapse>
 
-        <CardBody>
+        
             <ul className="Faq-qnaList">
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerBuyersQues2">Lost/Stolen/Damaged products, what can I do?</Button></h4></li>
             </ul>
-        </CardBody>
+        
 
 <UncontrolledCollapse toggler="#togglerBuyersQues2">
  
@@ -550,11 +550,11 @@ render() {
 
 </UncontrolledCollapse>
 
-        <CardBody>
+        
             <ul className="Faq-qnaList">
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerBuyersQues3">How do I request a refund/return?</Button></h4></li>
             </ul>
-        </CardBody>
+        
 
 <UncontrolledCollapse toggler="#togglerBuyersQues3">
  
@@ -568,11 +568,11 @@ render() {
 
 </UncontrolledCollapse>
 
-        <CardBody>
+       
             <ul className="Faq-qnaList">
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerBuyersQues4">Can I cancel my order?</Button></h4></li>
             </ul>
-        </CardBody>
+        
 
 <UncontrolledCollapse toggler="#togglerBuyersQues4">
  
@@ -585,11 +585,11 @@ render() {
 
 </UncontrolledCollapse>
 
-        <CardBody>
+        
             <ul className="Faq-qnaList">
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerBuyersQues5">Do I have a purchase history?</Button></h4></li>
             </ul>
-        </CardBody>
+        
 
 <UncontrolledCollapse toggler="#togglerBuyersQues5">
  
@@ -601,11 +601,11 @@ render() {
 
 </UncontrolledCollapse>
 
-        <CardBody>
+        
             <ul className="Faq-qnaList">
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerBuyersQues6">How can I contact the seller with any questions or concerns I may have?</Button></h4></li>
             </ul>
-        </CardBody>
+       
 
 <UncontrolledCollapse toggler="#togglerBuyersQues6">
  
@@ -618,15 +618,15 @@ render() {
 </UncontrolledCollapse>
 </UncontrolledCollapse>
 
-<UncontrolledCollapse toggler="togglerGuest">
+<UncontrolledCollapse toggler="guest">
 
       <h4 className="faqMenuTitle">Buying as a Guest</h4>
 
-        <CardBody>
+       
             <ul className="Faq-qnaList">
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerGuestQues1">How can I purchase an item on AcceptMyCrypto as a guest?</Button></h4></li>
             </ul>
-        </CardBody>
+       
 
 <UncontrolledCollapse toggler="#togglerGuestQues1">
  
@@ -639,11 +639,11 @@ render() {
 
 </UncontrolledCollapse>
 
-        <CardBody>
+       
             <ul className="Faq-qnaList">
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerGuestQues2">Will I receive an order confirmation email?</Button></h4></li>
             </ul>
-        </CardBody>
+        
 
 <UncontrolledCollapse toggler="#togglerGuestQues2">
  
@@ -655,11 +655,11 @@ render() {
 
 </UncontrolledCollapse>
 
-        <CardBody>
+        
             <ul className="Faq-qnaList">
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerGuestQues3">Can I track my order when buying as a guest?</Button></h4></li>
             </ul>
-        </CardBody>
+        
 
 <UncontrolledCollapse toggler="#togglerGuestQues3">
  
@@ -671,11 +671,11 @@ render() {
 
 </UncontrolledCollapse>
 
-        <CardBody>
+        
             <ul className="Faq-qnaList">
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerGuestQues4">Can I return something if I checked out as a guest?</Button></h4></li>
             </ul>
-        </CardBody>
+        
 
 <UncontrolledCollapse toggler="#togglerGuestQues4">
  
@@ -687,11 +687,11 @@ render() {
 
 </UncontrolledCollapse>
 
-        <CardBody>
+        
             <ul className="Faq-qnaList">
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerGuestQues5">How do I register an account on AcceptMyCrypto?</Button></h4></li>
             </ul>
-        </CardBody>
+       
 
 <UncontrolledCollapse toggler="#togglerGuestQues5">
  
