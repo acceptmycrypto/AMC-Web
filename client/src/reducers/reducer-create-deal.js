@@ -53,7 +53,8 @@ const handleImageRemove = (images, imageKey) => {
 }
 
 const CalculateDiscountPrice = (basePrice, discount) => {
-  return basePrice - (basePrice * (discount/100))
+  // return basePrice - (basePrice * (discount/100))
+  return ((100-discount)/100) * basePrice;
 }
 
 export default function CreateDealReducer(state = initialState, action) {
@@ -204,7 +205,9 @@ export default function CreateDealReducer(state = initialState, action) {
     case "SAVE_SHIPPING_MODAL":
       return {
         ...state,
-        modalVisible: false
+        modalVisible: false,
+        priceInUSD: action.payload.priceInUSD,
+        priceInCrypto: action.payload.priceInCrypto
       };
 
     case "SHOW_WEIGHT_MODAL":
