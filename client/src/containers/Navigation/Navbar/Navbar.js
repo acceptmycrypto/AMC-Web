@@ -10,6 +10,8 @@ import Category from "./Category";
 import { resetNavbar } from "../../../actions/navbarActions";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
 import { _loadChatSessions } from "../../../actions/chatActions";
+import {resetDealitemState} from "../../../actions/dealItemActions"
+
 
 
 class Navbar extends Component {
@@ -65,7 +67,7 @@ class Navbar extends Component {
     return (
       <header className="Toolbar">
         <div className="nav-left">
-          <Link onClick={this.resetNavbar} to="/" className="Logo">
+          <Link onClick={() => {this.resetNavbar(); this.props.resetDealitemState();}} to="/" className="Logo">
             <div className="font-17 color-deepBlue">
               <img className="navbar_logo" src="https://s3-us-west-1.amazonaws.com/acceptmycrypto/logo.png" alt="logo" />
               <span className="ml-2">
@@ -89,7 +91,7 @@ class Navbar extends Component {
             ?
             <div>
               <li>
-                <Link onClick={this.props.resetNavbar} to="/listdeal">
+                <Link onClick={() => {this.resetNavbar(); this.props.resetDealitemState();}} to="/listdeal">
                   {window.location.pathname == "/listdeal"
                     ? <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17 teal-underline font-family-roboto">Create a Deal</span></i>
                     : <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17 font-family-roboto">Create a Deal</span></i>
@@ -97,7 +99,7 @@ class Navbar extends Component {
                 </Link>
               </li>
               <li>
-                <Link onClick={this.props.resetNavbar} to="/chat">
+                <Link onClick={() => {this.resetNavbar(); this.props.resetDealitemState();}} to="/chat">
                   {this.handleMessageNotification() && <div className="message-notification"></div>}
                   <i className="fas fa-comments fa-lg"></i>
                 </Link>
@@ -106,7 +108,7 @@ class Navbar extends Component {
 
             : <div>
                 <li>
-                  <Link onClick={this.props.resetNavbar} to="/SignIn">
+                  <Link onClick={() => {this.resetNavbar(); this.props.resetDealitemState();}} to="/SignIn">
                     {window.location.pathname == "/SignIn"
                       ? <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17 teal-underline font-family-roboto">Create a Deal</span></i>
                       : <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17 font-family-roboto">Create a Deal</span></i>
@@ -159,7 +161,7 @@ const mapStateToProps = state => ({
 });
 
 const matchDispatchToProps = dispatch => {
-  return bindActionCreators({ _isLoggedIn, _loadPhoto, resetNavbar, _loadChatSessions }, dispatch);
+  return bindActionCreators({ _isLoggedIn, _loadPhoto, resetNavbar, _loadChatSessions, resetDealitemState }, dispatch);
 }
 
 

@@ -16,18 +16,30 @@
 
       <mj-column>
         <mj-text color="#fff" font-size="20px" align="center" line-height="20px">
-          Thank You for Your Purchase of <%=deal_name%>
+          Thank You for Your Interest In
+          <%= deal_name %>
+        </mj-text>
+        <mj-text color="#fff" font-size="20px" align="center" line-height="20px">
+          Sold by
+          <%= seller_name%>
         </mj-text>
         <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
-          Your order number is <%= txn_id %>
+          The Deal is Reserved for you for <%= time_left%> hours.
+        </mj-text>
+        <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
+          Please send <%= amount %> <%=crypto%>
         </mj-text>
         <mj-text color="#fff" font-size="15px" align="center" line-height="15px">
-          Your order has been processed. An email will be sent to you when your order ships.
+          To the Address: <%= address%>
         </mj-text>
 
-        <mj-button background-color="#F63A4D" href="<%=view_order%>">
-          View Your Order
+        <mj-button background-color="#6bd9c7" color="#2e4157" href="<%=view_deal%>">
+          View The Deal
         </mj-button>
+
+        <mj-text color="#fff" font-size="15px" align="center" line-height="15px">
+          Please contact support@acceptmycrypto.com for any questions or concerns.
+        </mj-text>
 
       </mj-column>
 
