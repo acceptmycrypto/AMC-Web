@@ -29,6 +29,7 @@
     "bluebird": "^3.5.3",
     "body-parser": "^1.18.3",
     "cheerio": "^1.0.0-rc.2",
+    "clarifai": "^2.9.0",
     "coinpayments": "^1.1.8",
     "coinpayments-ipn": "^1.0.0",
     "concurrently": "^4.0.1",

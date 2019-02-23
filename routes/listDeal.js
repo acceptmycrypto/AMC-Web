@@ -18,6 +18,14 @@ const uploadFile =  require ("./utils/file_upload");
 // create S3 instance
 const s3 = new AWS.S3();
 
+
+// creating clarifai - image recognition
+const Clarifai = require('clarifai');
+// initialize with your api key. This will also work in your browser via http://browserify.org/
+const clar = new Clarifai.App({
+ apiKey: 'a8a324ce95b74254ad0ece04c0a8171e'
+});
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride('_method'));
@@ -38,7 +46,7 @@ const connection = mysql.createConnection({
 
 router.post("/image/upload", verifyToken, function(request, response) {
   let user_id = request.decoded._id;
-
+ 
   const form = new multiparty.Form(); // parse a file upload
     form.parse(request, async (error, fields, files) => {
       if (error) throw new Error(error);
@@ -49,6 +57,42 @@ router.post("/image/upload", verifyToken, function(request, response) {
         const timestamp = Date.now().toString();
         const fileName = `dealsImages/user_id-${user_id}/${timestamp}`;
         const data = await uploadFile(buffer, fileName, type);
+
+
+        // {"ETag":"\"920876bfe74d0ff06ab05241eb4a1661\"","Location":"https://acceptmycrypto.s3.us-west-1.amazonaws.com/dealsImages/user_id-1/1550954878593.jpg","key":"dealsImages/user_id-1/1550954878593.jpg","Key":"dealsImages/user_id-1/1550954878593.jpg","Bucket":"acceptmycrypto"}
+
+        let stringImage = JSON.stringify(data.Location);
+
+        // app.models.predict("a403429f2ddf4b49b307e318f00e528b", "https://samples.clarifai.com/face-det.jpg").then(
+        //   function(response) {
+        //     // do something with response
+        //   },
+        //   function(err) {
+        //     // there was an error
+        //   }
+        // );
+
+        try {
+          clar.models.predict("a403429f2ddf4b49b307e318f00e528b", "https://acceptmycrypto.s3.us-west-1.amazonaws.com/dealsImages/user_id-1/1550954878593.jpg").then(
+            function(responseModel) {
+              console.log("You made it in the model");
+              console.log("Response Model stuff: " + JSON.stringify(responseModel));
+            },
+            function(err) {
+              console.log("somethings wrong" + err);
+              // there was an error
+            }
+          );
+        } catch (err) {
+          console.log("In catch place "+err);
+        }
+
+
+
+        console.log("YOURE IN THE FKING UPLOAD ROUTE.. DATA: " + JSON.stringify(data.Location));
+        console.log(response.status(200).json(data));
+
+
         return response.status(200).json(data);
       } catch (error) {
         return response.status(400).json(error);
