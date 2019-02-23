@@ -371,7 +371,7 @@ export default function CreateDealReducer(state = initialState, action) {
       for (let category in deal_category) {
         let value = deal_category[category];
         let label = deal_category[category];
-        categoryObj = {...categoryObj, label, value}
+        categoryObj = {label, value}
         deal_selected_category.push(categoryObj);
       }
 
