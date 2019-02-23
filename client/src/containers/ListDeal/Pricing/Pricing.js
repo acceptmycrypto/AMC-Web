@@ -68,9 +68,14 @@ class Pricing extends Component {
         <div>
             <div className="shipping-weight-title mt-4">The Shipping Cost That Will Be <span style={{color:"#5ED0C0"}}>Withdrawn</span> From Your Account: <span style={{color:"#5ED0C0"}}>${shippingPriceSelection.toFixed(2)}</span></div>
 
+          {/* {shippingPriceLessThanPriceAfterDiscount !== null &&
+            <div>Your entered discount price: ${this.props.priceInCrypto} is less than the selected shipping cost.</div>
+            <div></div>
+          } */}
+
             <div className="d-flex flex-row justify-content-between">
               <button className="weight-option-button" onClick={this.exitShippingModal}>Cancel</button>
-              <button className="weight-option-button" onClick={_saveShippingModal}>Save</button>
+              <button className="weight-option-button" onClick={this.evaluatePricing}>Save</button>
             </div>
         </div>
         }
@@ -95,6 +100,22 @@ class Pricing extends Component {
     document.querySelector("#weight-40").checked= false;
     document.querySelector("#weight-70").checked= false;
     this.props._exitShippingModal();
+  }
+
+  evaluatePricing = async () =>{
+
+    const{priceInUSD, priceInCrypto, discountPercent, shippingPriceSelection} = this.props;
+    
+    let newPriceInCrypto, newPriceInUSD;
+
+    if(shippingPriceSelection > (0.975 * priceInCrypto)){
+        newPriceInCrypto = ((shippingPriceSelection) / 0.975).toFixed(2);
+        newPriceInUSD = (newPriceInCrypto/((100-discountPercent)/100)).toFixed(2);
+    }else{
+      newPriceInCrypto = priceInCrypto;
+      newPriceInUSD = priceInUSD;
+    }
+    await this.props._saveShippingModal(newPriceInUSD, newPriceInCrypto);
   }
   render() {
     const{shippingLabelOption, shippingLabelSelection, modalVisible, _showWeightModal} = this.props
@@ -227,6 +248,10 @@ class Pricing extends Component {
                 <span className="ml-2 shipping-font">Ship On Your Own</span><br/>
                 <div className="small-shipping-font">You arrange your own label</div>
               </div>
+
+              <div className="shipping-margin-left">
+                <div></div>
+              </div>
               
             </form>
             <Modal
@@ -270,6 +295,9 @@ const mapStateToProps = state => ({
   shippingWeightSelection: state.CreateDeal.shippingWeightSelection,
   shippingPriceSelection: state.CreateDeal.shippingPriceSelection,
   modalVisible: state.CreateDeal.modalVisible,  
+  discountPercent: state.CreateDeal.discountPercent,
+  priceInUSD: state.CreateDeal.priceInUSD,
+  priceInCrypto: state.CreateDeal.priceInCrypto ,
 
 });
 
