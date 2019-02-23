@@ -334,6 +334,7 @@ class DealItem extends Component {
             selectedOption,
             transaction_loading,
             paymentInfo,
+            transaction_status,
             createPaymentButtonClicked,
             showDetailStep,
             showShippingStep,
