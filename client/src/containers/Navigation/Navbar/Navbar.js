@@ -90,7 +90,7 @@ class Navbar extends Component {
             ?
             <div>
               <li>
-                <Link onClick={() => {this.resetNavbar(); this.props.resetDealitemState();}} to="/listdeal">
+                <Link onClick={() => {this.resetNavbar(); this.props.resetDealitemState(); }} to="/listdeal">
                   {window.location.pathname == "/listdeal"
                     ? <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17 teal-underline font-family-roboto">Create a Deal</span></i>
                     : <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17 font-family-roboto">Create a Deal</span></i>
@@ -107,8 +107,8 @@ class Navbar extends Component {
 
             : <div>
                 <li>
-                  <Link onClick={() => {this.resetNavbar(); this.props.resetDealitemState();}} to="/SignIn">
-                    {window.location.pathname == "/SignIn"
+                  <Link onClick={() => {this.resetNavbar(); this.props.resetDealitemState();}} to="/listdeal">
+                    {window.location.pathname == "/listdeal"
                       ? <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17 teal-underline font-family-roboto">Create a Deal</span></i>
                       : <i className="fas fa-store fa-lg"> <span className="color-deepBlue font-17 font-family-roboto">Create a Deal</span></i>
                     }
