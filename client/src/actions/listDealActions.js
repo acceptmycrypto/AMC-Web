@@ -193,7 +193,7 @@ export const weightOption = event => {
   }
   return({
     type: "SELECT_WEIGHT_OPTION",
-    payload: {shippingWeightSelection: event.target.value, shippingPriceSelection}
+    payload: {shippingWeightSelection: event.target.value, shippingPriceSelection: shippingPriceSelection.toFixed(2)}
   });
   
 };
@@ -202,8 +202,9 @@ export const _exitShippingModal = () => ({
   type: "EXIT_SHIPPING_MODAL",
 });
 
-export const _saveShippingModal = () => ({
+export const _saveShippingModal = (priceInUSD, priceInCrypto) => ({
   type: "SAVE_SHIPPING_MODAL",
+  payload: {priceInUSD, priceInCrypto}
 });
 
 
