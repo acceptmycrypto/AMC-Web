@@ -3,7 +3,8 @@ import "./UploadingImage.css";
 
 const UploadingImage = props => {
   const { viewImage, uploadedImages, uploadImage, imageIsOnPreview, removeImage } = props;
-
+  console.log(uploadedImages);
+  // debugger;
   return (
     <div className="deal-listing-content">
       <div className="deal-listing-shown-image-container">

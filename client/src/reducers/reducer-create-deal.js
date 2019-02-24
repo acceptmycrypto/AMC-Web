@@ -10,6 +10,7 @@ const initialState = {
   images: [],
   imageView: "",
   uploading: false,
+  hashtags: {},
   error: null,
   showPhotosStep: true,
   showPricingStep: false,
@@ -59,6 +60,12 @@ const handleImageRemove = (images, imageKey) => {
   return newImageArr
 }
 
+const handleHashtagsRemove = (hashtags, imageKey) =>{
+  delete hashtags[imageKey];
+  return hashtags;
+
+}
+
 const CalculateDiscountPrice = (basePrice, discount) => {
   return basePrice - (basePrice * (discount/100))
 }
@@ -80,9 +87,10 @@ export default function CreateDealReducer(state = initialState, action) {
       return {
         ...state,
         uploading: false,
-        imageData: action.payload,
-        imageView: action.payload.Location,
-        images: handleImagesUpload(state.images, action.payload)
+        imageData: action.payload.imageData,
+        imageView: action.payload.imageData.Location,
+        images: handleImagesUpload(state.images, action.payload.imageData),
+        hashtags: {...state.hashtags, [action.payload.imageData.key]: action.payload.hashtags}
       };
 
     case "UPLOADING_IMAGES_FAILURE":
@@ -92,7 +100,8 @@ export default function CreateDealReducer(state = initialState, action) {
         error: action.payload.error,
         imageData: null,
         imageView: "",
-        images: []
+        images: [],
+        hashtags: {},
       };
 
     case "VIEW_UPLOADED_IMAGE":
@@ -104,7 +113,8 @@ export default function CreateDealReducer(state = initialState, action) {
     case "REMOVE_UPLOADED_IMAGE":
       return {
         ...state,
-        images: handleImageRemove(state.images, action.payload)
+        images: handleImageRemove(state.images, action.payload),
+        hashtags: handleHashtagsRemove(state.hashtags, action.payload),
       };
 
     case "SHOW_PHOTOS_UPLOADING":
