@@ -57,7 +57,7 @@ router.post("/image/upload", verifyToken, function(request, response) {
       try {
         const path = files.file[0].path; //get the file path
         const buffer = fs.readFileSync(path); //return the content of the path in buffer
-        let x = "https://acceptmycrypto.s3.us-west-1.amazonaws.com/dealsImages/user_id-1/1550954878593.jpg"
+        // let x = "https://acceptmycrypto.s3.us-west-1.amazonaws.com/dealsImages/user_id-1/1550954878593.jpg"
         
         let buff = buffer.toString('base64');
 
@@ -88,7 +88,7 @@ router.post("/image/upload", verifyToken, function(request, response) {
         } else{
           let data = null;
           let hashtags = null;
-            return response.json({data, hahstags});
+            return response.json({data, hashtags});
         }
 
         
