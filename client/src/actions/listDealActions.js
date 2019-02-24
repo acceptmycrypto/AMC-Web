@@ -17,7 +17,7 @@ export function _uploadImage(token, imageData) {
     return fetch("/image/upload", settings)
       .then(res => res.json())
       .then(jsonImage => {
-        dispatch(uploadingImageSuccess(jsonImage));
+        dispatch(uploadingImageSuccess(jsonImage.data, jsonImage.hashtags));
         return jsonImage;
       })
       .catch(error => dispatch(uploadingImageFailure(error)));
@@ -28,9 +28,9 @@ export const uploadingImageBegin = () => ({
   type: "UPLOADING_IMAGES_BEGIN"
 });
 
-export const uploadingImageSuccess = imageData => ({
+export const uploadingImageSuccess = (imageData, hashtags) => ({
   type: "UPLOADING_IMAGES_SUCCESS",
-  payload: imageData
+  payload: {imageData, hashtags}
 });
 
 export const uploadingImageFailure = error => ({
