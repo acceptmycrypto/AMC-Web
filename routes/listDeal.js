@@ -14,7 +14,7 @@ const fs = require('fs');
 const fileType = require('file-type');
 const multiparty = require('multiparty');
 const uploadFile =  require ("./utils/file_upload");
-const clarifyObj = require("./utils/clarifai_checker");
+
 
 // create S3 instance
 const s3 = new AWS.S3();
@@ -24,8 +24,11 @@ const s3 = new AWS.S3();
 const Clarifai = require('clarifai');
 // initialize with your api key. This will also work in your browser via http://browserify.org/
 const clar = new Clarifai.App({
- apiKey: 'a8a324ce95b74254ad0ece04c0a8171e'
+ apiKey: process.env.CLARIFAI_KEY
 });
+
+const clarifaiFunc = require("./utils/clarifai_checker");
+
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -56,7 +59,11 @@ router.post("/image/upload", verifyToken, function(request, response) {
         const buffer = fs.readFileSync(path); //return the content of the path in buffer
         let x = "https://acceptmycrypto.s3.us-west-1.amazonaws.com/dealsImages/user_id-1/1550954878593.jpg"
         
-        const clarifyStuff = clarifyObj(x);
+        let buff = buffer.toString('base64');
+
+        // console.log(buff);
+        // const clarifyStuff = clarifaiFunc.generalClarifai(x);
+        const clarifaiWithBytes = clarifaiFunc.generalClarifaiBytes(buff);
 
         const type = fileType(buffer); //return { ext: 'png', mime: 'image/png' }
         const timestamp = Date.now().toString();
@@ -112,8 +119,8 @@ router.post("/image/upload", verifyToken, function(request, response) {
 
 
 
-        console.log("YOURE IN THE FKING UPLOAD ROUTE.. DATA: " + JSON.stringify(data.Location));
-        console.log(response.status(200).json(data));
+        // console.log("YOURE IN THE FKING UPLOAD ROUTE.. DATA: " + JSON.stringify(data.Location));
+        // console.log(response.status(200).json(data));
 
 
         return response.status(200).json(data);
