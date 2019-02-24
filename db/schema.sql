@@ -361,6 +361,21 @@ CREATE TABLE chat_messages(
 	FOREIGN KEY (chat_session_id) REFERENCES chat_sessions(id)
 );
 
+
+CREATE TABLE hashtag (
+	id INT NOT NULL AUTO_INCREMENT,
+	hashtag_name VARCHAR(100) NOT NULL,
+	PRIMARY KEY (id)
+);
+
+
+CREATE TABLE hashtags_deals(
+	hashtag_id INT NOT NULL,
+	deals_id INT NOT NULL,
+	FOREIGN KEY (hashtag_id) REFERENCES hashtag(id),
+	FOREIGN KEY (deals_id) REFERENCES deals(id)
+);
+
 -- table to be used in the future
 -- custom options to be displayed when user is listing an item to sell eg. size, color, model etc based on the categoryies of the item
 -- CREATE TABLE customizable_option(
@@ -490,19 +505,7 @@ CREATE TABLE chat_messages(
 -- );
 
 
--- CREATE TABLE hashtag (
--- 	id INT NOT NULL AUTO_INCREMENT,
--- 	hashtag_name VARCHAR(100) NOT NULL,
--- 	PRIMARY KEY (id)
--- );
 
-
--- CREATE TABLE hashtags_deals(
--- 	hashtag_id INT NOT NULL,
--- 	deals_id INT NOT NULL,
--- 	FOREIGN KEY (hashtag_id) REFERENCES hashtag(id),
--- 	FOREIGN KEY (deals_id) REFERENCES deals(id)
--- );
 
 -- CREATE TABLE buyers_reviews_deals (
 -- 	id INT NOT NULL AUTO_INCREMENT,
