@@ -63,67 +63,35 @@ router.post("/image/upload", verifyToken, function(request, response) {
 
         // console.log(buff);
         // const clarifyStuff = clarifaiFunc.generalClarifai(x);
-        const clarifaiWithBytes = clarifaiFunc.generalClarifaiBytes(buff);
 
-        const type = fileType(buffer); //return { ext: 'png', mime: 'image/png' }
-        const timestamp = Date.now().toString();
-        const fileName = `dealsImages/user_id-${user_id}/${timestamp}`;
-
-        const data = await uploadFile(buffer, fileName, type);
-
-
-        // {"ETag":"\"920876bfe74d0ff06ab05241eb4a1661\"","Location":"https://acceptmycrypto.s3.us-west-1.amazonaws.com/dealsImages/user_id-1/1550954878593.jpg","key":"dealsImages/user_id-1/1550954878593.jpg","Key":"dealsImages/user_id-1/1550954878593.jpg","Bucket":"acceptmycrypto"}
-
-        // let stringImage = JSON.stringify(data.Location);
-
-        // console.log("TYPE OF : "+ typeof stringImage);
-
-        // app.models.predict("a403429f2ddf4b49b307e318f00e528b", "https://samples.clarifai.com/face-det.jpg").then(
-        //   function(response) {
-        //     // do something with response
-        //   },
-        //   function(err) {
-        //     // there was an error
-        //   }
-        // );
-
-        // try {
-        //   clar.models.predict("a403429f2ddf4b49b307e318f00e528b", "https://acceptmycrypto.s3.us-west-1.amazonaws.com/dealsImages/user_id-1/1550954878593.jpg").then(
-        //     function(responseModel) {
-        //       console.log("You made it in the model");
-        //       console.log("Response Model stuff: " + JSON.stringify(responseModel));
-        //       console.log("========================");
-        //       // console.log("Outputs: " + JSON.stringify(responseModel.outputs[0].data));
-        //     },
-        //     function(err) {
-        //       console.log("somethings wrong" + err);
-        //       // there was an error
-        //     }
-        //   );
-        // } catch (err) {
-        //   console.log("In catch place "+err);
-        // }
         
-        // try {
-        //   clar.models.initModel({id: Clarifai.GENERAL_MODEL, version: "aa7f35c01e0642fda5cf400f543e7c40"}).then(generalModel => {
-        //     return generalModel.predict(data.Location);
-        //   }).then(generalResponse => {
-        //     console.log("======================");
-        //     // console.log(generalResponse);
-        //     var concepts = generalResponse['outputs'][0]['data']['concepts'];
-        //     console.log(concepts);
-        //   })
-        // } catch(err) {
-        //   console.log("In catch place "+err);
-        // }
+        // 
 
+        const modWithBytes = await clarifaiFunc.moderationClarifaiBytes(buff);
+        const nsfwWithBytes = await clarifaiFunc.nsfwClarifaiBytes(buff);
+        // console.log(modWithBytes[0].name); 
+        // console.log(nsfwWithBytes[0].name);
+        //  modWithBytes[0].name will be either safe or drug, gore, suggestive, explicit
+        //  nsfwWithBytes[0].name will be either nsfw or sfw
+        if(modWithBytes[0].name === "safe" && nsfwWithBytes[0].name === "sfw"){
+          const clarifaiWithBytes = await clarifaiFunc.generalClarifaiBytes(buff);
+          const hashtags = [clarifaiWithBytes[0]["name"], clarifaiWithBytes[1]["name"], clarifaiWithBytes[2]["name"]];
+          const type = fileType(buffer); //return { ext: 'png', mime: 'image/png' }
+          const timestamp = Date.now().toString();
+          const fileName = `dealsImages/user_id-${user_id}/${timestamp}`;
+  
+          let data = await uploadFile(buffer, fileName, type);
+          
+  
+          return response.status(200).json({data, hashtags});
 
+        } else{
+          let data = null;
+          let hashtags = null;
+            return response.json({data, hahstags});
+        }
 
-        // console.log("YOURE IN THE FKING UPLOAD ROUTE.. DATA: " + JSON.stringify(data.Location));
-        // console.log(response.status(200).json(data));
-
-
-        return response.status(200).json(data);
+        
       } catch (error) {
         return response.status(400).json(error);
       }
