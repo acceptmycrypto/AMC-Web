@@ -17,14 +17,43 @@ const generalClarifai = (x) => clar.models.initModel({ id: Clarifai.GENERAL_MODE
 
 const generalClarifaiBytes = (buffer) => clar.models.predict(Clarifai.GENERAL_MODEL, { base64: buffer}).then(
   function (response) {
-    console.log(response['outputs'][0]['data']['concepts']);
+    // console.log(response['outputs'][0]['data']['concepts']);
+    return response['outputs'][0]['data']['concepts'];
   },
   function (err) {
     // there was an error
     console.log("error", err);
+    return err;
 
   }
 );
+
+const moderationClarifaiBytes = (buffer) => clar.models.predict("d16f390eb32cad478c7ae150069bd2c6", { base64: buffer}).then(
+  function (response) {
+    // console.log(response['outputs'][0]['data']['concepts']);
+    return response['outputs'][0]['data']['concepts'];
+  },
+  function (err) {
+    // there was an error
+    console.log("error", err);
+    return err;
+
+  }
+);
+
+const nsfwClarifaiBytes = (buffer) => clar.models.predict("e9576d86d2004ed1a38ba0cf39ecb4b1", { base64: buffer}).then(
+  function (response) {
+    // console.log(response['outputs'][0]['data']['concepts']);
+    return response['outputs'][0]['data']['concepts'];
+  },
+  function (err) {
+    // there was an error
+    console.log("error", err);
+    return err;
+
+  }
+);
+
 
 
 // clar.models.initModel({ id: Clarifai.GENERAL_MODEL, version: "aa7f35c01e0642fda5cf400f543e7c40" }).then(generalModel => {
@@ -37,4 +66,4 @@ const generalClarifaiBytes = (buffer) => clar.models.predict(Clarifai.GENERAL_MO
 // })
 
 
-module.exports = { generalClarifai, generalClarifaiBytes };
+module.exports = { generalClarifai, generalClarifaiBytes, moderationClarifaiBytes, nsfwClarifaiBytes };
