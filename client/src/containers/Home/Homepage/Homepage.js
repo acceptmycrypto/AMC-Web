@@ -36,13 +36,21 @@ class Homepage extends Component {
     console.log("all", homepage_deals.all_results);
     console.log("recent", homepage_deals.recent_deals);
 
+    const header_one = () => {
+      return (
+        <div>
+          Buy and Sell <strong>Almost Anything</strong> for <strong>Cryptocurrency</strong>
+        </div>
+      )
+    }
+
     const carouselItems = [
       {
         src: './assets/images/banner1.svg',
         // src: 'https://static.bhphoto.com/images/images500x500/Rosco_102354264825_E_Colour_5426_Blueberry_Blue_1233286396000_595543.jpg',
         altText: 'Slide 1',
-        caption: 'AcceptMyCrypto is the easiest marketplace to buy and sell discounted items for cryptocurrency',
-        header: 'Buy and Sell Anything for Cryptocurrency'
+        caption: 'AcceptMyCrypto is the easiest marketplace to buy and sell discounted items for crypto',
+        header: header_one()
       },
       {
         src: './assets/images/banner2.svg',
