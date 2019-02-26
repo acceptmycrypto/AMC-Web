@@ -493,9 +493,15 @@ router.post('/listdeal/edit', verifyToken, function(req, res) {
 
 })
 
-router.post('listdeal/delete', verifyToken, function(req, res) {
-  let user_id = req.decoded._id;
-  let {deal_id} = req.body.deal_id;
+router.post('/listdeal/delete', verifyToken, function(req, res) {
+  let {deal_id} = req.body;
+  
+  connection.query("UPDATE deals SET ? WHERE ?",
+  [{ deal_status: "deleted"}, {id: deal_id}],
+  function (error, results, fields) {
+    if (error) console.log(error);
+    res.json({success: true, message: "Successfully Deleted!"})
+  });
 })
 
 //to be used for /verification/check

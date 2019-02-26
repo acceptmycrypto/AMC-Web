@@ -31,7 +31,11 @@ const initialState = {
   dealEditedError: null,
   alertEditCancelModalVisible: false,
   creatingDealError: null,
+  alertDeleteModalVisible: false,
   dealCreated: {},
+  dealDeleted: {},
+  deletingDealError: null,
+  deletingDealLoading: null,
   modalVisible: false,
   phoneNumber: null,
   sellerAddress: null,
@@ -269,6 +273,18 @@ export default function CreateDealReducer(state = initialState, action) {
         alertEditCancelModalVisible: action.payload.visible
       };
 
+    case "OPEN_DELETE_ALERT_MODAL":
+      return {
+        ...state,
+        alertDeleteModalVisible: action.payload.visible
+      };
+
+    case "CLOSE_DELETE_ALERT_MODAL":
+      return {
+        ...state,
+        alertDeleteModalVisible: action.payload.visible
+      };
+
     case "RESET_EDIT_LISTING":
       return {
         ...initialState
@@ -396,6 +412,27 @@ export default function CreateDealReducer(state = initialState, action) {
         selectedCategory: deal_selected_category,
         selectedCondition: deal_item_condition,
         editorState
+      };
+
+    case "DELETE_DEAL_BEGIN":
+      return {
+        ...state,
+        deletingDealLoading: true,
+        deletingDealError: null
+      };
+
+    case "DELETE_DEAL_SUCCESS":
+      return {
+        ...state,
+        deletingDealLoading: false,
+        dealDeleted: action.payload
+      };
+
+    case "DELETE_DEAL_FAILURE":
+      return {
+        ...state,
+        deletingDealLoading: false,
+        deletingDealError: action.payload.error,
       };
 
     default:

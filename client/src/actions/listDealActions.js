@@ -438,40 +438,51 @@ export const closeAlertEditCancelModal = () => {
   }
 };
 
-export function _deleteDeal(token, dealItem) {
+export const openDeleteAlertModal = () => {
+  return {
+      type: 'OPEN_DELETE_ALERT_MODAL',
+      payload: {visible: true}
+  }
+};
 
+export const closeDeleteAlertModal = () => {
+  return {
+      type: 'CLOSE_DELETE_ALERT_MODAL',
+      payload: {visible: false}
+  }
+};
+
+export function _deleteDeal(token, deal_id) {
   const settings = {
     method: "POST",
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({token, dealItem})
+    body: JSON.stringify({token, deal_id})
   };
-
   return dispatch => {
-    dispatch(deleteDealBegin());
-    return fetch("/listdeal", settings)
+    dispatch(deleteListingDealBegin());
+    return fetch("/listdeal/delete", settings)
       .then(res => res.json())
-      .then(jsonDealDeleted => {
-
-        dispatch(deleteDealSuccess(jsonDealDeleted));
-        return jsonDealDeleted;
+      .then(jsonDeleted => {
+        dispatch(deleteListingDealSuccess(jsonDeleted));
+        return jsonDeleted;
       })
-      .catch(error => dispatch(deleteDealFailure(error)));
+      .catch(error => dispatch(deleteListingDealFailure(error)));
   };
 }
 
-export const deleteDealBegin = () => ({
+export const deleteListingDealBegin = () => ({
   type: "DELETE_DEAL_BEGIN"
 });
 
-export const deleteDealSuccess = dealCreated => ({
+export const deleteListingDealSuccess = dealDeleted => ({
   type: "DELETE_DEAL_SUCCESS",
-  payload: dealCreated
+  payload: dealDeleted
 });
 
-export const deleteDealFailure = error => ({
+export const deleteListingDealFailure = error => ({
   type: "DELETE_DEAL_FAILURE",
   payload: { error }
 });

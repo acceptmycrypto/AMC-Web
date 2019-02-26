@@ -52,8 +52,8 @@ router.get('/home/deals/:category_id', function (req, res) {
     let category_id = req.params.category_id;
 
     connection.query(
-        'SELECT DISTINCT deals.id, deals.deal_status, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, venues.venue_name, venues.venue_link, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings FROM deals LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN cryptos_deals ON cryptos_deals.deal_id = deals.id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON  categories_deals.deals_id = deals.id WHERE categories_deals.category_id = ? ORDER BY deals.date_created DESC LIMIT 15',
-        [category_id],
+        'SELECT DISTINCT deals.id, deals.deal_status, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, venues.venue_name, venues.venue_link, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings FROM deals LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN cryptos_deals ON cryptos_deals.deal_id = deals.id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON  categories_deals.deals_id = deals.id WHERE categories_deals.category_id = ? AND deals.deal_status <> ? ORDER BY deals.date_created DESC LIMIT 15',
+        [category_id, "deleted"],
         function (error, results, fields) {
           if (error) console.log(error);
           res.json(results);
@@ -73,7 +73,7 @@ router.get('/home/categorized/deals', function (req, res) {
 
     let query_statement = "";
     for(let i = 0; i < 14; i++){
-        query_statement += `(SELECT ${select_statement} WHERE category.id = ${i} ORDER BY deals.date_created DESC LIMIT 15)`
+        query_statement += `(SELECT ${select_statement} WHERE category.id = ${i} AND (deals.deal_status IS NULL OR deals.deal_status <> 'deleted') ORDER BY deals.date_created DESC LIMIT 15)`
         if(i !== 13){
             query_statement += ` UNION ALL `
         }
@@ -82,6 +82,7 @@ router.get('/home/categorized/deals', function (req, res) {
        query_statement,
         function (error, results, fields) {
           if (error) console.log(error);
+          console.log(results)
           let cat_1 =[], cat_2 =[], cat_3 =[], cat_4 = [], cat_5 = [], cat_6 = [], cat_7 = [], cat_8 = [], cat_9 =[], cat_10 =[], cat_11=[], cat_12=[], cat_13 =[];
             for(let i = 0; i< results.length; i++){
                 switch(results[i].category_id){
@@ -139,7 +140,8 @@ router.get('/home/categorized/deals', function (req, res) {
 
                 // }
 
-                connection.query( `(SELECT ${recent_select_statement} ORDER BY deals.date_created DESC LIMIT 15)`,
+                connection.query( `(SELECT ${recent_select_statement} WHERE deals.deal_status <> ? ORDER BY deals.date_created DESC LIMIT 15)`,
+                    ["deleted"],
                     function(error, recent_deals, fields) {
                         // if (error) console.log(error);
                         // console.log('search results');
@@ -176,8 +178,8 @@ router.get('/api/category', function(req, res) {
 
             connection.query(
                 //second query is to give back the set of search results specified by 'start' and 'numberPerPage'
-                'SELECT DISTINCT deals.id, deals.deal_status, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, venues.venue_name, venues.venue_link, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings FROM deals LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN cryptos_deals ON cryptos_deals.deal_id = deals.id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN category ON category.id = categories_deals.category_id WHERE (category_name LIKE ?) LIMIT ?, ?',
-                ['%'+req.query.term+'%', start, numberPerPage],
+                'SELECT DISTINCT deals.id, deals.deal_status, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, venues.venue_name, venues.venue_link, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings FROM deals LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN cryptos_deals ON cryptos_deals.deal_id = deals.id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN category ON category.id = categories_deals.category_id WHERE (category_name LIKE ?) AND deals.deal_status <> ? LIMIT ?, ?',
+                ['%'+req.query.term+'%', "deleted", start, numberPerPage],
                 function(error, results, fields) {
                     if (error) console.log(error);
                     console.log('search results');

@@ -293,6 +293,15 @@ class ListDeal extends Component {
     return errMsgs;
   }
 
+  handleDiscardEditChanges = () => {
+    this.props.resetEditListing();
+    this.props.history.push(
+      `/feed/deals/${this.props.dealItem.deal_id}/${
+        this.props.dealItem.deal_name
+      }`
+    );
+  }
+
   render() {
     const {
       error,
@@ -356,7 +365,7 @@ class ListDeal extends Component {
           <AlertModal
             alertEditModalVisible={alertEditCancelModalVisible}
             closeEditModal={closeAlertEditCancelModal}
-            discardEditChanges={resetEditListing}
+            discardEditChanges={this.handleDiscardEditChanges}
             />
 
           <div className="deal-container">
@@ -484,7 +493,8 @@ const mapStateToProps = state => ({
   userLoggedIn: state.LoggedIn.userLoggedIn,
   editingDeal: state.CreateDeal.editingDeal,
   editingDealId: state.CreateDeal.editingDealId,
-  alertEditCancelModalVisible: state.CreateDeal.alertEditCancelModalVisible
+  alertEditCancelModalVisible: state.CreateDeal.alertEditCancelModalVisible,
+  dealItem: state.DealItem.dealItem
 });
 
 const matchDispatchToProps = dispatch => {
