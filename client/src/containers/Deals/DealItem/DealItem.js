@@ -67,9 +67,10 @@ class DealItem extends Component {
     let paypalValues = queryString.parse(this.props.location.search);
     let paymentId = paypalValues.paymentId;
     let payerId = paypalValues.PayerID;
+    let user_email = this.props.user_info[0].email;
 
     if (paymentId) {
-      await this.props._executePayPalPayment(localStorage.getItem("token"), payerId, paymentId, id);
+      await this.props._executePayPalPayment(localStorage.getItem("token"), payerId, paymentId, id, deal_name, user_email);
     }
 
     // }else{
@@ -85,6 +86,7 @@ class DealItem extends Component {
 
     //if buyer is redirected from paypal then we update the buynow button to sold
     if (this.props.dealItem && paymentId) {
+      console.log("executed handle buy now button");
       this.handleBuyNowButton();
     }
   }
@@ -353,7 +355,8 @@ class DealItem extends Component {
   handleBuyNowButton = () => {
     const {deal_status} = this.props.dealItem;
     const {paypal_execute_payment} = this.props;
-
+    debugger
+    console.log("paypal_execute_payment", paypal_execute_payment)
     switch (true) {
       case deal_status === "reserved":
         return (
@@ -364,6 +367,7 @@ class DealItem extends Component {
           <button disabled>Sold</button>
         );
       case paypal_execute_payment && paypal_execute_payment.success === true:
+      debugger
         return (
           <button disabled>Sold</button>
         );
@@ -400,8 +404,6 @@ class DealItem extends Component {
             userLoggedIn,
             dealDeleted,
             alertDeleteModalVisible,
-            paypal_execute_payment_loading,
-            paypal_execute_payment,
 
             //actions
             handleFirstNameInput,
@@ -743,9 +745,9 @@ const mapStateToProps = state => ({
   deletingDealLoading: state.CreateDeal.deletingDealLoading,
   deletingDealError: state.CreateDeal.deletingDealError,
   alertDeleteModalVisible: state.CreateDeal.alertDeleteModalVisible,
-  paypal_execute_payment: state.TransactionInfo.paypal_execute_payment,
-  paypal_execute_payment_loading: state.TransactionInfo.paypal_execute_payment_loading,
-  paypal_execute_payment_error: state.TransactionInfo.paypal_execute_payment_error
+  paypal_excecute_payment: state.TransactionInfo.paypal_excecute_payment,
+  paypal_excecute_payment_loading: state.TransactionInfo.paypal_excecute_payment_loading,
+  paypal_excecute_payment_error: state.TransactionInfo.paypal_excecute_payment_error
 });
 
 const matchDispatchToProps = dispatch => {

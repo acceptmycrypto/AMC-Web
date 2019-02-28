@@ -95,7 +95,6 @@ export default function paymentTransactionReducer(state = initialState, action) 
       };
 
     case "EXECUTE_PAYPAL_TRANSACTION_SUCCESS":
-  
       return {
         ...state,
         paypal_excecute_payment_loading: false,

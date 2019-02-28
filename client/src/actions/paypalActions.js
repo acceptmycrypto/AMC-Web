@@ -51,15 +51,15 @@ export const createPaypalTransactionFailure = error => ({
   payload: { error }
 });
 
-export function _executePayPalPayment(token, payerId, paymentId, deal_id) {
-  
+export function _executePayPalPayment(token, payerId, paymentId, deal_id, deal_name, user_email) {
+
   const settings = {
     method: "POST",
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({token, payerId, paymentId, deal_id})
+    body: JSON.stringify({token, payerId, paymentId, deal_id, deal_name, user_email})
   };
 
   return dispatch => {

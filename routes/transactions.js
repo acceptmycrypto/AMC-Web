@@ -540,7 +540,7 @@ router.post("/checkout/notification", function (req, res, next) {
         //send an email to user saying the payment has been recieved. ship the order
 
         //this link doesn't work locally
-        let view_order = process.env.BACKEND_URL + "/profile/";
+        let view_order = process.env.FRONTEND_URL + "/profile/";
 
         connection.query('UPDATE users_purchases SET status = ?, payment_received = ? WHERE ?',
 
@@ -565,7 +565,10 @@ router.post("/checkout/notification", function (req, res, next) {
             to: data_status[0].email,
             from: process.env.CUSTOMER_SUPPORT,
             subject: 'Order Confirmation',
-            html: customer_invoice_emailTemplate({ txn_id: req.body.txn_id, view_order })
+            html: customer_invoice_emailTemplate(
+              { deal_name: req.body.deal_name,
+                txn_id: req.body.txn_id,
+                view_order })
           };
           sgMail.send(confirm_payment_with_customer);
         });
@@ -714,7 +717,7 @@ router.post("/paypal/create", verifyToken, function (req, res) {
 })
 
 router.post("/paypal/execute", verifyToken, function(req, res) {
-  let deal_id = req.body.deal_id;
+  let {deal_name, deal_id, user_email} = req.body;
 
   let paymentId = req.body.paymentId;
   let payerId = { payer_id: req.body.payerId }; //has to be in this format according to paypal doc
@@ -748,8 +751,22 @@ router.post("/paypal/execute", verifyToken, function(req, res) {
             if (err) {
               console.log(err);
             }
+
+            let view_order = process.env.FRONTEND_URL + "/profile/";
+
+            //send buyer an email invoice
+            const confirm_payment_with_customer = {
+              to: user_email,
+              from: process.env.CUSTOMER_SUPPORT,
+              subject: 'Order Confirmation',
+              html: customer_invoice_emailTemplate(
+                { deal_name, txn_id: paymentId, view_order })
+            };
+            sgMail.send(confirm_payment_with_customer);
+
              //send the paymentInfo to the client side
-            res.json({success: true, message: "payment completed successfully", deal_status: "sold"});
+             res.json({success: true, message: "payment completed successfully", deal_status: "sold"});
+
           }
         );
       } else {
