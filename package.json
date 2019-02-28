@@ -45,6 +45,7 @@
     "multiparty": "^4.2.1",
     "mysql": "^2.16.0",
     "react-awesome-modal": "^2.0.5",
+    "react-social-icons": "^4.1.0",
     "redirect": "^0.2.0",
     "request": "^2.88.0",
     "uuid": "^3.3.2",

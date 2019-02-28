@@ -1,5 +1,5 @@
 .Faq-qnaList{
-    text-align: center;
+  text-align: center;
   }
 
 .faqMenuTitle{
@@ -8,6 +8,18 @@
   
 .Faq-answer{
     font-size: 20px;
+    padding: 20px;
+    padding-left: 30%;
+    padding-right: 30%;
+    text-align: center;
+
+  }
+
+  .Faq-answerNote{
+    text-align: center;
+    font-size: 15px;
+    list-style: circle inside;
+    font-weight: bold;
   }
 
 #Faq-amh{

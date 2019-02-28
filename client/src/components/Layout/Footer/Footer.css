@@ -1,20 +1,45 @@
 .Footer{
+  background-color: #2E4158;
+  color: white;
+  padding-left: 5%;
+  padding-right: 0;
+
+}
+
+.Footer-colCompany{
+    text-align:  center;
+    background-color: #2E4158;
+    padding-bottom: 30px;
+    padding-top: 50px;
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+.Footer-colTerms{
   text-align:  center;
   background-color: #2E4158;
-  flex-direction: column;
-  flex: 1 1 0%;
-  display: flex;
   padding-bottom: 30px;
   padding-top: 50px;
+  /* padding-left: 10%;
+  padding-right: 10%; */
+}
+
+.Footer-logo{
+  font-size: 17px;
+  text-align:  center;
+  background-color: #2E4158;
+  padding-bottom: 30px;
+  padding-top: 50px;
+  padding-right: 5%;
 }
 
 .Footer-company{
   padding-bottom: 30px;
+ 
 }
 
 .Footer-terms{
   padding-bottom: 30px;
-
 }
 
 .Footer-linkTitle{
@@ -23,7 +48,7 @@
 
 .Footer-link{
   padding: 10px;
-  color: whitesmoke;
+  color: white;
 }
 
 .Footer-link:hover{
@@ -36,7 +61,13 @@
   display: flex;
   justify-content: center;
   color: #768496;
-  margin-bottom: 20px;
+  padding-left: 10px;
 }
+
+.Footer-socialIcon{
+justify-content: center;
+display: flex;
+}
+
 
 
