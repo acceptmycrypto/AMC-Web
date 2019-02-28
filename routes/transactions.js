@@ -12,6 +12,7 @@ var MERCHANT_ID = keys.coinpayment.MERCHANT_ID;
 var IPN_SECRET = keys.coinpayment.IPN_SECRET;
 var { verify } = require(`coinpayments-ipn`);
 var CoinpaymentsIPNError = require(`coinpayments-ipn/lib/error`);
+var paypal = require('paypal-rest-sdk');
 
 //use sendgrid
 var sgMail = require("@sendgrid/mail");
@@ -23,6 +24,13 @@ var verifyToken = require("./utils/validation");
 var path = require("path");
 var fs = require('fs');
 var ejs = require('ejs');
+
+//paypal
+paypal.configure({
+  'mode': 'sandbox', //sandbox or live
+  'client_id': process.env.PAYPAL_CLIENT_ID,
+  'client_secret': process.env.PAYPAL_CLIENT_SECRET
+});
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -609,9 +617,149 @@ router.post("/checkout/notification", function (req, res, next) {
 });
 
 //paypal
-router.post('/paypal/execute-payment', function (req, res) {
-  console.log("paypal", req.body);
+let users_purchase_id_paypal;
+router.post("/paypal/create", verifyToken, function (req, res) {
+  let user_id = req.decoded._id;
+  let {deal_id, deal_name, pay_in_dollar, deal_description} = req.body.dealItem;
+  let {firstName, lastName, shippingAddress, shippingCity, shippingState, zipcode} =  req.body;
+
+  let description = JSON.parse(deal_description);
+  console.log(req.body);
+
+  let dealUrl = `${process.env.FRONTEND_URL}/feed/deals/${deal_id}/${deal_name}`;
+  let encodedDealURL = encodeURI(dealUrl); //turn spaces in url to %20
+
+
+  let create_payment = JSON.stringify({
+    intent: "sale",
+    payer: {
+        payment_method: "paypal"
+    },
+    redirect_urls: {
+        return_url: encodedDealURL,
+        cancel_url: encodedDealURL
+    },
+    transactions: [{
+        item_list: {
+            items: [{
+                name: deal_name,
+                sku: deal_id,
+                price: pay_in_dollar,
+                currency: "USD",
+                quantity: 1
+            }]
+        },
+        amount: {
+            currency: "USD",
+            total: pay_in_dollar
+        },
+        description: encodedDealURL
+    }]
+  });
+
+
+  paypal.payment.create(create_payment, function (error, payment) {
+      let links = {};
+      if (error) {
+        console.error(JSON.stringify(error));
+      } else {
+          payment.links.forEach(function(linkObj){
+            links[linkObj.rel] = {
+              href: linkObj.href,
+              method: linkObj.method
+            };
+          })
+
+          if (links.hasOwnProperty('approval_url')){
+            connection.query(
+              "INSERT INTO users_purchases SET ?",
+              {
+                user_id,
+                deal_id
+              },
+              function (err, transactionInitiated) {
+                if (err) {
+                  console.log(err);
+                }
+
+                users_purchase_id_paypal = transactionInitiated.insertId;
+                //insert shipping address into table
+                connection.query(
+                  "INSERT INTO users_shipping_address SET ?",
+                  {
+                    users_purchases_id: transactionInitiated.insertId,
+                    shipping_firstname: firstName,
+                    shipping_lastname: lastName,
+                    shipping_address: shippingAddress,
+                    shipping_city: shippingCity,
+                    shipping_state: shippingState.value,
+                    shipping_zipcode: zipcode
+                  },
+                  function (err, shipping_data, fields) {
+                    if (err) throw err;
+                  }
+                );
+              }
+            );
+
+            // Redirect the customer to links['approval_url'].href
+            res.json({success: true, link: links['approval_url'].href})
+          } else {
+            res.json({success: false, message: "No Link"})
+          }
+
+      }
+  });
+
 })
+
+router.post("/paypal/execute", verifyToken, function(req, res) {
+  let deal_id = req.body.deal_id;
+
+  let paymentId = req.body.paymentId;
+  let payerId = { payer_id: req.body.payerId }; //has to be in this format according to paypal doc
+
+  paypal.payment.execute(paymentId, payerId, function(error, payment){
+    if(error){
+      console.error("execute error", JSON.stringify(error));
+    } else {
+      if (payment.state == 'approved'){
+
+        //update multiple records for users_purchases
+        connection.query("UPDATE users_purchases SET ? WHERE ?",
+          [
+            {paypal_paymentId: paymentId,
+            paypal_payerId: req.body.payerId,
+            payment_received: 1 },
+            {id: users_purchase_id_paypal}
+          ],
+          function (err, transactionInitiated) {
+            if (err) {
+              console.log(err);
+            }
+          }
+        );
+
+        //update deal item to sold
+        connection.query(
+          "UPDATE deals SET deal_status = ? WHERE id = ?",
+          ["sold", deal_id],
+          function(err, result) {
+            if (err) {
+              console.log(err);
+            }
+             //send the paymentInfo to the client side
+            res.json({success: true, message: "payment completed successfully", deal_status: "sold"});
+          }
+        );
+      } else {
+        res.json({success: false, message: "payment not completed"})
+      }
+    }
+  });
+
+
+});
 
 function createMatchedFriends(user_id, crypto_name) {
   connection.query(

@@ -26,10 +26,10 @@ const PurchaseOrder = props => {
 
         <div id="payment-divider">OR</div>
         <div id="paypal-button">
-          Pay in USD via Paypal
+          <strong>Pay in USD</strong>
           <PaypalButton
             dealItemInfo={props.deal_item}
-            fullNameInfo={props.first_name}
+            firstNameInfo={props.first_name}
             lastNameInfo={props.last_name}
             shippingAddressInfo={props.shipping_address}
             shippingCityInfo={props.shipping_city}

@@ -1,13 +1,13 @@
 export function _paypal(
-  deal_id,
+  token,
+  dealItem,
   firstName,
   lastName,
   shippingAddress,
   shippingCity,
   shippingState,
-  zipcode,
-  payerID,
-  paymentID) {
+  zipcode) {
+
   const settings = {
     method: "POST",
     headers: {
@@ -15,34 +15,75 @@ export function _paypal(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      deal_id,
+      token,
+      dealItem,
       firstName,
       lastName,
       shippingAddress,
       shippingCity,
       shippingState,
-      zipcode,
-      payerID,
-      paymentID})
+      zipcode})
   };
 
   return dispatch => {
-    return fetch("/paypal/execute-payment", settings)
+    dispatch(createPaypalTransactionBegin());
+    return fetch("/paypal/create", settings)
       .then(res => res.json())
       .then(jsonTransaction => {
-        dispatch(createTransactionSuccess(jsonTransaction));
+        dispatch(createPaypalTransactionSuccess(jsonTransaction));
         return jsonTransaction;
       })
-      .catch(error => dispatch(createTransactionFailure(error)));
+      .catch(error => dispatch(createPaypalTransactionFailure(error)));
   };
 }
 
-export const createTransactionSuccess = paypalTransaction => ({
+export const createPaypalTransactionBegin = () => ({
+  type: "CREATE_PAYPAL_TRANSACTION_BEGIN",
+});
+
+export const createPaypalTransactionSuccess = paypalTransaction => ({
   type: "CREATE_PAYPAL_TRANSACTION_SUCCESS",
   payload: { paypalTransaction }
 });
 
-export const createTransactionFailure = error => ({
+export const createPaypalTransactionFailure = error => ({
   type: "CREATE_PAYPAL_TRANSACTION_FAILURE",
+  payload: { error }
+});
+
+export function _executePayPalPayment(token, payerId, paymentId, deal_id) {
+  
+  const settings = {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({token, payerId, paymentId, deal_id})
+  };
+
+  return dispatch => {
+    dispatch(executePaypalTransactionBegin());
+    return fetch("/paypal/execute", settings)
+      .then(res => res.json())
+      .then(jsonTransaction => {
+        dispatch(executePaypalTransactionSuccess(jsonTransaction));
+        return jsonTransaction;
+      })
+      .catch(error => dispatch(executePaypalTransactionFailure(error)));
+  };
+}
+
+export const executePaypalTransactionBegin = () => ({
+  type: "EXECUTE_PAYPAL_TRANSACTION_BEGIN",
+});
+
+export const executePaypalTransactionSuccess = paypalTransactionExecution => ({
+  type: "EXECUTE_PAYPAL_TRANSACTION_SUCCESS",
+  payload: { paypalTransactionExecution }
+});
+
+export const executePaypalTransactionFailure = error => ({
+  type: "EXECUTE_PAYPAL_TRANSACTION_FAILURE",
   payload: { error }
 });

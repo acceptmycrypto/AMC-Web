@@ -28,7 +28,6 @@ export function _fetchTransactionInfo(
       zipcode,
       shippingState,
       firstName,
-
       lastName
     })
   };

@@ -202,18 +202,20 @@ CREATE TABLE users_purchases(
 	user_id INT NULL,
 	guest_user_id INT NULL,
 	deal_id INT NOT NULL,
-	crypto_id INT NOT NULL,
+	crypto_id INT NULL,
   buyers_reviews_sellers_id INT NULL,
 	date_purchased TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	amount DECIMAL(20, 8) NOT NULL,
-	txn_id VARCHAR(255) NOT NULL UNIQUE,
-	address VARCHAR(255) NOT NULL,
-	confirms_needed VARCHAR(255) NOT NULL,
-	timeout INT NOT NULL,
+	amount DECIMAL(20, 8) NULL,
+	txn_id VARCHAR(255) NULL UNIQUE,
+	address VARCHAR(255) NULL,
+	confirms_needed VARCHAR(255) NULL,
+	timeout INT NULL,
 	status_url VARCHAR(255) NULL,
-	qrcode_url VARCHAR(255) NOT NULL,
-  status VARCHAR(255) NOT NULL DEFAULT "0",
-	payment_received BOOLEAN NOT NULL DEFAULT FALSE,
+	qrcode_url VARCHAR(255) NULL,
+  status VARCHAR(255) NULL DEFAULT "0",
+	payment_received BOOLEAN NULL DEFAULT FALSE,
+  paypal_paymentId VARCHAR(255) NULL UNIQUE,
+  paypal_payerId VARCHAR(255) NULL,
 	permission VARCHAR(255) NOT NULL DEFAULT "community",
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_id) REFERENCES users(id),
@@ -225,7 +227,8 @@ CREATE TABLE users_purchases(
 
 CREATE TABLE users_shipping_address(
 	id INT NOT NULL AUTO_INCREMENT,
-	txn_id VARCHAR(255) NOT NULL,
+	txn_id VARCHAR(255) NULL,
+  users_purchases_id INT NULL,
 	shipping_firstname VARCHAR(255) NOT NULL,
   shipping_lastname VARCHAR(255) NOT NULL,
 	shipping_address VARCHAR(255) NOT NULL,
@@ -233,7 +236,8 @@ CREATE TABLE users_shipping_address(
 	shipping_state VARCHAR(255) NOT NULL,
 	shipping_zipcode VARCHAR(255) NOT NULL,
 	PRIMARY KEY (id),
-	FOREIGN KEY (txn_id) REFERENCES users_purchases(txn_id)
+	FOREIGN KEY (txn_id) REFERENCES users_purchases(txn_id),
+  FOREIGN KEY (users_purchases_id) REFERENCES users_purchases(id)
 );
 
 CREATE TABLE users_purchase_customization(

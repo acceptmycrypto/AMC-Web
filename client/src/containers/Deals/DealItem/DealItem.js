@@ -19,10 +19,11 @@ import {
   handleSelectedCrypto,
   handleDetailStep,
   handleShippingStep,
-  handlePayingStep,
+  handlePayingStep
 } from "../../../actions/dealItemActions";
 import { resetListDeal, editListing, resetEditListing, _deleteDeal, openDeleteAlertModal, closeDeleteAlertModal } from "../../../actions/listDealActions";
 import { _fetchTransactionInfo, _fetchGuestTransactionInfo } from "../../../actions/paymentActions";
+import { _executePayPalPayment } from "../../../actions/paypalActions";
 import { _createChatSession } from "../../../actions/chatActions";
 import { Carousel } from "react-responsive-carousel";
 import ItemDescription from "../ItemDescription";
@@ -34,9 +35,11 @@ import { _loadReviews } from "../../../actions/reviewsActions";
 import { _loadProfile } from "../../../actions/userLoadActions";
 import { EditorState, convertFromRaw } from "draft-js";
 import AlertModal from "../../../components/UI/Alert";
+import queryString from 'query-string';
 
 class DealItem extends Component {
   componentDidMount = async () => {
+
     //return the param value
     await this.props._isLoggedIn(localStorage.getItem("token"));
 
@@ -60,6 +63,14 @@ class DealItem extends Component {
       this.props.resetEditListing();
     }
 
+    //execute paypal payment when redirects from paypal
+    let paypalValues = queryString.parse(this.props.location.search);
+    let paymentId = paypalValues.paymentId;
+    let payerId = paypalValues.PayerID;
+
+    if (paymentId) {
+      await this.props._executePayPalPayment(localStorage.getItem("token"), payerId, paymentId, id);
+    }
 
     // }else{
     //     // localStorage.removeItem('token');
@@ -67,7 +78,6 @@ class DealItem extends Component {
     // }
 
   }
-
 
   //set the options to select crypto from
   //this function is needed to change the format of objects to be able to used for react select
@@ -358,6 +368,8 @@ class DealItem extends Component {
             userLoggedIn,
             dealDeleted,
             alertDeleteModalVisible,
+            paypal_execute_payment_loading,
+            paypal_execute_payment,
 
             //actions
             handleFirstNameInput,
@@ -465,6 +477,9 @@ class DealItem extends Component {
                       {...dealItem}
                       {...reviews}
                       transactionStatus={transaction_status}
+                      paypalValues = {queryString.parse(this.props.location.search)}
+                      paypalStatusLoading={paypal_execute_payment_loading}
+                      paypalStatus={paypal_execute_payment}
                       sellerDealDescription={this.loadDescription}
                       next_step={handleShippingStep}
                       rating_display={this.ratingDisplay}
@@ -698,7 +713,10 @@ const mapStateToProps = state => ({
   dealDeleted: state.CreateDeal.dealDeleted,
   deletingDealLoading: state.CreateDeal.deletingDealLoading,
   deletingDealError: state.CreateDeal.deletingDealError,
-  alertDeleteModalVisible: state.CreateDeal.alertDeleteModalVisible
+  alertDeleteModalVisible: state.CreateDeal.alertDeleteModalVisible,
+  paypal_execute_payment: state.TransactionInfo.paypal_execute_payment,
+  paypal_execute_payment_loading: state.TransactionInfo.paypal_execute_payment_loading,
+  paypal_execute_payment_error: state.TransactionInfo.paypal_execute_payment_error
 });
 
 const matchDispatchToProps = dispatch => {
@@ -728,7 +746,8 @@ const matchDispatchToProps = dispatch => {
       _deleteDeal,
       resetEditListing,
       openDeleteAlertModal,
-      closeDeleteAlertModal
+      closeDeleteAlertModal,
+      _executePayPalPayment
     },
     dispatch
   );
