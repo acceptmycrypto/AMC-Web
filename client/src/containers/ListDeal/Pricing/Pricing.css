@@ -87,9 +87,10 @@
 }
 
 .shipment-options{
-  position: relative;
+  /* position: relative;
   top: 30px;
-  width: 100%;
+  width: 100%; */
+  margin-top: 30px;
 }
 
 .shipping-font{
@@ -109,9 +110,10 @@
 }
 
 
-.shipping-margin-left{
-  margin-left: 125px;
-}
+/* .shipping-margin-left{
+  margin-left: 125px; 
+
+} */
 
 input[name="shipmentOption"]{
     margin-bottom: 10px;
@@ -283,4 +285,12 @@ input[name="shipmentOption"]{
   text-transform: uppercase;
   font-weight: 700;
   margin-top: 140px;
+}
+
+.w-60{
+  width: 60%;
+}
+
+.w-40{
+  width: 40%;
 }
