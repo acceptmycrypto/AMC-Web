@@ -10,13 +10,18 @@ const initialState = {
   showPricingStep: false,
   showDescriptionStep: false,
   discountPercent: 10,
-  priceInUSD: "",
-  priceInCrypto: "",
+  priceInUSD: null,
+  priceInCrypto: null,
   crypto_amount: {},
   gettingRate: {},
   shippingLabelSelection: "",
   shippingWeightSelection: null,
   shippingPriceSelection: null,
+  shippingLessThanDiscount: false,
+  sellerEarnsUSD: null,
+  sellerEarnsCrypto: null,
+  sellerProfitsUSD: null,
+  sellerProfitsCrypto: null,
   dealName: "",
   selectedCategory: "",
   selectedCondition: "", //important! Selected condition cannot by null by default, otherwist app will crash.
@@ -56,6 +61,18 @@ const CalculateDiscountPrice = (basePrice, discount) => {
   // return basePrice - (basePrice * (discount/100))
   return ((100-discount)/100) * basePrice;
 }
+
+const isShippingPriceHigher = (shippingPrice, discountPrice) =>{
+  let discountCalc = (parseFloat(discountPrice) * 0.975);
+  if(parseFloat(shippingPrice) <= discountCalc){
+    return false;
+  }
+  else{
+    return true;
+  }
+
+}
+
 
 export default function CreateDealReducer(state = initialState, action) {
   switch(action.type) {
@@ -191,6 +208,7 @@ export default function CreateDealReducer(state = initialState, action) {
         ...state,
         shippingWeightSelection: action.payload.shippingWeightSelection,
         shippingPriceSelection: action.payload.shippingPriceSelection,
+        shippingLessThanDiscount: isShippingPriceHigher(action.payload.shippingPriceSelection, state.priceInCrypto)
       };
     
     case "EXIT_SHIPPING_MODAL":
@@ -216,6 +234,19 @@ export default function CreateDealReducer(state = initialState, action) {
         modalVisible: true
       };
     
+    case "SELLER_EARNS_USD":
+      return {
+        ...state,
+        sellerEarnsUSD: action.payload.sellerEarnsUSD,
+        sellerProfitsUSD: action.payload.sellerProfitsUSD
+      };
+    
+    case "SELLER_EARNS_CRYPTO":
+      return {
+        ...state,
+        sellerEarnsCrypto: action.payload.sellerEarnsCrypto,
+        sellerProfitsCrypto: action.payload.sellerProfitsCrypto
+      };
 
     case "EDIT_DEAL_NAME":
       return {
