@@ -79,6 +79,16 @@ class DealItem extends Component {
 
   }
 
+  componentDidUpdate = () => {
+    let paypalValues = queryString.parse(this.props.location.search);
+    let paymentId = paypalValues.paymentId;
+
+    //if buyer is redirected from paypal then we update the buynow button to sold
+    if (this.props.dealItem && paymentId) {
+      this.handleBuyNowButton();
+    }
+  }
+
   //set the options to select crypto from
   //this function is needed to change the format of objects to be able to used for react select
   handleCryptoOptions = acceptedCryptos => {
@@ -340,6 +350,28 @@ class DealItem extends Component {
     }
   }
 
+  handleBuyNowButton = () => {
+    const {deal_status} = this.props.dealItem;
+    const {paypal_execute_payment} = this.props;
+
+    switch (true) {
+      case deal_status === "reserved":
+        return (
+          <button disabled>Waiting for Payment</button>
+        );
+      case deal_status === "sold":
+        return (
+          <button disabled>Sold</button>
+        );
+      case paypal_execute_payment && paypal_execute_payment.success === true:
+        return (
+          <button disabled>Sold</button>
+        );
+      default:
+        return <button>Buy Now</button>
+    }
+  };
+
   render() {
     const { //state
             error,
@@ -476,10 +508,7 @@ class DealItem extends Component {
                       //another way to pass in props using spread operator
                       {...dealItem}
                       {...reviews}
-                      transactionStatus={transaction_status}
-                      paypalValues = {queryString.parse(this.props.location.search)}
-                      paypalStatusLoading={paypal_execute_payment_loading}
-                      paypalStatus={paypal_execute_payment}
+                      buyNowButtonHandler={this.handleBuyNowButton}
                       sellerDealDescription={this.loadDescription}
                       next_step={handleShippingStep}
                       rating_display={this.ratingDisplay}
