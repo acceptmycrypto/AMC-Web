@@ -101,6 +101,7 @@ export const onDiscountPercentageToChange = (event) => {
 };
 
 export const OnUSDPriceChange = (event) => {
+  
   return {
       type: 'CHANGE_BASE_PRICE',
       payload: event.target.value
@@ -212,6 +213,16 @@ export const _showWeightModal = () => ({
   type: "SHOW_WEIGHT_MODAL",
 });
 
+
+export const _sellerEarnCrypto = (sellerEarnsCrypto, sellerProfitsCrypto) =>({
+  type: "SELLER_EARNS_CRYPTO",
+  payload: {sellerEarnsCrypto, sellerProfitsCrypto}
+});
+
+export const _sellerEarnUSD = (sellerEarnsUSD, sellerProfitsUSD) =>({
+  type: "SELLER_EARNS_USD",
+  payload: {sellerEarnsUSD, sellerProfitsUSD}
+});
 
 export const onEditingDealName = event => ({
   type: "EDIT_DEAL_NAME",
