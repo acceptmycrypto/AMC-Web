@@ -1,9 +1,8 @@
 .Footer{
   background-color: #2E4158;
   color: white;
-  padding-left: 5%;
-  padding-right: 0;
-
+  padding-right: 10%;
+  margin: auto;
 }
 
 .Footer-colCompany{
@@ -11,8 +10,8 @@
     background-color: #2E4158;
     padding-bottom: 30px;
     padding-top: 50px;
-    padding-left: 5%;
-    padding-right: 5%;
+    margin: auto;
+    margin-left: 10px;
   }
 
 .Footer-colTerms{
@@ -20,8 +19,9 @@
   background-color: #2E4158;
   padding-bottom: 30px;
   padding-top: 50px;
-  /* padding-left: 10%;
-  padding-right: 10%; */
+  padding-left: 0px;
+  margin: auto; 
+  margin-left: 10px;
 }
 
 .Footer-logo{
@@ -30,7 +30,7 @@
   background-color: #2E4158;
   padding-bottom: 30px;
   padding-top: 50px;
-  padding-right: 5%;
+  margin: auto; 
 }
 
 .Footer-company{
@@ -65,8 +65,9 @@
 }
 
 .Footer-socialIcon{
-justify-content: center;
-display: flex;
+  justify-content: center;
+  display: flex;
+  padding: 10px;
 }
 
 

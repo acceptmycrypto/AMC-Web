@@ -33,7 +33,7 @@ const Footer = props => {
       </div>
         </div>
       </Col>
-      <Col sm="4" className="Footer-colTerms">
+      <Col sm="3" className="Footer-colTerms">
         <div className="Footer-cardBody">
         <div className="Footer-terms">
       <h4 className="Footer-linkTitle">Terms</h4>
