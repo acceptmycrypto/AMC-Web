@@ -12,6 +12,7 @@ var MERCHANT_ID = keys.coinpayment.MERCHANT_ID;
 var IPN_SECRET = keys.coinpayment.IPN_SECRET;
 var { verify } = require(`coinpayments-ipn`);
 var CoinpaymentsIPNError = require(`coinpayments-ipn/lib/error`);
+var request = require("request");
 
 //shippo
 var shippo = require('shippo')(process.env.SHIPMENT_KEY);
@@ -753,6 +754,22 @@ router.get('/newShippingLabel/:txn_id/:deal_name', function (req, res) {
 
         });
 
+        var tracking_options = {
+          url: 'https://api.goshippo.com/tracks/',
+          headers: {
+            "carrier": "usps",
+            "tracking_number": transaction.tracking_number
+          }
+        };
+
+        function callback(error, response, body) {
+          if (!error && response.statusCode == 200) {
+            var info = JSON.parse(body);
+            console.log("line 768", info);
+          }
+        }
+
+        request(options, callback);
         res.json({ shipment, transaction });
 
       });
