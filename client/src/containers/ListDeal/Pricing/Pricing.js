@@ -37,32 +37,49 @@ class Pricing extends Component {
         <div>
           <div className="shipping-weight-title">Choose the Weight of your Item in POUNDS (lbs)</div>
           <hr/>
-        <form className="d-flex flex-row flex-wrap" id="weightOptionForm" onChange={weightOption}>
-              <div className="pr-5 mt-2">
+        <form className="d-flex flex-row flex-wrap justify-content-center" id="weightOptionForm" onChange={weightOption}>
+              <label className="mr-3 mt-2 weight-label">
                 <input id="weight-1" type="radio" name="weightOption" className="weightOption" value={1}/> 
-                <i class="fas fa-tshirt"></i>
-                <span className="ml-2 weight-font">0-1 lb</span>
-              </div>
-              <div className="pr-5 mt-2">
+                <div className=" d-flex flex-column justify-content-center align-items-center">
+                  <i class="fas fa-tshirt fa-2x"></i>
+                  <span className="weight-font mt-2">0-1 lb</span>
+                </div>
+              </label>
+              <label className="mr-3 mt-2 weight-label">
                 <input id="weight-3" type="radio" name="weightOption" className="weightOption" value={3}/> 
-                <span className="ml-2 weight-font">1-3 lbs</span>
-              </div>
-              <div className="pr-5 mt-2">
+                <div className=" d-flex flex-column justify-content-center align-items-center">
+                  <i class="fas fa-book fa-2x"></i>
+                  <span className="weight-font mt-2">1-3 lbs</span>
+                </div>
+              </label>
+              <label className="mr-3 mt-2 weight-label">
                 <input id="weight-10" type="radio" name="weightOption" className="weightOption" value={10}/> 
-                <span className="ml-2 weight-font">3-10 lbs</span>
-              </div>
-              <div className="pr-5 mt-2">
+                <div className=" d-flex flex-column justify-content-center align-items-center">
+                  <i class="fas fa-laptop fa-2x"></i>
+                  <span className="weight-font mt-2">3-10 lbs</span>
+                </div>
+              </label>
+              <label className="mr-3 mt-2 weight-label">
                 <input id="weight-20" type="radio" name="weightOption" className="weightOption" value={20}/> 
-                <span className="ml-2 weight-font">10-20 lbs</span>
-              </div>
-              <div className="pr-5 mt-2">
+                <div className=" d-flex flex-column justify-content-center align-items-center">
+                  <i class="fas fa-tv fa-2x"></i>
+                  <span className="weight-font mt-2">10-20 lbs</span>
+                </div>
+              </label>
+              <label className="mr-3 mt-2 weight-label">
                 <input id="weight-40" type="radio" name="weightOption" className="weightOption" value={40}/> 
-                <span className="ml-2 weight-font">20-40 lbs</span>
-              </div>
-              <div className="pr-5 mt-2">
+                <div className=" d-flex flex-column justify-content-center align-items-center">
+                  <i class="fas fa-bicycle fa-2x"></i>
+                  <span className="weight-font mt-2">20-40 lbs</span>
+                </div>
+              </label>
+              <label className="mt-2 weight-label">
                 <input id="weight-70" type="radio" name="weightOption" className="weightOption" value={70}/> 
-                <span className="ml-2 weight-font">40-70 lbs</span>
-              </div>
+                <div className=" d-flex flex-column justify-content-center align-items-center">
+                  <i class="fas fa-dumbbell fa-2x"></i>
+                  <span className="weight-font mt-2">40-70 lbs</span>
+                </div>
+              </label>
         </form>
         <hr/>
         {shippingPriceSelection !== null && 
