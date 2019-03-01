@@ -176,6 +176,8 @@ class ListDeal extends Component {
       basePrice: this.props.priceInUSD,
       selectedCrypto: !cryptosNotSelected, //check if user has selected a crypto
       shippingLabelSelection: this.props.shippingLabelSelection,
+      sellerProfitsCrypto: this.props.sellerProfitsCrypto,
+      sellerProfitsUSD: this.props.sellerProfitsUSD,
     }
 
     let isDataValid = false;
@@ -202,6 +204,10 @@ class ListDeal extends Component {
 
       }else if(this.props.shippingLabelSelection.length < 1){
         toast.error(this._validationErrors(validatePricing).notifyShippingLabelNotSelectedError, {
+          position: toast.POSITION.TOP_RIGHT
+        });
+      } else if(!this.props.sellerProfitsCrypto || !this.props.sellerProfitsUSD){
+        toast.error(this._validationErrors(validatePricing).notifyNegativePriceError,{
           position: toast.POSITION.TOP_RIGHT
         });
       }
@@ -276,7 +282,8 @@ class ListDeal extends Component {
       notifyShippingLabelNotSelectedError: val.shippingLabel ? null :'Please select a shipping label option',
       notifyDealNameError: val.dealName ? null : 'Please give your listing a name.',
       notifySelectedCategoryError: val.selectedCategory ? null : 'Please select a category.',
-      notifyDescriptionError: val.description ? null : 'Please describe your listing.'
+      notifyDescriptionError: val.description ? null : 'Please describe your listing.',
+      notifyNegativePriceError: val.description ? null : 'Please increase Price In Dollar amount'
     }
 
     return errMsgs;
@@ -457,6 +464,10 @@ const mapStateToProps = state => ({
   shippingLabelSelection: state.CreateDeal.shippingLabelSelection,
   shippingWeightSelection: state.CreateDeal.shippingWeightSelection,
   shippingPriceSelection: state.CreateDeal.shippingPriceSelection,
+  sellerEarnsUSD: state.CreateDeal.sellerEarnsUSD,
+  sellerEarnsCrypto: state.CreateDeal.sellerEarnsCrypto,
+  sellerProfitsUSD: state.CreateDeal.sellerProfitsUSD,
+  sellerProfitsCrypto: state.CreateDeal.sellerProfitsCrypto,
 });
 
 const matchDispatchToProps = dispatch => {
