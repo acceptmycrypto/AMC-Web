@@ -14,11 +14,7 @@ import { UncontrolledCarousel } from 'reactstrap';
 import CategoryHome from './CategoryHome/CategoryHome';
 import { _loadAllHomepageDeals } from '../../../actions/homepageActions';
 
-
-
 class Homepage extends Component {
-
-
 
   componentDidMount = () => {
     // this.props._loadHomepage();

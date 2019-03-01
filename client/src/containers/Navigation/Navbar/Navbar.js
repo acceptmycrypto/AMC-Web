@@ -12,15 +12,12 @@ import { _isLoggedIn } from "../../../actions/loggedInActions";
 import { _loadChatSessions } from "../../../actions/chatActions";
 import {resetDealitemState} from "../../../actions/dealItemActions"
 
-
-
 class Navbar extends Component {
 
   logOut = () => {
     localStorage.removeItem('token');
     this.props.history.push('/');
   }
-
 
   componentDidMount = async() => {
 
