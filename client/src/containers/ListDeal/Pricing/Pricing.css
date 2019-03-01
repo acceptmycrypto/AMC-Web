@@ -258,7 +258,7 @@ input[name="shipmentOption"]{
 
 .shipping-option-modal{
   width: 750px;
-  height: 450px;
+  height: 490px;
   background-color: #2E4158;
   border: solid #199087 .5em;
   padding: 25px;
@@ -285,7 +285,7 @@ input[name="shipmentOption"]{
   text-transform: uppercase;
   font-weight: 700;
   position: relative;
-  bottom: -15px;
+  bottom: -25px;
   /* margin-top: 140px; */
 }
 
@@ -296,3 +296,26 @@ input[name="shipmentOption"]{
 .w-40{
   width: 40%;
 }
+
+.weightOption { 
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* IMAGE STYLES */
+.weightOption + div{
+  cursor: pointer;
+  border: thin solid rgba(79, 102, 129, 0.753);
+  border-radius: 5px;
+  width: 100px;
+  height: 90px;
+}
+
+/* CHECKED STYLES */
+.weightOption:checked + div{
+  border: 2px solid #199087;
+  
+}
+
