@@ -70,6 +70,8 @@ class DealItem extends Component {
     if (this.props._isLoggedIn && paymentId) {
       let user_email = this.props.user_info[0].email;
       await this.props._executePayPalPayment(localStorage.getItem("token"), payerId, paymentId, id, deal_name, user_email);
+      await this.handleBuyNowButton();
+      await this.props.history.push("/profile");
     }
 
     // }else{
@@ -77,17 +79,6 @@ class DealItem extends Component {
     //     await this.props.history.push('/');
     // }
 
-  }
-
-  componentDidUpdate = () => {
-    let paypalValues = queryString.parse(this.props.location.search);
-    let paymentId = paypalValues.paymentId;
-
-    //if buyer is redirected from paypal then we update the buynow button to sold
-    if (this.props.dealItem && paymentId) {
-      console.log("executed handle buy now button");
-      this.handleBuyNowButton();
-    }
   }
 
   //set the options to select crypto from
@@ -353,9 +344,13 @@ class DealItem extends Component {
 
   handleBuyNowButton = () => {
     const {deal_status} = this.props.dealItem;
-    const {paypal_excecute_payment} = this.props;
-    
+    const {paypal_excecute_payment, paypal_excecute_payment_loading} = this.props;
+
     switch (true) {
+      case paypal_excecute_payment_loading:
+        return (
+          <div style={{marginTop: "10px"}}><LoadingSpinner /></div>
+        );
       case deal_status === "reserved":
         return (
           <button disabled>Waiting for Payment</button>
