@@ -360,7 +360,6 @@ class DealItem extends Component {
           <button disabled>Sold</button>
         );
       case paypal_excecute_payment && paypal_excecute_payment.success === true:
-      debugger
         return (
           <button disabled>Sold</button>
         );
