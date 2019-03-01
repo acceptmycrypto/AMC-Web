@@ -15,38 +15,38 @@
     <mj-section background-color="#2e4157">
 
       <mj-column>
-        <mj-text color="#fff" font-size="20px" align="center" line-height="20px">
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="20px" align="center" line-height="20px">
           A User Has Purched Your Item: 
           <%= deal_name %>
         </mj-text>
     
-        <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="20px">
           You Have 48 hrs to Ship the Item and Submit the Tracking Number
         </mj-text>
-        <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="20px">
           Once the User Receives the Item Your AcceptMyCrypto Account Balance Will Be Updated With Your Payment
         </mj-text>
 
-        <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="20px">
           Here is the User's Shipping Details:
         </mj-text>
-        <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="20px">
           User's Name: <%=shipping_firstname%> <%=shipping_lastname%>
           
         </mj-text>
-        <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="20px">
           Address: <%=shipping_address%>
         </mj-text>
 
-        <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="20px">
           City: <%=shipping_city%>
         </mj-text>
 
-        <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="20px">
            State: <%=shipping_state%>
         </mj-text>
 
-        <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="20px">
           Zipcode: <%=shipping_zipcode%>
         </mj-text>
 
@@ -54,7 +54,7 @@
           Submit Tracking Number
         </mj-button>
 
-        <mj-text color="#fff" font-size="15px" align="center" line-height="15px">
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="15px">
           Please contact support@acceptmycrypto.com for any questions or concerns.
         </mj-text>
 

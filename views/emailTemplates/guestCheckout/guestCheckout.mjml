@@ -15,21 +15,21 @@
     <mj-section background-color="#2e4157">
 
       <mj-column>
-        <mj-text color="#fff" font-size="20px" align="center" line-height="20px">
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="20px" align="center" line-height="20px">
           Thank You for Your Interest In
           <%= deal_name %>
         </mj-text>
-        <mj-text color="#fff" font-size="20px" align="center" line-height="20px">
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="20px" align="center" line-height="20px">
           Sold by
           <%= seller_name%>
         </mj-text>
-        <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="20px">
           The Deal is Reserved for you for <%= time_left%> hours.
         </mj-text>
-        <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="20px">
           Please send <%= amount %> <%=crypto%>
         </mj-text>
-        <mj-text color="#fff" font-size="15px" align="center" line-height="15px">
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="15px">
           To the Address: <%= address%>
         </mj-text>
 
@@ -37,7 +37,7 @@
           View The Deal
         </mj-button>
 
-        <mj-text color="#fff" font-size="15px" align="center" line-height="15px">
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="15px">
           Please contact support@acceptmycrypto.com for any questions or concerns.
         </mj-text>
 
