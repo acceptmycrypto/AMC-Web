@@ -182,15 +182,15 @@ export const weightOption = event => {
   if(event.target.value == 1){
     shippingPriceSelection = 6.50;
   }else if (event.target.value == 3){
-    shippingPriceSelection = 8.00;
+    shippingPriceSelection = 11.00;
   }else if (event.target.value == 10){
-    shippingPriceSelection = 13.00;
+    shippingPriceSelection = 16.00;
   }else if (event.target.value == 20){
-    shippingPriceSelection = 20.00;
-  }else if (event.target.value == 40){
     shippingPriceSelection = 30.00;
+  }else if (event.target.value == 40){
+    shippingPriceSelection = 35.00;
   }else if (event.target.value == 70){
-    shippingPriceSelection= 40.00;
+    shippingPriceSelection= 50.00;
   }
   return({
     type: "SELECT_WEIGHT_OPTION",
