@@ -284,7 +284,9 @@ input[name="shipmentOption"]{
   cursor: pointer;
   text-transform: uppercase;
   font-weight: 700;
-  margin-top: 140px;
+  position: relative;
+  bottom: -15px;
+  /* margin-top: 140px; */
 }
 
 .w-60{
