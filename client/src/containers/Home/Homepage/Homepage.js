@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Homepage.css';
+import './HomepageMobile.css';
 import { Menu, Segment } from 'semantic-ui-react'
 // Router and Route is never being called, but at the same time must not be deleted. If deleted, it thows an error.
 import { BrowserRouter as Router, Route, Link, NavLink } from 'react-router-dom';
@@ -69,7 +70,7 @@ class Homepage extends Component {
       <div>
         <Layout>
           {/* <p id="homepage_title">Homepage</p> */}
-          <div className="menu-parent">
+          <div className="menu-parent mob-category-menu">
             {category_list != undefined && category_list.length > 0 && category_list.map(category => (
               // <Menu.Item name={category.category_name} active={activeItem === category.category_name} onClick={this.handleItemClick} />
               <Link to={"/category?term=" + category.category_name + "&page=1"} className="menu-item" key={category.id} category-id={category.id}>{category.category_name}</Link>

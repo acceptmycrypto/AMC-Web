@@ -1,0 +1,68 @@
+@media only screen and (max-width: 600px) {
+
+  .mob-Toolbar {
+    height: 91px;
+    width: 100%;
+    position: fixed;
+    justify-content: space-between;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 1);
+    display: block;
+    align-items: center;
+    padding: 0px;
+    box-sizing: border-box;
+    z-index: 90;
+  }
+
+  /* header */
+  .mob-nav-header {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px;
+  }
+
+  .mob-nav-left {
+    flex-direction: column;
+  }
+
+  /* search bar */
+  .mob-nav-searchBar {
+    width: 100%;
+  }
+
+  .nav-left .Search, .search_Form {
+    width: 100%;
+  }
+
+  #searchbarinput, .search_Button {
+    height: 40px;
+    background-color: #eeeeee;
+    color: #000;
+  }
+
+  #searchbarinput {
+    width: 100%;
+    margin-left: 10px;
+  }
+
+  .search_Button {
+    margin-right: 10px;
+  }
+
+  #searchbarinput::placeholder, #searchbarButton {
+    color: #000;
+  }
+
+  .mob-nav-category, .mob-nav-createDeal, .mob-nav-signIn {
+    display: none !important;
+  }
+
+  /* hambuger bar */
+  .mob-nav-bar {
+    display: block;
+    position: absolute;
+    right: 5%;
+  }
+
+}

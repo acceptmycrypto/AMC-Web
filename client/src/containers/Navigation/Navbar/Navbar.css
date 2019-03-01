@@ -153,7 +153,7 @@
     opacity: 1;
 }
 
-#white {
+#searchbarButton {
     color: white;
 }
 
@@ -173,5 +173,9 @@
 
 .font-family-roboto {
   font-family: Roboto,sans-serif;
+}
+
+.mob-nav-bar {
+  display: none;
 }
 
