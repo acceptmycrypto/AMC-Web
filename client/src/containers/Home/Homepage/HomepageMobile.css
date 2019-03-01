@@ -17,6 +17,11 @@
   .menu-parent::-webkit-scrollbar {
       display: none;  /*Safari and Chrome */
   }
+
+  /* hide the carousel */
+  .homepage-carousel {
+    display: none;
+  }
 }
 
 
