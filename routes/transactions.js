@@ -622,6 +622,7 @@ router.post("/checkout/notification", function (req, res, next) {
 //paypal
 let users_purchase_id_paypal;
 router.post("/paypal/create", verifyToken, function (req, res) {
+
   let user_id = req.decoded._id;
   let {deal_id, deal_name, pay_in_dollar, deal_description} = req.body.dealItem;
   let {firstName, lastName, shippingAddress, shippingCity, shippingState, zipcode} =  req.body;
@@ -678,7 +679,8 @@ router.post("/paypal/create", verifyToken, function (req, res) {
               "INSERT INTO users_purchases SET ?",
               {
                 user_id,
-                deal_id
+                deal_id,
+                paypal_amount: pay_in_dollar
               },
               function (err, transactionInitiated) {
                 if (err) {
@@ -733,6 +735,7 @@ router.post("/paypal/execute", verifyToken, function(req, res) {
           [
             {paypal_paymentId: paymentId,
             paypal_payerId: req.body.payerId,
+            status: "100",
             payment_received: 1 },
             {id: users_purchase_id_paypal}
           ],

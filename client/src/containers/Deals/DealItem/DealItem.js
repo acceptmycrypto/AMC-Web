@@ -67,9 +67,8 @@ class DealItem extends Component {
     let paypalValues = queryString.parse(this.props.location.search);
     let paymentId = paypalValues.paymentId;
     let payerId = paypalValues.PayerID;
-    let user_email = this.props.user_info[0].email;
-
-    if (paymentId) {
+    if (this.props._isLoggedIn && paymentId) {
+      let user_email = this.props.user_info[0].email;
       await this.props._executePayPalPayment(localStorage.getItem("token"), payerId, paymentId, id, deal_name, user_email);
     }
 
@@ -354,9 +353,8 @@ class DealItem extends Component {
 
   handleBuyNowButton = () => {
     const {deal_status} = this.props.dealItem;
-    const {paypal_execute_payment} = this.props;
-    debugger
-    console.log("paypal_execute_payment", paypal_execute_payment)
+    const {paypal_excecute_payment} = this.props;
+    
     switch (true) {
       case deal_status === "reserved":
         return (
@@ -366,7 +364,7 @@ class DealItem extends Component {
         return (
           <button disabled>Sold</button>
         );
-      case paypal_execute_payment && paypal_execute_payment.success === true:
+      case paypal_excecute_payment && paypal_excecute_payment.success === true:
       debugger
         return (
           <button disabled>Sold</button>

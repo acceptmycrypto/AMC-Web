@@ -216,6 +216,7 @@ CREATE TABLE users_purchases(
 	payment_received BOOLEAN NULL DEFAULT FALSE,
   paypal_paymentId VARCHAR(255) NULL UNIQUE,
   paypal_payerId VARCHAR(255) NULL,
+  paypal_amount DECIMAL(10,2) NULL,
 	permission VARCHAR(255) NOT NULL DEFAULT "community",
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_id) REFERENCES users(id),
