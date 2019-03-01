@@ -40,6 +40,7 @@ class Pricing extends Component {
         <form className="d-flex flex-row flex-wrap" id="weightOptionForm" onChange={weightOption}>
               <div className="pr-5 mt-2">
                 <input id="weight-1" type="radio" name="weightOption" className="weightOption" value={1}/> 
+                <i class="fas fa-tshirt"></i>
                 <span className="ml-2 weight-font">0-1 lb</span>
               </div>
               <div className="pr-5 mt-2">
@@ -70,8 +71,8 @@ class Pricing extends Component {
 
           {shippingLessThanDiscount &&
             <div>
-            <div className="shipping-weight-title mt-4">Your entered discount price: <span style={{color:"#5ED0C0"}}>${this.props.priceInCrypto}</span> is less than the selected shipping cost.</div>
-            <div className="shipping-weight-title mt-4"> Your discount price will be adjusted to <span style={{color:"#5ED0C0"}}>${this.calcNewPrice()}</span> to include the <span style={{color:"#5ED0C0"}}>${shippingPriceSelection}</span> shipping cost that will be withdrawn from your account. </div>
+            <div className="shipping-weight-title mt-4">The discount price: <span style={{color:"#5ED0C0"}}>${this.props.priceInCrypto}</span> is less than the selected shipping cost.</div>
+            <div className="shipping-weight-title mt-4"> Your discount price will be adjusted to <span style={{color:"#5ED0C0"}}>${this.calcNewPrice()}</span> to include the <span style={{color:"#5ED0C0"}}>${shippingPriceSelection}</span> shipping cost that will be withdrawn from your listed price. </div>
             </div>
           }
 
@@ -142,48 +143,51 @@ class Pricing extends Component {
   }
 
   sellerEarnUSD = () =>{
+    
     let{priceInUSD, shippingPriceSelection} = this.props;
 
     let sellerEarns, sellerProfits; 
-    if(this.props.shippingLabelOption === "prepaid"){
-      sellerEarns = (((parseFloat(priceInUSD)).toFixed(2))-((0.025 * parseFloat(priceInUSD)).toFixed(2))-(parseFloat(shippingPriceSelection).toFixed(2))).toFixed(2);
+    if(this.props.shippingLabelSelection === "prepaid"){
+      sellerEarns = ((parseFloat(priceInUSD))-(0.025 * parseFloat(priceInUSD))-(parseFloat(shippingPriceSelection))).toFixed(2);
    
     }else{
-      sellerEarns = (((parseFloat(priceInUSD)).toFixed(2))-((0.025 * parseFloat(priceInUSD)).toFixed(2))).toFixed(2);
+      sellerEarns = ((parseFloat(priceInUSD))-(0.025 * parseFloat(priceInUSD))).toFixed(2);
     }
 
-    if(sellerEarns > 0){
+    if(sellerEarns >= 0){
         sellerProfits = true;
     }else{
       sellerProfits = false;
     }
 
-    // debugger;
+ 
     this.props._sellerEarnUSD(sellerEarns, sellerProfits);
 
     // return sellerEarns;
+    return true;
 
   }
 
   sellerEarnCrypto = () =>{
     let{priceInCrypto, shippingPriceSelection} = this.props;
     let sellerEarns, sellerProfits; 
-    if(this.props.shippingLabelOption === "prepaid"){
+    if(this.props.shippingLabelSelection === "prepaid"){
       sellerEarns = (((parseFloat(priceInCrypto)).toFixed(2))-((0.025 * parseFloat(priceInCrypto)).toFixed(2))-(parseFloat(shippingPriceSelection).toFixed(2))).toFixed(2);
     }else{
       sellerEarns = (((parseFloat(priceInCrypto)).toFixed(2))-((0.025 * parseFloat(priceInCrypto)).toFixed(2))).toFixed(2);
     }
 
-    if(sellerEarns > 0){
+    if(sellerEarns >= 0){
         sellerProfits = true;
     }else{
       sellerProfits = false;
     }
 
-    // debugger;
+   
     this.props._sellerEarnCrypto(sellerEarns, sellerProfits);
 
     // return sellerEarns;
+    return true;
   }
   
 
@@ -325,6 +329,7 @@ class Pricing extends Component {
                 <Modal
                   visible={modalVisible}
                   effect="fadeInUp"
+                  className ="shipping-weight-modal"
                   onClickAway={() => {
                   this.exitShippingModal();
                   }}
@@ -341,6 +346,7 @@ class Pricing extends Component {
                   <div className="w-50 pr-4 border-right">
                     {priceInUSD !== null && priceInUSD !== 'NaN' && priceInUSD.length > 0 &&
                       <div>
+                        <div className="text-center mb-2 pricing-titles" style={{color: "navy"}}>Buyer Purchases with USD</div>
                         <div className="d-flex flex-row justify-content-between">
                           <div className="shipping-font">USD Listed Price:</div>
                           <div className="shipping-font"> <strong>${(parseFloat(priceInUSD)).toFixed(2)}</strong></div>
@@ -355,18 +361,18 @@ class Pricing extends Component {
                             <div className="shipping-font">Shipping Cost: </div>
                             <div className="shipping-font" style={{color:"red"}}>  - ${shippingPriceSelection}</div>
                           </div>
-                          {this.sellerEarnUSD() && 
+                          {this.sellerEarnUSD() &&
                             <div className="d-flex flex-row justify-content-between">
-                              <div className="shipping-font" style={{color:"navy"}}> <strong>YOU EARN: </strong></div>
-                              {sellerProfitsUSD !== null && sellerEarnsUSD !== null && <div className="shipping-font" style={{color:"navy"}}> <strong> {sellerProfitsUSD ? "$" : " - $"} {sellerEarnsUSD}</strong></div>}
+                              <div className="shipping-font" style={{color:"navy"}}> <strong>YOU EARN (USD):  </strong></div>
+                              {sellerProfitsUSD !== null && sellerEarnsUSD !== null && <div className="shipping-font" style={{color:"navy"}}> <strong> {sellerProfitsUSD ? "$" : " - $"} {Math.abs(sellerEarnsUSD).toFixed(2)}</strong></div>}
                             </div>
                           }
                         </div>
                       }
                       { shippingLabelSelection === "seller" && this.sellerEarnUSD() && 
                         <div className="d-flex flex-row justify-content-between">
-                          <div className="shipping-font" style={{color:"navy"}}><strong>YOU EARN:</strong> </div>
-                          { sellerProfitsUSD !== null && sellerEarnsUSD !== null && <div className="shipping-font" style={{color:"navy"}}> <strong> {sellerProfitsUSD ? "$" : " - $"} {sellerEarnsUSD}</strong></div>}
+                          <div className="shipping-font" style={{color:"navy"}}><strong>YOU EARN (USD):</strong> </div>
+                          { sellerProfitsUSD !== null && sellerEarnsUSD !== null && <div className="shipping-font" style={{color:"navy"}}> <strong> {sellerProfitsUSD ? "$" : " - $"} {Math.abs(sellerEarnsUSD).toFixed(2)}</strong></div>}
                         </div>
                       }
 
@@ -376,6 +382,7 @@ class Pricing extends Component {
                   <div className="w-50 ml-4">
                     {priceInUSD !== null && priceInUSD !== 'NaN' && priceInUSD.length > 0 && priceInCrypto !== null && priceInCrypto !== 'NaN' && priceInCrypto.length > 0 && 
                       <div>
+                        <div className="text-center mb-2 pricing-titles" style={{color: "navy"}}>Buyer Purchases with Crypto</div>
                         <div className="d-flex flex-row justify-content-between">
                           <div className="shipping-font">Crypto Listed Price:</div>
                           <div className="shipping-font"><strong>${parseFloat(priceInCrypto).toFixed(2)}</strong></div>
@@ -392,16 +399,16 @@ class Pricing extends Component {
                             </div>
                             {this.sellerEarnCrypto() && 
                               <div className="d-flex flex-row justify-content-between">
-                                <div className="shipping-font" style={{color:"navy"}}> <strong>YOU EARN: </strong></div>
-                                {sellerProfitsCrypto !== null && sellerEarnsCrypto !== null && <div className="shipping-font" style={{color:"navy"}}> <strong> {sellerProfitsCrypto ? "$" : " - $"} {sellerEarnsCrypto}</strong></div>}
+                                <div className="shipping-font" style={{color:"navy"}}> <strong>YOU EARN (Crypto): </strong></div>
+                                {sellerProfitsCrypto !== null && sellerEarnsCrypto !== null && <div className="shipping-font" style={{color:"navy"}}> <strong> {sellerProfitsCrypto ? "$" : " - $"} {Math.abs(sellerEarnsCrypto).toFixed(2)}</strong></div>}
                               </div>
                             }
                           </div>
                         }
                         { shippingLabelSelection === "seller" && this.sellerEarnCrypto() && 
                         <div className="d-flex flex-row justify-content-between">
-                          <div className="shipping-font" style={{color:"navy"}}><strong>YOU EARN:</strong> </div>
-                          {sellerProfitsCrypto !== null && sellerEarnsCrypto !== null && <div className="shipping-font" style={{color:"navy"}}> <strong>{sellerProfitsCrypto ? "$" : " - $"} {sellerEarnsCrypto}</strong></div>}
+                          <div className="shipping-font" style={{color:"navy"}}><strong>YOU EARN (Crypto):</strong> </div>
+                          {sellerProfitsCrypto !== null && sellerEarnsCrypto !== null && <div className="shipping-font" style={{color:"navy"}}> <strong>{sellerProfitsCrypto ? "$" : " - $"} {Math.abs(sellerEarnsCrypto).toFixed(2)}</strong></div>}
                         </div>
                       }
                       </div>
