@@ -6,6 +6,7 @@ const initialState = {
     categoryPage: 1,
     categoryNumberOfResults: 0,
     parentCategory: [],
+    sideBarOpened: false
 };
 
 export default function categoryReducer(state = initialState, action) {
@@ -33,6 +34,18 @@ export default function categoryReducer(state = initialState, action) {
                 ...state,
                 parentCategory: action.payload.parentCategory
             };
+
+        case "OPEN_SIDE_BAR":
+            return {
+                ...state,
+                sideBarOpened: true
+            };
+
+        case "CLOSE_SIDE_BAR":
+          return {
+              ...state,
+              sideBarOpened: false
+          };
         default:
             return state;
     }

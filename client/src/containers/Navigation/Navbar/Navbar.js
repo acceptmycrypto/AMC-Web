@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { _loadPhoto } from "../../../actions/navbarActions";
 import SearchBar from "./Searchbar";
 import Category from "./Category";
-import { resetNavbar } from "../../../actions/navbarActions";
+import { resetNavbar, openSideBarOnMobile, closeSideBarOnMobile } from "../../../actions/navbarActions";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
 import { _loadChatSessions } from "../../../actions/chatActions";
 import { resetDealitemState } from "../../../actions/dealItemActions";
@@ -55,23 +55,22 @@ class Navbar extends Component {
     }
   };
 
-  openNavBarOnMobile = () => {
-
-  }
-
   render() {
+    const {sideBarOpened, openSideBarOnMobile, closeSideBarOnMobile} = this.props;
+
     return (
-      <header className="Toolbar mob-Toolbar">
+      <header id={sideBarOpened && "mob-nav-sidebar-gradient"} className="Toolbar mob-Toolbar">
         <div className="nav-left mob-nav-left">
           <div className="Logo mob-nav-header">
             <Link
+              className={sideBarOpened && "mob-nav-header-invisible"}
               onClick={() => {
                 this.resetNavbar();
                 this.props.resetDealitemState();
               }}
               to="/"
             >
-              <div className="font-17 color-deepBlue">
+              <div className="font-17 color-deepBlue mob-nav-sidebar-lightBlue">
                 <img
                   className="navbar_logo"
                   src="https://s3-us-west-1.amazonaws.com/acceptmycrypto/logo.png"
@@ -80,9 +79,16 @@ class Navbar extends Component {
                 <span className="ml-2">AcceptMyCrypto</span>
               </div>
             </Link>
-            <div onClick={this.openNavBarOnMobile} className="mob-nav-bar">
-              <i class="fas fa-bars fa-2x"></i>
-            </div>
+            {sideBarOpened ?
+              <div onClick={closeSideBarOnMobile} className="mob-nav-bar">
+                <i class="fas fa-times fa-2x"></i>
+              </div>
+              :
+              <div onClick={openSideBarOnMobile} className="mob-nav-bar">
+                <i class="fas fa-bars fa-2x"></i>
+              </div>
+            }
+
           </div>
           <div className="mob-nav-searchBar">
             <SearchBar />
@@ -166,7 +172,7 @@ class Navbar extends Component {
           )}
           <li>
             {this.props.photo.photo ? (
-              <div className="dropdown show m-0 p-0">
+              <div className="dropdown show m-0 p-0 mob-nav-photo">
                 <div
                   className="dropdown-toggle picture-toggle m-0 p-0"
                   id="dropdownMenuLink"
@@ -197,7 +203,7 @@ class Navbar extends Component {
                 </div>
               </div>
             ) : (
-              <div className="d-flex flex-row align-items-center mob-nav-signIn">
+              <div className={sideBarOpened ? "mob-nav-sidebar-signIn" : "d-flex flex-row align-items-center mob-nav-signIn"}>
                 <Link to="/SignIn">
                   <p className="navbar-login" id="nav-link-sign-in">
                     Sign In
@@ -229,7 +235,8 @@ const mapStateToProps = state => ({
   loading: state.Photo.loading,
   error: state.Photo.error,
   userLoggedIn: state.LoggedIn.userLoggedIn,
-  chat_sessions: state.Chat.chat_sessions
+  chat_sessions: state.Chat.chat_sessions,
+  sideBarOpened: state.Category.sideBarOpened
 });
 
 const matchDispatchToProps = dispatch => {
@@ -239,7 +246,9 @@ const matchDispatchToProps = dispatch => {
       _loadPhoto,
       resetNavbar,
       _loadChatSessions,
-      resetDealitemState
+      resetDealitemState,
+      openSideBarOnMobile,
+      closeSideBarOnMobile
     },
     dispatch
   );

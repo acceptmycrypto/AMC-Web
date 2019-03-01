@@ -38,3 +38,11 @@ export const fetchPhotoFailure = error => ({
 export const resetNavbar = deals => ({
     type: "RESET_NAVBAR"
   });
+
+export const openSideBarOnMobile = () => ({
+  type: "OPEN_SIDE_BAR"
+});
+
+export const closeSideBarOnMobile = () => ({
+  type: "CLOSE_SIDE_BAR"
+});
