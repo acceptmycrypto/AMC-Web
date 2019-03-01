@@ -26,7 +26,8 @@ const PurchaseOrder = props => {
 
         <div id="payment-divider">OR</div>
         <div id="paypal-button">
-          <strong>Pay in USD</strong>
+          <strong>{props.isLoggedin ? "Pay in USD" : "Sign in to pay in USD"}</strong>
+          {props.isLoggedin &&
           <PaypalButton
             dealItemInfo={props.deal_item}
             firstNameInfo={props.first_name}
@@ -35,7 +36,7 @@ const PurchaseOrder = props => {
             shippingCityInfo={props.shipping_city}
             zipcodeInfo={props.zip_code}
             shippingStateInfo={props.shipping_state}
-          />
+          /> }
         </div>
         <div>
           <div onClick={props.previous_step} className="payment-previous-step button">

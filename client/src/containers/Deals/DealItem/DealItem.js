@@ -67,7 +67,7 @@ class DealItem extends Component {
     let paypalValues = queryString.parse(this.props.location.search);
     let paymentId = paypalValues.paymentId;
     let payerId = paypalValues.PayerID;
-    if (this.props._isLoggedIn && paymentId) {
+    if (this.props.userLoggedIn && paymentId) {
       let user_email = this.props.user_info[0].email;
       await this.props._executePayPalPayment(localStorage.getItem("token"), payerId, paymentId, id, deal_name, user_email);
       await this.handleBuyNowButton();
@@ -565,6 +565,7 @@ class DealItem extends Component {
                         paymentInfo &&
                         this.timeInMilliseconds(paymentInfo.timeout)
                       }
+                      isLoggedin = {userLoggedIn}
                     />
                   )}
                 </div>
