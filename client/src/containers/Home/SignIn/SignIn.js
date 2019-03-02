@@ -60,15 +60,13 @@ class SignIn extends Component {
 
   render() {
     const { error, loading, userLoggedIn, visible } = this.props;
-    // console.log(userLoggedIn);
+
+    //If media query matches
+    const mobileScreenSize = window.matchMedia("(max-width: 640px)")
 
     if (error) {
       return <div>Error! {error.message}</div>;
     }
-
-    // if (loading) {
-    //   return <div>Loading...</div>;
-    // }
 
     return (
       <div className="App">
@@ -105,11 +103,14 @@ class SignIn extends Component {
 
               </div>
 
-              <Modal visible={visible} effect="fadeInLeft" onClickAway={() => {this.props.closeModal(); }}>
-                <div className="Modal">
+              <Modal
+                visible={visible}
+                width={mobileScreenSize.matches && "85%"} //If media query matches
+                effect="fadeInLeft"
+                onClickAway={() => {this.props.closeModal(); }}>
+                <div className={mobileScreenSize.matches ? "mob-modal" : "Modal"} >
                   <h4>Your Email or Password was Invalid</h4>
                   <a className="a-link" href="javascript:void(0);" onClick={() => {this.props.closeModal(); }}>Ok</a>
-
                 </div>
               </Modal>
             </form>
