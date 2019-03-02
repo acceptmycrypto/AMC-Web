@@ -19,7 +19,7 @@
 
 .select-crypto-for-deal {
   display: flex;
-  min-height: 375px;
+  min-height: 315px;
   box-sizing: border-box;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   border-radius: 5px;
@@ -87,11 +87,29 @@
 }
 
 .shipment-options{
-  /* position: relative;
-  top: 30px;
-  width: 100%; */
-  margin-top: 30px;
+  display: flex;
+  min-height: 300px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 5px;
+  padding: 20px;
+  /* padding-left: 40px; */
+  margin: 20px 10px 10px 50px;
+  position: relative;
+ 
+  /* margin-top: 30px; */
 }
+.pricing-options{
+  display: flex;
+  min-height: 300px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 5px;
+  padding: 20px;
+  margin: 20px 50px 10px 10px;
+  position: relative;
+}
+
 
 .shipping-font{
   font-size: 17px;
@@ -319,3 +337,14 @@ input[name="shipmentOption"]{
   
 }
 
+#shipping-previous{
+  position: absolute;
+  bottom: 60px;
+  left: 10px;
+}
+
+#shipping-next{
+  position: absolute;
+  bottom: 60px;
+  right: 10px;
+}
