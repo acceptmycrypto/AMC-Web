@@ -26,8 +26,6 @@ body, html {
   .App__Aside {
     width: 50%;
     background-color: #66DAC7;
-    /* padding-top: 75px; */
-    /* padding-bottom: 75px; */
   }
 
   .App__Form {
@@ -36,7 +34,7 @@ body, html {
     padding: 0px 40px;
     overflow: auto;
     padding-top: 75px;
-    /* padding-bottom: 75px; */
+    height: 100%;
   }
 
   .PageSwitcher {
@@ -71,11 +69,6 @@ body, html {
     border-bottom-right-radius: 25px;
   }
 
-  /* .FormCenter {
-    margin-bottom: 100px;
-  } */
-
-
   .FormTitle {
     color: #707C8B;
     font-weight: 300;
@@ -106,7 +99,6 @@ body, html {
   }
 
   .FormField__Label {
-    /* display: block; */
     text-transform: uppercase;
     font-size: .9em;
     color: white;
@@ -144,7 +136,6 @@ body, html {
   .FormField__Link {
     color: #66707D;
     text-decoration: none;
-    /* display: inline-block; */
     border-bottom: 1.5px solid #225E62;
     padding-bottom: 5px;
     width: fit-content;
@@ -182,7 +173,7 @@ body, html {
     color: white;
     position: fixed;
   }
-  
+
   .a-link{
     color: white;
     font-size: 20px;
@@ -336,18 +327,4 @@ hr.star-light {
     text-align: center;
   }
 
-}
-
-@media only screen and (max-width: 840px) {
-
-  .buttonLink{
-    width: fit-content;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  .FormField__Button {
-    margin: 0 0px 20px 0;
-  }
 }

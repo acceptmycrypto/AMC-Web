@@ -66,13 +66,15 @@ class SignIn extends Component {
       return <div>Error! {error.message}</div>;
     }
 
-    if (loading) {
-      return <div>Loading...</div>;
-    }
+    // if (loading) {
+    //   return <div>Loading...</div>;
+    // }
 
     return (
       <div className="App">
-        <Aside />
+         <div className="mob-signup-aside">
+          <Aside />
+        </div>
         <div className="App__Form">
           <div className="PageSwitcher">
             <NavLink to="/SignIn" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign In</NavLink>
