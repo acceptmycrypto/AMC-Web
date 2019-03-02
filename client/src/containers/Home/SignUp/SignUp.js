@@ -81,10 +81,7 @@ class SignUp extends Component {
 
     return (
       <div className="App">
-        <div className="mob-signup-aside">
-         <Aside />
-        </div>
-
+        <Aside />
         <div className="App__Form">
           <div className="PageSwitcher">
             <NavLink

@@ -95,4 +95,16 @@
     padding: 15px 100px;
   }
 
+  /* modal */
+  .mob-modal{
+    width: 500px;
+    height: 200px;
+    background-color: #2E4158;
+    border: solid #199087 .5em;
+    padding: 25px;
+    display: block;
+    text-transform: uppercase;
+    color: white;
+  }
+
 }

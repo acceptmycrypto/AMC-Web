@@ -72,9 +72,7 @@ class SignIn extends Component {
 
     return (
       <div className="App">
-         <div className="mob-signup-aside">
-          <Aside />
-        </div>
+        <Aside />
         <div className="App__Form">
           <div className="PageSwitcher">
             <NavLink to="/SignIn" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign In</NavLink>
