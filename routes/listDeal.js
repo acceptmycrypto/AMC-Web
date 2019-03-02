@@ -112,7 +112,8 @@ router.post("/cryptocurrency/exchange", verifyToken, async function(req, res) {
 
 router.post('/listdeal', verifyToken, function(req, res) {
   //info needed to insert into tables
-  let {dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos} = req.body
+  
+  let {dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos, label_status, weight, shipping_cost} = req.body
   let seller_id = req.decoded._id;
   let phone_number_verified;
 
@@ -127,6 +128,24 @@ router.post('/listdeal', verifyToken, function(req, res) {
   let featured_deal_image = images[0].Location;
   let pay_in_dollar = priceInUSD;
   let pay_in_crypto = priceInCrypto;
+
+  let dimension = 10;
+  if(label_status === "prepaid"){
+     if(weight == 1){
+      dimension = 5;
+     }else if(weight == 3){
+      dimension = 7;
+    }else if(weight == 10){
+      dimension = 11;
+    }else if(weight == 20){
+      dimension = 14;
+    }else if(weight == 40){
+      dimension = 18;
+    }else if(weight == 70){
+      dimension = 22;
+    }
+
+  }
 
   //Check if phone number is verified
   connection.query("SELECT phone_number_verified FROM users WHERE id = ?", [seller_id],
@@ -144,7 +163,7 @@ router.post('/listdeal', verifyToken, function(req, res) {
 
   //First insert into deals table
   // INSERT INTO users_shipping_address SET ?
-  let deals_rows = {seller_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto, item_condition};
+  let deals_rows = {seller_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto, item_condition, length: dimension, width: dimension, height: dimension, weight, shipping_label_status: label_status, shipment_cost: shipping_cost};
 
   connection.query("INSERT INTO deals SET ?",
     deals_rows,
@@ -514,11 +533,13 @@ router.post('/verification/start', verifyToken, function(req, res) {
 
   let state = req.body.sellerState.value;
 
-  let {sellerAddress, sellerCity, sellerZipcode} = req.body;
+  let {firstName, lastName, sellerAddress, sellerCity, sellerZipcode} = req.body;
 
   connection.query("UPDATE users SET ? WHERE ?",
   [
-    { address: sellerAddress,
+    { first_name: firstName,
+      last_name: lastName,
+      address: sellerAddress,
       city: sellerCity,
       state,
       zipcode: sellerZipcode

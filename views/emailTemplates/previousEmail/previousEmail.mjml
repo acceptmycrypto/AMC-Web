@@ -18,15 +18,15 @@
     <mj-section background-color="#2e4157">
 
       <mj-column>
-        <mj-text color="#fff" font-size="15px" align="left" line-height="20px">
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="left" line-height="20px">
             Success! You’ve changed your Email Address for your AcceptMyCrypto account.
              
         </mj-text>
-        <mj-text color="#6bd9c7" font-size="18px" align="center" line-height="20px">
+        <mj-text color="#6bd9c7" letter-spacing="1.2px" font-size="18px" align="center" line-height="20px">
             You can use <%=email%> to sign into your AcceptMyCrypto account and all your AcceptMyCrypto notifications will now be sent to <%=email%>.
         </mj-text>
 
-         <mj-text color="#fff" font-size="15px" align="left" line-height="20px">
+         <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="left" line-height="20px">
             Think you’re getting this email by mistake? Don’t worry - just click the button below.
         </mj-text>
 

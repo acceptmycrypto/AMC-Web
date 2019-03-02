@@ -196,13 +196,59 @@
                 <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%">
                   <tr>
                     <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
-                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;letter-spacing:1.2px;line-height:20px;text-align:center;color:#ffffff;"> Thanks for signing up! We now need you to confirm your email address. </div>
+                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:20px;letter-spacing:1.2px;line-height:20px;text-align:center;color:#ffffff;"> A User Has Purched Your Item:
+                        <%= deal_name %>
+                      </div>
                     </td>
                   </tr>
                   <tr>
                     <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
-                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:20px;letter-spacing:1.2px;line-height:20px;text-align:center;color:#ffffff;">
-                        <%= email %>
+                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;letter-spacing:1.2px;line-height:20px;text-align:center;color:#ffffff;"> You Have 48 hrs to Ship the Item and Submit the Tracking Number </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;letter-spacing:1.2px;line-height:20px;text-align:center;color:#ffffff;"> Once the User Receives the Item Your AcceptMyCrypto Account Balance Will Be Updated With Your Payment </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;letter-spacing:1.2px;line-height:20px;text-align:center;color:#ffffff;"> Here is the User's Shipping Details: </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;letter-spacing:1.2px;line-height:20px;text-align:center;color:#ffffff;"> User's Name:
+                        <%=shipping_firstname%>
+                        <%=shipping_lastname%>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;letter-spacing:1.2px;line-height:20px;text-align:center;color:#ffffff;"> Address:
+                        <%=shipping_address%>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;letter-spacing:1.2px;line-height:20px;text-align:center;color:#ffffff;"> City:
+                        <%=shipping_city%>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;letter-spacing:1.2px;line-height:20px;text-align:center;color:#ffffff;"> State:
+                        <%=shipping_state%>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;letter-spacing:1.2px;line-height:20px;text-align:center;color:#ffffff;"> Zipcode:
+                        <%=shipping_zipcode%>
                       </div>
                     </td>
                   </tr>
@@ -210,11 +256,16 @@
                     <td align="center" vertical-align="middle" style="font-size:0px;padding:10px 25px;word-break:break-word;">
                       <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;line-height:100%;">
                         <tr>
-                          <td align="center" bgcolor="#F63A4D" role="presentation" style="border:none;border-radius:3px;cursor:auto;padding:10px 25px;background:#F63A4D;" valign="middle">
-                            <a href="<%=verify_link%>" style="background:#F63A4D;color:#ffffff;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;font-weight:normal;line-height:120%;Margin:0;text-decoration:none;text-transform:none;" target="_blank"> Verify Email </a>
+                          <td align="center" bgcolor="#6bd9c7" role="presentation" style="border:none;border-radius:3px;cursor:auto;padding:10px 25px;background:#6bd9c7;" valign="middle">
+                            <a href="<%= supply_tracking_number_link%>" style="background:#6bd9c7;color:#2e4157;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;font-weight:normal;line-height:120%;Margin:0;text-decoration:none;text-transform:none;" target="_blank"> Submit Tracking Number </a>
                           </td>
                         </tr>
                       </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;letter-spacing:1.2px;line-height:15px;text-align:center;color:#ffffff;"> Please contact support@acceptmycrypto.com for any questions or concerns. </div>
                     </td>
                   </tr>
                 </table>

@@ -15,10 +15,10 @@
     <mj-section background-color="#2e4157">
 
       <mj-column>
-        <mj-text color="#fff" font-size="20px" align="center" line-height="20px">
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="20px" align="center" line-height="20px">
           A customer has ordered an item.
         </mj-text>
-        <mj-text color="#fff" font-size="15px" align="center" line-height="20px">
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="20px">
           txn_id:
           <%= txn_id %>
         </mj-text>
