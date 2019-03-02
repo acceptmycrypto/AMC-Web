@@ -174,10 +174,6 @@ body, html {
     position: fixed;
   }
 
-  .mob-modal-hidden {
-    display: none;
-  }
-
   .a-link{
     color: white;
     font-size: 20px;

@@ -1,9 +1,6 @@
 /* modal */
  /* media query */
  @media only screen and (max-width: 640px) {
-  .mob-modal-hidden {
-    display: block;
-  }
 
   .mob-modal{
     background-color: #2E4158;

@@ -103,6 +103,7 @@ class SignUp extends Component {
   };
 
   render() {
+    const mobileScreenSize = window.matchMedia("(max-width: 640px)")
     const { error, cryptoOptions, visible } = this.props;
 
     if (error) {
@@ -230,7 +231,8 @@ class SignUp extends Component {
                 </Link>
               </div>
 
-              <div className="mob-modal-hidden">{this.handleMobModal()}</div>
+              {/* If media query matches  on mobile */}
+              {mobileScreenSize.matches ? this.handleMobModal() :
               <Modal
                 visible={visible}
                 effect="fadeInLeft"
@@ -255,7 +257,7 @@ class SignUp extends Component {
                     Ok
                   </a>
                 </div>
-              </Modal>
+              </Modal> }
             </form>
           </div>
           <Footer />

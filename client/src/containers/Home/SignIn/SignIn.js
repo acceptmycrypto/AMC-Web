@@ -100,6 +100,8 @@ class SignIn extends Component {
                 <Link to="/ResendEmail" className="FormField__Link">
                   Resend my verification email
                 </Link>
+                {mobileScreenSize.matches &&
+                <div className="back_to_home"><Link to="/" id="back_to_home-text"><i className="fas fa-arrow-left" id="back-arrow"></i> <span>Home</span></Link></div> }
 
               </div>
 
