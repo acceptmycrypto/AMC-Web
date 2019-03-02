@@ -12,7 +12,7 @@ const UploadingImage = props => {
       <div className="deal-listing-images">
         <div className="first-row">
           {/* image one */}
-          {uploadedImages[0] !== undefined 
+          {uploadedImages[0] !== undefined
             ? (
               <div
                 data-imagekey={uploadedImages[0].Key}
@@ -31,7 +31,7 @@ const UploadingImage = props => {
                 />
                 <div class="main-uploaded-photo">Featured Photo</div>
               </div>
-            ) 
+            )
             : (
               <div className="deal-listing-img col-3">
                 <label htmlFor="small-photo-upload">
@@ -46,7 +46,7 @@ const UploadingImage = props => {
           )}
 
           {/* image two */}
-          {uploadedImages[1] !== undefined 
+          {uploadedImages[1] !== undefined
           ? (
             <div
               data-imagekey={uploadedImages[1].Key}
@@ -64,8 +64,8 @@ const UploadingImage = props => {
                 alt="uploaded_image"
               />
             </div>
-          ) 
-          : uploadedImages[0] !== undefined 
+          )
+          : uploadedImages[0] !== undefined
             ? (
               <div className="deal-listing-img col-3">
                 <label htmlFor="small-photo-upload">
@@ -77,13 +77,13 @@ const UploadingImage = props => {
                   onChange={uploadImage}
                 />
               </div>
-            ) 
+            )
             : (
               <div className="deal-listing-img col-3" />
           )}
 
           {/* image three */}
-          {uploadedImages[2] !== undefined 
+          {uploadedImages[2] !== undefined
             ? (
               <div
                 data-imagekey={uploadedImages[2].Key}
@@ -101,8 +101,8 @@ const UploadingImage = props => {
                   alt="uploaded_image"
                 />
               </div>
-            ) 
-            : uploadedImages[1] !== undefined 
+            )
+            : uploadedImages[1] !== undefined
               ? (
                 <div className="deal-listing-img col-3">
                   <label htmlFor="small-photo-upload">
@@ -114,7 +114,7 @@ const UploadingImage = props => {
                     onChange={uploadImage}
                   />
                 </div>
-              ) 
+              )
               : (
                 <div className="deal-listing-img col-3" />
           )}
@@ -122,7 +122,7 @@ const UploadingImage = props => {
 
         <div className="second-row">
           {/* image four */}
-          {uploadedImages[3] !== undefined 
+          {uploadedImages[3] !== undefined
           ? (
             <div
               data-imagekey={uploadedImages[3].Key}
@@ -140,8 +140,8 @@ const UploadingImage = props => {
                 alt="uploaded_image"
               />
             </div>
-          ) 
-          : uploadedImages[2] !== undefined 
+          )
+          : uploadedImages[2] !== undefined
             ? (
               <div className="deal-listing-img col-3">
                 <label htmlFor="small-photo-upload">
@@ -153,13 +153,13 @@ const UploadingImage = props => {
                   onChange={uploadImage}
                 />
               </div>
-            ) 
+            )
             : (
               <div className="deal-listing-img col-3" />
           )}
 
           {/* image four */}
-          {uploadedImages[4] !== undefined 
+          {uploadedImages[4] !== undefined
           ? (
             <div
               data-imagekey={uploadedImages[4].Key}
@@ -177,8 +177,8 @@ const UploadingImage = props => {
                 alt="uploaded_image"
               />
             </div>
-            ) 
-          : uploadedImages[3] !== undefined 
+            )
+          : uploadedImages[3] !== undefined
               ? (
                 <div className="deal-listing-img col-3">
                   <label htmlFor="small-photo-upload">
@@ -190,13 +190,13 @@ const UploadingImage = props => {
                     onChange={uploadImage}
                   />
                 </div>
-              ) 
+              )
               : (
                 <div className="deal-listing-img col-3" />
               )}
 
           {/* image six */}
-          {uploadedImages[5] !== undefined 
+          {uploadedImages[5] !== undefined
           ? (
             <div
               data-imagekey={uploadedImages[5].Key}
@@ -214,8 +214,8 @@ const UploadingImage = props => {
                 alt="uploaded_image"
               />
             </div>
-            ) 
-          : uploadedImages[4] !== undefined 
+            )
+          : uploadedImages[4] !== undefined
             ? (
               <div className="deal-listing-img col-3">
                 <label htmlFor="small-photo-upload">
@@ -227,7 +227,7 @@ const UploadingImage = props => {
                   onChange={uploadImage}
                 />
               </div>
-              ) 
+              )
             : (
               <div className="deal-listing-img col-3" />
             )}

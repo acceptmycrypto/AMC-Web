@@ -24,13 +24,19 @@ import {
   onEditingDealName,
   onEditingDetail,
   _submitDeal,
+  _updateEditingDeal,
   closeModalAfterDealCreated,
-  resetListDeal
+  resetListDeal,
+  resetEditListing,
+  openAlertEditCancelModal,
+  closeAlertEditCancelModal
 } from "../../actions/listDealActions";
+import { closeModal } from '../../actions/signInActions';
 import { _isLoggedIn } from '../../actions/loggedInActions';
 import { _loadCryptocurrencies } from "../../actions/loadCryptoActions";
 import { _loadCategory } from "../../actions/categoryActions";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
+import AlertModal from "../../components/UI/Alert";
 import UploadingImage from "./UploadImage";
 import Pricing from "./Pricing";
 import Description from "./Description";
@@ -107,7 +113,7 @@ class ListDeal extends Component {
 
   onSelectImageToReMove = e => {
     let imageKey = e.target.parentElement.getAttribute("data-imagekey");
-    this.props._removeImage(localStorage.getItem("token"), imageKey);
+    this.props._removeImage(localStorage.getItem("token"), imageKey, this.props.editingDeal);
   };
 
   calculateCryptoExchange = event => {
@@ -141,6 +147,22 @@ class ListDeal extends Component {
     let selected_cryptos = Object.keys(crypto_amount);
 
     _submitDeal(localStorage.getItem("token"), dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos, label_status, weight, shipping_cost);
+
+  };
+
+  onUpdatingDeal = () => {
+    const { dealName, selectedCategory, selectedCondition, _updateEditingDeal, images, priceInUSD, priceInCrypto, crypto_amount, editingDealId } = this.props;
+
+    let textDetailRaw = convertToRaw(this.props.editorState.getCurrentContent());
+
+    let selected_cryptos = [];
+    for (let cryptoSymbol in crypto_amount) {
+      if (crypto_amount[cryptoSymbol] !== undefined) {
+        selected_cryptos.push(cryptoSymbol)
+      }
+    }
+
+    _updateEditingDeal(localStorage.getItem("token"), editingDealId, dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos);
 
   };
 
@@ -223,7 +245,7 @@ class ListDeal extends Component {
 
     const validateDescription = {
       dealName: this.props.dealName,
-      selectedCategory: this.props.selectedCategory,
+      selectedCategory: this.props.selectedCategory.length > 0,
       description: detail
     }
 
@@ -241,7 +263,7 @@ class ListDeal extends Component {
         toast.error(this._validationErrors(validateDescription).notifyDealNameError, {
           position: toast.POSITION.TOP_RIGHT
         });
-      } else if (!this.props.selectedCategory) {
+      } else if (this.props.selectedCategory.length === 0) {
         toast.error(this._validationErrors(validateDescription).notifySelectedCategoryError, {
           position: toast.POSITION.TOP_RIGHT
         });
@@ -289,6 +311,15 @@ class ListDeal extends Component {
     return errMsgs;
   }
 
+  handleDiscardEditChanges = () => {
+    this.props.resetEditListing();
+    this.props.history.push(
+      `/feed/deals/${this.props.dealItem.deal_id}/${
+        this.props.dealItem.deal_name
+      }`
+    );
+  }
+
   render() {
     const {
       error,
@@ -306,7 +337,10 @@ class ListDeal extends Component {
       creatingDeal,
       creatingDealError,
       dealCreated,
+      editingDeal,
       modalVisible,
+      alertEditCancelModalVisible,
+      closeAlertEditCancelModal,
 
       onSelectImageToView,
       handleUploadingPhotosStep,
@@ -323,7 +357,9 @@ class ListDeal extends Component {
       handleSelectedCondition,
       onEditingDealName,
       onEditingDetail,
-      closeModalAfterDealCreated
+      closeModalAfterDealCreated,
+      openAlertEditCancelModal,
+      resetEditListing
     } = this.props;
 
     if (error) {
@@ -338,6 +374,18 @@ class ListDeal extends Component {
           message="Changes you made may not be saved."
         /> */}
         <Layout>
+          {editingDeal &&
+            <div onClick={openAlertEditCancelModal} className="closing-icon">
+              <i className="fas fa-times fa-2x"></i>
+            </div>
+          }
+
+          <AlertModal
+            alertEditModalVisible={alertEditCancelModalVisible}
+            closeEditModal={closeAlertEditCancelModal}
+            discardEditChanges={this.handleDiscardEditChanges}
+            />
+
           <div className="deal-container">
             <div className="ui three steps">
               <a
@@ -420,6 +468,7 @@ class ListDeal extends Component {
               showEdittingState={editorState}
               showPricingStep={handlePricingStep}
               createDeal={this.onCreateDeal}
+              updateDeal={this.onUpdatingDeal}
               loading_dealCreating={creatingDeal}
               error_dealCreating={creatingDealError}
               dealCreatedResult={dealCreated}
@@ -430,7 +479,7 @@ class ListDeal extends Component {
             />
           )}
         </Layout>
-        <ToastContainer autoClose={8000} />
+        <ToastContainer autoClose={5000} />
       </div>
     );
   }
@@ -461,6 +510,10 @@ const mapStateToProps = state => ({
   dealCreated: state.CreateDeal.dealCreated,
   modalVisible: state.CreateDeal.modalVisible,
   userLoggedIn: state.LoggedIn.userLoggedIn,
+  editingDeal: state.CreateDeal.editingDeal,
+  editingDealId: state.CreateDeal.editingDealId,
+  alertEditCancelModalVisible: state.CreateDeal.alertEditCancelModalVisible,
+  dealItem: state.DealItem.dealItem,
   shippingLabelSelection: state.CreateDeal.shippingLabelSelection,
   shippingWeightSelection: state.CreateDeal.shippingWeightSelection,
   shippingPriceSelection: state.CreateDeal.shippingPriceSelection,
@@ -491,9 +544,13 @@ const matchDispatchToProps = dispatch => {
       onEditingDealName,
       onEditingDetail,
       _submitDeal,
+      _updateEditingDeal,
       closeModalAfterDealCreated,
       resetListDeal,
-      _isLoggedIn
+      resetEditListing,
+      _isLoggedIn,
+      openAlertEditCancelModal,
+      closeAlertEditCancelModal
     },
     dispatch
   );

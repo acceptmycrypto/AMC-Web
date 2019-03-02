@@ -4,6 +4,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
 import LoadingSpinner from "../../../components/UI/LoadingSpinner";
 import {
   _loadDealItem,
@@ -20,7 +21,7 @@ import {
   handleShippingStep,
   handlePayingStep,
 } from "../../../actions/dealItemActions";
-import { resetListDeal } from "../../../actions/listDealActions";
+import { resetListDeal, editListing, resetEditListing, _deleteDeal, openDeleteAlertModal, closeDeleteAlertModal } from "../../../actions/listDealActions";
 import { _fetchTransactionInfo, _fetchGuestTransactionInfo } from "../../../actions/paymentActions";
 import { _createChatSession } from "../../../actions/chatActions";
 import { Carousel } from "react-responsive-carousel";
@@ -32,6 +33,7 @@ import { _isLoggedIn } from "../../../actions/loggedInActions";
 import { _loadReviews } from "../../../actions/reviewsActions";
 import { _loadProfile } from "../../../actions/userLoadActions";
 import { EditorState, convertFromRaw } from "draft-js";
+import AlertModal from "../../../components/UI/Alert";
 
 class DealItem extends Component {
   componentDidMount = async () => {
@@ -39,13 +41,24 @@ class DealItem extends Component {
     await this.props._isLoggedIn(localStorage.getItem("token"));
 
     // if (await this.props.userLoggedIn) {
-      const { deal_name, id } = await this.props.match.params;
-      await this.props._loadDealItem(id, deal_name);
+    const { deal_name, id } = await this.props.match.params;
+    await this.props._loadDealItem(id, deal_name);
 
-      let seller_id =
-        this.props.dealItem.seller_id || this.props.dealItem.venue_id;
-      await this.props._loadReviews(seller_id);
-      await this.props._loadProfile(localStorage.getItem("token"));
+    let seller_id =
+      this.props.dealItem.seller_id || this.props.dealItem.venue_id;
+    await this.props._loadReviews(seller_id);
+    await this.props._loadProfile(localStorage.getItem("token"));
+
+
+    if (this.props.dealEdited.success && !this.props.editingDeal) {
+
+      toast.success(this.props.dealEdited.message, {
+        position: toast.POSITION.TOP_RIGHT
+      });
+
+      //reset editing deal reducer
+      this.props.resetEditListing();
+    }
 
 
     // }else{
@@ -75,7 +88,7 @@ class DealItem extends Component {
   };
 
   convertToPercentage = (priceInDollar, priceInCrypto) => {
-    return parseInt(((priceInDollar - priceInCrypto) / priceInDollar) * 100);
+    return Math.ceil(((priceInDollar - priceInCrypto) / priceInDollar) * 100);
   };
 
   timeInMilliseconds = sec => {
@@ -303,49 +316,67 @@ class DealItem extends Component {
     );
   };
 
+  handleDeleteDeal = () => {
+    let {deal_id} = this.props.dealItem;
+    this.props._deleteDeal(localStorage.getItem("token"), deal_id)
+  }
+
+  handleDeletedDeal = () => {
+    if (this.props.dealDeleted) {
+      this.props.resetListDeal();
+      this.props.history.push(
+        `/listdeal`
+      );
+    }
+  }
+
   render() {
     const { //state
+            error,
+            deal_item_loading,
+            dealItem,
+            reviews,
+            acceptedCryptos,
+            allStates,
+            firstName,
+            lastName,
+            shippingAddress,
+            shippingCity,
+            zipcode,
+            shippingState,
+            email,
+            phoneNumber,
+            selectedOption,
+            transaction_loading,
+            paymentInfo,
+            transaction_status,
+            createPaymentButtonClicked,
+            showDetailStep,
+            showShippingStep,
+            showPayingStep,
+            user_info,
+            userLoggedIn,
+            dealDeleted,
+            alertDeleteModalVisible,
 
-      error,
-      deal_item_loading,
-      dealItem,
-      reviews,
-      acceptedCryptos,
-      allStates,
-      firstName,
-      lastName,
-      shippingAddress,
-      shippingCity,
-      zipcode,
-      shippingState,
-      email,
-      phoneNumber,
-      selectedOption,
-      transaction_loading,
-      paymentInfo,
-      transaction_status,
-      createPaymentButtonClicked,
-      showDetailStep,
-      showShippingStep,
-      showPayingStep,
-      user_info,
-      userLoggedIn,
-
-      //actions
-      handleFirstNameInput,
-      handleLastNameInput,
-      handleAddressInput,
-      handleCityInput,
-      handleZipcodeInput,
-      handleShippingStateInput,
-      handleSelectedCrypto,
-      handleShippingEmail,
-      handleShippingPhoneNumber,
-      handleDetailStep,
-      handleShippingStep,
-      handlePayingStep,
-    } = this.props;
-
+            //actions
+            handleFirstNameInput,
+            handleLastNameInput,
+            handleAddressInput,
+            handleCityInput,
+            handleZipcodeInput,
+            handleShippingStateInput,
+            handleSelectedCrypto,
+            handleShippingEmail,
+            handleShippingPhoneNumber,
+            handleDetailStep,
+            handleShippingStep,
+            handlePayingStep,
+            editListing,
+            openDeleteAlertModal,
+            closeDeleteAlertModal,
+            resetListDeal
+            } = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -365,45 +396,6 @@ class DealItem extends Component {
         <Layout>
           <div>
             <div className="deal-container">
-              {/* <div className="deal-header">
-
-              <div className="deal-item-header">
-                <div className="deal-item-name">
-                  <strong>{dealItem && dealItem.deal_name}</strong> <br/>
-                  <small> Offered By: {dealItem && dealItem.venue_name || dealItem && dealItem.seller_name}</small> <br/>
-                </div>
-                <div className="deal-item-cost">
-                  <strong>Pay in Crypto:  ${dealItem && dealItem.pay_in_crypto.toFixed(2)}</strong>  <small className="deal-item-discount">
-                  {dealItem && this.convertToPercentage(dealItem.pay_in_dollar, dealItem.pay_in_crypto)}% OFF</small> <br/>
-                  <small>Pay in Dollar:  ${dealItem && dealItem.pay_in_dollar.toFixed(2)} <br/></small>
-                </div>
-              </div>
-
-              <div className="deal-item-summary">
-
-                  <div className="customize-item-shipping">
-                    <strong>Shipping</strong> <br/>
-                    <small>{fullName}</small> <br/>
-                    <small>{shippingAddress}</small> <br/>
-                    <small>{shippingCity} </small>
-                    <small>{shippingState} </small>
-                    <small>{zipcode}</small>
-                  </div>
-
-                  <div className="customize-item-payment">
-                    <div className="crypto_logo">
-                      <strong>Crypto Payment</strong> <br/>
-                      {selectedOption ?  <img src={selectedOption.logo} alt="cryptoLogo" /> :
-                      <div>
-                        Powered By
-                        <img style={{width: "100px", marginTop: "0px"}} src="../../../assets/images/coin_payment.png" alt="coinpayment_logo"/>
-                      </div>
-                       }
-                    </div>
-                  </div>
-              </div>
-            </div> */}
-
               {/* classname is ui steps indiate using sematic ui */}
               <div className="ui three steps">
                 <a
@@ -567,12 +559,27 @@ class DealItem extends Component {
                   </div>
 
                   {user_info.length > 0 &&
-                    dealItem &&
-                    user_info[0].id === dealItem.seller_id ? null : (
-                      <Link to={"/chat"}>
-                        <div id="message-seller" className="px-3">
-                          <button onClick={this.messageSeller} className="mt-3">
-                            Message Seller
+                  dealItem &&
+                  user_info[0].id === dealItem.seller_id ?
+                  <div>
+                    <Link to={"/listdeal"}>
+                      <div className="px-3 message-seller">
+                        <button onClick={() => editListing(dealItem, acceptedCryptos)} className="mt-3">
+                        Edit Listing
+                        </button>
+                      </div>
+                    </Link>
+                    <div className="px-3 message-seller">
+                      <button style={{backgroundColor: "#9b0739"}} onClick={openDeleteAlertModal} className="mt-3">
+                          Delete Listing
+                      </button>
+                    </div>
+                  </div> :
+                  (
+                    <Link to={"/chat"}>
+                      <div className="px-3 message-seller">
+                        <button onClick={this.messageSeller} className="mt-3">
+                          Message Seller
                         </button>
                         </div>
                       </Link>
@@ -647,6 +654,13 @@ class DealItem extends Component {
             </div>
           </div>
         </Layout>
+        <ToastContainer autoClose={5000} />
+        <AlertModal
+            deleteModalVisible={alertDeleteModalVisible}
+            closeDeleteModal={closeDeleteAlertModal}
+            deleteListing={this.handleDeleteDeal}
+            deletedDealHandling = {this.handleDeletedDeal}
+        />
       </div>
     );
   }
@@ -678,7 +692,13 @@ const mapStateToProps = state => ({
   showPayingStep: state.DealItem.showPayingStep,
   dealCreated: state.CreateDeal.dealCreated,
   photo: state.Photo,
-  user_info: state.UserInfo.user_info
+  user_info: state.UserInfo.user_info,
+  dealEdited: state.CreateDeal.dealEdited,
+  editingDeal: state.CreateDeal.editingDeal,
+  dealDeleted: state.CreateDeal.dealDeleted,
+  deletingDealLoading: state.CreateDeal.deletingDealLoading,
+  deletingDealError: state.CreateDeal.deletingDealError,
+  alertDeleteModalVisible: state.CreateDeal.alertDeleteModalVisible
 });
 
 const matchDispatchToProps = dispatch => {
@@ -703,7 +723,12 @@ const matchDispatchToProps = dispatch => {
       _isLoggedIn,
       resetListDeal,
       _createChatSession,
-      _loadProfile
+      _loadProfile,
+      editListing,
+      _deleteDeal,
+      resetEditListing,
+      openDeleteAlertModal,
+      closeDeleteAlertModal
     },
     dispatch
   );

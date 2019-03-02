@@ -1,4 +1,9 @@
-import {EditorState} from 'draft-js';
+import {EditorState, convertFromRaw} from 'draft-js';
+import {
+  UPDATING_EDITING_DEAL_BEGIN,
+  UPDATING_EDITING_DEAL_SUCCESS,
+  UPDATING_EDITING_DEAL_FAILURE
+} from "../actions/listDealActions";
 
 const initialState = {
   imageData: {},
@@ -27,8 +32,18 @@ const initialState = {
   selectedCondition: "", //important! Selected condition cannot by null by default, otherwist app will crash.
   editorState: EditorState.createEmpty(),
   creatingDeal: false,
+  editingDeal: false,
+  editingDealId: null,
+  updateEditingLoading: false,
+  dealEdited: {},
+  dealEditedError: null,
+  alertEditCancelModalVisible: false,
   creatingDealError: null,
+  alertDeleteModalVisible: false,
   dealCreated: {},
+  dealDeleted: {},
+  deletingDealError: null,
+  deletingDealLoading: null,
   modalVisible: false,
   phoneNumber: null,
   sellerFirstname: null,
@@ -49,6 +64,7 @@ const initialState = {
 const handleImagesUpload = (images, imageObj) => {
   let newImageArr = [...images];
   newImageArr.push(imageObj);
+
   return newImageArr
 }
 
@@ -72,7 +88,6 @@ const isShippingPriceHigher = (shippingPrice, discountPrice) =>{
   }
 
 }
-
 
 export default function CreateDealReducer(state = initialState, action) {
   switch(action.type) {
@@ -168,6 +183,7 @@ export default function CreateDealReducer(state = initialState, action) {
       };
 
     case "GET_RATE_SUCCESS":
+
       return {
         ...state,
         gettingRate: {[action.payload.crypto_symbol] : false},
@@ -281,7 +297,6 @@ export default function CreateDealReducer(state = initialState, action) {
       };
 
     case "CREATING_DEAL_SUCCESS":
-    
       return {
         ...state,
         creatingDeal: false,
@@ -300,6 +315,57 @@ export default function CreateDealReducer(state = initialState, action) {
       return {
         ...state,
         modalVisible: action.payload.modalVisible
+      };
+
+    case UPDATING_EDITING_DEAL_BEGIN:
+      return {
+        ...state,
+        updateEditingLoading: true,
+        dealEditedError: null
+      };
+
+    case UPDATING_EDITING_DEAL_SUCCESS:
+      return {
+        ...state,
+        updateEditingLoading: false,
+        editingDeal: false,
+        dealEdited: action.payload
+      };
+
+    case UPDATING_EDITING_DEAL_FAILURE:
+      return {
+        ...state,
+        updateEditingLoading: false,
+        dealEdited: action.payload.error,
+      };
+
+    case "OPEN_ALERT_EDIT_CANCEL_MODAL":
+      return {
+        ...state,
+        alertEditCancelModalVisible: action.payload.visible
+      };
+
+    case "CLOSE_ALERT_EDIT_CANCEL_MODAL":
+      return {
+        ...state,
+        alertEditCancelModalVisible: action.payload.visible
+      };
+
+    case "OPEN_DELETE_ALERT_MODAL":
+      return {
+        ...state,
+        alertDeleteModalVisible: action.payload.visible
+      };
+
+    case "CLOSE_DELETE_ALERT_MODAL":
+      return {
+        ...state,
+        alertDeleteModalVisible: action.payload.visible
+      };
+
+    case "RESET_EDIT_LISTING":
+      return {
+        ...initialState
       };
 
     case "RESET_DEAL_CREATED":
@@ -395,6 +461,68 @@ export default function CreateDealReducer(state = initialState, action) {
         ...state,
         checkingCodeLoading: false,
         checkingCodeError: action.payload.error,
+      };
+
+    case "EDIT_LISTING":
+      let {deal_name, pay_in_crypto, pay_in_dollar, deal_category, item_condition,deal_image_object, deal_description, deal_id} = action.payload.dealItem;
+
+      let deal_selected_cryptos = {};
+      for (let crypto in action.payload.acceptedCryptos) {
+        let cryptoSymbol = action.payload.acceptedCryptos[crypto].crypto_symbol
+        deal_selected_cryptos = {...deal_selected_cryptos, [cryptoSymbol] : ""}
+      }
+
+      let deal_selected_category = [];
+      let categoryObj = {};
+      for (let category in deal_category) {
+        let value = deal_category[category];
+        let label = deal_category[category];
+        categoryObj = {label, value}
+        deal_selected_category.push(categoryObj);
+      }
+
+      let deal_item_condition = {label: item_condition, value: item_condition}
+
+      let dealDescription = convertFromRaw(JSON.parse(deal_description));
+      let editorState = EditorState.createWithContent(dealDescription);
+
+
+      return {
+        ...state,
+        editingDeal: true,
+        editingDealId: deal_id,
+        dealName: deal_name,
+        priceInUSD: pay_in_dollar,
+        priceInCrypto: pay_in_crypto,
+        discountPercent: CalculateDiscountPercentage(pay_in_dollar, pay_in_crypto),
+        images: deal_image_object,
+        imageData: deal_image_object[0],
+        imageView: deal_image_object[0].Location,
+        crypto_amount: deal_selected_cryptos,
+        selectedCategory: deal_selected_category,
+        selectedCondition: deal_item_condition,
+        editorState
+      };
+
+    case "DELETE_DEAL_BEGIN":
+      return {
+        ...state,
+        deletingDealLoading: true,
+        deletingDealError: null
+      };
+
+    case "DELETE_DEAL_SUCCESS":
+      return {
+        ...state,
+        deletingDealLoading: false,
+        dealDeleted: action.payload
+      };
+
+    case "DELETE_DEAL_FAILURE":
+      return {
+        ...state,
+        deletingDealLoading: false,
+        deletingDealError: action.payload.error,
       };
 
     default:

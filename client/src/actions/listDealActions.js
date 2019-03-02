@@ -1,6 +1,9 @@
+export const UPDATING_EDITING_DEAL_BEGIN = "UPDATING_EDITING_DEAL_BEGIN";
+export const UPDATING_EDITING_DEAL_SUCCESS = "UPDATING_EDITING_DEAL_SUCCESS";
+export const UPDATING_EDITING_DEAL_FAILURE = "UPDATING_EDITING_DEAL_FAILURE";
+
 export function _uploadImage(token, imageData) {
   //once image is uploaded, push that image to the state
-
   const settings = {
     method: "POST",
     headers: {
@@ -42,7 +45,9 @@ export const onSelectImageToView = (event) => {
   }
 };
 
-export function _removeImage(token, imageKey) {
+export function _removeImage(token, imageKey, deal_editing) {
+  //this action is being called when user's click X on image
+
   const settings = {
     method: "POST",
     headers: {
@@ -52,7 +57,10 @@ export function _removeImage(token, imageKey) {
     body: JSON.stringify({token, imageKey})
   };
 
-  fetch("/image/remove", settings).then(res => res.json());
+  //if this listing deal is being creating, not editing, then we remove the image on the backend as well
+  if(!deal_editing) {
+    fetch("/image/remove", settings).then(res => res.json());
+  }
 
   return {
     type: 'REMOVE_UPLOADED_IMAGE',
@@ -133,6 +141,7 @@ export function _getCryptoExchange(token, crypto_symbol, price_in_crypto) {
     return fetch("/cryptocurrency/exchange", settings)
       .then(res => res.json())
       .then(jsonRate => {
+
         dispatch(getRateSuccess(crypto_symbol, jsonRate));
         return jsonRate;
       })
@@ -292,6 +301,50 @@ export const creatingDealFailure = error => ({
   payload: { error }
 });
 
+export function _updateEditingDeal(token, editingDealId, dealName, category, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos) {
+
+  //create a new array to get the value of categories: ex [value1, value2]
+  let categoriesSelected = [...category]
+  let selectedCategory = [];
+  categoriesSelected.map(categ => {
+    selectedCategory.push(categ.value);
+  })
+  const settings = {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({token, editingDealId, dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos})
+  };
+
+  return dispatch => {
+    dispatch(editingDealBegin());
+    return fetch("/listdeal/edit", settings)
+      .then(res => res.json())
+      .then(jsonDealEdited => {
+
+        dispatch(editingDealSuccess(jsonDealEdited));
+        return jsonDealEdited;
+      })
+      .catch(error => dispatch(editingDealFailure(error)));
+  };
+}
+
+export const editingDealBegin = () => ({
+  type: UPDATING_EDITING_DEAL_BEGIN
+});
+
+export const editingDealSuccess = dealEdited => ({
+  type: UPDATING_EDITING_DEAL_SUCCESS,
+  payload: dealEdited
+});
+
+export const editingDealFailure = error => ({
+  type: UPDATING_EDITING_DEAL_FAILURE,
+  payload: { error }
+});
+
 export const closeModalAfterDealCreated = () => {
   return {
     type: "CLOSE_DEAL_CREATED_MODAL", //what does the action do = title of action
@@ -438,6 +491,78 @@ export const checkCodeSuccess = codeStatus => ({
 
 export const checkCodeFailure = error => ({
   type: "CHECK_CODE_FAILURE",
+  payload: { error }
+});
+
+export const editListing = (dealItem, acceptedCryptos) => ({
+  type: "EDIT_LISTING",
+  payload: {dealItem, acceptedCryptos}
+});
+
+export const resetEditListing = () => ({
+  type: "RESET_EDIT_LISTING"
+});
+
+export const openAlertEditCancelModal = () => {
+  return {
+      type: 'OPEN_ALERT_EDIT_CANCEL_MODAL',
+      payload: {visible: true}
+  }
+};
+
+export const closeAlertEditCancelModal = () => {
+  return {
+      type: 'CLOSE_ALERT_EDIT_CANCEL_MODAL',
+      payload: {visible: false}
+  }
+};
+
+export const openDeleteAlertModal = () => {
+  return {
+      type: 'OPEN_DELETE_ALERT_MODAL',
+      payload: {visible: true}
+  }
+};
+
+export const closeDeleteAlertModal = () => {
+  return {
+      type: 'CLOSE_DELETE_ALERT_MODAL',
+      payload: {visible: false}
+  }
+};
+
+export function _deleteDeal(token, deal_id) {
+  const settings = {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({token, deal_id})
+  };
+  return dispatch => {
+    dispatch(deleteListingDealBegin());
+    return fetch("/listdeal/delete", settings)
+      .then(res => res.json())
+      .then(jsonDeleted => {
+        dispatch(deleteListingDealSuccess(jsonDeleted));
+        return jsonDeleted;
+      })
+      .catch(error => dispatch(deleteListingDealFailure(error)));
+  };
+}
+
+export const deleteListingDealBegin = () => ({
+  type: "DELETE_DEAL_BEGIN"
+});
+
+export const deleteListingDealSuccess = dealDeleted => ({
+  type: "DELETE_DEAL_SUCCESS",
+  payload: dealDeleted
+});
+
+export const deleteListingDealFailure = error => ({
+  type: "DELETE_DEAL_FAILURE",
   payload: { error }
 });
 

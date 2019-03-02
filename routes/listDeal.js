@@ -38,7 +38,6 @@ const connection = mysql.createConnection({
 
 router.post("/image/upload", verifyToken, function(request, response) {
   let user_id = request.decoded._id;
-  console.log("this is my user ID", user_id);
 
   const form = new multiparty.Form(); // parse a file upload
     form.parse(request, async (error, fields, files) => {
@@ -162,8 +161,6 @@ router.post('/listdeal', verifyToken, function(req, res) {
 
   });
 
-
-
   //First insert into deals table
   // INSERT INTO users_shipping_address SET ?
   let deals_rows = {seller_id, deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto, item_condition, length: dimension, width: dimension, height: dimension, weight, shipping_label_status: label_status, shipment_cost: shipping_cost};
@@ -179,10 +176,11 @@ router.post('/listdeal', verifyToken, function(req, res) {
       let imagesRow = [];
       for (let i = 0; i < images.length; i++) {
         let dealImageRecord = [];
-        dealImageRecord.push(deal_id, images[i].Location)
+        let imageObj = JSON.stringify(images[i])
+        dealImageRecord.push(deal_id, images[i].Location, images[i].Key, imageObj) //image[i].Location is the image url
         imagesRow.push(dealImageRecord);
       }
-      connection.query("INSERT INTO deal_images(deal_id, deal_image) VALUES ?", [imagesRow],
+      connection.query("INSERT INTO deal_images(deal_id, deal_image, deal_image_key, deal_image_object)  VALUES ?", [imagesRow],
       function (error, results, fields) {
         if (error) console.log(error);
       });
@@ -276,9 +274,254 @@ router.post('/listdeal', verifyToken, function(req, res) {
 
   });
 
-
-
 });
+
+router.post('/listdeal/edit', verifyToken, function(req, res) {
+   //info needed to insert into tables
+   let {dealName, selectedCategory, editingDealId, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos} = req.body
+   let seller_id = req.decoded._id;
+   let phone_number_verified;
+   console.log(req.body);
+
+   //deals table
+   //deal_name, deal_description, featured_deal_image, pay_in_dollar, pay_in_crypto, item_condition
+   let deal_name = dealName;
+   let deal_description = JSON.stringify(textDetailRaw);
+   let item_condition;
+   if (selectedCondition.value) {
+     item_condition = selectedCondition.value;
+   }
+   let featured_deal_image = images[0].Location;
+   let pay_in_dollar = priceInUSD;
+   let pay_in_crypto = priceInCrypto;
+
+   //update deals table
+   connection.query("UPDATE deals SET ? WHERE ?",
+  [
+    { deal_name,
+      deal_description,
+      featured_deal_image,
+      item_condition,
+      pay_in_dollar,
+      pay_in_crypto
+    }, {id: editingDealId}],
+      function (error, results, fields) {
+        if (error) console.log(error);
+  });
+
+  //update cryptos_deals
+  let toBeKeptCryptosID = "SELECT crypto_id, crypto_symbol FROM cryptos_deals LEFT JOIN crypto_metadata ON cryptos_deals.crypto_id = crypto_metadata.id WHERE crypto_symbol IN (?) AND deal_id = ?";
+  let newCryptosID = "SELECT id AS crypto_id FROM crypto_metadata WHERE crypto_symbol IN (?)"
+
+  //query the crypto_ids needed to be kept
+  connection.query(toBeKeptCryptosID, [selected_cryptos, editingDealId],
+  function (error, toBeKeptCryptoResult, fields) {
+    if (error) console.log(error);
+
+    let toBeKeptCryptosArr = [];
+    for (let i = 0; i < toBeKeptCryptoResult.length; i++) {
+      toBeKeptCryptosArr.push(toBeKeptCryptoResult[i].crypto_id); //cryptos_ids [2,3]
+      console.log(toBeKeptCryptosArr);
+    }
+
+    //delete the crypto_id that users de-select
+    if (toBeKeptCryptosArr.length > 0) {
+      connection.query("DELETE FROM cryptos_deals WHERE crypto_id NOT IN (?) AND deal_id = ?", [toBeKeptCryptosArr, editingDealId],
+      function (error, exisitingCryptoResult, fields) {
+        if (error) console.log(error);
+      });
+    } else {
+      connection.query("DELETE FROM cryptos_deals WHERE deal_id = ?", [editingDealId],
+      function (error, exisitingCryptoResult, fields) {
+        if (error) console.log(error);
+      });
+    }
+
+    //insert new cryptos_ids into cryptos_deals
+    connection.query(newCryptosID, [selected_cryptos],
+      function (error, newCryptoResult, fields) {
+        if (error) console.log(error);
+
+        let cryptos_deals = [];
+        for (let i = 0; i < newCryptoResult.length; i++) {
+          let records = [];
+          records.push(newCryptoResult[i].crypto_id, editingDealId)
+          cryptos_deals.push(records);
+        }
+
+        connection.query("INSERT INTO cryptos_deals(crypto_id, deal_id) VALUES ? ON DUPLICATE KEY UPDATE crypto_id=VALUES(crypto_id),deal_id=VALUES(deal_id)",
+        [cryptos_deals], //cryptos_deals = [[1,2], [3, 2]]
+        function (error, results, fields) {
+          if (error) console.log(error);
+        });
+    });
+  });
+
+
+  //update category deals
+  let toBeKeptCategoryID = "SELECT category_id FROM categories_deals LEFT JOIN category ON categories_deals.category_id = category.id WHERE category_name IN (?) AND categories_deals.deals_id = ?";
+  let newCategoryID = "SELECT id AS category_id FROM category WHERE category_name IN (?)"
+
+  connection.query(toBeKeptCategoryID, [selectedCategory, editingDealId],
+    function (error, toBeKeptCategoryResult, fields) {
+      if (error) console.log(error);
+
+      let toBeKeptCategoryArr = [];
+      for (let i = 0; i < toBeKeptCategoryResult.length; i++) {
+        toBeKeptCategoryArr.push(toBeKeptCategoryResult[i].category_id);
+      }
+
+      if (toBeKeptCategoryArr.length > 0) {
+        connection.query("DELETE FROM categories_deals WHERE category_id NOT IN (?) AND categories_deals.deals_id = ?", [toBeKeptCategoryArr, editingDealId],
+        function (error, exisitingCetegoryResult, fields) {
+          if (error) console.log(error);
+        });
+      } else {
+        connection.query("DELETE FROM categories_deals WHERE categories_deals.deals_id = ?", [editingDealId],
+        function (error, exisitingCetegoryResult, fields) {
+          if (error) console.log(error);
+        });
+      }
+
+      connection.query(newCategoryID, [selectedCategory],
+        function (error, newCategoryResult, fields) {
+          if (error) console.log(error);
+
+          let category_deals = [];
+          for (let i = 0; i < newCategoryResult.length; i++) {
+            let records = [];
+            records.push(newCategoryResult[i].category_id, editingDealId)
+            category_deals.push(records);
+          }
+
+          connection.query("INSERT INTO categories_deals(category_id, deals_id) VALUES ? ON DUPLICATE KEY UPDATE category_id=VALUES(category_id),deals_id=VALUES(deals_id)",
+          [category_deals],
+          function (error, results, fields) {
+            if (error) console.log(error);
+          });
+      });
+    });
+
+  //update deal_images
+  let toBeKeptImageID = "SELECT deal_image_key FROM deal_images WHERE deal_image_key IN (?) AND deal_id = ?";
+  let newImageKeys = [];
+  for (let i in images) {
+    newImageKeys.push(images[i].Key);
+    console.log("deal_image_key", newImageKeys);
+  }
+
+  const removeImageOnAWS = (imagesToBeRemoved) => {
+    let keysArr = [];
+    for (let i in imagesToBeRemoved) {
+      let keyObj = {Key: imagesToBeRemoved[i].deal_image_key}
+      keysArr.push(keyObj);
+    }
+
+    let params = {
+      Bucket: process.env.AMAZON_BUCKET,
+      Delete: {
+        Objects: keysArr
+      }
+    };
+
+    s3.deleteObjects(params, function (err, data) {
+      console.log()
+      if (data) {
+          console.log("File deleted successfully");
+      }
+      else {
+          console.log(err);
+      }
+    });
+  }
+
+  const insertNewImages = (images) => {
+    //prep for inserting new images
+    let imagesRow = [];
+    for (let i = 0; i < images.length; i++) {
+      let dealImageRecord = [];
+      let imageObj = JSON.stringify(images[i])
+      dealImageRecord.push(images[i].Location, images[i].Key, editingDealId, imageObj) //image[i].Location is the image url
+      imagesRow.push(dealImageRecord);
+    }
+
+    connection.query("INSERT IGNORE INTO deal_images(deal_image, deal_image_key, deal_id, deal_image_object) VALUES ?",
+    [imagesRow],
+    function (error, results, fields) {
+      if (error) console.log(error);
+    });
+  }
+
+  connection.query(toBeKeptImageID, [newImageKeys, editingDealId],
+  function (error, toBeKeptImageResult, fields) {
+    if (error) console.log(error);
+
+    let toBeKeptImageArr = [];
+    for (let i = 0; i < toBeKeptImageResult.length; i++) {
+      toBeKeptImageArr.push(toBeKeptImageResult[i].deal_image_key);
+      console.log("image to be kept", toBeKeptImageArr);
+    }
+
+    //delete images that users removed
+    if (toBeKeptImageArr.length > 0) {
+
+      connection.query("SELECT * FROM deal_images WHERE deal_image_key NOT IN (?) AND deal_id = ?", [toBeKeptImageArr, editingDealId],
+      function (error, imagesToBeRemoved, fields) {
+        if (error) console.log(error);
+
+        //delete images users removed from the database
+        connection.query("DELETE FROM deal_images WHERE deal_image_key NOT IN (?) AND deal_id = ?",
+        [toBeKeptImageArr, editingDealId],
+        function (error, result, fields) {
+          if (error) console.log(error);
+        });
+
+        //inserting new images user selects
+        insertNewImages(images)
+
+        //delete image on AWS
+        removeImageOnAWS(imagesToBeRemoved);
+
+        res.json({success: true, message: "Updated Successfully."});
+      });
+
+    } else {
+      connection.query("SELECT * FROM deal_images WHERE deal_id = ?", [editingDealId],
+        function (error, imagesToBeRemoved, fields) {
+
+          if (error) console.log(error);
+
+          //delete images users removed from the database
+          connection.query("DELETE FROM deal_images WHERE deal_id = ?",
+          [editingDealId],
+          function (error, result, fields) {
+            if (error) console.log(error);
+          });
+
+          //inserting new images
+          insertNewImages(images)
+
+          //delete image on AWS
+          removeImageOnAWS(imagesToBeRemoved);
+
+          res.json({success: true, message: "Updated Successfully."});
+        });
+    }
+
+  });
+
+})
+
+router.post('/listdeal/delete', verifyToken, function(req, res) {
+  let {deal_id} = req.body;
+  
+  connection.query("UPDATE deals SET ? WHERE ?",
+  [{ deal_status: "deleted"}, {id: deal_id}],
+  function (error, results, fields) {
+    if (error) console.log(error);
+    res.json({success: true, message: "Successfully Deleted!"})
+  });
+})
 
 //to be used for /verification/check
 let phone_number;

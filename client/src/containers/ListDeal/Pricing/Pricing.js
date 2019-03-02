@@ -255,7 +255,7 @@ class Pricing extends Component {
             </div>
             <div className="listed-price-in-crypto-right">
               <div className="create-deal-discount-percent">
-                {this.props.showDiscountPercent}% OFF
+                {Math.ceil(props.showDiscountPercent)}% OFF
               </div>
               <input
                 onChange={this.props.changeDiscountPercent}
@@ -285,7 +285,7 @@ class Pricing extends Component {
                   <div key={crypto.crypto_symbol}>
                     <div
                       className={
-                        this.props.showCryptoAmount[crypto.crypto_symbol] ||
+                        this.props.showCryptoAmount[crypto.crypto_symbol] !== undefined ||
                           this.props.rateLoading[crypto.crypto_symbol]
                           ? "crypto-logo-image selected-crypto-logo-image"
                           : "crypto-logo-image"
@@ -309,7 +309,7 @@ class Pricing extends Component {
                     )}
                     {this.props.showCryptoAmount[crypto.crypto_symbol] && (
                       <div className="check-crypto-amount">
-                        {this.props.showCryptoAmount[crypto.crypto_symbol]}{" "}
+                        {this.props.showCryptoAmount[crypto.crypto_symbol]}
                         {crypto.crypto_symbol}
                       </div>
                     )}

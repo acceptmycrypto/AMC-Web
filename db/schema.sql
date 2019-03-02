@@ -83,7 +83,7 @@ CREATE TABLE deals (
 	weight INT NULL, -- in lb (pounds)
 	shipping_label_status VARCHAR(20) NULL, --prepaid or seller
 	shipment_cost DECIMAL(10, 2) NULL, -- USD
-  	deal_status VARCHAR (10) DEFAULT 'available', -- status: available, sold, reserved (paying item), expired, pending (pending is for deal that's not get displayed due to seller's verification)
+  deal_status VARCHAR (10) DEFAULT 'available', -- status: available, sold, reserved (paying item), expired, pending (pending is for deal that's not get displayed due to seller's verification), "deleted"
 -- 	deal_avg_rating FLOAT(3,2) NULL,
 -- 	total_deal_ratings INT NULL,
 	PRIMARY KEY (id),
@@ -94,8 +94,10 @@ CREATE TABLE deals (
 
 CREATE TABLE deal_images (
 	id INT NOT NULL AUTO_INCREMENT,
-  	deal_id INT NOT NULL,
-  	deal_image VARCHAR(255) NOT NULL,
+  deal_id INT NOT NULL,
+  deal_image VARCHAR(255) NOT NULL UNIQUE,
+  deal_image_key VARCHAR(255) NOT NULL UNIQUE,
+  deal_image_object VARCHAR(10000) NOT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
