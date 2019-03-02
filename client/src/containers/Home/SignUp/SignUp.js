@@ -200,6 +200,33 @@ class SignUp extends Component {
                 </Link>
               </div>
               <Modal
+                visible={true}
+                effect="fadeInUp"
+                width="85%"
+                height="70%"
+              >
+              <div className="mob-modal">
+                  <h4 className="mob-modal-header">You have successfully registered! </h4>
+                  <div className="mob-modal-body">
+                    Please check your Email and follow the instructions for
+                    Email verification.
+                  </div>
+                  <div className="mob-modal-buttons">
+                    <button
+                      clbuttonssName="a-link"
+                      href="javascript:void(0);"
+                      onClick={() => {
+                        this.props.closeModal();
+                        this.props.history.push("/SignIn");
+                      }}
+                    >
+                      Sign In
+                    </button>
+                  </div>
+              </div>
+
+              </Modal>
+              {/* <Modal
                 visible={visible}
                 effect="fadeInLeft"
                 onClickAway={() => {
@@ -223,7 +250,7 @@ class SignUp extends Component {
                     Ok
                   </a>
                 </div>
-              </Modal>
+              </Modal> */}
             </form>
           </div>
           <Footer />
