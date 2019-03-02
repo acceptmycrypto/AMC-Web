@@ -101,6 +101,7 @@ export const onDiscountPercentageToChange = (event) => {
 };
 
 export const OnUSDPriceChange = (event) => {
+  
   return {
       type: 'CHANGE_BASE_PRICE',
       payload: event.target.value
@@ -159,6 +160,70 @@ export const removeSelectedCrypto = (crypto_symbol) => ({
   payload: { crypto_symbol }
 });
 
+
+export const shippingLabelOption = event => {
+  if(event.target.value === "prepaid"){
+    return({
+      type: "SELECT_LABEL_OPTION_PREPAID",
+      payload: event.target.value
+    });
+  }else{
+    return({
+      type: "SELECT_LABEL_OPTION_SELLER",
+      payload: event.target.value
+    });
+  }
+  
+}
+
+export const weightOption = event => {
+  let shippingPriceSelection;
+
+  if(event.target.value == 1){
+    shippingPriceSelection = 6.50;
+  }else if (event.target.value == 3){
+    shippingPriceSelection = 11.00;
+  }else if (event.target.value == 10){
+    shippingPriceSelection = 16.00;
+  }else if (event.target.value == 20){
+    shippingPriceSelection = 30.00;
+  }else if (event.target.value == 40){
+    shippingPriceSelection = 35.00;
+  }else if (event.target.value == 70){
+    shippingPriceSelection= 50.00;
+  }
+  return({
+    type: "SELECT_WEIGHT_OPTION",
+    payload: {shippingWeightSelection: event.target.value, shippingPriceSelection: shippingPriceSelection.toFixed(2)}
+  });
+  
+};
+
+export const _exitShippingModal = () => ({
+  type: "EXIT_SHIPPING_MODAL",
+});
+
+export const _saveShippingModal = (priceInUSD, priceInCrypto) => ({
+  type: "SAVE_SHIPPING_MODAL",
+  payload: {priceInUSD, priceInCrypto}
+});
+
+
+export const _showWeightModal = () => ({
+  type: "SHOW_WEIGHT_MODAL",
+});
+
+
+export const _sellerEarnCrypto = (sellerEarnsCrypto, sellerProfitsCrypto) =>({
+  type: "SELLER_EARNS_CRYPTO",
+  payload: {sellerEarnsCrypto, sellerProfitsCrypto}
+});
+
+export const _sellerEarnUSD = (sellerEarnsUSD, sellerProfitsUSD) =>({
+  type: "SELLER_EARNS_USD",
+  payload: {sellerEarnsUSD, sellerProfitsUSD}
+});
+
 export const onEditingDealName = event => ({
   type: "EDIT_DEAL_NAME",
   payload: event.target.value
@@ -183,7 +248,7 @@ export const handleSelectedCondition = (selectedCondition) => {
   }
 };
 
-export function _submitDeal(token, dealName, category, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos) {
+export function _submitDeal(token, dealName, category, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos, label_status, weight, shipping_cost) {
 
   //create a new array to get the value of categories: ex [value1, value2]
   let categoriesSelected = [...category]
@@ -197,7 +262,7 @@ export function _submitDeal(token, dealName, category, selectedCondition, textDe
       "Accept": "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({token, dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos})
+    body: JSON.stringify({token, dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos, label_status, weight, shipping_cost})
   };
 
   return dispatch => {
@@ -247,6 +312,20 @@ export const onEditPhoneNumber = (event) => {
   }
 };
 
+export const onEditSellerFirstname = (event) => {
+  return {
+      type: 'EDIT_SELLER_FIRSTNAME',
+      payload: event.target.value
+  }
+};
+
+export const onEditSellerLastname = (event) => {
+  return {
+      type: 'EDIT_SELLER_LASTNAME',
+      payload: event.target.value
+  }
+};
+
 export const onEditSellerAddress = (event) => {
   return {
       type: 'EDIT_SELLER_ADDRESS',
@@ -278,7 +357,7 @@ export const onEditSellerZipcode = (event) => {
   }
 };
 
-export function _startVerificationForSeller(token, phoneNumber, sellerAddress, sellerCity, sellerState, sellerZipcode) {
+export function _startVerificationForSeller(token,firstName, lastName, phoneNumber, sellerAddress, sellerCity, sellerState, sellerZipcode) {
 
   const settings = {
     method: "POST",
@@ -286,7 +365,7 @@ export function _startVerificationForSeller(token, phoneNumber, sellerAddress, s
       "Accept": "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({token, phoneNumber, sellerAddress, sellerCity, sellerState, sellerZipcode})
+    body: JSON.stringify({token, firstName, lastName, phoneNumber, sellerAddress, sellerCity, sellerState, sellerZipcode})
   };
 
   return dispatch => {
@@ -361,3 +440,4 @@ export const checkCodeFailure = error => ({
   type: "CHECK_CODE_FAILURE",
   payload: { error }
 });
+

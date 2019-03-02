@@ -1,7 +1,9 @@
 const initialState = {
   deals: [],
   loading: false,
-  error: null
+  error: null,
+  trackingNumber: null, 
+  trackingResult: null,
 };
 
 export default function dealsReducer(state = initialState, action) {
@@ -37,6 +39,33 @@ export default function dealsReducer(state = initialState, action) {
         loading: false,
         error: action.payload.error,
         deals: []
+      };
+
+    case "EDIT_TRACKING_NUMBER":
+      return {
+        ...state,
+        trackingNumber: action.payload
+      };
+
+      case "UPDATE_TRACKING_NUMBER_BEGIN":
+      return {
+        ...state,
+        loading: true,
+        error: null
+      };
+
+    case "UPDATE_TRACKING_NUMBER_SUCCESS":
+      return {
+        ...state,
+        loading: false,
+        trackingResult: action.payload
+      };
+
+    case "UPDATE_TRACKING_NUMBER_FAILURE":
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
       };
 
     default:
