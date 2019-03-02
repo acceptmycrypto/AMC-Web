@@ -172,7 +172,7 @@ class Navbar extends Component {
           )}
           <li>
             {this.props.photo.photo ? (
-              <div className="dropdown show m-0 p-0 mob-nav-photo">
+              <div className={sideBarOpened ? "mob-nav-photo-visible" : "dropdown show m-0 p-0 mob-nav-photo-hidden"}>
                 <div
                   className="dropdown-toggle picture-toggle m-0 p-0"
                   id="dropdownMenuLink"

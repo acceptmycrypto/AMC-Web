@@ -25,6 +25,16 @@
     line-height: 2;
   }
 
+  .mob-nav-photo-visible {
+    display: block;
+    margin-top: 20px;
+  }
+
+  .mob-nav-photo-visible i {
+    font-size: 5rem;
+
+  }
+
 
 /* ///////////////////// */
 
@@ -82,7 +92,7 @@
     color: #000;
   }
 
-  .mob-nav-category, .mob-nav-createDeal, .mob-nav-signIn, .mob-nav-photo {
+  .mob-nav-category, .mob-nav-createDeal, .mob-nav-signIn, .mob-nav-photo-hidden {
     display: none !important;
   }
 
