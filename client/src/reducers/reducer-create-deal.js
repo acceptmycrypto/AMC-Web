@@ -73,7 +73,7 @@ const handleImageRemove = (images, imageKey) => {
   return newImageArr
 }
 
-const CalculateDiscountPrice = (basePrice, discount) => {
+const calculateDiscountPrice = (basePrice, discount) => {
   // return basePrice - (basePrice * (discount/100))
   return ((100-discount)/100) * basePrice;
 }
@@ -87,6 +87,10 @@ const isShippingPriceHigher = (shippingPrice, discountPrice) =>{
     return true;
   }
 
+}
+
+const calculateDiscountPercentage = (pay_in_dollar, pay_in_crypto) =>{
+    return Math.ceil((pay_in_crypto * 100)/ pay_in_dollar);
 }
 
 export default function CreateDealReducer(state = initialState, action) {
@@ -154,7 +158,7 @@ export default function CreateDealReducer(state = initialState, action) {
       };
 
     case "CHANGE_DISCOUNT_PERCENTAGE":
-      let discountPriceOnPercentageChange = CalculateDiscountPrice(state.priceInUSD, action.payload).toFixed(2)
+      let discountPriceOnPercentageChange = calculateDiscountPrice(state.priceInUSD, action.payload).toFixed(2)
       return {
         ...state,
         discountPercent: action.payload,
@@ -162,7 +166,7 @@ export default function CreateDealReducer(state = initialState, action) {
       };
 
     case "CHANGE_BASE_PRICE":
-      let discountPrice = CalculateDiscountPrice(action.payload, state.discountPercent).toFixed(2)
+      let discountPrice = calculateDiscountPrice(action.payload, state.discountPercent).toFixed(2)
       return {
         ...state,
         priceInUSD: action.payload,
@@ -494,7 +498,7 @@ export default function CreateDealReducer(state = initialState, action) {
         dealName: deal_name,
         priceInUSD: pay_in_dollar,
         priceInCrypto: pay_in_crypto,
-        discountPercent: CalculateDiscountPercentage(pay_in_dollar, pay_in_crypto),
+        discountPercent: calculateDiscountPercentage(pay_in_dollar, pay_in_crypto),
         images: deal_image_object,
         imageData: deal_image_object[0],
         imageView: deal_image_object[0].Location,
