@@ -295,7 +295,7 @@ router.post('/listdeal/edit', verifyToken, function(req, res) {
    let pay_in_dollar = priceInUSD;
    let pay_in_crypto = priceInCrypto;
 
-   //update deals table
+   //update multiple records for deals table
    connection.query("UPDATE deals SET ? WHERE ?",
   [
     { deal_name,
@@ -514,7 +514,7 @@ router.post('/listdeal/edit', verifyToken, function(req, res) {
 
 router.post('/listdeal/delete', verifyToken, function(req, res) {
   let {deal_id} = req.body;
-  
+
   connection.query("UPDATE deals SET ? WHERE ?",
   [{ deal_status: "deleted"}, {id: deal_id}],
   function (error, results, fields) {

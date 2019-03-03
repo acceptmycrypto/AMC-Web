@@ -82,7 +82,7 @@ router.get('/home/categorized/deals', function (req, res) {
        query_statement,
         function (error, results, fields) {
           if (error) console.log(error);
-          console.log(results)
+         
           let cat_1 =[], cat_2 =[], cat_3 =[], cat_4 = [], cat_5 = [], cat_6 = [], cat_7 = [], cat_8 = [], cat_9 =[], cat_10 =[], cat_11=[], cat_12=[], cat_13 =[];
             for(let i = 0; i< results.length; i++){
                 switch(results[i].category_id){

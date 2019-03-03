@@ -12,8 +12,8 @@ var MERCHANT_ID = keys.coinpayment.MERCHANT_ID;
 var IPN_SECRET = keys.coinpayment.IPN_SECRET;
 var { verify } = require(`coinpayments-ipn`);
 var CoinpaymentsIPNError = require(`coinpayments-ipn/lib/error`);
+var paypal = require('paypal-rest-sdk');
 var request = require("request");
-
 //shippo
 var shippo = require('shippo')(process.env.SHIPMENT_KEY);
 
@@ -27,6 +27,13 @@ var verifyToken = require("./utils/validation");
 var path = require("path");
 var fs = require('fs');
 var ejs = require('ejs');
+
+//paypal
+paypal.configure({
+  'mode': 'sandbox', //sandbox or live
+  'client_id': process.env.PAYPAL_CLIENT_ID,
+  'client_secret': process.env.PAYPAL_CLIENT_SECRET
+});
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -548,8 +555,13 @@ router.post("/checkout/notification", function (req, res, next) {
         //meaning: payment has received in coinpayment address
         //send an email to user saying the payment has been recieved. ship the order
 
-        //this link doesn't work locally
-        let view_order = process.env.BACKEND_URL + "/profile/";
+        let view_order;
+        if (process.env.NODE_ENV=="development"){
+              view_order = process.env.FRONTEND_URL + "/profile/";
+
+          } else {
+              view_order = process.env.BACKEND_URL + "/profile/";
+          }
 
         connection.query('UPDATE users_purchases SET status = ?, payment_received = ? WHERE ?',
           [req.body.status, 1, { txn_id: req.body.txn_id }],
@@ -567,7 +579,7 @@ router.post("/checkout/notification", function (req, res, next) {
                 res.json({deal_status: "sold"});
               }
             );
-            
+
             const confirm_payment_with_customer = {
               to: email,
               from: process.env.CUSTOMER_SUPPORT,
@@ -584,7 +596,7 @@ router.post("/checkout/notification", function (req, res, next) {
           } else {
             supply_tracking_number_link = `${process.env.BACKEND_URL}/trackingNumber/${req.body.txn_id}/${deal_name}`;
           }
-          
+
           if(shipping_label_status === "prepaid"){
             createShippmentInfo(req.body.txn_id, deal_name, seller_email, email);
           }else if(shipping_label_status === "seller"){
@@ -596,7 +608,7 @@ router.post("/checkout/notification", function (req, res, next) {
             };
             sgMail.send(seller_tracking_number_needed);
           }
-        
+
       }
 
       if (current_status === "0" && req.body.status === "-1") {
@@ -687,12 +699,12 @@ router.get('/newShippingLabel/:txn_id/:deal_name', function (req, res) {
       date.setDate(date.getDate() + days);
       return date;
     }
-    
+
     let date = new Date();
-    
+
     let date_48 = date.addDays(2);
-    let date_48_ISO = date_48.toISOString(); 
-  
+    let date_48_ISO = date_48.toISOString();
+
 
     shippo.shipment.create({
       "address_from": addressFrom,
@@ -703,7 +715,7 @@ router.get('/newShippingLabel/:txn_id/:deal_name', function (req, res) {
       "async": false
     }, function (err, shipment) {
 
-      // get the cheapest rate for the shipment 
+      // get the cheapest rate for the shipment
       let cheapest_rate = shipment.rates.filter(function (rate) {
         if (rate.attributes.length > 0) {
           for (let i = 0; i < rate.attributes.length; i++) {
@@ -716,8 +728,8 @@ router.get('/newShippingLabel/:txn_id/:deal_name', function (req, res) {
 
       // get the cheapest rate's object id to be used in the creating the shipment transaction
       let rate_object_id = cheapest_rate[0].object_id;
-    
-      
+
+
       shippo.transaction.create({
         "rate": rate_object_id,
         "label_file_type": "PDF",
@@ -750,7 +762,7 @@ router.get('/newShippingLabel/:txn_id/:deal_name', function (req, res) {
             html: buyer_tracking_url_EmailTemplate({deal_name: deal_name, txn_id: txn_id, tracking_number: transaction.tracking_number, tracking_url_provider: transaction.tracking_url_provider  })
           };
           sgMail.send(buyer_tracking_url);
-          
+
 
         });
 
@@ -780,11 +792,11 @@ router.get('/newShippingLabel/:txn_id/:deal_name', function (req, res) {
 );
 
 
-  
+
 })
 
 function createShippmentInfo(txn_id, deal_name, seller_email, buyer_email) {
-  
+
   connection.query("SELECT users_shipping_address.shipping_firstname AS buyer_firstname, users_shipping_address.shipping_lastname AS buyer_lastname, users_shipping_address.shipping_address AS buyer_address, users_shipping_address.shipping_city AS buyer_city, users_shipping_address.shipping_state AS buyer_state, users_shipping_address.shipping_zipcode AS buyer_zipcode, seller.first_name AS seller_firstname, seller.last_name AS seller_lastname, seller.address AS seller_address, seller.city AS seller_city, seller.state AS seller_state,seller.zipcode AS seller_zipcode, deals.length, deals.width, deals.height, deals.weight FROM users_shipping_address LEFT JOIN users_purchases ON  users_shipping_address.txn_id = users_purchases.txn_id LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN users seller ON deals.seller_id = seller.id WHERE users_shipping_address.txn_id = ?",
     [txn_id],
     function (err, shipping_data, fields) {
@@ -823,12 +835,12 @@ function createShippmentInfo(txn_id, deal_name, seller_email, buyer_email) {
         date.setDate(date.getDate() + days);
         return date;
       }
-      
+
       let date = new Date();
-      
+
       let date_48 = date.addDays(2);
-      let date_48_ISO = date_48.toISOString(); 
-    
+      let date_48_ISO = date_48.toISOString();
+
 
       shippo.shipment.create({
         "address_from": addressFrom,
@@ -839,7 +851,7 @@ function createShippmentInfo(txn_id, deal_name, seller_email, buyer_email) {
         "async": false
       }, function (err, shipment) {
 
-        // get the cheapest rate for the shipment 
+        // get the cheapest rate for the shipment
         let cheapest_rate = shipment.rates.filter(function (rate) {
           if (rate.attributes.length > 0) {
             for (let i = 0; i < rate.attributes.length; i++) {
@@ -852,8 +864,8 @@ function createShippmentInfo(txn_id, deal_name, seller_email, buyer_email) {
 
         // get the cheapest rate's object id to be used in the creating the shipment transaction
         let rate_object_id = cheapest_rate[0].object_id;
-      
-        
+
+
         shippo.transaction.create({
           "rate": rate_object_id,
           "label_file_type": "PDF",
@@ -884,7 +896,7 @@ function createShippmentInfo(txn_id, deal_name, seller_email, buyer_email) {
               html: buyer_tracking_url_EmailTemplate({deal_name: req.body.deal_name, txn_id: req.body.txn_id, tracking_number: transaction.tracking_number, tracking_url_provider: transaction.tracking_url_provider  })
             };
             sgMail.send(buyer_tracking_url);
-            
+
 
           });
 
@@ -907,9 +919,178 @@ router.post("/tracking-info/:TrackingNumber", function(req, res) {
 });
 
 //paypal
-router.post('/paypal/execute-payment', function (req, res) {
-  console.log("paypal", req.body);
+let users_purchase_id_paypal;
+router.post("/paypal/create", verifyToken, function (req, res) {
+
+  let user_id = req.decoded._id;
+  let {deal_id, deal_name, pay_in_dollar, deal_description} = req.body.dealItem;
+  let {firstName, lastName, shippingAddress, shippingCity, shippingState, zipcode} =  req.body;
+
+  let description = JSON.parse(deal_description);
+  console.log(req.body);
+
+  let dealUrl;
+  if (process.env.NODE_ENV=="development"){
+    dealUrl = `${process.env.FRONTEND_URL}/feed/deals/${deal_id}/${deal_name}`;
+  } else {
+    dealUrl = `${process.env.BACKEND_URL}/feed/deals/${deal_id}/${deal_name}`;
+  }
+
+  let encodedDealURL = encodeURI(dealUrl); //turn spaces in url to %20
+
+
+  let create_payment = JSON.stringify({
+    intent: "sale",
+    payer: {
+        payment_method: "paypal"
+    },
+    redirect_urls: {
+        return_url: encodedDealURL,
+        cancel_url: encodedDealURL
+    },
+    transactions: [{
+        item_list: {
+            items: [{
+                name: deal_name,
+                sku: deal_id,
+                price: pay_in_dollar,
+                currency: "USD",
+                quantity: 1
+            }]
+        },
+        amount: {
+            currency: "USD",
+            total: pay_in_dollar
+        },
+        description: encodedDealURL
+    }]
+  });
+
+
+  paypal.payment.create(create_payment, function (error, payment) {
+      let links = {};
+      if (error) {
+        console.error(JSON.stringify(error));
+      } else {
+          payment.links.forEach(function(linkObj){
+            links[linkObj.rel] = {
+              href: linkObj.href,
+              method: linkObj.method
+            };
+          })
+
+          if (links.hasOwnProperty('approval_url')){
+            connection.query(
+              "INSERT INTO users_purchases SET ?",
+              {
+                user_id,
+                deal_id,
+                paypal_amount: pay_in_dollar
+              },
+              function (err, transactionInitiated) {
+                if (err) {
+                  console.log(err);
+                }
+
+                users_purchase_id_paypal = transactionInitiated.insertId;
+                //insert shipping address into table
+                connection.query(
+                  "INSERT INTO users_shipping_address SET ?",
+                  {
+                    users_purchases_id: transactionInitiated.insertId,
+                    shipping_firstname: firstName,
+                    shipping_lastname: lastName,
+                    shipping_address: shippingAddress,
+                    shipping_city: shippingCity,
+                    shipping_state: shippingState.value,
+                    shipping_zipcode: zipcode
+                  },
+                  function (err, shipping_data, fields) {
+                    if (err) throw err;
+                  }
+                );
+              }
+            );
+
+            // Redirect the customer to links['approval_url'].href
+            res.json({success: true, link: links['approval_url'].href})
+          } else {
+            res.json({success: false, message: "No Link"})
+          }
+
+      }
+  });
+
 })
+
+router.post("/paypal/execute", verifyToken, function(req, res) {
+  let {deal_name, deal_id, user_email} = req.body;
+
+  let paymentId = req.body.paymentId;
+  let payerId = { payer_id: req.body.payerId }; //has to be in this format according to paypal doc
+
+  paypal.payment.execute(paymentId, payerId, function(error, payment){
+    if(error){
+      console.error("execute error", JSON.stringify(error));
+    } else {
+      if (payment.state == 'approved'){
+
+        //update multiple records for users_purchases
+        connection.query("UPDATE users_purchases SET ? WHERE ?",
+          [
+            {paypal_paymentId: paymentId,
+            paypal_payerId: req.body.payerId,
+            status: "100",
+            payment_received: 1 },
+            {id: users_purchase_id_paypal}
+          ],
+          function (err, transactionInitiated) {
+            if (err) {
+              console.log(err);
+            }
+          }
+        );
+
+        //update deal item to sold
+        connection.query(
+          "UPDATE deals SET deal_status = ? WHERE id = ?",
+          ["sold", deal_id],
+          function(err, result) {
+            if (err) {
+              console.log(err);
+            }
+
+            let view_order;
+            if (process.env.NODE_ENV=="development"){
+                  view_order = process.env.FRONTEND_URL + "/profile/";
+
+              } else {
+                  view_order = process.env.BACKEND_URL + "/profile/";
+              }
+
+            //send buyer an email invoice
+            const confirm_payment_with_customer = {
+              to: user_email,
+              from: process.env.CUSTOMER_SUPPORT,
+              subject: 'Order Confirmation',
+              html: customer_invoice_emailTemplate(
+                { deal_name, txn_id: paymentId, view_order })
+            };
+            sgMail.send(confirm_payment_with_customer);
+
+             //send the paymentInfo to the client side
+             res.json({success: true, message: "payment completed successfully", deal_status: "sold"});
+
+          }
+        );
+      } else {
+        res.json({success: false, message: "payment not completed"})
+      }
+    }
+  });
+
+
+});
 
 function createMatchedFriends(user_id, crypto_name) {
   connection.query(
