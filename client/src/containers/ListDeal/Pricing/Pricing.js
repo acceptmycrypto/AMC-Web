@@ -255,7 +255,7 @@ class Pricing extends Component {
             </div>
             <div className="listed-price-in-crypto-right">
               <div className="create-deal-discount-percent">
-                {Math.ceil(props.showDiscountPercent)}% OFF
+                {Math.ceil(this.props.showDiscountPercent)}% OFF
               </div>
               <input
                 onChange={this.props.changeDiscountPercent}
