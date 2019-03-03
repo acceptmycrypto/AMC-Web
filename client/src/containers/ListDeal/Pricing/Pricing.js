@@ -365,7 +365,7 @@ class Pricing extends Component {
             </div>
             <div className="w-50 pricing-options">
               <div className="d-flex flex-column ml-3 mt-3 w-100 text-center">
-                <div className="pricing-titles border-bottom text-center">Price Summary</div>
+                <div className="pricing-titles border-bottom text-center">Estimated Price Summary</div>
                 <div className="mr-2 ml-2 mt-2 d-flex flex-row">
                   <div className="w-50 pr-4 border-right">
                     {priceInUSD !== null && priceInUSD !== 'NaN' && priceInUSD.length > 0 &&
