@@ -1,0 +1,41 @@
+.termsMenuTitle{
+    padding-left: 50px;
+    padding-bottom: 10px;
+}
+
+.Terms-listItem{
+    font-size: 17px;
+    padding: 15px;
+    padding-left: 50px;
+    padding-right: 50px;
+
+}
+
+#Terms-amh{
+    padding: 20px;
+    text-align: center;
+    font-size: 27px;
+}
+
+.Terms-page {
+    height: 100vh;
+    text-align: left;
+    display: flex;
+    color: #2E4158;
+    padding-top: 54px;
+    min-height: calc(100vh - 50px);
+}
+
+.termsMainContent {
+    width: 100%;
+    background-color: white;
+    position: absolute;
+    padding-top: 75px;
+    margin: auto;
+}
+
+.Faq-menuItem:hover{
+    color: white;
+}
+
+    

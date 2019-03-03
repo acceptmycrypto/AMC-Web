@@ -37,7 +37,7 @@ const Footer = props => {
         <div className="Footer-cardBody">
         <div className="Footer-terms">
       <h4 className="Footer-linkTitle">Terms</h4>
-      <span className="Footer-link">AcceptMyTerms</span>
+      <span><Link className="Footer-link" to="/TermsOfServ">AcceptMyTerms</Link></span>
       <span><Link className="Footer-link" to="/CookiesPolicy">AcceptMyCookies</Link></span>
       </div>
         </div>

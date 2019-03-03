@@ -15,6 +15,7 @@ import Reviews from "./containers/Reviews";
 import ListDeal from "./containers/ListDeal";
 
 import Faq from "./containers/FooterPages/Faq/Faq"
+import TermsOfServ from "./containers/FooterPages/TermsOfServ/Terms"
 
 import AboutUs from "./containers/FooterPages/AboutUs/AboutUs"
 import Returns from "./containers/FooterPages/Returns/Returns"
@@ -56,6 +57,7 @@ class App extends Component {
               <Route exact path='/chat' component={Chat}/>
 
               <Route exact path='/AboutUs' component={AboutUs}/>
+              <Route exact path='/TermsOfServ' component={TermsOfServ}/>
 
               <Route exact path='/Faq' component={Faq}/>
               <Route exact path='/Returns' component={Returns}/>
