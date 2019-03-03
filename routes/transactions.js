@@ -555,8 +555,13 @@ router.post("/checkout/notification", function (req, res, next) {
         //meaning: payment has received in coinpayment address
         //send an email to user saying the payment has been recieved. ship the order
 
-        //this link doesn't work locally
-        let view_order = process.env.FRONTEND_URL + "/profile/";
+        let view_order;
+        if (process.env.NODE_ENV=="development"){
+              view_order = process.env.FRONTEND_URL + "/profile/";
+
+          } else {
+              view_order = process.env.BACKEND_URL + "/profile/";
+          }
 
         connection.query('UPDATE users_purchases SET status = ?, payment_received = ? WHERE ?',
           [req.body.status, 1, { txn_id: req.body.txn_id }],
@@ -924,7 +929,13 @@ router.post("/paypal/create", verifyToken, function (req, res) {
   let description = JSON.parse(deal_description);
   console.log(req.body);
 
-  let dealUrl = `${process.env.FRONTEND_URL}/feed/deals/${deal_id}/${deal_name}`;
+  let dealUrl;
+  if (process.env.NODE_ENV=="development"){
+    dealUrl = `${process.env.FRONTEND_URL}/feed/deals/${deal_id}/${deal_name}`;
+  } else {
+    dealUrl = `${process.env.BACKEND_URL}/feed/deals/${deal_id}/${deal_name}`;
+  }
+
   let encodedDealURL = encodeURI(dealUrl); //turn spaces in url to %20
 
 
@@ -1049,7 +1060,13 @@ router.post("/paypal/execute", verifyToken, function(req, res) {
               console.log(err);
             }
 
-            let view_order = process.env.FRONTEND_URL + "/profile/";
+            let view_order;
+            if (process.env.NODE_ENV=="development"){
+                  view_order = process.env.FRONTEND_URL + "/profile/";
+
+              } else {
+                  view_order = process.env.BACKEND_URL + "/profile/";
+              }
 
             //send buyer an email invoice
             const confirm_payment_with_customer = {
