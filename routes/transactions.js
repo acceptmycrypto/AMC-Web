@@ -699,12 +699,16 @@ router.get('/newShippingLabel/:txn_id/:deal_name', function (req, res) {
       date.setDate(date.getDate() + days);
       return date;
     }
-
+    
+    //current date timestamp
     let date = new Date();
-
+    
+    // add 2 days (48 hrs to timestamp)
     let date_48 = date.addDays(2);
-    let date_48_ISO = date_48.toISOString();
 
+    // date_48_ISO is date_48 as an ISO date timestamp
+    // date_48_ISO will be the shipment date for the seller so the seller has 48 hrs from now to ship the item
+    let date_48_ISO = date_48.toISOString(); 
 
     shippo.shipment.create({
       "address_from": addressFrom,
@@ -835,12 +839,16 @@ function createShippmentInfo(txn_id, deal_name, seller_email, buyer_email) {
         date.setDate(date.getDate() + days);
         return date;
       }
-
-      let date = new Date();
-
-      let date_48 = date.addDays(2);
-      let date_48_ISO = date_48.toISOString();
-
+      
+        //current date timestamp
+        let date = new Date();
+    
+        // add 2 days (48 hrs to timestamp)
+        let date_48 = date.addDays(2);
+    
+        // date_48_ISO is date_48 as an ISO date timestamp
+        // date_48_ISO will be the shipment date for the seller so the seller has 48 hrs from now to ship the item
+        let date_48_ISO = date_48.toISOString(); 
 
       shippo.shipment.create({
         "address_from": addressFrom,

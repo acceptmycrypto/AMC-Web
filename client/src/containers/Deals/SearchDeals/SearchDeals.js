@@ -8,6 +8,7 @@ import CryptoRankings from '../../CryptosRanking';
 import Layout from "../../Layout";
 import '../Deals.css';
 import './SearchDeals.css';
+import '../../Home/Homepage/Homepage.css';
 import { _isLoggedIn } from '../../../actions/loggedInActions';
 import {searchDeals} from '../../../actions/searchBarActions';
 import queryString from 'query-string';
@@ -141,17 +142,18 @@ class SearchDeals extends Component {
           {/* remove the cryptoranking table on the deals page until further notice
           <CryptoRankings /> */}
 
-          <div id="right" className="grid mx-4">
-            {deals != undefined && deals.length > 0 && deals.map(deal => (
+          {/* <div id="right" className="grid mx-4"> */}
+          <div className ="d-flex flex-row justify-content-center w-100">
+            {/* {deals != undefined && deals.length > 0 && deals.map(deal => (
               <div key={deal.id} className="deal">
                 <Link to={`/feed/deals/${deal.id}/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
 
                 <div className="deal-info">
                       <img className="deal-image" src={deal.featured_deal_image} alt="deal"/>
                       <div className="mt-1">{deal.deal_name}</div>
-                      <small className="deal-description">{this.handleLongDescription(deal.deal_description)}</small>
+                      <small className="deal-description">{this.handleLongDescription(deal.deal_description)}</small> */}
                       {/* if seller is a vendor then display the venue name else if seller is a user then display the seller name which is the user's username */}
-                      <div><small>Offered by: {deal.venue_name || deal.seller_name}</small></div>
+                      {/* <div><small>Offered by: {deal.venue_name || deal.seller_name}</small></div>
                     </div>
 
                     <div className="deal-price">
@@ -172,7 +174,51 @@ class SearchDeals extends Component {
                 </Link>
               </div>
 
-            ))}
+            ))} */}
+
+
+          {deals != undefined && deals.length > 0 && deals.map(deal => (
+            <div key={deal.id} className="category_item mx-3">
+              <Link to={`/feed/deals/${deal.id}/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
+
+                <div className="category-info">
+                  <div className="category-image-div">
+                    <img className="category-image" src={deal.featured_deal_image} alt="deal" />
+                    {deal.deal_status !== "available" &&
+                    <div class="deal-status">
+                      <div style={{textTransform: "uppercase"}}>
+                        {deal.deal_status}
+                      </div>
+                    </div>
+                    }
+                  </div>
+                  <div className="mt-1">{deal.deal_name}</div>
+                  {/* <small className="deal-description">{this.handleLongDescription(deal.deal_description)}</small> */}
+                  {/* if seller is a vendor then display the venue name else if seller is a user then display the seller name which is the user's username */}
+                  <div><small>Offered by: {deal.venue_name || deal.seller_name}</small></div>
+                </div>
+
+                <div className="deal-price">
+                  <div className="price-differ">
+                    <div>
+                      <div className="purchase-method">Dollar</div>
+                      <div>${deal.pay_in_dollar.toFixed(2)}</div>
+                    </div>
+                    <div className="d-flex flex-column text-center justify-content-center">
+                      <div className="purchase-method">Cryptocurrency</div>
+                      <strong className="pay_in_crypto">${deal.pay_in_crypto.toFixed(2)}</strong>
+                      <small className="w-75 pay_in_crypto discount">{this.convertToPercentage(deal.pay_in_dollar, deal.pay_in_crypto)}% OFF</small>
+
+                    </div>
+                  </div>
+                </div>
+
+              </Link>
+            </div>
+          ))}
+
+
+
           </div>
 
         </div>

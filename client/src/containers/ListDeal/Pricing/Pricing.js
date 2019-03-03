@@ -48,7 +48,7 @@ class Pricing extends Component {
             <label className="mr-3 mt-2 weight-label">
               <input id="weight-3" type="radio" name="weightOption" className="weightOption" value={3} />
               <div className=" d-flex flex-column justify-content-center align-items-center">
-                <i class="fas fa-book fa-2x"></i>
+                <i class="fas fa-mobile-alt fa-2x"></i>
                 <span className="weight-font mt-2">1-3 lbs</span>
               </div>
             </label>
@@ -255,7 +255,7 @@ class Pricing extends Component {
             </div>
             <div className="listed-price-in-crypto-right">
               <div className="create-deal-discount-percent">
-                {Math.ceil(props.showDiscountPercent)}% OFF
+                {Math.ceil(this.props.showDiscountPercent)}% OFF
               </div>
               <input
                 onChange={this.props.changeDiscountPercent}
@@ -365,7 +365,7 @@ class Pricing extends Component {
             </div>
             <div className="w-50 pricing-options">
               <div className="d-flex flex-column ml-3 mt-3 w-100 text-center">
-                <div className="pricing-titles border-bottom text-center">Price Summary</div>
+                <div className="pricing-titles border-bottom text-center">Estimated Price Summary</div>
                 <div className="mr-2 ml-2 mt-2 d-flex flex-row">
                   <div className="w-50 pr-4 border-right">
                     {priceInUSD !== null && priceInUSD !== 'NaN' && priceInUSD.length > 0 &&
