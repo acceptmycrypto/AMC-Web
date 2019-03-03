@@ -15,10 +15,18 @@ const initialState = {
   showPricingStep: false,
   showDescriptionStep: false,
   discountPercent: 10,
-  priceInUSD: "",
-  priceInCrypto: "",
+  priceInUSD: null,
+  priceInCrypto: null,
   crypto_amount: {},
   gettingRate: {},
+  shippingLabelSelection: "",
+  shippingWeightSelection: null,
+  shippingPriceSelection: null,
+  shippingLessThanDiscount: false,
+  sellerEarnsUSD: null,
+  sellerEarnsCrypto: null,
+  sellerProfitsUSD: null,
+  sellerProfitsCrypto: null,
   dealName: "",
   selectedCategory: "",
   selectedCondition: "", //important! Selected condition cannot by null by default, otherwist app will crash.
@@ -38,6 +46,8 @@ const initialState = {
   deletingDealLoading: null,
   modalVisible: false,
   phoneNumber: null,
+  sellerFirstname: null,
+  sellerLastname: null,
   sellerAddress: null,
   sellerCity: null,
   sellerState: null,
@@ -64,11 +74,19 @@ const handleImageRemove = (images, imageKey) => {
 }
 
 const CalculateDiscountPrice = (basePrice, discount) => {
-  return basePrice - (basePrice * (discount/100))
+  // return basePrice - (basePrice * (discount/100))
+  return ((100-discount)/100) * basePrice;
 }
 
-const CalculateDiscountPercentage = (basePrice, discountPrice) => {
-  return ((basePrice - discountPrice) / basePrice) * 100
+const isShippingPriceHigher = (shippingPrice, discountPrice) =>{
+  let discountCalc = (parseFloat(discountPrice) * 0.975);
+  if(parseFloat(shippingPrice) <= discountCalc){
+    return false;
+  }
+  else{
+    return true;
+  }
+
 }
 
 export default function CreateDealReducer(state = initialState, action) {
@@ -186,6 +204,66 @@ export default function CreateDealReducer(state = initialState, action) {
         crypto_amount: {...state.crypto_amount, [action.payload.crypto_symbol] : undefined}
       };
 
+    case "SELECT_LABEL_OPTION_PREPAID":
+      return {
+        ...state,
+        shippingLabelSelection: action.payload,
+        modalVisible: true
+      };
+
+    case "SELECT_LABEL_OPTION_SELLER":
+      return {
+        ...state,
+        shippingLabelSelection: action.payload,
+        shippingWeightSelection: null,
+        shippingPriceSelection: null,
+        modalVisible: false,
+      };
+    case "SELECT_WEIGHT_OPTION":
+      return {
+        ...state,
+        shippingWeightSelection: action.payload.shippingWeightSelection,
+        shippingPriceSelection: action.payload.shippingPriceSelection,
+        shippingLessThanDiscount: isShippingPriceHigher(action.payload.shippingPriceSelection, state.priceInCrypto)
+      };
+    
+    case "EXIT_SHIPPING_MODAL":
+      return {
+        ...state,
+        shippingLabelSelection: "",
+        shippingWeightSelection: null,
+        shippingPriceSelection: null,
+        modalVisible: false
+      };
+
+    case "SAVE_SHIPPING_MODAL":
+      return {
+        ...state,
+        modalVisible: false,
+        priceInUSD: action.payload.priceInUSD,
+        priceInCrypto: action.payload.priceInCrypto
+      };
+
+    case "SHOW_WEIGHT_MODAL":
+      return {
+        ...state,
+        modalVisible: true
+      };
+    
+    case "SELLER_EARNS_USD":
+      return {
+        ...state,
+        sellerEarnsUSD: action.payload.sellerEarnsUSD,
+        sellerProfitsUSD: action.payload.sellerProfitsUSD
+      };
+    
+    case "SELLER_EARNS_CRYPTO":
+      return {
+        ...state,
+        sellerEarnsCrypto: action.payload.sellerEarnsCrypto,
+        sellerProfitsCrypto: action.payload.sellerProfitsCrypto
+      };
+
     case "EDIT_DEAL_NAME":
       return {
         ...state,
@@ -299,6 +377,18 @@ export default function CreateDealReducer(state = initialState, action) {
       return {
         ...state,
         phoneNumber: action.payload
+      };
+
+      case "EDIT_SELLER_FIRSTNAME":
+      return {
+        ...state,
+        sellerFirstname: action.payload
+      };
+
+      case "EDIT_SELLER_LASTNAME":
+      return {
+        ...state,
+        sellerLastname: action.payload
       };
 
     case "EDIT_SELLER_ADDRESS":

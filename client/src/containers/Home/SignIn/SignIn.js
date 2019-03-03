@@ -35,13 +35,15 @@ class SignIn extends Component {
           localStorage.setItem('token', res.token);
           this.props.history.push(`/${values.redirect}`);
 
-        } else if (res.token) {
+        }else if (res.token && values.redirect && values.redirect.includes('trackingNumber')){
+          localStorage.setItem('token', res.token);
+          this.props.history.push(`${values.redirect}`);
+        }else if (res.token) {
           localStorage.setItem('token', res.token);
           // alert("You've successfully logged in");
           //redirect user to the feed/deals
           this.props.history.push('/');
-
-        }else {
+        } else {
           // alert(res.err);
           this.props.openModal();
         }

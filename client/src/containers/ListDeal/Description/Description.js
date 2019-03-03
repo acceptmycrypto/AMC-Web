@@ -11,6 +11,8 @@ import {
   handleSelectedCondition,
   closeModalAfterDealCreated,
   onEditPhoneNumber,
+  onEditSellerFirstname,
+  onEditSellerLastname,
   onEditSellerAddress,
   onEditSellerCity,
   onEditSellerState,
@@ -58,6 +60,8 @@ class Description extends Component {
     event.preventDefault();
 
     const {
+      sellerFirstname,
+      sellerLastname,
       phoneNumber,
       sellerAddress,
       sellerCity,
@@ -72,6 +76,8 @@ class Description extends Component {
     } else {
       this.props._startVerificationForSeller(
         localStorage.getItem("token"),
+        sellerFirstname,
+        sellerLastname,
         phoneNumber,
         sellerAddress,
         sellerCity,
@@ -95,7 +101,11 @@ class Description extends Component {
       sendingCode,
       sendingCodeSuccess,
       onEditPhoneNumber,
+      sellerFirstname,
+      sellerLastname,
       phoneNumber,
+      onEditSellerFirstname,
+      onEditSellerLastname,
       onEditSellerAddress,
       sellerAddress,
       onEditSellerCity,
@@ -171,7 +181,7 @@ class Description extends Component {
                 closeModalAfterDealCreated();
                 resetDealCreated();
               }}
-              // onClick={resetDealCreated}
+            // onClick={resetDealCreated}
             >
               Show My Listing
             </Link>
@@ -235,8 +245,36 @@ class Description extends Component {
               <small>We will send you a one-time verification code.</small>
             </div>
 
-            <div className="creating-deal-seller-address">
-              <label>Address Info</label>
+            <div className="d-flex flex-row mb-2">
+              <div className="creating-deal-seller-firstname mr-4">
+                {/* <label>First Name</label> */}
+                <input
+                  onChange={onEditSellerFirstname}
+                  value={sellerFirstname}
+                  type="text"
+                  className="description-input"
+                  autofocus="autofocus"
+                  placeholder="First Name"
+                  required
+                />
+              </div>
+
+              <div className="creating-deal-seller-lastname">
+                {/* <label>Last Name</label> */}
+                <input
+                  onChange={onEditSellerLastname}
+                  value={sellerLastname}
+                  type="text"
+                  className="description-input"
+                  autofocus="autofocus"
+                  placeholder="Last Name"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="creating-deal-seller-address pt-3">
+              {/* <label>Address Info</label> */}
               <input
                 onChange={onEditSellerAddress}
                 value={sellerAddress}
@@ -246,35 +284,36 @@ class Description extends Component {
                 placeholder="Address"
                 required
               />
-              <div className="city-state-zipcode-flex">
-                <input
-                  onChange={onEditSellerCity}
-                  value={sellerCity}
-                  type="text"
-                  className="description-input"
-                  autofocus="autofocus"
-                  placeholder="City"
-                  required
-                />
-                <Select
-                  className="create-deal-select"
-                  id="sellerState"
-                  options={allStates}
-                  placeholder="State"
-                  onChange={onEditSellerState}
-                  value={sellerState}
-                />
-                <input
-                  onChange={onEditSellerZipcode}
-                  value={sellerZipcode}
-                  type="number"
-                  className="description-input create-deal-zipcode-input"
-                  autofocus="autofocus"
-                  placeholder="Zip Code"
-                  required
-                />
-              </div>
             </div>
+            <div className="city-state-zipcode-flex">
+              <input
+                onChange={onEditSellerCity}
+                value={sellerCity}
+                type="text"
+                className="description-input"
+                autofocus="autofocus"
+                placeholder="City"
+                required
+              />
+              <Select
+                className="create-deal-select"
+                id="sellerState"
+                options={allStates}
+                placeholder="State"
+                onChange={onEditSellerState}
+                value={sellerState}
+              />
+              <input
+                onChange={onEditSellerZipcode}
+                value={sellerZipcode}
+                type="number"
+                className="description-input create-deal-zipcode-input"
+                autofocus="autofocus"
+                placeholder="Zip Code"
+                required
+              />
+            </div>
+
 
             <button>Text Me</button>
           </form>
@@ -368,7 +407,10 @@ class Description extends Component {
               value={selectedConditionValue}
             />
           </div>
+          
         </div>
+
+    
 
         <div>
           <div className="description-titles detail-title">Details</div>
@@ -428,7 +470,11 @@ class Description extends Component {
                 }
                 className="creating-deal-next-step submit-listing-deal"
               >
-                <button>Submit Deal</button>
+                {this.props.loading_dealCreating ? (
+                <LoadingSpinner />
+              ) : (
+                  <button>Submit Deal</button>
+                )}
               </div>
             )}
           </div>
@@ -437,10 +483,10 @@ class Description extends Component {
         <Modal
           visible={modalVisible}
           effect="fadeInUp"
-          // onClickAway={() => {
-          //   closeModalAfterDealCreated();
-          //   this.directToDealItemPage();
-          // }}
+        // onClickAway={() => {
+        //   closeModalAfterDealCreated();
+        //   this.directToDealItemPage();
+        // }}
         >
           <div className="deal-created-modal">{this.dealCreatedModal()}</div>
         </Modal>
@@ -453,6 +499,8 @@ const mapStateToProps = state => ({
   parentCategory: state.Category.parentCategory,
   modalVisible: state.CreateDeal.modalVisible,
   phoneNumber: state.CreateDeal.phoneNumber,
+  sellerFirstname: state.CreateDeal.sellerFirstname,
+  sellerLastname: state.CreateDeal.sellerLastname,
   sellerAddress: state.CreateDeal.sellerAddress,
   sellerCity: state.CreateDeal.sellerCity,
   sellerState: state.CreateDeal.sellerState,
@@ -481,6 +529,8 @@ const matchDispatchToProps = dispatch => {
       handleSelectedCondition,
       closeModalAfterDealCreated,
       onEditPhoneNumber,
+      onEditSellerFirstname,
+      onEditSellerLastname,
       onEditSellerAddress,
       onEditSellerCity,
       onEditSellerState,

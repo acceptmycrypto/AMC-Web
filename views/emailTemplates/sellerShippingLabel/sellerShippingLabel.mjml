@@ -16,25 +16,19 @@
 
       <mj-column>
         <mj-text color="#fff" letter-spacing="1.2px" font-size="20px" align="center" line-height="20px">
-          Thank You for Your Interest In
+          A User Has Purched Your Item: 
           <%= deal_name %>
         </mj-text>
-        <mj-text color="#fff" letter-spacing="1.2px" font-size="20px" align="center" line-height="20px">
-          Sold by
-          <%= seller_name%>
+    
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="20px">
+          You Have 48 hrs to Ship the Item
         </mj-text>
         <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="20px">
-          The Deal is Reserved for you for <%= time_left%> hours.
-        </mj-text>
-        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="20px">
-          Please send <%= amount %> <%=crypto%>
-        </mj-text>
-        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="15px">
-          To the Address: <%= address%>
+          Once the User Receives the Item Your AcceptMyCrypto Account Balance Will Be Updated With Your Payment
         </mj-text>
 
-        <mj-button background-color="#6bd9c7" color="#2e4157" href="<%=view_deal%>">
-          View The Deal
+        <mj-button background-color="#6bd9c7" color="#2e4157" href="<%=shipping_label_url%>">
+          View & Print Shipping Label
         </mj-button>
 
         <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="15px">

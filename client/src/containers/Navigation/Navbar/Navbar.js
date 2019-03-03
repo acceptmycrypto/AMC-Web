@@ -149,9 +149,9 @@ class Navbar extends Component {
                     this.resetNavbar();
                     this.props.resetDealitemState();
                   }}
-                  to="/SignIn"
+                  to="/listdeal"
                 >
-                  {window.location.pathname == "/SignIn" ? (
+                  {window.location.pathname == "/listdeal" ? (
                     <i className="fas fa-store fa-lg">
                       {" "}
                       <span className="color-deepBlue font-17 teal-underline font-family-roboto">
