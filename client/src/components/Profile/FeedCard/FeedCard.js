@@ -32,7 +32,7 @@ const FeedCard = props => {
                 </div>
 
                 <div>
-                  For <span className="greenText">{transaction.amount + " "}</span>
+                  For <span className="greenText">{transaction.amount ? transaction.amount + " " : "$" + transaction.paypal_amount}</span>
                   <span className="greenText">{transaction.crypto_symbol}</span>
                 </div>
 
@@ -68,7 +68,7 @@ const FeedCard = props => {
                 <span className="greenText">{transaction.crypto_symbol}</span> Sold By <span className="blueText">{transaction.venue_name || transaction.seller_name}</span></div>
               </div>}
 
-             <div><small className={'mt-3'}>Order# {transaction.txn_id}</small></div>
+             <div><small className={'mt-3'}>Order# {transaction.txn_id ? transaction.txn_id : transaction.paypal_paymentId}</small></div>
               <div className="timestamp">
                 {/* <small><Timestamp time={transaction.date_purchased}  format='ago' precision={2} autoUpdate={60}/></small> */}
                 <small><Timestamp time={transaction.date_purchased} format='full' precision={3}/></small>

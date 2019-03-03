@@ -19,10 +19,11 @@ import {
   handleSelectedCrypto,
   handleDetailStep,
   handleShippingStep,
-  handlePayingStep,
+  handlePayingStep
 } from "../../../actions/dealItemActions";
 import { resetListDeal, editListing, resetEditListing, _deleteDeal, openDeleteAlertModal, closeDeleteAlertModal } from "../../../actions/listDealActions";
 import { _fetchTransactionInfo, _fetchGuestTransactionInfo } from "../../../actions/paymentActions";
+import { _executePayPalPayment } from "../../../actions/paypalActions";
 import { _createChatSession } from "../../../actions/chatActions";
 import { Carousel } from "react-responsive-carousel";
 import ItemDescription from "../ItemDescription";
@@ -34,9 +35,11 @@ import { _loadReviews } from "../../../actions/reviewsActions";
 import { _loadProfile } from "../../../actions/userLoadActions";
 import { EditorState, convertFromRaw } from "draft-js";
 import AlertModal from "../../../components/UI/Alert";
+import queryString from 'query-string';
 
 class DealItem extends Component {
   componentDidMount = async () => {
+
     //return the param value
     await this.props._isLoggedIn(localStorage.getItem("token"));
 
@@ -60,6 +63,16 @@ class DealItem extends Component {
       this.props.resetEditListing();
     }
 
+    //execute paypal payment when redirects from paypal
+    let paypalValues = queryString.parse(this.props.location.search);
+    let paymentId = paypalValues.paymentId;
+    let payerId = paypalValues.PayerID;
+    if (this.props.userLoggedIn && paymentId) {
+      let user_email = this.props.user_info[0].email;
+      await this.props._executePayPalPayment(localStorage.getItem("token"), payerId, paymentId, id, deal_name, user_email);
+      await this.handleBuyNowButton();
+      await this.props.history.push("/profile");
+    }
 
     // }else{
     //     // localStorage.removeItem('token');
@@ -67,7 +80,6 @@ class DealItem extends Component {
     // }
 
   }
-
 
   //set the options to select crypto from
   //this function is needed to change the format of objects to be able to used for react select
@@ -330,6 +342,32 @@ class DealItem extends Component {
     }
   }
 
+  handleBuyNowButton = () => {
+    const {deal_status} = this.props.dealItem;
+    const {paypal_excecute_payment, paypal_excecute_payment_loading} = this.props;
+
+    switch (true) {
+      case paypal_excecute_payment_loading:
+        return (
+          <div style={{marginTop: "10px"}}><LoadingSpinner /></div>
+        );
+      case deal_status === "reserved":
+        return (
+          <button disabled>Waiting for Payment</button>
+        );
+      case deal_status === "sold":
+        return (
+          <button disabled>Sold</button>
+        );
+      case paypal_excecute_payment && paypal_excecute_payment.success === true:
+        return (
+          <button disabled>Sold</button>
+        );
+      default:
+        return <button>Buy Now</button>
+    }
+  };
+
   render() {
     const { //state
             error,
@@ -464,7 +502,7 @@ class DealItem extends Component {
                       //another way to pass in props using spread operator
                       {...dealItem}
                       {...reviews}
-                      transactionStatus={transaction_status}
+                      buyNowButtonHandler={this.handleBuyNowButton}
                       sellerDealDescription={this.loadDescription}
                       next_step={handleShippingStep}
                       rating_display={this.ratingDisplay}
@@ -526,6 +564,7 @@ class DealItem extends Component {
                         paymentInfo &&
                         this.timeInMilliseconds(paymentInfo.timeout)
                       }
+                      isLoggedin = {userLoggedIn}
                     />
                   )}
                 </div>
@@ -698,7 +737,10 @@ const mapStateToProps = state => ({
   dealDeleted: state.CreateDeal.dealDeleted,
   deletingDealLoading: state.CreateDeal.deletingDealLoading,
   deletingDealError: state.CreateDeal.deletingDealError,
-  alertDeleteModalVisible: state.CreateDeal.alertDeleteModalVisible
+  alertDeleteModalVisible: state.CreateDeal.alertDeleteModalVisible,
+  paypal_excecute_payment: state.TransactionInfo.paypal_excecute_payment,
+  paypal_excecute_payment_loading: state.TransactionInfo.paypal_excecute_payment_loading,
+  paypal_excecute_payment_error: state.TransactionInfo.paypal_excecute_payment_error
 });
 
 const matchDispatchToProps = dispatch => {
@@ -728,7 +770,8 @@ const matchDispatchToProps = dispatch => {
       _deleteDeal,
       resetEditListing,
       openDeleteAlertModal,
-      closeDeleteAlertModal
+      closeDeleteAlertModal,
+      _executePayPalPayment
     },
     dispatch
   );
