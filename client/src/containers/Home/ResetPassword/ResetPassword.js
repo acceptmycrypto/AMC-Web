@@ -39,17 +39,14 @@ class ResetPassword extends Component {
   }
 
   render() {
-
+    //If media query matches
+    const mobileScreenSize = window.matchMedia("(max-width: 640px)")
     const { error, loading, visible , validity} = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
     }
 
-    if (loading) {
-      return <div>Loading...</div>;
-    }
-    
     return (
       <div className="App">
         <Aside />
@@ -111,8 +108,8 @@ class ResetPassword extends Component {
                   back to sign in
                 </Link>
               </div>
-              <Modal visible={visible} effect="fadeInLeft" onClickAway={() => {this.props.closeModal(); }}>
-                <div className="Modal">
+              <Modal width={mobileScreenSize.matches && "85%"} visible={visible} effect="fadeInLeft" onClickAway={() => {this.props.closeModal(); }}>
+                <div className={mobileScreenSize.matches ? "mob-modal" : "Modal"}>
                   <h4>{this.props.error_message}</h4>
                   <a className="a-link" href="javascript:void(0);" onClick={() => {this.props.closeModal(); }}>Ok</a>
 

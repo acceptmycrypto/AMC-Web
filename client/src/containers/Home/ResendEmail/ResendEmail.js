@@ -23,8 +23,6 @@ class ResendEmail extends Component {
     this.props._loadCryptocurrencies();
   }
 
-
-
   //function to handle when user clicks submit button to register
   handleSubmit(e) {
     e.preventDefault();
@@ -47,9 +45,9 @@ class ResendEmail extends Component {
     }
   }
 
-
-
   render() {
+    //If media query matches
+    const mobileScreenSize = window.matchMedia("(max-width: 640px)")
 
     const { error, loading, cryptoOptions, visible } = this.props;
 
@@ -57,15 +55,6 @@ class ResendEmail extends Component {
       return <div>Error! {error.message}</div>;
     }
 
-    if (loading) {
-      return <div>Loading...</div>;
-    }
-
-    // console.log("This.props" , this.props);
-
-    // if (localStorage.getItem('token')) {
-    //   this.props.history.push('/feed/deals');
-    // }
     return (
       <div className="App">
         <Aside />
@@ -110,8 +99,8 @@ class ResendEmail extends Component {
                   back to sign in
                 </Link>
               </div>
-              <Modal visible={visible} effect="fadeInLeft" onClickAway={() => {this.props.closeModal(); }}>
-                <div className="Modal">
+              <Modal visible={visible} width={mobileScreenSize.matches && "85%"}  effect="fadeInLeft" onClickAway={() => {this.props.closeModal(); }}>
+                <div className={mobileScreenSize.matches ? "mob-modal" : "Modal"}>
                   <h4>Please check your email to confirm registration.</h4>
                   <a className="a-link" href="javascript:void(0);" onClick={() => {this.props.closeModal(); }}>Ok</a>
 

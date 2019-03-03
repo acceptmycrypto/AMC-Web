@@ -1,0 +1,31 @@
+
+/* media query */
+@media only screen and (max-width: 640px) {
+  #deal-item-info {
+    display: block;
+  }
+
+  .condition-category-posted-container {
+    width: 100%;
+  }
+
+  .condition-category-posted {
+    width: 50%;
+    margin-right: 0px;
+  }
+
+  .deal-item-discount {
+    position: absolute;
+    right: 15px;
+    top: 105px;
+  }
+
+  .buy-now {
+    margin-bottom: 20px;
+  }
+
+  .buy-now button {
+    width: 100%;
+  }
+
+}

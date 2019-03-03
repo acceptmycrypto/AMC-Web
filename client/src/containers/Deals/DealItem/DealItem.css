@@ -8,6 +8,16 @@
   flex-direction: column;
 }
 
+.deal-item-content {
+  min-height: 500px;
+  margin: 0px 50px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  display: flex;
+  border-radius: 5px;
+}
+
 .deal-header {
   background-image: linear-gradient(-85deg, #49cdb7, #1ab7db);
   width: 100%;
@@ -273,7 +283,7 @@
 }
 .buy-now button {
   width: 85%;
-  margin-top: 30px;
+  margin: 30px 0px;
   font-size: 1.5em;
 }
 

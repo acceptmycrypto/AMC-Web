@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import {Link} from "react-router-dom";
+import "../SignUp/SignUpMobile.css";
 
 class Aside extends Component {
     render() {
         return (
-            <div className="App__Aside">
+            <div className="App__Aside mob-signup-aside">
                 <div className="back_to_home"><Link to="/" id="back_to_home-text"><i className="fas fa-arrow-left" id="back-arrow"></i> <span>Home</span></Link></div>
                 <img className="crypto-img img-fluid mb-5 d-block mx-auto" src="../../../assets/images/logo.png" alt="acceptmycrypto_logo"></img>
                 <h1 className="text-uppercase mb-0">Accept My Crypto</h1>

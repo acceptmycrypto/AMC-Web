@@ -1,5 +1,6 @@
 import React from "react";
 import "./ItemDescription.css";
+import "./ItemDescriptionMobile.css";
 import { Editor } from 'draft-js';
 
 const ItemDescription = props => {
