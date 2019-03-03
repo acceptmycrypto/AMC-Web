@@ -48,7 +48,7 @@ class Pricing extends Component {
             <label className="mr-3 mt-2 weight-label">
               <input id="weight-3" type="radio" name="weightOption" className="weightOption" value={3} />
               <div className=" d-flex flex-column justify-content-center align-items-center">
-                <i class="fas fa-book fa-2x"></i>
+                <i class="fas fa-mobile-alt fa-2x"></i>
                 <span className="weight-font mt-2">1-3 lbs</span>
               </div>
             </label>
