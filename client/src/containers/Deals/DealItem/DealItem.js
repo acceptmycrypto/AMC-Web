@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./DealItem.css";
+import "./DealItemMobile.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
@@ -369,6 +370,9 @@ class DealItem extends Component {
   };
 
   render() {
+    //If media query matches
+    const mobileScreenSize = window.matchMedia("(max-width: 640px)")
+
     const { //state
             error,
             deal_item_loading,
@@ -483,9 +487,11 @@ class DealItem extends Component {
               </div>
             </div>
 
-            <div className="deal-listing-content">
+            <div className="deal-item-content">
               <div className={!userLoggedIn && showShippingStep ?  "guest-images-container" : "deal-images-container"}>
-                <Carousel className="react-carousel" showStatus={false}>
+                <Carousel
+                  className="react-carousel"
+                  showStatus={false}>
                   {dealItem &&
                     dealItem.deal_image.map((img, i) => (
                       <div key={i} className="deal-item-image">
