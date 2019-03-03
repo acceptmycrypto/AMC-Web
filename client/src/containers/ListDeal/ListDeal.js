@@ -137,12 +137,16 @@ class ListDeal extends Component {
   };
 
   onCreateDeal = () => {
-    const { dealName, selectedCategory, selectedCondition, _submitDeal, images, priceInUSD, priceInCrypto, crypto_amount } = this.props;
+    const { dealName, selectedCategory, selectedCondition, _submitDeal, images, priceInUSD, priceInCrypto, crypto_amount, shippingLabelSelection, shippingWeightSelection, shippingPriceSelection } = this.props;
+
+    let label_status = shippingLabelSelection;
+    let weight = shippingWeightSelection;
+    let shipping_cost = shippingPriceSelection;
 
     let textDetailRaw = convertToRaw(this.props.editorState.getCurrentContent());
     let selected_cryptos = Object.keys(crypto_amount);
 
-    _submitDeal(localStorage.getItem("token"), dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos);
+    _submitDeal(localStorage.getItem("token"), dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos, label_status, weight, shipping_cost);
 
   };
 
@@ -192,7 +196,10 @@ class ListDeal extends Component {
 
     const validatePricing = {
       basePrice: this.props.priceInUSD,
-      selectedCrypto: !cryptosNotSelected //check if user has selected a crypto
+      selectedCrypto: !cryptosNotSelected, //check if user has selected a crypto
+      shippingLabelSelection: this.props.shippingLabelSelection,
+      sellerProfitsCrypto: this.props.sellerProfitsCrypto,
+      sellerProfitsUSD: this.props.sellerProfitsUSD,
     }
 
     let isDataValid = false;
@@ -217,6 +224,14 @@ class ListDeal extends Component {
           position: toast.POSITION.TOP_RIGHT
         });
 
+      }else if(this.props.shippingLabelSelection.length < 1){
+        toast.error(this._validationErrors(validatePricing).notifyShippingLabelNotSelectedError, {
+          position: toast.POSITION.TOP_RIGHT
+        });
+      } else if(!this.props.sellerProfitsCrypto || !this.props.sellerProfitsUSD){
+        toast.error(this._validationErrors(validatePricing).notifyNegativePriceError,{
+          position: toast.POSITION.TOP_RIGHT
+        });
       }
     }
 
@@ -280,14 +295,17 @@ class ListDeal extends Component {
 
   }
 
+
   _validationErrors(val) {
     const errMsgs = {
       notifyImageUploadError: val.imageSRC ? null : 'Please upload an image first.',
       notifyBasePriceEmptyError: val.basePrice && val.basePrice !== "NaN" && val.basePrice !== "0.00"? null : 'Please enter your base price.',
       notifyCryptoNotSelectedError: val.selectedCrypto ? null : 'Please select at least one Cryptocurrency.',
+      notifyShippingLabelNotSelectedError: val.shippingLabel ? null :'Please select a shipping label option',
       notifyDealNameError: val.dealName ? null : 'Please give your listing a name.',
       notifySelectedCategoryError: val.selectedCategory ? null : 'Please select a category.',
-      notifyDescriptionError: val.description ? null : 'Please describe your listing.'
+      notifyDescriptionError: val.description ? null : 'Please describe your listing.',
+      notifyNegativePriceError: val.description ? null : 'Please increase Price In Dollar amount'
     }
 
     return errMsgs;
@@ -434,6 +452,7 @@ class ListDeal extends Component {
               showUploadingPhotoStep={handleUploadingPhotosStep}
               showDescriptionStep={handleDescriptionStep}
               validateSelectedCrypto={this.validateBasePriceToBeEnteredBeforeSelectCrypto}
+              validateSelectShippingLabel={this.validateBasePriceToBeEnteredBeforeSelectCrypto}
             />
           )}
           {showDescriptionStep && (
@@ -494,7 +513,14 @@ const mapStateToProps = state => ({
   editingDeal: state.CreateDeal.editingDeal,
   editingDealId: state.CreateDeal.editingDealId,
   alertEditCancelModalVisible: state.CreateDeal.alertEditCancelModalVisible,
-  dealItem: state.DealItem.dealItem
+  dealItem: state.DealItem.dealItem,
+  shippingLabelSelection: state.CreateDeal.shippingLabelSelection,
+  shippingWeightSelection: state.CreateDeal.shippingWeightSelection,
+  shippingPriceSelection: state.CreateDeal.shippingPriceSelection,
+  sellerEarnsUSD: state.CreateDeal.sellerEarnsUSD,
+  sellerEarnsCrypto: state.CreateDeal.sellerEarnsCrypto,
+  sellerProfitsUSD: state.CreateDeal.sellerProfitsUSD,
+  sellerProfitsCrypto: state.CreateDeal.sellerProfitsCrypto,
 });
 
 const matchDispatchToProps = dispatch => {

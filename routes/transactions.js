@@ -13,6 +13,9 @@ var IPN_SECRET = keys.coinpayment.IPN_SECRET;
 var { verify } = require(`coinpayments-ipn`);
 var CoinpaymentsIPNError = require(`coinpayments-ipn/lib/error`);
 var paypal = require('paypal-rest-sdk');
+var request = require("request");
+//shippo
+var shippo = require('shippo')(process.env.SHIPMENT_KEY);
 
 //use sendgrid
 var sgMail = require("@sendgrid/mail");
@@ -76,12 +79,12 @@ router.get("/api/transactions/community/payment_received", function (req, res) {
 //coinpayment
 router.post("/checkout", verifyToken, function (req, res) {
   //Inserting to user_purchases table, this doens't mean purchase is successful
-  //Need to listen to IPA when payment has recieved and then update payment_recieved to true
+  //Need to listen to IPN (instant payment notification) when payment has recieved and then update payment_recieved to true
 
   let user_id = req.decoded._id;
   let crypto_name = req.body.crypto_name;
 
-  createMatchedFriends(user_id, crypto_name);
+  // createMatchedFriends(user_id, crypto_name);
 
   client.createTransaction(
     {
@@ -147,10 +150,6 @@ router.post("/checkout", verifyToken, function (req, res) {
                     res.json({paymentInfo, deal_status: "reserved"});
                   }
                 );
-
-
-
-
               }
             );
 
@@ -480,7 +479,19 @@ var item_ordered_emailTemplate = ejs.compile(item_ordered_ET);
 var item_canceled_ET = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/itemCanceled/itemCanceled.ejs'), 'utf-8');
 var item_canceled_emailTemplate = ejs.compile(item_canceled_ET);
 
-//ipa (listen to coinpayment's events)
+//this email template is sent to customer if item has been canceled
+var seller_tracking_number_ET = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/sellerTrackingNeeded/sellerTrackingNeeded.ejs'), 'utf-8');
+var seller_tracking_number_needed_EmailTemplate = ejs.compile(seller_tracking_number_ET);
+
+//this email template is sent to customer if item has been canceled
+var seller_shipping_label_ET = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/sellerShippingLabel/sellerShippingLabel.ejs'), 'utf-8');
+var seller_shipping_label_EmailTemplate = ejs.compile(seller_shipping_label_ET);
+
+//this email template is sent to customer if item has been canceled
+var buyer_tracking_url_ET = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/buyerTrackingUrl/buyerTrackingUrl.ejs'), 'utf-8');
+var buyer_tracking_url_EmailTemplate = ejs.compile(buyer_tracking_url_ET);
+
+//ipn (listen to coinpayment's events) - instant payment notification
 router.post("/checkout/notification", function (req, res, next) {
   if (!req.get(`HMAC`) || !req.body || !req.body.ipn_mode || req.body.ipn_mode !== `hmac` || MERCHANT_ID !== req.body.merchant) {
     return next(new Error(`Invalid request`));
@@ -508,11 +519,16 @@ router.post("/checkout/notification", function (req, res, next) {
 }, function (req, res, next) {
   //handle events
   connection.query(
-    'SELECT status, email, amount, crypto_symbol, deal_name, users_purchases.deal_id FROM users_purchases LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE txn_id = ?',
+    'SELECT status, users.email, users.username guest_users.email AS guest_email, amount, crypto_symbol, deal_name, deals.seller_id, deals.shipping_label_status, users_purchases.deal_id, seller.email AS seller_email, shipping_firstname, shipping_lastname, shipping_address, shipping_city, shipping_state, shipping_zipcode  FROM users_purchases LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN guest_users ON users_purchases.guest_user_id = guest_users.id LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name LEFT JOIN users seller ON deals.seller_id = users.id LEFT JOIN users_shipping_address ON users_shipping_address.txn_id = users_purchases.txn_id WHERE txn_id = ?',
     [req.body.txn_id],
     function (err, data_status, fields) {
       let current_status = data_status[0].status;
       let deal_name = data_status[0].deal_name;
+      let deal_id = data_status[0].deal_id;
+      let shipping_label_status =  data_status[0].shipping_label_status;
+      let email = data_status[0].email || data_status[0].guest_email;
+      let seller_email = data_status[0].seller_email;
+      let {shipping_firstname, shipping_lastname, shipping_address, shipping_city, shipping_state, shipping_zipcode } = data_status[0];
 
       if (current_status === "0" && req.body.status === "1") {
         //update the status in the table to "1"
@@ -543,35 +559,51 @@ router.post("/checkout/notification", function (req, res, next) {
         let view_order = process.env.FRONTEND_URL + "/profile/";
 
         connection.query('UPDATE users_purchases SET status = ?, payment_received = ? WHERE ?',
+          [req.body.status, 1, { txn_id: req.body.txn_id }],
+          function (error, results, fields) {
+            if (error) throw error;
 
-        [req.body.status, 1, { txn_id: req.body.txn_id }],
-        function (error, results, fields) {
-          if (error) throw error;
-
-          //update the deal item to sold
-          connection.query(
-            "UPDATE deals SET deal_status = ? WHERE id = ?",
-            ["sold", data_status[0].deal_id],
-            function(err, result) {
-              if (err) {
-                console.log(err);
+            connection.query(
+              "UPDATE deals SET deal_status = ? WHERE id = ?",
+              ["sold", data_status[0].deal_id],
+              function(err, result) {
+                if (err) {
+                  console.log(err);
+                }
+                 //send the paymentInfo to the client side
+                res.json({deal_status: "sold"});
               }
-               //send the paymentInfo to the client side
-              res.json({deal_status: "sold"});
-            }
-          );
+            );
 
-          const confirm_payment_with_customer = {
-            to: data_status[0].email,
-            from: process.env.CUSTOMER_SUPPORT,
-            subject: 'Order Confirmation',
-            html: customer_invoice_emailTemplate(
-              { deal_name: req.body.deal_name,
-                txn_id: req.body.txn_id,
-                view_order })
-          };
-          sgMail.send(confirm_payment_with_customer);
-        });
+            const confirm_payment_with_customer = {
+              to: email,
+              from: process.env.CUSTOMER_SUPPORT,
+              subject: 'Order Confirmation',
+              html: customer_invoice_emailTemplate({ deal_name: req.body.deal_name, txn_id: req.body.txn_id, view_order })
+            };
+            sgMail.send(confirm_payment_with_customer);
+          });
+
+
+          let supply_tracking_number_link;
+          if (process.env.NODE_ENV == "development") {
+            supply_tracking_number_link = `${process.env.FRONTEND_URL}/trackingNumber/${req.body.txn_id}/${deal_name}`;
+          } else {
+            supply_tracking_number_link = `${process.env.BACKEND_URL}/trackingNumber/${req.body.txn_id}/${deal_name}`;
+          }
+
+          if(shipping_label_status === "prepaid"){
+            createShippmentInfo(req.body.txn_id, deal_name, seller_email, email);
+          }else if(shipping_label_status === "seller"){
+            const seller_tracking_number_needed = {
+              to: seller_email,
+              from: process.env.CUSTOMER_SUPPORT,
+              subject: `A User Has Purchased ${req.body.deal_name}`,
+              html: seller_tracking_number_needed_EmailTemplate({deal_name: req.body.deal_name, txn_id: req.body.txn_id, shipping_firstname, shipping_lastname, shipping_address, shipping_city, shipping_state, shipping_zipcode, supply_tracking_number_link})
+            };
+            sgMail.send(seller_tracking_number_needed);
+          }
+
       }
 
       if (current_status === "0" && req.body.status === "-1") {
@@ -579,10 +611,9 @@ router.post("/checkout/notification", function (req, res, next) {
         //meaning: payment has been timeout
         //send an email to user saying the payment has been canceled
         connection.query('UPDATE users_purchases SET ? WHERE ?',
-
-        [{ status: req.body.status}, { txn_id: req.body.txn_id }],
-        function (error, results, fields) {
-          if (error) throw error;
+          [{ status: req.body.status }, { txn_id: req.body.txn_id }],
+          function (error, results, fields) {
+            if (error) throw error;
 
           //update the deal item back to available
           connection.query(
@@ -597,26 +628,289 @@ router.post("/checkout/notification", function (req, res, next) {
             }
           );
 
-          const cancel_order = {
-            to: data_status[0].email,
-            from: process.env.CUSTOMER_SUPPORT,
-            subject: 'Payment Timed Out',
-            html: item_canceled_emailTemplate(
-              { txn_id: req.body.txn_id,
-                amount: req.body.amount,
-                crypto_symbol: req.body.crypto_symbol,
-                deal_name: req.body.deal_name,
-                sign_in: process.env.BACKEND_URL
-              })
-          };
-          sgMail.send(cancel_order);
-        });
+            const cancel_order = {
+              to: email,
+              from: process.env.CUSTOMER_SUPPORT,
+              subject: 'Payment Timed Out',
+              html: item_canceled_emailTemplate(
+                {
+                  txn_id: req.body.txn_id,
+                  amount: req.body.amount,
+                  crypto_symbol: req.body.crypto_symbol,
+                  deal_name: req.body.deal_name,
+                  sign_in: process.env.BACKEND_URL
+                })
+            };
+            sgMail.send(cancel_order);
+          });
       }
 
     }
   );
 
   return next();
+});
+
+// route for testing
+router.get('/newShippingLabel/:txn_id/:deal_name', function (req, res) {
+  let {txn_id, deal_name} = req.params;
+  let seller_email = "avanika@acceptmycrypto.com";
+  let buyer_email = "avanika@acceptmycrypto.com";
+  connection.query("SELECT users_shipping_address.shipping_firstname AS buyer_firstname, users_shipping_address.shipping_lastname AS buyer_lastname, users_shipping_address.shipping_address AS buyer_address, users_shipping_address.shipping_city AS buyer_city, users_shipping_address.shipping_state AS buyer_state, users_shipping_address.shipping_zipcode AS buyer_zipcode, seller.first_name AS seller_firstname, seller.last_name AS seller_lastname, seller.address AS seller_address, seller.city AS seller_city, seller.state AS seller_state,seller.zipcode AS seller_zipcode, deals.length, deals.width, deals.height, deals.weight FROM users_shipping_address LEFT JOIN users_purchases ON  users_shipping_address.txn_id = users_purchases.txn_id LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN users seller ON deals.seller_id = seller.id WHERE users_shipping_address.txn_id = ?",
+  [txn_id],
+  function (err, shipping_data, fields) {
+    if (err) throw err;
+    shipping_data = shipping_data[0];
+    let addressFrom = {
+      "name": `${shipping_data.seller_firstname} ${shipping_data.seller_lastname}`,
+      "street1": shipping_data.seller_address,
+      "city": shipping_data.seller_city,
+      "state": shipping_data.seller_state,
+      "zip": shipping_data.seller_zipcode,
+      "country": "US"
+    };
+
+    let addressTo = {
+      "name": `${shipping_data.buyer_firstname} ${shipping_data.buyer_lastname}`,
+      "street1": shipping_data.buyer_address,
+      "city": shipping_data.buyer_city,
+      "state": shipping_data.buyer_state,
+      "zip": shipping_data.buyer_zipcode,
+      "country": "US"
+    };
+
+    let parcel = {
+      "length": shipping_data.length,
+      "width": shipping_data.width,
+      "height": shipping_data.height,
+      "distance_unit": "in",
+      "weight": shipping_data.weight,
+      "mass_unit": "lb"
+    };
+
+
+    Date.prototype.addDays = function(days) {
+      let date = new Date(this.valueOf());
+      date.setDate(date.getDate() + days);
+      return date;
+    }
+
+    let date = new Date();
+
+    let date_48 = date.addDays(2);
+    let date_48_ISO = date_48.toISOString();
+
+
+    shippo.shipment.create({
+      "address_from": addressFrom,
+      "address_to": addressTo,
+      "address_return" : addressFrom,
+      "shipment_date": date_48_ISO,
+      "parcels": [parcel],
+      "async": false
+    }, function (err, shipment) {
+
+      // get the cheapest rate for the shipment
+      let cheapest_rate = shipment.rates.filter(function (rate) {
+        if (rate.attributes.length > 0) {
+          for (let i = 0; i < rate.attributes.length; i++) {
+            if (rate.attributes[i] == "CHEAPEST") {
+              return rate;
+            }
+          }
+        }
+      })
+
+      // get the cheapest rate's object id to be used in the creating the shipment transaction
+      let rate_object_id = cheapest_rate[0].object_id;
+
+
+      shippo.transaction.create({
+        "rate": rate_object_id,
+        "label_file_type": "PDF",
+        "async": false
+      }, function (err, transaction) {
+        if (err) throw err;
+        console.log({shipment, transaction});
+        // res.json({ shipment, transaction });
+        // console.log(transaction);
+        console.log("transaction.label_url", transaction.label_url);
+        console.log("transaction.tracking_url_provider", transaction.tracking_url_provider);
+
+
+        connection.query("UPDATE users_purchases SET ? WHERE ?", [{shipment_date: shipment.shipment_date, shipping_label_url: transaction.label_url, shippo_shipment_price: cheapest_rate[0].amount, tracking_number: transaction.tracking_number, tracking_status: transaction.tracking_status, tracking_url_provider: transaction.tracking_url_provider, eta: transaction.eta, shippo_shipment_id: shipment.object_id,  shippo_transaction_id: transaction.object_id}, {txn_id}], function (error, results, fields) {
+          if (error) throw error;
+
+          const seller_shipping_label = {
+            to: seller_email,
+            from: process.env.CUSTOMER_SUPPORT,
+            subject: `A User Has Purchased ${deal_name}`,
+            html: seller_shipping_label_EmailTemplate({deal_name: deal_name, txn_id: txn_id, shipping_label_url: transaction.label_url})
+          };
+          sgMail.send(seller_shipping_label);
+
+
+          const buyer_tracking_url = {
+            to: buyer_email,
+            from: process.env.CUSTOMER_SUPPORT,
+            subject: `Your Purchased Item Will Be Shipping Soon`,
+            html: buyer_tracking_url_EmailTemplate({deal_name: deal_name, txn_id: txn_id, tracking_number: transaction.tracking_number, tracking_url_provider: transaction.tracking_url_provider  })
+          };
+          sgMail.send(buyer_tracking_url);
+
+
+        });
+
+        var tracking_options = {
+          url: 'https://api.goshippo.com/tracks/',
+          headers: {
+            "carrier": "usps",
+            "tracking_number": transaction.tracking_number
+          }
+        };
+
+        function callback(error, response, body) {
+          if (!error && response.statusCode == 200) {
+            var info = JSON.parse(body);
+            console.log("line 768", info);
+          }
+        }
+
+        request(options, callback);
+        res.json({ shipment, transaction });
+
+      });
+    });
+
+
+  }
+);
+
+
+
+})
+
+function createShippmentInfo(txn_id, deal_name, seller_email, buyer_email) {
+
+  connection.query("SELECT users_shipping_address.shipping_firstname AS buyer_firstname, users_shipping_address.shipping_lastname AS buyer_lastname, users_shipping_address.shipping_address AS buyer_address, users_shipping_address.shipping_city AS buyer_city, users_shipping_address.shipping_state AS buyer_state, users_shipping_address.shipping_zipcode AS buyer_zipcode, seller.first_name AS seller_firstname, seller.last_name AS seller_lastname, seller.address AS seller_address, seller.city AS seller_city, seller.state AS seller_state,seller.zipcode AS seller_zipcode, deals.length, deals.width, deals.height, deals.weight FROM users_shipping_address LEFT JOIN users_purchases ON  users_shipping_address.txn_id = users_purchases.txn_id LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN users seller ON deals.seller_id = seller.id WHERE users_shipping_address.txn_id = ?",
+    [txn_id],
+    function (err, shipping_data, fields) {
+      if (err) throw err;
+      shipping_data = shipping_data[0];
+      let addressFrom = {
+        "name": `${shipping_data.seller_firstname} ${shipping_data.seller_lastname}`,
+        "street1": shipping_data.seller_address,
+        "city": shipping_data.seller_city,
+        "state": shipping_data.seller_state,
+        "zip": shipping_data.seller_zipcode,
+        "country": "US"
+      };
+
+      let addressTo = {
+        "name": `${shipping_data.buyer_firstname} ${shipping_data.buyer_lastname}`,
+        "street1": shipping_data.buyer_address,
+        "city": shipping_data.buyer_city,
+        "state": shipping_data.buyer_state,
+        "zip": shipping_data.buyer_zipcode,
+        "country": "US"
+      };
+
+      let parcel = {
+        "length": shipping_data.length,
+        "width": shipping_data.width,
+        "height": shipping_data.height,
+        "distance_unit": "in",
+        "weight": shipping_data.weight,
+        "mass_unit": "lb"
+      };
+
+
+      Date.prototype.addDays = function(days) {
+        let date = new Date(this.valueOf());
+        date.setDate(date.getDate() + days);
+        return date;
+      }
+
+      let date = new Date();
+
+      let date_48 = date.addDays(2);
+      let date_48_ISO = date_48.toISOString();
+
+
+      shippo.shipment.create({
+        "address_from": addressFrom,
+        "address_to": addressTo,
+        "address_return" : addressFrom,
+        "shipment_date": date_48_ISO,
+        "parcels": [parcel],
+        "async": false
+      }, function (err, shipment) {
+
+        // get the cheapest rate for the shipment
+        let cheapest_rate = shipment.rates.filter(function (rate) {
+          if (rate.attributes.length > 0) {
+            for (let i = 0; i < rate.attributes.length; i++) {
+              if (rate.attributes[i] == "CHEAPEST") {
+                return rate;
+              }
+            }
+          }
+        })
+
+        // get the cheapest rate's object id to be used in the creating the shipment transaction
+        let rate_object_id = cheapest_rate[0].object_id;
+
+
+        shippo.transaction.create({
+          "rate": rate_object_id,
+          "label_file_type": "PDF",
+          "async": false
+        }, function (err, transaction) {
+          if (err) throw err;
+          console.log({shipment, transaction});
+          // res.json({ shipment, transaction });
+          // console.log(transaction);
+
+
+          connection.query("UPDATE users_purchases SET ? WHERE ?", [{shipment_date: shipment.shipment_date, shipping_label_url: transaction.label_url, shippo_shipment_price: cheapest_rate[0].amount, tracking_number: transaction.tracking_number, tracking_status: transaction.tracking_status, tracking_url_provider: transaction.tracking_url_provider, eta: transaction.eta, shippo_shipment_id: shipment.object_id,  shippo_transaction_id: transaction.object_id}, {txn_id}], function (error, results, fields) {
+            if (error) throw error;
+
+            const seller_shipping_label = {
+              to: seller_email,
+              from: process.env.CUSTOMER_SUPPORT,
+              subject: `A User Has Purchased ${deal_name}`,
+              html: seller_shipping_label_EmailTemplate({deal_name: req.body.deal_name, txn_id: req.body.txn_id, shipping_label_url: transaction.label_url})
+            };
+            sgMail.send(seller_shipping_label);
+
+
+            const buyer_tracking_url = {
+              to: buyer_email,
+              from: process.env.CUSTOMER_SUPPORT,
+              subject: `Your Purchased Item Will Be Shipping Soon`,
+              html: buyer_tracking_url_EmailTemplate({deal_name: req.body.deal_name, txn_id: req.body.txn_id, tracking_number: transaction.tracking_number, tracking_url_provider: transaction.tracking_url_provider  })
+            };
+            sgMail.send(buyer_tracking_url);
+
+
+          });
+
+
+
+        });
+      });
+
+
+    }
+  );
+
+}
+
+//route for tracking shipment
+
+router.post("/tracking-info/:TrackingNumber", function(req, res) {
+  console.log("117", res.req.body);
+  res.json(JSON.stringify(res.tracking_status));
 });
 
 //paypal
