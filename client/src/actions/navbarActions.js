@@ -1,4 +1,4 @@
-export function _loadPhoto(token) {
+export function _loadPhoto(token, seller_id) {
   const settingsPhoto = {
     method: "POST",
     headers: {
@@ -7,7 +7,7 @@ export function _loadPhoto(token) {
     },
     body: JSON.stringify({token})
   };
-
+  
   return dispatch => {
     dispatch(fetchPhotoBegin());
     return fetch("/navbar/photo", settingsPhoto)

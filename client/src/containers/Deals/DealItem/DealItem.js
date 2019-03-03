@@ -587,7 +587,7 @@ class DealItem extends Component {
                       <i
                         className={
                           "fas py-3 px-4 user-icon-navbar " +
-                          this.props.photo.photo
+                          this.props.sellerPhoto
                         }
                       />
                     </div>
@@ -714,6 +714,7 @@ class DealItem extends Component {
 const mapStateToProps = state => ({
   dealItem: state.DealItem.dealItem,
   reviews: state.Reviews.reviews,
+  sellerPhoto: state.Reviews.sellerPhoto,
   acceptedCryptos: state.DealItem.acceptedCryptos,
   firstName: state.DealItem.firstName,
   lastName: state.DealItem.lastName,

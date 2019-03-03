@@ -28,10 +28,10 @@ var connection = mysql.createConnection({
 
     // Your port; if not 3306
     port: 3306,
-  
+
     // Your username
     user: process.env.DB_USER,
-  
+
     // Your password
     password: process.env.DB_PW,
     database: process.env.DB_DB
@@ -45,6 +45,16 @@ router.post('/navbar/photo',verifyToken, function (req, res) {
         console.log("photo:", results[0].photo);
         res.json(results[0].photo);
     });
+});
+
+//getting the seller photo for the deal item for the buyer
+router.get('/seller-photo/:seller_id', function (req, res) {
+  let seller_id = req.params.seller_id;
+
+  connection.query('SELECT users_profiles.photo FROM users_profiles LEFT JOIN users ON users.id = users_profiles.user_id WHERE users.id = ?;', [seller_id], function (error, results, fields) {
+      if (error) throw error;
+      res.json(results[0].photo);
+  });
 });
 
 router.post('/loggedIn', verifyToken, function (req, res){
@@ -63,7 +73,7 @@ router.get("/category/parent", function(req, res) {
         res.json(results);
       }
     );
-  
+
   });
 
 
