@@ -1,4 +1,4 @@
-export function _loadPhoto(token, seller_id) {
+export function _loadPhoto(token) {
   const settingsPhoto = {
     method: "POST",
     headers: {
