@@ -109,7 +109,7 @@ export const onDiscountPercentageToChange = (event) => {
 };
 
 export const OnUSDPriceChange = (event) => {
-  
+
   return {
       type: 'CHANGE_BASE_PRICE',
       payload: event.target.value
@@ -182,7 +182,7 @@ export const shippingLabelOption = event => {
       payload: event.target.value
     });
   }
-  
+
 }
 
 export const weightOption = event => {
@@ -205,7 +205,7 @@ export const weightOption = event => {
     type: "SELECT_WEIGHT_OPTION",
     payload: {shippingWeightSelection: event.target.value, shippingPriceSelection: shippingPriceSelection.toFixed(2)}
   });
-  
+
 };
 
 export const _exitShippingModal = () => ({
@@ -309,6 +309,7 @@ export function _updateEditingDeal(token, editingDealId, dealName, category, sel
   categoriesSelected.map(categ => {
     selectedCategory.push(categ.value);
   })
+
   const settings = {
     method: "POST",
     headers: {

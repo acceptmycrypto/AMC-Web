@@ -112,7 +112,7 @@ router.post("/cryptocurrency/exchange", verifyToken, async function(req, res) {
 
 router.post('/listdeal', verifyToken, function(req, res) {
   //info needed to insert into tables
-  
+
   let {dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos, label_status, weight, shipping_cost} = req.body
   let seller_id = req.decoded._id;
   let phone_number_verified;

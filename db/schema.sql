@@ -120,6 +120,7 @@ CREATE TABLE parent_child_categories(
 CREATE TABLE categories_deals(
 	category_id INT NOT NULL,
 	deals_id INT NOT NULL,
+  PRIMARY KEY (category_id, deals_id),
 	FOREIGN KEY (category_id) REFERENCES category(id),
 	FOREIGN KEY (deals_id) REFERENCES deals(id)
 );
