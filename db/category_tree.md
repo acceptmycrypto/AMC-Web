@@ -65,7 +65,7 @@
     72. Fish & Aquatic Pets
     73. Small Animals
     74. Birds
-7. Food & Grocery
+7. Luxury
 8. Health & Beauty
     75. Beauty Products
     76. Health & Wellness
