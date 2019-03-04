@@ -448,15 +448,18 @@ router.post('/listdeal/edit', verifyToken, function(req, res) {
       }
     };
 
-    s3.deleteObjects(params, function (err, data) {
-      console.log()
-      if (data) {
-          console.log("File deleted successfully");
-      }
-      else {
-          console.log(err);
-      }
-    });
+    //delete images if there are images to be removed
+    if (imagesToBeRemoved.length > 0) {
+      s3.deleteObjects(params, function (err, data) {
+        if (data) {
+            console.log("File deleted successfully");
+        }
+        else {
+            console.log(err);
+        }
+      });
+    }
+
   }
 
   const insertNewImages = (images) => {
