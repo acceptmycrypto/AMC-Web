@@ -314,6 +314,7 @@ router.post("/acceptmycrypto/shippo/tracking_status", function(req, res) {
   let txn_id, user_id, crypto_id;
 
   if (tracking_status === "DELIVERED") {
+    //update seller's balance
     connection.query(
       "SELECT txn_id, user_id, crypto_id, tracking_status AS delivery_status FROM users_purchases WHERE tracking_number = ?",
       [tracking_number],
