@@ -142,12 +142,12 @@ router.post("/checkout", verifyToken, function (req, res) {
                 connection.query(
                   "UPDATE deals SET deal_status = ? WHERE id = ?",
                   ["reserved", req.body.deal_id],
-                  function(err, result) {
+                  function (err, result) {
                     if (err) {
                       console.log(err);
                     }
-                     //send the paymentInfo to the client side
-                    res.json({paymentInfo, deal_status: "reserved"});
+                    //send the paymentInfo to the client side
+                    res.json({ paymentInfo, deal_status: "reserved" });
                   }
                 );
               }
@@ -252,40 +252,40 @@ router.post("/guestCheckout", function (req, res) {
                         console.log(res[0]);
 
                         let view_deal;
-                        if (process.env.NODE_ENV=="development"){
-                              view_deal = `${process.env.FRONTEND_URL}/feed/deals/${req.body.deal_id}/${res[0].deal_name}`;
-                          } else {
-                              view_deal = `${process.env.BACKEND_URL}/feed/deals/${req.body.deal_id}/${res[0].deal_name}`;
-                          }
+                        if (process.env.NODE_ENV == "development") {
+                          view_deal = `${process.env.FRONTEND_URL}/feed/deals/${req.body.deal_id}/${res[0].deal_name}`;
+                        } else {
+                          view_deal = `${process.env.BACKEND_URL}/feed/deals/${req.body.deal_id}/${res[0].deal_name}`;
+                        }
 
-                          const guest_checkout = {
-                            to: req.body.email,
-                            from: process.env.CUSTOMER_SUPPORT,
-                            subject: 'You Reserved a Deal',
-                            html: guest_checkout_emailTemplate(
-                              {
-                                deal_name: res[0].deal_name,
-                                seller_name: res[0].seller_name,
-                                time_left: time_left_hrs,
-                                amount: paymentInfo.amount,
-                                crypto: req.body.crypto_name,
-                                address: paymentInfo.address,
-                                view_deal: view_deal
-                              })
-                          };
-                          sgMail.send(guest_checkout);
+                        const guest_checkout = {
+                          to: req.body.email,
+                          from: process.env.CUSTOMER_SUPPORT,
+                          subject: 'You Reserved a Deal',
+                          html: guest_checkout_emailTemplate(
+                            {
+                              deal_name: res[0].deal_name,
+                              seller_name: res[0].seller_name,
+                              time_left: time_left_hrs,
+                              amount: paymentInfo.amount,
+                              crypto: req.body.crypto_name,
+                              address: paymentInfo.address,
+                              view_deal: view_deal
+                            })
+                        };
+                        sgMail.send(guest_checkout);
                       });
 
                     //update deal item to reserved
                     connection.query(
                       "UPDATE deals SET deal_status = ? WHERE id = ?",
                       ["reserved", req.body.deal_id],
-                      function(err, result) {
+                      function (err, result) {
                         if (err) {
                           console.log(err);
                         }
                         //send the paymentInfo to the client side
-                        res.json({paymentInfo, deal_status: "reserved"});
+                        res.json({ paymentInfo, deal_status: "reserved" });
 
                       }
                     );
@@ -306,7 +306,7 @@ router.post("/guestCheckout", function (req, res) {
 //once we verified that the item has been shipped to the buyer
 //this route needs to be programatically called once tracking number has been verified
 //we need to listen to shippo for the endpoint
-router.get("/payout", function(req, res) {
+router.get("/payout", function (req, res) {
   //sample txn_id, user_id, and crypto_id (needs to query the right one)
   let txn_id = "CPDB7P3MAVEJMZ7N73TNSX2KBX";
   let user_id = 1;
@@ -316,10 +316,10 @@ router.get("/payout", function(req, res) {
   connection.query(
     "SELECT amount, crypto_symbol, payment_received, users_purchases.user_id, users_purchases.crypto_id, users_cryptos.crypto_address, users_cryptos.id AS users_cryptos_id, crypto_balance, deal_name, email AS user_email from users_purchases LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN users_cryptos ON users_cryptos.crypto_id = crypto_info.id LEFT JOIN deals ON users_purchases.deal_id = deals.id where txn_id = ? AND users_purchases.user_id = ? AND users_purchases.crypto_id = ?",
     [txn_id, user_id, crypto_id],
-    function(error, result, fields) {
+    function (error, result, fields) {
       if (error) throw error;
 
-      let {amount, crypto_symbol, payment_received, crypto_address, users_cryptos_id, crypto_balance, deal_name, user_email} = result[0];
+      let { amount, crypto_symbol, payment_received, crypto_address, users_cryptos_id, crypto_balance, deal_name, user_email } = result[0];
       console.log(result[0]);
       //update the crypto balance of the seller
       if (payment_received === 100) {
@@ -329,7 +329,7 @@ router.get("/payout", function(req, res) {
         connection.query(
           "UPDATE users_cryptos SET crypto_balance = ? WHERE id = ?",
           [newBalance, users_cryptos_id],
-          function(err, result) {
+          function (err, result) {
             if (err) {
               console.log(err);
             }
@@ -350,115 +350,115 @@ router.get("/payout", function(req, res) {
   );
 });
 
-router.post("/withdraw/initiate", verifyToken, function(req, res) {
+router.post("/withdraw/initiate", verifyToken, function (req, res) {
   let user_id = req.decoded._id;
-  let {crypto_id, crypto_symbol, user_email} = req.body;
+  let { crypto_id, crypto_symbol, user_email } = req.body;
 
   //send an email to the seller with a confirmation code
-  let withdraw_token = Math.random().toString(36).substring(2,10)+"-"+Math.random().toString(36).substring(2,10)+"-"+Math.random().toString(36).substring(2,10);
+  let withdraw_token = Math.random().toString(36).substring(2, 10) + "-" + Math.random().toString(36).substring(2, 10) + "-" + Math.random().toString(36).substring(2, 10);
   let withdraw_token_timestamp = Date.now();
 
   connection.query(
     'SELECT id AS users_cryptos_id, crypto_balance, crypto_address FROM users_cryptos WHERE user_id = ? AND crypto_id = ?',
     [user_id, crypto_id],
-    function(error, result, fields) {
-        if (error) throw error;
-        let {users_cryptos_id, crypto_balance, crypto_address} = result[0];
+    function (error, result, fields) {
+      if (error) throw error;
+      let { users_cryptos_id, crypto_balance, crypto_address } = result[0];
 
-        //insert new token in the withdraw table
-        connection.query(
-          'INSERT INTO cryptos_withdraw SET ?',
-          {withdraw_token, withdraw_token_timestamp, users_cryptos_id},
-          function(error, result, fields) {
-              if (error) throw error;
+      //insert new token in the withdraw table
+      connection.query(
+        'INSERT INTO cryptos_withdraw SET ?',
+        { withdraw_token, withdraw_token_timestamp, users_cryptos_id },
+        function (error, result, fields) {
+          if (error) throw error;
 
-              //use sendgrid here
-              const withdraw_confirmation = {
-                to: user_email,
-                from: process.env.CUSTOMER_SUPPORT,
-                subject: "You've initiated a fund transfer from AcceptMyCrypto",
-                html: cryptoWithdrawEmailTemplate({ crypto_balance, crypto_address, crypto_symbol, withdraw_token })
-              };
-              sgMail.send(withdraw_confirmation);
+          //use sendgrid here
+          const withdraw_confirmation = {
+            to: user_email,
+            from: process.env.CUSTOMER_SUPPORT,
+            subject: "You've initiated a fund transfer from AcceptMyCrypto",
+            html: cryptoWithdrawEmailTemplate({ crypto_balance, crypto_address, crypto_symbol, withdraw_token })
+          };
+          sgMail.send(withdraw_confirmation);
 
-              console.log(withdraw_token);
-              res.json({success: true, message: "Please check your email for the transfer confirmation token."})
-          }
-        )
+          console.log(withdraw_token);
+          res.json({ success: true, message: "Please check your email for the transfer confirmation token." })
+        }
+      )
 
     }
   )
 });
 
-router.post("/withdraw/confirm", verifyToken, function(req, res) {
+router.post("/withdraw/confirm", verifyToken, function (req, res) {
   let user_id = 1;
-  let {crypto_id, withdraw_confirmation_token} = req.body;
+  let { crypto_id, withdraw_confirmation_token } = req.body;
 
   connection.query(
     'SELECT withdraw_token, withdraw_token_timestamp from cryptos_withdraw WHERE withdraw_token = ?',
     [withdraw_confirmation_token],
-    function(error, cryptos_withdraw_result, fields) {
-        if (error) throw error;
+    function (error, cryptos_withdraw_result, fields) {
+      if (error) throw error;
 
-        //5 minutes = 300,000 ms
+      //5 minutes = 300,000 ms
 
-        if (cryptos_withdraw_result.length > 0 && (cryptos_withdraw_result[0].withdraw_token_timestamp + 300000)  >= Date.now()) {
+      if (cryptos_withdraw_result.length > 0 && (cryptos_withdraw_result[0].withdraw_token_timestamp + 300000) >= Date.now()) {
 
-          //verify if there is money in users_cryptos. We checked at the endpoint withdraw/initiate already, but we're double checking again when user hit this withdraw/confirm
-          connection.query(
-            'SELECT users_cryptos.id AS users_cryptos_id, crypto_address, crypto_balance, crypto_symbol FROM users_cryptos LEFT JOIN crypto_info ON users_cryptos.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name WHERE users_cryptos.user_id = ? AND users_cryptos.crypto_id = ?',
-            [user_id, crypto_id],
-            function(error, users_cryptos_result, fields) {
-                if (error) throw error;
-                let {users_cryptos_id, crypto_address, crypto_balance, crypto_symbol} = users_cryptos_result[0];
+        //verify if there is money in users_cryptos. We checked at the endpoint withdraw/initiate already, but we're double checking again when user hit this withdraw/confirm
+        connection.query(
+          'SELECT users_cryptos.id AS users_cryptos_id, crypto_address, crypto_balance, crypto_symbol FROM users_cryptos LEFT JOIN crypto_info ON users_cryptos.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name WHERE users_cryptos.user_id = ? AND users_cryptos.crypto_id = ?',
+          [user_id, crypto_id],
+          function (error, users_cryptos_result, fields) {
+            if (error) throw error;
+            let { users_cryptos_id, crypto_address, crypto_balance, crypto_symbol } = users_cryptos_result[0];
 
-                if (crypto_balance > 0) {
-                  console.log("call coinpayment")
-                  let options = {
-                    amount: crypto_balance,
-                    currency: crypto_symbol,
-                    address: crypto_address
-                  };
+            if (crypto_balance > 0) {
+              console.log("call coinpayment")
+              let options = {
+                amount: crypto_balance,
+                currency: crypto_symbol,
+                address: crypto_address
+              };
 
-                  client.createWithdrawal(options, function(error, transferResult) {
-                    if (error) {
-                      //forbidden if minimum amount does not meet
-                      res.status(403).json({error: true, message: error});
-                      console.log("error", error);
-                    } else if (transferResult.status === 1) {
-                        //update the the user's cryptos table so the new balance is now 0
-                        connection.query(
-                          "UPDATE users_cryptos SET crypto_balance = ? WHERE id = ?",
-                          [0, users_cryptos_id],
-                          function(err, result) {
-                            if (err) {
-                              console.log(err);
-                            }
-                            res.json({success: true, message: "Successfully Transfered"})
-                          }
-                        );
-
-                        //update the cryptos_withdraw table the amount of cryptos withdraw
-                        connection.query(
-                          "UPDATE cryptos_withdraw SET withdraw_amount = ?, coinpayment_withdraw_id = ? WHERE withdraw_token = ?",
-                          [crypto_balance, 1, cryptos_withdraw_result[0].withdraw_token, transferResult.id],
-                          function(err, result) {
-                            if (err) {
-                              console.log(err);
-                            }
-                          }
-                        );
+              client.createWithdrawal(options, function (error, transferResult) {
+                if (error) {
+                  //forbidden if minimum amount does not meet
+                  res.status(403).json({ error: true, message: error });
+                  console.log("error", error);
+                } else if (transferResult.status === 1) {
+                  //update the the user's cryptos table so the new balance is now 0
+                  connection.query(
+                    "UPDATE users_cryptos SET crypto_balance = ? WHERE id = ?",
+                    [0, users_cryptos_id],
+                    function (err, result) {
+                      if (err) {
+                        console.log(err);
+                      }
+                      res.json({ success: true, message: "Successfully Transfered" })
                     }
+                  );
 
-                  });
-
+                  //update the cryptos_withdraw table the amount of cryptos withdraw
+                  connection.query(
+                    "UPDATE cryptos_withdraw SET withdraw_amount = ?, coinpayment_withdraw_id = ? WHERE withdraw_token = ?",
+                    [crypto_balance, 1, cryptos_withdraw_result[0].withdraw_token, transferResult.id],
+                    function (err, result) {
+                      if (err) {
+                        console.log(err);
+                      }
+                    }
+                  );
                 }
 
+              });
+
             }
-          )
-        } else {
-          res.status(403).json({message: "Invalid Confirmation Token"});
-        }
+
+          }
+        )
+      } else {
+        res.status(403).json({ message: "Invalid Confirmation Token" });
+      }
     }
   )
 
@@ -525,10 +525,10 @@ router.post("/checkout/notification", function (req, res, next) {
       let current_status = data_status[0].status;
       let deal_name = data_status[0].deal_name;
       let deal_id = data_status[0].deal_id;
-      let shipping_label_status =  data_status[0].shipping_label_status;
+      let shipping_label_status = data_status[0].shipping_label_status;
       let email = data_status[0].email || data_status[0].guest_email;
       let seller_email = data_status[0].seller_email;
-      let {shipping_firstname, shipping_lastname, shipping_address, shipping_city, shipping_state, shipping_zipcode } = data_status[0];
+      let { shipping_firstname, shipping_lastname, shipping_address, shipping_city, shipping_state, shipping_zipcode } = data_status[0];
 
       if (current_status === "0" && req.body.status === "1") {
         //update the status in the table to "1"
@@ -556,12 +556,12 @@ router.post("/checkout/notification", function (req, res, next) {
         //send an email to user saying the payment has been recieved. ship the order
 
         let view_order;
-        if (process.env.NODE_ENV=="development"){
-              view_order = process.env.FRONTEND_URL + "/profile/";
+        if (process.env.NODE_ENV == "development") {
+          view_order = process.env.FRONTEND_URL + "/profile/";
 
-          } else {
-              view_order = process.env.BACKEND_URL + "/profile/";
-          }
+        } else {
+          view_order = process.env.BACKEND_URL + "/profile/";
+        }
 
         connection.query('UPDATE users_purchases SET status = ?, payment_received = ? WHERE ?',
           [req.body.status, 1, { txn_id: req.body.txn_id }],
@@ -571,12 +571,12 @@ router.post("/checkout/notification", function (req, res, next) {
             connection.query(
               "UPDATE deals SET deal_status = ? WHERE id = ?",
               ["sold", data_status[0].deal_id],
-              function(err, result) {
+              function (err, result) {
                 if (err) {
                   console.log(err);
                 }
-                 //send the paymentInfo to the client side
-                res.json({deal_status: "sold"});
+                //send the paymentInfo to the client side
+                res.json({ deal_status: "sold" });
               }
             );
 
@@ -590,24 +590,24 @@ router.post("/checkout/notification", function (req, res, next) {
           });
 
 
-          let supply_tracking_number_link;
-          if (process.env.NODE_ENV == "development") {
-            supply_tracking_number_link = `${process.env.FRONTEND_URL}/trackingNumber/${req.body.txn_id}/${deal_name}`;
-          } else {
-            supply_tracking_number_link = `${process.env.BACKEND_URL}/trackingNumber/${req.body.txn_id}/${deal_name}`;
-          }
+        let supply_tracking_number_link;
+        if (process.env.NODE_ENV == "development") {
+          supply_tracking_number_link = `${process.env.FRONTEND_URL}/trackingNumber/${req.body.txn_id}/${deal_name}`;
+        } else {
+          supply_tracking_number_link = `${process.env.BACKEND_URL}/trackingNumber/${req.body.txn_id}/${deal_name}`;
+        }
 
-          if(shipping_label_status === "prepaid"){
-            createShippmentInfo(req.body.txn_id, deal_name, seller_email, email);
-          }else if(shipping_label_status === "seller"){
-            const seller_tracking_number_needed = {
-              to: seller_email,
-              from: process.env.CUSTOMER_SUPPORT,
-              subject: `A User Has Purchased ${req.body.deal_name}`,
-              html: seller_tracking_number_needed_EmailTemplate({deal_name: req.body.deal_name, txn_id: req.body.txn_id, shipping_firstname, shipping_lastname, shipping_address, shipping_city, shipping_state, shipping_zipcode, supply_tracking_number_link})
-            };
-            sgMail.send(seller_tracking_number_needed);
-          }
+        if (shipping_label_status === "prepaid") {
+          createShippmentInfo(req.body.txn_id, deal_name, seller_email, email);
+        } else if (shipping_label_status === "seller") {
+          const seller_tracking_number_needed = {
+            to: seller_email,
+            from: process.env.CUSTOMER_SUPPORT,
+            subject: `A User Has Purchased ${req.body.deal_name}`,
+            html: seller_tracking_number_needed_EmailTemplate({ deal_name: req.body.deal_name, txn_id: req.body.txn_id, shipping_firstname, shipping_lastname, shipping_address, shipping_city, shipping_state, shipping_zipcode, supply_tracking_number_link })
+          };
+          sgMail.send(seller_tracking_number_needed);
+        }
 
       }
 
@@ -620,18 +620,18 @@ router.post("/checkout/notification", function (req, res, next) {
           function (error, results, fields) {
             if (error) throw error;
 
-          //update the deal item back to available
-          connection.query(
-            "UPDATE deals SET deal_status = ? WHERE id = ?",
-            ["available", data_status[0].deal_id],
-            function(err, result) {
-              if (err) {
-                console.log(err);
+            //update the deal item back to available
+            connection.query(
+              "UPDATE deals SET deal_status = ? WHERE id = ?",
+              ["available", data_status[0].deal_id],
+              function (err, result) {
+                if (err) {
+                  console.log(err);
+                }
+                //send the paymentInfo to the client side
+                res.json({ deal_status: "available" });
               }
-               //send the paymentInfo to the client side
-              res.json({deal_status: "available"});
-            }
-          );
+            );
 
             const cancel_order = {
               to: email,
@@ -658,147 +658,149 @@ router.post("/checkout/notification", function (req, res, next) {
 
 // route for testing
 router.get('/newShippingLabel/:txn_id/:deal_name', function (req, res) {
-  let {txn_id, deal_name} = req.params;
+  let { txn_id, deal_name } = req.params;
   let seller_email = "avanika@acceptmycrypto.com";
   let buyer_email = "avanika@acceptmycrypto.com";
   connection.query("SELECT users_shipping_address.shipping_firstname AS buyer_firstname, users_shipping_address.shipping_lastname AS buyer_lastname, users_shipping_address.shipping_address AS buyer_address, users_shipping_address.shipping_city AS buyer_city, users_shipping_address.shipping_state AS buyer_state, users_shipping_address.shipping_zipcode AS buyer_zipcode, seller.first_name AS seller_firstname, seller.last_name AS seller_lastname, seller.address AS seller_address, seller.city AS seller_city, seller.state AS seller_state,seller.zipcode AS seller_zipcode, deals.length, deals.width, deals.height, deals.weight FROM users_shipping_address LEFT JOIN users_purchases ON  users_shipping_address.txn_id = users_purchases.txn_id LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN users seller ON deals.seller_id = seller.id WHERE users_shipping_address.txn_id = ?",
-  [txn_id],
-  function (err, shipping_data, fields) {
-    if (err) throw err;
-    shipping_data = shipping_data[0];
-    let addressFrom = {
-      "name": `${shipping_data.seller_firstname} ${shipping_data.seller_lastname}`,
-      "street1": shipping_data.seller_address,
-      "city": shipping_data.seller_city,
-      "state": shipping_data.seller_state,
-      "zip": shipping_data.seller_zipcode,
-      "country": "US"
-    };
+    [txn_id],
+    function (err, shipping_data, fields) {
+      if (err) throw err;
+      shipping_data = shipping_data[0];
+      let addressFrom = {
+        "name": `${shipping_data.seller_firstname} ${shipping_data.seller_lastname}`,
+        "street1": shipping_data.seller_address,
+        "city": shipping_data.seller_city,
+        "state": shipping_data.seller_state,
+        "zip": shipping_data.seller_zipcode,
+        "country": "US"
+      };
 
-    let addressTo = {
-      "name": `${shipping_data.buyer_firstname} ${shipping_data.buyer_lastname}`,
-      "street1": shipping_data.buyer_address,
-      "city": shipping_data.buyer_city,
-      "state": shipping_data.buyer_state,
-      "zip": shipping_data.buyer_zipcode,
-      "country": "US"
-    };
+      let addressTo = {
+        "name": `${shipping_data.buyer_firstname} ${shipping_data.buyer_lastname}`,
+        "street1": shipping_data.buyer_address,
+        "city": shipping_data.buyer_city,
+        "state": shipping_data.buyer_state,
+        "zip": shipping_data.buyer_zipcode,
+        "country": "US"
+      };
 
-    let parcel = {
-      "length": shipping_data.length,
-      "width": shipping_data.width,
-      "height": shipping_data.height,
-      "distance_unit": "in",
-      "weight": shipping_data.weight,
-      "mass_unit": "lb"
-    };
+      let parcel = {
+        "length": shipping_data.length,
+        "width": shipping_data.width,
+        "height": shipping_data.height,
+        "distance_unit": "in",
+        "weight": shipping_data.weight,
+        "mass_unit": "lb"
+      };
 
 
-    Date.prototype.addDays = function(days) {
-      let date = new Date(this.valueOf());
-      date.setDate(date.getDate() + days);
-      return date;
-    }
-    
-    //current date timestamp
-    let date = new Date();
-    
-    // add 2 days (48 hrs to timestamp)
-    let date_48 = date.addDays(2);
+      Date.prototype.addDays = function (days) {
+        let date = new Date(this.valueOf());
+        date.setDate(date.getDate() + days);
+        return date;
+      }
 
-    // date_48_ISO is date_48 as an ISO date timestamp
-    // date_48_ISO will be the shipment date for the seller so the seller has 48 hrs from now to ship the item
-    let date_48_ISO = date_48.toISOString(); 
+      //current date timestamp
+      let date = new Date();
 
-    shippo.shipment.create({
-      "address_from": addressFrom,
-      "address_to": addressTo,
-      "address_return" : addressFrom,
-      "shipment_date": date_48_ISO,
-      "parcels": [parcel],
-      "async": false
-    }, function (err, shipment) {
+      // add 2 days (48 hrs to timestamp)
+      let date_48 = date.addDays(2);
 
-      // get the cheapest rate for the shipment
-      let cheapest_rate = shipment.rates.filter(function (rate) {
-        if (rate.attributes.length > 0) {
-          for (let i = 0; i < rate.attributes.length; i++) {
-            if (rate.attributes[i] == "CHEAPEST") {
-              return rate;
+      // date_48_ISO is date_48 as an ISO date timestamp
+      // date_48_ISO will be the shipment date for the seller so the seller has 48 hrs from now to ship the item
+      let date_48_ISO = date_48.toISOString();
+
+      shippo.shipment.create({
+        "address_from": addressFrom,
+        "address_to": addressTo,
+        "address_return": addressFrom,
+        "shipment_date": date_48_ISO,
+        "parcels": [parcel],
+        "async": false
+      }, function (err, shipment) {
+
+        // get the cheapest rate for the shipment
+        let cheapest_rate = shipment.rates.filter(function (rate) {
+          if (rate.attributes.length > 0) {
+            for (let i = 0; i < rate.attributes.length; i++) {
+              if (rate.attributes[i] == "CHEAPEST") {
+                return rate;
+              }
             }
           }
-        }
-      })
+        })
 
-      // get the cheapest rate's object id to be used in the creating the shipment transaction
-      let rate_object_id = cheapest_rate[0].object_id;
-
-
-      shippo.transaction.create({
-        "rate": rate_object_id,
-        "label_file_type": "PDF",
-        "async": false
-      }, function (err, transaction) {
-        if (err) throw err;
-        console.log({shipment, transaction});
-        // res.json({ shipment, transaction });
-        // console.log(transaction);
-        console.log("transaction.label_url", transaction.label_url);
-        console.log("transaction.tracking_url_provider", transaction.tracking_url_provider);
+        // get the cheapest rate's object id to be used in the creating the shipment transaction
+        let rate_object_id = cheapest_rate[0].object_id;
 
 
-        connection.query("UPDATE users_purchases SET ? WHERE ?", [{shipment_date: shipment.shipment_date, shipping_label_url: transaction.label_url, shippo_shipment_price: cheapest_rate[0].amount, tracking_number: transaction.tracking_number, tracking_status: transaction.tracking_status, tracking_url_provider: transaction.tracking_url_provider, eta: transaction.eta, shippo_shipment_id: shipment.object_id,  shippo_transaction_id: transaction.object_id}, {txn_id}], function (error, results, fields) {
-          if (error) throw error;
+        shippo.transaction.create({
+          "rate": rate_object_id,
+          "label_file_type": "PDF",
+          "async": false
+        }, function (err, transaction) {
+          if (err) throw err;
+          console.log({ shipment, transaction });
+          // res.json({ shipment, transaction });
+          // console.log(transaction);
+          console.log("transaction.label_url", transaction.label_url);
+          console.log("transaction.tracking_url_provider", transaction.tracking_url_provider);
 
-          const seller_shipping_label = {
-            to: seller_email,
-            from: process.env.CUSTOMER_SUPPORT,
-            subject: `A User Has Purchased ${deal_name}`,
-            html: seller_shipping_label_EmailTemplate({deal_name: deal_name, txn_id: txn_id, shipping_label_url: transaction.label_url})
+
+          connection.query("UPDATE users_purchases SET ? WHERE ?", [{ shipment_date: shipment.shipment_date, shipping_label_url: transaction.label_url, shippo_shipment_price: cheapest_rate[0].amount, tracking_number: transaction.tracking_number, tracking_status: transaction.tracking_status, tracking_url_provider: transaction.tracking_url_provider, eta: transaction.eta, shippo_shipment_id: shipment.object_id, shippo_transaction_id: transaction.object_id }, { txn_id }], function (error, results, fields) {
+            if (error) throw error;
+
+            const seller_shipping_label = {
+              to: seller_email,
+              from: process.env.CUSTOMER_SUPPORT,
+              subject: `A User Has Purchased ${deal_name}`,
+              html: seller_shipping_label_EmailTemplate({ deal_name: deal_name, txn_id: txn_id, shipping_label_url: transaction.label_url })
+            };
+            sgMail.send(seller_shipping_label);
+
+
+            const buyer_tracking_url = {
+              to: buyer_email,
+              from: process.env.CUSTOMER_SUPPORT,
+              subject: `Your Purchased Item Will Be Shipping Soon`,
+              html: buyer_tracking_url_EmailTemplate({ deal_name: deal_name, txn_id: txn_id, tracking_number: transaction.tracking_number, tracking_url_provider: transaction.tracking_url_provider })
+            };
+            sgMail.send(buyer_tracking_url);
+
+
+          });
+
+          var tracking_options = {
+            url: 'https://api.goshippo.com/tracks/',
+            headers: {
+              "carrier": "usps",
+              "tracking_number": transaction.tracking_number
+            }
           };
-          sgMail.send(seller_shipping_label);
 
+          function callback(error, response, body) {
+            if (!error && response.statusCode == 200) {
+              var info = JSON.parse(body);
+              console.log("line 768", info);
+            }
+          }
 
-          const buyer_tracking_url = {
-            to: buyer_email,
-            from: process.env.CUSTOMER_SUPPORT,
-            subject: `Your Purchased Item Will Be Shipping Soon`,
-            html: buyer_tracking_url_EmailTemplate({deal_name: deal_name, txn_id: txn_id, tracking_number: transaction.tracking_number, tracking_url_provider: transaction.tracking_url_provider  })
-          };
-          sgMail.send(buyer_tracking_url);
-
+          request(options, callback);
+          res.json({ shipment, transaction });
 
         });
-
-        var tracking_options = {
-          url: 'https://api.goshippo.com/tracks/',
-          headers: {
-            "carrier": "usps",
-            "tracking_number": transaction.tracking_number
-          }
-        };
-
-        function callback(error, response, body) {
-          if (!error && response.statusCode == 200) {
-            var info = JSON.parse(body);
-            console.log("line 768", info);
-          }
-        }
-
-        request(options, callback);
-        res.json({ shipment, transaction });
-
       });
-    });
 
 
-  }
-);
+    }
+  );
 
 
 
 })
 
+
+// create shippo label and tracking number for coinpayment transaction
 function createShippmentInfo(txn_id, deal_name, seller_email, buyer_email) {
 
   connection.query("SELECT users_shipping_address.shipping_firstname AS buyer_firstname, users_shipping_address.shipping_lastname AS buyer_lastname, users_shipping_address.shipping_address AS buyer_address, users_shipping_address.shipping_city AS buyer_city, users_shipping_address.shipping_state AS buyer_state, users_shipping_address.shipping_zipcode AS buyer_zipcode, seller.first_name AS seller_firstname, seller.last_name AS seller_lastname, seller.address AS seller_address, seller.city AS seller_city, seller.state AS seller_state,seller.zipcode AS seller_zipcode, deals.length, deals.width, deals.height, deals.weight FROM users_shipping_address LEFT JOIN users_purchases ON  users_shipping_address.txn_id = users_purchases.txn_id LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN users seller ON deals.seller_id = seller.id WHERE users_shipping_address.txn_id = ?",
@@ -834,26 +836,26 @@ function createShippmentInfo(txn_id, deal_name, seller_email, buyer_email) {
       };
 
 
-      Date.prototype.addDays = function(days) {
+      Date.prototype.addDays = function (days) {
         let date = new Date(this.valueOf());
         date.setDate(date.getDate() + days);
         return date;
       }
-      
-        //current date timestamp
-        let date = new Date();
-    
-        // add 2 days (48 hrs to timestamp)
-        let date_48 = date.addDays(2);
-    
-        // date_48_ISO is date_48 as an ISO date timestamp
-        // date_48_ISO will be the shipment date for the seller so the seller has 48 hrs from now to ship the item
-        let date_48_ISO = date_48.toISOString(); 
+
+      //current date timestamp
+      let date = new Date();
+
+      // add 2 days (48 hrs to timestamp)
+      let date_48 = date.addDays(2);
+
+      // date_48_ISO is date_48 as an ISO date timestamp
+      // date_48_ISO will be the shipment date for the seller so the seller has 48 hrs from now to ship the item
+      let date_48_ISO = date_48.toISOString();
 
       shippo.shipment.create({
         "address_from": addressFrom,
         "address_to": addressTo,
-        "address_return" : addressFrom,
+        "address_return": addressFrom,
         "shipment_date": date_48_ISO,
         "parcels": [parcel],
         "async": false
@@ -880,19 +882,19 @@ function createShippmentInfo(txn_id, deal_name, seller_email, buyer_email) {
           "async": false
         }, function (err, transaction) {
           if (err) throw err;
-          console.log({shipment, transaction});
+          console.log({ shipment, transaction });
           // res.json({ shipment, transaction });
           // console.log(transaction);
 
 
-          connection.query("UPDATE users_purchases SET ? WHERE ?", [{shipment_date: shipment.shipment_date, shipping_label_url: transaction.label_url, shippo_shipment_price: cheapest_rate[0].amount, tracking_number: transaction.tracking_number, tracking_status: transaction.tracking_status, tracking_url_provider: transaction.tracking_url_provider, eta: transaction.eta, shippo_shipment_id: shipment.object_id,  shippo_transaction_id: transaction.object_id}, {txn_id}], function (error, results, fields) {
+          connection.query("UPDATE users_purchases SET ? WHERE ?", [{ shipment_date: shipment.shipment_date, shipping_label_url: transaction.label_url, shippo_shipment_price: cheapest_rate[0].amount, tracking_number: transaction.tracking_number, tracking_status: transaction.tracking_status, tracking_url_provider: transaction.tracking_url_provider, eta: transaction.eta, shippo_shipment_id: shipment.object_id, shippo_transaction_id: transaction.object_id }, { txn_id }], function (error, results, fields) {
             if (error) throw error;
 
             const seller_shipping_label = {
               to: seller_email,
               from: process.env.CUSTOMER_SUPPORT,
               subject: `A User Has Purchased ${deal_name}`,
-              html: seller_shipping_label_EmailTemplate({deal_name: req.body.deal_name, txn_id: req.body.txn_id, shipping_label_url: transaction.label_url})
+              html: seller_shipping_label_EmailTemplate({ deal_name: req.body.deal_name, txn_id: req.body.txn_id, shipping_label_url: transaction.label_url })
             };
             sgMail.send(seller_shipping_label);
 
@@ -901,7 +903,7 @@ function createShippmentInfo(txn_id, deal_name, seller_email, buyer_email) {
               to: buyer_email,
               from: process.env.CUSTOMER_SUPPORT,
               subject: `Your Purchased Item Will Be Shipping Soon`,
-              html: buyer_tracking_url_EmailTemplate({deal_name: req.body.deal_name, txn_id: req.body.txn_id, tracking_number: transaction.tracking_number, tracking_url_provider: transaction.tracking_url_provider  })
+              html: buyer_tracking_url_EmailTemplate({ deal_name: req.body.deal_name, txn_id: req.body.txn_id, tracking_number: transaction.tracking_number, tracking_url_provider: transaction.tracking_url_provider })
             };
             sgMail.send(buyer_tracking_url);
 
@@ -919,11 +921,155 @@ function createShippmentInfo(txn_id, deal_name, seller_email, buyer_email) {
 
 }
 
+
+// create shippo label and tracking number for coinpayment transaction
+function createShippmentInfoPaypal(txn_id, deal_name, seller_email, buyer_email) {
+
+  connection.query("SELECT users_shipping_address.shipping_firstname AS buyer_firstname, users_shipping_address.shipping_lastname AS buyer_lastname, users_shipping_address.shipping_address AS buyer_address, users_shipping_address.shipping_city AS buyer_city, users_shipping_address.shipping_state AS buyer_state, users_shipping_address.shipping_zipcode AS buyer_zipcode, seller.first_name AS seller_firstname, seller.last_name AS seller_lastname, seller.address AS seller_address, seller.city AS seller_city, seller.state AS seller_state,seller.zipcode AS seller_zipcode, deals.length, deals.width, deals.height, deals.weight FROM users_shipping_address LEFT JOIN users_purchases ON  users_shipping_address.users_purchases_id = users_purchases.id LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN users seller ON deals.seller_id = seller.id WHERE users_purchases.paypal_paymentId = ?",
+    [txn_id],
+    function (err, shipping_data, fields) {
+      if (err) throw err;
+      shipping_data = shipping_data[0];
+      let addressFrom = {
+        "name": `${shipping_data.seller_firstname} ${shipping_data.seller_lastname}`,
+        "street1": shipping_data.seller_address,
+        "city": shipping_data.seller_city,
+        "state": shipping_data.seller_state,
+        "zip": shipping_data.seller_zipcode,
+        "country": "US"
+      };
+
+      let addressTo = {
+        "name": `${shipping_data.buyer_firstname} ${shipping_data.buyer_lastname}`,
+        "street1": shipping_data.buyer_address,
+        "city": shipping_data.buyer_city,
+        "state": shipping_data.buyer_state,
+        "zip": shipping_data.buyer_zipcode,
+        "country": "US"
+      };
+
+      let parcel = {
+        "length": shipping_data.length,
+        "width": shipping_data.width,
+        "height": shipping_data.height,
+        "distance_unit": "in",
+        "weight": shipping_data.weight,
+        "mass_unit": "lb"
+      };
+
+
+      Date.prototype.addDays = function (days) {
+        let date = new Date(this.valueOf());
+        date.setDate(date.getDate() + days);
+        return date;
+      }
+
+      //current date timestamp
+      let date = new Date();
+
+      // add 2 days (48 hrs to timestamp)
+      let date_48 = date.addDays(2);
+
+      // date_48_ISO is date_48 as an ISO date timestamp
+      // date_48_ISO will be the shipment date for the seller so the seller has 48 hrs from now to ship the item
+      let date_48_ISO = date_48.toISOString();
+
+      shippo.shipment.create({
+        "address_from": addressFrom,
+        "address_to": addressTo,
+        "address_return": addressFrom,
+        "shipment_date": date_48_ISO,
+        "parcels": [parcel],
+        "async": false
+      }, function (err, shipment) {
+
+        // get the cheapest rate for the shipment
+        let cheapest_rate = shipment.rates.filter(function (rate) {
+          if (rate.attributes.length > 0) {
+            for (let i = 0; i < rate.attributes.length; i++) {
+              if (rate.attributes[i] == "CHEAPEST") {
+                return rate;
+              }
+            }
+          }
+        })
+
+        // get the cheapest rate's object id to be used in the creating the shipment transaction
+        let rate_object_id = cheapest_rate[0].object_id;
+
+
+        shippo.transaction.create({
+          "rate": rate_object_id,
+          "label_file_type": "PDF",
+          "async": false
+        }, function (err, transaction) {
+          if (err) throw err;
+          console.log({ shipment, transaction });
+          // res.json({ shipment, transaction });
+          // console.log(transaction);
+
+
+          connection.query("UPDATE users_purchases SET ? WHERE ?", [{ shipment_date: shipment.shipment_date, shipping_label_url: transaction.label_url, shippo_shipment_price: cheapest_rate[0].amount, tracking_number: transaction.tracking_number, tracking_status: transaction.tracking_status, tracking_url_provider: transaction.tracking_url_provider, eta: transaction.eta, shippo_shipment_id: shipment.object_id, shippo_transaction_id: transaction.object_id }, { txn_id }], function (error, results, fields) {
+            if (error) throw error;
+
+            const seller_shipping_label = {
+              to: seller_email,
+              from: process.env.CUSTOMER_SUPPORT,
+              subject: `A User Has Purchased ${deal_name}`,
+              html: seller_shipping_label_EmailTemplate({ deal_name: req.body.deal_name, txn_id: req.body.txn_id, shipping_label_url: transaction.label_url })
+            };
+            sgMail.send(seller_shipping_label);
+
+
+            const buyer_tracking_url = {
+              to: buyer_email,
+              from: process.env.CUSTOMER_SUPPORT,
+              subject: `Your Purchased Item Will Be Shipping Soon`,
+              html: buyer_tracking_url_EmailTemplate({ deal_name: req.body.deal_name, txn_id: req.body.txn_id, tracking_number: transaction.tracking_number, tracking_url_provider: transaction.tracking_url_provider })
+            };
+            sgMail.send(buyer_tracking_url);
+
+
+          });
+
+
+
+        });
+      });
+
+
+    }
+  );
+
+}
+
+
+
+
 //route for tracking shipment
 
-router.post("/tracking-info/:TrackingNumber", function(req, res) {
+router.post("/tracking-info/", function (req, res) {
   console.log("117", res.req.body);
-  res.json(JSON.stringify(res.tracking_status));
+
+  let tracking_result = res.req.body.data;
+  let tracking_info = res.tracking_status;
+
+  connection.query("INSERT INTO users_tracking_info SET ?",
+    {
+      tracking_number: tracking_result.tracking_number,
+      tracking_status: tracking_result.tracking_status.status,
+      status_details: tracking_result.tracking_status.status_details,
+      status_date: tracking_result.tracking_status.status_date,
+      eta: tracking_result.eta,
+    },
+  function (err, result) {
+    if (err) {
+      console.log(err);
+    }
+    res.json(JSON.stringify(tracking_result));
+  }
+);
+
 });
 
 //paypal
@@ -931,14 +1077,14 @@ let users_purchase_id_paypal;
 router.post("/paypal/create", verifyToken, function (req, res) {
 
   let user_id = req.decoded._id;
-  let {deal_id, deal_name, pay_in_dollar, deal_description} = req.body.dealItem;
-  let {firstName, lastName, shippingAddress, shippingCity, shippingState, zipcode} =  req.body;
+  let { deal_id, deal_name, pay_in_dollar, deal_description } = req.body.dealItem;
+  let { firstName, lastName, shippingAddress, shippingCity, shippingState, zipcode } = req.body;
 
   let description = JSON.parse(deal_description);
   console.log(req.body);
 
   let dealUrl;
-  if (process.env.NODE_ENV=="development"){
+  if (process.env.NODE_ENV == "development") {
     dealUrl = `${process.env.FRONTEND_URL}/feed/deals/${deal_id}/${deal_name}`;
   } else {
     dealUrl = `${process.env.BACKEND_URL}/feed/deals/${deal_id}/${deal_name}`;
@@ -950,107 +1096,109 @@ router.post("/paypal/create", verifyToken, function (req, res) {
   let create_payment = JSON.stringify({
     intent: "sale",
     payer: {
-        payment_method: "paypal"
+      payment_method: "paypal"
     },
     redirect_urls: {
-        return_url: encodedDealURL,
-        cancel_url: encodedDealURL
+      return_url: encodedDealURL,
+      cancel_url: encodedDealURL
     },
     transactions: [{
-        item_list: {
-            items: [{
-                name: deal_name,
-                sku: deal_id,
-                price: pay_in_dollar,
-                currency: "USD",
-                quantity: 1
-            }]
-        },
-        amount: {
-            currency: "USD",
-            total: pay_in_dollar
-        },
-        description: encodedDealURL
+      item_list: {
+        items: [{
+          name: deal_name,
+          sku: deal_id,
+          price: pay_in_dollar,
+          currency: "USD",
+          quantity: 1
+        }]
+      },
+      amount: {
+        currency: "USD",
+        total: pay_in_dollar
+      },
+      description: encodedDealURL
     }]
   });
 
 
   paypal.payment.create(create_payment, function (error, payment) {
-      let links = {};
-      if (error) {
-        console.error(JSON.stringify(error));
-      } else {
-          payment.links.forEach(function(linkObj){
-            links[linkObj.rel] = {
-              href: linkObj.href,
-              method: linkObj.method
-            };
-          })
+    let links = {};
+    if (error) {
+      console.error(JSON.stringify(error));
+    } else {
+      payment.links.forEach(function (linkObj) {
+        links[linkObj.rel] = {
+          href: linkObj.href,
+          method: linkObj.method
+        };
+      })
 
-          if (links.hasOwnProperty('approval_url')){
+      if (links.hasOwnProperty('approval_url')) {
+        connection.query(
+          "INSERT INTO users_purchases SET ?",
+          {
+            user_id,
+            deal_id,
+            paypal_amount: pay_in_dollar
+          },
+          function (err, transactionInitiated) {
+            if (err) {
+              console.log(err);
+            }
+
+            users_purchase_id_paypal = transactionInitiated.insertId;
+            //insert shipping address into table
             connection.query(
-              "INSERT INTO users_purchases SET ?",
+              "INSERT INTO users_shipping_address SET ?",
               {
-                user_id,
-                deal_id,
-                paypal_amount: pay_in_dollar
+                users_purchases_id: transactionInitiated.insertId,
+                shipping_firstname: firstName,
+                shipping_lastname: lastName,
+                shipping_address: shippingAddress,
+                shipping_city: shippingCity,
+                shipping_state: shippingState.value,
+                shipping_zipcode: zipcode
               },
-              function (err, transactionInitiated) {
-                if (err) {
-                  console.log(err);
-                }
-
-                users_purchase_id_paypal = transactionInitiated.insertId;
-                //insert shipping address into table
-                connection.query(
-                  "INSERT INTO users_shipping_address SET ?",
-                  {
-                    users_purchases_id: transactionInitiated.insertId,
-                    shipping_firstname: firstName,
-                    shipping_lastname: lastName,
-                    shipping_address: shippingAddress,
-                    shipping_city: shippingCity,
-                    shipping_state: shippingState.value,
-                    shipping_zipcode: zipcode
-                  },
-                  function (err, shipping_data, fields) {
-                    if (err) throw err;
-                  }
-                );
+              function (err, shipping_data, fields) {
+                if (err) throw err;
               }
             );
-
-            // Redirect the customer to links['approval_url'].href
-            res.json({success: true, link: links['approval_url'].href})
-          } else {
-            res.json({success: false, message: "No Link"})
           }
+        );
 
+        // Redirect the customer to links['approval_url'].href
+        res.json({ success: true, link: links['approval_url'].href })
+      } else {
+        res.json({ success: false, message: "No Link" })
       }
+
+    }
   });
 
 })
 
-router.post("/paypal/execute", verifyToken, function(req, res) {
-  let {deal_name, deal_id, user_email} = req.body;
+router.post("/paypal/execute", verifyToken, function (req, res) {
+  let { deal_name, deal_id, user_email } = req.body;
 
   let paymentId = req.body.paymentId;
   let payerId = { payer_id: req.body.payerId }; //has to be in this format according to paypal doc
 
-  paypal.payment.execute(paymentId, payerId, function(error, payment){
-    if(error){
+  paypal.payment.execute(paymentId, payerId, function (error, payment) {
+    if (error) {
       console.error("execute error", JSON.stringify(error));
     } else {
-      if (payment.state == 'approved'){
+      if (payment.state == 'approved') {
 
         //update multiple records for users_purchases
         connection.query("UPDATE users_purchases SET ? WHERE ?",
           [
-            {paypal_paymentId: paymentId,
-            paypal_payerId: req.body.payerId,
-            status: "100",
-            payment_received: 1 },
-            {id: users_purchase_id_paypal}
+            {
+              paypal_paymentId: paymentId,
+              paypal_payerId: req.body.payerId,
+              status: "100",
+              payment_received: 1
+            },
+            { id: users_purchase_id_paypal }
           ],
           function (err, transactionInitiated) {
             if (err) {
@@ -1063,18 +1211,18 @@ router.post("/paypal/execute", verifyToken, function(req, res) {
         connection.query(
           "UPDATE deals SET deal_status = ? WHERE id = ?",
           ["sold", deal_id],
-          function(err, result) {
+          function (err, result) {
             if (err) {
               console.log(err);
             }
 
             let view_order;
-            if (process.env.NODE_ENV=="development"){
-                  view_order = process.env.FRONTEND_URL + "/profile/";
+            if (process.env.NODE_ENV == "development") {
+              view_order = process.env.FRONTEND_URL + "/profile/";
 
-              } else {
-                  view_order = process.env.BACKEND_URL + "/profile/";
-              }
+            } else {
+              view_order = process.env.BACKEND_URL + "/profile/";
+            }
 
             //send buyer an email invoice
             const confirm_payment_with_customer = {
@@ -1086,13 +1234,62 @@ router.post("/paypal/execute", verifyToken, function(req, res) {
             };
             sgMail.send(confirm_payment_with_customer);
 
-             //send the paymentInfo to the client side
-             res.json({success: true, message: "payment completed successfully", deal_status: "sold"});
+            
+
+            connection.query("SELECT users.email AS seller_email FROM users LEFT JOIN deals ON deals.seller_id = users.id WHERE deals.id = ?",
+              [deal_id],
+              function (err, result) {
+                if (err) {
+                  console.log(err);
+
+                }
+
+                let seller_email = result[0].seller_email;
+                connection.query("SELECT shipping_firstname, shipping_lastname, shipping_address, shipping_city, shipping_state, shipping_zipcode FROM users_shipping_address WHERE users_purchases_id = ?",
+                  [users_purchase_id_paypal],
+                  function (err, res) {
+                    if (err) {
+                      console.log(err);
+
+                    }
+                
+                    let{shipping_firstname, shipping_lastname, shipping_address, shipping_city, shipping_state, shipping_zipcode} = res[0];
+                    
+
+                    let supply_tracking_number_link;
+                    if (process.env.NODE_ENV == "development") {
+                      supply_tracking_number_link = `${process.env.FRONTEND_URL}/trackingNumber/${paymentId}/${deal_name}`;
+                    } else {
+                      supply_tracking_number_link = `${process.env.BACKEND_URL}/trackingNumber/${paymentId}/${deal_name}`;
+                    }
+
+                    if (shipping_label_status === "prepaid") {
+                      createShippmentInfoPaypal(paymentId, deal_name, seller_email, user_email);
+                    } else if (shipping_label_status === "seller") {
+                      const seller_tracking_number_needed = {
+                        to: seller_email,
+                        from: process.env.CUSTOMER_SUPPORT,
+                        subject: `A User Has Purchased ${deal_name}`,
+                        html: seller_tracking_number_needed_EmailTemplate({ deal_name: deal_name, txn_id: paymentId, shipping_firstname, shipping_lastname, shipping_address, shipping_city, shipping_state, shipping_zipcode, supply_tracking_number_link })
+                      };
+                      sgMail.send(seller_tracking_number_needed);
+                    }
+
+                    //send the paymentInfo to the client side
+                    res.json({ success: true, message: "payment completed successfully", deal_status: "sold" });
+                          });
+
+
+              });
+
+
+
+
 
           }
         );
       } else {
-        res.json({success: false, message: "payment not completed"})
+        res.json({ success: false, message: "payment not completed" })
       }
     }
   });
