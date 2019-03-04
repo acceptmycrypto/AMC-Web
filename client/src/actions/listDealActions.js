@@ -301,7 +301,7 @@ export const creatingDealFailure = error => ({
   payload: { error }
 });
 
-export function _updateEditingDeal(token, editingDealId, dealName, category, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos) {
+export function _updateEditingDeal(token, editingDealId, dealName, category, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos, label_status, weight, shipping_cost) {
 
   //create a new array to get the value of categories: ex [value1, value2]
   let categoriesSelected = [...category]
@@ -316,7 +316,7 @@ export function _updateEditingDeal(token, editingDealId, dealName, category, sel
       "Accept": "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({token, editingDealId, dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos})
+    body: JSON.stringify({token, editingDealId, dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos, label_status, weight, shipping_cost})
   };
 
   return dispatch => {

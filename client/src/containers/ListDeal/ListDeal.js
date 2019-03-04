@@ -151,7 +151,7 @@ class ListDeal extends Component {
   };
 
   onUpdatingDeal = () => {
-    const { dealName, selectedCategory, selectedCondition, _updateEditingDeal, images, priceInUSD, priceInCrypto, crypto_amount, editingDealId } = this.props;
+    const { dealName, selectedCategory, selectedCondition, _updateEditingDeal, images, priceInUSD, priceInCrypto, crypto_amount, editingDealId, shippingLabelSelection, shippingWeightSelection, shippingPriceSelection } = this.props;
 
     let textDetailRaw = convertToRaw(this.props.editorState.getCurrentContent());
 
@@ -162,7 +162,7 @@ class ListDeal extends Component {
       }
     }
 
-    _updateEditingDeal(localStorage.getItem("token"), editingDealId, dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos);
+    _updateEditingDeal(localStorage.getItem("token"), editingDealId, dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos, shippingLabelSelection, shippingWeightSelection, shippingPriceSelection);
 
   };
 
