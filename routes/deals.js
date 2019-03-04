@@ -62,7 +62,7 @@ router.get('/api/deals/:deal_id/:deal_name', function (req, res) {
 
   // specify specific column names rather than * because don't want to select all users (seller) info
   connection.query(
-    'SELECT deals.id AS deal_id, deals.venue_id, deals.seller_id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.deal_status, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, deal_images.deal_image, deal_images.deal_image_object, venues.id AS venues_id, venues.venue_name, venues.venue_description, venues.venue_link, venues.accepted_crypto, users.id AS seller_id, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings, category.category_name AS deal_category FROM deals LEFT JOIN deal_images ON deals.id = deal_images.deal_id LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN category ON category.id = categories_deals.category_id WHERE deals.id = ? AND deals.deal_status <> ?',
+    'SELECT deals.id AS deal_id, deals.venue_id, deals.seller_id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.deal_status, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, deals.weight, deals.shipping_label_status, deals.shipment_cost, deal_images.deal_image, deal_images.deal_image_object, venues.id AS venues_id, venues.venue_name, venues.venue_description, venues.venue_link, venues.accepted_crypto, users.id AS seller_id, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings, category.category_name AS deal_category FROM deals LEFT JOIN deal_images ON deals.id = deal_images.deal_id LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN category ON category.id = categories_deals.category_id WHERE deals.id = ? AND deals.deal_status <> ?',
     [req.params.deal_id, "deleted"],
     function (error, result, fields) {
 
@@ -309,11 +309,12 @@ router.get('/api/search', function(req, res) {
 router.post('/update_tracking_number', verifyToken, function (req, res) {
   let id = req.decoded._id;
 
+  // txn_id can either be coinpayment txn_id or paypal paypal_paymentId that is passed from front end 
   let {txn_id, trackingNumber} = req.body;
 
     connection.query(
-      'UPDATE users_purchases SET tracking_number = ? WHERE txn_id = ?',
-      [trackingNumber, txn_id],
+      'UPDATE users_purchases SET tracking_number = ? WHERE txn_id = ? OR paypal_paymentId = ?',
+      [trackingNumber, txn_id, txn_id],
       function (error, results, fields) {
         if (error) console.log(error);
         res.json(results);

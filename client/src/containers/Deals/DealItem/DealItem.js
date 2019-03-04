@@ -608,9 +608,11 @@ class DealItem extends Component {
                     </div>
                   </div>
 
+
                   {user_info.length > 0 &&
                   dealItem &&
                   user_info[0].id === dealItem.seller_id ?
+                  dealItem.deal_status === "available" ?
                   <div>
                     <Link to={"/listdeal"}>
                       <div className="px-3 message-seller">
@@ -624,7 +626,7 @@ class DealItem extends Component {
                           Delete Listing
                       </button>
                     </div>
-                  </div> :
+                  </div> : null :
                   (
                     <Link to={"/chat"}>
                       <div className="px-3 message-seller">

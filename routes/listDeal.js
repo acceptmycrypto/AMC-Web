@@ -112,7 +112,7 @@ router.post("/cryptocurrency/exchange", verifyToken, async function(req, res) {
 
 router.post('/listdeal', verifyToken, function(req, res) {
   //info needed to insert into tables
-  
+
   let {dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos, label_status, weight, shipping_cost} = req.body
   let seller_id = req.decoded._id;
   let phone_number_verified;
@@ -278,7 +278,7 @@ router.post('/listdeal', verifyToken, function(req, res) {
 
 router.post('/listdeal/edit', verifyToken, function(req, res) {
    //info needed to insert into tables
-   let {dealName, selectedCategory, editingDealId, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos} = req.body
+   let {dealName, selectedCategory, editingDealId, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos, label_status, weight, shipping_cost} = req.body
    let seller_id = req.decoded._id;
    let phone_number_verified;
    console.log(req.body);
@@ -295,6 +295,24 @@ router.post('/listdeal/edit', verifyToken, function(req, res) {
    let pay_in_dollar = priceInUSD;
    let pay_in_crypto = priceInCrypto;
 
+  //shipping dimension
+  let dimension = 10;
+  if(label_status === "prepaid"){
+    if(weight == 1){
+      dimension = 5;
+    }else if(weight == 3){
+      dimension = 7;
+    }else if(weight == 10){
+      dimension = 11;
+    }else if(weight == 20){
+      dimension = 14;
+    }else if(weight == 40){
+      dimension = 18;
+    }else if(weight == 70){
+      dimension = 22;
+    }
+  }
+
    //update multiple records for deals table
    connection.query("UPDATE deals SET ? WHERE ?",
   [
@@ -303,7 +321,13 @@ router.post('/listdeal/edit', verifyToken, function(req, res) {
       featured_deal_image,
       item_condition,
       pay_in_dollar,
-      pay_in_crypto
+      pay_in_crypto,
+      length: dimension,
+      width: dimension,
+      height: dimension,
+      weight,
+      shipping_label_status: label_status,
+      shipment_cost: shipping_cost
     }, {id: editingDealId}],
       function (error, results, fields) {
         if (error) console.log(error);
@@ -424,15 +448,18 @@ router.post('/listdeal/edit', verifyToken, function(req, res) {
       }
     };
 
-    s3.deleteObjects(params, function (err, data) {
-      console.log()
-      if (data) {
-          console.log("File deleted successfully");
-      }
-      else {
-          console.log(err);
-      }
-    });
+    //delete images if there are images to be removed
+    if (imagesToBeRemoved.length > 0) {
+      s3.deleteObjects(params, function (err, data) {
+        if (data) {
+            console.log("File deleted successfully");
+        }
+        else {
+            console.log(err);
+        }
+      });
+    }
+
   }
 
   const insertNewImages = (images) => {
