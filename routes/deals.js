@@ -309,11 +309,12 @@ router.get('/api/search', function(req, res) {
 router.post('/update_tracking_number', verifyToken, function (req, res) {
   let id = req.decoded._id;
 
+  // txn_id can either be coinpayment txn_id or paypal paypal_paymentId that is passed from front end 
   let {txn_id, trackingNumber} = req.body;
 
     connection.query(
-      'UPDATE users_purchases SET tracking_number = ? WHERE txn_id = ?',
-      [trackingNumber, txn_id],
+      'UPDATE users_purchases SET tracking_number = ? WHERE txn_id = ? OR paypal_paymentId = ?',
+      [trackingNumber, txn_id, txn_id],
       function (error, results, fields) {
         if (error) console.log(error);
         res.json(results);
