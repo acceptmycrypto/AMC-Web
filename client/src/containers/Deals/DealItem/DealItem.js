@@ -488,7 +488,10 @@ class DealItem extends Component {
             </div>
 
             <div className="deal-item-content">
-              <div className={!userLoggedIn && showShippingStep ?  "guest-images-container" : "deal-images-container"}>
+            {/* mobileScreenSize && showShippingStep || mobileScreenSize && showPayingStep ? "mob-carousel-hidden" : */}
+              <div
+               id={mobileScreenSize && showShippingStep || mobileScreenSize && showPayingStep ? "mob-carousel-hidden" : null}
+               className={!userLoggedIn && showShippingStep ?  "guest-images-container" : "deal-images-container"}>
                 <Carousel
                   className="react-carousel"
                   showStatus={false}>
@@ -577,7 +580,9 @@ class DealItem extends Component {
               </div>
             </div>
 
-            <div className="sellers-reviews">
+            <div
+              id={mobileScreenSize && showShippingStep || mobileScreenSize && showPayingStep ? "mob-reviews-hidden" : null}
+              className="sellers-reviews">
               <div id="seller-review-label">Seller</div>
 
               <div id="seller-profile-rating">
@@ -631,7 +636,7 @@ class DealItem extends Component {
                     )}
                 </div>
 
-                <div id="seller-review-rating">
+                <div id={mobileScreenSize && showShippingStep || mobileScreenSize && showPayingStep ? "mob-reviews-hidden" : "seller-review-rating"}>
                   <div>
                     Seller's Average Rating
                     <small className="star-space-right">

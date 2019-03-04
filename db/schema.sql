@@ -70,22 +70,22 @@ CREATE TABLE deals (
 	seller_id INT NULL,
 	deal_name VARCHAR(255) NOT NULL,
 	deal_description VARCHAR(10000) NOT NULL,
-  	featured_deal_image VARCHAR(255) NOT NULL,
+  featured_deal_image VARCHAR(255) NOT NULL,
 	pay_in_dollar DECIMAL(10,2) NOT NULL,
 	pay_in_crypto DECIMAL(10, 2) NOT NULL,
 	date_expired DATETIME NULL,
 	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  	category VARCHAR(255) NULL, -- we need to take this out eventually
+  category VARCHAR(255) NULL, -- we need to take this out eventually
 	item_condition VARCHAR (255) NULL,
-	length INT NULL, --in inches
-	width INT NULL, --in inches
-	height INT NULL, --in inches
+	length INT NULL, -- in inches
+	width INT NULL,  -- in inches
+	height INT NULL, -- in inches
 	weight INT NULL, -- in lb (pounds)
-	shipping_label_status VARCHAR(20) NULL, --prepaid or seller
+	shipping_label_status VARCHAR(20) NULL, -- prepaid or seller
 	shipment_cost DECIMAL(10, 2) NULL, -- USD
   deal_status VARCHAR (10) DEFAULT 'available', -- status: available, sold, reserved (paying item), expired, pending (pending is for deal that's not get displayed due to seller's verification), "deleted"
--- 	deal_avg_rating FLOAT(3,2) NULL,
--- 	total_deal_ratings INT NULL,
+  -- deal_avg_rating FLOAT(3,2) NULL,
+  -- total_deal_ratings INT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (venue_id) REFERENCES venues(id),
 	FOREIGN KEY (seller_id) REFERENCES users(id)
