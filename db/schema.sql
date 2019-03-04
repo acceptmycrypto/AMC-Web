@@ -228,7 +228,7 @@ CREATE TABLE users_purchases(
 	shipment_date VARCHAR (255) NULL,
 	shipping_label_url VARCHAR(500) NULL, -- if prepaid this is link to shipping label
 	shippo_shipment_price DECIMAL (10,2) NULL,
-	tracking_number VARCHAR(255) NULL, -- shipment tracking number
+	tracking_number VARCHAR(255) NULL UNIQUE, -- shipment tracking number
 	tracking_status VARCHAR(100) NULL,
 	tracking_url_provider VARCHAR (500) NULL, -- link to track package online
 	eta VARCHAR (255) NULL,
@@ -240,6 +240,18 @@ CREATE TABLE users_purchases(
 	FOREIGN KEY (crypto_id) REFERENCES crypto_info(id),
 	FOREIGN KEY (deal_id) REFERENCES deals(id),
   	FOREIGN KEY (buyers_reviews_sellers_id) REFERENCES buyers_reviews_sellers(id)
+);
+
+CREATE TABLE users_tracking_info(
+	id INT NOT NULL AUTO_INCREMENT,
+	tracking_number VARCHAR(255) NULL,
+	tracking_status VARCHAR(100) NULL,
+	status_details VARCHAR(255) NULL,
+	status_date VARCHAR(255) NULL,
+	eta VARCHAR (255) NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (tracking_number) REFERENCES users_purchases(tracking_number)
+
 );
 
 CREATE TABLE users_shipping_address(
