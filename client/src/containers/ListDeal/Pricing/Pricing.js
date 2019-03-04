@@ -368,7 +368,7 @@ class Pricing extends Component {
                 <div className="pricing-titles border-bottom text-center">Estimated Price Summary</div>
                 <div className="mr-2 ml-2 mt-2 d-flex flex-row">
                   <div className="w-50 pr-4 border-right">
-                    {priceInUSD !== null && priceInUSD !== 'NaN' && priceInUSD.length > 0 &&
+                    {priceInUSD !== null && priceInUSD !== 'NaN' && priceInUSD > 0 &&
                       <div>
                         <div className="text-center mb-2 pricing-titles" style={{ color: "navy" }}>Buyer Purchases with USD</div>
                         <div className="d-flex flex-row justify-content-between">
@@ -379,7 +379,7 @@ class Pricing extends Component {
                           <div className="shipping-font">Selling Fee (2.5%):</div>
                           <div className="shipping-font" style={{ color: "red" }}>  - ${(0.025 * parseFloat(priceInUSD)).toFixed(2)}</div>
                         </div>
-                        {shippingLabelSelection === "prepaid" && shippingPriceSelection !== null && shippingPriceSelection !== 'NaN' && shippingPriceSelection.length > 0 &&
+                        {shippingLabelSelection === "prepaid" && shippingPriceSelection !== null && shippingPriceSelection !== 'NaN' && shippingPriceSelection > 0 &&
                           <div>
                             <div className="d-flex flex-row justify-content-between">
                               <div className="shipping-font">Shipping Cost: </div>
@@ -404,7 +404,7 @@ class Pricing extends Component {
                     }
                   </div>
                   <div className="w-50 ml-4">
-                    {priceInUSD !== null && priceInUSD !== 'NaN' && priceInUSD.length > 0 && priceInCrypto !== null && priceInCrypto !== 'NaN' && priceInCrypto.length > 0 &&
+                    {priceInUSD !== null && priceInUSD !== 'NaN' && priceInUSD > 0 && priceInCrypto !== null && priceInCrypto !== 'NaN' && priceInCrypto > 0 &&
                       <div>
                         <div className="text-center mb-2 pricing-titles" style={{ color: "navy" }}>Buyer Purchases with Crypto</div>
                         <div className="d-flex flex-row justify-content-between">
@@ -415,7 +415,7 @@ class Pricing extends Component {
                           <div className="shipping-font">Selling Fee (2.5%):</div>
                           <div className="shipping-font" style={{ color: "red" }}>  - ${(0.025 * parseFloat(priceInCrypto)).toFixed(2)}</div>
                         </div>
-                        {shippingLabelSelection === "prepaid" && shippingPriceSelection !== null && shippingPriceSelection !== 'NaN' && shippingPriceSelection.length > 0 &&
+                        {shippingLabelSelection === "prepaid" && shippingPriceSelection !== null && shippingPriceSelection !== 'NaN' && shippingPriceSelection > 0 &&
                           <div>
                             <div className="d-flex flex-row justify-content-between">
                               <div className="shipping-font">Shipping Cost: </div>
@@ -446,9 +446,9 @@ class Pricing extends Component {
                 <button onClick={() =>this.props.validatePricingStep() && this.props.showDescriptionStep()}>Next</button>
               </div>
             </div>
-            
+
           </div>
-          
+
           {/* <div className="deal-listing-step-buttons">
             <div className="creating-deal-back-step">
               <button onClick={this.props.showUploadingPhotoStep}>Previous</button>

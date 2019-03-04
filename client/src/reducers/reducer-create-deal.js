@@ -230,7 +230,7 @@ export default function CreateDealReducer(state = initialState, action) {
         shippingPriceSelection: action.payload.shippingPriceSelection,
         shippingLessThanDiscount: isShippingPriceHigher(action.payload.shippingPriceSelection, state.priceInCrypto)
       };
-    
+
     case "EXIT_SHIPPING_MODAL":
       return {
         ...state,
@@ -253,14 +253,14 @@ export default function CreateDealReducer(state = initialState, action) {
         ...state,
         modalVisible: true
       };
-    
+
     case "SELLER_EARNS_USD":
       return {
         ...state,
         sellerEarnsUSD: action.payload.sellerEarnsUSD,
         sellerProfitsUSD: action.payload.sellerProfitsUSD
       };
-    
+
     case "SELLER_EARNS_CRYPTO":
       return {
         ...state,
@@ -468,7 +468,7 @@ export default function CreateDealReducer(state = initialState, action) {
       };
 
     case "EDIT_LISTING":
-      let {deal_name, pay_in_crypto, pay_in_dollar, deal_category, item_condition,deal_image_object, deal_description, deal_id} = action.payload.dealItem;
+      let {deal_name, pay_in_crypto, pay_in_dollar, deal_category, item_condition,deal_image_object, deal_description, deal_id, shipping_label_status, weight, shipment_cost} = action.payload.dealItem;
 
       let deal_selected_cryptos = {};
       for (let crypto in action.payload.acceptedCryptos) {
@@ -505,7 +505,10 @@ export default function CreateDealReducer(state = initialState, action) {
         crypto_amount: deal_selected_cryptos,
         selectedCategory: deal_selected_category,
         selectedCondition: deal_item_condition,
-        editorState
+        editorState,
+        shippingLabelSelection: shipping_label_status,
+        shippingWeightSelection: weight,
+        shippingPriceSelection: shipment_cost
       };
 
     case "DELETE_DEAL_BEGIN":

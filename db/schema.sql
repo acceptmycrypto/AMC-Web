@@ -77,7 +77,7 @@ CREATE TABLE deals (
 	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   category VARCHAR(255) NULL, -- we need to take this out eventually
 	item_condition VARCHAR (255) NULL,
-	length INT NULL, -- in inches
+  length INT NULL, -- in inches
 	width INT NULL,  -- in inches
 	height INT NULL, -- in inches
 	weight INT NULL, -- in lb (pounds)
