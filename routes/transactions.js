@@ -306,48 +306,88 @@ router.post("/guestCheckout", function (req, res) {
 //once we verified that the item has been shipped to the buyer
 //this route needs to be programatically called once tracking number has been verified
 //we need to listen to shippo for the endpoint
-router.get("/payout", function(req, res) {
+router.post("/acceptmycrypto/shippo/tracking_status", function(req, res) {
   //sample txn_id, user_id, and crypto_id (needs to query the right one)
-  let txn_id = "CPDB7P3MAVEJMZ7N73TNSX2KBX";
-  let user_id = 1;
-  let crypto_id = 1;
+  let shippo = JSON.parse(req.body);
+  let tracking_status = shippo.tracking_status.status;
+  let tracking_number = shippo.tracking_number;
+  let txn_id, user_id, crypto_id;
 
-  //get the balance and amount of the transaction from our database
-  connection.query(
-    "SELECT amount, crypto_symbol, payment_received, users_purchases.user_id, users_purchases.crypto_id, users_cryptos.crypto_address, users_cryptos.id AS users_cryptos_id, crypto_balance, deal_name, email AS user_email from users_purchases LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN users_cryptos ON users_cryptos.crypto_id = crypto_info.id LEFT JOIN deals ON users_purchases.deal_id = deals.id where txn_id = ? AND users_purchases.user_id = ? AND users_purchases.crypto_id = ?",
-    [txn_id, user_id, crypto_id],
-    function(error, result, fields) {
-      if (error) throw error;
+  if (tracking_status === "DELIVERED") {
+    connection.query(
+      "SELECT txn_id, user_id, crypto_id, tracking_status AS delivery_status FROM users_purchases WHERE tracking_number = ?",
+      [tracking_number],
+      function(err, result) {
+        if (err) {
+          console.log(err);
+        }
 
-      let {amount, crypto_symbol, payment_received, crypto_address, users_cryptos_id, crypto_balance, deal_name, user_email} = result[0];
-      console.log(result[0]);
-      //update the crypto balance of the seller
-      if (payment_received === 100) {
-        let amountAfterFee = amount * (0.98) //since coinpase already takes .5%, we're taking 2% (totoal is 2.5%)
-        let newBalance = crypto_balance + amountAfterFee;
+        txn_id = result[0].txn_id;
+        user_id = result[0].user_id;
+        crypto_id = result[0].crypto_id;
+        let delivery_status = result[0].tracking_status;
 
-        connection.query(
-          "UPDATE users_cryptos SET crypto_balance = ? WHERE id = ?",
-          [newBalance, users_cryptos_id],
-          function(err, result) {
-            if (err) {
-              console.log(err);
+        //if there is a tracking number in the database and tracking_status has not delivered yet
+        if (txn_id && delivery_status !== "DELIVERED") {
+           //get the balance and amount of the transaction from our database
+          connection.query(
+            "SELECT amount, crypto_symbol, payment_received, users_purchases.user_id, users_purchases.crypto_id, users_cryptos.crypto_address, users_cryptos.id AS users_cryptos_id, crypto_balance, deal_name, email AS user_email from users_purchases LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN users_cryptos ON users_cryptos.crypto_id = crypto_info.id LEFT JOIN deals ON users_purchases.deal_id = deals.id where txn_id = ? AND users_purchases.user_id = ? AND users_purchases.crypto_id = ?",
+            [txn_id, user_id, crypto_id],
+            function(error, result, fields) {
+              if (error) throw error;
+
+              let {amount, crypto_symbol, payment_received, crypto_address, users_cryptos_id, crypto_balance, deal_name, user_email} = result[0];
+              console.log(result[0]);
+              //update the crypto balance of the seller
+              if (payment_received === 100) {
+                let amountAfterFee = amount * (0.98) //since coinpase already takes .5%, we're taking 2% (totoal is 2.5%)
+                let newBalance = crypto_balance + amountAfterFee;
+
+                connection.query(
+                  "UPDATE users_cryptos SET crypto_balance = ? WHERE id = ?",
+                  [newBalance, users_cryptos_id],
+                  function(err, result) {
+                    if (err) {
+                      console.log(err);
+                    }
+
+                    const balance_deposited = {
+                      to: user_email,
+                      from: process.env.CUSTOMER_SUPPORT,
+                      subject: '[AcceptMyCrypto Notification] Cryptocurrency Deposited!',
+                      html: balanceDepositedEmailTemplate({ crypto_symbol, amountAfterFee, deal_name })
+                    };
+                    sgMail.send(balance_deposited);
+
+                  }
+                );
+              }
+
             }
+          );
 
-            const balance_deposited = {
-              to: user_email,
-              from: process.env.CUSTOMER_SUPPORT,
-              subject: '[AcceptMyCrypto Notification] Cryptocurrency Deposited!',
-              html: balanceDepositedEmailTemplate({ crypto_symbol, amountAfterFee, deal_name })
-            };
-            sgMail.send(balance_deposited);
+          //update tracking status to delivered
+          connection.query(
+            "UPDATE users_purchases SET tracking_status = ? WHERE txn_id = ?",
+            ["DELIVERED", txn_id],
+            function(err, result) {
+              if (err) {
+                console.log(err);
+              }
 
-          }
-        );
+            }
+          );
+
+        }
+
+
       }
+    );
+  }
 
-    }
-  );
+  //send back to shippo that we have recieved the webhook
+  res.status(200).json(tracking_number);
+
 });
 
 router.post("/withdraw/initiate", verifyToken, function(req, res) {
@@ -464,7 +504,6 @@ router.post("/withdraw/confirm", verifyToken, function(req, res) {
 
 
 });
-
 
 //compile email template
 //this email template is sent to customer if payment has received
@@ -699,16 +738,16 @@ router.get('/newShippingLabel/:txn_id/:deal_name', function (req, res) {
       date.setDate(date.getDate() + days);
       return date;
     }
-    
+
     //current date timestamp
     let date = new Date();
-    
+
     // add 2 days (48 hrs to timestamp)
     let date_48 = date.addDays(2);
 
     // date_48_ISO is date_48 as an ISO date timestamp
     // date_48_ISO will be the shipment date for the seller so the seller has 48 hrs from now to ship the item
-    let date_48_ISO = date_48.toISOString(); 
+    let date_48_ISO = date_48.toISOString();
 
     shippo.shipment.create({
       "address_from": addressFrom,
@@ -839,16 +878,16 @@ function createShippmentInfo(txn_id, deal_name, seller_email, buyer_email) {
         date.setDate(date.getDate() + days);
         return date;
       }
-      
+
         //current date timestamp
         let date = new Date();
-    
+
         // add 2 days (48 hrs to timestamp)
         let date_48 = date.addDays(2);
-    
+
         // date_48_ISO is date_48 as an ISO date timestamp
         // date_48_ISO will be the shipment date for the seller so the seller has 48 hrs from now to ship the item
-        let date_48_ISO = date_48.toISOString(); 
+        let date_48_ISO = date_48.toISOString();
 
       shippo.shipment.create({
         "address_from": addressFrom,
@@ -935,7 +974,6 @@ router.post("/paypal/create", verifyToken, function (req, res) {
   let {firstName, lastName, shippingAddress, shippingCity, shippingState, zipcode} =  req.body;
 
   let description = JSON.parse(deal_description);
-  console.log(req.body);
 
   let dealUrl;
   if (process.env.NODE_ENV=="development"){
