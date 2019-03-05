@@ -10,20 +10,19 @@ const Footer = props => {
     return (
       <div className="Footer">
       
-      {/* <img className="Footer_logo" src="https://s3-us-west-1.amazonaws.com/acceptmycrypto/logo.png" alt="logo" /> */}
-      <Row>
-      <Col sm="2" className="Footer-logo">
-      <span className="ml-2">
+      <div sm="2" className="Footer-logo">
+      {/* <span className="ml-2">
                 AcceptMyCrypto
-              </span>
+              </span> */}
       <div className="Footer-socialIcon">
-      <SocialIcon  url="https://www.linkedin.com/company/acceptmycrypto/" bgColor="#66DAC7" style={{ height: 25, width: 25 }} />
-      <SocialIcon  url="https://www.instagram.com/acceptmycrypto/?hl=en" bgColor="#ff5a01"  style={{ height: 25, width: 25 }} />
-      <SocialIcon  url="https://twitter.com/acceptmycrypto" bgColor="#1DA1F2" style={{ height: 25, width: 25 }}/>
+      <SocialIcon className="FooterSocIcon"  url="https://www.linkedin.com/company/acceptmycrypto/" bgColor="#66DAC7" style={{ height: 25, width: 25 }} />
+      <SocialIcon className="FooterSocIcon" url="https://www.instagram.com/acceptmycrypto/?hl=en" bgColor="#ff5a01"  style={{ height: 25, width: 25 }} />
+      <SocialIcon className="FooterSocIcon" url="https://twitter.com/acceptmycrypto" bgColor="#1DA1F2" style={{ height: 25, width: 25 }}/>
+      <SocialIcon className="FooterSocIcon" url="https://discordapp.com/channels/544415678191501314/544415678627577867" bgColor="#7289da" style={{ height: 25, width: 25 }} label="Discord"/>
       </div>
-      <div className="copyrightFooter">AcceptMyCrypto © 2018</div>
-      </Col>
-      <Col sm="4" className="Footer-colCompany">
+      <div className="copyrightFooter">AcceptMyCrypto © 2019</div>
+      </div>
+
         <div className="Footer-cardBody">
         <div className="Footer-company">
       <h4 className="Footer-linkTitle">Company</h4>
@@ -32,8 +31,7 @@ const Footer = props => {
       <span><Link className="Footer-link" to="/Returns">AcceptMyReturns</Link></span>
       </div>
         </div>
-      </Col>
-      <Col sm="3" className="Footer-colTerms">
+    
         <div className="Footer-cardBody">
         <div className="Footer-terms">
       <h4 className="Footer-linkTitle">Terms</h4>
@@ -41,9 +39,7 @@ const Footer = props => {
       <span><Link className="Footer-link" to="/CookiesPolicy">AcceptMyCookies</Link></span>
       </div>
         </div>
-      </Col>
-    </Row>
-
+    
       </div>
 
  
