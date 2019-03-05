@@ -12,7 +12,7 @@
     23. Magazines
     24. Textbooks
     25. Audiobooks
-3. Movies, Music & Games  
+3. Movies, Music & Games
     26. Movies & TV Shows <-
     27. Blu-ray
     28. CDs & Vinyl

@@ -5,18 +5,12 @@ import '../Homepage.css';
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import { updateSelectedCategory } from '../../../../actions/homepageActions';
+import { handleLongDescription } from '../../../../utils/helper_functions';
 
 
 class CategoryHome extends Component {
   convertToPercentage = (priceInDollar, priceInCrypto) => {
     return parseInt(((priceInDollar - priceInCrypto) / priceInDollar) * 100)
-  }
-
-  handleLongDescription = (description) => {
-    let trimmedDescription = description.trim();
-    if (trimmedDescription.length > 125) {
-      return trimmedDescription.substring(0, trimmedDescription.indexOf(' ', 75)) + "...";
-    }
   }
 
   handleRightButtonClick = (event) => {
@@ -102,8 +96,7 @@ class CategoryHome extends Component {
                       </div>
                       }
                     </div>
-                    <div className="mt-1">{deal.deal_name}</div>
-                    {/* <small className="deal-description">{this.handleLongDescription(deal.deal_description)}</small> */}
+                    <div className="mt-1">{handleLongDescription(deal.deal_name, 50, 50)}</div>
                     {/* if seller is a vendor then display the venue name else if seller is a user then display the seller name which is the user's username */}
                     <div><small>Offered by: {deal.venue_name || deal.seller_name}</small></div>
                   </div>

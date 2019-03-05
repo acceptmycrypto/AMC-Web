@@ -21,9 +21,6 @@ npm run dev
 ```
 ## Run Schema/ Seeds files:
 1. SOURCE schema.sql
-2. SOURCE seeds_venues.sql
+2. SOURCE seeds_category.sql
 3. Run the app
-4. SOURCE seeds_cryptos-venues.sql
-5. SOURCE seeds_category.sql
-6. SOURCE seeds_deals.sql
-7. Run the app again
+4. SOURCE seeds_deals.sql
