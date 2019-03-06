@@ -42,8 +42,8 @@ router.post('/navbar/photo',verifyToken, function (req, res) {
     var id = req.decoded._id;
     connection.query('SELECT users_profiles.photo, users.id AS user_id FROM users_profiles LEFT JOIN users ON users.id = users_profiles.user_id WHERE users.id = ?;', [id], function (error, results, fields) {
         if (error) throw error;
-       
-        res.json({photo: results[0].photo, seller_id: results[0].user_id});
+
+        res.json({photo: results[0].photo, user_id: results[0].user_id});
     });
 });
 

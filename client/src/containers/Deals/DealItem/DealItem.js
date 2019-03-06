@@ -362,7 +362,7 @@ class DealItem extends Component {
         );
       case deal_status === "pending":
         return (
-          <button disabled>Please Verify Your Phone Number</button>
+          <button disabled>Verify Your Phone Number</button>
         );
       case paypal_excecute_payment && paypal_excecute_payment.success === true:
         return (
