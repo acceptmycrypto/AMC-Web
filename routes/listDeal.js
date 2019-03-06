@@ -171,6 +171,15 @@ router.post('/listdeal', verifyToken, function(req, res) {
       if (error) console.log(error);
       deal_id = results.insertId; //assign the new deal_id
 
+      //verify if phone number is verifed, if not we set deal status to pending
+      if (phone_number_verified === 0) {
+        connection.query("UPDATE deals SET ? WHERE ?",
+        [{ deal_status: "pending"}, {id: deal_id}],
+        function (error, results, fields) {
+          if (error) console.log(error);
+        });
+      }
+
       //Second insert images into deal_images table
       //create image rows with the deal id to be inserted into deal_images table
       let imagesRow = [];

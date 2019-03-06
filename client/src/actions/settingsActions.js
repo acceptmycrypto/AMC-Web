@@ -17,7 +17,7 @@ export const handleSettingsMenuItemClick = (e, {name} ) => {
     return {
         type: SET_ACTIVE_SETTINGS,
         payload: {activeSettingsItem: name}
-        
+
     }
 }
 
@@ -26,7 +26,7 @@ export const handleProfileSettingsMenuItemClick = (e, {name} ) => {
     return {
         type: SET_ACTIVE_PROFILE_SETTINGS,
         payload: {activeProfileSettingsItem: name}
-        
+
     }
 }
 
@@ -37,7 +37,7 @@ export const handleCryptoSettingsMenuItemClick = (e, {name} ) => {
     return {
         type: SET_ACTIVE_CRYPTO_SETTINGS,
         payload: {activeCryptoSettingsItem: name}
-        
+
     }
 }
 
@@ -51,13 +51,13 @@ export const _changePhoto = (token, selectedPhoto)=>{
             "Content-Type": "application/json",
         },
         body: JSON.stringify({ token, selectedPhoto })
-    }; 
+    };
     const update_photos =  fetch("/update/photo", settings)
 
     return {
         type: 'FETCH_PHOTO_SUCCESS',
-        payload: {
-            photo: selectedPhoto
+        payload: {photo:
+          {photo: selectedPhoto}
         }
     }
 
@@ -71,7 +71,7 @@ export const _changeUsername = (token, newUsername)=>{
             "Content-Type": "application/json",
         },
         body: JSON.stringify({ token, newUsername })
-    }; 
+    };
     return fetch("/update/username", settings)
         .then(res => res.json())
         .then(jsonUsername => {
@@ -89,7 +89,7 @@ export const _changeEmail = (token, newEmail)=>{
             "Content-Type": "application/json",
         },
         body: JSON.stringify({ token, newEmail })
-    }; 
+    };
     return fetch("/update/email", settings)
         .then(res => res.json())
         .then(jsonEmail => {
@@ -106,7 +106,7 @@ export const _changePassword = (token, oldPassword, newPassword)=>{
             "Content-Type": "application/json",
         },
         body: JSON.stringify({ token, oldPassword, newPassword})
-    }; 
+    };
     return fetch("/update/password", passSettings)
         .then(res => res.json())
         .then(jsonPassword => {
@@ -123,7 +123,7 @@ export const _cryptoOptionsLeft = (token) => {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({ token})
-    }; 
+    };
     return dispatch => {
         dispatch(cryptoOptionsBegin());
         return fetch(`/crypto/left`, settings)
@@ -131,19 +131,19 @@ export const _cryptoOptionsLeft = (token) => {
           .then(jsonLoadCrypto => {
 
             let cryptoOptions = [];
-      
+
              jsonLoadCrypto.map(crypto => {
-      
+
                 let optionObj = {};
                 optionObj.value = crypto.crypto_name;
                 optionObj.label = crypto.crypto_name + " " + "(" + crypto.crypto_symbol + ")";
-      
+
                 cryptoOptions.push(optionObj);
               })
-      
+
               return cryptoOptions;
-      
-            
+
+
           }). then(cryptoOptionsArray =>{
             dispatch(cryptoOptionsSuccess(cryptoOptionsArray));
             return cryptoOptionsArray;
@@ -153,22 +153,22 @@ export const _cryptoOptionsLeft = (token) => {
       };
     }
 
-    
+
     export const cryptoOptionsBegin = () => ({
       type: "CRYPTO_OPTIONS_LEFT_BEGIN"
     });
-    
-    
+
+
     export const cryptoOptionsSuccess = cryptoLeft => ({
       type: "CRYPTO_OPTIONS_LEFT_SUCCESS",
       payload: { cryptoLeft }
     });
-    
+
     export const cryptoOptionsFailure = error => ({
       type: "CRYPTO_OPTIONS_LEFT_FAILURE",
       payload: { error }
     });
-    
+
 
     export const _addCryptos = (token, cryptoProfile)=>{
          const settings = {
@@ -178,17 +178,17 @@ export const _cryptoOptionsLeft = (token) => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ token, cryptoProfile })
-        }; 
+        };
         const update_cryptos =  fetch("/add/cryptos", settings);
 
-    
+
         return {
             type: 'ADD_CRYPTO_SUCCESS',
             payload: {
                 activeCryptoSettingsItem: "Crypto I am Are Interested In"
             }
         }
-    
+
     }
 
 export const _allTransactions = (token) =>{
@@ -199,7 +199,7 @@ export const _allTransactions = (token) =>{
             "Content-Type": "application/json",
         },
         body: JSON.stringify({ token})
-    }; 
+    };
 
     return dispatch => {
         dispatch(fetchAllTransactionsBegin());
@@ -213,20 +213,20 @@ export const _allTransactions = (token) =>{
       };
 }
 
-    
+
     export const fetchAllTransactionsBegin = () => ({
       type: "ALL_TRANSACTIONS_LEFT_BEGIN"
     });
-    
-    
+
+
     export const fetchAllTransactionsSuccess = transactionInfo => ({
       type: "ALL_TRANSACTIONS_LEFT_SUCCESS",
       payload: { transactionInfo }
     });
-    
+
     export const fetchAllTransactionsFailure = error => ({
       type: "ALL_TRANSACTIONS_LEFT_FAILURE",
       payload: { error }
     });
-    
+
 

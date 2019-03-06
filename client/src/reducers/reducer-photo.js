@@ -1,7 +1,8 @@
 const initialState = {
   photo: null,
   loading: false,
-  error: null
+  error: null,
+  seller_id: null
 };
 
 export default function photoReducer(state = initialState, action) {
@@ -14,10 +15,12 @@ export default function photoReducer(state = initialState, action) {
       };
 
     case "FETCH_PHOTO_SUCCESS":
+    debugger
       return {
         ...state,
         loading: false,
-        photo: action.payload.photo
+        photo: action.payload.photo.photo,
+        seller_id: action.payload.photo.seller_id
       };
 
     case "FETCH_PHOTO_FAILURE":

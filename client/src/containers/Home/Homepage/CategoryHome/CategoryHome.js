@@ -9,6 +9,7 @@ import { handleLongDescription } from '../../../../utils/helper_functions';
 
 
 class CategoryHome extends Component {
+
   convertToPercentage = (priceInDollar, priceInCrypto) => {
     return parseInt(((priceInDollar - priceInCrypto) / priceInDollar) * 100)
   }
@@ -75,6 +76,7 @@ class CategoryHome extends Component {
 
   render() {
     const { category_collection, category_collection_name, category_collection_id } = this.props;
+    debugger
     return (
       <div className="mt-4">
         <Link to={"/category?term=" + category_collection_name + "&page=1"} className="category-title-margin mb-3">{category_collection_name}<i className="fas fa-chevron-right chevron-right"></i></Link>
@@ -82,42 +84,44 @@ class CategoryHome extends Component {
           {category_collection[0].id !== null && <button type="button" className="btn btn-light" id="leftCategoryButton" onClick={this.handleLeftButtonClick}><i className="fas fa-chevron-left category-icon-chevron"></i></button>}
           <div className="category_div" id={category_collection_id}>
             {category_collection.map(deal => (
-              <div key={deal.id} className="category_item mx-2">
-                <Link to={`/feed/deals/${deal.id}/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
+              deal.deal_status === "pending"  ?
+                <div key={deal.id} className="category_item mx-2">
+                  <Link to={`/feed/deals/${deal.id}/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
 
-                  <div className="category-info">
-                    <div className="category-image-div">
-                      <img className="category-image" src={deal.featured_deal_image} alt="deal" />
-                      {deal.deal_status !== "available" &&
-                      <div class="deal-status">
-                        <div style={{textTransform: "uppercase"}}>
-                          {deal.deal_status}
+                    <div className="category-info">
+                      <div className="category-image-div">
+                        <img className="category-image" src={deal.featured_deal_image} alt="deal" />
+                        {deal.deal_status !== "available" &&
+                        <div class="deal-status">
+                          <div style={{textTransform: "uppercase"}}>
+                            {deal.deal_status}
+                          </div>
+                        </div>
+                        }
+                      </div>
+                      <div className="mt-1">{handleLongDescription(deal.deal_name, 50, 50)}</div>
+                      {/* if seller is a vendor then display the venue name else if seller is a user then display the seller name which is the user's username */}
+                      <div><small>Offered by: {deal.venue_name || deal.seller_name}</small></div>
+                    </div>
+
+                    <div className="deal-price">
+                      <div className="price-differ">
+                        <div>
+                          <div className="purchase-method">Dollar</div>
+                          <div>${deal.pay_in_dollar.toFixed(2)}</div>
+                        </div>
+                        <div className="d-flex flex-column text-center justify-content-center">
+                          <div className="purchase-method">Cryptocurrency</div>
+                          <strong className="pay_in_crypto">${deal.pay_in_crypto.toFixed(2)}</strong>
+                          <small className="w-75 pay_in_crypto discount">{this.convertToPercentage(deal.pay_in_dollar, deal.pay_in_crypto)}% OFF</small>
+
                         </div>
                       </div>
-                      }
                     </div>
-                    <div className="mt-1">{handleLongDescription(deal.deal_name, 50, 50)}</div>
-                    {/* if seller is a vendor then display the venue name else if seller is a user then display the seller name which is the user's username */}
-                    <div><small>Offered by: {deal.venue_name || deal.seller_name}</small></div>
-                  </div>
 
-                  <div className="deal-price">
-                    <div className="price-differ">
-                      <div>
-                        <div className="purchase-method">Dollar</div>
-                        <div>${deal.pay_in_dollar.toFixed(2)}</div>
-                      </div>
-                      <div className="d-flex flex-column text-center justify-content-center">
-                        <div className="purchase-method">Cryptocurrency</div>
-                        <strong className="pay_in_crypto">${deal.pay_in_crypto.toFixed(2)}</strong>
-                        <small className="w-75 pay_in_crypto discount">{this.convertToPercentage(deal.pay_in_dollar, deal.pay_in_crypto)}% OFF</small>
-
-                      </div>
-                    </div>
-                  </div>
-
-                </Link>
-              </div>
+                  </Link>
+                </div>
+              : ""
             ))}
             {category_collection_name !== "Most Recent Deals Listed" && <div className="list-deal-category" onClick={this.createDealFromCategory}>
               <div className="list-deal-category-label">Create {this.properArticle(category_collection_name)} {category_collection_name} Deal </div>
@@ -140,7 +144,7 @@ class CategoryHome extends Component {
 }
 
 const mapStateToProps = state => ({
-
+  
 });
 
 const matchDispatchToProps = dispatch => {
