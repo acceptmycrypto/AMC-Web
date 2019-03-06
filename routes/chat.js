@@ -266,7 +266,13 @@ router.post("/chat_session/messages/new", verifyToken, (req, res) => {
           if (err) console.log(err);
 
           let recipientEmailUser_email = result[0].email;
-          let chatURL = process.env.FRONTEND_URL+"/chat";
+
+          let chatURL;
+          if (process.env.NODE_ENV == "development") {
+            chatURL = process.env.FRONTEND_URL+"/chat";
+          } else {
+            chatURL = process.env.BACKEND_URL+"/chat/";
+          }
 
           //notify participant via email
           //use sendgrid to send email
