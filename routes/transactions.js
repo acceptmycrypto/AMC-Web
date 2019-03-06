@@ -308,13 +308,14 @@ router.post("/guestCheckout", function (req, res) {
 //we need to listen to shippo for the endpoint
 router.post("/acceptmycrypto/shippo/tracking_status", function(req, res) {
   //sample txn_id, user_id, and crypto_id (needs to query the right one)
-  let shippo = JSON.parse(req.body);
-  let tracking_status = shippo.tracking_status.status;
-  let tracking_number = shippo.tracking_number;
+  let shippo = JSON.parse(res.req.body);
+  let tracking_result = shippo.data;
+  let tracking_status = tracking_result.status;
+  let tracking_number = tracking_result.tracking_number;
   let txn_id, user_id, crypto_id;
 
   if (tracking_status === "DELIVERED") {
-    //update seller's balance
+    //query if tracking number exists in database
     connection.query(
       "SELECT txn_id, user_id, crypto_id, tracking_status AS delivery_status FROM users_purchases WHERE tracking_number = ?",
       [tracking_number],
@@ -330,20 +331,84 @@ router.post("/acceptmycrypto/shippo/tracking_status", function(req, res) {
 
         //if there is a tracking number in the database and tracking_status has not delivered yet
         if (txn_id && delivery_status !== "DELIVERED") {
-           //get the balance and amount of the transaction from our database
+           //query info relating to this purchase to make an update
           connection.query(
-            "SELECT amount, crypto_symbol, payment_received, users_purchases.user_id, users_purchases.crypto_id, users_cryptos.crypto_address, users_cryptos.id AS users_cryptos_id, crypto_balance, deal_name, email AS user_email from users_purchases LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN users_cryptos ON users_cryptos.crypto_id = crypto_info.id LEFT JOIN deals ON users_purchases.deal_id = deals.id where txn_id = ? AND users_purchases.user_id = ? AND users_purchases.crypto_id = ?",
+            "SELECT shippo_shipment_price, amount, crypto_symbol, payment_received, users_purchases.user_id, users_purchases.crypto_id, users_cryptos.crypto_address, users_cryptos.id AS users_cryptos_id, crypto_balance, deal_name, email AS user_email from users_purchases LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN users_cryptos ON users_cryptos.crypto_id = crypto_info.id LEFT JOIN deals ON users_purchases.deal_id = deals.id where txn_id = ? AND users_purchases.user_id = ? AND users_purchases.crypto_id = ?",
             [txn_id, user_id, crypto_id],
-            function(error, result, fields) {
+            async function(error, result, fields) {
               if (error) throw error;
 
-              let {amount, crypto_symbol, payment_received, crypto_address, users_cryptos_id, crypto_balance, deal_name, user_email} = result[0];
-              console.log(result[0]);
-              //update the crypto balance of the seller
+              let {amount, crypto_symbol, payment_received, users_cryptos_id, crypto_balance, deal_name, user_email} = result[0];
+
+              //check to see if payment has recevied
               if (payment_received === 100) {
-                let amountAfterFee = amount * (0.98) //since coinpase already takes .5%, we're taking 2% (totoal is 2.5%)
+                let amountAfterFee = amount * (0.98) //since coinpase already takes .5%, we're taking 2% (total is 2.5%)
+
+                //insert the tracking update to users_tracking_info
+                connection.query("INSERT INTO users_tracking_info SET ?",
+                  {
+                    tracking_number: tracking_result.tracking_number,
+                    tracking_status: tracking_result.tracking_status.status,
+                    status_details: tracking_result.tracking_status.status_details,
+                    status_date: tracking_result.tracking_status.status_date,
+                    eta: tracking_result.eta,
+                    shipping_fee_crypto_amount: shippingCryptoAmount
+                  },
+                  function (err, result) {
+                    if (err) {
+                      console.log(err);
+                    }
+                  }
+                );
+
+                //check if seller uses shippo service
+                if (shippo_shipment_price) {
+                  //if there is, exchange the shipping fee to crypto
+                  let options = {
+                    method: "GET",
+                    qs: {
+                      symbol: crypto_symbol
+                    },
+                    headers: {
+                      "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
+                      Accept: "application/json"
+                    }
+                  };
+
+                   //use request to call coinmarketcap endpoint
+                  await request('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest', options, function (error, response, body) {
+                    if (error) {
+                      console.log(error);
+                    }
+
+                    let rateDate = JSON.parse(body);
+                    let cryptoRate = rateDate.data[crypto].quote.USD.price;
+
+                    //this is the shipping fee in crypto
+                    let shippingCryptoAmount = (shippo_shipment_price/cryptoRate).toFixed(4);
+                    //subtract the shipping fee
+                    amountAfterFee = amountAfterFee - shippingCryptoAmount;
+
+                    //update the shipping crypto amount in users_tracking_info table
+                    connection.query(
+                      "UPDATE users_tracking_info SET shipping_fee_crypto_amount = ? WHERE tracking_number = ?",
+                      [shippingCryptoAmount, tracking_number],
+                      function(err, result) {
+                        if (err) {
+                          console.log(err);
+                        }
+
+                      }
+                    );
+
+
+                  });
+                }
+
+                //New balance that gets updated
                 let newBalance = crypto_balance + amountAfterFee;
 
+                //Set the new crupto balance
                 connection.query(
                   "UPDATE users_cryptos SET crypto_balance = ? WHERE id = ?",
                   [newBalance, users_cryptos_id],
@@ -362,20 +427,20 @@ router.post("/acceptmycrypto/shippo/tracking_status", function(req, res) {
 
                   }
                 );
+
+                //update tracking status to delivered
+                connection.query(
+                  "UPDATE users_purchases SET tracking_status = ? WHERE txn_id = ?",
+                  ["DELIVERED", txn_id],
+                  function(err, result) {
+                    if (err) {
+                      console.log(err);
+                    }
+
+                  }
+                );
+
               }
-
-            }
-          );
-
-          //update tracking status to delivered
-          connection.query(
-            "UPDATE users_purchases SET tracking_status = ? WHERE txn_id = ?",
-            ["DELIVERED", txn_id],
-            function(err, result) {
-              if (err) {
-                console.log(err);
-              }
-
             }
           );
 

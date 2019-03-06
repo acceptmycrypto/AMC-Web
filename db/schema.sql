@@ -250,6 +250,7 @@ CREATE TABLE users_tracking_info(
 	status_details VARCHAR(255) NULL,
 	status_date VARCHAR(255) NULL,
 	eta VARCHAR (255) NULL,
+  shipping_fee_crypto_amount DECIMAL(20, 8) NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (tracking_number) REFERENCES users_purchases(tracking_number)
 
