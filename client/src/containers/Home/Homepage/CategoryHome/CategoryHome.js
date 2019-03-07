@@ -87,16 +87,16 @@ class CategoryHome extends Component {
             {category_collection.map(deal => (
 
               <div key={deal.id}
-                className={deal.deal_status === "pending" && deal.seller_id !== user_id ? "category_item mx-2 deal-item-pending-hidden" : "category_item mx-2"}>
+                className={deal.phone_number_verified === 0 && deal.seller_id !== user_id ? "category_item mx-2 deal-item-pending-hidden" : "category_item mx-2"}>
                 <Link to={`/feed/deals/${deal.id}/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
 
                   <div className="category-info">
                     <div className="category-image-div">
                       <img className="category-image" src={deal.featured_deal_image} alt="deal" />
-                      {deal.deal_status !== "available" &&
+                      {deal.deal_status !== "available" || deal.phone_number_verified === 0 &&
                       <div class="deal-status">
                         <div style={{textTransform: "uppercase"}}>
-                          {deal.deal_status}
+                          {deal.phone_number_verified === 0 ? "pending" : deal.deal_status}
                         </div>
                       </div>
                       }

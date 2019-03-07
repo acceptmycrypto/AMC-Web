@@ -344,7 +344,7 @@ class DealItem extends Component {
   }
 
   handleBuyNowButton = () => {
-    const {deal_status} = this.props.dealItem;
+    const {deal_status, phone_number_verified} = this.props.dealItem;
     const {paypal_excecute_payment, paypal_excecute_payment_loading} = this.props;
 
     switch (true) {
@@ -360,9 +360,9 @@ class DealItem extends Component {
         return (
           <button disabled>Sold</button>
         );
-      case deal_status === "pending":
+      case phone_number_verified === 0:
         return (
-          <button disabled>Verify Your Phone Number</button>
+          <button>Verify Your Phone Number</button>
         );
       case paypal_excecute_payment && paypal_excecute_payment.success === true:
         return (
