@@ -302,21 +302,37 @@ router.post("/guestCheckout", function (req, res) {
 });
 
 
-//payout
-//once we verified that the item has been shipped to the buyer
-//this route needs to be programatically called once tracking number has been verified
-//we need to listen to shippo for the endpoint
+//update seller's balance per shippo tracking number
 router.post("/acceptmycrypto/shippo/tracking_status", function(req, res) {
   //sample txn_id, user_id, and crypto_id (needs to query the right one)
-  let shippo = JSON.parse(req.body);
-  let tracking_status = shippo.tracking_status.status;
-  let tracking_number = shippo.tracking_number;
+  let shippo = JSON.parse(res.req.body);
+  let tracking_result = shippo.data;
+
+  let tracking_status = tracking_result.status;
+  let tracking_number = tracking_result.tracking_number;
   let txn_id, user_id, crypto_id;
 
+  // We should insert into users_tracking_info regardless if the tracking_status is DELIVERED or not because we want to store if the package is for example in transit or returned
+  //insert the tracking update to users_tracking_info
+  connection.query("INSERT INTO users_tracking_info SET ?",
+  {
+    tracking_number: tracking_result.tracking_number,
+    tracking_status: tracking_result.tracking_status.status,
+    status_details: tracking_result.tracking_status.status_details,
+    status_date: tracking_result.tracking_status.status_date,
+    eta: tracking_result.eta
+  },
+    function (err, result) {
+      if (err) {
+        console.log(err);
+      }
+    }
+  );
+
   if (tracking_status === "DELIVERED") {
-    //update seller's balance
+    //query if tracking number exists in database
     connection.query(
-      "SELECT txn_id, user_id, crypto_id, tracking_status AS delivery_status FROM users_purchases WHERE tracking_number = ?",
+      "SELECT txn_id, paypal_paymentId, user_id, crypto_id, tracking_status AS delivery_status FROM users_purchases WHERE tracking_number = ?",
       [tracking_number],
       function(err, result) {
         if (err) {
@@ -324,26 +340,91 @@ router.post("/acceptmycrypto/shippo/tracking_status", function(req, res) {
         }
 
         txn_id = result[0].txn_id;
+        paypal_id = result[0].paypal_paymentId; 
         user_id = result[0].user_id;
         crypto_id = result[0].crypto_id;
         let delivery_status = result[0].tracking_status;
 
-        //if there is a tracking number in the database and tracking_status has not delivered yet
-        if (txn_id && delivery_status !== "DELIVERED") {
-           //get the balance and amount of the transaction from our database
+        let transaction_type;
+        let transaction_id;
+
+        // check to see if txn_id is not NULL or if paypal_id is not NULL
+        if(txn_id){
+          transaction_type = `txn_id = ?`;
+          transaction_id = txn_id;
+        } else if(paypal_id){
+          transaction_type = `paypal_paymentId = ?`;
+          transaction_id = paypal_id;
+        }
+
+        //if there is a tracking number in the database and tracking_status from the database has not delivered yet
+        if (transaction_id && delivery_status !== "DELIVERED") {
+           //query info relating to this purchase to make an update
           connection.query(
-            "SELECT amount, crypto_symbol, payment_received, users_purchases.user_id, users_purchases.crypto_id, users_cryptos.crypto_address, users_cryptos.id AS users_cryptos_id, crypto_balance, deal_name, email AS user_email from users_purchases LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN users_cryptos ON users_cryptos.crypto_id = crypto_info.id LEFT JOIN deals ON users_purchases.deal_id = deals.id where txn_id = ? AND users_purchases.user_id = ? AND users_purchases.crypto_id = ?",
-            [txn_id, user_id, crypto_id],
-            function(error, result, fields) {
+            `SELECT shippo_shipment_price, amount, crypto_symbol, payment_received, users_purchases.user_id, users_purchases.crypto_id, users_cryptos.crypto_address, users_cryptos.id AS users_cryptos_id, crypto_balance, deal_name, email AS user_email from users_purchases LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN users_cryptos ON users_cryptos.crypto_id = crypto_info.id LEFT JOIN deals ON users_purchases.deal_id = deals.id WHERE ${transaction_type} AND users_purchases.user_id = ? AND users_purchases.crypto_id = ?`,
+            [transaction_id, user_id, crypto_id],
+            async function(error, result, fields) {
               if (error) throw error;
 
-              let {amount, crypto_symbol, payment_received, crypto_address, users_cryptos_id, crypto_balance, deal_name, user_email} = result[0];
-              console.log(result[0]);
-              //update the crypto balance of the seller
+              let {amount, crypto_symbol, payment_received, users_cryptos_id, crypto_balance, deal_name, user_email} = result[0];
+
+              //check to see if payment has recevied
               if (payment_received === 100) {
-                let amountAfterFee = amount * (0.98) //since coinpase already takes .5%, we're taking 2% (totoal is 2.5%)
+
+                //total payout to seller
+                let amountAfterFee;
+                //exchange the shipping fee to crypto
+                let options = {
+                  method: "GET",
+                  qs: {
+                    symbol: crypto_symbol
+                  },
+                  headers: {
+                    "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
+                    Accept: "application/json"
+                  }
+                };
+
+                  //use request to call coinmarketcap endpoint
+                await request('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest', options, function (error, response, body) {
+                  if (error) {
+                    console.log(error);
+                  }
+
+                  let rateDate = JSON.parse(body);
+                  let cryptoRate = rateDate.data[crypto].quote.USD.price;
+
+                  //this is the shipping fee in crypto
+                  let shippingCryptoAmount = (shippo_shipment_price/cryptoRate).toFixed(4);
+                  //subtract the shipping fee
+
+                  amountAfterFee = (amount * (0.98)) - shippingCryptoAmount
+                  //amount is the crypto amount of sale tat buyer pays
+                  //since coinpase already takes .5%, we're taking 2% (total is 2.5%)
+
+                  //update the shipping crypto amount and tracking status
+                  connection.query(
+                    "UPDATE users_purchases SET ? WHERE ?",
+                    [{
+                      shipping_fee_crypto_amount: shippingCryptoAmount,
+                      tracking_status: "DELIVERED"
+                    },{tracking_number}],
+                    function(err, result) {
+                      if (err) {
+                        console.log(err);
+                      }
+
+                    }
+                  );
+
+
+                });
+
+
+                //New balance that gets updated for the seller
                 let newBalance = crypto_balance + amountAfterFee;
 
+                //Set the new crypto balance for the seller
                 connection.query(
                   "UPDATE users_cryptos SET crypto_balance = ? WHERE id = ?",
                   [newBalance, users_cryptos_id],
@@ -362,20 +443,8 @@ router.post("/acceptmycrypto/shippo/tracking_status", function(req, res) {
 
                   }
                 );
+
               }
-
-            }
-          );
-
-          //update tracking status to delivered
-          connection.query(
-            "UPDATE users_purchases SET tracking_status = ? WHERE txn_id = ?",
-            ["DELIVERED", txn_id],
-            function(err, result) {
-              if (err) {
-                console.log(err);
-              }
-
             }
           );
 
