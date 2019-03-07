@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import "./Navbar.css";
 import "./NavbarMobile.css";
 import { bindActionCreators } from "redux";
@@ -15,7 +15,7 @@ import { resetDealitemState } from "../../../actions/dealItemActions";
 class Navbar extends Component {
   logOut = () => {
     localStorage.removeItem("token");
-    this.props.history.push("/");
+    this.props.history.go("/");
   };
 
   componentDidMount = async () => {
@@ -99,9 +99,10 @@ class Navbar extends Component {
         </div>
 
         <div className="Nav d-flex flex-row align-items-center">
+        {console.log("location", this.props)}
           {this.props.userLoggedIn ? (
-            <div className="mob-nav-createDeal">
-              <li>
+            <div>
+              <li id={this.props.location.pathname === "/" && !sideBarOpened ? "mob-nav-createDeal" : "mob-create-deal-hidden"}>
                 <Link
                   onClick={() => {
                     this.resetNavbar();
@@ -126,7 +127,7 @@ class Navbar extends Component {
                   )}
                 </Link>
               </li>
-              <li>
+              <li className="mob-nav-chat">
                 <Link
                   onClick={() => {
                     this.resetNavbar();
@@ -142,8 +143,8 @@ class Navbar extends Component {
               </li>
             </div>
           ) : (
-            <div className="mob-nav-createDeal">
-              <li>
+            <div>
+              <li id={this.props.location.pathname === "/" && !sideBarOpened ? "mob-nav-createDeal" : "mob-create-deal-hidden"}>
                 <Link
                   onClick={() => {
                     this.resetNavbar();
@@ -254,7 +255,7 @@ const matchDispatchToProps = dispatch => {
   );
 };
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   matchDispatchToProps
-)(Navbar);
+)(Navbar));
