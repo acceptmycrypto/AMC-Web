@@ -532,6 +532,13 @@ export default function CreateDealReducer(state = initialState, action) {
         deletingDealError: action.payload.error,
       };
 
+    case "OPEN_MODAL_PHONE_VERIFICATION":
+      return {
+        ...state,
+        modalVisible: true
+      };
+
+
     default:
       // ALWAYS have a default case in a reducer
       return state;
