@@ -312,10 +312,27 @@ router.post("/acceptmycrypto/shippo/tracking_status", function(req, res) {
   let tracking_number = tracking_result.tracking_number;
   let txn_id, user_id, crypto_id;
 
+  // We should insert into users_tracking_info regardless if the tracking_status is DELIVERED or not because we want to store if the package is for example in transit or returned
+  //insert the tracking update to users_tracking_info
+  connection.query("INSERT INTO users_tracking_info SET ?",
+  {
+    tracking_number: tracking_result.tracking_number,
+    tracking_status: tracking_result.tracking_status.status,
+    status_details: tracking_result.tracking_status.status_details,
+    status_date: tracking_result.tracking_status.status_date,
+    eta: tracking_result.eta
+  },
+    function (err, result) {
+      if (err) {
+        console.log(err);
+      }
+    }
+  );
+
   if (tracking_status === "DELIVERED") {
     //query if tracking number exists in database
     connection.query(
-      "SELECT txn_id, user_id, crypto_id, tracking_status AS delivery_status FROM users_purchases WHERE tracking_number = ?",
+      "SELECT txn_id, paypal_paymentId, user_id, crypto_id, tracking_status AS delivery_status FROM users_purchases WHERE tracking_number = ?",
       [tracking_number],
       function(err, result) {
         if (err) {
@@ -323,16 +340,29 @@ router.post("/acceptmycrypto/shippo/tracking_status", function(req, res) {
         }
 
         txn_id = result[0].txn_id;
+        paypal_id = result[0].paypal_paymentId; 
         user_id = result[0].user_id;
         crypto_id = result[0].crypto_id;
         let delivery_status = result[0].tracking_status;
 
+        let transaction_type;
+        let transaction_id;
+
+        // check to see if txn_id is not NULL or if paypal_id is not NULL
+        if(txn_id){
+          transaction_type = `txn_id = ?`;
+          transaction_id = txn_id;
+        } else if(paypal_id){
+          transaction_type = `paypal_paymentId = ?`;
+          transaction_id = paypal_id;
+        }
+
         //if there is a tracking number in the database and tracking_status from the database has not delivered yet
-        if (txn_id && delivery_status !== "DELIVERED") {
+        if (transaction_id && delivery_status !== "DELIVERED") {
            //query info relating to this purchase to make an update
           connection.query(
-            "SELECT shippo_shipment_price, amount, crypto_symbol, payment_received, users_purchases.user_id, users_purchases.crypto_id, users_cryptos.crypto_address, users_cryptos.id AS users_cryptos_id, crypto_balance, deal_name, email AS user_email from users_purchases LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN users_cryptos ON users_cryptos.crypto_id = crypto_info.id LEFT JOIN deals ON users_purchases.deal_id = deals.id where txn_id = ? AND users_purchases.user_id = ? AND users_purchases.crypto_id = ?",
-            [txn_id, user_id, crypto_id],
+            `SELECT shippo_shipment_price, amount, crypto_symbol, payment_received, users_purchases.user_id, users_purchases.crypto_id, users_cryptos.crypto_address, users_cryptos.id AS users_cryptos_id, crypto_balance, deal_name, email AS user_email from users_purchases LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN users_cryptos ON users_cryptos.crypto_id = crypto_info.id LEFT JOIN deals ON users_purchases.deal_id = deals.id WHERE ${transaction_type} AND users_purchases.user_id = ? AND users_purchases.crypto_id = ?`,
+            [transaction_id, user_id, crypto_id],
             async function(error, result, fields) {
               if (error) throw error;
 
@@ -340,22 +370,6 @@ router.post("/acceptmycrypto/shippo/tracking_status", function(req, res) {
 
               //check to see if payment has recevied
               if (payment_received === 100) {
-
-                //insert the tracking update to users_tracking_info
-                connection.query("INSERT INTO users_tracking_info SET ?",
-                {
-                  tracking_number: tracking_result.tracking_number,
-                  tracking_status: tracking_result.tracking_status.status,
-                  status_details: tracking_result.tracking_status.status_details,
-                  status_date: tracking_result.tracking_status.status_date,
-                  eta: tracking_result.eta
-                },
-                  function (err, result) {
-                    if (err) {
-                      console.log(err);
-                    }
-                  }
-                );
 
                 //total payout to seller
                 let amountAfterFee;
