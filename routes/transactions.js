@@ -302,14 +302,12 @@ router.post("/guestCheckout", function (req, res) {
 });
 
 
-//payout
-//once we verified that the item has been shipped to the buyer
-//this route needs to be programatically called once tracking number has been verified
-//we need to listen to shippo for the endpoint
+//update seller's balance per shippo tracking number
 router.post("/acceptmycrypto/shippo/tracking_status", function(req, res) {
   //sample txn_id, user_id, and crypto_id (needs to query the right one)
   let shippo = JSON.parse(res.req.body);
   let tracking_result = shippo.data;
+
   let tracking_status = tracking_result.status;
   let tracking_number = tracking_result.tracking_number;
   let txn_id, user_id, crypto_id;
@@ -329,7 +327,7 @@ router.post("/acceptmycrypto/shippo/tracking_status", function(req, res) {
         crypto_id = result[0].crypto_id;
         let delivery_status = result[0].tracking_status;
 
-        //if there is a tracking number in the database and tracking_status has not delivered yet
+        //if there is a tracking number in the database and tracking_status from the database has not delivered yet
         if (txn_id && delivery_status !== "DELIVERED") {
            //query info relating to this purchase to make an update
           connection.query(
@@ -342,18 +340,16 @@ router.post("/acceptmycrypto/shippo/tracking_status", function(req, res) {
 
               //check to see if payment has recevied
               if (payment_received === 100) {
-                let amountAfterFee = amount * (0.98) //since coinpase already takes .5%, we're taking 2% (total is 2.5%)
 
                 //insert the tracking update to users_tracking_info
                 connection.query("INSERT INTO users_tracking_info SET ?",
-                  {
-                    tracking_number: tracking_result.tracking_number,
-                    tracking_status: tracking_result.tracking_status.status,
-                    status_details: tracking_result.tracking_status.status_details,
-                    status_date: tracking_result.tracking_status.status_date,
-                    eta: tracking_result.eta,
-                    shipping_fee_crypto_amount: shippingCryptoAmount
-                  },
+                {
+                  tracking_number: tracking_result.tracking_number,
+                  tracking_status: tracking_result.tracking_status.status,
+                  status_details: tracking_result.tracking_status.status_details,
+                  status_date: tracking_result.tracking_status.status_date,
+                  eta: tracking_result.eta
+                },
                   function (err, result) {
                     if (err) {
                       console.log(err);
@@ -361,54 +357,60 @@ router.post("/acceptmycrypto/shippo/tracking_status", function(req, res) {
                   }
                 );
 
-                //check if seller uses shippo service
-                if (shippo_shipment_price) {
-                  //if there is, exchange the shipping fee to crypto
-                  let options = {
-                    method: "GET",
-                    qs: {
-                      symbol: crypto_symbol
-                    },
-                    headers: {
-                      "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
-                      Accept: "application/json"
-                    }
-                  };
+                //total payout to seller
+                let amountAfterFee;
+                //exchange the shipping fee to crypto
+                let options = {
+                  method: "GET",
+                  qs: {
+                    symbol: crypto_symbol
+                  },
+                  headers: {
+                    "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
+                    Accept: "application/json"
+                  }
+                };
 
-                   //use request to call coinmarketcap endpoint
-                  await request('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest', options, function (error, response, body) {
-                    if (error) {
-                      console.log(error);
-                    }
+                  //use request to call coinmarketcap endpoint
+                await request('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest', options, function (error, response, body) {
+                  if (error) {
+                    console.log(error);
+                  }
 
-                    let rateDate = JSON.parse(body);
-                    let cryptoRate = rateDate.data[crypto].quote.USD.price;
+                  let rateDate = JSON.parse(body);
+                  let cryptoRate = rateDate.data[crypto].quote.USD.price;
 
-                    //this is the shipping fee in crypto
-                    let shippingCryptoAmount = (shippo_shipment_price/cryptoRate).toFixed(4);
-                    //subtract the shipping fee
-                    amountAfterFee = amountAfterFee - shippingCryptoAmount;
+                  //this is the shipping fee in crypto
+                  let shippingCryptoAmount = (shippo_shipment_price/cryptoRate).toFixed(4);
+                  //subtract the shipping fee
 
-                    //update the shipping crypto amount in users_tracking_info table
-                    connection.query(
-                      "UPDATE users_tracking_info SET shipping_fee_crypto_amount = ? WHERE tracking_number = ?",
-                      [shippingCryptoAmount, tracking_number],
-                      function(err, result) {
-                        if (err) {
-                          console.log(err);
-                        }
+                  amountAfterFee = (amount * (0.98)) - shippingCryptoAmount
+                  //amount is the crypto amount of sale tat buyer pays
+                  //since coinpase already takes .5%, we're taking 2% (total is 2.5%)
 
+                  //update the shipping crypto amount and tracking status
+                  connection.query(
+                    "UPDATE users_purchases SET ? WHERE ?",
+                    [{
+                      shipping_fee_crypto_amount: shippingCryptoAmount,
+                      tracking_status: "DELIVERED"
+                    },{tracking_number}],
+                    function(err, result) {
+                      if (err) {
+                        console.log(err);
                       }
-                    );
+
+                    }
+                  );
 
 
-                  });
-                }
+                });
 
-                //New balance that gets updated
+
+                //New balance that gets updated for the seller
                 let newBalance = crypto_balance + amountAfterFee;
 
-                //Set the new crupto balance
+                //Set the new crypto balance for the seller
                 connection.query(
                   "UPDATE users_cryptos SET crypto_balance = ? WHERE id = ?",
                   [newBalance, users_cryptos_id],
@@ -424,18 +426,6 @@ router.post("/acceptmycrypto/shippo/tracking_status", function(req, res) {
                       html: balanceDepositedEmailTemplate({ crypto_symbol, amountAfterFee, deal_name })
                     };
                     sgMail.send(balance_deposited);
-
-                  }
-                );
-
-                //update tracking status to delivered
-                connection.query(
-                  "UPDATE users_purchases SET tracking_status = ? WHERE txn_id = ?",
-                  ["DELIVERED", txn_id],
-                  function(err, result) {
-                    if (err) {
-                      console.log(err);
-                    }
 
                   }
                 );
