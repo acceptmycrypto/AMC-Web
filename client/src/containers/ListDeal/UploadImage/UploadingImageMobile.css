@@ -1,0 +1,57 @@
+@media only screen and (max-width: 600px) {
+
+  .deal-listing-content {
+    min-height: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    box-shadow: none;
+    display: block;
+  }
+
+  .deal-listing-shown-image-container {
+    width: 100%;
+    margin: 0px;
+    min-height: 300px;
+    max-height: 300px;
+    border: none;
+    display: flex;
+    align-items: center;
+    /* display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed;
+    border-radius: 5px; */
+}
+
+  .deal-listing-images {
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+  }
+
+  .deal-listing-img, .deal-uploaded-img-border {
+    height: 100px;
+  }
+
+  #shown-uploading-image {
+    min-height: 300px;
+    max-height: 300px;
+    width: 100%;
+    max-width: 100%;
+    object-fit: cover;
+  }
+
+  .uploaded-listing-image {
+    height: 100%;
+    object-fit: contain;
+    width: 100%;
+    padding: 0px;
+  }
+
+  .main-uploaded-photo {
+    display: none;
+  }
+
+
+
+}

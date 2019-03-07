@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./UploadingImage.css";
+import "./UploadingImageMobile.css";
 
 const UploadingImage = props => {
   const { viewImage, uploadedImages, uploadImage, imageIsOnPreview, removeImage } = props;
