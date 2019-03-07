@@ -3,14 +3,17 @@ import "./Footer.css";
 //These imports need to remain. Although, they are not being called, they throw an error when deleted!
 import { BrowserRouter as Router, Route, Link, NavLink } from 'react-router-dom';
 import { SocialIcon } from 'react-social-icons';
-import { Row, Col } from 'reactstrap';
+
+
 
 const Footer = props => {
 
+  
     return (
+     
       <div className="Footer">
       
-      <div sm="2" className="Footer-logo">
+      <div className="Footer-logo">
       {/* <span className="ml-2">
                 AcceptMyCrypto
               </span> */}
@@ -41,6 +44,7 @@ const Footer = props => {
         </div>
     
       </div>
+    
 
  
     );

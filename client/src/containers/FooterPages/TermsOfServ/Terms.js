@@ -251,27 +251,26 @@ class TermsOfServ extends Component {
         
             <ul>
 
-                <li className="Terms-listItem">When listing an item, you agree to comply with AcceptMyCrypto Listing policies and Selling practices policy and that:</li>
+                <li className="Terms-listItem">When listing an item, you agree to comply with AcceptMyCrypto Listing policies and Selling practices policy and that:
 
-                <li className="Terms-listItem">You are responsible for the accuracy and content of the listing and item offered</li>
-                {/* <li className="Terms-listItem">Your listing may not be immediately searchable by keyword or category for several hours (or up to 24 hours in some circumstances). 
-                    AcceptMyCrypto can't guarantee exact listing durations</li> */}
-                 <li className="Terms-listItem">When you use the consumer seller listing tool to create listings, your fixed-price listings may renew automatically every 30 days, 
-                    based on the listing terms at that time, until the quantities sell out or until you cancel the listing</li> -->
-                <li className="Terms-listItem">Content that violates any of AcceptMyCrypto’s policies may be modified, obfuscated or deleted at AcceptMyCrypto’s discretion</li>
-                <li className="Terms-listItem">We may revise product data associated with listings to supplement, remove, or correct information</li>
+                You are responsible for the accuracy and content of the listing and item offered
+                Your listing may not be immediately searchable by keyword or category for several hours (or up to 24 hours in some circumstances). 
+                    AcceptMyCrypto can't guarantee exact listing durations
+                 When you use the consumer seller listing tool to create listings, your fixed-price listings may renew automatically every 30 days, 
+                    based on the listing terms at that time, until the quantities sell out or until you cancel the listing
+                    Content that violates any of AcceptMyCrypto’s policies may be modified, obfuscated or deleted at AcceptMyCrypto’s discretion
+                    We may revise product data associated with listings to supplement, remove, or correct information</li>
                 <li className="Terms-listItem">We strive to create a marketplace where buyers find what they are looking for. Therefore, the appearance or placement of listings in 
                     search and browse results will depend on a variety of factors, including, but not limited to:</li>
-                        <ul><li className="Terms-listItem">buyer's location, search query, browsing site, and history;</li>
-                            <li className="Terms-listItem">item's location, listing format, price and shipping cost, terms of service, end time, history, and relevance to the user 
+                        <ul><li className="Terms-listSubItem">buyer's location, search query, browsing site, and history;</li>
+                            <li className="Terms-listSubItem">item's location, listing format, price and shipping cost, terms of service, end time, history, and relevance to the user 
                                 query;</li>
-                            <li className="Terms-listItem">seller's history, including listing practices, Detailed Seller Ratings, AcceptMyCrypto policy compliance, Feedback, and 
+                            <li className="Terms-listSubItem">seller's history, including listing practices, Detailed Seller Ratings, AcceptMyCrypto policy compliance, Feedback, and 
                                 defect rate; and</li>
-                            <li className="Terms-listItem">number of listings matching the buyer's query</li>
+                            <li className="Terms-listSubItem">number of listings matching the buyer's query</li>
                         </ul>
                 <li className="Terms-listItem">To drive a positive user experience, a listing may not appear in some search and browse results regardless of the sort order chosen by 
-                    the buyer</li>
-                <li className="Terms-listItem">Metatags and URL links that are included in a listing may be removed or altered so as to not affect third-party search engine 
+                    the buyer. Metatags and URL links that are included in a listing may be removed or altered so as to not affect third-party search engine 
                     results.</li>
             </ul>
                 </div>

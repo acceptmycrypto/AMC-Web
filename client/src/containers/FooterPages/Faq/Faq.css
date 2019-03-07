@@ -1,5 +1,6 @@
 .Faq-qnaList{
-  text-align: center;
+  justify-content: left;
+  display: inline;
   }
 
 .faqMenuTitle{
@@ -30,10 +31,12 @@
 
 .Faq-button{
     font-weight: 500;
+    color: #2E4158;
   }
   
 .Faq-page {
     height: 100vh;
+    justify-content: center;
     display: flex;
     color: #2E4158;
     padding-top: 54px;
@@ -44,8 +47,23 @@
     width: 100%;
     background-color: white;
     position: absolute;
-    padding-top: 75px;
+    padding-top: 50px;
   }
+
+  .faqMenuTitle{
+    padding-left: 50px;
+    padding-bottom: 10px;
+    color: #2E4158;
+}
+
+.faqMenuTitle:hover{
+  color: #66DAC7;
+}
+
+.Faq-button:hover{
+  color: #66DAC7;
+}
+
     
 .Faq-menu {
     width: 100%;
@@ -64,7 +82,7 @@
     z-index: 2;
   }
 
-.Faq-menuItem{
+/* .Faq-menuItem{
     font-size: 15.5px;
     padding-left: 50px;
     padding-right: 50px;
@@ -75,10 +93,7 @@
     margin: 0px 97px 0px 83px;
     color: #2a3c51;
     font-size: 17px;   
-  }
+  } */
   
-.Faq-menuItem:hover{
-    color: white;
-  }
-  
+
   

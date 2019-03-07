@@ -1,6 +1,10 @@
 .termsMenuTitle{
+    color: #2E4158;
     padding-left: 50px;
     padding-bottom: 10px;
+}
+.termsMenuTitle:hover{
+    color: #66DAC7;
 }
 
 .Terms-listItem{
@@ -8,7 +12,14 @@
     padding: 15px;
     padding-left: 50px;
     padding-right: 50px;
+}
 
+.Terms-listSubItem{
+    font-size: 17px;
+    padding: 10px;
+    margin-left: 250px;
+    font-weight: bold;
+    list-style: disc inside; 
 }
 
 #Terms-amh{

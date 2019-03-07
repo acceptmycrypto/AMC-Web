@@ -36,7 +36,7 @@ render() {
         <Navbar/>
         
          
-         <div className="Faq-menu">
+         {/* <div className="Faq-menu">
 
     <title> AcceptMyCrypto FAQs </title> 
          
@@ -58,24 +58,31 @@ render() {
            </a>
          
          
-         </div>
+         </div> */}
     
-        <div className="Faq-mainContent">
+        <div className="Faq-mainContent" id="Faq-menu">
           <div className="font-17 color-deepBlue">
               <div className="ml-2" id="Faq-amh">
                 AcceptMyHelp
               </div>
             </div>
           <hr className="star-light"></hr>
-          
-<Collapse toggler="#general" isOpen={!this.state.collapse}>
-      <h4 className="faqMenuTitle">General</h4>
+
+          <h5 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseGeneral" aria-expanded="true" aria-controls="collapseGeneral">
+                <h4 className="faqMenuTitle">General</h4>
+                </button>
+            </h5>
+
+            <div id="collapseGeneral" class="collapse show" aria-labelledby="headingOne" data-parent="#Faq-menu">
+            <div class="card-body">
 
           <ul className="Faq-qnaList">
-            <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerQuestion1">What is acceptmycrypto.com?</Button></h4></li>
+            <li><h4><Button className="Faq-button" id="togglerQuestion1" size="lg" color="link" >What is acceptmycrypto.com?</Button></h4></li>
           </ul>
      
 <UncontrolledCollapse toggler="#togglerQuestion1">
+
           <ul className="Faq-qnaList">
             <li className="Faq-answer">Acceptmycrypto.com is a marketplace to allows sellers to list items/services in crypto currencies or US dollars. It was created to assist in the acceptance of cryptocurrencies as a viable form of payment , which is why listings have a lower price in cryptocurrency.</li>
           </ul>
@@ -87,6 +94,7 @@ render() {
           </ul>
       
 <UncontrolledCollapse toggler="#togglerQuestion2">
+
           <ul className="Faq-qnaList">  
             <li className="Faq-answer">If you would like to have a listing then yes you would need to create an account.There is an option for guest checkout as a buyer, however, we advise you to create a profile for a more complete experience.</li>
           </ul>
@@ -174,7 +182,6 @@ render() {
             <li className="Faq-answer">If you are under 18, you may use the AcceptMyCrypto Services explicitly with involvement of a parent or guardian. Parents and guardians may create profiles for their minors.</li>
           </ul>
       
-            
 </UncontrolledCollapse>
 
           <ul className="Faq-qnaList">
@@ -212,11 +219,18 @@ render() {
           </ul>
       
 </UncontrolledCollapse>
-</Collapse>
-            
-<Collapse toggler="#seller" isOpen={this.state.collapse}>
+</div>
+</div>
 
-      <h4 className="faqMenuTitle">Sellers</h4>
+            
+          <h5 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseSellers" aria-expanded="true" aria-controls="collapseSellers">
+                <h4 className="faqMenuTitle">Sellers</h4>
+                </button>
+            </h5>
+
+            <div id="collapseSellers" class="collapse" aria-labelledby="headingOne" data-parent="#Faq-menu">
+            <div class="card-body">
 
     
           <ul className="Faq-qnaList">
@@ -469,12 +483,18 @@ render() {
         
 
 </UncontrolledCollapse>
-</Collapse>
+</div>
+</div>
+
          
-<UncontrolledCollapse toggler="buyers" isOpen={this.state.collapse} >
+            <h5 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseBuyers" aria-expanded="true" aria-controls="collapseBuyers">
+                <h4 className="faqMenuTitle">Buyers</h4>
+                </button>
+            </h5>
 
-        <h4 className="faqMenuTitle">Buyers</h4>
-
+            <div id="collapseBuyers" class="collapse" aria-labelledby="headingOne" data-parent="#Faq-menu">
+            <div class="card-body">
          
             <ul className="Faq-qnaList">
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerBuyersQues1">The cryptocurrency I want to use is not supported on your site, what can I do?</Button></h4></li>
@@ -576,11 +596,18 @@ render() {
         
 
 </UncontrolledCollapse>
-</UncontrolledCollapse>
+</div>
+</div>
 
-<UncontrolledCollapse toggler="guest" isOpen={this.state.collapse}>
 
-      <h4 className="faqMenuTitle">Buying as a Guest</h4>
+            <h5 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseGuest" aria-expanded="true" aria-controls="collapseGuest">
+                <h4 className="faqMenuTitle">Buying as a Guest</h4>
+                </button>
+            </h5>
+
+            <div id="collapseGuest" class="collapse" aria-labelledby="headingOne" data-parent="#Faq-menu">
+            <div class="card-body">
 
        
             <ul className="Faq-qnaList">
@@ -662,11 +689,14 @@ render() {
         
 
 </UncontrolledCollapse>
-</UncontrolledCollapse>
+</div>
+</div>
+
 
 <Footer/>
             </div>
             </div>
+         
      
        
              
