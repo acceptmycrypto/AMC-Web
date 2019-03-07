@@ -6,6 +6,7 @@
     box-sizing: border-box;
     box-shadow: none;
     display: block;
+    padding-top: 5px;
   }
 
   .deal-listing-shown-image-container {
@@ -51,6 +52,25 @@
   .main-uploaded-photo {
     display: none;
   }
+
+  .creating-deal-hr {
+    display: none;
+  }
+
+  /* Button */
+
+#photos-next-step {
+  display: block;
+  font-size: 1.5em;
+  margin: 20px 10px;
+}
+
+#photos-next-step button {
+  width: 90%;
+  font-size: 1.2em;
+  border-radius: 50px;
+}
+
 
 
 
