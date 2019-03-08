@@ -235,7 +235,7 @@ const UploadingImage = props => {
         </div>
         <hr className="creating-deal-hr"/>
         <div id="photos-next-step">
-          <button onClick={() => props.validateImageUpload() && props.showPricingStep()}>Next</button>
+          <button onClick={() => props.validateImageUpload() && props.showPricingStep()}>Set Price</button>
         </div>
       </div>
     </div>
