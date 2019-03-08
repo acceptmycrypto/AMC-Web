@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import { Link } from "react-router-dom";
 import queryString from 'query-string';
+import Select from "react-select";
 import Layout from "../../Layout";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
 import { updateTrackingNumber, editTrackingNumber, editTrackingCarrier } from "../../../actions/dealsActions";
@@ -19,37 +20,48 @@ class TrackingNumber extends Component {
 
         await this.props._isLoggedIn(localStorage.getItem('token'));
         if (await !this.props.userLoggedIn) {
-          await this.props.history.push(`/SignIn?redirect=${this.props.location.pathname}`);
+            await this.props.history.push(`/SignIn?redirect=${this.props.location.pathname}`);
         }
-      }
+    }
     render() {
-       
+
         let txn_id = this.props.match.params.txn_id;
         let deal_name = this.props.match.params.deal_name;
-        let{editTrackingNumber, editTrackingCarrier, trackingNumber, trackingCarrier, updateTrackingNumber} = this.props;
+        let { editTrackingNumber, editTrackingCarrier, trackingNumber, trackingCarrier, updateTrackingNumber, trackingCarrierSelected } = this.props;
         console.log(txn_id);
         return (
             <div className="pt-5">
                 <Layout >
-                    {deal_name !== undefined && <div className="container mx-0 text-center">
-                        <div className="mb-4" style={{color:"navy", fontSize:"20px"}}>Enter the Tracking Number for {deal_name}:</div>
-                        <input
-                            onChange={editTrackingCarrier}
-                            value={trackingCarrier}
-                            className="tracking-number"
-                            autofocus="autofocus"
-                            placeholder="Enter Tracking Carrier"
-                            style={{width:"300px"}}
-                        />
+                    {deal_name !== undefined && <div className="text-center trackingDiv">
+                        <div className="mb-4 tracking-title">Enter the Tracking Number for <br /> {deal_name}</div>
                         <input
                             onChange={editTrackingNumber}
                             value={trackingNumber}
                             className="tracking-number"
                             autofocus="autofocus"
                             placeholder="Enter Tracking Number"
-                            style={{width:"300px"}}
+                            style={{ width: "300px" }}
                         />
-                        <div className="btn btn-info ml-4" onClick={async (event)=>{await updateTrackingNumber(localStorage.getItem('token'), txn_id, trackingNumber, trackingCarrier); await this.props.history.push(`/`)}}>Submit</div>
+                        {/* <input
+                            onChange={editTrackingCarrier}
+                            value={trackingCarrier}
+                            className="tracking-carrier"
+                            autofocus="autofocus"
+                            placeholder="Enter Tracking Carrier"
+                            style={{ width: "300px" }}
+                        /> */}
+                        <div className="tracking-dropdown">
+                            <Select
+                                className="tracking-select"
+                                required
+                                onChange={editTrackingCarrier}
+                                options={trackingCarrier}
+                                isMulti={false}
+                                autoBlur={false}
+                            />
+                        </div>
+
+                        <div className="btn btn-info" onClick={async (event) => { await updateTrackingNumber(localStorage.getItem('token'), txn_id, trackingNumber, trackingCarrierSelected); await this.props.history.push(`/`) }}>Submit</div>
                     </div>}
                 </Layout >
 
@@ -62,12 +74,13 @@ class TrackingNumber extends Component {
 const mapStateToProps = state => ({
     trackingNumber: state.matchedDeals.trackingNumber,
     trackingCarrier: state.matchedDeals.trackingCarrier,
+    rackingCarrierSelected: state.matchedDeals.trackingCarrierSelected,
     userLoggedIn: state.LoggedIn.userLoggedIn,
 });
 
 const matchDispatchToProps = dispatch => {
 
-    return bindActionCreators({updateTrackingNumber, editTrackingNumber, _isLoggedIn, editTrackingCarrier}, dispatch);
+    return bindActionCreators({ updateTrackingNumber, editTrackingNumber, _isLoggedIn, editTrackingCarrier }, dispatch);
 
 }
 
