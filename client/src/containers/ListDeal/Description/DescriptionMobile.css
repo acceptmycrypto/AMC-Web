@@ -1,0 +1,95 @@
+@media only screen and (max-width: 600px) {
+  .deal-listing-description {
+    min-height: 0px;
+    margin: 0px;
+    box-shadow: none;
+  }
+
+  .listing-description-container-for-dropdown-flex {
+    display: block;
+  }
+
+  .listing-description-container-for-dropdown {
+    width: 100%;
+    margin-right: 0px;
+    margin-bottom: 20px;
+  }
+
+  .mob-description-buttons {
+    margin: 0;
+  }
+
+  .editor-wrapper {
+    width: 100%;
+    margin-bottom: 150px;
+  }
+
+  .mob-description-buttons, .mob-description-buttons button {
+    width: 100%;
+    font-size: 1.2em;
+  }
+
+  .mob-description-buttons .creating-deal-back-step button {
+    bottom: 70px;
+  }
+
+  .submit-listing-deal button {
+    right: auto;
+    bottom: 0px;
+    font-size: 1.2em;
+    background-color: #2e4157;
+  }
+
+
+  /* modal */
+
+  .deal-created-modal {
+    width: 100%;
+  }
+
+  .create-deal-modal-link {
+    left: 25%;
+  }
+
+  .city-state-zipcode-flex {
+    display: block;
+    margin-bottom: 0px;
+  }
+
+  .create-deal-select {
+    width: 100%;
+    margin: 10px 0px;
+  }
+
+  .create-deal-zipcode-input {
+    width: 100%;
+  }
+
+  .creating-deal-seller-verification button{
+    left: 62%;
+  }
+
+  .creating-deal-modal-loading-spinner {
+    width: 100%;
+    margin: 0;
+    position: static;
+  }
+
+
+  /* .mob-description-buttons {
+    width: 100;
+  } */
+
+  /* .mob-description-buttons .creating-deal-back-step{
+    width: 100;
+  } */
+
+  /* .mob-description-buttons .creating-deal-back-step button {
+    width: 100;
+    position: relative;;
+  } */
+
+
+
+
+}

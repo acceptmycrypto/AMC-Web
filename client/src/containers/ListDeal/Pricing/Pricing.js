@@ -360,7 +360,7 @@ class Pricing extends Component {
                     this.exitShippingModal();
                   }}
                 >
-                  <div className="shipping-option-modal mob-modal">
+                  <div className="mob-modal shipping-option-modal">
                     {this.shippingOptionModal()}
                   </div>
                 </Modal>
