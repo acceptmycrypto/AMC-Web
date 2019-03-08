@@ -1,0 +1,59 @@
+.trackingDiv{
+    width: 60%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #2E4158;
+    border: solid #199087 .5em;
+    padding: 25px;
+    text-transform: uppercase;
+    color: white;
+}
+
+.trackingDiv div.tracking-title{
+    font-size: 20px;
+}
+
+
+.trackingDiv input{
+    width: 90%;
+    margin: 0 auto;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #445366;
+    color: #fff;
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+.trackingDiv div.btn{
+    margin-top: 40px;
+    margin-bottom: 80px;
+    background-color: rgb(22, 190, 182);
+    color: white;
+    border: none;
+    outline: none;
+    padding: 10px 25px;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+
+.tracking-dropdown{
+    width: 50%;
+    margin-top: 20px;
+    padding: 0px;
+    align-self: center;
+}
+
+.tracking-select{
+    padding: 0;
+    margin: 0;
+    color: black;
+}
