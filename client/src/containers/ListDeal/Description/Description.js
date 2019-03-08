@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./Description.css";
-import "./DescriptionMobile.css";   
+import "./DescriptionMobile.css";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -164,7 +164,7 @@ class Description extends Component {
         );
       case checkingCodeSuccess.success:
         return (
-          <div>
+          <div className="mob-verified-phone-success">
             <div className="verified-phone-success">
               <h4>Verified Success!</h4>
               <div>
@@ -321,7 +321,7 @@ class Description extends Component {
         );
       default:
         return (
-          <div>
+          <div className="mob-verified-phone-success">
             <div className="verified-phone-success">
               <h4>You have successfully created a Deal!</h4>
               <div>

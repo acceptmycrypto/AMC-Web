@@ -24,16 +24,6 @@ class Navbar extends Component {
       this.props._loadPhoto(localStorage.getItem("token"));
       this.props._loadChatSessions(localStorage.getItem("token"));
     }
-    // else {
-
-    // }
-    // let isLoggedIn = await this.props._isLoggedIn(localStorage.getItem('token'));
-    // if(isLoggedIn.message == "WrongToken"){
-
-    // }
-    //
-
-    // console.log(this.props.photo.photo);
   };
 
   resetNavbar = () => {

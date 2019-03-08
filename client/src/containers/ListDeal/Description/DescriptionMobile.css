@@ -45,10 +45,12 @@
 
   .deal-created-modal {
     width: 100%;
+    height: 100%;
   }
 
   .create-deal-modal-link {
-    left: 25%;
+    position: static;
+    margin-top: 30px;
   }
 
   .city-state-zipcode-flex {
@@ -65,14 +67,32 @@
     width: 100%;
   }
 
+  .creating-deal-seller-verification {
+    display: flex;
+    flex-direction: column;
+  }
+
   .creating-deal-seller-verification button{
-    left: 62%;
+    position: static;
+    margin-top: 30px;
   }
 
   .creating-deal-modal-loading-spinner {
     width: 100%;
     margin: 0;
     position: static;
+  }
+
+  .description-input {
+    font-size: 1em;
+  }
+
+  .mob-verified-phone-success {
+    text-align: center;
+  }
+
+  .verified-phone-success {
+    margin-bottom: 30px;
   }
 
 
