@@ -143,7 +143,7 @@ class ItemDescription extends Component {
         );
       case checkingCodeSuccess.success:
         return (
-          <div>
+          <div className="mob-verified-phone-success">
             <div className="verified-phone-success">
               <h4>Verified Success!</h4>
               <div>
@@ -300,7 +300,7 @@ class ItemDescription extends Component {
         );
       default:
         return (
-          <div>
+          <div className="mob-verified-phone-success">
             <div className="verified-phone-success">
               <h4>You have successfully created a Deal!</h4>
               <div>
