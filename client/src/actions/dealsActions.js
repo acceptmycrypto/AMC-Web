@@ -40,8 +40,6 @@ export const editTrackingNumber = event => ({
 });
 
 export const editTrackingCarrier = selectedOptions => {
-  console.log(selectedOptions.value);
-  
   return {
     type: "EDIT_TRACKING_CARRIER",
     payload: selectedOptions.value
