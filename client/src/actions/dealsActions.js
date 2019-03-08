@@ -39,14 +39,24 @@ export const editTrackingNumber = event => ({
   payload: event.target.value
 });
 
-export function updateTrackingNumber(token, txn_id, trackingNumber) {
+export const editTrackingCarrier = selectedOptions => {
+  console.log(selectedOptions.value);
+  
+  return {
+    type: "EDIT_TRACKING_CARRIER",
+    payload: selectedOptions.value
+  }
+};
+
+
+export function updateTrackingNumber(token, txn_id, trackingNumber, trackingCarrier) {
   const settings = {
     method: "POST",
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({token, txn_id, trackingNumber})
+    body: JSON.stringify({token, txn_id, trackingNumber, trackingCarrier})
   };
 
   return dispatch => {
