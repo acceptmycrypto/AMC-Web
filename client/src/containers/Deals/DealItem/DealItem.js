@@ -119,7 +119,8 @@ class DealItem extends Component {
       firstName,
       lastName,
       email,
-      phoneNumber
+      phoneNumber,
+      user_info
     } = this.props;
 
     //info needed to insert into user_purchases table
@@ -129,6 +130,7 @@ class DealItem extends Component {
     let crypto_symbol = selectedOption.value;
     let crypto_name = selectedOption.name;
     let token = localStorage.getItem("token");
+    let user_email = user_info[0].email;
 
     if(this.props.userLoggedIn){
       this.props._fetchTransactionInfo(
@@ -142,7 +144,8 @@ class DealItem extends Component {
         zipcode,
         shippingState,
         firstName,
-        lastName
+        lastName,
+        user_email
       );
     }else{
       this.props._fetchGuestTransactionInfo(

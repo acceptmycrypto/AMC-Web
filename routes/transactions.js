@@ -122,6 +122,8 @@ router.post("/checkout", verifyToken, function (req, res) {
                   console.log(err);
                 }
 
+                let time_left_hrs = paymentInfo.timeout / 60 / 60;
+
                 //insert shipping address into table
                 connection.query(
                   "INSERT INTO users_shipping_address SET ?",
@@ -138,6 +140,38 @@ router.post("/checkout", verifyToken, function (req, res) {
                     if (err) throw err;
                   }
                 );
+
+                //email to user that the deal has reserved
+                connection.query('SELECT deals.deal_name, users.username AS seller_name FROM deals LEFT JOIN users ON deals.seller_id = users.id WHERE deals.id = ?',
+                [req.body.deal_id],
+                function (error, res, fields) {
+                  if (error) throw error;
+
+                  let view_deal;
+                  if (process.env.NODE_ENV == "development") {
+                    view_deal = `${process.env.FRONTEND_URL}/feed/deals/${req.body.deal_id}/${res[0].deal_name}`;
+                  } else {
+                    view_deal = `${process.env.BACKEND_URL}/feed/deals/${req.body.deal_id}/${res[0].deal_name}`;
+                  }
+
+                  //this template is generic for both guess user and registered
+                  const guest_checkout = {
+                    to: req.body.user_email,
+                    from: process.env.CUSTOMER_SUPPORT,
+                    subject: 'You Reserved a Deal',
+                    html: guest_checkout_emailTemplate(
+                      {
+                        deal_name: res[0].deal_name,
+                        seller_name: res[0].seller_name,
+                        time_left: time_left_hrs,
+                        amount: paymentInfo.amount,
+                        crypto: req.body.crypto_name,
+                        address: paymentInfo.address,
+                        view_deal: view_deal
+                      })
+                  };
+                  sgMail.send(guest_checkout);
+                });
 
                 connection.query(
                   "UPDATE deals SET deal_status = ? WHERE id = ?",
@@ -249,8 +283,6 @@ router.post("/guestCheckout", function (req, res) {
                       function (error, res, fields) {
                         if (error) throw error;
 
-                        console.log(res[0]);
-
                         let view_deal;
                         if (process.env.NODE_ENV == "development") {
                           view_deal = `${process.env.FRONTEND_URL}/feed/deals/${req.body.deal_id}/${res[0].deal_name}`;
@@ -340,7 +372,7 @@ router.post("/acceptmycrypto/shippo/tracking_status", function(req, res) {
         }
 
         txn_id = result[0].txn_id;
-        paypal_id = result[0].paypal_paymentId; 
+        paypal_id = result[0].paypal_paymentId;
         user_id = result[0].user_id;
         crypto_id = result[0].crypto_id;
         let delivery_status = result[0].tracking_status;
