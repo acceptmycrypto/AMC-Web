@@ -46,8 +46,8 @@ CREATE TABLE users(
 	zipcode VARCHAR(255) NULL,
 	password VARCHAR(255) NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    reset_pw_token VARCHAR(26) NULL,
-    reset_pw_timestamp BIGINT NULL,
+  	reset_pw_token VARCHAR(26) NULL,
+  	reset_pw_timestamp BIGINT NULL,
 	sellers_avg_rating FLOAT(3,2) NOT NULL DEFAULT 0,
 	total_sellers_ratings INT NOT NULL DEFAULT 0,
 	PRIMARY KEY (id)
@@ -70,24 +70,34 @@ CREATE TABLE deals (
 	seller_id INT NULL,
 	deal_name VARCHAR(255) NOT NULL,
 	deal_description VARCHAR(10000) NOT NULL,
-  	featured_deal_image VARCHAR(255) NOT NULL,
+  featured_deal_image VARCHAR(255) NOT NULL,
 	pay_in_dollar DECIMAL(10,2) NOT NULL,
 	pay_in_crypto DECIMAL(10, 2) NOT NULL,
 	date_expired DATETIME NULL,
 	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  	category VARCHAR(255) NULL, -- we need to take this out eventually
+  category VARCHAR(255) NULL, -- we need to take this out eventually
 	item_condition VARCHAR (255) NULL,
--- 	deal_avg_rating FLOAT(3,2) NULL,
--- 	total_deal_ratings INT NULL,
+  length INT NULL, -- in inches
+	width INT NULL,  -- in inches
+	height INT NULL, -- in inches
+	weight INT NULL, -- in lb (pounds)
+	shipping_label_status VARCHAR(20) NULL, -- prepaid or seller
+	shipment_cost DECIMAL(10, 2) NULL, -- USD
+  deal_status VARCHAR (10) DEFAULT 'available', -- status: available, sold, reserved (paying item), expired, pending (pending is for deal that's not get displayed due to seller's verification), "deleted"
+  -- deal_avg_rating FLOAT(3,2) NULL,
+  -- total_deal_ratings INT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (venue_id) REFERENCES venues(id),
 	FOREIGN KEY (seller_id) REFERENCES users(id)
 );
 
+
 CREATE TABLE deal_images (
 	id INT NOT NULL AUTO_INCREMENT,
-  	deal_id INT NOT NULL,
-  	deal_image VARCHAR(255) NOT NULL,
+  deal_id INT NOT NULL,
+  deal_image VARCHAR(255) NOT NULL UNIQUE,
+  deal_image_key VARCHAR(255) NULL UNIQUE,
+  deal_image_object VARCHAR(10000) NOT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 );
@@ -110,6 +120,7 @@ CREATE TABLE parent_child_categories(
 CREATE TABLE categories_deals(
 	category_id INT NOT NULL,
 	deals_id INT NOT NULL,
+  PRIMARY KEY (category_id, deals_id),
 	FOREIGN KEY (category_id) REFERENCES category(id),
 	FOREIGN KEY (deals_id) REFERENCES deals(id)
 );
@@ -156,10 +167,24 @@ CREATE TABLE users_cryptos(
 	user_id INT NOT NULL,
 	crypto_id INT NOT NULL,
 	crypto_address VARCHAR(255) NULL,
+  	crypto_balance DECIMAL(20, 8) NOT NULL DEFAULT 0,
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_id) REFERENCES users(id),
 	FOREIGN KEY (crypto_id) REFERENCES crypto_info(id)
 );
+
+-- keep track of how many times users withdraw
+CREATE TABLE cryptos_withdraw(
+	id INT NOT NULL AUTO_INCREMENT,
+	users_cryptos_id INT NOT NULL,
+  	withdraw_token VARCHAR(26) NOT NULL,
+  	withdraw_token_timestamp BIGINT NOT NULL,
+  	withdraw_amount DECIMAL(20, 8) NULL,
+  	coinpayment_withdraw_id VARCHAR(26) NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (users_cryptos_id) REFERENCES users_cryptos(id)
+);
+
 
 CREATE TABLE buyers_reviews_sellers(
 	id INT NOT NULL AUTO_INCREMENT,
@@ -185,30 +210,56 @@ CREATE TABLE users_purchases(
 	user_id INT NULL,
 	guest_user_id INT NULL,
 	deal_id INT NOT NULL,
-	crypto_id INT NOT NULL,
+	crypto_id INT NULL,
   buyers_reviews_sellers_id INT NULL,
 	date_purchased TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	amount DECIMAL(20, 8) NOT NULL,
-	txn_id VARCHAR(255) NOT NULL UNIQUE,
-	address VARCHAR(255) NOT NULL,
-	confirms_needed VARCHAR(255) NOT NULL,
-	timeout INT NOT NULL,
+	amount DECIMAL(20, 8) NULL,
+	txn_id VARCHAR(255) NULL UNIQUE,
+	address VARCHAR(255) NULL,
+	confirms_needed VARCHAR(255) NULL,
+	timeout INT NULL,
 	status_url VARCHAR(255) NULL,
-	qrcode_url VARCHAR(255) NOT NULL,
-  	status VARCHAR(255) NOT NULL DEFAULT "0",
-	payment_received BOOLEAN NOT NULL DEFAULT FALSE,
+	qrcode_url VARCHAR(255) NULL,
+  status VARCHAR(255) NULL DEFAULT "0",
+	payment_received BOOLEAN NULL DEFAULT FALSE,
+  paypal_paymentId VARCHAR(255) NULL UNIQUE,
+  paypal_payerId VARCHAR(255) NULL,
+  paypal_amount DECIMAL(10,2) NULL,
 	permission VARCHAR(255) NOT NULL DEFAULT "community",
+	shipment_date VARCHAR (255) NULL,
+	shipping_label_url VARCHAR(500) NULL, -- if prepaid this is link to shipping label
+	shippo_shipment_price DECIMAL (10,2) NULL,
+  shipping_fee_crypto_amount DECIMAL(20, 8) NULL,
+	tracking_number VARCHAR(255) NULL UNIQUE, -- shipment tracking number
+	tracking_status VARCHAR(100) NULL,
+	tracking_url_provider VARCHAR (500) NULL, -- link to track package online
+	eta VARCHAR (255) NULL,
+	shippo_shipment_id VARCHAR(255) NULL,
+	shippo_transaction_id VARCHAR(255) NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_id) REFERENCES users(id),
 	FOREIGN KEY (guest_user_id) REFERENCES guest_users(id),
 	FOREIGN KEY (crypto_id) REFERENCES crypto_info(id),
 	FOREIGN KEY (deal_id) REFERENCES deals(id),
-  FOREIGN KEY (buyers_reviews_sellers_id) REFERENCES buyers_reviews_sellers(id)
+  	FOREIGN KEY (buyers_reviews_sellers_id) REFERENCES buyers_reviews_sellers(id)
+);
+
+CREATE TABLE users_tracking_info(
+	id INT NOT NULL AUTO_INCREMENT,
+	tracking_number VARCHAR(255) NULL,
+	tracking_status VARCHAR(100) NULL,
+	status_details VARCHAR(255) NULL,
+	status_date VARCHAR(255) NULL,
+	eta VARCHAR (255) NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (tracking_number) REFERENCES users_purchases(tracking_number)
+
 );
 
 CREATE TABLE users_shipping_address(
 	id INT NOT NULL AUTO_INCREMENT,
-	txn_id VARCHAR(255) NOT NULL,
+	txn_id VARCHAR(255) NULL,
+  users_purchases_id INT NULL,
 	shipping_firstname VARCHAR(255) NOT NULL,
   	shipping_lastname VARCHAR(255) NOT NULL,
 	shipping_address VARCHAR(255) NOT NULL,
@@ -216,7 +267,8 @@ CREATE TABLE users_shipping_address(
 	shipping_state VARCHAR(255) NOT NULL,
 	shipping_zipcode VARCHAR(255) NOT NULL,
 	PRIMARY KEY (id),
-	FOREIGN KEY (txn_id) REFERENCES users_purchases(txn_id)
+	FOREIGN KEY (txn_id) REFERENCES users_purchases(txn_id),
+  FOREIGN KEY (users_purchases_id) REFERENCES users_purchases(id)
 );
 
 CREATE TABLE users_purchase_customization(
@@ -243,14 +295,14 @@ CREATE TABLE users_matched_friends(
 CREATE TABLE crypto_comments(
 	id INT NOT NULL AUTO_INCREMENT,
 	user_id INT NOT NULL,
-  	crypto_id INT NOT NULL,
-  	body TEXT NOT NULL,
-  	date_commented TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  	comment_status VARCHAR (10) DEFAULT 'normal',
-  	points INT DEFAULT 0,
+	crypto_id INT NOT NULL,
+	body TEXT NOT NULL,
+	date_commented TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	comment_status VARCHAR (10) DEFAULT 'normal',
+	points INT DEFAULT 0,
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_id) REFERENCES users(id),
-  	FOREIGN KEY (crypto_id) REFERENCES crypto_info(id)
+	FOREIGN KEY (crypto_id) REFERENCES crypto_info(id)
 );
 
 CREATE TABLE parents_children(
@@ -267,7 +319,7 @@ CREATE TABLE notifications (
 	matched_friend_id INT NOT NULL,
 	venue_id INT NOT NULL,
 	deal_id INT NOT NULL,
-  	PRIMARY KEY (id),
+	PRIMARY KEY (id),
 	FOREIGN KEY (user_id) REFERENCES users(id),
 	FOREIGN KEY (matched_friend_id) REFERENCES users_matched_friends(id),
 	FOREIGN KEY (venue_id) REFERENCES venues(id),
@@ -309,8 +361,8 @@ CREATE TABLE flagged_users(
 
 CREATE TABLE chat_sessions(
 	id INT NOT NULL AUTO_INCREMENT,
-  deal_id INT NOT NULL,
-  session_status VARCHAR (10) DEFAULT 'normal',
+  	deal_id INT NOT NULL,
+  	session_status VARCHAR (10) DEFAULT 'normal',
 	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (id),
   FOREIGN KEY (deal_id) REFERENCES deals(id)
@@ -319,27 +371,27 @@ CREATE TABLE chat_sessions(
 -- participant_status is 'normal', 'deleted', or 'blocked'
 CREATE TABLE chat_session_participants(
 	id INT NOT NULL AUTO_INCREMENT,
-  chat_session_id INT NOT NULL,
-  user_id INT NOT NULL,
-  seller_id INT NOT NULL,
-  buyer_id INT NOT NULL,
-  participant_status VARCHAR (10) DEFAULT 'normal',
+  	chat_session_id INT NOT NULL,
+  	user_id INT NOT NULL,
+  	seller_id INT NOT NULL,
+  	buyer_id INT NOT NULL,
+  	participant_status VARCHAR (10) DEFAULT 'normal',
 	date_joined TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  message_read BOOLEAN NOT NULL DEFAULT TRUE,
+  	message_read BOOLEAN NOT NULL DEFAULT TRUE,
 	PRIMARY KEY (id),
-  FOREIGN KEY (chat_session_id) REFERENCES chat_sessions(id),
+  	FOREIGN KEY (chat_session_id) REFERENCES chat_sessions(id),
 	FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (seller_id) REFERENCES users(id),
-  FOREIGN KEY (buyer_id) REFERENCES users(id)
+  	FOREIGN KEY (seller_id) REFERENCES users(id),
+  	FOREIGN KEY (buyer_id) REFERENCES users(id)
 );
 
 CREATE TABLE chat_messages(
 	id INT NOT NULL AUTO_INCREMENT,
 	chat_session_id INT NOT NULL,
 	message VARCHAR(255) NOT NULL,
-  message_status VARCHAR (10) DEFAULT 'normal',
+  	message_status VARCHAR (10) DEFAULT 'normal',
 	date_message_sent TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  message_owner_id INT NOT NULL,
+  	message_owner_id INT NOT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (chat_session_id) REFERENCES chat_sessions(id)
 );
@@ -511,4 +563,27 @@ CREATE TABLE chat_messages(
 -- 	review_child_id INT NOT NULL,
 -- 	FOREIGN KEY (review_parent_id) REFERENCES buyers_reviews_deals(id),
 -- 	FOREIGN KEY (review_child_id) REFERENCES buyers_reviews_deals(id)
+-- );
+
+
+-- CREATE TABLE shipping_deals(
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	deal_id INT NOT NULL,
+-- 	length INT NULL, --in inches
+-- 	width INT NULL, --in inches
+-- 	height INT NULL, --in inches
+-- 	weight INT NULL, -- in lb (pounds)
+-- 	shipping_label_status VARCHAR(20) NULL, --prepaid or seller
+-- 	shipment_cost DECIMAL(10, 2) NULL, -- USD,
+-- 	shipment_date VARCHAR (255) NULL,
+-- 	shipping_label_url VARCHAR(500) NULL, -- if prepaid this is link to shipping label
+-- 	shippo_shipment_price DECIMAL (10,2) NULL,
+-- 	tracking_number VARCHAR(255) NULL, -- shipment tracking number
+-- 	tracking_status VARCHAR(100) NULL,
+-- 	tracking_url_provider VARCHAR (500) NULL, -- link to track package online
+-- 	eta VARCHAR (255) NULL,
+-- 	shippo_shipment_id VARCHAR(255) NULL,
+-- 	shippo_transaction_id VARCHAR(255) NULL,
+-- 	PRIMARY KEY (id),
+-- 	FOREIGN KEY (deal_id) REFERENCES deals(id)
 -- );

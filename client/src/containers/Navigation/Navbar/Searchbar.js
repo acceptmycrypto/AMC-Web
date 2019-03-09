@@ -11,17 +11,17 @@ class SearchBar extends Component {
         this.props.searchDeals(event.target.children[0].value, 1);
         this.props.history.push("/Search?term="+event.target.children[0].value+"&page=1");
     }
-    
+
     render(){
         return (
-            <div className="Search d-flex flex-row align-items-center">
+            <div className="Search mob-search d-flex flex-row align-items-center">
                 <form className="search_Form" onSubmit={this.search}>
                     <input type="text"
-                        placeholder="Search"
+                        placeholder="Search for Deals"
                         id = "searchbarinput"
                         defaultValue = {this.props.searchTerm}
                     />
-                    <button className="search_Button"><i className="fas fa-search fa-lg" id="white"></i></button>
+                    <button className="search_Button"><i className="fas fa-search fa-lg" id="searchbarButton"></i></button>
                 </form>
             </div>
         )

@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import "./DealItem.css";
+import "./DealItemMobile.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import LoadingSpinner from "../../../components/UI/LoadingSpinner";
 import {
   _loadDealItem,
   handleFirstNameInput,
@@ -12,13 +15,16 @@ import {
   handleCityInput,
   handleZipcodeInput,
   handleShippingStateInput,
+  handleShippingEmail,
+  handleShippingPhoneNumber,
   handleSelectedCrypto,
   handleDetailStep,
   handleShippingStep,
   handlePayingStep
 } from "../../../actions/dealItemActions";
-import { resetListDeal } from "../../../actions/listDealActions";
-import { _fetchTransactionInfo } from "../../../actions/paymentActions";
+import { resetListDeal, editListing, resetEditListing, _deleteDeal, openDeleteAlertModal, closeDeleteAlertModal } from "../../../actions/listDealActions";
+import { _fetchTransactionInfo, _fetchGuestTransactionInfo } from "../../../actions/paymentActions";
+import { _executePayPalPayment } from "../../../actions/paypalActions";
 import { _createChatSession } from "../../../actions/chatActions";
 import { Carousel } from "react-responsive-carousel";
 import ItemDescription from "../ItemDescription";
@@ -29,21 +35,45 @@ import { _isLoggedIn } from "../../../actions/loggedInActions";
 import { _loadReviews } from "../../../actions/reviewsActions";
 import { _loadProfile } from "../../../actions/userLoadActions";
 import { EditorState, convertFromRaw } from "draft-js";
+import AlertModal from "../../../components/UI/Alert";
+import queryString from 'query-string';
 
 class DealItem extends Component {
   componentDidMount = async () => {
+
     //return the param value
     await this.props._isLoggedIn(localStorage.getItem("token"));
 
     // if (await this.props.userLoggedIn) {
-      const { deal_name, id } = await this.props.match.params;
-      await this.props._loadDealItem(id, deal_name);
+    const { deal_name, id } = await this.props.match.params;
+    await this.props._loadDealItem(id, deal_name);
 
-      let seller_id =
-        this.props.dealItem.seller_id || this.props.dealItem.venue_id;
-      await this.props._loadReviews(seller_id);
-      await this.props._loadProfile(localStorage.getItem("token"));
+    let seller_id =
+      this.props.dealItem.seller_id || this.props.dealItem.venue_id;
+    await this.props._loadReviews(seller_id);
+    await this.props._loadProfile(localStorage.getItem("token"));
 
+
+    if (this.props.dealEdited.success && !this.props.editingDeal) {
+
+      toast.success(this.props.dealEdited.message, {
+        position: toast.POSITION.TOP_RIGHT
+      });
+
+      //reset editing deal reducer
+      this.props.resetEditListing();
+    }
+
+    //execute paypal payment when redirects from paypal
+    let paypalValues = queryString.parse(this.props.location.search);
+    let paymentId = paypalValues.paymentId;
+    let payerId = paypalValues.PayerID;
+    if (this.props.userLoggedIn && paymentId) {
+      let user_email = this.props.user_info[0].email;
+      await this.props._executePayPalPayment(localStorage.getItem("token"), payerId, paymentId, id, deal_name, user_email);
+      await this.handleBuyNowButton();
+      await this.props.history.push("/profile");
+    }
 
     // }else{
     //     // localStorage.removeItem('token');
@@ -51,7 +81,6 @@ class DealItem extends Component {
     // }
 
   }
-
 
   //set the options to select crypto from
   //this function is needed to change the format of objects to be able to used for react select
@@ -72,7 +101,7 @@ class DealItem extends Component {
   };
 
   convertToPercentage = (priceInDollar, priceInCrypto) => {
-    return parseInt(((priceInDollar - priceInCrypto) / priceInDollar) * 100);
+    return Math.ceil(((priceInDollar - priceInCrypto) / priceInDollar) * 100);
   };
 
   timeInMilliseconds = sec => {
@@ -88,7 +117,9 @@ class DealItem extends Component {
       zipcode,
       shippingState,
       firstName,
-      lastName
+      lastName,
+      email,
+      phoneNumber
     } = this.props;
 
     //info needed to insert into user_purchases table
@@ -99,30 +130,65 @@ class DealItem extends Component {
     let crypto_name = selectedOption.name;
     let token = localStorage.getItem("token");
 
-    this.props._fetchTransactionInfo(
-      crypto_name,
-      crypto_symbol,
-      deal_id,
-      amount,
-      token,
-      shippingAddress,
-      shippingCity,
-      zipcode,
-      shippingState,
-      firstName,
-      lastName
-    );
+    if(this.props.userLoggedIn){
+      this.props._fetchTransactionInfo(
+        crypto_name,
+        crypto_symbol,
+        deal_id,
+        amount,
+        token,
+        shippingAddress,
+        shippingCity,
+        zipcode,
+        shippingState,
+        firstName,
+        lastName
+      );
+    }else{
+      this.props._fetchGuestTransactionInfo(
+        crypto_name,
+        crypto_symbol,
+        deal_id,
+        amount,
+        shippingAddress,
+        shippingCity,
+        zipcode,
+        shippingState,
+        firstName,
+        lastName,
+        email,
+        phoneNumber
+      );
+    }
+
   };
 
   handleShipmentValidation = () => {
-    const validateNewInput = {
-      enteredFirstname: this.props.firstName,
-      enteredLastname: this.props.lastName,
-      enteredShippingAddress: this.props.shippingAddress,
-      enteredShippingCity: this.props.shippingCity,
-      enteredZipcode: this.props.zipcode,
-      selectedShippingState: this.props.shippingState
-    };
+
+    let validateNewInput;
+    if (this.props.userLoggedIn) {
+      validateNewInput = {
+        enteredFirstname: this.props.firstName,
+        enteredLastname: this.props.lastName,
+        enteredShippingAddress: this.props.shippingAddress,
+        enteredShippingCity: this.props.shippingCity,
+        enteredZipcode: this.props.zipcode,
+        selectedShippingState: this.props.shippingState.value,
+      };
+    } else {
+      validateNewInput = {
+        enteredFirstname: this.props.firstName,
+        enteredLastname: this.props.lastName,
+        enteredShippingAddress: this.props.shippingAddress,
+        enteredShippingCity: this.props.shippingCity,
+        enteredZipcode: this.props.zipcode,
+        selectedShippingState: this.props.shippingState.value,
+        enteredEmail: this.props.email,
+        enteredPhoneNumber: this.props.phoneNumber,
+      };
+    }
+
+
     let isDataValid = false;
 
     if (
@@ -133,27 +199,29 @@ class DealItem extends Component {
       isDataValid = true;
     } else {
       document.getElementById(
-        "shipping-firstname-error"
-      ).innerHTML = this._validationErrors(validateNewInput).firstNameValMsg;
+        "shipping-firstname"
+      ).classList.add("shipping-error");
       document.getElementById(
-        "shipping-lastname-error"
-      ).innerHTML = this._validationErrors(validateNewInput).lastNameValMsg;
+        "shipping-lastname"
+      ).classList.add("shipping-error");
       document.getElementById(
-        "shipping-address-error"
-      ).innerHTML = this._validationErrors(
-        validateNewInput
-      ).shippingAddressValMsg;
+        "shipping-address"
+      ).classList.add("shipping-error");
       document.getElementById(
-        "shipping-city-error"
-      ).innerHTML = this._validationErrors(validateNewInput).shippingCityValMsg;
+        "shipping-city"
+      ).classList.add("shipping-error");
       document.getElementById(
-        "shipping-zipcode-error"
-      ).innerHTML = this._validationErrors(validateNewInput).zipcodeValMsg;
+        "shipping-zipcode"
+      ).classList.add("shipping-error");
       document.getElementById(
-        "shipping-state-error"
-      ).innerHTML = this._validationErrors(
-        validateNewInput
-      ).shippingStateValMsg;
+        "shipping-state"
+      ).classList.add("shipping-state-error");
+
+      if (!this.props.userLoggedIn) {
+        document.getElementById("shipping-email").classList.add("shipping-error");
+        document.getElementById("shipping-phone-number").classList.add("shipping-error");
+      }
+
     }
 
     return isDataValid;
@@ -184,25 +252,15 @@ class DealItem extends Component {
 
   _validationErrors(val) {
     const errMsgs = {
-      firstNameValMsg: val.enteredFirstname
-        ? null
-        : "Please enter your first name",
-      lastNameValMsg: val.enteredLastname
-        ? null
-        : "Please enter your last name",
-      shippingAddressValMsg: val.enteredShippingAddress
-        ? null
-        : "Please enter your shipping address",
-      shippingCityValMsg: val.enteredShippingCity
-        ? null
-        : "Please enter your shipping city",
-      zipcodeValMsg: val.enteredZipcode ? null : "Please enter your zip code",
-      shippingStateValMsg: val.selectedShippingState
-        ? null
-        : "Please select your state",
       selectedPaymentValMsg: val.selectedPaymentOption
         ? null
-        : "Please select your payment option"
+        : "Please select your payment option",
+      shippingEmailValMsg: val.enteredEmail
+        ? null
+        : "Please enter your email",
+      shippingPhoneNumberValMsg: val.enteredPhoneNumber
+        ? null
+        : "Please enter your phone number"
     };
 
     return errMsgs;
@@ -246,7 +304,7 @@ class DealItem extends Component {
         }
       }
     }
-    
+
     return result;
   };
 
@@ -271,7 +329,54 @@ class DealItem extends Component {
     );
   };
 
+  handleDeleteDeal = () => {
+    let {deal_id} = this.props.dealItem;
+    this.props._deleteDeal(localStorage.getItem("token"), deal_id)
+  }
+
+  handleDeletedDeal = () => {
+    if (this.props.dealDeleted) {
+      this.props.resetListDeal();
+      this.props.history.push(
+        `/listdeal`
+      );
+    }
+  }
+
+  handleBuyNowButton = () => {
+    const {deal_status, phone_number_verified} = this.props.dealItem;
+    const {paypal_excecute_payment, paypal_excecute_payment_loading} = this.props;
+
+    switch (true) {
+      case paypal_excecute_payment_loading:
+        return (
+          <div style={{marginTop: "10px"}}><LoadingSpinner /></div>
+        );
+      case deal_status === "reserved":
+        return (
+          <button disabled>Waiting for Payment</button>
+        );
+      case deal_status === "sold":
+        return (
+          <button disabled>Sold</button>
+        );
+      case phone_number_verified === 0:
+        return (
+          <button>Verify Your Phone Number</button>
+        );
+      case paypal_excecute_payment && paypal_excecute_payment.success === true:
+        return (
+          <button disabled>Sold</button>
+        );
+      default:
+        return <button>Buy Now</button>
+    }
+  };
+
   render() {
+    //If media query matches
+    const mobileScreenSize = window.matchMedia("(max-width: 640px)")
+
     const { //state
             error,
             deal_item_loading,
@@ -285,15 +390,20 @@ class DealItem extends Component {
             shippingCity,
             zipcode,
             shippingState,
+            email,
+            phoneNumber,
             selectedOption,
             transaction_loading,
             paymentInfo,
+            transaction_status,
             createPaymentButtonClicked,
             showDetailStep,
             showShippingStep,
             showPayingStep,
             user_info,
             userLoggedIn,
+            dealDeleted,
+            alertDeleteModalVisible,
 
             //actions
             handleFirstNameInput,
@@ -303,72 +413,35 @@ class DealItem extends Component {
             handleZipcodeInput,
             handleShippingStateInput,
             handleSelectedCrypto,
-
+            handleShippingEmail,
+            handleShippingPhoneNumber,
             handleDetailStep,
             handleShippingStep,
             handlePayingStep,
+            editListing,
+            openDeleteAlertModal,
+            closeDeleteAlertModal,
+            resetListDeal
             } = this.props;
-
-    console.log("line 268", userLoggedIn);
 
     if (error) {
       return <div>Error! {error.message}</div>;
     }
     if (deal_item_loading) {
-      return <div>Loading...</div>;
+      return <div className="page-loading"><LoadingSpinner /></div>
     }
-
-    console.log("user info", user_info);
 
     //if user is redirected from the deal created page after deal is created
     if (this.props.dealCreated.deal_id) {
       this.props.resetListDeal();
     }
 
+
     return (
       <div className="pt-5">
         <Layout>
           <div>
             <div className="deal-container">
-              {/* <div className="deal-header">
-
-              <div className="deal-item-header">
-                <div className="deal-item-name">
-                  <strong>{dealItem && dealItem.deal_name}</strong> <br/>
-                  <small> Offered By: {dealItem && dealItem.venue_name || dealItem && dealItem.seller_name}</small> <br/>
-                </div>
-                <div className="deal-item-cost">
-                  <strong>Pay in Crypto:  ${dealItem && dealItem.pay_in_crypto.toFixed(2)}</strong>  <small className="deal-item-discount">
-                  {dealItem && this.convertToPercentage(dealItem.pay_in_dollar, dealItem.pay_in_crypto)}% OFF</small> <br/>
-                  <small>Pay in Dollar:  ${dealItem && dealItem.pay_in_dollar.toFixed(2)} <br/></small>
-                </div>
-              </div>
-
-              <div className="deal-item-summary">
-
-                  <div className="customize-item-shipping">
-                    <strong>Shipping</strong> <br/>
-                    <small>{fullName}</small> <br/>
-                    <small>{shippingAddress}</small> <br/>
-                    <small>{shippingCity} </small>
-                    <small>{shippingState} </small>
-                    <small>{zipcode}</small>
-                  </div>
-
-                  <div className="customize-item-payment">
-                    <div className="crypto_logo">
-                      <strong>Crypto Payment</strong> <br/>
-                      {selectedOption ?  <img src={selectedOption.logo} alt="cryptoLogo" /> :
-                      <div>
-                        Powered By
-                        <img style={{width: "100px", marginTop: "0px"}} src="../../../assets/images/coin_payment.png" alt="coinpayment_logo"/>
-                      </div>
-                       }
-                    </div>
-                  </div>
-              </div>
-            </div> */}
-
               {/* classname is ui steps indiate using sematic ui */}
               <div className="ui three steps">
                 <a
@@ -385,7 +458,7 @@ class DealItem extends Component {
                 </a>
                 <a
                   onClick={() => handleShippingStep()}
-                  className={showShippingStep ? "active step" : "step"}
+                  className={dealItem && dealItem.deal_status === "available" ? showShippingStep ? "active step" : "step" : "step disabled"}
                 >
                   <i className="truck icon" />
                   <div className="content">
@@ -405,8 +478,8 @@ class DealItem extends Component {
                     (!showShippingStep && showDetailStep
                       ? "disabled"
                       : showPayingStep
-                      ? "active"
-                      : "")
+                        ? "active"
+                        : "")
                   }
                 >
                   <i className="shopping cart icon" />
@@ -418,9 +491,14 @@ class DealItem extends Component {
               </div>
             </div>
 
-            <div className="deal-listing-content">
-              <div className="deal-images-container">
-                <Carousel className="react-carousel" showStatus={false}>
+            <div className="deal-item-content">
+            {/* mobileScreenSize && showShippingStep || mobileScreenSize && showPayingStep ? "mob-carousel-hidden" : */}
+              <div
+               id={mobileScreenSize && showShippingStep || mobileScreenSize && showPayingStep ? "mob-carousel-hidden" : null}
+               className={!userLoggedIn && showShippingStep ?  "guest-images-container" : "deal-images-container"}>
+                <Carousel
+                  className="react-carousel"
+                  showStatus={false}>
                   {dealItem &&
                     dealItem.deal_image.map((img, i) => (
                       <div key={i} className="deal-item-image">
@@ -437,6 +515,7 @@ class DealItem extends Component {
                       //another way to pass in props using spread operator
                       {...dealItem}
                       {...reviews}
+                      buyNowButtonHandler={this.handleBuyNowButton}
                       sellerDealDescription={this.loadDescription}
                       next_step={handleShippingStep}
                       rating_display={this.ratingDisplay}
@@ -453,15 +532,20 @@ class DealItem extends Component {
                       handle_ShippingCity={handleCityInput}
                       handle_ShippingZipcode={handleZipcodeInput}
                       handle_ShippingState={handleShippingStateInput}
+                      handle_ShippingEmail={handleShippingEmail}
+                      handle_ShippingPhoneNumber={handleShippingPhoneNumber}
                       showShippingFirstName={firstName}
                       showShippingLastName={lastName}
                       showShippingAddress={shippingAddress}
                       showShippingCity={shippingCity}
                       showShippingState={shippingState}
                       showShippingZipcode={zipcode}
+                      showShippingEmail={email}
+                      showShippingPhoneNumber={phoneNumber}
                       next_step={handlePayingStep}
                       previous_step={handleDetailStep}
                       validateShipmentData={this.handleShipmentValidation}
+                      user_status={userLoggedIn ? "user" : "guest"}
                     />
                   )}
 
@@ -486,18 +570,23 @@ class DealItem extends Component {
                       shipping_city={shippingCity}
                       zip_code={zipcode}
                       shipping_state={shippingState}
+                      email={email}
+                      phoneNumber={phoneNumber}
                       showLoadingSpinner={transaction_loading}
                       timeout={
                         paymentInfo &&
                         this.timeInMilliseconds(paymentInfo.timeout)
                       }
+                      isLoggedin = {userLoggedIn}
                     />
                   )}
                 </div>
               </div>
             </div>
 
-            <div className="sellers-reviews">
+            <div
+              id={mobileScreenSize && showShippingStep || mobileScreenSize && showPayingStep ? "mob-reviews-hidden" : null}
+              className="sellers-reviews">
               <div id="seller-review-label">Seller</div>
 
               <div id="seller-profile-rating">
@@ -507,7 +596,7 @@ class DealItem extends Component {
                       <i
                         className={
                           "fas py-3 px-4 user-icon-navbar " +
-                          this.props.photo.photo
+                          this.props.sellerPhoto
                         }
                       />
                     </div>
@@ -523,20 +612,37 @@ class DealItem extends Component {
                     </div>
                   </div>
 
+
                   {user_info.length > 0 &&
                   dealItem &&
-                  user_info[0].id === dealItem.seller_id ? null : (
-                    <Link to={"/chat"}>
-                      <div id="message-seller" className="px-3">
-                        <button onClick={this.messageSeller} className="mt-3">
-                          Message Seller
+                  user_info[0].id === dealItem.seller_id ?
+                  dealItem.deal_status === "available" ?
+                  <div>
+                    <Link to={"/listdeal"}>
+                      <div className="px-3 message-seller">
+                        <button onClick={() => editListing(dealItem, acceptedCryptos)} className="mt-3">
+                        Edit Listing
                         </button>
                       </div>
                     </Link>
-                  )}
+                    <div className="px-3 message-seller">
+                      <button style={{backgroundColor: "#9b0739"}} onClick={openDeleteAlertModal} className="mt-3">
+                          Delete Listing
+                      </button>
+                    </div>
+                  </div> : null :
+                  (
+                    <Link to={"/chat"}>
+                      <div className="px-3 message-seller">
+                        <button onClick={this.messageSeller} className="mt-3">
+                          Message Seller
+                        </button>
+                        </div>
+                      </Link>
+                    )}
                 </div>
 
-                <div id="seller-review-rating">
+                <div id={mobileScreenSize && showShippingStep || mobileScreenSize && showPayingStep ? "mob-reviews-hidden" : "seller-review-rating"}>
                   <div>
                     Seller's Average Rating
                     <small className="star-space-right">
@@ -549,61 +655,68 @@ class DealItem extends Component {
                   <label>Reviews</label>
                   <div id="seller-reviews-container">
                     {reviews.allReviews !== undefined &&
-                    reviews.allReviews.length > 0 ? (
-                      reviews.allReviews.map(reviews => (
-                        <div key={reviews.review_id} className="review-box">
-                          <div className="review-header-container">
-                            <div className="review-header">
-                              <div className="buyer-review-avatar">
-                                <i
-                                  className={
-                                    "fas py-2 px-3 user-icon-navbar " +
-                                    reviews.buyer_photo
-                                  }
-                                />
+                      reviews.allReviews.length > 0 ? (
+                        reviews.allReviews.map(reviews => (
+                          <div key={reviews.review_id} className="review-box">
+                            <div className="review-header-container">
+                              <div className="review-header">
+                                <div className="buyer-review-avatar">
+                                  <i
+                                    className={
+                                      "fas py-2 px-3 user-icon-navbar " +
+                                      reviews.buyer_photo
+                                    }
+                                  />
+                                </div>
+                                <div>
+                                  <strong className="text-secondary">
+                                    {reviews.buyer_name}
+                                  </strong>
+                                  <small className="star-buyer">
+                                    {this.ratingDisplay(reviews.rating)}
+                                  </small>
+                                </div>
+                                {/* {reviews.buyer_name} purchased {reviews.deal_name} */}
                               </div>
-                              <div>
-                                <strong className="text-secondary">
-                                  {reviews.buyer_name}
-                                </strong>
-                                <small className="star-buyer">
-                                  {this.ratingDisplay(reviews.rating)}
-                                </small>
-                              </div>
-                              {/* {reviews.buyer_name} purchased {reviews.deal_name} */}
+                              <small className="buyer-review-date">
+                                {reviews.rating_date_reviewed.substring(0, 10)}
+                              </small>
                             </div>
-                            <small className="buyer-review-date">
-                              {reviews.rating_date_reviewed.substring(0, 10)}
+
+                            <div>
+                              <div className="text-secondary">
+                                {reviews.rating_title}{" "}
+                              </div>
+                            </div>
+
+                            <div className="review-body">
+                              {reviews.rating_body}
+                            </div>
+
+                            <small>
+                              <a href="/">Report abuse</a>
                             </small>
+                            <hr />
                           </div>
-
-                          <div>
-                            <div className="text-secondary">
-                              {reviews.rating_title}{" "}
-                            </div>
-                          </div>
-
-                          <div className="review-body">
-                            {reviews.rating_body}
-                          </div>
-
-                          {/* <small>
-                            <a href="/">Report abuse</a>
-                          </small> */}
-                          <hr />
-                        </div>
-                      ))
-                    ) : (
-                      <div className="text-secondary">
-                        This seller has no reviews yet!
+                        ))
+                      ) : (
+                        <div className="text-secondary">
+                          This seller has no reviews yet!
                       </div>
-                    )}
+                      )}
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </Layout>
+        <ToastContainer autoClose={5000} />
+        <AlertModal
+            deleteModalVisible={alertDeleteModalVisible}
+            closeDeleteModal={closeDeleteAlertModal}
+            deleteListing={this.handleDeleteDeal}
+            deletedDealHandling = {this.handleDeletedDeal}
+        />
       </div>
     );
   }
@@ -612,6 +725,7 @@ class DealItem extends Component {
 const mapStateToProps = state => ({
   dealItem: state.DealItem.dealItem,
   reviews: state.Reviews.reviews,
+  sellerPhoto: state.Reviews.sellerPhoto,
   acceptedCryptos: state.DealItem.acceptedCryptos,
   firstName: state.DealItem.firstName,
   lastName: state.DealItem.lastName,
@@ -619,9 +733,12 @@ const mapStateToProps = state => ({
   shippingCity: state.DealItem.shippingCity,
   zipcode: state.DealItem.zipcode,
   shippingState: state.DealItem.shippingState,
+  email: state.DealItem.email,
+  phoneNumber: state.DealItem.phoneNumber,
   selectedOption: state.DealItem.selectedOption,
   allStates: state.DealItem.states,
   paymentInfo: state.TransactionInfo.transactionInfo,
+  transaction_status: state.TransactionInfo.deal_status,
   createPaymentButtonClicked: state.TransactionInfo.createPaymentButtonClicked,
   transaction_loading: state.TransactionInfo.loading,
   deal_item_loading: state.DealItem.loading,
@@ -632,7 +749,16 @@ const mapStateToProps = state => ({
   showPayingStep: state.DealItem.showPayingStep,
   dealCreated: state.CreateDeal.dealCreated,
   photo: state.Photo,
-  user_info: state.UserInfo.user_info
+  user_info: state.UserInfo.user_info,
+  dealEdited: state.CreateDeal.dealEdited,
+  editingDeal: state.CreateDeal.editingDeal,
+  dealDeleted: state.CreateDeal.dealDeleted,
+  deletingDealLoading: state.CreateDeal.deletingDealLoading,
+  deletingDealError: state.CreateDeal.deletingDealError,
+  alertDeleteModalVisible: state.CreateDeal.alertDeleteModalVisible,
+  paypal_excecute_payment: state.TransactionInfo.paypal_excecute_payment,
+  paypal_excecute_payment_loading: state.TransactionInfo.paypal_excecute_payment_loading,
+  paypal_excecute_payment_error: state.TransactionInfo.paypal_excecute_payment_error
 });
 
 const matchDispatchToProps = dispatch => {
@@ -641,12 +767,15 @@ const matchDispatchToProps = dispatch => {
       _loadReviews,
       _loadDealItem,
       _fetchTransactionInfo,
+      _fetchGuestTransactionInfo,
       handleFirstNameInput,
       handleLastNameInput,
       handleAddressInput,
       handleCityInput,
       handleZipcodeInput,
       handleShippingStateInput,
+      handleShippingEmail,
+      handleShippingPhoneNumber,
       handleSelectedCrypto,
       handleDetailStep,
       handleShippingStep,
@@ -654,7 +783,13 @@ const matchDispatchToProps = dispatch => {
       _isLoggedIn,
       resetListDeal,
       _createChatSession,
-      _loadProfile
+      _loadProfile,
+      editListing,
+      _deleteDeal,
+      resetEditListing,
+      openDeleteAlertModal,
+      closeDeleteAlertModal,
+      _executePayPalPayment
     },
     dispatch
   );

@@ -62,7 +62,7 @@
     /* flex-shrink: 0; */
     background-color: white;
     font-family: 'Lato', sans-serif;
-    
+
 }
 
 
@@ -91,12 +91,12 @@
     transition: 0.6s ease;
     overflow: hidden;
     position: absolute;
-    
+
   }
 
   .category-image:hover {
     /* -ms-transform: scale(1.1); IE 9 */
-    /* -webkit-transform: scale(1.1); Safari 3-8 */ 
+    /* -webkit-transform: scale(1.1); Safari 3-8 */
     /* transform: scale(1.02); */
     /* overflow: hidden; */
     -webkit-transform: scale(1.2);
@@ -128,7 +128,7 @@
 
 
 
-.carousel-item > img { 
+.carousel-item > img {
   /* width: 100%; */
   height: 300px;
   margin: 0 auto;
@@ -140,6 +140,16 @@
     transition: transform 0.5s ease, -webkit-transform 0.5s ease;
     -webkit-backface-visibility: visible;
     backface-visibility: visible;
+}
+
+.carousel-item::after {
+  display: block;
+  position: relative;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.356), rgba(20, 10, 5, 0.657));
+  margin-top: -250px;
+  height: 200px;
+  width: 100%;
+  content: '';
 }
 
 
@@ -193,3 +203,35 @@
     font-weight: bold;
     font-size: 14px;
 }
+
+.deal-status {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  background-color: #2e4157;
+  color: #fff;
+  font-weight: 700;
+
+  text-align: center;
+}
+
+.deal-status div {
+  padding: 5px;
+}
+
+.carousel-caption {
+  bottom: 50px;
+  color: #fff;
+  font-family: Roboto,sans-serif;
+  font-size: 20px;
+}
+
+.carousel-caption h3 {
+  font-size: 2.75rem;
+}
+
+.carousel-caption p {
+  font-weight: 500;
+}
+
+

@@ -91,7 +91,6 @@ class Chat extends Component {
   render() {
     const {
       chat_sessions,
-      chat_sessions_loading,
       _loadChatSessions,
       chat_messages,
       _loadChatMessages,

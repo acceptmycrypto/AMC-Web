@@ -16,19 +16,19 @@
 
       <mj-column>
 
-        <mj-text color="#fff" font-size="15px" align="center" line-height="15px">
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="15px">
           Your payment of <%=amount%> <%=crypto_symbol%> for <%=deal_name%> has timed out without us receiving the required funds.
         </mj-text>
 
-        <mj-text color="#fff" font-size="15px" align="center" line-height="15px">
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="15px">
          The transaction with ID <%=txn_id%> has been cancelled.
         </mj-text>
 
-        <mj-text color="#fff" font-size="15px" align="center" line-height="15px">
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="15px">
          If you sent funds that didn't confirm in time to complete the transaction, they will still need to confirmation on the blockchain before we can return them to you. Only after it has been confirmed on the blockchain will you receive an email within 8 hours with a link to claim the refund.
         </mj-text>
 
-        <mj-text color="#fff" font-size="15px" align="center" line-height="15px">
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="15px">
          If you don't receive the email 8 hours AFTER getting confirmations or need any help or assistance feel free to contact us at
         </mj-text>
 

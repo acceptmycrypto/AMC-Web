@@ -56,15 +56,9 @@ class ResetPasswordEmail extends Component {
       return <div>Error! {error.message}</div>;
     }
 
-    if (loading) {
-      return <div>Loading...</div>;
-    }
+   //If media query matches
+   const mobileScreenSize = window.matchMedia("(max-width: 640px)")
 
-    // console.log("This.props" , this.props);
-
-    // if (localStorage.getItem('token')) {
-    //   this.props.history.push('/feed/deals');
-    // }
     return (
       <div className="App">
         <Aside />
@@ -111,8 +105,8 @@ class ResetPasswordEmail extends Component {
                   back to sign in
                 </Link>
               </div>
-              <Modal visible={visible} effect="fadeInLeft" onClickAway={() => {this.props.closeModal(); }}>
-                <div className="Modal">
+              <Modal width={mobileScreenSize.matches && "85%"} visible={visible} effect="fadeInLeft" onClickAway={() => {this.props.closeModal(); }}>
+                <div className={mobileScreenSize.matches ? "mob-modal" : "Modal"}>
                   <h4>Please check your email to reset password.</h4>
                   <a className="a-link" href="javascript:void(0);" onClick={() => {this.props.closeModal(); }}>Ok</a>
 

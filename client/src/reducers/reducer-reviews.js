@@ -29,7 +29,8 @@ const initialState = {
     reviewedSellerSuccess: null,
     reviewedSellerError: false,
     rating: null,
-    review_body: null
+    review_body: null,
+    sellerPhoto: null
   };
 
 export default function reviewReducer(state = initialState, action) {
@@ -46,7 +47,8 @@ export default function reviewReducer(state = initialState, action) {
         return {
           ...state,
           loading: false,
-          reviews: action.payload.reviews
+          reviews: action.payload.reviews,
+          sellerPhoto: action.payload.sellerPhoto
         };
 
       case FETCH_REVIEWS_FAILURE:

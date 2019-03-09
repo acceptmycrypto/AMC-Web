@@ -33,3 +33,44 @@ export const fetchDealsFailure = error => ({
   type: "FETCH_DEALS_FAILURE",
   payload: { error }
 });
+
+export const editTrackingNumber = event => ({
+  type: "EDIT_TRACKING_NUMBER",
+  payload: event.target.value
+});
+
+export function updateTrackingNumber(token, txn_id, trackingNumber) {
+  const settings = {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({token, txn_id, trackingNumber})
+  };
+
+  return dispatch => {
+    dispatch(trackingNumberBegin());
+    return fetch("/update_tracking_number", settings)
+      .then(res => res.json())
+      .then(jsonRes => {
+        dispatch(trackingNumberSuccess(jsonRes));
+        return jsonRes;
+      })
+      .catch(error => dispatch(trackingNumberFailure(error)));
+  };
+}
+
+export const trackingNumberBegin = () => ({
+  type: "UPDATE_TRACKING_NUMBER_BEGIN"
+});
+
+export const trackingNumberSuccess = res => ({
+  type: "UPDATE_TRACKING_NUMBER_SUCCESS",
+  payload: res
+});
+
+export const trackingNumberFailure = error => ({
+  type: "UPDATE_TRACKING_NUMBER_FAILURE",
+  payload: { error }
+});

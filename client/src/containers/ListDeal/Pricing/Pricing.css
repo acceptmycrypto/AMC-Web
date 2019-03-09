@@ -19,7 +19,7 @@
 
 .select-crypto-for-deal {
   display: flex;
-  min-height: 375px;
+  min-height: 315px;
   box-sizing: border-box;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   border-radius: 5px;
@@ -82,8 +82,59 @@
 
 .pricing-footer-note {
   position: relative;
-  top: 30px;
+  top: 20px;
   font-size: 1em;
+}
+
+.shipment-options{
+  display: flex;
+  min-height: 300px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 5px;
+  padding: 20px;
+  /* padding-left: 40px; */
+  margin: 20px 10px 10px 50px;
+  position: relative;
+ 
+  /* margin-top: 30px; */
+}
+.pricing-options{
+  display: flex;
+  min-height: 300px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 5px;
+  padding: 20px;
+  margin: 20px 50px 10px 10px;
+  position: relative;
+}
+
+
+.shipping-font{
+  font-size: 17px;
+  padding-bottom: 10px;
+}
+
+.small-shipping-font{
+  border-top: 1px solid grey;
+  padding-top: 10px;
+  font-size: 13px;
+  width: 300px;
+}
+
+.weight-font{
+  font-size: 17px;
+}
+
+
+/* .shipping-margin-left{
+  margin-left: 125px; 
+
+} */
+
+input[name="shipmentOption"]{
+    margin-bottom: 10px;
 }
 
 .create-deal-discount-percent {
@@ -223,3 +274,77 @@
   font-size: 12px;
 }
 
+.shipping-option-modal{
+  width: 750px;
+  height: 490px;
+  background-color: #2E4158;
+  border: solid #199087 .5em;
+  padding: 25px;
+  display: block;
+  text-transform: uppercase;
+  color: white;
+}
+
+.shipping-weight-title{
+  text-transform: none;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.weight-option-button{
+  background-color: rgb(22, 190, 182);
+  color: white;
+  border: none;
+  outline: none;
+  padding: 10px 25px;
+  font-size: 1em;
+  font-weight: 500;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: 700;
+  position: relative;
+  bottom: -25px;
+  /* margin-top: 140px; */
+}
+
+.w-60{
+  width: 60%;
+}
+
+.w-40{
+  width: 40%;
+}
+
+.weightOption { 
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* IMAGE STYLES */
+.weightOption + div{
+  cursor: pointer;
+  border: thin solid rgba(79, 102, 129, 0.753);
+  border-radius: 5px;
+  width: 100px;
+  height: 90px;
+}
+
+/* CHECKED STYLES */
+.weightOption:checked + div{
+  border: 2px solid #199087;
+  
+}
+
+#shipping-previous{
+  position: absolute;
+  bottom: 60px;
+  left: 10px;
+}
+
+#shipping-next{
+  position: absolute;
+  bottom: 60px;
+  right: 10px;
+}

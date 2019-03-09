@@ -11,6 +11,8 @@ import {
   handleSelectedCondition,
   closeModalAfterDealCreated,
   onEditPhoneNumber,
+  onEditSellerFirstname,
+  onEditSellerLastname,
   onEditSellerAddress,
   onEditSellerCity,
   onEditSellerState,
@@ -46,9 +48,11 @@ class Description extends Component {
   };
 
   //We have access to history props from withRouter
-  directToDealItemPage = () => {
+  directToDealItemPage = (deal_id, deal_name) => {
     this.props.history.push(
-      `/feed/deals/${this.props.dealCreatedResult.deal_id}/${this.props.dealNameValue}`
+      `/feed/deals/${deal_id}/${
+        deal_name
+      }`
     );
   };
 
@@ -56,6 +60,8 @@ class Description extends Component {
     event.preventDefault();
 
     const {
+      sellerFirstname,
+      sellerLastname,
       phoneNumber,
       sellerAddress,
       sellerCity,
@@ -64,10 +70,14 @@ class Description extends Component {
     } = this.props;
 
     if (!sellerState) {
-      document.querySelector("#sellerState").classList.add("create-deal-select-error");
+      document
+        .querySelector("#sellerState")
+        .classList.add("create-deal-select-error");
     } else {
       this.props._startVerificationForSeller(
         localStorage.getItem("token"),
+        sellerFirstname,
+        sellerLastname,
         phoneNumber,
         sellerAddress,
         sellerCity,
@@ -91,7 +101,11 @@ class Description extends Component {
       sendingCode,
       sendingCodeSuccess,
       onEditPhoneNumber,
+      sellerFirstname,
+      sellerLastname,
       phoneNumber,
+      onEditSellerFirstname,
+      onEditSellerLastname,
       onEditSellerAddress,
       sellerAddress,
       onEditSellerCity,
@@ -161,47 +175,49 @@ class Description extends Component {
 
             <Link
               className="create-deal-modal-link"
-              style={{ textDecoration: 'none' }}
+              style={{ textDecoration: "none" }}
               to={`/feed/deals/${dealCreatedResult.deal_id}/${dealNameValue}`}
               onClick={() => {
                 closeModalAfterDealCreated();
                 resetDealCreated();
               }}
-              // onClick={resetDealCreated}
+            // onClick={resetDealCreated}
             >
               Show My Listing
             </Link>
           </div>
         );
       case checkingCodeSuccess.success === false:
-
-      return (
-        <form
-          onSubmit={this.onVerificationResult}
-          className="creating-deal-seller-verification"
-        >
-          <h4 className="creating-deal-modal-header">
-            To protect our community, we need to verify all sellers.{" "}
-            <i class="fa fa-question-circle" aria-hidden="true" />
-          </h4>
-          <div className="creating-deal-seller-contact">
-            <label>Incorrect Verification Code. Please Enter the Code We Texted You.</label>
-            <div>
-              <input
-                onChange={onEditSellerVerificationToken}
-                value={sellerVerificationToken}
-                required
-                className="description-input"
-                autofocus="autofocus"
-                placeholder="Enter your verification code"
-              />
+        return (
+          <form
+            onSubmit={this.onVerificationResult}
+            className="creating-deal-seller-verification"
+          >
+            <h4 className="creating-deal-modal-header">
+              To protect our community, we need to verify all sellers.{" "}
+              <i class="fa fa-question-circle" aria-hidden="true" />
+            </h4>
+            <div className="creating-deal-seller-contact">
+              <label>
+                Incorrect Verification Code. Please Enter the Code We Texted
+                You.
+              </label>
+              <div>
+                <input
+                  onChange={onEditSellerVerificationToken}
+                  value={sellerVerificationToken}
+                  required
+                  className="description-input"
+                  autofocus="autofocus"
+                  placeholder="Enter your verification code"
+                />
+              </div>
+              <small>A text message with code was sent to your phone.</small>
             </div>
-            <small>A text message with code was sent to your phone.</small>
-          </div>
 
-          <button>Verify</button>
-        </form>
-      );
+            <button>Verify</button>
+          </form>
+        );
       case dealCreatedResult.phone_number_verified === 0:
         return (
           <form
@@ -229,8 +245,36 @@ class Description extends Component {
               <small>We will send you a one-time verification code.</small>
             </div>
 
-            <div className="creating-deal-seller-address">
-              <label>Address Info</label>
+            <div className="d-flex flex-row mb-2">
+              <div className="creating-deal-seller-firstname mr-4">
+                {/* <label>First Name</label> */}
+                <input
+                  onChange={onEditSellerFirstname}
+                  value={sellerFirstname}
+                  type="text"
+                  className="description-input"
+                  autofocus="autofocus"
+                  placeholder="First Name"
+                  required
+                />
+              </div>
+
+              <div className="creating-deal-seller-lastname">
+                {/* <label>Last Name</label> */}
+                <input
+                  onChange={onEditSellerLastname}
+                  value={sellerLastname}
+                  type="text"
+                  className="description-input"
+                  autofocus="autofocus"
+                  placeholder="Last Name"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="creating-deal-seller-address pt-3">
+              {/* <label>Address Info</label> */}
               <input
                 onChange={onEditSellerAddress}
                 value={sellerAddress}
@@ -240,35 +284,36 @@ class Description extends Component {
                 placeholder="Address"
                 required
               />
-              <div className="city-state-zipcode-flex">
-                <input
-                  onChange={onEditSellerCity}
-                  value={sellerCity}
-                  type="text"
-                  className="description-input"
-                  autofocus="autofocus"
-                  placeholder="City"
-                  required
-                />
-                <Select
-                  className="create-deal-select"
-                  id="sellerState"
-                  options={allStates}
-                  placeholder="State"
-                  onChange={onEditSellerState}
-                  value={sellerState}
-                />
-                <input
-                  onChange={onEditSellerZipcode}
-                  value={sellerZipcode}
-                  type="number"
-                  className="description-input create-deal-zipcode-input"
-                  autofocus="autofocus"
-                  placeholder="Zip Code"
-                  required
-                />
-              </div>
             </div>
+            <div className="city-state-zipcode-flex">
+              <input
+                onChange={onEditSellerCity}
+                value={sellerCity}
+                type="text"
+                className="description-input"
+                autofocus="autofocus"
+                placeholder="City"
+                required
+              />
+              <Select
+                className="create-deal-select"
+                id="sellerState"
+                options={allStates}
+                placeholder="State"
+                onChange={onEditSellerState}
+                value={sellerState}
+              />
+              <input
+                onChange={onEditSellerZipcode}
+                value={sellerZipcode}
+                type="number"
+                className="description-input create-deal-zipcode-input"
+                autofocus="autofocus"
+                placeholder="Zip Code"
+                required
+              />
+            </div>
+
 
             <button>Text Me</button>
           </form>
@@ -287,7 +332,7 @@ class Description extends Component {
 
             <Link
               className="create-deal-modal-link"
-              style={{ textDecoration: 'none' }} //make sure the link has no underline
+              style={{ textDecoration: "none" }} //make sure the link has no underline
               to={`/feed/deals/${dealCreatedResult.deal_id}/${dealNameValue}`}
               onClick={() => {
                 closeModalAfterDealCreated();
@@ -303,7 +348,6 @@ class Description extends Component {
   };
 
   render() {
-
     const {
       parentCategory,
       handleSelectedCategory,
@@ -317,7 +361,8 @@ class Description extends Component {
       selectedCategory,
       selectedConditionValue,
       sendingCode,
-      sendingCodeSuccess
+      sendingCodeSuccess,
+      editingDeal
     } = this.props;
 
     const itemCondition = [
@@ -362,7 +407,10 @@ class Description extends Component {
               value={selectedConditionValue}
             />
           </div>
+          
         </div>
+
+    
 
         <div>
           <div className="description-titles detail-title">Details</div>
@@ -391,37 +439,56 @@ class Description extends Component {
           </div>
           <hr className="creating-deal-hr" />
           <div id="deal-listing-step-buttons">
-
             <div className="creating-deal-back-step">
               <button onClick={this.props.showPricingStep}>Previous</button>
             </div>
 
-            <div
-              onClick={() =>
-                this.props.validateDescriptionStep() && this.props.createDeal()
-              }
-              className="creating-deal-next-step submit-listing-deal"
-            >
-              {this.props.loading_dealCreating ? (
+            {editingDeal ? (
+              <div
+                onClick={() =>
+                  {
+                    if (this.props.validateDescriptionStep()) {
+                      this.props.updateDeal();
+                      this.directToDealItemPage(this.props.editingDealId, this.props.dealName);
+                    }
+
+                  }
+                }
+                className="creating-deal-next-step submit-listing-deal"
+              >
+                {this.props.updateEditingLoading ? (
+                  <LoadingSpinner />
+                ) : (
+                  <button>Update Deal</button>
+                )}
+              </div>
+            ) : (
+              <div
+                onClick={() =>
+                  this.props.validateDescriptionStep() &&
+                  this.props.createDeal()
+                }
+                className="creating-deal-next-step submit-listing-deal"
+              >
+                {this.props.loading_dealCreating ? (
                 <LoadingSpinner />
               ) : (
-                <button>Submit Deal</button>
-              )}
-            </div>
+                  <button>Submit Deal</button>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
         <Modal
           visible={modalVisible}
           effect="fadeInUp"
-          // onClickAway={() => {
-          //   closeModalAfterDealCreated();
-          //   this.directToDealItemPage();
-          // }}
+        // onClickAway={() => {
+        //   closeModalAfterDealCreated();
+        //   this.directToDealItemPage();
+        // }}
         >
-          <div className="deal-created-modal">
-            {this.dealCreatedModal()}
-          </div>
+          <div className="deal-created-modal">{this.dealCreatedModal()}</div>
         </Modal>
       </div>
     );
@@ -432,6 +499,8 @@ const mapStateToProps = state => ({
   parentCategory: state.Category.parentCategory,
   modalVisible: state.CreateDeal.modalVisible,
   phoneNumber: state.CreateDeal.phoneNumber,
+  sellerFirstname: state.CreateDeal.sellerFirstname,
+  sellerLastname: state.CreateDeal.sellerLastname,
   sellerAddress: state.CreateDeal.sellerAddress,
   sellerCity: state.CreateDeal.sellerCity,
   sellerState: state.CreateDeal.sellerState,
@@ -443,8 +512,13 @@ const mapStateToProps = state => ({
   sellerVerificationToken: state.CreateDeal.sellerVerificationToken,
   checkingCodeLoading: state.CreateDeal.checkingCodeLoading,
   checkingCodeSuccess: state.CreateDeal.checkingCodeSuccess,
-  checkingCodeError: state.CreateDeal.checkingCodeError, 
-  selectedCategory: state.CreateDeal.selectedCategory
+  checkingCodeError: state.CreateDeal.checkingCodeError,
+  selectedCategory: state.CreateDeal.selectedCategory,
+  editingDeal: state.CreateDeal.editingDeal,
+  editingDealId: state.CreateDeal.editingDealId,
+  dealName: state.CreateDeal.dealName,
+  updateEditingLoading: state.CreateDeal.updateEditingLoading,
+  dealEdited: state.CreateDeal.dealEdited
 });
 
 const matchDispatchToProps = dispatch => {
@@ -455,6 +529,8 @@ const matchDispatchToProps = dispatch => {
       handleSelectedCondition,
       closeModalAfterDealCreated,
       onEditPhoneNumber,
+      onEditSellerFirstname,
+      onEditSellerLastname,
       onEditSellerAddress,
       onEditSellerCity,
       onEditSellerState,

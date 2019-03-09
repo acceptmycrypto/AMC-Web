@@ -19,7 +19,7 @@ const PurchaseOrder = props => {
         </div>
 
         {!props.paymentButtonClicked ?
-        <div id="submit_payment">
+        <div className="submit_payment">
           <button>Send Your Payment</button>
         </div> : null}
 

@@ -24,13 +24,19 @@ import {
   onEditingDealName,
   onEditingDetail,
   _submitDeal,
+  _updateEditingDeal,
   closeModalAfterDealCreated,
-  resetListDeal
+  resetListDeal,
+  resetEditListing,
+  openAlertEditCancelModal,
+  closeAlertEditCancelModal
 } from "../../actions/listDealActions";
+import { closeModal } from '../../actions/signInActions';
 import { _isLoggedIn } from '../../actions/loggedInActions';
 import { _loadCryptocurrencies } from "../../actions/loadCryptoActions";
 import { _loadCategory } from "../../actions/categoryActions";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
+import AlertModal from "../../components/UI/Alert";
 import UploadingImage from "./UploadImage";
 import Pricing from "./Pricing";
 import Description from "./Description";
@@ -49,7 +55,7 @@ class ListDeal extends Component {
       await this.props.history.push("/SignIn?redirect=ListDeal");
     }
   }
-  
+
   // If user refreshes the page, we warn users that data won't be saved
   componentDidUpdate = () => {
     const { images } = this.props;
@@ -107,7 +113,7 @@ class ListDeal extends Component {
 
   onSelectImageToReMove = e => {
     let imageKey = e.target.parentElement.getAttribute("data-imagekey");
-    this.props._removeImage(localStorage.getItem("token"), imageKey);
+    this.props._removeImage(localStorage.getItem("token"), imageKey, this.props.editingDeal);
   };
 
   calculateCryptoExchange = event => {
@@ -131,12 +137,32 @@ class ListDeal extends Component {
   };
 
   onCreateDeal = () => {
-    const { dealName, selectedCategory, selectedCondition, _submitDeal, images, priceInUSD, priceInCrypto, crypto_amount } = this.props;
+    const { dealName, selectedCategory, selectedCondition, _submitDeal, images, priceInUSD, priceInCrypto, crypto_amount, shippingLabelSelection, shippingWeightSelection, shippingPriceSelection } = this.props;
+
+    let label_status = shippingLabelSelection;
+    let weight = shippingWeightSelection;
+    let shipping_cost = shippingPriceSelection;
 
     let textDetailRaw = convertToRaw(this.props.editorState.getCurrentContent());
     let selected_cryptos = Object.keys(crypto_amount);
 
-    _submitDeal(localStorage.getItem("token"), dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos);
+    _submitDeal(localStorage.getItem("token"), dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos, label_status, weight, shipping_cost);
+
+  };
+
+  onUpdatingDeal = () => {
+    const { dealName, selectedCategory, selectedCondition, _updateEditingDeal, images, priceInUSD, priceInCrypto, crypto_amount, editingDealId, shippingLabelSelection, shippingWeightSelection, shippingPriceSelection } = this.props;
+
+    let textDetailRaw = convertToRaw(this.props.editorState.getCurrentContent());
+
+    let selected_cryptos = [];
+    for (let cryptoSymbol in crypto_amount) {
+      if (crypto_amount[cryptoSymbol] !== undefined) {
+        selected_cryptos.push(cryptoSymbol)
+      }
+    }
+
+    _updateEditingDeal(localStorage.getItem("token"), editingDealId, dealName, selectedCategory, selectedCondition, textDetailRaw, images, priceInUSD, priceInCrypto, selected_cryptos, shippingLabelSelection, shippingWeightSelection, shippingPriceSelection);
 
   };
 
@@ -170,7 +196,10 @@ class ListDeal extends Component {
 
     const validatePricing = {
       basePrice: this.props.priceInUSD,
-      selectedCrypto: !cryptosNotSelected //check if user has selected a crypto
+      selectedCrypto: !cryptosNotSelected, //check if user has selected a crypto
+      shippingLabelSelection: this.props.shippingLabelSelection,
+      sellerProfitsCrypto: this.props.sellerProfitsCrypto,
+      sellerProfitsUSD: this.props.sellerProfitsUSD,
     }
 
     let isDataValid = false;
@@ -195,6 +224,14 @@ class ListDeal extends Component {
           position: toast.POSITION.TOP_RIGHT
         });
 
+      }else if(this.props.shippingLabelSelection.length < 1){
+        toast.error(this._validationErrors(validatePricing).notifyShippingLabelNotSelectedError, {
+          position: toast.POSITION.TOP_RIGHT
+        });
+      } else if(!this.props.sellerProfitsCrypto || !this.props.sellerProfitsUSD){
+        toast.error(this._validationErrors(validatePricing).notifyNegativePriceError,{
+          position: toast.POSITION.TOP_RIGHT
+        });
       }
     }
 
@@ -208,7 +245,7 @@ class ListDeal extends Component {
 
     const validateDescription = {
       dealName: this.props.dealName,
-      selectedCategory: this.props.selectedCategory,
+      selectedCategory: this.props.selectedCategory.length > 0,
       description: detail
     }
 
@@ -226,7 +263,7 @@ class ListDeal extends Component {
         toast.error(this._validationErrors(validateDescription).notifyDealNameError, {
           position: toast.POSITION.TOP_RIGHT
         });
-      } else if (!this.props.selectedCategory) {
+      } else if (this.props.selectedCategory.length === 0) {
         toast.error(this._validationErrors(validateDescription).notifySelectedCategoryError, {
           position: toast.POSITION.TOP_RIGHT
         });
@@ -258,17 +295,29 @@ class ListDeal extends Component {
 
   }
 
+
   _validationErrors(val) {
     const errMsgs = {
       notifyImageUploadError: val.imageSRC ? null : 'Please upload an image first.',
       notifyBasePriceEmptyError: val.basePrice && val.basePrice !== "NaN" && val.basePrice !== "0.00"? null : 'Please enter your base price.',
       notifyCryptoNotSelectedError: val.selectedCrypto ? null : 'Please select at least one Cryptocurrency.',
+      notifyShippingLabelNotSelectedError: val.shippingLabel ? null :'Please select a shipping label option',
       notifyDealNameError: val.dealName ? null : 'Please give your listing a name.',
       notifySelectedCategoryError: val.selectedCategory ? null : 'Please select a category.',
-      notifyDescriptionError: val.description ? null : 'Please describe your listing.'
+      notifyDescriptionError: val.description ? null : 'Please describe your listing.',
+      notifyNegativePriceError: val.description ? null : 'Please increase Price In Dollar amount'
     }
 
     return errMsgs;
+  }
+
+  handleDiscardEditChanges = () => {
+    this.props.resetEditListing();
+    this.props.history.push(
+      `/feed/deals/${this.props.dealItem.deal_id}/${
+        this.props.dealItem.deal_name
+      }`
+    );
   }
 
   render() {
@@ -288,7 +337,10 @@ class ListDeal extends Component {
       creatingDeal,
       creatingDealError,
       dealCreated,
+      editingDeal,
       modalVisible,
+      alertEditCancelModalVisible,
+      closeAlertEditCancelModal,
 
       onSelectImageToView,
       handleUploadingPhotosStep,
@@ -305,10 +357,10 @@ class ListDeal extends Component {
       handleSelectedCondition,
       onEditingDealName,
       onEditingDetail,
-      closeModalAfterDealCreated
+      closeModalAfterDealCreated,
+      openAlertEditCancelModal,
+      resetEditListing
     } = this.props;
-
-    console.log(crypto_amount);
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -322,6 +374,18 @@ class ListDeal extends Component {
           message="Changes you made may not be saved."
         /> */}
         <Layout>
+          {editingDeal &&
+            <div onClick={openAlertEditCancelModal} className="closing-icon">
+              <i className="fas fa-times fa-2x"></i>
+            </div>
+          }
+
+          <AlertModal
+            alertEditModalVisible={alertEditCancelModalVisible}
+            closeEditModal={closeAlertEditCancelModal}
+            discardEditChanges={this.handleDiscardEditChanges}
+            />
+
           <div className="deal-container">
             <div className="ui three steps">
               <a
@@ -388,6 +452,7 @@ class ListDeal extends Component {
               showUploadingPhotoStep={handleUploadingPhotosStep}
               showDescriptionStep={handleDescriptionStep}
               validateSelectedCrypto={this.validateBasePriceToBeEnteredBeforeSelectCrypto}
+              validateSelectShippingLabel={this.validateBasePriceToBeEnteredBeforeSelectCrypto}
             />
           )}
           {showDescriptionStep && (
@@ -403,6 +468,7 @@ class ListDeal extends Component {
               showEdittingState={editorState}
               showPricingStep={handlePricingStep}
               createDeal={this.onCreateDeal}
+              updateDeal={this.onUpdatingDeal}
               loading_dealCreating={creatingDeal}
               error_dealCreating={creatingDealError}
               dealCreatedResult={dealCreated}
@@ -413,7 +479,7 @@ class ListDeal extends Component {
             />
           )}
         </Layout>
-        <ToastContainer autoClose={8000} />
+        <ToastContainer autoClose={5000} />
       </div>
     );
   }
@@ -443,7 +509,18 @@ const mapStateToProps = state => ({
   creatingDealError: state.CreateDeal.creatingDealError,
   dealCreated: state.CreateDeal.dealCreated,
   modalVisible: state.CreateDeal.modalVisible,
-  userLoggedIn: state.LoggedIn.userLoggedIn
+  userLoggedIn: state.LoggedIn.userLoggedIn,
+  editingDeal: state.CreateDeal.editingDeal,
+  editingDealId: state.CreateDeal.editingDealId,
+  alertEditCancelModalVisible: state.CreateDeal.alertEditCancelModalVisible,
+  dealItem: state.DealItem.dealItem,
+  shippingLabelSelection: state.CreateDeal.shippingLabelSelection,
+  shippingWeightSelection: state.CreateDeal.shippingWeightSelection,
+  shippingPriceSelection: state.CreateDeal.shippingPriceSelection,
+  sellerEarnsUSD: state.CreateDeal.sellerEarnsUSD,
+  sellerEarnsCrypto: state.CreateDeal.sellerEarnsCrypto,
+  sellerProfitsUSD: state.CreateDeal.sellerProfitsUSD,
+  sellerProfitsCrypto: state.CreateDeal.sellerProfitsCrypto,
 });
 
 const matchDispatchToProps = dispatch => {
@@ -467,9 +544,13 @@ const matchDispatchToProps = dispatch => {
       onEditingDealName,
       onEditingDetail,
       _submitDeal,
+      _updateEditingDeal,
       closeModalAfterDealCreated,
-      resetListDeal, 
-      _isLoggedIn
+      resetListDeal,
+      resetEditListing,
+      _isLoggedIn,
+      openAlertEditCancelModal,
+      closeAlertEditCancelModal
     },
     dispatch
   );

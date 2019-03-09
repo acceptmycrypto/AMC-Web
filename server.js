@@ -139,7 +139,7 @@ var options = [
   }
 ];
 
-// //use aynch to map two request ojects and return all results in one callback
+//use aynch to map two request ojects and return all results in one callback
 
 async.map(
   options,

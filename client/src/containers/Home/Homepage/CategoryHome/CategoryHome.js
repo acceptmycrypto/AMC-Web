@@ -1,21 +1,18 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from "react-router-dom";
 // import { handleSelectedCategory } from '../../../../actions/listDealActions';
+import '../Homepage.css';
+import './CategoryHome.css';
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import { updateSelectedCategory } from '../../../../actions/homepageActions';
+import { handleLongDescription } from '../../../../utils/helper_functions';
 
 
 class CategoryHome extends Component {
+
   convertToPercentage = (priceInDollar, priceInCrypto) => {
     return parseInt(((priceInDollar - priceInCrypto) / priceInDollar) * 100)
-  }
-
-  handleLongDescription = (description) => {
-    let trimmedDescription = description.trim();
-    if (trimmedDescription.length > 125) {
-      return trimmedDescription.substring(0, trimmedDescription.indexOf(' ', 75)) + "...";
-    }
   }
 
   handleRightButtonClick = (event) => {
@@ -79,7 +76,8 @@ class CategoryHome extends Component {
  }
 
   render() {
-    const { category_collection, category_collection_name, category_collection_id } = this.props;
+    const { category_collection, category_collection_name, category_collection_id, user_id } = this.props;
+
     return (
       <div className="mt-4">
         <Link to={"/category?term=" + category_collection_name + "&page=1"} className="category-title-margin mb-3">{category_collection_name}<i className="fas fa-chevron-right chevron-right"></i></Link>
@@ -87,15 +85,23 @@ class CategoryHome extends Component {
           {category_collection[0].id !== null && <button type="button" className="btn btn-light" id="leftCategoryButton" onClick={this.handleLeftButtonClick}><i className="fas fa-chevron-left category-icon-chevron"></i></button>}
           <div className="category_div" id={category_collection_id}>
             {category_collection.map(deal => (
-              <div key={deal.id} className="category_item mx-2">
+
+              <div key={deal.id}
+                className={deal.phone_number_verified === 0 && deal.seller_id !== user_id ? "category_item mx-2 deal-item-pending-hidden" : "category_item mx-2"}>
                 <Link to={`/feed/deals/${deal.id}/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
 
                   <div className="category-info">
                     <div className="category-image-div">
                       <img className="category-image" src={deal.featured_deal_image} alt="deal" />
+                      {deal.deal_status !== "available" || deal.phone_number_verified === 0 ?
+                      <div class="deal-status">
+                        <div style={{textTransform: "uppercase"}}>
+                          {deal.phone_number_verified === 0 ? "pending" : deal.deal_status}
+                        </div>
+                      </div> : null
+                      }
                     </div>
-                    <div className="mt-1">{deal.deal_name}</div>
-                    {/* <small className="deal-description">{this.handleLongDescription(deal.deal_description)}</small> */}
+                    <div className="mt-1">{handleLongDescription(deal.deal_name, 50, 50)}</div>
                     {/* if seller is a vendor then display the venue name else if seller is a user then display the seller name which is the user's username */}
                     <div><small>Offered by: {deal.venue_name || deal.seller_name}</small></div>
                   </div>
@@ -117,6 +123,7 @@ class CategoryHome extends Component {
 
                 </Link>
               </div>
+
             ))}
             {category_collection_name !== "Most Recent Deals Listed" && <div className="list-deal-category" onClick={this.createDealFromCategory}>
               <div className="list-deal-category-label">Create {this.properArticle(category_collection_name)} {category_collection_name} Deal </div>
@@ -139,7 +146,7 @@ class CategoryHome extends Component {
 }
 
 const mapStateToProps = state => ({
-
+  user_id: state.Photo.user_id
 });
 
 const matchDispatchToProps = dispatch => {

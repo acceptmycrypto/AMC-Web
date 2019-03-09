@@ -1,0 +1,7 @@
+.paypal-image-button{
+  margin-top: 5px;
+}
+
+.paypal-image-button:hover{
+  cursor: pointer;
+}

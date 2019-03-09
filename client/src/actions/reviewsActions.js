@@ -12,22 +12,16 @@ export const EDIT_REVIEW_BODY = "EDIT_REVIEW_BODY";
 
 
 export function _loadReviews(seller_id) {
-  const Reviews = {
-    method: "GET",
-    headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    },
-    // body: JSON.stringify({ token }) //no need to pass in token since everyone (signed in or not) should be able to see reviews
-  };
-
   return dispatch => {
     dispatch(fetchReviewsBegin());
-    return fetch(`/api/reviews/sellers/${seller_id}`)
-    .then(res => res.json())
-    .then(resJson => {
-      dispatch(fetchReviewsSuccess(resJson));
-      return resJson;
+    return Promise.all([
+      fetch(`/api/reviews/sellers/${seller_id}`),
+      fetch(`/seller-photo/${seller_id}`)
+    ])
+    .then(([res1, res2]) => Promise.all([res1.json(), res2.json()]))
+    .then(([resJson, jsonSellerPhoto]) => {
+      dispatch(fetchReviewsSuccess(resJson, jsonSellerPhoto));
+      return {resJson, jsonSellerPhoto};
     })
     .catch(error => dispatch(fetchReviewsFailure(error)));
   };
@@ -37,9 +31,9 @@ export const fetchReviewsBegin = () => ({
   type: FETCH_REVIEWS_BEGIN
 });
 
-export const fetchReviewsSuccess = (reviews) => ({
+export const fetchReviewsSuccess = (reviews, sellerPhoto) => ({
   type: FETCH_REVIEWS_SUCCESS,
-  payload: { reviews }
+  payload: { reviews, sellerPhoto }
 });
 
 export const fetchReviewsFailure = error => ({
