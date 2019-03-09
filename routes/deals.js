@@ -12,6 +12,10 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 app.use(methodOverride('_method'));
 
+//shippo
+var shippo = require('shippo')(process.env.SHIPMENT_KEY);
+
+
 var connection = mysql.createConnection({
   host: process.env.DB_HOST,
 
@@ -339,8 +343,26 @@ router.post('/update_tracking_number', verifyToken, function (req, res) {
       [{tracking_number: trackingNumber, tracking_carrier:  trackingCarrier}, transaction_id, transaction_id],
       function (error, results, fields) {
         if (error) res.json(error);
+       
+
+        // post tracking information to shippo tracking webhook
+        var tracking_options = {
+          url: 'https://api.goshippo.com/tracks/',
+          headers: {
+            "carrier": trackingCarrier,
+            "tracking_number": trackingNumber
+          }
+        };
+
+        function callback(error, response, body) {
+          if (!error && response.statusCode == 200) {
+            var info = JSON.parse(body);
+          }
+        }
+
+        request(tracking_options, callback);
         res.json(results);
-      }
+      } 
 
     );
 });
