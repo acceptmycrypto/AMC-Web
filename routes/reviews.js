@@ -96,44 +96,6 @@ router.post('/review/buyer/:user_id', verifyToken, function (req, res) { //need 
 });
 
 //route for posting buyer review seller
-<<<<<<< HEAD
-router.post('/review/seller/:user_id', verifyToken, function (req, res) { 
-    let buyer_id = req.decoded._id;
-    let seller_id = req.params.user_id;
-    //make sure req.body.rating is a num
-    let rating = parseInt(req.body.rating);
-    let languagePass = true; //languageFilter(req.body.body);
-    if(languagePass)
-    {
-        connection.query(
-            'INSERT INTO buyers_reviews_sellers (buyer_id, deal_id, seller_id, title, rating, body, display_review) VALUES (?,?,?,?,?,?,?);',
-            [buyer_id,req.body.deal_id,seller_id,req.body.title,rating,req.body.body,'1'],
-            function(error, response ,fields){
-                if (error) throw error;
-                // console.log(response);
-                connection.query(
-                    'SELECT sellers_avg_rating, total_sellers_ratings FROM users WHERE users.id = ?;',
-                    [seller_id],
-                    function(error, res1, fields){
-                        if (error) throw error;
-                        //update calculation
-                        let current_avg = res1[0].sellers_avg_rating;
-                        // console.log(current_avg);
-                        let current_total = res1[0].total_sellers_ratings;
-                        // console.log(current_total);
-                        // console.log(rating);
-                        let new_avg_rating = ((current_avg*current_total)+rating)/(current_total+1);
-                        // console.log(new_avg_rating);
-                        connection.query(
-                            'UPDATE users SET sellers_avg_rating = ?, total_sellers_ratings = ? WHERE id = ?',
-                            [new_avg_rating, current_total+1, seller_id],
-                            function(error, res_third, fields){
-                                if (error) throw error;
-                                res.status(200).json({success: true, message: "review accepted"});  
-                            });
-                    });    
-            });
-=======
 router.post('/seller-review/new', verifyToken, function (req, res) {
     let buyer_id = req.decoded._id;
     let { seller_id, deal_id, review_body, title, users_purchases_id} = req.body;
@@ -181,31 +143,18 @@ router.post('/seller-review/new', verifyToken, function (req, res) {
 
             });
 
->>>>>>> d0424ac83f6ab16ebd17f40dfc5360ef63be522e
     }
     else{
         //insert incident into flagged user
         connection.query(
-<<<<<<< HEAD
-            'INSERT INTO buyers_reviews_sellers (buyer_id, deal_id, seller_id, title, rating, body, display_review) VALUES (?,?,?,?,?,?,?);',
-            [buyer_id,req.body.deal_id,seller_id,req.body.title,rating,req.body.body,'0'],
-            function(error, response ,fields){
-                if (error) throw error;
-                res.status(200).json({success: true, message: "submission under review"});    
-=======
             'INSERT INTO buyers_reviews_sellers (buyer_id, deal_id, seller_id, rating, body, title, display_review) VALUES (?,?,?,?,?,?,?);',
             [buyer_id, deal_id, seller_id, rating, review_body, title, '0'],
             function(error, response ,fields){
                 if (error) throw error;
 
                 res.status(200).json({success: true, message: "submission under review"});
->>>>>>> d0424ac83f6ab16ebd17f40dfc5360ef63be522e
             });
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> d0424ac83f6ab16ebd17f40dfc5360ef63be522e
 });
 
 //route for getting the seller's rating

@@ -169,6 +169,7 @@ async.map(
         var crypto_price = coin_metadata[i].quote.USD.price;
 
         connection.query(
+          //add update time
           "INSERT INTO crypto_metadata SET ?",
           {
             crypto_name: crypto_name,
