@@ -34,15 +34,20 @@ export const fetchDealsFailure = error => ({
   payload: { error }
 });
 
-export const editTrackingNumber = event => ({
-  type: "EDIT_TRACKING_NUMBER",
-  payload: event.target.value
-});
+export const editTrackingNumber = event => {
+  let number = event.target.value.trim();
+  
+  return{
+    type: "EDIT_TRACKING_NUMBER",
+    payload: number
+  }
+};
 
 export const editTrackingCarrier = selectedOptions => {
+  let carrier = selectedOptions.value;
   return {
     type: "EDIT_TRACKING_CARRIER",
-    payload: selectedOptions.value
+    payload: {carrier}
   }
 };
 
