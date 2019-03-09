@@ -130,9 +130,10 @@ class DealItem extends Component {
     let crypto_symbol = selectedOption.value;
     let crypto_name = selectedOption.name;
     let token = localStorage.getItem("token");
-    let user_email = user_info[0].email;
 
     if(this.props.userLoggedIn){
+      let user_email = user_info[0].email;
+      
       this.props._fetchTransactionInfo(
         crypto_name,
         crypto_symbol,
