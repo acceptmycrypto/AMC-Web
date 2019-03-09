@@ -19,6 +19,10 @@
           A User Has Purched Your Item: 
           <%= deal_name %>
         </mj-text>
+
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="20px">
+          The Order Number is: <%=txn_id%>
+        </mj-text>
     
         <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="20px">
           You Have 48 hrs to Ship the Item and Submit the Tracking Number

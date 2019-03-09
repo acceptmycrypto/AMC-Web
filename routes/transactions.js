@@ -632,9 +632,9 @@ router.post("/checkout/notification", function (req, res, next) {
 
         let supply_tracking_number_link;
         if (process.env.NODE_ENV == "development") {
-          supply_tracking_number_link = `${process.env.FRONTEND_URL}/trackingNumber/${req.body.txn_id}/${deal_name}`;
+          supply_tracking_number_link = `${process.env.FRONTEND_URL}/trackingNumber/${req.body.txn_id}/${data_status[0].deal_id}`;
         } else {
-          supply_tracking_number_link = `${process.env.BACKEND_URL}/trackingNumber/${req.body.txn_id}/${deal_name}`;
+          supply_tracking_number_link = `${process.env.BACKEND_URL}/trackingNumber/${req.body.txn_id}/${data_status[0].deal_id}`;
         }
 
         if (shipping_label_status === "prepaid") {
@@ -787,7 +787,7 @@ router.get('/newShippingLabel/:txn_id/:deal_name', function (req, res) {
           console.log("transaction.tracking_url_provider", transaction.tracking_url_provider);
 
 
-          connection.query("UPDATE users_purchases SET ? WHERE ?", [{ shipment_date: shipment.shipment_date, shipping_label_url: transaction.label_url, shippo_shipment_price: cheapest_rate[0].amount, tracking_number: transaction.tracking_number, tracking_status: transaction.tracking_status, tracking_url_provider: transaction.tracking_url_provider, eta: transaction.eta, shippo_shipment_id: shipment.object_id, shippo_transaction_id: transaction.object_id }, { txn_id }], function (error, results, fields) {
+          connection.query("UPDATE users_purchases SET ? WHERE ?", [{ shipment_date: shipment.shipment_date, shipping_label_url: transaction.label_url, shippo_shipment_price: cheapest_rate[0].amount, tracking_number: transaction.tracking_number, tracking_carrier: "usps", tracking_status: transaction.tracking_status, tracking_url_provider: transaction.tracking_url_provider, eta: transaction.eta, shippo_shipment_id: shipment.object_id, shippo_transaction_id: transaction.object_id }, { txn_id }], function (error, results, fields) {
             if (error) throw error;
 
             const seller_shipping_label = {
@@ -927,7 +927,7 @@ function createShippmentInfo(txn_id, deal_name, seller_email, buyer_email) {
           // console.log(transaction);
 
 
-          connection.query("UPDATE users_purchases SET ? WHERE ?", [{ shipment_date: shipment.shipment_date, shipping_label_url: transaction.label_url, shippo_shipment_price: cheapest_rate[0].amount, tracking_number: transaction.tracking_number, tracking_status: transaction.tracking_status, tracking_url_provider: transaction.tracking_url_provider, eta: transaction.eta, shippo_shipment_id: shipment.object_id, shippo_transaction_id: transaction.object_id }, { txn_id }], function (error, results, fields) {
+          connection.query("UPDATE users_purchases SET ? WHERE ?", [{ shipment_date: shipment.shipment_date, shipping_label_url: transaction.label_url, shippo_shipment_price: cheapest_rate[0].amount, tracking_number: transaction.tracking_number, tracking_carrier: "usps", tracking_status: transaction.tracking_status, tracking_url_provider: transaction.tracking_url_provider, eta: transaction.eta, shippo_shipment_id: shipment.object_id, shippo_transaction_id: transaction.object_id }, { txn_id }], function (error, results, fields) {
             if (error) throw error;
 
             const seller_shipping_label = {
@@ -1049,7 +1049,7 @@ function createShippmentInfoPaypal(txn_id, deal_name, seller_email, buyer_email)
           // console.log(transaction);
 
 
-          connection.query("UPDATE users_purchases SET ? WHERE ?", [{ shipment_date: shipment.shipment_date, shipping_label_url: transaction.label_url, shippo_shipment_price: cheapest_rate[0].amount, tracking_number: transaction.tracking_number, tracking_status: transaction.tracking_status, tracking_url_provider: transaction.tracking_url_provider, eta: transaction.eta, shippo_shipment_id: shipment.object_id, shippo_transaction_id: transaction.object_id }, { txn_id }], function (error, results, fields) {
+          connection.query("UPDATE users_purchases SET ? WHERE ?", [{ shipment_date: shipment.shipment_date, shipping_label_url: transaction.label_url, shippo_shipment_price: cheapest_rate[0].amount, tracking_number: transaction.tracking_number, tracking_carrier: "usps", tracking_status: transaction.tracking_status, tracking_url_provider: transaction.tracking_url_provider, eta: transaction.eta, shippo_shipment_id: shipment.object_id, shippo_transaction_id: transaction.object_id }, { txn_id }], function (error, results, fields) {
             if (error) throw error;
 
             const seller_shipping_label = {

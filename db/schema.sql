@@ -230,6 +230,7 @@ CREATE TABLE users_purchases(
 	shipping_label_url VARCHAR(500) NULL, -- if prepaid this is link to shipping label
 	shippo_shipment_price DECIMAL (10,2) NULL,
 	tracking_number VARCHAR(255) NULL UNIQUE, -- shipment tracking number
+	tracking_carrier VARCHAR (100) NULL,
 	tracking_status VARCHAR(100) NULL,
 	tracking_url_provider VARCHAR (500) NULL, -- link to track package online
 	eta VARCHAR (255) NULL,

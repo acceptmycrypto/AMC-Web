@@ -305,18 +305,40 @@ router.get('/api/search', function(req, res) {
 
 // });
 
+
+// check if user can update the tracking number
+
+router.post('/can_update_tracking', verifyToken, function (req, res) {
+  let seller_id = req.decoded._id;
+  let {deal_id} = req.body;
+
+  let transaction_id = req.body.txn_id;
+
+    connection.query(
+      'SELECT deal_name, tracking_number FROM deals LEFT JOIN users_purchases ON deals.id = users_purchases.deal_id WHERE deals.id = ? AND deals.seller_id = ? AND (txn_id = ? OR paypal_paymentId = ?)',
+      [deal_id, seller_id, transaction_id, transaction_id],
+      function (error, results, fields) {
+        if (error) console.log(error);
+        console.log(results);
+        res.json(results);
+      }
+    );
+});
+
 //  update tracking number for deal
 router.post('/update_tracking_number', verifyToken, function (req, res) {
   let id = req.decoded._id;
 
   // txn_id can either be coinpayment txn_id or paypal paypal_paymentId that is passed from front end
-  let {txn_id, trackingNumber} = req.body;
+  let {trackingNumber, trackingCarrier} = req.body;
+
+  let transaction_id = req.body.txn_id; 
 
     connection.query(
-      'UPDATE users_purchases SET tracking_number = ? WHERE txn_id = ? OR paypal_paymentId = ?',
-      [trackingNumber, txn_id, txn_id],
+      'UPDATE users_purchases SET ? WHERE txn_id = ? OR paypal_paymentId = ?',
+      [{tracking_number: trackingNumber, tracking_carrier:  trackingCarrier}, transaction_id, transaction_id],
       function (error, results, fields) {
-        if (error) console.log(error);
+        if (error) res.json(error);
         res.json(results);
       }
     );
