@@ -59,7 +59,7 @@ export default function dealsReducer(state = initialState, action) {
       case "EDIT_TRACKING_CARRIER":
       return {
         ...state,
-        trackingCarrierSelected: action.payload
+        trackingCarrierSelected: action.payload.carrier
       };
 
       case "UPDATE_TRACKING_NUMBER_BEGIN":
