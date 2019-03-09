@@ -34,6 +34,45 @@ export const fetchDealsFailure = error => ({
   payload: { error }
 });
 
+
+
+
+export function _canUpdateTracking (token, txn_id, deal_id) {
+  const settings = {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({token, txn_id, deal_id})
+  };
+
+  return dispatch => {
+    dispatch(canTrackingBegin());
+    return fetch("/can_update_tracking", settings)
+      .then(res => res.json())
+      .then(jsonRes => {
+        dispatch(canTrackingSuccess(jsonRes));
+        return jsonRes;
+      })
+      .catch(error => dispatch(canTrackingFailure(error)));
+  };
+}
+
+export const canTrackingBegin = () => ({
+  type: "CAN_UPDATE_TRACKING_BEGIN"
+});
+
+export const canTrackingSuccess = res => ({
+  type: "CAN_UPDATE_TRACKING_SUCCESS",
+  payload: res
+});
+
+export const canTrackingFailure = error => ({
+  type: "CAN_UPDATE_TRACKING_FAILURE",
+  payload: { error }
+});
+
 export const editTrackingNumber = event => {
   let number = event.target.value.trim();
   
