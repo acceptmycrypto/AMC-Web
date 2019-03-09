@@ -9,6 +9,7 @@ const initialState = {
   { value: 'usps', label: 'USPS' }],
   trackingCarrierSelected: null,
   trackingResult: null,
+  backEndTrackingInfo: null
 };
 	
 	
@@ -60,6 +61,27 @@ export default function dealsReducer(state = initialState, action) {
       return {
         ...state,
         trackingCarrierSelected: action.payload.carrier
+      };
+
+      case "CAN_UPDATE_TRACKING_BEGIN":
+      return {
+        ...state,
+        loading: true,
+        error: null
+      };
+      
+      case "CAN_UPDATE_TRACKING_SUCCESS":
+      return {
+        ...state,
+        loading: false,
+        backEndTrackingInfo: action.payload
+      };
+      
+      case "CAN_UPDATE_TRACKING_FAILURE":
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
       };
 
       case "UPDATE_TRACKING_NUMBER_BEGIN":
