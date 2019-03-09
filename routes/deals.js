@@ -315,8 +315,8 @@ router.post('/can_update_tracking', verifyToken, function (req, res) {
   let transaction_id = req.body.txn_id;
 
     connection.query(
-      'SELECT deal_name, tracking_number FROM deals LEFT JOIN users_purchases ON deals.id = users_purchases.deal_id WHERE deals.id = ? AND deals.seller_id = ? AND (txn_id = ? OR paypal_paymentId = ?)',
-      [deal_id, seller_id, transaction_id, transaction_id],
+      'SELECT deal_name, tracking_number FROM deals LEFT JOIN users_purchases ON deals.id = users_purchases.deal_id WHERE deals.id = ? AND deals.seller_id = ? AND shipping_label_status = ? AND (txn_id = ? OR paypal_paymentId = ?)',
+      [deal_id, seller_id, "seller", transaction_id, transaction_id],
       function (error, results, fields) {
         if (error) console.log(error);
         console.log(results);
@@ -341,6 +341,7 @@ router.post('/update_tracking_number', verifyToken, function (req, res) {
         if (error) res.json(error);
         res.json(results);
       }
+
     );
 });
 
