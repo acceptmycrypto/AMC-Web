@@ -1,0 +1,28 @@
+
+/* media query */
+@media only screen and (max-width: 640px) {
+
+    .search-deals-title{
+        padding-top: 70px;
+    }
+  
+    .search-deals-results{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 90%;
+        padding: 0px;
+       justify-content: center;
+    }
+
+    .full-width-deals{
+        visibility: hidden;
+        
+    }
+
+    .mob-width-deals{
+        visibility: visible; 
+    }
+
+}
+  
