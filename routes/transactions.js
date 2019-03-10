@@ -879,23 +879,6 @@ router.get('/newShippingLabel/:txn_id/:deal_name', function (req, res) {
 
           });
 
-          var tracking_options = {
-            url: 'https://api.goshippo.com/tracks/',
-            headers: {
-              "carrier": "usps",
-              "tracking_number": transaction.tracking_number
-            }
-          };
-
-          function callback(error, response, body) {
-            if (!error && response.statusCode == 200) {
-              var info = JSON.parse(body);
-            }
-          }
-
-          request(tracking_options, callback);
-          res.json({ shipment, transaction });
-
         });
       });
 
@@ -1018,26 +1001,6 @@ function createShippmentInfo(txn_id, deal_name, seller_email, buyer_email) {
 
           });
 
-
-          // post tracking information to shippo tracking webhook
-          var tracking_options = {
-            url: 'https://api.goshippo.com/tracks/',
-            headers: {
-              "carrier": "usps",
-              "tracking_number": transaction.tracking_number
-            }
-          };
-
-          function callback(error, response, body) {
-            if (!error && response.statusCode == 200) {
-              var info = JSON.parse(body);
-            }
-          }
-
-          request(tracking_options, callback);
-
-
-
         });
       });
 
@@ -1158,24 +1121,6 @@ function createShippmentInfoPaypal(txn_id, deal_name, seller_email, buyer_email)
 
 
           });
-
-          // post tracking information to shippo tracking webhook
-          var tracking_options = {
-            url: 'https://api.goshippo.com/tracks/',
-            headers: {
-              "carrier": "usps",
-              "tracking_number": transaction.tracking_number
-            }
-          };
-
-          function callback(error, response, body) {
-            if (!error && response.statusCode == 200) {
-              var info = JSON.parse(body);
-            }
-          }
-
-          request(tracking_options, callback);
-
 
 
         });
