@@ -96,7 +96,7 @@
   /* padding-left: 40px; */
   margin: 20px 10px 10px 50px;
   position: relative;
- 
+
   /* margin-top: 30px; */
 }
 .pricing-options{
@@ -129,7 +129,7 @@
 
 
 /* .shipping-margin-left{
-  margin-left: 125px; 
+  margin-left: 125px;
 
 } */
 
@@ -315,7 +315,7 @@ input[name="shipmentOption"]{
   width: 40%;
 }
 
-.weightOption { 
+.weightOption {
   position: absolute;
   opacity: 0;
   width: 0;
@@ -334,17 +334,23 @@ input[name="shipmentOption"]{
 /* CHECKED STYLES */
 .weightOption:checked + div{
   border: 2px solid #199087;
-  
+
 }
 
 #shipping-previous{
   position: absolute;
-  bottom: 60px;
-  left: 10px;
+  bottom: 70px;
+  left: 60px;
+  width: 100%;
 }
 
 #shipping-next{
+  width: 100%;
   position: absolute;
-  bottom: 60px;
-  right: 10px;
+  bottom: 70px;
+  right: 60px;
+}
+
+.summary-pricing-title {
+  opacity: .7;
 }

@@ -1,0 +1,195 @@
+@media only screen and (max-width: 600px) {
+  .add-price-for-deal {
+    display: block;
+  }
+
+  .listed-price-in-dollar, .listed-price-in-crypto {
+    min-height: 0px;
+    margin: 0px;
+    box-shadow: none;
+    width: 100%;
+    padding: 20px;
+  }
+
+  .pricing-footer-note {
+    top: 10px;
+  }
+
+  .listed-price-in-crypto {
+    flex-direction: column-reverse;
+  }
+
+  .listed-price-in-crypto-left {
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 25px;
+    text-align: center;
+
+    height: 130px;
+    padding: 10px 0;
+  }
+
+  .listed-price-in-crypto-left .pricing-input-row {
+    justify-content: center;
+  }
+
+  .listed-price-in-crypto-left .pricing-titles {
+    font-size: 1.5em;
+  }
+
+  .listed-price-in-crypto-right {
+    width: 100%;
+  }
+
+  .discount-pricing-title {
+    margin-top: 10px;
+  }
+
+  /* Special styling for WebKit/Blink/knob*/
+  #percent-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 40px;
+    height: 40px;
+    margin-top: -18px;
+  }
+
+  /* All the same stuff for Firefox */
+  #percent-slider::-moz-range-thumb {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* All the same stuff for IE */
+  #percent-slider::-ms-thumb {
+    width: 40px;
+    height: 40px;
+  }
+
+  .select-crypto-for-deal {
+    display: block;
+    min-height: 0px;
+    box-shadow: none;
+    margin: 0 0 10px 0;
+  }
+
+  .select-crypto-for-deal .pricing-footer-note {
+    font-size: 0.8em;
+  }
+
+  .crypto-subtitle {
+    font-weight: 300;
+    font-size: 1em;
+    opacity: 1.0;
+  }
+
+  .crypto-logos-for-deal-listing {
+    overflow-x: auto;
+    justify-content: flex-start;
+    height: fit-content;
+    /* hide scroll bar */
+    -ms-overflow-style: none;  /* IE 10+ */
+    overflow: -moz-scrollbars-none; /*Firefox*/
+  }
+
+  .crypto-logos-for-deal-listing::-webkit-scrollbar {
+    display: none;  /*Safari and Chrome */
+  }
+
+  .crypto-logo-image {
+    height: 100px;
+    width: 100px;
+    margin: 5px;
+  }
+
+  .pricing-footer-note hr {
+    display: none;
+  }
+
+  .shipment-options, .pricing-options {
+    display: block;
+    min-height: 0px;
+    /* box-sizing: border-box; */
+    box-shadow: none;
+    padding: 20px;
+
+    /* padding-left: 40px; */
+    margin: 0px;
+    position: static;
+    /* margin-top: 30px; */
+}
+
+  .shipping-font {
+    font-size: 1em;
+    font-size: 3vw;
+  }
+
+  .summary-pricing-title {
+    font-size: .8em;
+  }
+
+  .pricing-options {
+    height: 400px;
+  }
+
+  .small-shipping-font {
+    width: 100%;
+  }
+
+  .border-right {
+    height: 125px;
+  }
+  .deal-listing-step-buttons {
+    margin: 0 20px;
+  }
+
+  #shipping-next, #shipping-previous  {
+    width: 100%;
+  }
+
+  #shipping-previous {
+    bottom: 190px;
+    left: auto;
+  }
+
+  #shipping-next {
+    bottom: 120px;
+    right: auto;
+    background-color: #2e4157;
+  }
+
+  #shipping-next button{
+    background-color: #2e4157;
+  }
+
+  #shipping-next button, #shipping-previous button  {
+    width: 100%;
+    font-size: 1.5em;
+    border-radius: 50px;
+  }
+
+  .shipping-option-modal {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* modal */
+  .weightOption + div {
+    width: 80px;
+    height: 70px;
+  }
+
+  .weight-font {
+    font-size: 12px;
+  }
+
+  .shipping-weight-title {
+    font-size: 17px;
+  }
+
+  .weight-option-button {
+    width: 110px;
+  }
+
+
+
+}
