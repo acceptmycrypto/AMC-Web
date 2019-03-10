@@ -8,7 +8,13 @@
 .returnsMenuTitle{
     text-align: center;
     padding: 10px;
+    padding-top: 54px;
   }
+
+.returnsListSubItem{
+  font-weight: bold;
+  list-style: disc inside; 
+}
   
 .returns-listItem{
     font-size: 20px;

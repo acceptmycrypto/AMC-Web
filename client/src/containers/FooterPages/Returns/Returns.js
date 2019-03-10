@@ -47,9 +47,9 @@ render() {
       <h4 className="returnsMenuTitle">None Refundable Items</h4>
 
           <ul className="returns-listItem">
-              <li>Gift Cards</li>
-              <li>Any Services</li>
-              <li>Any Event Tickets</li>
+              <li className="returnsListSubItem">Gift Cards</li>
+              <li className="returnsListSubItem">Any Services</li>
+              <li className="returnsListSubItem">Any Event Tickets</li>
           </ul>
           <ul id="returns-listSubItem">
           <li>We will always require a receipt or proof of purchase.</li>

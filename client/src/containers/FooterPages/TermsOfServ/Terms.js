@@ -4,6 +4,7 @@ import './Terms.css';
 // import { BrowserRouter as Link } from 'react-router-dom';
 import Navbar from '../../Navigation/Navbar/Navbar';
 import Footer from '../../../components/Layout/Footer';
+import AnchorLink from 'react-anchor-link-smooth-scroll'
 // Will keep these imports for possible future use. Will delete when found unnecessary.
 // import * as Scroll from 'react-scroll';
 // import { Link, Element , Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
@@ -18,26 +19,131 @@ class TermsOfServ extends Component {
           
 <div className="Terms-page">
         <Navbar/>
+        
+        
+
 
     <title> AcceptMyCrypto Terms of Service </title>
 
-    <div className="termsMainContent" id="Terms-menu">
-    <div className="ml-2" id="Terms-amh">
+    <div className="termsMenu">
+    
+            <h5 class="mb-0">
+                <AnchorLink offset="100" href="#useOfSite">
+                <h4 className="termsAnchor">Use of Site</h4>
+                </AnchorLink>
+            </h5>
+
+            <h5 class="mb-0">
+                <AnchorLink offset="100" href="#amendments">
+                <h4 className="termsAnchor">Amendments</h4>
+                </AnchorLink>
+            </h5>
+
+            <h5 class="mb-0">
+                <AnchorLink offset="100" href="#reviewsAndComments">
+                <h4 className="termsAnchor">Reviews and Comments</h4>
+                </AnchorLink>
+            </h5>
+
+            <h5 class="mb-0">
+                <AnchorLink offset="100" href="#intellectualProp">
+                <h4 className="termsAnchor">Intellectual Property</h4>
+                </AnchorLink>
+            </h5>
+            <h5 class="mb-0">
+                <AnchorLink offset="100" href="privacyPolicy">
+                <h4 className="termsAnchor">Privacy Policy</h4>
+                </AnchorLink>
+            </h5>
+
+            <h5 class="mb-0">
+                <AnchorLink offset="100" href="#holds">                       
+                <h4 className="termsAnchor">Holds</h4>
+                </AnchorLink>
+            </h5>
+
+            <h5 class="mb-0">
+                <AnchorLink offset="100" href="#termAndEffect">
+                <h4 className="termsAnchor">Termination and Effect of Termination</h4>
+                </AnchorLink>
+            </h5>
+
+            <h5 class="mb-0">
+                <AnchorLink offset="100" href="#internationalAccess">
+                        <h4 className="termsAnchor">International Access</h4>
+                </AnchorLink>
+            </h5>
+
+            <h5 class="mb-0">
+                <AnchorLink offset="100" href="#listingConditions">
+                        <h4 className="termsAnchor">Listing Condtions</h4>
+                </AnchorLink>
+            </h5>
+
+            <h5 class="mb-0">
+                <AnchorLink offset="100" href="#purchaseConditons">                            
+                <h4 className="termsAnchor">Purchase Condtions</h4>
+                </AnchorLink>
+            </h5>
+
+            <h5 class="mb-0">
+                <AnchorLink offset="100" href="#authorizationToContact">
+                        <h4 className="termsAnchor">Authorization to Contact You</h4>
+                </AnchorLink>
+            </h5>
+
+            <h5 class="mb-0">
+                <AnchorLink offset="100" href="#legalDisputes">
+                            <h4 className="termsAnchor">Legal Disputes</h4>
+                </AnchorLink>
+            </h5>
+
+            <h5 class="mb-0">
+                <AnchorLink offset="100" href="#privacyOthers">
+                        <h4 className="termsAnchor">Privacy of Others; Marketing</h4>
+                </AnchorLink>
+            </h5>
+
+            <h5 class="mb-0">
+                <AnchorLink offset="100" href="#indemnity">
+                        <h4 className="termsAnchor">Indemnity</h4>
+                </AnchorLink>
+            </h5>
+
+            <h5 class="mb-0">
+                <AnchorLink offset="100" href="#applicapleLaw">
+                        <h4 className="termsAnchor">Applicaple Law</h4>
+                </AnchorLink>
+            </h5>
+
+            <h5 class="mb-0">
+                <AnchorLink offset="100" href="#optOut">
+                        <h4 className="termsAnchor">Opt-Out Procedure</h4>
+                </AnchorLink>
+            </h5>
+
+            <h5 class="mb-0">
+                <AnchorLink offset="100" href="#agreementToArbitrate">
+                        <h4 className="termsAnchor">Agreement to Arbitrate</h4>
+                </AnchorLink>
+            </h5>
+
+            <h5 class="mb-0">
+                <AnchorLink offset="100" href="#general">
+                        <h4 className="termsAnchor">General</h4>
+                </AnchorLink>
+            </h5>
+            </div>
+            
+        <main className="termsMainContent">
+        <div className="ml-2" id="Terms-amh">
                 AcceptMyTerms
               </div>
-            
-              <hr className="star-light"></hr>
-       
-            
-            <h5 class="mb-0">
-                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseUse" aria-expanded="true" aria-controls="collapseUse">
-                <h4 className="termsMenuTitle">Use of Site</h4>
-                </button>
-            </h5>
-            
+        <hr className="star-light"></hr>
         
-            <div id="collapseUse" class="collapse show" aria-labelledby="headingOne" data-parent="#Terms-menu">
+            <div id="useOfSite">
             <div class="card-body">
+            <h4 className="termsSectionTitle">Use of Site</h4>
 
             <ul>
 
@@ -77,15 +183,9 @@ class TermsOfServ extends Component {
                 </div>
             </div>
     
-                    <h5 class="mb-0">
-                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseAmendments" aria-expanded="true" aria-controls="collapseAmendments">
-                        <h4 className="termsMenuTitle">Amendments</h4>
-                        </button>
-                    </h5>
-                  
-                
-                    <div id="collapseAmendments" class="collapse" aria-labelledby="headingOne" data-parent="#Terms-menu">
+                    <div id="amendments">
                     <div class="card-body">
+                    <h4 className="termsSectionTitle">Amendments</h4>
         
             <ul>
 
@@ -98,15 +198,12 @@ class TermsOfServ extends Component {
                 </div>
             </div>
       
-                    <h5 class="mb-0">
-                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
-                        <h4 className="termsMenuTitle">Reviews and Comments</h4>
-                        </button>
-                    </h5>
+                    
                   
                 
-                    <div id="collapseThree" class="collapse" aria-labelledby="headingOne" data-parent="#Terms-menu">
+                    <div id="reviewsAndComments">
                     <div class="card-body">
+                    <h4 className="termsSectionTitle">Reviews and Comments</h4>
         
             <ul>
 
@@ -129,15 +226,12 @@ class TermsOfServ extends Component {
                 </div>
             </div>
     
-                <h5 class="mb-0">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
-                    <h4 className="termsMenuTitle">Intellectual Property</h4>
-                    </button>
-                </h5>
+                
               
             
-                <div id="collapseFour" class="collapse" aria-labelledby="headingOne" data-parent="#Terms-menu">
+                <div id="intellectualProp">
                 <div class="card-body">
+                <h4 className="termsSectionTitle">Intellectual Property</h4>
         
             <ul>
 
@@ -155,15 +249,12 @@ class TermsOfServ extends Component {
                 </div>
             </div>
 
-                <h5 class="mb-0">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
-                    <h4 className="termsMenuTitle">Privacy Policy</h4>
-                    </button>
-                </h5>
+                
               
             
-                <div id="collapseFive" class="collapse" aria-labelledby="headingOne" data-parent="#Terms-menu">
+                <div id="privacyPolicy">
                 <div class="card-body">
+                <h4 className="termsSectionTitle">Privacy Policy</h4>
         
             <ul>
 
@@ -179,15 +270,12 @@ class TermsOfServ extends Component {
                 </div>
             </div>
         
-                <h5 class="mb-0">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseSix" aria-expanded="true" aria-controls="collapseSix">
-                        <h4 className="termsMenuTitle">Holds</h4>
-                    </button>
-                </h5>
+                
                
             
-                <div id="collapseSix" class="collapse" aria-labelledby="headingOne" data-parent="#Terms-menu">
+                <div id="holds">
                 <div class="card-body">
+                <h4 className="termsSectionTitle">Holds</h4>
         
             <ul>
 
@@ -199,15 +287,12 @@ class TermsOfServ extends Component {
                 </div>
             </div>
     
-                <h5 class="mb-0">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
-                    <h4 className="termsMenuTitle">Termination and Effect of Termination</h4>
-                    </button>
-                </h5>
+                
                 
             
-                <div id="collapseSeven" class="collapse" aria-labelledby="headingOne" data-parent="#Terms-menu">
+                <div id="termAndEffect">
                 <div class="card-body">
+                <h4 className="termsSectionTitle">Termination and Effect of Termination</h4>
         
             <ul>
 
@@ -220,15 +305,12 @@ class TermsOfServ extends Component {
                 </div>
             </div>
               
-                <h5 class="mb-0">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseEight" aria-expanded="true" aria-controls="collapseEight">
-                            <h4 className="termsMenuTitle">International Access</h4>
-                    </button>
-                </h5>
+                
                
             
-                <div id="collapseEight" class="collapse" aria-labelledby="headingOne" data-parent="#Terms-menu">
+                <div id="internationalAccess">
                 <div class="card-body">
+                <h4 className="termsSectionTitle">International Access</h4>
         
             <ul>
 
@@ -239,15 +321,12 @@ class TermsOfServ extends Component {
                 </div>
             </div>
              
-                <h5 class="mb-0">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseNine" aria-expanded="true" aria-controls="collapseNine">
-                            <h4 className="termsMenuTitle">Listing Condtions</h4>
-                    </button>
-                </h5>
+                
               
             
-                <div id="collapseNine" class="collapse" aria-labelledby="headingOne" data-parent="#Terms-menu">
+                <div id="listingConditions">
                 <div class="card-body">
+                <h4 className="termsSectionTitle">Listing Conditions</h4>
         
             <ul>
 
@@ -276,15 +355,12 @@ class TermsOfServ extends Component {
                 </div>
             </div>
         
-                <h5 class="mb-0">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTen" aria-expanded="true" aria-controls="collapseTen">
-                            <h4 className="termsMenuTitle">Purchase Condtions</h4>
-                    </button>
-                </h5>
+                
              
             
-                <div id="collapseTen" class="collapse" aria-labelledby="headingOne" data-parent="#Terms-menu">
+                <div id="purchaseConditons">
                 <div class="card-body">
+                <h4 className="termsSectionTitle">Purchase Conditions</h4>
         
             <ul>
 
@@ -303,15 +379,12 @@ class TermsOfServ extends Component {
                 </div>
             </div>
         
-                <h5 class="mb-0">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseEleven" aria-expanded="true" aria-controls="collapseEleven">
-                            <h4 className="termsMenuTitle">Authorization to Contact You</h4>
-                    </button>
-                </h5>
+                
                
             
-                <div id="collapseEleven" class="collapse" aria-labelledby="headingOne" data-parent="#Terms-menu">
+                <div id="authorizationToContact">
                 <div class="card-body">
+                <h4 className="termsSectionTitle">Authorization to Contact</h4>
         
             <ul>
 
@@ -340,15 +413,12 @@ class TermsOfServ extends Component {
                 </div>
             </div>
     
-                <h5 class="mb-0">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwelve" aria-expanded="true" aria-controls="collapseTwelve">
-                            <h4 className="termsMenuTitle">Privacy of Others; Marketing</h4>
-                    </button>
-                </h5>
+                
            
             
-                <div id="collapseTwelve" class="collapse" aria-labelledby="headingOne" data-parent="#Terms-menu">
+                <div id="privacyOthers">
                 <div class="card-body">
+                <h4 className="termsSectionTitle">Privacy of Others</h4>
         
             <ul>
 
@@ -360,15 +430,12 @@ class TermsOfServ extends Component {
                 </div>
             </div>
     
-                <h5 class="mb-0">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseThirteen" aria-expanded="true" aria-controls="collapseThirteen">
-                            <h4 className="termsMenuTitle">Indemnity</h4>
-                    </button>
-                </h5>
+               
               
             
-                <div id="collapseThirteen" class="collapse" aria-labelledby="headingOne" data-parent="#Terms-menu">
+                <div id="indemnity">
                 <div class="card-body">
+                <h4 className="termsSectionTitle">Indemnity</h4>
         
             <ul>
 
@@ -379,15 +446,12 @@ class TermsOfServ extends Component {
                 </div>
             </div>
     
-                <h5 class="mb-0">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseFourteen" aria-expanded="true" aria-controls="collapseFourteen">
-                                <h4 className="termsMenuTitle">Legal Disputes</h4>
-                    </button>
-                </h5>
+                
             
             
-                <div id="collapseFourteen" class="collapse" aria-labelledby="headingOne" data-parent="#Terms-menu">
+                <div id="legalDisputes">
                 <div class="card-body">
+                <h4 className="termsSectionTitle">Legal Disputes</h4>
         
             <ul>
                 <li className="Terms-listItem">PLEASE READ THIS SECTION CAREFULLY. IT AFFECTS YOUR RIGHTS AND WILL HAVE A SUBSTANTIAL IMPACT ON HOW CLAIMS YOU AND AcceptMyCrypto HAVE AGAINST 
@@ -401,15 +465,14 @@ class TermsOfServ extends Component {
                 </div>
             </div>
             
-                <h5 class="mb-0">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseFifteen" aria-expanded="true" aria-controls="collapseFifteen">
-                            <h4 className="termsMenuTitle">Applicaple Law</h4>
-                    </button>
-                </h5>
+                
+
+                
             
             
-                <div id="collapseFifteen" class="collapse" aria-labelledby="headingOne" data-parent="#Terms-menu">
+                <div id="applicableLaw">
                 <div class="card-body">
+                <h4 className="termsSectionTitle">Applicable Law</h4>
         
             <ul>
                 <li className="Terms-listItem">You agree that, except to the extent inconsistent with or preempted by federal law, the laws of the State of Utah, without regard to principles of 
@@ -419,15 +482,12 @@ class TermsOfServ extends Component {
                 </div>
             </div>
          
-                <h5 class="mb-0">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseSixteen" aria-expanded="true" aria-controls="collapseSixteen">
-                            <h4 className="termsMenuTitle">Agreement to Arbitrate</h4>
-                    </button>
-                </h5>
+                
            
             
-                <div id="collapseSixteen" class="collapse" aria-labelledby="headingOne" data-parent="#Terms-menu">
+                <div id="agreementToArbitrate">
                 <div class="card-body">
+                <h4 className="termsSectionTitle">Agreement to Arbitrate</h4>
         
             <ul>
                 <li className="Terms-listItem">You and AcceptMyCrypto each agree that any and all disputes or claims that have arisen, or may arise, between you and AcceptMyCrypto (including any 
@@ -509,15 +569,12 @@ class TermsOfServ extends Component {
                 </div>
             </div>
               
-                <h5 class="mb-0">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseSeventeen" aria-expanded="true" aria-controls="collapseSeventeen">
-                            <h4 className="termsMenuTitle">Opt-Out Procedure</h4>
-                    </button>
-                </h5>
+                
                 
             
-                <div id="collapseSeventeen" class="collapse" aria-labelledby="headingOne" data-parent="#Terms-menu">
+                <div id="optOut">
                 <div class="card-body">
+                <h4 className="termsSectionTitle">Opt Out</h4>
         
             <ul>
                 <li className="Terms-listItem">IF YOU ARE A NEW USER OF OUR SERVICES, YOU CAN CHOOSE TO REJECT THIS AGREEMENT TO ARBITRATE ("OPT-OUT") BY MAILING US A WRITTEN OPT-OUT 
@@ -546,14 +603,11 @@ class TermsOfServ extends Component {
                 </div>
             </div>
        
-                <h5 class="mb-0">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseEighteen" aria-expanded="true" aria-controls="collapseEighteen">
-                            <h4 className="termsMenuTitle">General</h4>
-                    </button>
-                </h5>
+                
             
-                <div id="collapseEighteen" class="collapse" aria-labelledby="headingOne" data-parent="#Terms-menu">
+                <div id="general">
                 <div class="card-body">
+                <h4 className="termsSectionTitle">General</h4>
         
             <ul>
                 <li className="Terms-listItem">Except as otherwise provided in this User Agreement, if any provision of this User Agreement is held to be invalid, void or for any 
@@ -598,7 +652,8 @@ class TermsOfServ extends Component {
     </div>
    
     <Footer />
-    </div>
+    </main>
+    
 </div>
 
           

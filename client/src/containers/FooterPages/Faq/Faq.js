@@ -5,6 +5,7 @@ import './Faq.css';
 import { UncontrolledCollapse, Button, CardBody, Card, Collapse } from 'reactstrap';
 import Navbar from '../../Navigation/Navbar/Navbar';
 import Footer from '../../../components/Layout/Footer';
+import AnchorLink from 'react-anchor-link-smooth-scroll'
 // Will keep these imports for possible future use. Will delete when found unnecessary.
 // import * as Scroll from 'react-scroll';
 // import { Link, Element , Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
@@ -16,14 +17,6 @@ class Faq extends Component {
   constructor(props) {
     super(props);
     
-    this.toggle = this.toggle.bind(this);
-    this.state = { collapse: false };
-  }
-
-  toggle() {
-    if(this.setState({ collapse: !this.state.collapse })){
-        this.closeToggle();
-    }
   }
 
     
@@ -36,31 +29,36 @@ render() {
         <Navbar/>
         
          
-         {/* <div className="Faq-menu">
+<div className="Faq-menu">
 
     <title> AcceptMyCrypto FAQs </title> 
          
-         <a className="Faq-menuItem" id="general" onClick={this.toggle}>
-         
-                  General
-            </a>
+            <h5 class="mb-0">
+                <AnchorLink offset="100" href="#general">
+                <h4 className="Faq-menuItem">General</h4>
+                </AnchorLink>
+            </h5>
 
-            <a className="Faq-menuItem" id="seller"  onClick={this.toggle}>
-                  Sellers
-           </a>
+            <h5 class="mb-0">
+                <AnchorLink offset="100" href="#sellers">
+                <h4 className="Faq-menuItem">Sellers</h4>
+                </AnchorLink>
+            </h5>
 
-           <a className="Faq-menuItem" id="buyers">
-                  Buyers
-           </a>
-           
-           <a className="Faq-menuItem" id="guest">
-                  Buying as a Guest
-           </a>
-         
-         
-         </div> */}
+            <h5 class="mb-0">
+                <AnchorLink offset="100" href="#buyers">
+                <h4 className="Faq-menuItem">Buyers</h4>
+                </AnchorLink>
+            </h5>
+
+            <h5 class="mb-0">
+                <AnchorLink offset="100" href="#guest">
+                <h4 className="Faq-menuItem">Buying as a Guest</h4>
+                </AnchorLink>
+            </h5>
+        </div>
     
-        <div className="Faq-mainContent" id="Faq-menu">
+        <main className="Faq-mainContent">
           <div className="font-17 color-deepBlue">
               <div className="ml-2" id="Faq-amh">
                 AcceptMyHelp
@@ -68,14 +66,9 @@ render() {
             </div>
           <hr className="star-light"></hr>
 
-          <h5 class="mb-0">
-                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseGeneral" aria-expanded="true" aria-controls="collapseGeneral">
-                <h4 className="faqMenuTitle">General</h4>
-                </button>
-            </h5>
-
-            <div id="collapseGeneral" class="collapse show" aria-labelledby="headingOne" data-parent="#Faq-menu">
+            <div id="general">
             <div class="card-body">
+            <h4 className="faqSectionTitle">General</h4>
 
           <ul className="Faq-qnaList">
             <li><h4><Button className="Faq-button" id="togglerQuestion1" size="lg" color="link" >What is acceptmycrypto.com?</Button></h4></li>
@@ -223,14 +216,11 @@ render() {
 </div>
 
             
-          <h5 class="mb-0">
-                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseSellers" aria-expanded="true" aria-controls="collapseSellers">
-                <h4 className="faqMenuTitle">Sellers</h4>
-                </button>
-            </h5>
+          
 
-            <div id="collapseSellers" class="collapse" aria-labelledby="headingOne" data-parent="#Faq-menu">
+            <div id="sellers">
             <div class="card-body">
+            <h4 className="faqSectionTitle">Sellers</h4>
 
     
           <ul className="Faq-qnaList">
@@ -487,14 +477,11 @@ render() {
 </div>
 
          
-            <h5 class="mb-0">
-                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseBuyers" aria-expanded="true" aria-controls="collapseBuyers">
-                <h4 className="faqMenuTitle">Buyers</h4>
-                </button>
-            </h5>
+           
 
-            <div id="collapseBuyers" class="collapse" aria-labelledby="headingOne" data-parent="#Faq-menu">
+            <div id="buyers">
             <div class="card-body">
+            <h4 className="faqSectionTitle">Buyers</h4>
          
             <ul className="Faq-qnaList">
               <li><h4><Button className="Faq-button" size="lg" color="link" id="togglerBuyersQues1">The cryptocurrency I want to use is not supported on your site, what can I do?</Button></h4></li>
@@ -600,14 +587,11 @@ render() {
 </div>
 
 
-            <h5 class="mb-0">
-                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseGuest" aria-expanded="true" aria-controls="collapseGuest">
-                <h4 className="faqMenuTitle">Buying as a Guest</h4>
-                </button>
-            </h5>
+            
 
-            <div id="collapseGuest" class="collapse" aria-labelledby="headingOne" data-parent="#Faq-menu">
+            <div id="guest">
             <div class="card-body">
+            <h4 className="faqSectionTitle">Buying as a Guest</h4>
 
        
             <ul className="Faq-qnaList">
@@ -694,7 +678,7 @@ render() {
 
 
 <Footer/>
-            </div>
+            </main>
             </div>
          
      

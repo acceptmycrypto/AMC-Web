@@ -1,19 +1,19 @@
 .Faq-qnaList{
-  justify-content: left;
-  display: inline;
+  text-align: center;
   }
 
-.faqMenuTitle{
+  .faqSectionTitle{
     text-align: center;
-  }
-  
+    color: #2E4158;
+}
+
+
 .Faq-answer{
     font-size: 20px;
     padding: 20px;
     padding-left: 30%;
     padding-right: 30%;
     text-align: center;
-
   }
 
   .Faq-answerNote{
@@ -35,25 +35,22 @@
   }
   
 .Faq-page {
-    height: 100vh;
-    justify-content: center;
-    display: flex;
-    color: #2E4158;
-    padding-top: 54px;
-    min-height: calc(100vh - 50px);
+  position: relative;
+  background-color: white;
+  color: #2E4158;
+  padding-top: 54px;
+  min-height: 100%;
   }
   
 .Faq-mainContent {
-    width: 100%;
-    background-color: white;
-    position: absolute;
-    padding-top: 50px;
+  background-color: white;
+  padding-top: 50px;
   }
 
-  .faqMenuTitle{
-    padding-left: 50px;
-    padding-bottom: 10px;
-    color: #2E4158;
+.faqMenuTitle{
+  padding-left: 50px;
+  padding-bottom: 10px;
+  color: #2E4158;
 }
 
 .faqMenuTitle:hover{
@@ -63,26 +60,24 @@
 .Faq-button:hover{
   color: #66DAC7;
 }
-
-    
+ 
 .Faq-menu {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  border-bottom: 3px solid #d6d4d4;
+  background-color: #199087;
+  color: #fff;
+  padding-top: 15px;
+  padding-left: 90px;
+  padding-right: 70px;
+  position: fixed;
+  margin-top: 0;
+  z-index: 2;
+}
 
-    overflow-x: auto;
-    border-bottom: 3px solid #d6d4d4;
-    background-color: #199087;
-    color: #fff;
-    padding-top: 15px;
-    padding-left: 90px;
-    padding-right: 70px;
-    position: fixed;
-    margin-top: 0;
-    z-index: 2;
-  }
-
-/* .Faq-menuItem{
+.Faq-menuItem{
     font-size: 15.5px;
     padding-left: 50px;
     padding-right: 50px;
@@ -91,9 +86,8 @@
     text-decoration: none;
     color: #fff;
     margin: 0px 97px 0px 83px;
-    color: #2a3c51;
     font-size: 17px;   
-  } */
+  }
   
 
   
