@@ -80,14 +80,14 @@ class CategoryHome extends Component {
 
     return (
       <div className="mt-4">
-        <Link to={"/category?term=" + category_collection_name + "&page=1"} className="category-title-margin mb-3">{category_collection_name}<i className="fas fa-chevron-right chevron-right"></i></Link>
+        <Link to={"/category?term=" + category_collection_name + "&page=1"} className="category-title-margin mob-hidden mb-3">{category_collection_name}<i className="fas fa-chevron-right chevron-right"></i></Link>
         {category_collection != undefined && category_collection.length > 0 && category_collection[0].id !== null && <div className="d-flex flex-row mt-3">
-          {category_collection[0].id !== null && <button type="button" className="btn btn-light" id="leftCategoryButton" onClick={this.handleLeftButtonClick}><i className="fas fa-chevron-left category-icon-chevron"></i></button>}
+          {category_collection[0].id !== null && <button type="button" className="btn btn-light mob-hidden" id="leftCategoryButton" onClick={this.handleLeftButtonClick}><i className="fas fa-chevron-left category-icon-chevron"></i></button>}
           <div className="category_div" id={category_collection_id}>
             {category_collection.map(deal => (
 
               <div key={deal.id}
-                className={deal.phone_number_verified === 0 && deal.seller_id !== user_id ? "category_item mx-2 deal-item-pending-hidden" : "category_item mx-2"}>
+                className={deal.phone_number_verified === 0 && deal.seller_id !== user_id ? "category_item  deal-item-pending-hidden" : "category_item "}>
                 <Link to={`/feed/deals/${deal.id}/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
 
                   <div className="category-info">
@@ -130,7 +130,7 @@ class CategoryHome extends Component {
               <i className="fas fa-plus fa-2x" />
             </div>}
           </div>
-          {category_collection[0].id !== null && <button type="button" className="btn btn-light" id="rightCategoryButton" onClick={this.handleRightButtonClick}><i className="fas fa-chevron-right category-icon-chevron"></i></button>}
+          {category_collection[0].id !== null && <button type="button" className="btn btn-light mob-hidden" id="rightCategoryButton" onClick={this.handleRightButtonClick}><i className="fas fa-chevron-right category-icon-chevron"></i></button>}
         </div>}
         {category_collection[0].id === null &&
           <div className="mt-3 margin-left-add-deal mb-5">
