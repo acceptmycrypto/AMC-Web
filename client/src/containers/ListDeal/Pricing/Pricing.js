@@ -59,28 +59,28 @@ class Pricing extends Component {
             <label className="mr-3 mt-2 weight-label">
               <input id="weight-10" type="radio" name="weightOption" className="weightOption" value={10} />
               <div className=" d-flex flex-column justify-content-center align-items-center">
-                <i className={mobileScreenSize ? "fas fa-laptop fa-lg" : "fas fa-laptop fa-2x"}></i>
+                <i className={mobileScreenSize.matches ? "fas fa-laptop fa-lg" : "fas fa-laptop fa-2x"}></i>
                 <span className="weight-font mt-2">3-10 lbs</span>
               </div>
             </label>
             <label className="mr-3 mt-2 weight-label">
               <input id="weight-20" type="radio" name="weightOption" className="weightOption" value={20} />
               <div className=" d-flex flex-column justify-content-center align-items-center">
-                <i className={mobileScreenSize ? "fas fa-tv fa-lg" : "fas fa-tv fa-2x"}></i>
+                <i className={mobileScreenSize.matches ? "fas fa-tv fa-lg" : "fas fa-tv fa-2x"}></i>
                 <span className="weight-font mt-2">10-20 lbs</span>
               </div>
             </label>
             <label className="mr-3 mt-2 weight-label">
               <input id="weight-40" type="radio" name="weightOption" className="weightOption" value={40} />
               <div className=" d-flex flex-column justify-content-center align-items-center">
-                <i className={mobileScreenSize ? "fas fa-bicycle fa-lg" : "fas fa-bicycle fa-2x"}></i>
+                <i className={mobileScreenSize.matches ? "fas fa-bicycle fa-lg" : "fas fa-bicycle fa-2x"}></i>
                 <span className="weight-font mt-2">20-40 lbs</span>
               </div>
             </label>
-            <label className={mobileScreenSize ? "mr-2 mt-2 weight-label" : "mt-2 weight-label"}>
+            <label className={mobileScreenSize.matches ? "mr-2 mt-2 weight-label" : "mt-2 weight-label"}>
               <input id="weight-70" type="radio" name="weightOption" className="weightOption" value={70} />
               <div className=" d-flex flex-column justify-content-center align-items-center">
-                <i className={mobileScreenSize ? "fas fa-dumbbell fa-lg" : "fas fa-dumbbell fa-2x"}></i>
+                <i className={mobileScreenSize.matches ? "fas fa-dumbbell fa-lg" : "fas fa-dumbbell fa-2x"}></i>
                 <span className="weight-font mt-2">40-70 lbs</span>
               </div>
             </label>
@@ -97,7 +97,7 @@ class Pricing extends Component {
                 </div>
               }
 
-              <div className={mobileScreenSize ? "d-flex mb-4 flex-row justify-content-between" : "d-flex flex-row justify-content-between"}>
+              <div className={mobileScreenSize.matches ? "d-flex mb-4 flex-row justify-content-between" : "d-flex flex-row justify-content-between"}>
                 <button className="weight-option-button" onClick={this.exitShippingModal}>Cancel</button>
                 <button className="weight-option-button" onClick={this.evaluatePricing}>Save</button>
               </div>
