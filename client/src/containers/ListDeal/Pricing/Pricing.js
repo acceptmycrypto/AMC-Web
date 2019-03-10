@@ -45,14 +45,14 @@ class Pricing extends Component {
             <label className="mr-3 mt-2 weight-label">
               <input id="weight-1" type="radio" name="weightOption" className="weightOption" value={1} />
               <div className=" d-flex flex-column justify-content-center align-items-center">
-                <i className={mobileScreenSize ? "fas fa-tshirt fa-lg" : "fas fa-tshirt fa-2x"}></i>
+                <i className={mobileScreenSize.matches ? "fas fa-tshirt fa-lg" : "fas fa-tshirt fa-2x"}></i>
                 <span className="weight-font mt-2">0-1 lb</span>
               </div>
             </label>
             <label className="mr-3 mt-2 weight-label">
               <input id="weight-3" type="radio" name="weightOption" className="weightOption" value={3} />
               <div className=" d-flex flex-column justify-content-center align-items-center">
-                <i className={mobileScreenSize ? "fas fa-mobile-alt fa-lg" : "fas fa-mobile-alt fa-2x"}></i>
+                <i className={mobileScreenSize.matches ? "fas fa-mobile-alt fa-lg" : "fas fa-mobile-alt fa-2x"}></i>
                 <span className="weight-font mt-2">1-3 lbs</span>
               </div>
             </label>
