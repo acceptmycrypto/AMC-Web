@@ -14,16 +14,18 @@ import Layout from '../../Layout';
 import { UncontrolledCarousel } from 'reactstrap';
 import CategoryHome from './CategoryHome/CategoryHome';
 import { _loadAllHomepageDeals } from '../../../actions/homepageActions';
+import { _loadCryptosRanking } from "../../../actions/cryptosRankingActions";
 
 class Homepage extends Component {
 
   componentDidMount = () => {
     // this.props._loadHomepage();
     this.props._loadAllHomepageDeals();
+    this.props._loadCryptosRanking("venues");
   }
 
   render() {
-    const { error, loading, category_list, homepage_deals } = this.props;
+    const { error, loading, category_list, homepage_deals, cryptos } = this.props;
     // console.log(category_list, apparel_accessories, electronics);
 
     if (error) {
@@ -40,6 +42,37 @@ class Homepage extends Component {
         </div>
       )
     }
+    const header_two = () => {
+        return (
+            <div>
+                <div>
+                    <i className="fas fa-tag"></i> Sell items to get paid with Cryptos
+                </div>
+                <div>
+                    <i className="fas fa-truck"></i> Ship to buyers
+                </div>
+                <div>
+                    <i className="fas fa-wallet"></i> Get paid when buyers receive the orders
+                </div>
+            </div>
+        )
+    }
+    const header_three = () => {
+        return (
+          <div>
+              Accepted Cryptos: 
+          </div>
+        )
+    }
+    const caption_three = () => {
+        return (
+          <div>
+            {cryptos.map(crypto => {
+                return <span><div className="crypto-logo"><img src={crypto.crypto_logo} alt="crypto_logo"/></div>{crypto.crypto_symbol} </span>
+            })}
+          </div>
+        )
+    }
 
     const carouselItems = [
       {
@@ -54,14 +87,14 @@ class Homepage extends Component {
         // src: 'https://www.solidbackgrounds.com/images/2048x1536/2048x1536-true-blue-solid-color-background.jpg',
         altText: 'Slide 2',
         // caption: 'Slide 2',
-        // header: 'Slide 2 Header'
+        header: header_two()
       },
       {
         src: './assets/images/banner3.svg',
         // src: 'https://static.bhphoto.com/images/images500x500/Savage_36_1253_Widetone_Seamless_Background_Paper_1233087643000_486211.jpg',
         altText: 'Slide 3',
-        // caption: 'Slide 3',
-        // header: 'Slide 3 Header'
+        caption: caption_three(),
+        header: header_three()
       }
     ];
 
@@ -103,12 +136,12 @@ const mapStateToProps = state => ({
   // health_beauty: state.Homepage.health_beauty,
   // movies_music_games: state.Homepage.movies_music_games,
   error: state.Homepage.error,
-  loading: state.Homepage.loading
-
+  loading: state.Homepage.loading,
+    cryptos: state.Cryptos.cryptos
 });
 
 const matchDispatchToProps = dispatch => {
-  return bindActionCreators({ _loadAllHomepageDeals}, dispatch);
+  return bindActionCreators({ _loadAllHomepageDeals, _loadCryptosRanking}, dispatch);
 }
 
 

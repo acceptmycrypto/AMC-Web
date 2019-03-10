@@ -220,7 +220,8 @@
 }
 
 .carousel-caption {
-  bottom: 50px;
+  /* bottom: 50px; */
+  margin: auto;
   color: #fff;
   font-family: Roboto,sans-serif;
   font-size: 20px;
@@ -234,4 +235,8 @@
   font-weight: 500;
 }
 
-
+.crypto-logo {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+}
