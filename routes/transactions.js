@@ -392,16 +392,17 @@ router.post("/acceptmycrypto/shippo/tracking_status", function(req, res) {
         //if there is a tracking number in the database and tracking_status from the database has not delivered yet
         if (transaction_id && delivery_status !== "DELIVERED") {
            //query info relating to this purchase to make an update
+
           connection.query(
             `SELECT shippo_shipment_price, amount, crypto_symbol, payment_received, users_purchases.user_id, users_purchases.crypto_id, users_cryptos.crypto_address, users_cryptos.id AS users_cryptos_id, crypto_balance, deal_name, email AS user_email from users_purchases LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN users_cryptos ON users_cryptos.crypto_id = crypto_info.id LEFT JOIN deals ON users_purchases.deal_id = deals.id WHERE ${transaction_type} AND users_purchases.user_id = ? AND users_purchases.crypto_id = ?`,
             [transaction_id, user_id, crypto_id],
             async function(error, result, fields) {
               if (error) throw error;
 
-              let {amount, crypto_symbol, payment_received, users_cryptos_id, crypto_balance, deal_name, user_email} = result[0];
+              let {amount, crypto_symbol, payment_received, users_cryptos_id, crypto_balance, deal_name, user_email, shippo_shipment_price} = result[0];
 
               //check to see if payment has recevied
-              if (payment_received === 100) {
+              if (payment_received === 1) {
 
                 //total payout to seller
                 let amountAfterFee;
@@ -424,13 +425,14 @@ router.post("/acceptmycrypto/shippo/tracking_status", function(req, res) {
                   }
 
                   let rateDate = JSON.parse(body);
-                  let cryptoRate = rateDate.data[crypto].quote.USD.price;
+                  let cryptoRate = rateDate.data[crypto_symbol].quote.USD.price;
 
                   //this is the shipping fee in crypto
                   let shippingCryptoAmount = (shippo_shipment_price/cryptoRate).toFixed(4);
-                  //subtract the shipping fee
 
-                  amountAfterFee = (amount * (0.98)) - shippingCryptoAmount
+                  //subtract the shipping fee
+                  amountAfterFee = (amount * (0.98)) - shippingCryptoAmount;
+
                   //amount is the crypto amount of sale tat buyer pays
                   //since coinpase already takes .5%, we're taking 2% (total is 2.5%)
 
@@ -449,40 +451,39 @@ router.post("/acceptmycrypto/shippo/tracking_status", function(req, res) {
                     }
                   );
 
+                  //New balance that gets updated for the seller
+                  let newBalance = crypto_balance + amountAfterFee;
+
+                   //Set the new crypto balance for the seller
+                  connection.query(
+                    "UPDATE users_cryptos SET crypto_balance = ? WHERE id = ?",
+                    [newBalance, users_cryptos_id],
+                    function(err, result) {
+                      if (err) {
+                        console.log(err);
+                      }
+
+                      let profile_url;
+                      if (process.env.NODE_ENV == "development") {
+                        profile_url = process.env.FRONTEND_URL + "/profile/";
+
+                      } else {
+                        profile_url = process.env.BACKEND_URL + "/profile/";
+                      }
+
+                      const balance_deposited = {
+                        to: user_email,
+                        from: process.env.CUSTOMER_SUPPORT,
+                        subject: '[AcceptMyCrypto Notification] Cryptocurrency Deposited!',
+                        html: balanceDepositedEmailTemplate({ crypto_symbol, amountAfterFee, deal_name, profile_url })
+                      };
+                      sgMail.send(balance_deposited);
+
+                    }
+                );
+
 
                 });
-
-
-                //New balance that gets updated for the seller
-                let newBalance = crypto_balance + amountAfterFee;
-
-                //Set the new crypto balance for the seller
-                connection.query(
-                  "UPDATE users_cryptos SET crypto_balance = ? WHERE id = ?",
-                  [newBalance, users_cryptos_id],
-                  function(err, result) {
-                    if (err) {
-                      console.log(err);
-                    }
-
-                    let profile_url;
-                    if (process.env.NODE_ENV == "development") {
-                      profile_url = process.env.FRONTEND_URL + "/profile/";
-
-                    } else {
-                      profile_url = process.env.BACKEND_URL + "/profile/";
-                    }
-
-                    const balance_deposited = {
-                      to: user_email,
-                      from: process.env.CUSTOMER_SUPPORT,
-                      subject: '[AcceptMyCrypto Notification] Cryptocurrency Deposited!',
-                      html: balanceDepositedEmailTemplate({ crypto_symbol, amountAfterFee, deal_name, profile_url })
-                    };
-                    sgMail.send(balance_deposited);
-
-                  }
-                );
 
               }
             }
@@ -528,7 +529,6 @@ router.post("/withdraw/initiate", verifyToken, function (req, res) {
           };
           sgMail.send(withdraw_confirmation);
 
-          console.log(withdraw_token);
           res.json({ success: true, message: "Please check your email for the transfer confirmation token." })
         }
       )
@@ -560,7 +560,6 @@ router.post("/withdraw/confirm", verifyToken, function (req, res) {
             let { users_cryptos_id, crypto_address, crypto_balance, crypto_symbol } = users_cryptos_result[0];
 
             if (crypto_balance > 0) {
-              console.log("call coinpayment")
               let options = {
                 amount: crypto_balance,
                 currency: crypto_symbol,
@@ -664,14 +663,12 @@ router.post("/checkout/notification", function (req, res, next) {
   return next();
 }, function (req, res, next) {
 
-  console.log("coinpayment", req.body)
   console.log("transaction_id", req.body.txn_id);
   //handle events
   connection.query(
     'SELECT status, users.email, users.username, guest_users.email AS guest_email, amount, crypto_symbol, deal_name, deals.seller_id, deals.shipping_label_status, users_purchases.deal_id, seller.email AS seller_email, shipping_firstname, shipping_lastname, shipping_address, shipping_city, shipping_state, shipping_zipcode FROM users_purchases LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN guest_users ON users_purchases.guest_user_id = guest_users.id LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name LEFT JOIN users seller ON deals.seller_id = seller.id LEFT JOIN users_shipping_address ON users_shipping_address.txn_id = users_purchases.txn_id WHERE users_purchases.txn_id = ?',
     [req.body.txn_id],
     function (err, data_status, fields) {
-      console.log("data-status", data_status);
 
       if(data_status.length === 0 || undefined) {
         console.log(`Unable to get ${req.body.txn_id} in the database`);
