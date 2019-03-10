@@ -3,6 +3,7 @@ import { Link, withRouter } from "react-router-dom";
 // import { handleSelectedCategory } from '../../../../actions/listDealActions';
 import '../Homepage.css';
 import './CategoryHome.css';
+import './CategoryHomeMobile.css';
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import { updateSelectedCategory } from '../../../../actions/homepageActions';
