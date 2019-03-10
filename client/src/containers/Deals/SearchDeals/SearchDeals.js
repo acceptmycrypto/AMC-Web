@@ -159,7 +159,7 @@ class SearchDeals extends Component {
           <div className ="search-deals-results">
           
           {deals != undefined && deals.length > 0 && deals.map(deal => (
-            <div key={deal.id} className="category_item m-3">
+            <div key={deal.id} className="category_item">
               <Link to={`/feed/deals/${deal.id}/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
 
                 <div className="category-info">
