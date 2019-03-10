@@ -169,10 +169,11 @@ class Pricing extends Component {
 
     let sellerEarns, sellerProfits;
     if (this.props.shippingLabelSelection === "prepaid") {
-      sellerEarns = ((parseFloat(priceInUSD)) - (0.025 * parseFloat(priceInUSD)) - (parseFloat(shippingPriceSelection))).toFixed(2);
+      // change seller earns in USD so that the seller fee is 10% and not 2.5%
+      sellerEarns = (((parseFloat(priceInUSD)).toFixed(2)) - ((0.10 * parseFloat(priceInUSD)).toFixed(2)) - (parseFloat(shippingPriceSelection).toFixed(2))).toFixed(2);
 
     } else {
-      sellerEarns = ((parseFloat(priceInUSD)) - (0.025 * parseFloat(priceInUSD))).toFixed(2);
+      sellerEarns = (((parseFloat(priceInUSD)).toFixed(2)) - ((0.10 * parseFloat(priceInUSD)).toFixed(2))).toFixed(2);
     }
 
     if (sellerEarns >= 0) {
@@ -383,8 +384,8 @@ class Pricing extends Component {
                           <div className="shipping-font"> <strong>${(parseFloat(priceInUSD)).toFixed(2)}</strong></div>
                         </div>
                         <div className="d-flex flex-row justify-content-between">
-                          <div className="shipping-font">Selling Fee (2.5%):</div>
-                          <div className="shipping-font" style={{ color: "red" }}>  - ${(0.025 * parseFloat(priceInUSD)).toFixed(2)}</div>
+                          <div className="shipping-font">Selling Fee (10%):</div>
+                          <div className="shipping-font" style={{ color: "red" }}>  - ${(0.10 * parseFloat(priceInUSD)).toFixed(2)}</div>
                         </div>
                         {shippingLabelSelection === "prepaid" && shippingPriceSelection !== null && shippingPriceSelection !== 'NaN' && shippingPriceSelection > 0 &&
                           <div>
