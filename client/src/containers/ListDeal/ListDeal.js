@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Prompt } from "react-router";
 import "./ListDeal.css";
+import "./ListDealMobile.css";
 import Layout from "../Layout";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
