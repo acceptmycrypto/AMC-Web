@@ -13,7 +13,7 @@ import Layout from '../../Layout';
 // import { _loadHomepage } from '../../../actions/homepageActions';
 import { UncontrolledCarousel } from 'reactstrap';
 import CategoryHome from './CategoryHome/CategoryHome';
-import { _loadAllHomepageDeals } from '../../../actions/homepageActions';
+import { _loadAllHomepageDeals, _loadAllHomepageDealsMobile } from '../../../actions/homepageActions';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { resetTracking } from '../../../actions/dealsActions';
@@ -21,8 +21,14 @@ import { resetTracking } from '../../../actions/dealsActions';
 class Homepage extends Component {
 
   componentDidMount = async () => {
-   
-    await this.props._loadAllHomepageDeals();
+
+    const mobileScreenSize = await window.matchMedia("(max-width: 640px)");
+
+    if(mobileScreenSize.matches){
+      await this.props._loadAllHomepageDealsMobile();
+    }else{
+      await this.props._loadAllHomepageDeals();
+    }
     
     if(await this.props.trackingResult !== null && this.props.trackingResult.message === "success"){
       await  toast.success("Tracking Info Updated", {
@@ -79,7 +85,6 @@ class Homepage extends Component {
     return (
       <div>
         <Layout>
-          {/* <p id="homepage_title">Homepage</p> */}
           <div className="menu-parent mob-category-menu">
             {category_list != undefined && category_list.length > 0 && category_list.map(category => (
               // <Menu.Item name={category.category_name} active={activeItem === category.category_name} onClick={this.handleItemClick} />
@@ -118,7 +123,7 @@ const mapStateToProps = state => ({
 });
 
 const matchDispatchToProps = dispatch => {
-  return bindActionCreators({ _loadAllHomepageDeals, resetTracking}, dispatch);
+  return bindActionCreators({ _loadAllHomepageDeals, _loadAllHomepageDealsMobile, resetTracking}, dispatch);
 }
 
 
