@@ -15,51 +15,5 @@
        justify-content: center;
     }
 
-    .full-width-deals{
-        visibility: hidden;
-        display: none;
-        
-    }
-
-    .mob-hidden{
-        visibility: hidden;
-        display: none;
-    }
-
-    .category_div{
-        margin-top: 50px;
-        /* margin: 0 auto; */
-        /* padding: 0 20px; */
-        width: 100%;
-        /* max-width: fit-content; */
-        height: 100%;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        overflow-x: visible;
-        align-items: center;
-        scroll-behavior: smooth;
-        justify-content: center;
-      }
-
-      .category_item{
-          margin: 5px;
-          width: 160px;
-          height: 390px;
-      }
-
-      .price-differ{
-          flex-direction: column-reverse !important;
-      }
-      .pay_in_crypto{
-          margin: 0 auto;
-          margin-bottom: 5px
-
-      }
-
-      .category-title-margin{
-        margin-top: 200px;
-      }
-
 }
   
