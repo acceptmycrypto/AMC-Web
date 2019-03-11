@@ -52,7 +52,7 @@ class SearchDeals extends Component {
     return parseInt(((priceInDollar - priceInCrypto) / priceInDollar) * 100)
   }
 
-  
+
 
   render() {
     const mobileScreenSize = window.matchMedia("(max-width: 640px)");
@@ -74,7 +74,7 @@ class SearchDeals extends Component {
     }else{
       page_title = `${title_term} Deals:`
     }
-    
+
     if (error) {
       return <div>Error! {error.message}</div>;
     }
@@ -88,7 +88,7 @@ class SearchDeals extends Component {
     let currentPage, currentNumberOfResults;
     //filter deals by search
     if (this.props.searchTerm!=="" && this.props.pageType === "search"){
-        deals = this.props.searchedDeals; 
+        deals = this.props.searchedDeals;
         currentTerm = this.props.searchTerm;
         currentPage = this.props.searchPage;
         currentNumberOfResults = this.props.numberOfResults;
@@ -105,11 +105,13 @@ class SearchDeals extends Component {
     if ( this.props.category){
       deals = this.props.categorizedDeals;
     }
-    
+
 
     return (
       <div>
         <Layout>
+        {/* {deals == undefined || deals.length == 0 && <div className="no_Results">No results found</div>
+        } */}
         {(categoryTerm || searchTerm) && <div className="search-deals-title" >{page_title}</div>}
         <div className ="search-deals-wrapper">
         {deals != undefined && deals.length > 0 && currentTerm !==""  && <div className="page_Nav">
@@ -150,13 +152,10 @@ class SearchDeals extends Component {
                     </button>
                 </span>
             </div>
-        </div>} 
-        
+        </div>}
         <div className="venues-content mb-5">
-
-        
           <div className ="search-deals-results">
-          
+
           {deals != undefined && deals.length > 0 && deals.map(deal => (
             <div key={deal.id} className="category_item">
               <Link to={`/feed/deals/${deal.id}/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
@@ -202,7 +201,7 @@ class SearchDeals extends Component {
           </div>
 
         </div>
-        {deals != undefined && deals.length > 0 && currentTerm !="" && <div className="page_Nav">
+        {deals != undefined && deals.length > 0 && currentTerm !="" && <div className="page_Nav page_pagination_bottom">
             <div className="page_NavContent">
                 <span>
                     <button className={"scroll_Button "+("button_Hide_"+(parseInt(currentPage)==1))} onClick={()=>this.goToSearchPage(1)}>
@@ -259,7 +258,7 @@ const mapStateToProps = state => ({
   numberOfResults: state.Search.numberOfResults,
   category: state.Category.category,
   categorizedDeals: state.Category.filteredCategory,
-  categoryTerm: state.Category.categoryTerm, 
+  categoryTerm: state.Category.categoryTerm,
   categoriesDeals: state.Category.categoriesDeals,
   categoryPage: state.Category.categoryPage,
   categoryNumberOfResults: state.Category.categoryNumberOfResults,

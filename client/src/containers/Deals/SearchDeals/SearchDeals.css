@@ -50,6 +50,14 @@
     color: #52C4B9;
 }
 
+.page_pagination_bottom {
+  margin-top: 150px;
+}
+
+.page_pagination_top {
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
 .search-deals-title{
     text-align: center;
     padding-top: 20px;
@@ -58,7 +66,7 @@
 }
 
 .term-color{
-    color: #52C4B9;  
+    color: #52C4B9;
 }
 
 .search-deals-results{
