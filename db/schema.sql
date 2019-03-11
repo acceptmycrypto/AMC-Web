@@ -231,6 +231,7 @@ CREATE TABLE users_purchases(
 	shippo_shipment_price DECIMAL (10,2) NULL,
   shipping_fee_crypto_amount DECIMAL(20, 8) NULL,
 	tracking_number VARCHAR(255) NULL UNIQUE, -- shipment tracking number
+	tracking_carrier VARCHAR (100) NULL,
 	tracking_status VARCHAR(100) NULL,
 	tracking_url_provider VARCHAR (500) NULL, -- link to track package online
 	eta VARCHAR (255) NULL,
