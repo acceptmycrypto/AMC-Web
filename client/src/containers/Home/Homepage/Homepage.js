@@ -13,7 +13,7 @@ import Layout from '../../Layout';
 // import { _loadHomepage } from '../../../actions/homepageActions';
 import { UncontrolledCarousel } from 'reactstrap';
 import CategoryHome from './CategoryHome/CategoryHome';
-import { _loadAllHomepageDeals, _loadAllHomepageDealsMobile } from '../../../actions/homepageActions';
+import { _loadAllHomepageDeals, _loadAllHomepageDealsMobile, showCryptoLogos  } from '../../../actions/homepageActions';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { resetTracking } from '../../../actions/dealsActions';
@@ -30,6 +30,8 @@ class Homepage extends Component {
       await this.props._loadAllHomepageDeals();
     }
     
+    await this.props.showCryptoLogos();
+    
     if(await this.props.trackingResult !== null && this.props.trackingResult.message === "success"){
       await  toast.success("Tracking Info Updated", {
         position: toast.POSITION.TOP_RIGHT
@@ -39,8 +41,7 @@ class Homepage extends Component {
   }
 
   render() {
-    const { error, loading, category_list, homepage_deals } = this.props;
-
+    const { error, loading, category_list, homepage_deals, cryptoLogos } = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -56,13 +57,44 @@ class Homepage extends Component {
         </div>
       )
     }
+    const header_two = () => {
+        return (
+            <div className="carousel-header-two">
+                <div>
+                    <i className="fas fa-tag"></i> Create a Deal for Sale
+                </div>
+                <div>
+                    <i className="fas fa-truck"></i> Ship to Buyer
+                </div>
+                <div>
+                    <i className="fas fa-wallet"></i> Get Paid with Cryptos
+                </div>
+            </div>
+        )
+    }
+    const header_three = () => {
+        return (
+          <div>
+              Accepted Cryptos
+          </div>
+        )
+    }
+    const caption_three = () => {
+        return (
+          <div className="caption_three">
+            {cryptoLogos.map(crypto => {
+                return <div className="crypto-logo"><img src={crypto} alt="crypto_logo"/></div>
+            })}
+          </div>
+        )
+    }
 
     const carouselItems = [
       {
         src: './assets/images/banner1.svg',
         // src: 'https://static.bhphoto.com/images/images500x500/Rosco_102354264825_E_Colour_5426_Blueberry_Blue_1233286396000_595543.jpg',
         altText: 'Slide 1',
-        caption: 'AcceptMyCrypto is the easiest marketplace to buy and sell discounted items for crypto',
+        caption: 'AcceptMyCrypto is the easiest marketplace to buy and sell items for a discount price in crypto.',
         header: header_one()
       },
       {
@@ -70,14 +102,14 @@ class Homepage extends Component {
         // src: 'https://www.solidbackgrounds.com/images/2048x1536/2048x1536-true-blue-solid-color-background.jpg',
         altText: 'Slide 2',
         // caption: 'Slide 2',
-        // header: 'Slide 2 Header'
+        header: header_two()
       },
       {
         src: './assets/images/banner3.svg',
         // src: 'https://static.bhphoto.com/images/images500x500/Savage_36_1253_Widetone_Seamless_Background_Paper_1233087643000_486211.jpg',
         altText: 'Slide 3',
-        // caption: 'Slide 3',
-        // header: 'Slide 3 Header'
+        caption: caption_three(),
+        header: header_three()
       }
     ];
 
@@ -119,11 +151,12 @@ const mapStateToProps = state => ({
   error: state.Homepage.error,
   loading: state.Homepage.loading,
   trackingResult: state.matchedDeals.trackingResult,
+  cryptoLogos: state.LoadCrypto.cryptoLogos
 
 });
 
 const matchDispatchToProps = dispatch => {
-  return bindActionCreators({ _loadAllHomepageDeals, _loadAllHomepageDealsMobile, resetTracking}, dispatch);
+  return bindActionCreators({ _loadAllHomepageDeals, _loadAllHomepageDealsMobile, resetTracking, showCryptoLogos}, dispatch);
 }
 
 

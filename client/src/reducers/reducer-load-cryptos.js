@@ -2,7 +2,19 @@ const initialState = {
     cryptoOptions: [],
     cryptoOptionsForCreatingDeal: [],
     loading: false,
-    error: null
+    error: null,
+    cryptoLogos: [
+      "https://s2.coinmarketcap.com/static/img/coins/64x64/1831.png",
+      "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png",
+      "https://s2.coinmarketcap.com/static/img/coins/64x64/131.png",
+      "https://s2.coinmarketcap.com/static/img/coins/64x64/74.png",
+      "https://s2.coinmarketcap.com/static/img/coins/64x64/1765.png",
+      "https://s2.coinmarketcap.com/static/img/coins/64x64/1321.png",
+      "https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png",
+      "https://s2.coinmarketcap.com/static/img/coins/64x64/2.png",
+      "https://s2.coinmarketcap.com/static/img/coins/64x64/52.png",
+      "https://s2.coinmarketcap.com/static/img/coins/64x64/693.png"
+    ]
 }
 
 export default function loadCryptosReducer(state = initialState, action) {
@@ -28,6 +40,11 @@ export default function loadCryptosReducer(state = initialState, action) {
               ...state,
               loading: false,
               cryptoOptionsForCreatingDeal: action.payload.cryptoOptionsForCreatingDeal
+          };
+
+        case "SHOW_CRYPTOS_LOGOS_FOR_HOME_PAGE":
+          return {
+              ...state,
           };
 
         case "LOAD_CRYPTO_FAILURE":
