@@ -178,7 +178,7 @@ router.get('/api/category', function(req, res) {
     var start = numberPerPage*(req.query.page-1);
 
     let category_count_filter, category_deal_filter;
-    if(req.query.term !== "Most Recent Deals Listed"){
+    if(req.query.term !== "Most Recent Deals"){
         category_count_filter = ` WHERE ( category_name LIKE ?) `;
         category_deal_filter = ` WHERE (category_name LIKE ?) AND deals.deal_status <> ? LIMIT ?, ? `;
         category_count_array = ['%'+req.query.term+'%'];
