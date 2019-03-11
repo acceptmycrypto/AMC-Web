@@ -119,7 +119,7 @@ var connection = mysql.createConnection({
 //     method: "GET",
 //     uri: "https://pro-api.coinmarketcap.com/v1/cryptocurrency/info",
 //     qs: {
-//       symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,XVG,XMR"
+//       symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,EOS,XVG"
 //     },
 //     headers: {
 //       "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
@@ -130,7 +130,7 @@ var connection = mysql.createConnection({
 //     method: "GET",
 //     uri: "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest",
 //     qs: {
-//       symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,XVG,XMR"
+//       symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,EOS,XVG"
 //     },
 //     headers: {
 //       "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
@@ -169,7 +169,7 @@ var connection = mysql.createConnection({
 //         var crypto_price = coin_metadata[i].quote.USD.price;
 
 //         connection.query(
-//           "INSERT INTO crypto_metadata SET ?",
+//           "INSERT IGNORE INTO crypto_metadata SET ?",
 //           {
 //             crypto_name: crypto_name,
 //             crypto_symbol: crypto_symbol,
@@ -188,7 +188,7 @@ var connection = mysql.createConnection({
 //         var crypto_logo = coin_info[j].logo;
 //         var crypto_metadata_name = coin_info[j].name;
 //         connection.query(
-//           "INSERT INTO crypto_info SET ?",
+//           "INSERT IGNORE INTO crypto_info SET ?",
 //           {
 //             crypto_logo: crypto_logo,
 //             crypto_link: crypto_site,

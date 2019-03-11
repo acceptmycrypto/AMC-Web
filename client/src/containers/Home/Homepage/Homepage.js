@@ -13,19 +13,18 @@ import Layout from '../../Layout';
 // import { _loadHomepage } from '../../../actions/homepageActions';
 import { UncontrolledCarousel } from 'reactstrap';
 import CategoryHome from './CategoryHome/CategoryHome';
-import { _loadAllHomepageDeals } from '../../../actions/homepageActions';
-import { _loadCryptosRanking } from "../../../actions/cryptosRankingActions";
+import { _loadAllHomepageDeals, showCryptoLogos } from '../../../actions/homepageActions';
 
 class Homepage extends Component {
 
   componentDidMount = () => {
     // this.props._loadHomepage();
     this.props._loadAllHomepageDeals();
-    this.props._loadCryptosRanking("venues");
+    this.props.showCryptoLogos();
   }
 
   render() {
-    const { error, loading, category_list, homepage_deals, cryptos } = this.props;
+    const { error, loading, category_list, homepage_deals, cryptoLogos } = this.props;
     // console.log(category_list, apparel_accessories, electronics);
 
     if (error) {
@@ -44,15 +43,15 @@ class Homepage extends Component {
     }
     const header_two = () => {
         return (
-            <div>
+            <div className="carousel-header-two">
                 <div>
-                    <i className="fas fa-tag"></i> Sell items to get paid with Cryptos
+                    <i className="fas fa-tag"></i> Create a Deal for Sale
                 </div>
                 <div>
-                    <i className="fas fa-truck"></i> Ship to buyers
+                    <i className="fas fa-truck"></i> Ship to Buyer
                 </div>
                 <div>
-                    <i className="fas fa-wallet"></i> Get paid when buyers receive the orders
+                    <i className="fas fa-wallet"></i> Get Paid with Cryptos
                 </div>
             </div>
         )
@@ -60,15 +59,15 @@ class Homepage extends Component {
     const header_three = () => {
         return (
           <div>
-              Accepted Cryptos: 
+              Accepted Cryptos
           </div>
         )
     }
     const caption_three = () => {
         return (
           <div>
-            {cryptos.map(crypto => {
-                return <span><div className="crypto-logo"><img src={crypto.crypto_logo} alt="crypto_logo"/></div>{crypto.crypto_symbol} </span>
+            {cryptoLogos.map(crypto => {
+                return <div className="crypto-logo"><img src={crypto} alt="crypto_logo"/></div>
             })}
           </div>
         )
@@ -79,7 +78,7 @@ class Homepage extends Component {
         src: './assets/images/banner1.svg',
         // src: 'https://static.bhphoto.com/images/images500x500/Rosco_102354264825_E_Colour_5426_Blueberry_Blue_1233286396000_595543.jpg',
         altText: 'Slide 1',
-        caption: 'AcceptMyCrypto is the easiest marketplace to buy and sell discounted items for crypto',
+        caption: 'AcceptMyCrypto is the easiest marketplace to buy and sell items for a discount price in crypto.',
         header: header_one()
       },
       {
@@ -137,11 +136,11 @@ const mapStateToProps = state => ({
   // movies_music_games: state.Homepage.movies_music_games,
   error: state.Homepage.error,
   loading: state.Homepage.loading,
-    cryptos: state.Cryptos.cryptos
+  cryptoLogos: state.LoadCrypto.cryptoLogos
 });
 
 const matchDispatchToProps = dispatch => {
-  return bindActionCreators({ _loadAllHomepageDeals, _loadCryptosRanking}, dispatch);
+  return bindActionCreators({ _loadAllHomepageDeals, showCryptoLogos}, dispatch);
 }
 
 
