@@ -182,7 +182,7 @@ router.get('/api/search', function(req, res) {
 //     console.log(req.query);
     //hardcoded number of search results per page to 8.  ideally should be something like 20.
     //this number needs to match the number in frontend SearchDeals.js
-    var numberPerPage = 4;
+    var numberPerPage = 10;
     //this calculates starting from which search result to give back
     //for example, if start==0 and numberPerPage==8, then db should give back 8 results starting from result #0
     var start = numberPerPage*(req.query.page-1);

@@ -13,7 +13,7 @@ import Layout from '../../Layout';
 // import { _loadHomepage } from '../../../actions/homepageActions';
 import { UncontrolledCarousel } from 'reactstrap';
 import CategoryHome from './CategoryHome/CategoryHome';
-import { _loadAllHomepageDeals } from '../../../actions/homepageActions';
+import { _loadAllHomepageDeals, _loadAllHomepageDealsMobile } from '../../../actions/homepageActions';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { resetTracking } from '../../../actions/dealsActions';
@@ -21,8 +21,14 @@ import { resetTracking } from '../../../actions/dealsActions';
 class Homepage extends Component {
 
   componentDidMount = async () => {
-   
-    await this.props._loadAllHomepageDeals();
+
+    const mobileScreenSize = await window.matchMedia("(max-width: 640px)");
+
+    if(mobileScreenSize.matches){
+      await this.props._loadAllHomepageDealsMobile();
+    }else{
+      await this.props._loadAllHomepageDeals();
+    }
     
     if(await this.props.trackingResult !== null && this.props.trackingResult.message === "success"){
       await  toast.success("Tracking Info Updated", {
@@ -79,7 +85,6 @@ class Homepage extends Component {
     return (
       <div>
         <Layout>
-          {/* <p id="homepage_title">Homepage</p> */}
           <div className="menu-parent mob-category-menu">
             {category_list != undefined && category_list.length > 0 && category_list.map(category => (
               // <Menu.Item name={category.category_name} active={activeItem === category.category_name} onClick={this.handleItemClick} />
@@ -87,13 +92,19 @@ class Homepage extends Component {
               // {/* <Menu.Item key={category.id} content={category.category_name} category-id={category.id} /> */}
             ))}
           </div>
+        
           <UncontrolledCarousel items={carouselItems} indicators={false} className="homepage-carousel" />
+          
+         
           {homepage_deals.recent_deals !== undefined && homepage_deals.recent_deals.length > 0 &&
-            <CategoryHome category_collection={homepage_deals.recent_deals} category_collection_name={"Most Recent Deals Listed"} category_collection_id={`cat_recent`}/>
+            <CategoryHome category_collection={homepage_deals.recent_deals} category_collection_name={"Most Recent Deals"} category_collection_id={`cat_recent`}/>
           }
+          
+          <div className="full-width-deals">
           {homepage_deals.all_results !== undefined && homepage_deals.all_results.length > 0 && homepage_deals.all_results.map((categorizedDealArray, i) => (
             <CategoryHome category_collection={categorizedDealArray} category_collection_name={categorizedDealArray[0].category_name} category_collection_id={`cat_${i}`}/>
           ))}
+          </div>
 
         </Layout>
         <ToastContainer autoClose={5000} />
@@ -112,7 +123,7 @@ const mapStateToProps = state => ({
 });
 
 const matchDispatchToProps = dispatch => {
-  return bindActionCreators({ _loadAllHomepageDeals, resetTracking}, dispatch);
+  return bindActionCreators({ _loadAllHomepageDeals, _loadAllHomepageDealsMobile, resetTracking}, dispatch);
 }
 
 

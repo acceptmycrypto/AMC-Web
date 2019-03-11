@@ -1,0 +1,70 @@
+
+/* media query */
+@media only screen and (max-width: 640px) {
+
+    .full-width-deals{
+        visibility: hidden;
+        display: none;
+        
+    }
+
+    .mob-hidden{
+        visibility: hidden;
+        display: none;
+    }
+
+    .category_div{
+        margin-top: 15px;
+        /* margin: 0 auto; */
+        /* padding: 0 20px; */
+        width: 100%;
+        /* max-width: fit-content; */
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        overflow-x: visible;
+        align-items: center;
+        scroll-behavior: smooth;
+        justify-content: center;
+        padding-bottom: 50px;
+      }
+
+      .category_item{
+          margin: 5px;
+          width: 160px;
+          height: 260px;
+      }
+
+      /* .price-differ{
+          flex-direction: column-reverse !important;
+      } */
+      .pay_in_crypto{
+          margin: 0 auto;
+          margin-bottom: 5px
+
+      }
+
+      .category-title-margin{
+        margin-top: 100px;
+      }
+
+      .menu-parent{
+          padding-left: 20px;
+          padding-right: 20px;
+      }
+
+      .category-image-div{
+          height: 140px;
+      }
+
+      .mob-most-recent-title{
+          visibility: visible;
+          display: flex;
+          justify-content: center;
+          margin-top: 110px;
+          font-size: 25px;
+      }
+
+}
+  

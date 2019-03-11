@@ -8,11 +8,15 @@ import CryptoRankings from '../../CryptosRanking';
 import Layout from "../../Layout";
 import '../Deals.css';
 import './SearchDeals.css';
+import './SearchDealsMobile.css';
 import '../../Home/Homepage/Homepage.css';
 import { _isLoggedIn } from '../../../actions/loggedInActions';
 import {searchDeals} from '../../../actions/searchBarActions';
 import queryString from 'query-string';
 import { categoryDeals } from '../../../actions/categoryActions';
+import { handleLongDescription } from '../../../utils/helper_functions';
+import LoadingSpinner from '../../../components/UI/LoadingSpinner';
+
 
 
 
@@ -28,7 +32,7 @@ class SearchDeals extends Component {
         }
     }
 
-  componentDidMount = () => {
+  componentDidMount = async() => {
       //parse out search term and current page number from url
       console.log("this.props.location.search");
       console.log(this.props.location.search);
@@ -36,10 +40,11 @@ class SearchDeals extends Component {
 
 
       if(this.props.pageType === "search"){
-        this.props.searchDeals(values.term, values.page);
+        await this.props.searchDeals(values.term, values.page);
       }else if (this.props.pageType === "category"){
-        this.props.categoryDeals(values.term, values.page);
+        await this.props.categoryDeals(values.term, values.page);
       }
+
 
   }
 
@@ -47,25 +52,35 @@ class SearchDeals extends Component {
     return parseInt(((priceInDollar - priceInCrypto) / priceInDollar) * 100)
   }
 
-  handleLongDescription = (description) => {
-    let trimmedDescription = description.trim();
-    if (trimmedDescription.length > 125) {
-      return trimmedDescription.substring(0, trimmedDescription.indexOf(' ', 75)) + "...";
-    }
-  }
+  
 
   render() {
-    let { error, loading, deals, userLoggedIn } = this.props;  //does this need to be const?? i changed it to let so line 56 will work
+    const mobileScreenSize = window.matchMedia("(max-width: 640px)");
+    let { error, loading, deals, userLoggedIn, pageType, searchTerm, categoryTerm } = this.props;  //does this need to be const?? i changed it to let so line 56 will work
     //hardcoded number of search results per page to 8.  ideally should be something like 20.
     //this number needs to match the number in backend deals.js
-    let numberPerPage = 4;
+    let numberPerPage = 10;
+    let title_start = window.location.search.indexOf("=") + 1;
+    let title_end = window.location.search.indexOf("page") - 1;
+    let title_term = window.location.search.slice(title_start, title_end);
+    title_term = decodeURIComponent(title_term);
+
+    let page_title;
+
+    if (categoryTerm === "Most Recent Deals"){
+      page_title = `All Deals:`;
+    }else if(pageType === "search"){
+      page_title = `Search Results for ${title_term}:`
+    }else{
+      page_title = `${title_term} Deals:`
+    }
     
     if (error) {
       return <div>Error! {error.message}</div>;
     }
 
     if (loading) {
-      return <div>Loading...</div>;
+      return <LoadingSpinner/>;
     }
 
 
@@ -95,8 +110,8 @@ class SearchDeals extends Component {
     return (
       <div>
         <Layout>
-        {deals == undefined || deals.length == 0 && <div className="no_Results">No results found</div>
-        }
+        {(categoryTerm || searchTerm) && <div className="search-deals-title" >{page_title}</div>}
+        <div className ="search-deals-wrapper">
         {deals != undefined && deals.length > 0 && currentTerm !==""  && <div className="page_Nav">
         <div className="page_NavContent">
                 <span>
@@ -136,49 +151,14 @@ class SearchDeals extends Component {
                 </span>
             </div>
         </div>} 
+        
         <div className="venues-content mb-5">
 
-
-          {/* remove the cryptoranking table on the deals page until further notice
-          <CryptoRankings /> */}
-
-          {/* <div id="right" className="grid mx-4"> */}
-          <div className ="d-flex flex-row justify-content-center w-100">
-            {/* {deals != undefined && deals.length > 0 && deals.map(deal => (
-              <div key={deal.id} className="deal">
-                <Link to={`/feed/deals/${deal.id}/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
-
-                <div className="deal-info">
-                      <img className="deal-image" src={deal.featured_deal_image} alt="deal"/>
-                      <div className="mt-1">{deal.deal_name}</div>
-                      <small className="deal-description">{this.handleLongDescription(deal.deal_description)}</small> */}
-                      {/* if seller is a vendor then display the venue name else if seller is a user then display the seller name which is the user's username */}
-                      {/* <div><small>Offered by: {deal.venue_name || deal.seller_name}</small></div>
-                    </div>
-
-                    <div className="deal-price">
-                      <div className="price-differ">
-                        <div>
-                          <div className="purchase-method">Dollar</div>
-                          <div>${deal.pay_in_dollar.toFixed(2)}</div>
-                        </div>
-                        <div>
-                          <div className="purchase-method">Cryptocurrency</div>
-                          <strong className="pay_in_crypto">${deal.pay_in_crypto.toFixed(2)}
-                          <small className="discount">{this.convertToPercentage(deal.pay_in_dollar, deal.pay_in_crypto)}% OFF</small>
-                          </strong>
-                        </div>
-                      </div>
-                    </div>
-
-                </Link>
-              </div>
-
-            ))} */}
-
-
+        
+          <div className ="search-deals-results">
+          
           {deals != undefined && deals.length > 0 && deals.map(deal => (
-            <div key={deal.id} className="category_item mx-3">
+            <div key={deal.id} className="category_item">
               <Link to={`/feed/deals/${deal.id}/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
 
                 <div className="category-info">
@@ -192,10 +172,10 @@ class SearchDeals extends Component {
                     </div>
                     }
                   </div>
-                  <div className="mt-1">{deal.deal_name}</div>
+                  <div className="mt-1 text-center mr-1 ml-1">{mobileScreenSize.matches ? handleLongDescription(deal.deal_name, 50, 20) : handleLongDescription(deal.deal_name, 50, 50) }</div>
                   {/* <small className="deal-description">{this.handleLongDescription(deal.deal_description)}</small> */}
                   {/* if seller is a vendor then display the venue name else if seller is a user then display the seller name which is the user's username */}
-                  <div><small>Offered by: {deal.venue_name || deal.seller_name}</small></div>
+                  <div className="text-center mr-1 ml-1 mob-hidden"><small>Offered by: {deal.venue_name || deal.seller_name}</small></div>
                 </div>
 
                 <div className="deal-price">
@@ -205,9 +185,9 @@ class SearchDeals extends Component {
                       <div>${deal.pay_in_dollar.toFixed(2)}</div>
                     </div>
                     <div className="d-flex flex-column text-center justify-content-center">
-                      <div className="purchase-method">Cryptocurrency</div>
+                      <div className="purchase-method">Crypto</div>
                       <strong className="pay_in_crypto">${deal.pay_in_crypto.toFixed(2)}</strong>
-                      <small className="w-75 pay_in_crypto discount">{this.convertToPercentage(deal.pay_in_dollar, deal.pay_in_crypto)}% OFF</small>
+                      <small className="pay_in_crypto discount">{this.convertToPercentage(deal.pay_in_dollar, deal.pay_in_crypto)}% OFF</small>
 
                     </div>
                   </div>
@@ -261,6 +241,7 @@ class SearchDeals extends Component {
                 </span>
             </div>
         </div>}
+        </div>
         </Layout >
       </div>
     );
