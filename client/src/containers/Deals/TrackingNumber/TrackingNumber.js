@@ -69,19 +69,27 @@ class TrackingNumber extends Component {
         return isDataValid;
     }
 
-    _validationErrors(val) {
-        const errMsgs = {
-            notifyTrackingNumberError: val.trackingNumber ? null : 'Please enter a valid tracking number.',
-            notifyTrackingCarrierError: val.trackingCarrierSelected ? null : 'Please select the tracking carrier.'
-        }
-        return errMsgs;
-      }
-
     validateAndSubmitTracking = async() =>{
         let txn_id = await this.props.match.params.txn_id;
         await this.handleTrackingNumberValidation();
         await this.props.updateTrackingNumber(localStorage.getItem('token'), txn_id, this.props.trackingNumber, this.props.trackingCarrierSelected);
-        await this.props.history.push('/');
+
+        if(await this.props.trackingResult.message === "success"){
+            await this.props.history.push('/');
+        }else{
+            toast.error("Re-Submit Tracking Info", {
+                position: toast.POSITION.TOP_RIGHT
+            });
+        }
+        
+    }
+
+    _validationErrors(val) {
+        const errMsgs = {
+            notifyTrackingNumberError: val.trackingNumber ? null : 'Please enter a valid tracking number.',
+            notifyTrackingCarrierError: val.trackingCarrierSelected ? null : 'Please select the tracking carrier.', 
+        }
+        return errMsgs;
     }
 
     render() {
@@ -134,7 +142,9 @@ const mapStateToProps = state => ({
     trackingCarrier: state.matchedDeals.trackingCarrier,
     trackingCarrierSelected: state.matchedDeals.trackingCarrierSelected,
     backEndTrackingInfo: state.matchedDeals.backEndTrackingInfo,
+    trackingResult: state.matchedDeals.trackingResult,
     userLoggedIn: state.LoggedIn.userLoggedIn,
+
 });
 
 const matchDispatchToProps = dispatch => {

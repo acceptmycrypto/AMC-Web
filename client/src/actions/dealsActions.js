@@ -126,3 +126,7 @@ export const trackingNumberFailure = error => ({
   type: "UPDATE_TRACKING_NUMBER_FAILURE",
   payload: { error }
 });
+
+export const resetTracking = () => ({
+  type: "RESET_TRACKING"
+});

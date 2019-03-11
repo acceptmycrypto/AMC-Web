@@ -14,17 +14,27 @@ import Layout from '../../Layout';
 import { UncontrolledCarousel } from 'reactstrap';
 import CategoryHome from './CategoryHome/CategoryHome';
 import { _loadAllHomepageDeals } from '../../../actions/homepageActions';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { resetTracking } from '../../../actions/dealsActions';
 
 class Homepage extends Component {
 
-  componentDidMount = () => {
-    // this.props._loadHomepage();
-    this.props._loadAllHomepageDeals();
+  componentDidMount = async () => {
+   
+    await this.props._loadAllHomepageDeals();
+    
+    if(await this.props.trackingResult !== null && this.props.trackingResult.message === "success"){
+      await  toast.success("Tracking Info Updated", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      await this.props.resetTracking();
+    }
   }
 
   render() {
     const { error, loading, category_list, homepage_deals } = this.props;
-    // console.log(category_list, apparel_accessories, electronics);
+
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -91,11 +101,8 @@ class Homepage extends Component {
           ))}
           </div>
 
-          {/* <CategoryHome category_collection={apparel_accessories} category_collection_name={"Apparel & Accessories"} category_collection_id={"apparel_accessories_container"}/>
-            <CategoryHome category_collection={electronics} category_collection_name={"Electronics, Computers & Office"} category_collection_id={"electronics_container"}/>
-            <CategoryHome category_collection={health_beauty} category_collection_name={"Health & Beauty"} category_collection_id={"health_beauty"}/>
-            <CategoryHome category_collection={movies_music_games} category_collection_name={"Movies, Music & Games"} category_collection_id={"movies_music_games"}/>               */}
         </Layout>
+        <ToastContainer autoClose={5000} />
       </div>
     );
   }
@@ -104,17 +111,14 @@ class Homepage extends Component {
 const mapStateToProps = state => ({
   category_list: state.Homepage.category_list,
   homepage_deals: state.Homepage.homepage_deals,
-  // apparel_accessories: state.Homepage.apparel_accessories,
-  // electronics: state.Homepage.electronics,
-  // health_beauty: state.Homepage.health_beauty,
-  // movies_music_games: state.Homepage.movies_music_games,
   error: state.Homepage.error,
-  loading: state.Homepage.loading
+  loading: state.Homepage.loading,
+  trackingResult: state.matchedDeals.trackingResult,
 
 });
 
 const matchDispatchToProps = dispatch => {
-  return bindActionCreators({ _loadAllHomepageDeals}, dispatch);
+  return bindActionCreators({ _loadAllHomepageDeals, resetTracking}, dispatch);
 }
 
 

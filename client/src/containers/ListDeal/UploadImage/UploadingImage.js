@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./UploadingImage.css";
+import "./UploadingImageMobile.css";
 
 const UploadingImage = props => {
   const { viewImage, uploadedImages, uploadImage, imageIsOnPreview, removeImage } = props;
@@ -234,7 +235,7 @@ const UploadingImage = props => {
         </div>
         <hr className="creating-deal-hr"/>
         <div id="photos-next-step">
-          <button onClick={() => props.validateImageUpload() && props.showPricingStep()}>Next</button>
+          <button onClick={() => props.validateImageUpload() && props.showPricingStep()}>Set Price</button>
         </div>
       </div>
     </div>

@@ -361,7 +361,7 @@ router.post('/update_tracking_number', verifyToken, function (req, res) {
         }
 
         request(tracking_options, callback);
-        res.json(results);
+        res.json({message:"success"});
       } 
 
     );
