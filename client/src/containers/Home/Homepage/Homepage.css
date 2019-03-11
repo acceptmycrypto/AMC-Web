@@ -235,10 +235,11 @@
 }
 
 .crypto-logo {
-    display: inline-block;
-    width: 50px;
-    height: 50px;
-    margin-right: 20px;
+  display: inline-block;
+  width: 50px;
+  height: 70px;
+  margin: 0px 15px;
+  padding: 10px 0px;
 }
 
 .carousel-header-two {
@@ -260,4 +261,9 @@
 
 .carousel-header-two div {
   margin-bottom: 25px;
+}
+
+.caption_three {
+  background-color: #ffffff1a;
+  border-radius: 5px;
 }

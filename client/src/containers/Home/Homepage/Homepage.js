@@ -65,7 +65,7 @@ class Homepage extends Component {
     }
     const caption_three = () => {
         return (
-          <div>
+          <div className="caption_three">
             {cryptoLogos.map(crypto => {
                 return <div className="crypto-logo"><img src={crypto} alt="crypto_logo"/></div>
             })}
