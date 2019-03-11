@@ -66,7 +66,10 @@ class SearchDeals extends Component {
     title_term = decodeURIComponent(title_term);
 
     let page_title;
-    if(pageType === "search"){
+
+    if (categoryTerm === "Most Recent Deals"){
+      page_title = `All Deals:`;
+    }else if(pageType === "search"){
       page_title = `Search Results for ${title_term}:`
     }else{
       page_title = `${title_term} Deals:`
@@ -107,7 +110,7 @@ class SearchDeals extends Component {
     return (
       <div>
         <Layout>
-        <div className="search-deals-title" >{page_title}</div>
+        {(categoryTerm || searchTerm) && <div className="search-deals-title" >{page_title}</div>}
         <div className ="search-deals-wrapper">
         {deals != undefined && deals.length > 0 && currentTerm !==""  && <div className="page_Nav">
         <div className="page_NavContent">
