@@ -49,3 +49,31 @@
     font-weight: 500;
     color: #52C4B9;
 }
+
+.page_pagination_bottom {
+  margin-top: 150px;
+}
+
+.page_pagination_top {
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+.search-deals-title{
+    text-align: center;
+    padding-top: 20px;
+    font-size: 20px;
+    text-transform: uppercase;
+}
+
+.term-color{
+    color: #52C4B9;
+}
+
+.search-deals-results{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    padding-right: 30px;
+    padding-left: 30px;
+}

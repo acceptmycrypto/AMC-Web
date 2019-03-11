@@ -32,3 +32,12 @@
   font-weight: 700;
   margin-bottom: 10px;
 }
+
+@media only screen and (max-width: 600px) {
+
+  .alert-modal{
+    width: 100%;
+    height: 100%;
+
+  }
+}

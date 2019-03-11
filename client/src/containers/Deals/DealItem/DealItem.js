@@ -119,7 +119,8 @@ class DealItem extends Component {
       firstName,
       lastName,
       email,
-      phoneNumber
+      phoneNumber,
+      user_info
     } = this.props;
 
     //info needed to insert into user_purchases table
@@ -131,6 +132,8 @@ class DealItem extends Component {
     let token = localStorage.getItem("token");
 
     if(this.props.userLoggedIn){
+      let user_email = user_info[0].email;
+      
       this.props._fetchTransactionInfo(
         crypto_name,
         crypto_symbol,
@@ -142,7 +145,8 @@ class DealItem extends Component {
         zipcode,
         shippingState,
         firstName,
-        lastName
+        lastName,
+        user_email
       );
     }else{
       this.props._fetchGuestTransactionInfo(
@@ -344,7 +348,7 @@ class DealItem extends Component {
   }
 
   handleBuyNowButton = () => {
-    const {deal_status} = this.props.dealItem;
+    const {deal_status, phone_number_verified} = this.props.dealItem;
     const {paypal_excecute_payment, paypal_excecute_payment_loading} = this.props;
 
     switch (true) {
@@ -359,6 +363,10 @@ class DealItem extends Component {
       case deal_status === "sold":
         return (
           <button disabled>Sold</button>
+        );
+      case phone_number_verified === 0:
+        return (
+          <button>Verify Your Phone Number</button>
         );
       case paypal_excecute_payment && paypal_excecute_payment.success === true:
         return (

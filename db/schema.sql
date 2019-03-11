@@ -96,7 +96,7 @@ CREATE TABLE deal_images (
 	id INT NOT NULL AUTO_INCREMENT,
   deal_id INT NOT NULL,
   deal_image VARCHAR(255) NOT NULL UNIQUE,
-  deal_image_key VARCHAR(255) NOT NULL UNIQUE,
+  deal_image_key VARCHAR(255) NULL UNIQUE,
   deal_image_object VARCHAR(10000) NOT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (deal_id) REFERENCES deals(id)
@@ -229,7 +229,9 @@ CREATE TABLE users_purchases(
 	shipment_date VARCHAR (255) NULL,
 	shipping_label_url VARCHAR(500) NULL, -- if prepaid this is link to shipping label
 	shippo_shipment_price DECIMAL (10,2) NULL,
+  shipping_fee_crypto_amount DECIMAL(20, 8) NULL,
 	tracking_number VARCHAR(255) NULL UNIQUE, -- shipment tracking number
+	tracking_carrier VARCHAR (100) NULL,
 	tracking_status VARCHAR(100) NULL,
 	tracking_url_provider VARCHAR (500) NULL, -- link to track package online
 	eta VARCHAR (255) NULL,

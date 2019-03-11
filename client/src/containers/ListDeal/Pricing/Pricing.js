@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import "./Pricing.css";
+import "./PricingMobile.css";
+import "../../../components/UI/Modal/ModalMobile.css";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter } from "react-router-dom";
@@ -31,52 +33,54 @@ class Pricing extends Component {
   }
 
   shippingOptionModal = () => {
+    const mobileScreenSize = window.matchMedia("(max-width: 640px)")
+
     const { weightOption, shippingWeightSelection, shippingPriceSelection, _saveShippingModal, shippingLessThanDiscount } = this.props
     return (
       <div>
         <div>
-          <div className="shipping-weight-title">Choose the Weight of your Item in POUNDS (lbs)</div>
+          <div className="shipping-weight-title mob-modal-header">Choose the Weight of your Item in POUNDS (lbs)</div>
           <hr />
-          <form className="d-flex flex-row flex-wrap justify-content-center" id="weightOptionForm" onChange={weightOption}>
+          <form className="mob-modal-body d-flex flex-row flex-wrap justify-content-center" id="weightOptionForm" onChange={weightOption}>
             <label className="mr-3 mt-2 weight-label">
               <input id="weight-1" type="radio" name="weightOption" className="weightOption" value={1} />
               <div className=" d-flex flex-column justify-content-center align-items-center">
-                <i class="fas fa-tshirt fa-2x"></i>
+                <i className={mobileScreenSize.matches ? "fas fa-tshirt fa-lg" : "fas fa-tshirt fa-2x"}></i>
                 <span className="weight-font mt-2">0-1 lb</span>
               </div>
             </label>
             <label className="mr-3 mt-2 weight-label">
               <input id="weight-3" type="radio" name="weightOption" className="weightOption" value={3} />
               <div className=" d-flex flex-column justify-content-center align-items-center">
-                <i class="fas fa-mobile-alt fa-2x"></i>
+                <i className={mobileScreenSize.matches ? "fas fa-mobile-alt fa-lg" : "fas fa-mobile-alt fa-2x"}></i>
                 <span className="weight-font mt-2">1-3 lbs</span>
               </div>
             </label>
             <label className="mr-3 mt-2 weight-label">
               <input id="weight-10" type="radio" name="weightOption" className="weightOption" value={10} />
               <div className=" d-flex flex-column justify-content-center align-items-center">
-                <i class="fas fa-laptop fa-2x"></i>
+                <i className={mobileScreenSize.matches ? "fas fa-laptop fa-lg" : "fas fa-laptop fa-2x"}></i>
                 <span className="weight-font mt-2">3-10 lbs</span>
               </div>
             </label>
             <label className="mr-3 mt-2 weight-label">
               <input id="weight-20" type="radio" name="weightOption" className="weightOption" value={20} />
               <div className=" d-flex flex-column justify-content-center align-items-center">
-                <i class="fas fa-tv fa-2x"></i>
+                <i className={mobileScreenSize.matches ? "fas fa-tv fa-lg" : "fas fa-tv fa-2x"}></i>
                 <span className="weight-font mt-2">10-20 lbs</span>
               </div>
             </label>
             <label className="mr-3 mt-2 weight-label">
               <input id="weight-40" type="radio" name="weightOption" className="weightOption" value={40} />
               <div className=" d-flex flex-column justify-content-center align-items-center">
-                <i class="fas fa-bicycle fa-2x"></i>
+                <i className={mobileScreenSize.matches ? "fas fa-bicycle fa-lg" : "fas fa-bicycle fa-2x"}></i>
                 <span className="weight-font mt-2">20-40 lbs</span>
               </div>
             </label>
-            <label className="mt-2 weight-label">
+            <label className={mobileScreenSize.matches ? "mr-2 mt-2 weight-label" : "mt-2 weight-label"}>
               <input id="weight-70" type="radio" name="weightOption" className="weightOption" value={70} />
               <div className=" d-flex flex-column justify-content-center align-items-center">
-                <i class="fas fa-dumbbell fa-2x"></i>
+                <i className={mobileScreenSize.matches ? "fas fa-dumbbell fa-lg" : "fas fa-dumbbell fa-2x"}></i>
                 <span className="weight-font mt-2">40-70 lbs</span>
               </div>
             </label>
@@ -93,7 +97,7 @@ class Pricing extends Component {
                 </div>
               }
 
-              <div className="d-flex flex-row justify-content-between">
+              <div className={mobileScreenSize.matches ? "d-flex mb-4 flex-row justify-content-between" : "d-flex flex-row justify-content-between"}>
                 <button className="weight-option-button" onClick={this.exitShippingModal}>Cancel</button>
                 <button className="weight-option-button" onClick={this.evaluatePricing}>Save</button>
               </div>
@@ -165,10 +169,11 @@ class Pricing extends Component {
 
     let sellerEarns, sellerProfits;
     if (this.props.shippingLabelSelection === "prepaid") {
-      sellerEarns = ((parseFloat(priceInUSD)) - (0.025 * parseFloat(priceInUSD)) - (parseFloat(shippingPriceSelection))).toFixed(2);
+      // change seller earns in USD so that the seller fee is 10% and not 2.5%
+      sellerEarns = (((parseFloat(priceInUSD)).toFixed(2)) - ((0.10 * parseFloat(priceInUSD)).toFixed(2)) - (parseFloat(shippingPriceSelection).toFixed(2))).toFixed(2);
 
     } else {
-      sellerEarns = ((parseFloat(priceInUSD)) - (0.025 * parseFloat(priceInUSD))).toFixed(2);
+      sellerEarns = (((parseFloat(priceInUSD)).toFixed(2)) - ((0.10 * parseFloat(priceInUSD)).toFixed(2))).toFixed(2);
     }
 
     if (sellerEarns >= 0) {
@@ -209,6 +214,8 @@ class Pricing extends Component {
 
 
   render() {
+    const mobileScreenSize = window.matchMedia("(max-width: 640px)")
+
     const { shippingLabelOption, shippingLabelSelection, modalVisible, _showWeightModal, priceInCrypto, priceInUSD, shippingPriceSelection, sellerProfitsCrypto, sellerProfitsUSD, sellerEarnsCrypto, sellerEarnsUSD } = this.props
     return (
       <div>
@@ -277,7 +284,7 @@ class Pricing extends Component {
           <div style={{ width: "100%" }}>
             <div className="pricing-titles">Accept Cryptocurrencies</div>
             <div className="crypto-subtitle">
-              Select one or more cryptocurrencies you want to accept as payment
+              Select one or more cryptocurrencies you want to accept as payment.
             </div>
             <div className="crypto-logos-for-deal-listing">
               {this.props.cryptoOptions.map(crypto => {
@@ -310,6 +317,7 @@ class Pricing extends Component {
                     {this.props.showCryptoAmount[crypto.crypto_symbol] && (
                       <div className="check-crypto-amount">
                         {this.props.showCryptoAmount[crypto.crypto_symbol]}
+                        <br/>
                         {crypto.crypto_symbol}
                       </div>
                     )}
@@ -318,7 +326,7 @@ class Pricing extends Component {
               })}
             </div>
             <small class="pricing-footer-note">
-              Please be aware that the crypto amount will be different at the time
+              *Please be aware that the crypto amount will be different at the time
               of purchase due to market volatility.
               <hr />
             </small>
@@ -326,15 +334,15 @@ class Pricing extends Component {
         </div>
 
         <div>
-          <div className="d-flex flex-row">
-            <div className="shipment-options w-50">
+          <div className={mobileScreenSize.matches ? null : "d-flex flex-row"}>
+            <div className={mobileScreenSize.matches ? "shipment-options" : "shipment-options w-50"}>
               <div className="w-100">
                 <div className="pricing-titles mt-3">Shipping Label Options</div>
                 <div className="crypto-subtitle mb-3">
                   Choose your preferred Shipping Label Option
                     </div>
-                <form className="d-flex flex-row flex-wrap justify-content-center" id="shipmentOptionForm" onChange={(event) => { this.validateShippingLabelOption(event) }}>
-                  <div className="pr-3 mt-3">
+                <form className={mobileScreenSize.matches ? null : "d-flex flex-row flex-wrap justify-content-center"} id="shipmentOptionForm" onChange={(event) => { this.validateShippingLabelOption(event) }}>
+                  <div className={mobileScreenSize.matches ? null : "pr-3 mt-3"}>
                     <input id="label-prepaid" type="radio" name="shipmentOption" value="prepaid" />
                     <span className="ml-2 shipping-font">USPS Prepaid Shipping Label  {shippingLabelSelection === "prepaid" && <span className="btn btn-outline-info p-0 pr-2 pl-2" onClick={this.showWeightModal}>Edit</span>} </span><br />
                     <div className="small-shipping-font">We will email you a prepaid USPS Shipping label and Subtract the Shipping Cost From Your Account</div>
@@ -353,31 +361,31 @@ class Pricing extends Component {
                     this.exitShippingModal();
                   }}
                 >
-                  <div className="shipping-option-modal">
+                  <div className="mob-modal shipping-option-modal">
                     {this.shippingOptionModal()}
                   </div>
                 </Modal>
               </div>
               {/* <hr/> */}
-              <div className="creating-deal-back-step" id="shipping-previous">
+              {/* <div className="creating-deal-back-step" id="shipping-previous">
                 <button onClick={this.props.showUploadingPhotoStep}>Previous</button>
-              </div>
+              </div> */}
             </div>
-            <div className="w-50 pricing-options">
-              <div className="d-flex flex-column ml-3 mt-3 w-100 text-center">
+            <div className={mobileScreenSize.matches ? "pricing-options" : "w-50 pricing-options"}>
+              <div className={mobileScreenSize.matches ? null : "d-flex flex-column ml-3 mt-3 w-100 text-center"}>
                 <div className="pricing-titles border-bottom text-center">Estimated Price Summary</div>
                 <div className="mr-2 ml-2 mt-2 d-flex flex-row">
-                  <div className="w-50 pr-4 border-right">
+                  <div className={mobileScreenSize.matches ? "w-50 pr-2 border-right" : "w-50 pr-4 border-right"}>
                     {priceInUSD !== null && priceInUSD !== 'NaN' && priceInUSD > 0 &&
                       <div>
-                        <div className="text-center mb-2 pricing-titles" style={{ color: "navy" }}>Buyer Purchases with USD</div>
+                        <div className="text-center mb-2 pricing-titles summary-pricing-title">Buyer Purchases with USD</div>
                         <div className="d-flex flex-row justify-content-between">
                           <div className="shipping-font">USD Listed Price:</div>
                           <div className="shipping-font"> <strong>${(parseFloat(priceInUSD)).toFixed(2)}</strong></div>
                         </div>
                         <div className="d-flex flex-row justify-content-between">
-                          <div className="shipping-font">Selling Fee (2.5%):</div>
-                          <div className="shipping-font" style={{ color: "red" }}>  - ${(0.025 * parseFloat(priceInUSD)).toFixed(2)}</div>
+                          <div className="shipping-font">Selling Fee (10%):</div>
+                          <div className="shipping-font" style={{ color: "red" }}>  - ${(0.10 * parseFloat(priceInUSD)).toFixed(2)}</div>
                         </div>
                         {shippingLabelSelection === "prepaid" && shippingPriceSelection !== null && shippingPriceSelection !== 'NaN' && shippingPriceSelection > 0 &&
                           <div>
@@ -387,26 +395,26 @@ class Pricing extends Component {
                             </div>
                             {this.sellerEarnUSD() &&
                               <div className="d-flex flex-row justify-content-between">
-                                <div className="shipping-font" style={{ color: "navy" }}> <strong>YOU EARN (USD):  </strong></div>
-                                {sellerProfitsUSD !== null && sellerEarnsUSD !== null && <div className="shipping-font" style={{ color: "navy" }}> <strong> {sellerProfitsUSD ? "$" : " - $"} {Math.abs(sellerEarnsUSD).toFixed(2)}</strong></div>}
+                                <div className="shipping-font"> <strong>YOU EARN (USD):  </strong></div>
+                                {sellerProfitsUSD !== null && sellerEarnsUSD !== null && <div className="shipping-font"> <strong> {sellerProfitsUSD ? "$" : " - $"} {Math.abs(sellerEarnsUSD).toFixed(2)}</strong></div>}
                               </div>
                             }
                           </div>
                         }
                         {shippingLabelSelection === "seller" && this.sellerEarnUSD() &&
                           <div className="d-flex flex-row justify-content-between">
-                            <div className="shipping-font" style={{ color: "navy" }}><strong>YOU EARN (USD):</strong> </div>
-                            {sellerProfitsUSD !== null && sellerEarnsUSD !== null && <div className="shipping-font" style={{ color: "navy" }}> <strong> {sellerProfitsUSD ? "$" : " - $"} {Math.abs(sellerEarnsUSD).toFixed(2)}</strong></div>}
+                            <div className="shipping-font"><strong>YOU EARN (USD):</strong> </div>
+                            {sellerProfitsUSD !== null && sellerEarnsUSD !== null && <div className="shipping-font"> <strong> {sellerProfitsUSD ? "$" : " - $"} {Math.abs(sellerEarnsUSD).toFixed(2)}</strong></div>}
                           </div>
                         }
 
                       </div>
                     }
                   </div>
-                  <div className="w-50 ml-4">
+                  <div className={mobileScreenSize.matches ? "w-50 ml-2" : "w-50 ml-4"}>
                     {priceInUSD !== null && priceInUSD !== 'NaN' && priceInUSD > 0 && priceInCrypto !== null && priceInCrypto !== 'NaN' && priceInCrypto > 0 &&
                       <div>
-                        <div className="text-center mb-2 pricing-titles" style={{ color: "navy" }}>Buyer Purchases with Crypto</div>
+                        <div className="text-center mb-2 pricing-titles summary-pricing-title">Buyer Purchases with Crypto</div>
                         <div className="d-flex flex-row justify-content-between">
                           <div className="shipping-font">Crypto Listed Price:</div>
                           <div className="shipping-font"><strong>${parseFloat(priceInCrypto).toFixed(2)}</strong></div>
@@ -423,16 +431,16 @@ class Pricing extends Component {
                             </div>
                             {this.sellerEarnCrypto() &&
                               <div className="d-flex flex-row justify-content-between">
-                                <div className="shipping-font" style={{ color: "navy" }}> <strong>YOU EARN (Crypto): </strong></div>
-                                {sellerProfitsCrypto !== null && sellerEarnsCrypto !== null && <div className="shipping-font" style={{ color: "navy" }}> <strong> {sellerProfitsCrypto ? "$" : " - $"} {Math.abs(sellerEarnsCrypto).toFixed(2)}</strong></div>}
+                                <div className="shipping-font"> <strong>YOU EARN (Crypto): </strong></div>
+                                {sellerProfitsCrypto !== null && sellerEarnsCrypto !== null && <div className="shipping-font"> <strong> {sellerProfitsCrypto ? "$" : " - $"} {Math.abs(sellerEarnsCrypto).toFixed(2)}</strong></div>}
                               </div>
                             }
                           </div>
                         }
                         {shippingLabelSelection === "seller" && this.sellerEarnCrypto() &&
                           <div className="d-flex flex-row justify-content-between">
-                            <div className="shipping-font" style={{ color: "navy" }}><strong>YOU EARN (Crypto):</strong> </div>
-                            {sellerProfitsCrypto !== null && sellerEarnsCrypto !== null && <div className="shipping-font" style={{ color: "navy" }}> <strong>{sellerProfitsCrypto ? "$" : " - $"} {Math.abs(sellerEarnsCrypto).toFixed(2)}</strong></div>}
+                            <div className="shipping-font"><strong>YOU EARN (Crypto):</strong> </div>
+                            {sellerProfitsCrypto !== null && sellerEarnsCrypto !== null && <div className="shipping-font"> <strong>{sellerProfitsCrypto ? "$" : " - $"} {Math.abs(sellerEarnsCrypto).toFixed(2)}</strong></div>}
                           </div>
                         }
                       </div>
@@ -442,21 +450,20 @@ class Pricing extends Component {
                 </div>
               </div>
               {/* <hr /> */}
-              <div className="creating-deal-next-step" id="shipping-next">
+              {/* <div className="creating-deal-next-step" id="shipping-next">
                 <button onClick={() =>this.props.validatePricingStep() && this.props.showDescriptionStep()}>Next</button>
-              </div>
+              </div> */}
             </div>
-
           </div>
 
-          {/* <div className="deal-listing-step-buttons">
-            <div className="creating-deal-back-step">
-              <button onClick={this.props.showUploadingPhotoStep}>Previous</button>
+          <div className="deal-listing-step-buttons">
+            <div className="creating-deal-back-step" id="shipping-previous">
+              <button onClick={this.props.showUploadingPhotoStep}>Edit Photo</button>
             </div>
-            <div className="creating-deal-next-step">
-              <button onClick={() =>this.props.validatePricingStep() && this.props.showDescriptionStep()}>Next</button>
+            <div className="creating-deal-next-step" id="shipping-next">
+              <button onClick={() =>this.props.validatePricingStep() && this.props.showDescriptionStep()}>Describe Your Deal</button>
             </div>
-          </div> */}
+          </div>
         </div>
 
       </div>

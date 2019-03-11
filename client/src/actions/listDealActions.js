@@ -346,6 +346,12 @@ export const editingDealFailure = error => ({
   payload: { error }
 });
 
+export const openModalForPhoneVerification = () => {
+  return {
+    type: "OPEN_MODAL_PHONE_VERIFICATION",
+  };
+};
+
 export const closeModalAfterDealCreated = () => {
   return {
     type: "CLOSE_DEAL_CREATED_MODAL", //what does the action do = title of action

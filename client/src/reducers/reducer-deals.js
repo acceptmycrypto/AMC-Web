@@ -3,8 +3,18 @@ const initialState = {
   loading: false,
   error: null,
   trackingNumber: null, 
+  trackingCarrier: [{ value: 'dhl_express', label: 'DHL Express' },
+  { value: 'fedex', label: 'FedEx' },
+  { value: 'ups', label: 'UPS' },
+  { value: 'usps', label: 'USPS' }],
+  trackingCarrierSelected: null,
   trackingResult: null,
+  backEndTrackingInfo: null
 };
+	
+	
+	
+	
 
 export default function dealsReducer(state = initialState, action) {
   switch(action.type) {
@@ -47,6 +57,33 @@ export default function dealsReducer(state = initialState, action) {
         trackingNumber: action.payload
       };
 
+      case "EDIT_TRACKING_CARRIER":
+      return {
+        ...state,
+        trackingCarrierSelected: action.payload.carrier
+      };
+
+      case "CAN_UPDATE_TRACKING_BEGIN":
+      return {
+        ...state,
+        loading: true,
+        error: null
+      };
+      
+      case "CAN_UPDATE_TRACKING_SUCCESS":
+      return {
+        ...state,
+        loading: false,
+        backEndTrackingInfo: action.payload
+      };
+      
+      case "CAN_UPDATE_TRACKING_FAILURE":
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+      };
+
       case "UPDATE_TRACKING_NUMBER_BEGIN":
       return {
         ...state,
@@ -66,6 +103,15 @@ export default function dealsReducer(state = initialState, action) {
         ...state,
         loading: false,
         error: action.payload.error,
+      };
+
+    case "RESET_TRACKING":
+      return {
+        ...state,
+        trackingNumber: null, 
+        trackingCarrierSelected: null,
+        trackingResult: null,
+        backEndTrackingInfo: null
       };
 
     default:

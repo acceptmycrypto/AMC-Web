@@ -12,6 +12,10 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 app.use(methodOverride('_method'));
 
+//shippo
+var shippo = require('shippo')(process.env.SHIPMENT_KEY);
+
+
 var connection = mysql.createConnection({
   host: process.env.DB_HOST,
 
@@ -62,7 +66,7 @@ router.get('/api/deals/:deal_id/:deal_name', function (req, res) {
 
   // specify specific column names rather than * because don't want to select all users (seller) info
   connection.query(
-    'SELECT deals.id AS deal_id, deals.venue_id, deals.seller_id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.deal_status, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, deals.weight, deals.shipping_label_status, deals.shipment_cost, deal_images.deal_image, deal_images.deal_image_object, venues.id AS venues_id, venues.venue_name, venues.venue_description, venues.venue_link, venues.accepted_crypto, users.id AS seller_id, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings, category.category_name AS deal_category FROM deals LEFT JOIN deal_images ON deals.id = deal_images.deal_id LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN category ON category.id = categories_deals.category_id WHERE deals.id = ? AND deals.deal_status <> ?',
+    'SELECT deals.id AS deal_id, deals.venue_id, deals.seller_id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.deal_status, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, deals.weight, deals.shipping_label_status, deals.shipment_cost, deal_images.deal_image, deal_images.deal_image_object, venues.id AS venues_id, venues.venue_name, venues.venue_description, venues.venue_link, venues.accepted_crypto, users.id AS seller_id, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings, users.phone_number_verified, category.category_name AS deal_category FROM deals LEFT JOIN deal_images ON deals.id = deal_images.deal_id LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN category ON category.id = categories_deals.category_id WHERE deals.id = ? AND deals.deal_status <> ?',
     [req.params.deal_id, "deleted"],
     function (error, result, fields) {
 
@@ -178,7 +182,7 @@ router.get('/api/search', function(req, res) {
 //     console.log(req.query);
     //hardcoded number of search results per page to 8.  ideally should be something like 20.
     //this number needs to match the number in frontend SearchDeals.js
-    var numberPerPage = 4;
+    var numberPerPage = 10;
     //this calculates starting from which search result to give back
     //for example, if start==0 and numberPerPage==8, then db should give back 8 results starting from result #0
     var start = numberPerPage*(req.query.page-1);
@@ -305,20 +309,61 @@ router.get('/api/search', function(req, res) {
 
 // });
 
+
+// check if user can update the tracking number
+
+router.post('/can_update_tracking', verifyToken, function (req, res) {
+  let seller_id = req.decoded._id;
+  let {deal_id} = req.body;
+
+  let transaction_id = req.body.txn_id;
+
+    connection.query(
+      'SELECT deal_name, tracking_number FROM deals LEFT JOIN users_purchases ON deals.id = users_purchases.deal_id WHERE deals.id = ? AND deals.seller_id = ? AND shipping_label_status = ? AND (txn_id = ? OR paypal_paymentId = ?)',
+      [deal_id, seller_id, "seller", transaction_id, transaction_id],
+      function (error, results, fields) {
+        if (error) console.log(error);
+        console.log(results);
+        res.json(results);
+      }
+    );
+});
+
 //  update tracking number for deal
 router.post('/update_tracking_number', verifyToken, function (req, res) {
   let id = req.decoded._id;
 
-  // txn_id can either be coinpayment txn_id or paypal paypal_paymentId that is passed from front end 
-  let {txn_id, trackingNumber} = req.body;
+  // txn_id can either be coinpayment txn_id or paypal paypal_paymentId that is passed from front end
+  let {trackingNumber, trackingCarrier} = req.body;
+
+  let transaction_id = req.body.txn_id; 
 
     connection.query(
-      'UPDATE users_purchases SET tracking_number = ? WHERE txn_id = ? OR paypal_paymentId = ?',
-      [trackingNumber, txn_id, txn_id],
+      'UPDATE users_purchases SET ? WHERE txn_id = ? OR paypal_paymentId = ?',
+      [{tracking_number: trackingNumber, tracking_carrier:  trackingCarrier}, transaction_id, transaction_id],
       function (error, results, fields) {
-        if (error) console.log(error);
-        res.json(results);
-      }
+        if (error) res.json(error);
+       
+
+        // post tracking information to shippo tracking webhook
+        var tracking_options = {
+          url: 'https://api.goshippo.com/tracks/',
+          headers: {
+            "carrier": trackingCarrier,
+            "tracking_number": trackingNumber
+          }
+        };
+
+        function callback(error, response, body) {
+          if (!error && response.statusCode == 200) {
+            var info = JSON.parse(body);
+          }
+        }
+
+        request(tracking_options, callback);
+        res.json({message:"success"});
+      } 
+
     );
 });
 

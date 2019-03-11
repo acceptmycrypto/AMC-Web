@@ -9,7 +9,8 @@ export function _fetchTransactionInfo(
   zipcode,
   shippingState,
   firstName,
-  lastName) {
+  lastName,
+  user_email) {
 
   const settings = {
     method: "POST",
@@ -28,7 +29,8 @@ export function _fetchTransactionInfo(
       zipcode,
       shippingState,
       firstName,
-      lastName
+      lastName,
+      user_email
     })
   };
 

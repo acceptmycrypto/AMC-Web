@@ -47,7 +47,8 @@ var connection = mysql.createConnection({
 
     // Your password
     password: process.env.DB_PW,
-    database: process.env.DB_DB
+    database: process.env.DB_DB,
+    debug: true
 });
 
 //to be held off until later date
@@ -153,9 +154,7 @@ router.post('/seller-review/new', verifyToken, function (req, res) {
 
                 res.status(200).json({success: true, message: "submission under review"});
             });
-
     }
-
 });
 
 //route for getting the seller's rating

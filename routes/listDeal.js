@@ -598,7 +598,6 @@ router.post('/verification/start', verifyToken, function(req, res) {
 router.post('/verification/check', verifyToken, function(req, res) {
 
   let seller_id = req.decoded._id;
-  console.log("SELLER", seller_id);
 
   let options = {
     method: "GET",
@@ -615,19 +614,24 @@ router.post('/verification/check', verifyToken, function(req, res) {
     if (error) console.log(error);
 
     let status = JSON.parse(body);
+    console.log(status);
 
     //update seller to verified if code entered is correct
     if (status.success) {
 
       connection.query(
         'UPDATE users SET ? WHERE ?',
-        [{phone_number_verified: 1}, {id: seller_id}],
+        [{
+          phone_number_verified: 1,
+          phone_number: phone_number
+        }, {id: seller_id}],
         function(error, results, fields) {
           if (error) throw error;
-          console.log(results);
           res.json(body);
         }
       );
+    } else {
+      res.json(body);
     }
 
   });

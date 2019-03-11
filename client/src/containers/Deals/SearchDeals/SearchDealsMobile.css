@@ -1,0 +1,19 @@
+
+/* media query */
+@media only screen and (max-width: 640px) {
+
+    .search-deals-title{
+        padding-top: 70px;
+    }
+  
+    .search-deals-results{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+        padding: 0px;
+       justify-content: center;
+    }
+
+}
+  
