@@ -1,4 +1,4 @@
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 640px) {
 
   /* category slide */
   .mob-category-menu {
@@ -10,9 +10,9 @@
     /* for scroll */
     -ms-overflow-style: none;  /* IE 10+ */
     overflow: -moz-scrollbars-none; /*Firefox*/
-
+    margin-top: 40px;
     /* Not relating to scroll */
-    padding-left: 10px;
+    /* padding-left: 10px; */
   }
   .menu-parent::-webkit-scrollbar {
       display: none;  /*Safari and Chrome */

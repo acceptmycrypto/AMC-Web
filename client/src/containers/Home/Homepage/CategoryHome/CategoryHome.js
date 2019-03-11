@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from "react-router-dom";
-// import { handleSelectedCategory } from '../../../../actions/listDealActions';
+import { handleSelectedCategory } from '../../../../actions/listDealActions';
 import '../Homepage.css';
 import './CategoryHome.css';
+import './CategoryHomeMobile.css';
+import '../HomepageMobile.css';
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import { updateSelectedCategory } from '../../../../actions/homepageActions';
@@ -78,16 +80,19 @@ class CategoryHome extends Component {
   render() {
     const { category_collection, category_collection_name, category_collection_id, user_id } = this.props;
 
+    const mobileScreenSize = window.matchMedia("(max-width: 640px)");
+
     return (
       <div className="mt-4">
-        <Link to={"/category?term=" + category_collection_name + "&page=1"} className="category-title-margin mb-3">{category_collection_name}<i className="fas fa-chevron-right chevron-right"></i></Link>
+        <Link to={"/category?term=" + category_collection_name + "&page=1"} className="category-title-margin mob-hidden mb-3">{category_collection_name}<i className="fas fa-chevron-right chevron-right"></i></Link>
+        <div className="mob-most-recent-title">Most Recent Deals</div>
         {category_collection != undefined && category_collection.length > 0 && category_collection[0].id !== null && <div className="d-flex flex-row mt-3">
-          {category_collection[0].id !== null && <button type="button" className="btn btn-light" id="leftCategoryButton" onClick={this.handleLeftButtonClick}><i className="fas fa-chevron-left category-icon-chevron"></i></button>}
+          {category_collection[0].id !== null && <button type="button" className="btn btn-light mob-hidden" id="leftCategoryButton" onClick={this.handleLeftButtonClick}><i className="fas fa-chevron-left category-icon-chevron"></i></button>}
           <div className="category_div" id={category_collection_id}>
             {category_collection.map(deal => (
 
               <div key={deal.id}
-                className={deal.phone_number_verified === 0 && deal.seller_id !== user_id ? "category_item mx-2 deal-item-pending-hidden" : "category_item mx-2"}>
+                className={deal.phone_number_verified === 0 && deal.seller_id !== user_id ? "category_item  deal-item-pending-hidden" : "category_item "}>
                 <Link to={`/feed/deals/${deal.id}/${deal.deal_name}`} style={{ textDecoration: 'none', color: "black" }} >
 
                   <div className="category-info">
@@ -101,9 +106,9 @@ class CategoryHome extends Component {
                       </div> : null
                       }
                     </div>
-                    <div className="mt-1">{handleLongDescription(deal.deal_name, 50, 50)}</div>
+                    <div className="mt-1 text-center mr-1 ml-1">{mobileScreenSize.matches ? handleLongDescription(deal.deal_name, 50, 20) : handleLongDescription(deal.deal_name, 50, 50) }</div>
                     {/* if seller is a vendor then display the venue name else if seller is a user then display the seller name which is the user's username */}
-                    <div><small>Offered by: {deal.venue_name || deal.seller_name}</small></div>
+                    <div className="text-center mr-1 ml-1 mob-hidden"><small>Offered by: {deal.venue_name || deal.seller_name}</small></div>
                   </div>
 
                   <div className="deal-price">
@@ -113,9 +118,9 @@ class CategoryHome extends Component {
                         <div>${deal.pay_in_dollar.toFixed(2)}</div>
                       </div>
                       <div className="d-flex flex-column text-center justify-content-center">
-                        <div className="purchase-method">Cryptocurrency</div>
+                        <div className="purchase-method">Crypto</div>
                         <strong className="pay_in_crypto">${deal.pay_in_crypto.toFixed(2)}</strong>
-                        <small className="w-75 pay_in_crypto discount">{this.convertToPercentage(deal.pay_in_dollar, deal.pay_in_crypto)}% OFF</small>
+                        <small className=" pay_in_crypto discount">{this.convertToPercentage(deal.pay_in_dollar, deal.pay_in_crypto)}% OFF</small>
 
                       </div>
                     </div>
@@ -125,12 +130,12 @@ class CategoryHome extends Component {
               </div>
 
             ))}
-            {category_collection_name !== "Most Recent Deals Listed" && <div className="list-deal-category" onClick={this.createDealFromCategory}>
+            {category_collection_name !== "Most Recent Deals" && <div className="list-deal-category" onClick={this.createDealFromCategory}>
               <div className="list-deal-category-label">Create {this.properArticle(category_collection_name)} {category_collection_name} Deal </div>
               <i className="fas fa-plus fa-2x" />
             </div>}
           </div>
-          {category_collection[0].id !== null && <button type="button" className="btn btn-light" id="rightCategoryButton" onClick={this.handleRightButtonClick}><i className="fas fa-chevron-right category-icon-chevron"></i></button>}
+          {category_collection[0].id !== null && <button type="button" className="btn btn-light mob-hidden" id="rightCategoryButton" onClick={this.handleRightButtonClick}><i className="fas fa-chevron-right category-icon-chevron"></i></button>}
         </div>}
         {category_collection[0].id === null &&
           <div className="mt-3 margin-left-add-deal mb-5">
