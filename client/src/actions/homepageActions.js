@@ -3,7 +3,7 @@ export const FETCH_HOMEPAGE_DEALS_SUCCESS = "FETCH_HOMEPAGE_DEALS_SUCCESS";
 export const FETCH_HOMEPAGE_DEALS_FAILURE = "FETCH_HOMEPAGE_DEALS_FAILURE";
 
 // export function _loadHomepage() {
-    
+
 //     return dispatch => {
 //       dispatch(fetchHomepageDealsBegin());
 //       return Promise.all([
@@ -47,10 +47,10 @@ export function _loadAllHomepageDeals() {
     ])
       .then(([res1, res2]) => Promise.all([res1.json(), res2.json()]))
       .then(([category_list, jsonCategorizedDeals]) => {
-        
+
 
         dispatch(fetchAllHomepageDealsSuccess(category_list,jsonCategorizedDeals));
-        
+
         return jsonCategorizedDeals;
       })
       .catch(error => dispatch(fetchAllHomepageDealsFailure(error)));
@@ -60,12 +60,12 @@ export function _loadAllHomepageDeals() {
   export const fetchAllHomepageDealsBegin = () => ({
     type: FETCH_HOMEPAGE_DEALS_BEGIN
   });
-  
+
   export const fetchAllHomepageDealsSuccess = (category_list, homepage_deals) => ({
     type: FETCH_HOMEPAGE_DEALS_SUCCESS,
     payload: {category_list, homepage_deals}
   });
-  
+
   export const fetchAllHomepageDealsFailure = error => ({
     type: FETCH_HOMEPAGE_DEALS_FAILURE,
     payload: { error }
@@ -78,3 +78,7 @@ export function _loadAllHomepageDeals() {
       payload: {categoriesSelected}
     }
   };
+
+  export const showCryptoLogos = () => ({
+    type: "SHOW_CRYPTOS_LOGOS_FOR_HOME_PAGE"
+  });

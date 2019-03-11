@@ -119,7 +119,7 @@ var options = [
     method: "GET",
     uri: "https://pro-api.coinmarketcap.com/v1/cryptocurrency/info",
     qs: {
-      symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,XVG,XMR"
+      symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,EOS,XVG"
     },
     headers: {
       "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
@@ -130,7 +130,7 @@ var options = [
     method: "GET",
     uri: "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest",
     qs: {
-      symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,XVG,XMR"
+      symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,EOS,XVG"
     },
     headers: {
       "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
@@ -139,8 +139,7 @@ var options = [
   }
 ];
 
-//use aynch to map two request ojects and return all results in one callback
-
+// use aynch to map two request ojects and return all results in one callback
 async.map(
   options,
   function(obj, callback) {
@@ -168,9 +167,23 @@ async.map(
         var crypto_symbol = coin_metadata[i].symbol;
         var crypto_price = coin_metadata[i].quote.USD.price;
 
+        // connection.query(
+        //   "INSERT IGNORE INTO crypto_metadata SET ?",
+        //   {
+        //     crypto_name: crypto_name,
+        //     crypto_symbol: crypto_symbol,
+        //     crypto_price: crypto_price
+        //   },
+        //   function(err, res) {
+        //     if (err) {
+        //       console.log("170: " + err);
+        //     }
+        //   }
+        // );
+
+        //for updating cryptos
         connection.query(
-          //add update time
-          "INSERT INTO crypto_metadata SET ?",
+          "UPDATE IGNORE crypto_metadata SET ?",
           {
             crypto_name: crypto_name,
             crypto_symbol: crypto_symbol,
@@ -188,8 +201,22 @@ async.map(
         var crypto_site = coin_info[j].urls.website[0];
         var crypto_logo = coin_info[j].logo;
         var crypto_metadata_name = coin_info[j].name;
+        // connection.query(
+        //   "INSERT IGNORE INTO crypto_info SET ?",
+        //   {
+        //     crypto_logo: crypto_logo,
+        //     crypto_link: crypto_site,
+        //     crypto_metadata_name
+        //   },
+        //   function(err, res) {
+        //     if (err) {
+        //       // console.log(err);
+        //     }
+        //   }
+        // );
+
         connection.query(
-          "INSERT INTO crypto_info SET ?",
+          "UPDATE IGNORE crypto_info SET ?",
           {
             crypto_logo: crypto_logo,
             crypto_link: crypto_site,
@@ -205,6 +232,8 @@ async.map(
     }
   }
 );
+
+
 
 // set the view engine to ejs
 app.set("view engine", "ejs");
