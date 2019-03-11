@@ -6,4 +6,11 @@
         margin-top: 50px;
         width: 95%;
     }
+    .mob-tracking-padding{
+        padding: 0px 20px;
+    }
+
+    .mob-tracking-width{
+        max-width: 280px;
+    }
 }
