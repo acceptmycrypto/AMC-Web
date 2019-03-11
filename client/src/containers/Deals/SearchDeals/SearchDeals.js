@@ -52,14 +52,10 @@ class SearchDeals extends Component {
     return parseInt(((priceInDollar - priceInCrypto) / priceInDollar) * 100)
   }
 
-  handleLongDescription = (description) => {
-    let trimmedDescription = description.trim();
-    if (trimmedDescription.length > 125) {
-      return trimmedDescription.substring(0, trimmedDescription.indexOf(' ', 75)) + "...";
-    }
-  }
+  
 
   render() {
+    const mobileScreenSize = window.matchMedia("(max-width: 640px)");
     let { error, loading, deals, userLoggedIn, pageType, searchTerm, categoryTerm } = this.props;  //does this need to be const?? i changed it to let so line 56 will work
     //hardcoded number of search results per page to 8.  ideally should be something like 20.
     //this number needs to match the number in backend deals.js
@@ -173,10 +169,10 @@ class SearchDeals extends Component {
                     </div>
                     }
                   </div>
-                  <div className="mt-1 text-center mr-1 ml-1">{handleLongDescription(deal.deal_name, 50, 50)}</div>
+                  <div className="mt-1 text-center mr-1 ml-1">{mobileScreenSize.matches ? handleLongDescription(deal.deal_name, 50, 20) : handleLongDescription(deal.deal_name, 50, 50) }</div>
                   {/* <small className="deal-description">{this.handleLongDescription(deal.deal_description)}</small> */}
                   {/* if seller is a vendor then display the venue name else if seller is a user then display the seller name which is the user's username */}
-                  <div className="text-center mr-1 ml-1"><small>Offered by: {deal.venue_name || deal.seller_name}</small></div>
+                  <div className="text-center mr-1 ml-1 mob-hidden"><small>Offered by: {deal.venue_name || deal.seller_name}</small></div>
                 </div>
 
                 <div className="deal-price">
@@ -186,9 +182,9 @@ class SearchDeals extends Component {
                       <div>${deal.pay_in_dollar.toFixed(2)}</div>
                     </div>
                     <div className="d-flex flex-column text-center justify-content-center">
-                      <div className="purchase-method">Cryptocurrency</div>
+                      <div className="purchase-method">Crypto</div>
                       <strong className="pay_in_crypto">${deal.pay_in_crypto.toFixed(2)}</strong>
-                      <small className="w-75 pay_in_crypto discount">{this.convertToPercentage(deal.pay_in_dollar, deal.pay_in_crypto)}% OFF</small>
+                      <small className="pay_in_crypto discount">{this.convertToPercentage(deal.pay_in_dollar, deal.pay_in_crypto)}% OFF</small>
 
                     </div>
                   </div>
