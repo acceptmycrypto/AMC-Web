@@ -72,9 +72,44 @@ export function _loadAllHomepageDeals() {
   });
 
 
+  export function _loadAllHomepageDealsMobile() {
+
+    return dispatch => {
+      dispatch(fetchAllHomepageDealsMobileBegin());
+      return Promise.all([
+        fetch("/load/categories/list/mobile"),
+        fetch("/home/categorized/deals"),
+      ])
+        .then(([res1, res2]) => Promise.all([res1.json(), res2.json()]))
+        .then(([category_list, jsonCategorizedDeals]) => {
+          
+  
+          dispatch(fetchAllHomepageDealsMobileSuccess(category_list,jsonCategorizedDeals));
+          
+          return jsonCategorizedDeals;
+        })
+        .catch(error => dispatch(fetchAllHomepageDealsMobileFailure(error)));
+    };
+  }
+  
+    export const fetchAllHomepageDealsMobileBegin = () => ({
+      type: FETCH_HOMEPAGE_DEALS_BEGIN
+    });
+    
+    export const fetchAllHomepageDealsMobileSuccess = (category_list, homepage_deals) => ({
+      type: FETCH_HOMEPAGE_DEALS_SUCCESS,
+      payload: {category_list, homepage_deals}
+    });
+    
+    export const fetchAllHomepageDealsMobileFailure = error => ({
+      type: FETCH_HOMEPAGE_DEALS_FAILURE,
+      payload: { error }
+    });
+
   export const updateSelectedCategory = (categoriesSelected) => {
     return {
       type: 'SELECT_CATEGORY',
       payload: {categoriesSelected}
     }
   };
+
