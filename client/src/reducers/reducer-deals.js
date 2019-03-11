@@ -105,6 +105,15 @@ export default function dealsReducer(state = initialState, action) {
         error: action.payload.error,
       };
 
+    case "RESET_TRACKING":
+      return {
+        ...state,
+        trackingNumber: null, 
+        trackingCarrierSelected: null,
+        trackingResult: null,
+        backEndTrackingInfo: null
+      };
+
     default:
       // ALWAYS have a default case in a reducer
       return state;
