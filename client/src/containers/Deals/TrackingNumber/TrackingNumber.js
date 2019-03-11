@@ -8,7 +8,7 @@ import queryString from 'query-string';
 import Select from "react-select";
 import Layout from "../../Layout";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
-import { updateTrackingNumber, editTrackingNumber, editTrackingCarrier, _canUpdateTracking } from "../../../actions/dealsActions";
+import { updateTrackingNumber, editTrackingNumber, editTrackingCarrier, _canUpdateTracking, resetTracking } from "../../../actions/dealsActions";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -72,15 +72,20 @@ class TrackingNumber extends Component {
     validateAndSubmitTracking = async() =>{
         let txn_id = await this.props.match.params.txn_id;
         await this.handleTrackingNumberValidation();
-        await this.props.updateTrackingNumber(localStorage.getItem('token'), txn_id, this.props.trackingNumber, this.props.trackingCarrierSelected);
 
-        if(await this.props.trackingResult.message === "success"){
-            await this.props.history.push('/');
-        }else{
-            toast.error("Re-Submit Tracking Info", {
-                position: toast.POSITION.TOP_RIGHT
-            });
+        if(this.props.trackingNumber && this.props.trackingNumber.length >= 10 && this.props.trackingCarrierSelected && this.props.trackingCarrierSelected.length > 0){
+            await this.props.updateTrackingNumber(localStorage.getItem('token'), txn_id, this.props.trackingNumber, this.props.trackingCarrierSelected);
+
+            if(await this.props.trackingResult.message === "success"){
+                await this.props.history.push('/');
+                
+            }else{
+                toast.error("Re-Submit Tracking Info", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+            }
         }
+        
         
     }
 
@@ -105,16 +110,16 @@ class TrackingNumber extends Component {
                         <div className="mb-1 tracking-title">Enter Tracking Info for Deal</div>
                         <div className="mb-1 tracking-title tracking-deal-title">{backEndTrackingInfo[0].deal_name}</div>
                         <div className="mb-4">Order # {txn_id}</div>
-                        <div className="text-left" style={{ width: "330px" }}>Tracking Number</div>
+                        <div className="text-left mob-tracking-padding" style={{ width: "330px" }}>Tracking Number</div>
                         <input
                             onChange={editTrackingNumber}
                             value={trackingNumber}
-                            className="tracking-number mb-3"
+                            className="tracking-number mb-3 mob-tracking-padding mob-tracking-width"
                             autofocus="autofocus"
                             placeholder="Enter Tracking Number"
                             style={{ width: "330px" }}
                         />
-                        <div className="tracking-dropdown">
+                        <div className="tracking-dropdown mob-tracking-padding">
                             <div className="text-left mb-2">Tracking Carrier</div>
                             <Select
                                 className="tracking-select"
@@ -149,7 +154,7 @@ const mapStateToProps = state => ({
 
 const matchDispatchToProps = dispatch => {
 
-    return bindActionCreators({ updateTrackingNumber, editTrackingNumber, _isLoggedIn, editTrackingCarrier, _canUpdateTracking }, dispatch);
+    return bindActionCreators({ updateTrackingNumber, editTrackingNumber, _isLoggedIn, editTrackingCarrier, _canUpdateTracking, resetTracking }, dispatch);
 
 }
 
