@@ -16,21 +16,25 @@ import CategoryHome from './CategoryHome/CategoryHome';
 import { _loadAllHomepageDeals } from '../../../actions/homepageActions';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { resetTracking } from '../../../actions/dealsActions';
 
 class Homepage extends Component {
 
-  componentDidMount = () => {
-    // this.props._loadHomepage();
-    this.props._loadAllHomepageDeals();
+  componentDidMount = async () => {
+   
+    await this.props._loadAllHomepageDeals();
     
-    if(await this.props.trackingResult.message === "success"){
-      await this.props.history.push('/');
+    if(await this.props.trackingResult !== null && this.props.trackingResult.message === "success"){
+      await  toast.success("Tracking Info Updated", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      await this.props.resetTracking();
     }
   }
 
   render() {
     const { error, loading, category_list, homepage_deals } = this.props;
-    // console.log(category_list, apparel_accessories, electronics);
+
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -92,6 +96,7 @@ class Homepage extends Component {
           ))}
 
         </Layout>
+        <ToastContainer autoClose={5000} />
       </div>
     );
   }
@@ -107,7 +112,7 @@ const mapStateToProps = state => ({
 });
 
 const matchDispatchToProps = dispatch => {
-  return bindActionCreators({ _loadAllHomepageDeals}, dispatch);
+  return bindActionCreators({ _loadAllHomepageDeals, resetTracking}, dispatch);
 }
 
 
