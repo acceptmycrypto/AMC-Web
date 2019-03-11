@@ -85,7 +85,7 @@ class CategoryHome extends Component {
     return (
       <div className="mt-4">
         <Link to={"/category?term=" + category_collection_name + "&page=1"} className="category-title-margin mob-hidden mb-3">{category_collection_name}<i className="fas fa-chevron-right chevron-right"></i></Link>
-        <div className="mob-most-recent-title">Most Recent Listed Deals</div>
+        <div className="mob-most-recent-title">Most Recent Deals</div>
         {category_collection != undefined && category_collection.length > 0 && category_collection[0].id !== null && <div className="d-flex flex-row mt-3">
           {category_collection[0].id !== null && <button type="button" className="btn btn-light mob-hidden" id="leftCategoryButton" onClick={this.handleLeftButtonClick}><i className="fas fa-chevron-left category-icon-chevron"></i></button>}
           <div className="category_div" id={category_collection_id}>
@@ -130,7 +130,7 @@ class CategoryHome extends Component {
               </div>
 
             ))}
-            {category_collection_name !== "Most Recent Deals Listed" && <div className="list-deal-category" onClick={this.createDealFromCategory}>
+            {category_collection_name !== "Most Recent Deals" && <div className="list-deal-category" onClick={this.createDealFromCategory}>
               <div className="list-deal-category-label">Create {this.properArticle(category_collection_name)} {category_collection_name} Deal </div>
               <i className="fas fa-plus fa-2x" />
             </div>}

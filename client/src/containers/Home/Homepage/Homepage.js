@@ -97,7 +97,7 @@ class Homepage extends Component {
           
          
           {homepage_deals.recent_deals !== undefined && homepage_deals.recent_deals.length > 0 &&
-            <CategoryHome category_collection={homepage_deals.recent_deals} category_collection_name={"Most Recent Deals Listed"} category_collection_id={`cat_recent`}/>
+            <CategoryHome category_collection={homepage_deals.recent_deals} category_collection_name={"Most Recent Deals"} category_collection_id={`cat_recent`}/>
           }
           
           <div className="full-width-deals">
