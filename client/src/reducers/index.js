@@ -18,6 +18,8 @@ import UploadedImages from './reducer-images';
 import Chat from './reducer-chat';
 import PasswordReset from './reducer-pw-token';
 import Homepage from './reducer-homepage';
+// import LandingCryptos from './reducer-landing-cryptos';
+// import CryptoResults from './reducer-crypto-results';
 
 
 const allReducers = combineReducers({
@@ -40,6 +42,9 @@ const allReducers = combineReducers({
   Chat,
   PasswordReset,
   Homepage
+  // TransactionInfo, 
+  // LandingCryptos, 
+  // CryptoResults
 });
 
 export default allReducers;

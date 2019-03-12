@@ -1,0 +1,55 @@
+
+#user-instructions{
+  display: block;
+  font-size: 1.7em;
+  text-transform: uppercase;
+  color: #199087;
+  font-weight: bold;
+
+}
+
+.labelLandingSubheader{
+  display: block;
+  text-transform: uppercase;
+  font-size: 1.3em;
+  color: #768496;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.labelLanding{
+  display: block;
+  text-transform: uppercase;
+  font-size: 1.1em;
+  color: white;
+}
+
+#landing_cryptos{
+  color: #199087;
+}
+
+.getUserListed_input {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  color: white;
+  outline: none;
+  border-bottom: 1px solid #445366;
+  font-size: 1em;
+  font-weight: 300;
+  padding-bottom: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.FormCenter{
+  min-height: 80%;
+}
+
+.results_link {
+  color: #199087;
+}
+
+.results_link:hover {
+  color: #199087;
+}

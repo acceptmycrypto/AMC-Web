@@ -15,7 +15,6 @@ import allReducers from './reducers';
 //for redux devtool on Chrome to work, came from extension's documentation
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 //all data store in variable store
-
 const store = createStore(
   allReducers, composeEnhancers(applyMiddleware(thunk))
 //middleware which we can add to Redux to effectively teach it how to deal with new kinds of actions.

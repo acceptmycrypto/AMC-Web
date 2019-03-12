@@ -5,6 +5,14 @@ import SignIn from "./containers/Home/SignIn";
 import ResendEmail from "./containers/Home/ResendEmail";
 import ResetPassword from "./containers/Home/ResetPassword";
 import ResetPasswordEmail from "./containers/Home/ResetPasswordEmail";
+
+// import SignUp from "./containers/Home/SignUp";
+// import SignIn from "./containers/Home/SignIn";
+// import ForVendor from "./containers/LandingPage/ForVendor";
+// import ForUser from "./containers/LandingPage/ForUser";
+// import Results from "./containers/LandingPage/Results";
+
+
 import Profile from "./containers/Profile/UserProfile";
 import Settings from "./containers/UserSettings/Settings";
 import Homepage from "./containers/Home/Homepage";
@@ -33,6 +41,14 @@ class App extends Component {
               <Route exact path="/ResendEmail" component={ResendEmail} />
               <Route exact path="/ResetPasswordEmail" component={ResetPasswordEmail} />
               <Route path="/ResetPassword/:token" component={ResetPassword}/>
+              {/* <Route exact path="/" component={SignIn} />
+              <Route exact path="/SignUp" component={SignUp} /> */}
+              {/* <Route exact path="/" component={ForUser} />
+              <Route exact path="/vendor" component={ForVendor} />
+              <Route exact path="/results" component={Results} /> */}
+
+
+
               <Route exact path="/profile" component={Profile} />
 
 

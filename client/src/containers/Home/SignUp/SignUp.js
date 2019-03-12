@@ -24,6 +24,8 @@ import {
 import Footer from "../../../components/Layout/Footer";
 import Aside from "../Aside";
 
+import Modal from 'react-awesome-modal';
+
 class SignUp extends Component {
   componentDidMount = () => {
     this.props._loadCryptocurrencies();
@@ -216,6 +218,9 @@ class SignUp extends Component {
                     required
                     type="checkbox"
                     name="hasAgreed"
+                    required
+                    // value={this.state.hasAgreed}
+                    // onChange={this.handleChange}
                   />
                   I agree to all statements in
                   <a href="#" className="FormField__TermsLink">

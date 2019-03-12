@@ -1,0 +1,274 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
+
+* {
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.mr-20 {
+  margin-right: 20px;
+}
+
+.App {
+    height: 100%;
+    display: flex;
+    color: white;
+    /* this margin top is needed to offset the layout margin top so there is no gap between the nav bar and the sign up content */
+    /* margin-top: -30px; */
+  }
+
+  .App__Aside {
+    width: 50%;
+    background-color: #66DAC7;
+    padding-top: 75px;
+    /* padding-bottom: 75px; */
+  }
+
+  .App__Form {
+    width: 50%;
+    background-color: #2E4158;
+    padding: 25px 40px;
+    overflow: auto;
+    padding-top: 75px;
+    /* padding-bottom: 75px; */
+  }
+
+  .App__Aside .PageSwitcher {
+    display: none;
+  }
+
+  .PageSwitcher {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10%;
+  }
+
+  .PageSwitcher__Item {
+    background-color: #4C5D72;
+    color: #9DA6B1;
+    padding: 10px 25px;
+    cursor: pointer;
+    font-size: 1em;
+    border: none;
+    outline: none;
+    display: inline-block;
+    text-decoration: none;
+  }
+
+  .PageSwitcher__Item:hover {
+    text-decoration: none;
+    color: white;
+  }
+
+  .PageSwitcher__Item--Active {
+    background-color: #5ED0C0;
+    color: white;
+  }
+
+  .PageSwitcher__Item:first-child {
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+  }
+  .PageSwitcher__Item:last-child {
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+  }
+
+  #how-it-work {
+    display: block;
+    text-transform: uppercase;
+    font-size: 1em;
+    color: white;
+  }
+
+  #how-it-work h5 {
+    margin-bottom: 20px;
+  }
+
+  .vendor-list-feaures {
+    display: flex;
+    margin-bottom: 15px;
+  }
+
+  .vendor-list-feaures i {
+    margin: 3px 10px 0 0;
+  }
+
+  .getListed_input {
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    color: white;
+    outline: none;
+    border-bottom: 1px solid #445366;
+    font-size: 1em;
+    font-weight: 300;
+    padding-bottom: 10px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+  }
+
+  .getListed_button {
+    background-color: #52C4B9;
+    color: white;
+    border: none;
+    outline: none;
+    border-radius: 100px;
+    padding: 10px 30px;
+    font-size: 1em;
+    font-weight: 500;
+    text-transform: uppercase;
+    float: right;
+    cursor: pointer;
+    margin-left: 50px;
+    margin-bottom: 30px;
+  }
+
+/* Left Panel */
+.crypto-img {
+  width: 150px;
+}
+
+/* .font-weight-light ul {
+  font-size: 25px;
+  font-weight: 500;
+} */
+
+.App__Aside h1,
+.App__Aside h2 {
+  color: #616e7f;
+  text-align: center;
+  font-weight: 700;
+}
+
+.App__Aside ul {
+  font-size: 15px;
+  color: #2e4157;
+  line-height: 3;
+}
+
+hr.star-light {
+  max-width: 15rem;
+  padding: 0;
+  text-align: center;
+  border: none;
+  border-top: solid 0.25rem;
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+  hr.star-light:after {
+    position: relative;
+    top: -.8em;
+    display: inline-block;
+    padding: 0 0.25em;
+    content: '\f005';
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 2em;
+  }
+
+  hr.star-light {
+    border-color: #445366;
+  }
+
+  hr.star-light:after {
+    color: #445366;
+    background-color: #66DAC7;
+  }
+
+  .App__Aside .homepage-icons {
+    color: #445366;
+    padding: 10px;
+    font-size: 25px;
+  }
+
+  .lp-vendor{
+    min-height: 80%;
+  }
+
+/* media query */
+@media only screen and (max-width: 640px) {
+  .App {
+    height: 100%;
+    display: table;
+    color: white;
+    width: 100%;
+    /* this margin top is needed to offset the layout margin top so there is no gap between the nav bar and the sign up content */
+    /* margin-top: -30px; */
+  }
+
+  .App__Aside {
+    width: 100%;
+    background-color: #66DAC7;
+    padding-top: 75px;
+    padding-bottom: 75px;
+  }
+
+  .App__Form {
+    width: 100%;
+    background-color: #2E4158;
+    padding-top: 35px;
+  }
+
+  .App__Aside ul {
+    padding-right: 15px;
+  }
+
+  #vendor-submit-success {
+    width: 100%;
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+
+  #user-submit-success {
+    width: 100%;
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+
+
+/* page switcher toggle */
+  .App__Form .PageSwitcher {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    position: fixed;
+  }
+
+  .App__Form .PageSwitcher__Item {
+    background-color: #4C5D72;
+    color: #2e4157;
+    cursor: pointer;
+    font-size: 1.2em;
+    border: none;
+    outline: none;
+    display: inline-block;
+    text-decoration: none;
+    width: 100%;
+  }
+
+  .App__Form .PageSwitcher__Item--Active {
+    background-color: #2e4157;
+    color: #66DAC7;
+  }
+
+  .PageSwitcher__Item:first-child {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    text-align: center;
+  }
+  .PageSwitcher__Item:last-child {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    text-align: center;
+  }
+}
