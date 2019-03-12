@@ -54,8 +54,8 @@ var reviewRoutes = require("./routes/reviews.js");
 var listDealRoutes = require("./routes/listDeal.js");
 var chatRoutes = require("./routes/chat.js");
 var homepageRoutes = require("./routes/homepage.js");
-var landingUsersRoutes = require("./routes/landing_users.js");
-var landingResultsRoutes = require("./routes/landing_results.js");
+// var landingUsersRoutes = require("./routes/landing_users.js");
+// var landingResultsRoutes = require("./routes/landing_results.js");
 
 
 
@@ -92,8 +92,8 @@ app.use("/", reviewRoutes);
 app.use("/", listDealRoutes);
 app.use("/", chatRoutes);
 app.use("/", homepageRoutes);
-app.use("/", landingUsersRoutes);
-app.use("/", landingResultsRoutes);
+// app.use("/", landingUsersRoutes);
+// app.use("/", landingResultsRoutes);
 
 
 if (process.env.NODE_ENV === 'production') {
