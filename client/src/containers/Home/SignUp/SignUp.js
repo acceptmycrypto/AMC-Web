@@ -24,7 +24,7 @@ import {
 import Footer from "../../../components/Layout/Footer";
 import Aside from "../Aside";
 
-import Modal from 'react-awesome-modal';
+
 
 class SignUp extends Component {
   componentDidMount = () => {
