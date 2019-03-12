@@ -24,34 +24,22 @@ var connection = mysql.createConnection({
   database: process.env.DB_DB
 });
 
-// api
-router.get('/api/cryptosranking', function(req, res) {
+router.get('/api/cryptosranking_venues', function(req, res) {
   connection.query(
-    'SELECT crypto_id, count(venue_id) as total FROM cryptos_venues GROUP BY crypto_id',
+    'SELECT crypto_id, crypto_name, crypto_symbol, crypto_logo, crypto_price, count(venue_id) as venues_count FROM cryptos_venues LEFT JOIN crypto_metadata ON cryptos_venues.crypto_id = crypto_metadata.id LEFT JOIN crypto_info ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name GROUP BY crypto_id ORDER by venues_count DESC',
     function(err, venues_count, fields) {
-      for (var i in venues_count) {
-        connection.query(
-          'UPDATE crypto_metadata SET ? WHERE ?',
-          [
-            { venues_count: venues_count[i].total },
-            { id: venues_count[i].crypto_id }
-          ],
-          function(err, res) {
-            if (err) {
-              console.log(err);
-            }
-          }
-        );
-      }
-
-      connection.query(
-        'SELECT * FROM crypto_metadata LEFT JOIN crypto_info ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name ORDER by venues_count DESC',
-        function(err, data, fields) {
-          res.json(data);
-        }
-      );
+      if(err) console.log(err);
+      res.json(venues_count);
     }
   );
 });
 
+router.get('/api/cryptosranking_transactions', function(req, res) {
+  connection.query(
+    'SELECT users_purchases.crypto_id, crypto_metadata.crypto_name, crypto_metadata.crypto_symbol, crypto_info.crypto_logo, crypto_metadata.crypto_price, count(users_purchases.crypto_id) as total_transactions FROM users_purchases LEFT JOIN crypto_metadata ON users_purchases.crypto_id = crypto_metadata.id LEFT JOIN crypto_info ON crypto_metadata.crypto_name = crypto_info.crypto_metadata_name GROUP BY users_purchases.crypto_id ORDER BY total_transactions DESC',
+    function(err, transaction_count, fields) {
+      res.json(transaction_count);
+    }
+  );
+});
 module.exports = router;

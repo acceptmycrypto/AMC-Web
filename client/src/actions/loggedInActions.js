@@ -9,37 +9,37 @@ export function _isLoggedIn(token) {
   };
 
   return dispatch => {
-    dispatch(fetchUserBegin());
+    dispatch(fetchIsLoggedInBegin());
     return fetch("/loggedIn", settingsLoggedIn)
       .then(res => res.json())
       .then(jsonLogin => {
-        dispatch(fetchUserSuccess(jsonLogin));
+        dispatch(fetchIsLoggedInSuccess(jsonLogin));
         return jsonLogin;
       })
-      .catch(error => dispatch(fetchUserFailure(error)));
+      .catch(error => dispatch(fetchIsLoggedInFailure(error)));
   };
 }
 
-export const fetchUserBegin = () => ({
-  type: "FETCH_USER_BEGIN"
+export const fetchIsLoggedInBegin = () => ({
+  type: "FETCH_LOGGED_IN_BEGIN"
 });
 
 
-export const fetchUserSuccess = user => {
+export const fetchIsLoggedInSuccess = user => {
   if(user.message == "Right Token"){
     return {
-      type: "FETCH_USER_SUCCESS",
+      type: "FETCH_LOGGED_IN_SUCCESS",
       payload: true
     }
   }else {
     return {
-      type: "FETCH_USER_SUCCESS",
+      type: "FETCH_LOGGED_IN_SUCCESS",
       payload: false
     }
   }
 }
 
-export const fetchUserFailure = error => ({
-  type: "FETCH_USER_FAILURE",
+export const fetchIsLoggedInFailure = error => ({
+  type: "FETCH_LOGGED_IN_FAILURE",
   payload: { error }
 });

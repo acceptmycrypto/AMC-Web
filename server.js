@@ -17,14 +17,8 @@ var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 
 if (process.env.NODE_ENV === 'production') {
-  // Exprees will serve up production assets
+  // Express will serve up production assets
   app.use(express.static('client/build'));
-
-  // Express serve up index.html file if it doesn't recognize route
-  // const path = require('path');
-  // app.get('*', (req, res) => {
-  //   res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-  // });
 }
 else app.use(express.static("public"));
 
@@ -33,7 +27,7 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
+    "Origin, X-Requested-With, Content-Type, Accept, Cache-Control"
   );
   res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");
   next();
@@ -55,8 +49,13 @@ var signInRoutes = require('./routes/signin.js');
 var transactionsRoutes = require("./routes/transactions.js");
 var cryptosRankingRoutes = require("./routes/cryptos_ranking.js");
 var notificationRoutes = require("./routes/cryptos_ranking.js");
-var landingUsersRoutes = require("./routes/landing_users.js");
-var landingResultsRoutes = require("./routes/landing_results.js");
+var settingsRoutes = require("./routes/settings.js");
+var reviewRoutes = require("./routes/reviews.js");
+var listDealRoutes = require("./routes/listDeal.js");
+var chatRoutes = require("./routes/chat.js");
+var homepageRoutes = require("./routes/homepage.js");
+// var landingUsersRoutes = require("./routes/landing_users.js");
+// var landingResultsRoutes = require("./routes/landing_results.js");
 
 
 
@@ -88,10 +87,22 @@ app.use('/', signInRoutes);
 app.use("/", transactionsRoutes);
 app.use("/", cryptosRankingRoutes);
 app.use("/", notificationRoutes);
-app.use("/", landingUsersRoutes);
-app.use("/", landingResultsRoutes);
+app.use("/", settingsRoutes);
+app.use("/", reviewRoutes);
+app.use("/", listDealRoutes);
+app.use("/", chatRoutes);
+app.use("/", homepageRoutes);
+// app.use("/", landingUsersRoutes);
+// app.use("/", landingResultsRoutes);
 
 
+if (process.env.NODE_ENV === 'production') {
+  // catch all routes
+  app.get('/*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
+//not sure what this is, I don't we need it
 path.join(__dirname, "public");
 
 var connection = mysql.createConnection({
@@ -114,10 +125,12 @@ var options = [
     method: "GET",
     uri: "https://pro-api.coinmarketcap.com/v1/cryptocurrency/info",
     qs: {
-      symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,XVG,XMR"
+
+      symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,EOS,XVG"
+
     },
     headers: {
-      "X-CMC_PRO_API_KEY": "0972c733-b48c-4f2e-8da9-21e39cff4fc9",
+      "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
       Accept: "application/json"
     }
   },
@@ -125,16 +138,20 @@ var options = [
     method: "GET",
     uri: "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest",
     qs: {
-      symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,XVG,XMR"
+
+      symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,EOS,XVG"
+
     },
     headers: {
-      "X-CMC_PRO_API_KEY": "0972c733-b48c-4f2e-8da9-21e39cff4fc9",
+      "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
       Accept: "application/json"
     }
   }
 ];
 
-//use aynch to map two request ojects and return all results in one callback
+
+//use async to map two request ojects and return all results in one callback
+
 async.map(
   options,
   function(obj, callback) {
@@ -162,8 +179,25 @@ async.map(
         var crypto_symbol = coin_metadata[i].symbol;
         var crypto_price = coin_metadata[i].quote.USD.price;
 
+
+        // connection.query(
+        //   "INSERT IGNORE INTO crypto_metadata SET ?",
+        //   {
+        //     crypto_name: crypto_name,
+        //     crypto_symbol: crypto_symbol,
+        //     crypto_price: crypto_price
+        //   },
+        //   function(err, res) {
+        //     if (err) {
+        //       console.log("170: " + err);
+        //     }
+        //   }
+        // );
+
+        //for updating cryptos
         connection.query(
-          "INSERT INTO crypto_metadata SET ?",
+          "UPDATE IGNORE crypto_metadata SET ?",
+
           {
             crypto_name: crypto_name,
             crypto_symbol: crypto_symbol,
@@ -181,8 +215,24 @@ async.map(
         var crypto_site = coin_info[j].urls.website[0];
         var crypto_logo = coin_info[j].logo;
         var crypto_metadata_name = coin_info[j].name;
+
+        // connection.query(
+        //   "INSERT IGNORE INTO crypto_info SET ?",
+        //   {
+        //     crypto_logo: crypto_logo,
+        //     crypto_link: crypto_site,
+        //     crypto_metadata_name
+        //   },
+        //   function(err, res) {
+        //     if (err) {
+        //       // console.log(err);
+        //     }
+        //   }
+        // );
+
         connection.query(
-          "INSERT INTO crypto_info SET ?",
+          "UPDATE IGNORE crypto_info SET ?",
+
           {
             crypto_logo: crypto_logo,
             crypto_link: crypto_site,
@@ -202,7 +252,7 @@ async.map(
 // set the view engine to ejs
 // app.set("view engine", "ejs");
 
-//Heroku tells us which port our app to use. For production, we use Heroku port. For development, we use 3000
+//Heroku tells us which port our app to use. For production, we use Heroku port. For development, we use 3001
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, function() {
   console.log("Backend server is listening on 3001");

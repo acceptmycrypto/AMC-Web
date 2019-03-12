@@ -1,0 +1,79 @@
+.scroll_Button {
+    background-color: #52C4B9;
+    color: white;
+    border: none;
+    outline: none;
+    padding: 6px 12px;
+    font-size: 0.8em;
+    font-weight: 500;
+    width: 100px;
+    border-radius: 25px;
+}
+
+.scroll_Button:hover {
+    cursor: pointer;
+}
+
+.page_Number {
+    color: #52C4B9;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    font-size: 1em;
+    font-weight: 500;
+    width: fit-content;
+    margin: 0px 15px;
+}
+
+.page_Number:hover {
+    cursor: pointer;
+}
+
+.page_NavContent {
+    width: fit-content;
+    margin: 10px auto;
+}
+
+.button_Hide_true {
+    visibility: hidden;
+}
+
+.button_Hide_false {
+    visibility: visible;
+}
+
+.no_Results {
+    width: fit-content;
+    margin: auto;
+    font-size: 1em;
+    font-weight: 500;
+    color: #52C4B9;
+}
+
+.page_pagination_bottom {
+  margin-top: 150px;
+}
+
+.page_pagination_top {
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+.search-deals-title{
+    text-align: center;
+    padding-top: 20px;
+    font-size: 20px;
+    text-transform: uppercase;
+}
+
+.term-color{
+    color: #52C4B9;
+}
+
+.search-deals-results{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    padding-right: 30px;
+    padding-left: 30px;
+}

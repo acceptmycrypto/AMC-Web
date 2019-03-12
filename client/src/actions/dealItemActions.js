@@ -1,4 +1,4 @@
-export function _loadDealItem(deal_name) {
+export function _loadDealItem(id, deal_name) {
   const settings = {
     method: "GET",
     headers: {
@@ -9,11 +9,11 @@ export function _loadDealItem(deal_name) {
 
   return dispatch => {
     dispatch(fetchDealItemBegin());
-    return fetch(`/api/deals/${deal_name}`, settings)
+    return fetch(`/api/deals/${id}/${deal_name}`, settings)
       .then(res => res.json())
-      .then(jsonPhoto => {
-        dispatch(fetchDealItemSuccess(jsonPhoto));
-        return jsonPhoto;
+      .then(jsonDeal => {
+        dispatch(fetchDealItemSuccess(jsonDeal));
+        return jsonDeal;
       })
       .catch(error => dispatch(fetchDealItemFailure(error)));
   };
@@ -23,8 +23,7 @@ export const fetchDealItemBegin = () => ({
   type: "FETCH_DEAL_ITEM_BEGIN"
 });
 
-
-export const fetchDealItemSuccess = dealItem => ({
+export const fetchDealItemSuccess = (dealItem) => ({
   type: "FETCH_DEAL_ITEM_SUCCESS",
   payload: { dealItem }
 });
@@ -41,23 +40,16 @@ export const resetDealitemState = () => {
   }
 };
 
-export const handleCustomizingSize = (event) => {
+export const handleFirstNameInput = (event) => {
   return {
-      type: 'SELECT_SIZE',
+      type: 'FIRST_NAME',
       payload: event.target.value
   }
 };
 
-export const handleCustomizingColor = (event) => {
+export const handleLastNameInput = (event) => {
   return {
-      type: 'SELECT_COLOR',
-      payload: event.target.value
-  }
-};
-
-export const handleFullNameInput = (event) => {
-  return {
-      type: 'FULL_NAME',
+      type: 'LAST_NAME',
       payload: event.target.value
   }
 };
@@ -83,9 +75,24 @@ export const handleZipcodeInput = (event) => {
   }
 };
 
-export const handleShippingStateInput = (event) => {
+export const handleShippingStateInput = (selectedState) => {
+  document.querySelector("#shipping-state").classList.remove("shipping-state-error");
   return {
       type: 'SHIPPING_STATE',
+      payload: {selectedState}
+  }
+};
+
+export const handleShippingEmail = (event) => {
+  return {
+      type: 'SHIPPING_EMAIL',
+      payload: event.target.value
+  }
+};
+
+export const handleShippingPhoneNumber = (event) => {
+  return {
+      type: 'SHIPPING_PHONE_NUMBER',
       payload: event.target.value
   }
 };
@@ -97,3 +104,36 @@ export const handleSelectedCrypto = (selectedOption) => {
   }
 };
 
+export const handleDetailStep = () => {
+
+  return {
+    type: "SHOW_DETAIL",
+    payload: {
+      showDetailStep: true,
+      showShippingStep: false,
+      showPayingStep: false
+    }
+  }
+}
+
+export const handleShippingStep = () => {
+  return {
+    type: "SHOW_SHIPPING",
+    payload: {
+      showCustomizationStep: false,
+      showShippingStep: true,
+      showPayingStep: false
+    }
+  }
+}
+
+export const handlePayingStep = () => {
+  return {
+    type: "SHOW_PAYING",
+    payload: {
+      showCustomizationStep: false,
+      showShippingStep: false,
+      showPayingStep: true
+    }
+  }
+}

@@ -5,9 +5,10 @@
   font-family: "Roboto", sans-serif;
 }
 
-body {
+body, html {
   margin: 0;
   padding: 0;
+  height: 100%;
 }
 
 .mr-20 {
@@ -15,7 +16,7 @@ body {
 }
 
 .App {
-    height: 100vh;
+    height: 100%;
     display: flex;
     color: white;
     /* this margin top is needed to offset the layout margin top so there is no gap between the nav bar and the sign up content */
@@ -25,17 +26,15 @@ body {
   .App__Aside {
     width: 50%;
     background-color: #66DAC7;
-    padding-top: 75px;
-    padding-bottom: 75px;
   }
 
   .App__Form {
     width: 50%;
     background-color: #2E4158;
-    padding: 25px 40px;
+    padding: 0px 40px;
     overflow: auto;
     padding-top: 75px;
-    padding-bottom: 75px;
+    height: 100%;
   }
 
   .PageSwitcher {
@@ -49,7 +48,7 @@ body {
     color: #9DA6B1;
     padding: 10px 25px;
     cursor: pointer;
-    font-size: 1.2em;
+    font-size: 1em;
     border: none;
     outline: none;
     display: inline-block;
@@ -68,10 +67,6 @@ body {
   .PageSwitcher__Item:last-child {
     border-top-right-radius: 25px;
     border-bottom-right-radius: 25px;
-  }
-
-  .FormCenter {
-    margin-bottom: 100px;
   }
 
   .FormTitle {
@@ -104,7 +99,6 @@ body {
   }
 
   .FormField__Label {
-    display: block;
     text-transform: uppercase;
     font-size: .9em;
     color: white;
@@ -133,16 +127,19 @@ body {
     outline: none;
     border-radius: 25px;
     padding: 15px 70px;
-    font-size: 1em;
+    font-size: 0.8em;
     font-weight: 500;
+    width: fit-content;
+    margin: 0 20px 20px 0;
   }
 
   .FormField__Link {
     color: #66707D;
     text-decoration: none;
-    display: inline-block;
     border-bottom: 1.5px solid #225E62;
     padding-bottom: 5px;
+    width: fit-content;
+    margin-left: 15px;
   }
 
   .FormField__CheckboxLabel {
@@ -164,7 +161,7 @@ body {
     margin-left: 5px;
   }
 
-  /* .Modal{
+  .Modal{
     text-align: center;
     width: 600px;
     height: 250px;
@@ -176,23 +173,19 @@ body {
     color: white;
     position: fixed;
   }
-  p{
-    text-align: center;
-    padding-top: 30px;
-    font-size: .6em;
-  }
+
   .a-link{
     color: white;
     font-size: 20px;
     margin-left: 90%;
-  } */
+  }
 
 
 .crypto-img {
   width: 150px;
 }
 
-ul {
+.font-weight-light ul {
   font-size: 25px;
   font-weight: 500;
 }
@@ -241,3 +234,31 @@ hr.star-light {
     padding: 10px;
   }
 
+
+  .FormCenter{
+    min-height: calc(100% - 23%);
+  }
+
+  .orangeText{
+    color: orange;
+  }
+
+
+.back_to_home{
+  margin-left: 20px;
+  font-size: 15px;
+  padding-bottom: 75px;
+  padding-top: 10px;
+}
+#back_to_home-text{
+  color: #2E4158;
+}
+
+#back_to_home-text:hover{
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#back-arrow{
+  color: #2E4158;
+}

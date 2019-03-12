@@ -1,11 +1,11 @@
 /* Start of CSS for Crypto Portfolio */
 #cryptoPortfolio{
-  
+
   /* width: 18em;
   max-width: 18em; */
 
   min-height: 200px;
-  border: rgb(22, 190, 182) 2px solid;
+  /* border: rgb(22, 190, 182) 2px solid; */
 
   border-radius: 5px;
 }
@@ -19,17 +19,32 @@
 }
 
 .cryptoImage{
-  width: 100%;
+  width: 5rem;
   cursor: pointer;
-  /* margin-right: 15%;
-  margin-left: 15%; */
-  padding-right: 20%;
-  padding-left: 20%; 
- 
+  padding: 10px
+
 }
 
 .cryptoText{
   font-size: 15px;
+}
+
+.crypto-balance button {
+  background-color: #0d5045;
+  color: white;
+  border: none;
+  outline: none;
+  border-radius: 25px;
+  padding: 5px 20px;
+  font-size: 1em;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.crypto-balance div {
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 5px;
 }
 
 
@@ -48,16 +63,19 @@
   top: 0;
   right: 10%;
   cursor: pointer;
-  
+
 }
 
 .address{
   display: inline-block;
   word-break: break-all;
+  padding-bottom: 10px;
 }
 
 .qr{
-  width: 100%;
+  width: fit-content;
+  padding: 0;
+  margin: 0 auto;
 }
 
 #addressFormInput{
@@ -67,7 +85,8 @@
 #addAddressForm{
   display: flex;
   justify-content: center;
-  flex-direction: column;
+  padding: 10px;
+  /* flex-direction: column; */
   /* margin-right: 15%; */
   /* margin-left: 15%; */
 }
@@ -75,6 +94,10 @@
 .addAddressButton{
   width: fit-content;
   margin: 0 auto;
+}
+
+.owned, .interested{
+  justify-content: center;
 }
 
 
@@ -89,9 +112,9 @@
     width: 120px;
     height: 34px;
   }
-  
+
   .switch input {display:none;}
-  
+
   .slider {
     position: absolute;
     cursor: pointer;
@@ -103,7 +126,7 @@
     -webkit-transition: .4s;
     transition: .4s;
   }
-  
+
   .slider:before {
     position: absolute;
     content: "";
@@ -115,21 +138,21 @@
     -webkit-transition: .4s;
     transition: .4s;
   }
-  
+
   input:checked + .slider {
     background-color: #1ab7db;
   }
-  
+
   input:focus + .slider {
     box-shadow: 0 0 1px #2196F3;
   }
-  
+
   input:checked + .slider:before {
     -webkit-transform: translateX(85px);
     -ms-transform: translateX(85px);
     transform: translateX(85px);
   }
-  
+
   .interest
   {
     display: none;
@@ -146,17 +169,17 @@
     font-size: 12px;
     font-family: Verdana, sans-serif;
   }
-  
+
   input:checked+ .slider .interest
   {display: block;}
-  
+
   input:checked + .slider .own
   {display: none;}
-  
+
   .slider.round {
     border-radius: 34px;
   }
-  
+
   .slider.round:before {
     border-radius: 50%;}
 

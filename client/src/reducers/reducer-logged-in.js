@@ -1,12 +1,12 @@
 const initialState = {
-  userLoggedIn: null,
+  userLoggedIn: false,
   loading: false,
   error: null
 };
 
 export default function layoutReducer(state = initialState, action) {
   switch(action.type) {
-    case "FETCH_USER_BEGIN":
+    case "FETCH_LOGGED_IN_BEGIN":
       // Mark the state as "loading" so we can show a spinner or something
       // Also, reset any errors. We're starting fresh.
       return {
@@ -15,14 +15,14 @@ export default function layoutReducer(state = initialState, action) {
         error: null
       };
 
-    case "FETCH_USER_SUCCESS":
+    case "FETCH_LOGGED_IN_SUCCESS":
       return {
         ...state,
         loading: false,
         userLoggedIn: action.payload
       };
 
-    case "FETCH_USER_FAILURE":
+    case "FETCH_LOGGED_IN_FAILURE":
       // The request failed, but it did stop, so set loading to "false".
       // Save the error, and we can display it somewhere
       // Since it failed, we don't have items to display anymore, so set it empty.

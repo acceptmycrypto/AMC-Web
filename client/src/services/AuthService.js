@@ -29,3 +29,36 @@ export async function _loadCryptocurrencies () {
 
 //   return cryptos
 }
+
+export const _resendEmail = (email) => {
+	return fetch("/resend-email", {
+	    method: 'POST',
+	    headers: {
+	      'Accept': 'application/json',
+	      'Content-Type': 'application/json'
+	    },
+	    body: JSON.stringify({email})
+	  }).then(res => res.json())
+}
+
+export const _resetPasswordEmail = (email) => {
+	return fetch("/reset-password-email", {
+	    method: 'POST',
+	    headers: {
+	      'Accept': 'application/json',
+	      'Content-Type': 'application/json'
+	    },
+	    body: JSON.stringify({email})
+	  }).then(res => res.json())
+}
+
+export const _resetPassword = (token, password1, password2) => {
+	return fetch("/reset-password", {
+	    method: 'POST',
+	    headers: {
+	      'Accept': 'application/json',
+	      'Content-Type': 'application/json'
+	    },
+	    body: JSON.stringify({token, password1, password2})
+	  }).then(res => res.json())
+}

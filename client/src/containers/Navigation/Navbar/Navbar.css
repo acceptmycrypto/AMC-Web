@@ -1,18 +1,19 @@
 .Toolbar {
-  height: 45px;
+  height: 55px;
   width: 100%;
   position: fixed;
   justify-content: space-between;
   top: 0;
   left: 0;
-  background-color: rgba(255, 255, 255, 0.93);
+  background-color: rgba(255, 255, 255, 1);
   display: flex;
   align-items: center;
-  padding: 0 20px;
+  padding: 25px 20px;
   box-sizing: border-box;
   z-index: 90;
   font-size: 14px;
   font-family: Verdana, sans-serif;
+  box-shadow:0 2px 2px 0 rgba(0,0,0,0.16);
 }
 
 .Toolbar a {
@@ -38,27 +39,28 @@
 }
 
 .Search {
-  margin-right: 45px;
+  margin-right: 85px;
   border-radius: 5px;
 }
 
 .Search input {
-  border-radius: 5px;
+  border-radius: 0px;
   border: 1px solid gray;
+  padding: 0px 8px;
 }
 
 .Search input:focus {
   outline: gray;
 }
 
-li {
+.Toolbar li {
   display: inline-block;
-  margin-left: 15px;
+  margin: 0 15px;
   line-height: 1.5;
 }
 
 .nav-left .Search {
-  width: 18%;
+  width: 28%;
 }
 
 .user-icon-navbar{
@@ -79,9 +81,101 @@ li {
 
 .font-17{
   font-size: 17px;
-  
+
 }
 
 .color-deepBlue{
   color: #2a3c51;
 }
+
+.teal-underline{
+  border-bottom: solid 2px rgb(22, 190, 182);
+}
+
+.navbar_logo {
+  width: 50px;
+}
+
+.category-dropdown:hover {
+  cursor: pointer;
+}
+
+.navbar-login{
+  color: rgb(32, 170, 163);
+  font-size: 16px;
+  font-weight: 20;
+
+}
+
+#nav-link-sign-in:hover, #nav-link-sign-up:hover{
+  text-decoration: underline;
+}
+
+.clear-text-decoration{
+  text-decoration: none;
+  margin-right: 3px;
+  margin-left: 3px;
+}
+
+#nav-vertical-divider{
+  font-size: 18px;
+}
+.search_Button {
+    background-color: #52C4B9;
+    color: white;
+    border: none;
+    outline: none;
+    padding: 6px 12px;
+    font-size: 0.8em;
+    font-weight: 500;
+    border-radius: 0px 15px 15px 0px;
+    width: fit-content;
+}
+
+#searchbarinput {
+    background-color: #52C4B9;
+    border: none;
+    border-radius: 15px 0px 0px 15px;
+    color: white;
+}
+
+#searchbarinput:-webkit-autofill,
+#searchbarinput:-webkit-autofill:hover,
+#searchbarinput:-webkit-autofill:focus,
+#searchbarinput:-webkit-autofill:active  {
+    box-shadow: 0 0 0 30px #52C4B9;
+    -webkit-box-shadow: 0 0 0 30px #52C4B9 inset !important;
+    -webkit-text-fill-color: white !important;
+}
+
+#searchbarinput::placeholder {
+    color: white;
+    opacity: 1;
+}
+
+#searchbarButton {
+    color: white;
+}
+
+.search_Form {
+    display: flex;
+}
+
+.message-notification {
+  background-color: red;
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+  position: absolute;
+  top: 8px;
+  right: 115px;
+}
+
+.font-family-roboto {
+  font-family: Roboto,sans-serif;
+}
+
+.mob-nav-bar {
+  display: none;
+}
+

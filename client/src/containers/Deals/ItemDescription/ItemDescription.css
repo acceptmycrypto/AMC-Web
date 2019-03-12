@@ -1,0 +1,40 @@
+.deal-name-label, .shipping-name-label, .payment-name-label {
+  font-weight: 700;
+  font-size: 1.5em;
+}
+
+#deal-item-info {
+  display: flex;
+}
+
+.condition-category-posted {
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+  font-weight: 600;
+  font-size: 1.4em;
+}
+
+.condition-category-posted-container {
+  display: flex;
+  margin-bottom: 10px;
+  width: 50%;
+}
+
+.condition-category-posted {
+  margin-right: 30px;
+}
+
+.detail-wrapper {
+  max-height: 300px;
+  min-height: 200px;
+  margin-top: 10px;
+}
+
+#category-display-flex {
+  display: flex;
+}
+
+#category-span {
+  align-self: flex-end;
+  font-size: 16px;
+}
+

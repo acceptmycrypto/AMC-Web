@@ -1,4 +1,4 @@
-export function _loadCryptosRanking() {
+export function _loadCryptosRanking(type) {
   const cryptosRankingSettings = {
     method: "GET",
     headers: {
@@ -9,13 +9,27 @@ export function _loadCryptosRanking() {
 
   return dispatch => {
     dispatch(fetchCryptosBegin());
-    return fetch("/api/cryptosranking", cryptosRankingSettings)
+    if(type == 'venues')
+    {
+      return fetch("/api/cryptosranking_venues", cryptosRankingSettings)
       .then(res => res.json())
       .then(jsonCryptos => {
-        dispatch(fetchCryptosSuccess(jsonCryptos));
+        dispatch(fetchCryptosSuccess(jsonCryptos, 'venues'));
         return jsonCryptos;
       })
       .catch(error => dispatch(fetchCryptosFailure(error)));
+    }
+    else
+    {
+      return fetch("/api/cryptosranking_transactions", cryptosRankingSettings)
+      .then(res => res.json())
+      .then(jsonCryptos => {
+        dispatch(fetchCryptosSuccess(jsonCryptos, 'transactions'));
+        console.log(jsonCryptos);
+        return jsonCryptos;
+      })
+      .catch(error => dispatch(fetchCryptosFailure(error)));
+    }
   };
 }
 
@@ -24,9 +38,10 @@ export const fetchCryptosBegin = () => ({
 });
 
 
-export const fetchCryptosSuccess = cryptos => ({
+export const fetchCryptosSuccess = (cryptos, sort) => ({
   type: "FETCH_CRYPTOS_SUCCESS",
-  payload: { cryptos }
+  payload: { cryptos },
+  cryptosSort: sort
 });
 
 export const fetchCryptosFailure = error => ({

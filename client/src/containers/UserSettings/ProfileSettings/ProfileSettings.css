@@ -1,0 +1,38 @@
+.profileSettings{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 auto;
+    width: 50%;
+}
+
+.margin-L-15{
+    margin-left: 15%;
+}
+
+.margin-L-38{
+    margin-left: 38%;
+}
+
+.margin-L-45{
+    margin-left: 45%;
+}
+.button-font{
+    font-size: 16px;
+}
+
+.settings-icon-shaded{
+    display: inline-block;
+    color: white;
+    background-image: linear-gradient(-85deg, #49cdb7, #1ab7db); 
+    width: fit-content;
+    font-size: 3em;
+    border-radius: 5px;
+
+}
+
+#newEmail{
+    font-size: 17px;
+    width: 300px;
+
+}

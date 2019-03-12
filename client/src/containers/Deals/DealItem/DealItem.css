@@ -1,6 +1,6 @@
 .deal-container {
-  margin: 50px;
-  height: 80vh; /*relative to the height of the viewport*/
+  margin: 0px 50px;
+  margin-bottom: 10px;
   box-sizing: border-box;
   box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
   display: flex;
@@ -8,10 +8,20 @@
   flex-direction: column;
 }
 
+.deal-item-content {
+  min-height: 500px;
+  margin: 0px 50px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  display: flex;
+  border-radius: 5px;
+}
+
 .deal-header {
   background-image: linear-gradient(-85deg, #49cdb7, #1ab7db);
   width: 100%;
-  height: 25%;
+  height: 100px;
   border-radius: 5px 5px 0 0;
   display: flex;
   color: white;
@@ -34,10 +44,11 @@
 .deal-item-discount {
   background-color: #e63e43;
   border:  #e63e43 1px solid;
-  font-size: 12px;
+  font-size: 15px;
   border-radius: 5px;
-  margin: 0 7px;
-  padding: 0 5px;
+  padding: 5px;
+  color: #fff;
+  font-weight: 700;
 }
 
 .deal-item-summary {
@@ -60,6 +71,15 @@
   width: 20%;
 }
 
+/* .deal-item-steps {
+  background-color: sandybrown;
+} */
+
+.ui.steps {
+  border-radius: 0px;
+  width: 100%;
+}
+
 .deal-main-info {
   display: flex;
   height: 100%;
@@ -67,24 +87,41 @@
 }
 
 .deal-images-container {
-  height: 100%;
-  width: 100%;
-  padding: 15px;
+  width: 35%;
+  margin: 25px 25px 25px 25px;
+  min-height: 485px;
+  max-height: 485px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.guest-images-container {
+  min-height: 590px;
+  max-height: 590px;
+  width: 35%;
+  margin: 25px 25px 25px 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .deal-checkout-container {
-  padding: 0 15px;
+  padding: 0 20px;
   position: relative;
   height: 100%;
-  width: 100%;
+  width: 65%;
 }
 
 .react-carousel {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+}
 
+.thumbs.animated {
+  overflow-x: auto;
 }
 
 .deal-item-image {
@@ -95,149 +132,194 @@
   border-radius: 5px;
   max-width: 300px;
   max-height: 300px;
+  min-width: 175px;
+  min-height: 175px;
+  object-fit: cover;
 }
 
-/* stop default stiling of ol */
-ol.progtrckr {
-  list-style-type: none;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  height: 25%;
-  margin-bottom: 30px;
+.dealitem-error-msg {
+  /* border-color: red; */
+  color: red;
+  margin-bottom: 10px;
 }
 
-/* Hide the default step of order list*/
-.progtrckr em {
-  display: none;
+/* Seller Review */
+.sellers-reviews {
+  /* min-height: 500px; */
+  margin: 0px 50px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 5px;
+  padding: 20px;
   font-weight: 700;
-  padding-left: 1rem;
+  font-size: 1.5em;
 }
 
-
-/* Set the color of three states: todo, doing, and done */
-ol.progtrckr li.progtrckr-todo {
-  color: silver;
-  border-bottom: 4px solid silver;
+#seller-review-label{
+  margin-bottom: 20px;
 }
 
-ol.progtrckr li.progtrckr-doing {
-  color: black;
-  border-bottom: 4px solid #CCCCCC;
+#seller-review-avatar, #buyer-review-avatar {
+  margin-right: 10px;
 }
 
-ol.progtrckr li.progtrckr-done {
-  color: black;
-  border-bottom: 4px solid #5cb85c;
+#seller-review-name {
+  font-size: 1em;
 }
 
-ol.progtrckr li {
-  display: inline-block;
-  text-align: center;
-  line-height: 4.5rem;
+#seller-review-verify, .buyer-review-rating {
+  font-size: .8em;
+  margin-right: 5px;
+}
+
+#seller-review-verify i {
+ margin-right: 5px;
+}
+
+#seller-profile-rating {
+  display: flex;
+  width: 100%;
+}
+
+.seller-review-profile-left {
+  width: 35%;
+}
+
+#seller-review-profile {
+  display: flex;
+  margin-right: 25px;
+  padding: 0 20px;
+}
+
+#seller-review-rating {
+  width: 65%;
+  padding: 0 20px;
+  font-size: .8em;
+}
+
+.star-space{
+  padding: 0px 10px;
+}
+
+.star-space-right{
+  margin: 0 10px;
+}
+
+.star-buyer {
+  display: flex;
+}
+
+.review-header-container{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.review-header{
+  display: flex;
+}
+
+.review-header i {
+  display: flex;
+  width: 101%;
+}
+
+.buyer-review-avatar {
+  margin-right: 10px;
+}
+
+.buyer-review-date {
+  justify-content: space-between;
+}
+
+.review-body {
+  font-size: .9em;
+}
+
+.message-seller button{
+  border-radius: 5px;
+  width: 90%;
   cursor: pointer;
-  margin-left: 0;
+  background-color: green;
+  color: #fff;
 }
 
-ol.progtrckr li span {
-  padding: 0 1.5rem;
+.react-carousel .carousel .slide, .react-carousel .carousel .slider {
+  background: none;
 }
 
-
-ol.progtrckr li:before {
-  position: relative;
-  bottom: -3.7rem;
-  float: left;
-  left: 50%;
-  margin-top:  4px;
+.react-carousel .carousel .control-dots .dot {
+  width: 15px;
+  height: 15px;
+  background: black;
 }
 
-/* adding the content "\00a0\00a0" after li to make some spaces for cenetering */
-ol.progtrckr li:after {
-  content: "\A0\A0";
-}
+/* progress buttons */
+/* .next-step button{
+  position: static;
+} */
 
-ol.progtrckr li.progtrckr-doing:before {
-  content: "\2022";
+/* .steps-workflow, .next-step {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+} */
+
+.next-step button, .previous-step button, .buy-now button, .submit_payment button, .payment-previous-step button, .done-sending-payment button{
+  background-color: rgb(22, 190, 182);
   color: white;
-  background-color: #CCCCCC;
-  width: 1.2em;
-  line-height: 1.2em;
-  border-radius: 1.2em;
+  border: none;
+  outline: none;
+  border-radius: 25px;
+  padding: 10px 25px;
+  font-size: 1em;
+  font-weight: 700;
+  cursor: pointer;
 }
 
-ol.progtrckr li.progtrckr-doing:hover:before {
-  color: #ff4500;
+.buy-now, .done-sending-payment {
+  text-align: center;
+}
+.buy-now button {
+  width: 85%;
+  margin: 30px 0px;
+  font-size: 1.5em;
 }
 
-ol.progtrckr li.progtrckr-todo:before {
-  content: "\039F";
-  color: silver;
-  background-color: #f8f8fa;
-  width: 1.2em;
-  line-height: 1.4em;
+.done-sending-payment button {
+  width: 85%;
+  margin-top: 10px;
+  font-size: 1.5em;
 }
 
-ol.progtrckr li.progtrckr-todo:hover:before {
-  color: #ff4500;
-}
-
-ol.progtrckr li.progtrckr-done:before {
-  content: "\2713";
-  color: #f8f8fa;
-  background-color: #5cb85c;
-  width: 1.2em;
-  line-height: 1.2em;
-  border-radius: 1.2em;
-}
-
-ol.progtrckr li.progtrckr-done:hover:before {
-  color: #333;
-}
-
-/*Make the button stay at the bottom*/
-.footer-buttons {
+.next-step button {
   position: absolute;
-  bottom: 0%;
-  margin: 20px 0px;
-  width: 95%;
-  z-index: 0;
+  left: 77%;
 }
 
-/* overriding the default color of the react-stepzilla */
-.footer-buttons button {
-  background-color: #52C4B9;
-    color: white;
-    border: none;
-    outline: none;
-    border-radius: 25px;
-    padding: 10px 25px;
-    font-size: 1em;
-    font-weight: 500;
+.previous-step button {
+  position: absolute;
+  left: 3%;
+}
+.shipping-step-buttons {
+  margin-top: 20px;
 }
 
-.footer-buttons button:hover {
-  background-color: #52C4B9;
+.guest-shipping-step-buttons {
+  margin-top: 130px;
 }
 
-/* !important us used to override bootstrap */
-.footer-buttons button:active {
-  background-color: #52C4B9 !important;
+.submit_payment button {
+  position: absolute;
+  top: 110%;
+  left: 74%;
+
 }
 
-.footer-buttons #next-button {
-  float: right;
+.payment-previous-step button {
+  position: absolute;
+  top: 110%;
+  left: 3%;
 }
 
-/* for mobile */
-@media (max-width: 650px) {
-  .progtrckr li span {
-    display: none;
-  }
-}
-
-@media (max-width: 650px) {
-  .progtrckr em {
-    display: inline;
-  }
-}

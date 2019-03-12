@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import "./Layout.css";
+import "./LayoutMobile.css";
 import Navbar from "../Navigation/Navbar";
+import Footer from "../../components/Layout/Footer";
 // import { connect } from "react-redux";
 // import { _isLoggedIn } from "../../actions/layoutActions";
 
@@ -15,12 +17,15 @@ class Layout extends Component {
   return (
     <div>
       {/* {this.props.user_info.length>0 && <Navbar /> } */}
-
-      <Navbar/>
-
-      <main className="Content">
-        {this.props.children}
-      </main>
+      <div id="mob-nav-sidebar">
+        <div id="mob-content">
+          <Navbar/>
+          <main className="Content">
+            {this.props.children}
+          </main>
+          <Footer/>
+        </div>
+      </div>
     </div>
   );
   }

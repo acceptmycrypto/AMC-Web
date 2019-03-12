@@ -1,0 +1,75 @@
+
+
+
+.homepage-carousel {
+  top: 50px;
+  margin-bottom: 75px;
+}
+
+.carousel-item {
+    transition: -webkit-transform 0.5s ease;
+    transition: transform 0.5s ease;
+    transition: transform 0.5s ease, -webkit-transform 0.5s ease;
+    -webkit-backface-visibility: visible;
+    backface-visibility: visible;
+}
+
+.carousel-item::after {
+  display: block;
+  position: relative;
+  /* top: 70px; */
+  background-image: linear-gradient(rgba(0, 0, 0, 0.356), rgba(20, 10, 5, 0.657));
+  margin-top: -300px;
+  height: 300px;
+  width: 100%;
+  content: '';
+}
+
+
+
+
+.carousel-caption {
+  top: 20%;
+  color: #fff;
+  font-family: Roboto,sans-serif;
+  font-size: 20px;
+}
+
+.carousel-caption h3 {
+  font-size: 2.75rem;
+  margin-bottom: 20px;
+}
+
+.crypto-logo {
+  display: inline-block;
+  width: 50px;
+  height: 70px;
+  margin: 0px 15px;
+  padding: 10px 0px;
+}
+
+.carousel-header-two {
+  font-size: 30px;
+  position: relative;
+  bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.carousel-header-two div:first-child {
+  margin-right: auto;
+}
+
+.carousel-header-two div:nth-child(3) {
+  margin-left: auto;
+}
+
+.carousel-header-two div {
+  margin-bottom: 25px;
+}
+
+.caption_three {
+  background-color: #ffffff1a;
+  border-radius: 5px;
+}

@@ -1,0 +1,47 @@
+.shipping-name-label {
+  margin-bottom: 10px;
+}
+
+.shipping-form {
+  height: 375px;
+}
+
+.shipping-form input {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid #445366;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.shipping-form input:-webkit-autofill,
+.shipping-form input:-webkit-autofill:hover,
+.shipping-form input:-webkit-autofill:focus,
+.shipping-form input:-webkit-autofill:active  {
+    box-shadow: 0 0 0 30px #f8f8fa;
+    -webkit-box-shadow: 0 0 0 30px #f8f8fa inset !important;
+}
+
+#shipping-state {
+  margin-bottom: 10px;
+}
+
+.shipping-form label {
+  display: block;
+  text-transform: uppercase;
+  font-size: .9em;
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+}
+
+.shipping-error::placeholder {
+  color: red;
+  opacity: 1; /* Firefox */
+}
+
+.shipping-state-error {
+  border: solid red 1px;
+  border-radius: 5px;
+}
+
+

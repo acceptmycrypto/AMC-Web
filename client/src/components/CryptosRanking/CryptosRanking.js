@@ -11,7 +11,7 @@ class CryptosRankings extends Component {
   }
 
   async componentDidMount() {
-    const cryptosList = await fetch("/api/cryptosranking");
+    const cryptosList = await fetch("/api/cryptosranking_venues");
     const cryptosRanking = await cryptosList.json();
 
     this.setState({ cryptosRanking });
@@ -20,6 +20,8 @@ class CryptosRankings extends Component {
   render() {
     return (
       <div id="left" className="column cryptosRanking">
+        <button onClick=''>Venues</button>
+        <button onClick=''>Transactions</button>
         <table className="table table-hover">
           <thead>
             <tr>
@@ -33,7 +35,7 @@ class CryptosRankings extends Component {
             {this.state.cryptosRanking.map((crypto, i) => (
               <tr key={crypto+i}>
                 <th scope="row">{i + 1}</th>
-                <td><img src={crypto.crypto_logo} alt="crypto-logo"/> {crypto.crypto_symbol}</td>
+                <td><img class="rankImage" src={crypto.crypto_logo} alt="crypto-logo"/> {crypto.crypto_symbol}</td>
                 <td>{crypto.venues_count}</td>
                 <td>{crypto.crypto_price}</td>
               </tr>

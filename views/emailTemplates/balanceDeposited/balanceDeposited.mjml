@@ -1,0 +1,38 @@
+<mjml>
+  <mj-body>
+
+    <!-- Company Header -->
+    <mj-section background-color="#6bd9c7">
+      <mj-column>
+        <mj-text font-size="20px" color="#626e7e" align="center">
+          AcceptMyCrypto
+        </mj-text>
+        <mj-image width="80px" src="https://s3-us-west-1.amazonaws.com/acceptmycrypto/logo.png" />
+      </mj-column>
+    </mj-section>
+
+    <!-- verifying section -->
+    <mj-section background-color="#2e4157">
+
+      <mj-column>
+        <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="20px">
+          Your sale of <%= deal_name %> has been deposited.
+        </mj-text>
+         <mj-text color="#fff" letter-spacing="1.2px" font-size="20px" align="center" line-height="20px">
+          <%= amountAfterFee %> <%= crypto_symbol %>
+          </mj-text>
+         <mj-text color="#fff" letter-spacing="1.2px" font-size="20px" align="center" line-height="20px">
+          You now can make a crypto transfer to your wallet.
+        </mj-text>
+          <mj-button background-color="#6bd9c7" color="#2e4157" href="<%=profile_url%>">
+            Login
+          </mj-button>
+          <mj-text color="#fff" letter-spacing="1.2px" font-size="20px" align="center" line-height="20px">
+          For more information about making a fund transfer, visit our <a href="http://www.acceptmycrypto.com/faq">support</a> page.
+        </mj-text>
+      </mj-column>
+
+    </mj-section>
+
+  </mj-body>
+</mjml>

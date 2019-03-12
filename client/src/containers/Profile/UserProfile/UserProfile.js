@@ -5,7 +5,8 @@ import coinAddressValidator from "coin-address-validator";
 import ProfileCard from "../../../components/Profile/ProfileCard";
 import CryptoCard from "../../../components/Profile/CryptoCard";
 import CryptoAddress from "../../../components/Profile/CryptoAddress";
-import ProfileFeed from "../../../components/Profile/ProfileFeed";
+import ProfileFeed from "../ProfileFeed";
+import CryptoRankings from "../../CryptosRanking";
 // import Layout from "../../../components/Layout"
 import Layout from "../../Layout";
 import { connect } from "react-redux";
@@ -13,272 +14,150 @@ import { bindActionCreators } from 'redux';
 import { _updateCryptoTable, _verifyUser } from "../../../services/UserProfileService";
 import { _loadProfile } from "../../../actions/userLoadActions";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
-
-
-
+import { handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos, _handleInitiateWithdraw, openWithdrawModal, _handleConfirmedWithdraw,  onEditWithdrawConfirmationToken } from "../../../actions/cryptoPortfolioActions";
+import { resetDealitemState } from "../../../actions/dealItemActions";
+import Modal from "react-awesome-modal";
+import { closeModal } from "../../../actions/signInActions";
+import LoadingSpinner from "../../../components/UI/LoadingSpinner";
 
 class UserProfile extends Component {
-  constructor() {
-    super();
 
-    this.state = {
-      crypto_view: "owned",
-      // user_info: [],
-      // user_crypto: [],
-      add_address: false,
-      qr: false,
-      users_cryptos_id: null,
-      current_crypto_name: null,
-      // transactions: []
-    }
+  componentDidMount = async () => {
+    // await console.log(this.props.userLoggedIn);
+    await this.props._isLoggedIn(localStorage.getItem('token'));
 
-  }
+    // await console.log(this.props.userLoggedIn);
 
-  // updates state
-  setCurrentState = (crypto_view, qr, add_address, users_cryptos_id, current_crypto_name) => {
-    this.setState({ crypto_view, qr, add_address, users_cryptos_id, current_crypto_name });
-  }
-
-
-  // if status is show, all coins in wallet will be shown but if status is hide, all coins but the one clicked on will be hidden
-  hideOrShowCoin = (status, parentDiv) => {
-    // status can be either "show" or "hide"
-    let surroundingDiv = document.querySelector(".cryptoWallet");
-    let allChildren = surroundingDiv.children;
-
-    if (status === "show") {
-      // displays all the user's coins
-      for (let i = 0; i < allChildren.length; i++) {
-        let element = allChildren[i]
-        element.style.display = "flex";
-      }
-
-      if (this.state.qr) { //if the QR is shown on the page
-        this.hideOrShowAddress("hide"); // will hide the QR code and Wallet address when all the coins are shown
-      }
-
-    } else {
-      // status is hide, all coins other than what user clicked on will be hidden
-      for (let i = 0; i < allChildren.length; i++) {
-        let element = allChildren[i]
-        if (element != parentDiv) {
-          element.style.display = "none";
-        }
-      }
+    if (await this.props.userLoggedIn) {
+      await this.props._loadProfile(localStorage.getItem('token'));
+    }else{
+        // localStorage.removeItem('token');
+        await this.props.history.push('/');
     }
   }
 
-  // if status is show, the QR code and Wallet Address will be shown, if status is hide, the QR code and Wallet Address will be removed from DOM
-  hideOrShowAddress = (status, parentDiv, address) => {
-    if (status === "show") {
-      // the wallet address, QR code and delete button will be created and shown
-      let surroundingDiv = document.querySelector(".cryptoWallet");
+  componentDidUpdate(prevProps) {
 
-      let qr = document.createElement("img");
-      qr.classList.add("qr");
-      qr.src = `https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${address}`;
-
-      let displayAddress = document.createElement("p");
-      displayAddress.classList.add("address");
-      displayAddress.innerHTML = address;
-      surroundingDiv.append(qr, displayAddress);
-
-      // let icon = document.createElement("i");
-      // icon.classList.add("fas", "fa-times", "deleteIcon");
-      // icon.addEventListener("click", this.hideQR);
-      // icon.classList.add("deleteQR");
-      // surroundingDiv.insertBefore(icon, parentDiv);
-
-    } else {
-      // status = "hide"
-
-      console.log('hidden');
-      let address = document.querySelector(".address");
-      let qr = document.querySelector(".qr");
-      // let deleteIcon = document.querySelector(".deleteIcon");
-
-      // remove wallet address, QR code, and delete icon from DOM
-      address.remove();
-      qr.remove();
-      // deleteIcon.remove();
-    }
-  }
-
-
-  handleToggleChange = (event) => {
-    let target = event.target.checked; // checkbox has property checked = true or checked = false;
-
-    if (target) { // if checkbox is checked show interested coins
-      this.setCurrentState("interested", false, false, null, null); // crypto_view, qr, add_address, users_cryptos_id, current_crypto_name
-
-      this.hideOrShowCoin("show");
-
-    } else { // if checkbox is not checked show owned coins
-      this.setCurrentState("owned", false, false, null, null); //crypto_view, qr, add_address, users_cryptos_id, current_crypto_name
-
-      this.hideOrShowCoin("show");
-    }
-  }
-
-  handleQRChange = (event) => {
-    if (this.state.qr) {
-      // after click of coin, if in state qr = true then show all coins and set state
-      this.hideOrShowCoin("show");
-
-      this.setCurrentState(this.state.crypto_view, false, this.state.add_address, null, null); //crypto_view, qr, add_address, users_cryptos_id, current_crypto_name
-
-    } else {
-      // after click of coin, if in state qr = false then change qr = true in state and hide all other coins and show the QR and wallet address of the coin that was clicked on
-      let target = event.target; // coin that was clicked on
-      let parentDiv = target.parentElement.parentElement;
-      let address = target.getAttribute("data-address");
-
-      console.log(parentDiv);
-
-      this.hideOrShowCoin("hide", parentDiv);
-
-      this.hideOrShowAddress("show", parentDiv, address);
-
-      this.setCurrentState(this.state.crypto_view, true, this.state.add_address, null, null); //crypto_view, qr, add_address, users_cryptos_id, current_crypto_name
-    }
-  }
-
-  handleAddressFormChange = (event) => {
-
-    let target = event.target;
-    let parentDiv = target.parentElement.parentElement;
-
-    let users_cryptos_id = target.getAttribute("data-id");
-    let current_crypto_name = target.getAttribute("data-name");
-
-
-    if (this.state.add_address) {
-      // when add wallet form is hidden then show all coins
-
-      this.hideOrShowCoin("show");
-
-      this.setCurrentState(this.state.crypto_view, this.state.qr, false, null, null); //crypto_view, qr, add_address, users_cryptos_id, current_crypto_name
-
-    } else {
-      // when add wallet address form is shown then hide other coins
-
-      this.hideOrShowCoin("hide", parentDiv);
-
-      this.setCurrentState(this.state.crypto_view, this.state.qr, true, users_cryptos_id, current_crypto_name); //crypto_view, qr, add_address, users_cryptos_id, current_crypto_name
-    }
-  }
-
-  updateCryptos = (event) => {
-    event.preventDefault();
-
-    let id = this.state.users_cryptos_id;
-    let current_crypto_name = this.state.current_crypto_name.trim();
-    let crypto_address = event.target.children[0].value;
-    let validAddress = true;
-
-    // TO DO: FIX LITECOIN VALIATION ISSUE
-
-    // commented out for now because is not working
-
-    // coin-address-validator does not list Verge as a supported currency type to validate by currency name so will validate manually
-    // if (current_crypto_name === "Verge" && crypto_address.indexOf(" ") === -1 && crypto_address[0] === "D" && crypto_address.length === 34) {
-    //   validAddress = true;
-
-    // } else if (crypto_address > 20 && coinAddressValidator.validate(crypto_address, current_crypto_name)) {
-    //   // use coin-address-validator to validate the crypto address for the specific crypto selected
-    //   validAddress = coinAddressValidator.validate(crypto_address, current_crypto_name)
-
-
-    // } else {
-    //   validAddress = false;
-
-    // }
-
-    if (validAddress) {
-
-      this.updateCryptoTable(crypto_address, id).then(res => {
-        // update users crypto wallet address in database
-
-        //update state
-        let { user_info, user_crypto, crypto_view, add_address } = res;
-        this.setState({ user_info, user_crypto, crypto_view, add_address });
-
-        //set toggle button checked = false
-        document.querySelector("#togBtn").checked = false;
-
-        // show all coins
-        this.hideOrShowCoin("show");
-      })
-
-    } else {
-      event.target.children[0].value = "Invalid Address";
-    }
-
-  }
-
-  // update database with users new added wallet address
-  updateCryptoTable = (crypto_address, id) => {
-    return _updateCryptoTable(crypto_address, id, localStorage.getItem('token'));
-  }
-
-
-  componentDidMount() {
-
-    // return _loadProfile(localStorage.getItem('token')).then(res => {
-    //   // console.log(res);
-
-    //   let { user_info, user_crypto, friends_array, transactions } = res;
-    //   // console.log(user_info, user_crypto, friends_array, transactions);
-
-    //   this.setState({ user_info, user_crypto, friends_array, transactions });
-
-    // });
-
-    this.props._isLoggedIn(localStorage.getItem('token'));
+  //if withdrawn success and user closes the modal, we update the balance by calling _loadProfile action
+   if (prevProps.confirmWithdraw.success) {
     this.props._loadProfile(localStorage.getItem('token'));
-
-
+   }
 
   }
 
+  cryptoWithdrawModal = () => {
+    const {
+      crypto_id, crypto_name, crypto_symbol, crypto_balance, crypto_address
+    } = this.props.selectedWithdrawCrypto;
+
+    const {initiateWithdrawLoading, initiateWithdraw, _handleInitiateWithdraw, user_info, confirmWithdrawLoading, confirmWithdraw, confirmWithdrawError, _handleConfirmedWithdraw, onEditWithdrawConfirmationToken, withdrawConfirmationToken, closeModal} = this.props;
+    
+    console.log(confirmWithdrawError);
+    switch (true) {
+      case initiateWithdrawLoading || confirmWithdrawLoading:
+        return (
+          <div className="creating-deal-modal-loading-spinner">
+            <LoadingSpinner />
+          </div>
+        );
+      case initiateWithdraw.success || confirmWithdraw.message === "Invalid Confirmation Token":
+        return (
+          <div>
+            <div className="withdraw-modal">
+              <h4>Send {crypto_name} ({crypto_symbol})</h4>
+              <br />
+              <div className="creating-deal-seller-contact">
+                <label>Please enter the transfer confirmation token we just emailed you.</label>
+                <div>
+                  <input
+                    onChange={onEditWithdrawConfirmationToken}
+                    value={withdrawConfirmationToken}
+                    required
+                    className="description-input"
+                    autofocus="autofocus"
+                    placeholder="Enter your verification code"
+                  />
+                  <div style={{color: "red"}}>{confirmWithdraw.message}</div>
+                </div>
+              </div>
+            </div>
+            <button onClick={() => _handleConfirmedWithdraw(localStorage.getItem('token'), crypto_id, withdrawConfirmationToken)} style={{left: "80%"}}>Continue</button>
+          </div>
+        );
+        case confirmWithdraw.success:
+          return (
+            <div>
+              <div className="withdraw-modal-success-transfered">
+                <h4>Successfully Transfered!</h4>
+                <div>
+                  <i class="fas fa-check fa-2x" />
+                </div>
+              </div>
+              <button onClick={() => closeModal()}>Close</button>
+            </div>
+          );
+        case confirmWithdraw.error:
+          return (
+            <div>
+              <div className="withdraw-modal-success-transfered">
+                <h4>Failed to Transfer</h4>
+                <div>
+                <i class="fas fa-exclamation-triangle fa-2x"></i>
+                </div>
+                <br/>
+                <h4>{confirmWithdraw.message}</h4>
+              </div>
+              <button onClick={() => closeModal()}>Close</button>
+            </div>
+          );
+      default:
+        return (
+          <div>
+            <div className="withdraw-modal">
+              <h4>Send {crypto_name} ({crypto_symbol})</h4>
+              <br />
+              <div>Amount</div>
+              <h4 style={{color: "#49cdb7"}}>
+                {crypto_balance}
+              </h4>
+              <br/>
+              <div>Sending to Address</div>
+              <h4 style={{color: "#49cdb7", letterSpacing: "1.5px"}}>{crypto_address}</h4>
+              <small>*Please make sure this is {crypto_symbol} address.</small>
+            </div>
+            <button style={{left: "80%"}} onClick={() => _handleInitiateWithdraw(localStorage.getItem('token'), crypto_id, crypto_symbol, user_info[0].email)}>Continue</button>
+          </div>
+        );
+    }
+  };
 
   render() {
-    // console.log(this.state);
-    // console.log(this.props.location.pathname);
-    // console.log(this.props.match.params);
 
-    const { error, loading, user_info, user_crypto, transactions, userLoggedIn } = this.props;
-
-    
+    const { error, loading, user_info, user_crypto, transactions, confirmed, pending, tx_history_view, userLoggedIn, crypto_view, address_form_shown, qr_shown, users_cryptos_id, current_crypto_name, handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos, modalVisible, openWithdrawModal, closeModal, confirmWithdraw} = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
     }
 
-    if (loading) {
-      return <div>Loading...</div>;
-    }
+    // if (loading) {
+    //   return <div>Loading...</div>;
+    // }
 
-    if (userLoggedIn) {
-      console.log("user logged in");
-      
-    }else{
-        // localStorage.removeItem('token');
-        this.props.history.push('/');
-    }
+    //reset dealItem state when user hit deals route
+    this.props.resetDealitemState();
 
     return (
-      <div>
-        <Layout />
+      <div className="pt-5">
+        <Layout >
         <div className="userProfile d-flex flex-row justify-content-between">
-          <div className="d-flex flex-column width-30">
-            {user_info != undefined && <ProfileCard user_info={user_info} />}
+          <div className="d-flex flex-column w-25 ml-2">
+            {user_info != undefined && user_info.length > 0 && <ProfileCard user_info={user_info} />}
 
             {user_crypto != undefined &&
-              <CryptoCard handleToggleChange={this.handleToggleChange} handleAddressFormChange={this.handleAddressFormChange} handleQRChange={this.handleQRChange} crypto_view={this.state.crypto_view} user_crypto={user_crypto}>
+              <CryptoCard handleToggleChange={handleToggleChange} address_form_shown={address_form_shown} handleAddressFormChange={handleAddressFormChange} handleQRChange={handleQRChange} qr_shown={qr_shown} crypto_view={crypto_view} user_crypto={user_crypto} initiateWithdraw={openWithdrawModal} withdrawStatus={confirmWithdraw}>
 
-                {this.state.add_address &&
-                  <CryptoAddress updateCryptos={this.updateCryptos} updateCryptoTable={this.updateCryptoTable} />
+                {address_form_shown &&
+                  <CryptoAddress updateCryptos={updateCryptos} crypto_id={users_cryptos_id} current_crypto_name={current_crypto_name} token={localStorage.getItem('token')} />
                 }
 
               </CryptoCard>
@@ -286,16 +165,28 @@ class UserProfile extends Component {
 
           </div>
 
-          <div className="w-100 mx-5">
-          { transactions != undefined && <ProfileFeed transactions={transactions} />}
-            
+          <div className="w-50 mr-4 ml-5">
+          { transactions != undefined && <ProfileFeed classname="w-50" />}
+
           </div>
 
-          {/* <div className="width-20 mr-3">       
+          {/* <div className="width-20 mr-3">
             <FriendCard friends_array={this.state.friends_array} />
           </div> */}
 
+          <CryptoRankings/>
+
+          <Modal
+            visible={modalVisible}
+            effect="fadeInUp"
+            onClickAway={() => {closeModal()}}
+          >
+            <div className="deal-created-modal">
+              {this.cryptoWithdrawModal()}
+            </div>
+          </Modal>
         </div>
+        </Layout >
       </div>
     );
   }
@@ -305,13 +196,29 @@ const mapStateToProps = state => ({
   user_info: state.UserInfo.user_info,
   user_crypto: state.UserInfo.user_crypto,
   transactions: state.UserInfo.transactions,
+  confirmed: state.UserInfo.confirmed,
+  pending: state.UserInfo.pending,
+  tx_history_view: state.UserInfo.tx_history_view,
   loading: state.UserInfo.loading,
   error: state.UserInfo.error,
-  userLoggedIn: state.LoggedIn.userLoggedIn
+  userLoggedIn: state.LoggedIn.userLoggedIn,
+  crypto_view: state.UserInfo.crypto_view,
+  qr_shown: state.UserInfo.qr_shown,
+  address_form_shown: state.UserInfo.address_form_shown,
+  users_cryptos_id: state.UserInfo.users_cryptos_id,
+  current_crypto_name: state.UserInfo.current_crypto_name,
+  modalVisible: state.UserInfo.modalVisible,
+  selectedWithdrawCrypto: state.UserInfo.selectedWithdrawCrypto,
+  initiateWithdraw: state.UserInfo.initiateWithdraw,
+  initiateWithdrawLoading: state.UserInfo.initiateWithdrawLoading,
+  confirmWithdraw: state.UserInfo.confirmWithdraw,
+  confirmWithdrawLoading: state.UserInfo.confirmWithdrawLoading,
+  confirmWithdrawError: state.UserInfo.confirmWithdrawError,
+  withdrawConfirmationToken: state.UserInfo.withdrawConfirmationToken
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({_isLoggedIn, _loadProfile}, dispatch);
+  return bindActionCreators({_isLoggedIn, _loadProfile, handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos, resetDealitemState, _handleInitiateWithdraw, openWithdrawModal, closeModal, onEditWithdrawConfirmationToken, _handleConfirmedWithdraw}, dispatch);
 }
 
 

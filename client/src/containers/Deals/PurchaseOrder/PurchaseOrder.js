@@ -3,34 +3,53 @@ import "./PurchaseOrder.css";
 import Select from "react-select";
 import Checkout from "../../../components/Checkout";
 import LoadingSpinner from "../../../components/UI/LoadingSpinner";
+import PaypalButton from '../PaypalButton';
 
 const PurchaseOrder = props => {
   return (
     <div>
-      <form onSubmit={props.SubmitPayment}>
-        <div class="form-group">
-        <label className="text-capitalize" htmlFor="select_crypto">Select the Cryptocurrency to pay with</label>
-        <Select
-        id="select_crypto"
-        required
-        onChange={props.selectCrypto}
-        options={props.cryptos}
-      />
+      {!props.paymentButtonClicked ?
+      <div className="payment-form">
+        <form>
+          <div class="form-group">
+            <label className="text-capitalize payment-name-label" htmlFor="select_crypto">Select the Cryptocurrency to pay with</label>
+              <Select
+                id="select_crypto"
+                required
+                onChange={props.selectCrypto}
+                value={props.selectedPayment}
+                options={props.cryptos}
+              />
+          </div>
+          <div className="dealitem-error-msg" id="selected-payment-error"></div>
+        </form>
+
+        <div id="payment-divider">OR</div>
+        <div id="paypal-button">
+          <strong>{props.isLoggedin ? "Pay in USD" : "Sign in to pay in USD"}</strong>
+          {props.isLoggedin &&
+          <PaypalButton
+            dealItemInfo={props.deal_item}
+            firstNameInfo={props.first_name}
+            lastNameInfo={props.last_name}
+            shippingAddressInfo={props.shipping_address}
+            shippingCityInfo={props.shipping_city}
+            zipcodeInfo={props.zip_code}
+            shippingStateInfo={props.shipping_state}
+          /> }
         </div>
-
-        {!props.paymentButtonClicked ?
-        <div id="submit_payment">
+        <div>
+          <div onClick={props.previous_step} className="payment-previous-step button">
+            <button>Previous</button>
+          </div>
+          <div onClick={() => props.validatePaymentData() && props.SubmitPayment()}     className="submit_payment">
           <button>Send Your Payment</button>
-        </div> : null}
-
-      </form>
-
-
-      {props.paymentButtonClicked ?
-      <Checkout showTimeout={props.timeout} showTransaction={props.transactionInfo} showPaidIn={props.cryptoSymbol}/> : null}
-
-      {props.showLoadingSpinner ? <LoadingSpinner /> : null}
-
+          </div>
+        </div>
+        {props.showLoadingSpinner ? <LoadingSpinner /> : null}
+      </div> :
+        <Checkout showTimeout={props.timeout} showTransaction={props.transactionInfo} showPaidIn={props.cryptoSymbol}/>
+      }
     </div>
   );
 };

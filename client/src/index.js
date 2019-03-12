@@ -1,16 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+// import bootstrap css for reactstrap package used to create carousel on homepage
+import 'bootstrap/dist/css/bootstrap.css';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import BrowserRouter from "react-router-dom/BrowserRouter";
 import HttpsRedirect from 'react-https-redirect';
 import {Provider} from 'react-redux';
-import {createStore, applyMiddleware, compose} from 'redux'
+import {createStore, applyMiddleware, compose} from 'redux';
 import thunk from "redux-thunk";
 import allReducers from './reducers';
 
-//all data store in variable store
+//for redux devtool on Chrome to work, came from extension's documentation
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 //all data store in variable store
 const store = createStore(
@@ -19,14 +21,14 @@ const store = createStore(
 );
 
 ReactDOM.render(
-  <Provider store={store}>
-  {/* HttpsRedirect needed on the frontend to redirect from http to https */}
-    <HttpsRedirect>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </HttpsRedirect>
-  </Provider>, document.getElementById('root'));
+    <Provider store={store}>
+    {/* HttpsRedirect needed on the frontend to redirect from http to https */}
+      <HttpsRedirect>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </HttpsRedirect>
+    </Provider>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
