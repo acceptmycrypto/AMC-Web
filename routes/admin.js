@@ -17,11 +17,11 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 app.use(methodOverride('_method'));
 app.use(cookieParser());
-app.use(session({
-  secret: 'app',
-  cookie: { maxAge: 60000}
- }
-));
+// app.use(session({
+//   secret: 'app',
+//   cookie: { maxAge: 60000}
+//  }
+// ));
 app.use(flash());
 
 var connection = mysql.createConnection({
@@ -100,13 +100,13 @@ router.get('/admin', function(req, res) {
 //   }
 // });
 
-router.get('/admin/signin', function(req, res) {
-  if (req.session.user_id) {
-    res.redirect('/admin');
-  } else {
-    res.render('pages/admin/login');
-  }
-});
+// router.get('/admin/signin', function(req, res) {
+//   if (req.session.user_id) {
+//     res.redirect('/admin');
+//   } else {
+//     res.render('pages/admin/login');
+//   }
+// });
 
 router.get('/admin/logout', function(req, res){
 	req.session.destroy(function(err){

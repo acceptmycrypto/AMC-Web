@@ -10,8 +10,8 @@ var methodOverride = require("method-override");
 var flash = require("express-flash");
 var path = require("path");
 //use session
-var cookieParser = require("cookie-parser");
-var session = require("express-session");
+// var cookieParser = require("cookie-parser");
+// var session = require("express-session");
 //for login/logout (authentication)
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
@@ -36,7 +36,7 @@ app.use(function(req, res, next) {
 //routers
 var navbarRoutes = require("./routes/navbar.js");
 var adminRoutes = require("./routes/admin.js");
-var venueRoutes = require("./routes/venue.js");
+// var venueRoutes = require("./routes/venue.js");
 var cryptoRoutes = require("./routes/crypto.js");
 var apiRoutes = require("./routes/api.js");
 var supportRoutes = require("./routes/support.js");
@@ -63,18 +63,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 // app.use(express.static("public"));
 app.use(methodOverride("_method"));
-app.use(cookieParser());
-app.use(
-  session({
-    secret: "app",
-    cookie: { maxAge: 60000 }
-  })
-);
+// app.use(cookieParser());
+// app.use(
+//   session({
+//     secret: "app",
+//     cookie: { maxAge: 60000 }
+//   })
+// );
 app.use(flash());
 
 app.use("/", navbarRoutes);
 app.use("/", adminRoutes);
-app.use("/", venueRoutes);
+// app.use("/", venueRoutes);
 app.use("/", cryptoRoutes);
 app.use("/", apiRoutes);
 app.use("/", supportRoutes);
