@@ -59,6 +59,8 @@ var homepageRoutes = require("./routes/homepage.js");
 
 
 
+
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 // app.use(express.static("public"));
@@ -94,6 +96,7 @@ app.use("/", chatRoutes);
 app.use("/", homepageRoutes);
 // app.use("/", landingUsersRoutes);
 // app.use("/", landingResultsRoutes);
+
 
 
 if (process.env.NODE_ENV === 'production') {

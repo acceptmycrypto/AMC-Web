@@ -1,0 +1,59 @@
+.cookiesItem-list{
+    margin: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    text-align: center;
+  }
+
+.cookiesMenuTitle{
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
+  }
+  
+.cookies-listItem{
+    font-size: 20px;
+    text-align: left;
+    padding: 10px;
+    padding-left: 10%;
+    padding-right: 10%;
+  }
+
+  #cookies-listBoldItem{
+    font-size: 20px;
+    text-align: left;
+    padding: 10px;
+    /* padding-left: 10%;
+    padding-right: 10%; */
+    font-weight: bold;
+    list-style: disc outside;
+  }
+
+  #cookies-listSubItem{
+    font-size: 20px;
+    text-align: left;
+    padding: 10px;
+    padding-left: 10%;
+    padding-right: 10%;
+  }
+#cookies-amc{
+    padding: 10px;
+    
+    text-align: center;
+    font-size: 27px;
+  }
+  
+.Cookies-page {
+    height: 100vh;
+    display: flex;
+    color: #2E4158;
+    padding-top: 54px;
+    min-height: calc(100vh - 50px);
+  }
+  
+.Cookies-mainContent {
+    width: 100%;
+    background-color: white;
+    position: absolute;
+    padding-top: 75px;
+  }
