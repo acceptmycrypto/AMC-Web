@@ -33,7 +33,7 @@
     font-weight: 500;
     color: #2E4158;
   }
-  
+
 .Faq-page {
   position: relative;
   background-color: white;
@@ -41,7 +41,7 @@
   padding-top: 54px;
   min-height: 100%;
   }
-  
+
 .Faq-mainContent {
   background-color: white;
   padding-top: 50px;
@@ -60,34 +60,31 @@
 .Faq-button:hover{
   color: #66DAC7;
 }
- 
+
 .Faq-menu {
   width: 100%;
   display: flex;
   flex-direction: row;
-  overflow-x: auto;
   border-bottom: 3px solid #d6d4d4;
   background-color: #199087;
   color: #fff;
   padding-top: 15px;
-  padding-left: 90px;
-  padding-right: 70px;
   position: fixed;
   margin-top: 0;
   z-index: 2;
+  justify-content: center;
 }
 
 .Faq-menuItem{
+    width: 100%;
     font-size: 15.5px;
-    padding-left: 50px;
-    padding-right: 50px;
+
     font-family: Lato,sans-serif;
     padding-bottom: 10px;
     text-decoration: none;
     color: #fff;
     margin: 0px 97px 0px 83px;
-    font-size: 17px;   
+    font-size: 17px;
   }
-  
 
-  
+

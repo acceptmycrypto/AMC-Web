@@ -36,7 +36,7 @@
     padding-left: 10%;
     margin-left: 250px;
     font-weight: bold;
-    list-style: disc inside; 
+    list-style: disc inside;
 }
 
 #Terms-amh{
@@ -59,19 +59,13 @@
 }
 
 .termsMenu {
-    /* border: 1px solid;
-    border-color: #2E4158;
-    border-radius: 5px;  */
-    width: 300px;
-    height: auto;
-    overflow: auto;
-    background-color: transparent;
-    position: fixed;
-    top: 115px;
-    margin-top: 10%;
-    padding-right: 20px;
-    padding: 20px;
-   
+  width: 20%;
+  height: 60%;
+  overflow-y: auto;
+  background-color: transparent;
+  position: fixed;
+  top: 100px;
+  padding: 0 10px;
 }
 
 .termsMainContent {
@@ -87,4 +81,3 @@
     color: white;
 }
 
-    
