@@ -83,7 +83,7 @@ router.post("/checkout", verifyToken, function (req, res) {
 
   let user_id = req.decoded._id;
   let crypto_name = req.body.crypto_name;
-  
+
   // createMatchedFriends(user_id, crypto_name);
 
   client.createTransaction(
@@ -638,6 +638,8 @@ var buyer_tracking_url_EmailTemplate = ejs.compile(buyer_tracking_url_ET);
 
 //ipn (listen to coinpayment's events) - instant payment notification
 router.post("/checkout/notification", function (req, res, next) {
+  res.send("ok");
+  
   if (!req.get(`HMAC`) || !req.body || !req.body.ipn_mode || req.body.ipn_mode !== `hmac` || MERCHANT_ID !== req.body.merchant) {
     return next(new Error(`Invalid request`));
   }
@@ -663,7 +665,7 @@ router.post("/checkout/notification", function (req, res, next) {
   return next();
 }, function (req, res, next) {
 
-  console.log("transaction_id", req.body.txn_id);
+  console.log("transaction_id", req.body);
   //handle events
   connection.query(
     'SELECT status, users.email, users.username, guest_users.email AS guest_email, amount, crypto_symbol, deal_name, deals.seller_id, deals.shipping_label_status, users_purchases.deal_id, seller.email AS seller_email, shipping_firstname, shipping_lastname, shipping_address, shipping_city, shipping_state, shipping_zipcode FROM users_purchases LEFT JOIN users ON users_purchases.user_id = users.id LEFT JOIN guest_users ON users_purchases.guest_user_id = guest_users.id LEFT JOIN crypto_info ON users_purchases.crypto_id = crypto_info.id LEFT JOIN deals ON users_purchases.deal_id = deals.id LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name LEFT JOIN users seller ON deals.seller_id = seller.id LEFT JOIN users_shipping_address ON users_shipping_address.txn_id = users_purchases.txn_id WHERE users_purchases.txn_id = ?',
