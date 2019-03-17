@@ -1,4 +1,4 @@
-var mysql = require("mysql");
+var connection = require("./utils/database");
 var express = require('express');
 var app = express();
 var router = express.Router();
@@ -36,22 +36,6 @@ app.use(express.static("public"));
 app.set('view engine', 'ejs');
 
 app.use(methodOverride('_method'));
-
-
-var connection = mysql.createConnection({
-    host: process.env.DB_HOST,
-
-    // Your port; if not 3306
-    port: 3306,
-
-    // Your username
-    user: process.env.DB_USER,
-
-    // Your password
-    password: process.env.DB_PW,
-    database: process.env.DB_DB
-});
-
 
 //compile email template
 var newEmailTemplateText = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/emailVerification/emailVerification.ejs'), 'utf-8');
@@ -93,7 +77,7 @@ router.post('/update/username', verifyToken, function (req, res) {
 
             res.json({responseMessage: "Username is taken. Enter a different Username."});
         }
-        
+
     });
 });
 
@@ -110,7 +94,7 @@ router.post('/update/email', verifyToken, function (req, res) {
                 let previous_email = results[0].email;
                 let email_verification_token = results[0].email_verification_token
                 // console.log("Line 84", results[0].email)
-                
+
                 connection.query('UPDATE users SET ? , verified_email = 0 WHERE ? ;', [{email}, {id}], function (error, results, fields) {
                     if (error) throw error;
 
@@ -126,9 +110,9 @@ router.post('/update/email', verifyToken, function (req, res) {
 
                     connection.query('UPDATE users SET ? WHERE ? ;', [{previous_email}, {id}], function (error, results, fields) {
                         if (error) throw error;
-    
+
                         let reverse_email_link = process.env.BACKEND_URL+"/email-reverse/" + id + "/" + email_verification_token;
-    
+
                         const previous_email_template = {
                             to: previous_email,
                             from: process.env.CUSTOMER_SUPPORT,
@@ -136,17 +120,17 @@ router.post('/update/email', verifyToken, function (req, res) {
                             html: previousEmailTemplate({ email, reverse_email_link })
                         };
                         sgMail.send(previous_email_template);
-                        
+
                         res.json({responseMessage: `Check your ${email} email and confirm your new email address.`});
                     });
 
                 });
-                
+
             });
         }else{
 
         }
-        
+
     });
 });
 
@@ -167,17 +151,17 @@ router.get('/email-reverse/:user_id/:email_verification_token', function(req, re
                 html: resetEmailTemplate({ email})
             };
             sgMail.send(email_reset_success);
-            
+
             res.send(`Your Email Address associated with your AcceptMyCryptoAccount has been reset to ${email}.`);
         });
-        
-  
+
+
       }
     );
   });
 
   router.post('/update/password', verifyToken, function (req, res) {
-    
+
     let id = req.decoded._id;
     let oldPassword = req.body.oldPassword;
     let newPassword = req.body.newPassword;
@@ -195,25 +179,25 @@ router.get('/email-reverse/:user_id/:email_verification_token', function(req, re
         bcrypt.genSalt(10, function(err, salt) {
             bcrypt.hash(newPassword, salt, function(err, password_hash) {
     //1) insert the new user into users table
-    
+
               connection.query('UPDATE users SET password = ? WHERE id = ?',
               [password_hash, id],
               function (error, results, fields) {
-    
+
                 if (error) {
                   console.log(error)
                 } else {
-                  
+
                   res.json({
                     responseMessage: "Password has been updated successfully!"
                   });
 
                 }
               });
-    
+
             });
-    
-          }); 
+
+          });
     });
 });
 
@@ -226,7 +210,7 @@ router.post('/complete/order/details', verifyToken, function(req, res) {
       function(error, result, fields) {
         if (error) throw error;
         res.json(result);
-      
+
       }
     );
   });

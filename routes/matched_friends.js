@@ -1,4 +1,4 @@
-var mysql = require("mysql");
+var connection = require("./utils/database");
 var express = require('express');
 var app = express();
 var router = express.Router();
@@ -21,21 +21,6 @@ app.use(express.static("public"));
 app.set('view engine', 'ejs');
 
 app.use(methodOverride('_method'));
-
-
-var connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-
-  // Your port; if not 3306
-  port: 3306,
-
-  // Your username
-  user: process.env.DB_USER,
-
-  // Your password
-  password: process.env.DB_PW,
-  database: process.env.DB_DB
-});
 
 // var id = 1;
 
@@ -73,17 +58,17 @@ router.post("/settings/make/friends", verifyToken, function (req, res) {
               "UPDATE users_matched_friends SET both_accepted = 1 WHERE user_id = ? AND matched_friend_id = ? OR user_id = ? AND matched_friend_id = ?",
               [user_id, matched_friend_id, matched_friend_id, user_id],
               function (error, data, fields) {
-                
+
               }
             );
 
           }
-          
+
         }
       );
       res.json(results);
     }
-    
+
   );
 });
 
