@@ -13,15 +13,15 @@ import Footer from '../../../components/Layout/Footer';
 
 
 class Returns extends Component {
-    
+
 render() {
 
     return (
-      
+
 
         <div className="returns-page">
         <Navbar/>
-         
+
         <div className="Returns-mainContent">
           <div className="font-17 color-deepBlue">
               <div className="ml-2" id="returns-amr">
@@ -41,7 +41,7 @@ render() {
       <h4 className="returnsMenuTitle">Refunds and Exchanges</h4>
 
           <ul className="returns-listItem">
-              <li>To be eligible for a refund or exchange, you must first set up communication with is within 7 days of receiving the item at contact@acceptmycrypto.com to alert us of any of the above mentioned criterias. Upon receipt of the damaged item we will ship out a replacement, if available. If a replacement is not available we will refund the full purchase price of your item excluding a 2.5% processing fee (this amount is subject to change at any time with or without notice, please check this policy periodically to stay current on any changes).</li>
+              <li>To be eligible for a refund or exchange, you must first set up communication with us within 7 days of receiving the item at support@acceptmycrypto.com to alert us of any of the above mentioned criterias. Upon receipt of the damaged item we will ship out a replacement, if available. If a replacement is not available we will refund the full purchase price of your item excluding a 2.5% processing fee (this amount is subject to change at any time with or without notice, please check this policy periodically to stay current on any changes).</li>
           </ul>
 
       <h4 className="returnsMenuTitle">None Refundable Items</h4>
@@ -81,7 +81,7 @@ render() {
 
 
 
-        
+
     );
 }
 }

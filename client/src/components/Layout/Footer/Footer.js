@@ -48,11 +48,6 @@ const Footer = props => {
             </Link>
           </span>
           <span>
-            <Link className="Footer-link" to="/AboutUs">
-              AcceptMyStory
-            </Link>
-          </span>
-          <span>
             <Link className="Footer-link" to="/Returns">
               AcceptMyReturns
             </Link>
@@ -73,7 +68,7 @@ const Footer = props => {
             </Link>
           </span>
         </div>
-     
+
       </div>
     </div>
   );

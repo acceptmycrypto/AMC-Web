@@ -87,4 +87,16 @@
     font-size: 17px;
   }
 
+@media only screen and (max-width: 640px) {
+  .Faq-mainContent li, .Faq-mainContent h4 button {
+    padding: 0px;
+    width: 100%;
+  }
+
+  .termsMenu {
+    display: none;
+  }
+
+}
+
 
