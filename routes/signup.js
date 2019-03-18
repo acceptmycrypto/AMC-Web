@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 var router = express.Router();
-var mysql = require('mysql');
+var connection = require("./utils/database");
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 //for login/logout (authentication)
@@ -21,20 +21,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('public'));
 app.use(methodOverride('_method'));
-
-var connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-
-  // Your port; if not 3306
-  port: 3306,
-
-  // Your username
-  user: process.env.DB_USER,
-
-  // Your password
-  password: process.env.DB_PW,
-  database: process.env.DB_DB
-});
 
 //compile email template
 var signupEmailTemplateText = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/emailVerification/emailVerification.ejs'), 'utf-8');
@@ -267,7 +253,7 @@ router.post('/reset-password-email', function(req, res) {
         } else {
             password_reset_link = process.env.BACKEND_URL+"/ResetPassword/"+token;
         }
-        
+
        const email_password_reset = {
          to: req.body.email,
          from: process.env.CUSTOMER_SUPPORT,
@@ -280,7 +266,7 @@ router.post('/reset-password-email', function(req, res) {
     );
   });
 
-   
+
     router.get('/validate-pw-token', function(req, res) {
         console.log("req.query.token");
         console.log(req.query.token);

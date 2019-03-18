@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const router = express.Router();
-const mysql = require('mysql');
+var connection = require("./utils/database");
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const verifyToken =  require ("./utils/validation");
@@ -22,19 +22,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride('_method'));
 
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-
-  // Your port; if not 3306
-  port: 3306,
-
-  // Your username
-  user: process.env.DB_USER,
-
-  // Your password
-  password: process.env.DB_PW,
-  database: process.env.DB_DB
-});
 
 router.post("/image/upload", verifyToken, function(request, response) {
   let user_id = request.decoded._id;

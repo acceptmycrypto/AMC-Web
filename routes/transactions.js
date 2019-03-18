@@ -1,7 +1,7 @@
 var express = require("express");
+var connection = require("./utils/database");
 var app = express();
 var router = express.Router();
-var mysql = require("mysql");
 var bodyParser = require("body-parser");
 var methodOverride = require("method-override");
 //coinpayment
@@ -40,19 +40,6 @@ app.use(bodyParser.json());
 app.use(express.static("public"));
 app.use(methodOverride("_method"));
 
-var connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-
-  // Your port; if not 3306
-  port: 3306,
-
-  // Your username
-  user: process.env.DB_USER,
-
-  // Your password
-  password: process.env.DB_PW,
-  database: process.env.DB_DB
-});
 
 //compile email template for withdraw token
 var cryptoWithdrawEmailTemplateText = fs.readFileSync(path.join(__dirname, '../views/emailTemplates/cryptoWithdrawConfirmation/cryptoWithdrawConfirmation.ejs'), 'utf-8');
@@ -639,7 +626,7 @@ var buyer_tracking_url_EmailTemplate = ejs.compile(buyer_tracking_url_ET);
 //ipn (listen to coinpayment's events) - instant payment notification
 router.post("/checkout/notification", function (req, res, next) {
   res.send("ok");
-  
+
   if (!req.get(`HMAC`) || !req.body || !req.body.ipn_mode || req.body.ipn_mode !== `hmac` || MERCHANT_ID !== req.body.merchant) {
     return next(new Error(`Invalid request`));
   }

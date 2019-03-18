@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 var router = express.Router();
-var mysql = require('mysql');
+var connection = require("./utils/database");
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var verifyToken = require("./utils/validation");
@@ -14,21 +14,6 @@ app.use(methodOverride('_method'));
 
 //shippo
 var shippo = require('shippo')(process.env.SHIPMENT_KEY);
-
-
-var connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-
-  // Your port; if not 3306
-  port: 3306,
-
-  // Your username
-  user: process.env.DB_USER,
-
-  // Your password
-  password: process.env.DB_PW,
-  database: process.env.DB_DB
-});
 
 // api
 router.post('/api/deals', verifyToken, function (req, res) {
@@ -336,14 +321,14 @@ router.post('/update_tracking_number', verifyToken, function (req, res) {
   // txn_id can either be coinpayment txn_id or paypal paypal_paymentId that is passed from front end
   let {trackingNumber, trackingCarrier} = req.body;
 
-  let transaction_id = req.body.txn_id; 
+  let transaction_id = req.body.txn_id;
 
     connection.query(
       'UPDATE users_purchases SET ? WHERE txn_id = ? OR paypal_paymentId = ?',
       [{tracking_number: trackingNumber, tracking_carrier:  trackingCarrier}, transaction_id, transaction_id],
       function (error, results, fields) {
         if (error) res.json(error);
-       
+
 
         // post tracking information to shippo tracking webhook
         var tracking_options = {
@@ -362,7 +347,7 @@ router.post('/update_tracking_number', verifyToken, function (req, res) {
 
         request(tracking_options, callback);
         res.json({message:"success"});
-      } 
+      }
 
     );
 });
