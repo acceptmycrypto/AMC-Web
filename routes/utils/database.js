@@ -1,6 +1,6 @@
 var mysql = require("mysql");
 var connection = mysql.createPool({
-  connectionLimit : 10,
+  connectionLimit : 100,
   host: process.env.DB_HOST,
   // Your port; if not 3306
   port: 3306,
@@ -24,7 +24,7 @@ connection.getConnection((err, connection) => {
       }
   }
   if (connection) connection.release()
-  
+
   return
 })
 module.exports = connection
