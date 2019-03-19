@@ -10,7 +10,7 @@
     padding: 10px;
     font-weight: bold;
   }
-  
+
 .cookies-listItem{
     font-size: 20px;
     text-align: left;
@@ -37,12 +37,11 @@
     padding-right: 10%;
   }
 #cookies-amc{
-    padding: 10px;
-    
+    padding: 20px;
     text-align: center;
     font-size: 27px;
   }
-  
+
 .Cookies-page {
     height: 100vh;
     display: flex;
@@ -50,10 +49,7 @@
     padding-top: 54px;
     min-height: calc(100vh - 50px);
   }
-  
+
 .Cookies-mainContent {
     width: 100%;
-    background-color: white;
-    position: absolute;
-    padding-top: 75px;
   }

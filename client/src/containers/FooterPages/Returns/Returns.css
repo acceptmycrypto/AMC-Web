@@ -8,14 +8,13 @@
 .returnsMenuTitle{
     text-align: center;
     padding: 10px;
-    padding-top: 54px;
   }
 
 .returnsListSubItem{
   font-weight: bold;
-  list-style: disc inside; 
+  list-style: disc inside;
 }
-  
+
 .returns-listItem{
     font-size: 20px;
     text-align: center;
@@ -33,11 +32,11 @@
     font-weight: bold;
   }
 #returns-amr{
-    padding: 10px;
+    padding: 20px;
     text-align: center;
     font-size: 27px;
   }
-  
+
 .Returns-page {
     height: 100vh;
     display: flex;
@@ -45,10 +44,7 @@
     padding-top: 54px;
     min-height: calc(100vh - 50px);
   }
-  
+
 .Returns-mainContent {
     width: 100%;
-    background-color: white;
-    position: absolute;
-    padding-top: 75px;
   }
