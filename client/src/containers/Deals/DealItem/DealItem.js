@@ -133,7 +133,7 @@ class DealItem extends Component {
 
     if(this.props.userLoggedIn){
       let user_email = user_info[0].email;
-      
+
       this.props._fetchTransactionInfo(
         crypto_name,
         crypto_symbol,
@@ -498,7 +498,7 @@ class DealItem extends Component {
             <div className="deal-item-content">
             {/* mobileScreenSize && showShippingStep || mobileScreenSize && showPayingStep ? "mob-carousel-hidden" : */}
               <div
-               id={mobileScreenSize && showShippingStep || mobileScreenSize && showPayingStep ? "mob-carousel-hidden" : null}
+               id={mobileScreenSize.matches && showShippingStep || mobileScreenSize.matches && showPayingStep ? "mob-carousel-hidden" : null}
                className={!userLoggedIn && showShippingStep ?  "guest-images-container" : "deal-images-container"}>
                 <Carousel
                   className="react-carousel"
@@ -589,7 +589,7 @@ class DealItem extends Component {
             </div>
 
             <div
-              id={mobileScreenSize && showShippingStep || mobileScreenSize && showPayingStep ? "mob-reviews-hidden" : null}
+              id={mobileScreenSize.matches && showShippingStep || mobileScreenSize.matches && showPayingStep ? "mob-reviews-hidden" : null}
               className="sellers-reviews">
               <div id="seller-review-label">Seller</div>
 
@@ -646,7 +646,7 @@ class DealItem extends Component {
                     )}
                 </div>
 
-                <div id={mobileScreenSize && showShippingStep || mobileScreenSize && showPayingStep ? "mob-reviews-hidden" : "seller-review-rating"}>
+                <div id={mobileScreenSize.matches && showShippingStep || mobileScreenSize.matches && showPayingStep ? "mob-reviews-hidden" : "seller-review-rating"}>
                   <div>
                     Seller's Average Rating
                     <small className="star-space-right">
