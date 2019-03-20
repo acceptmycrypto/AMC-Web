@@ -3,11 +3,13 @@ CREATE DATABASE crypto_db;
 
 USE crypto_db;
 
+-- add a date timestamp
 CREATE TABLE crypto_metadata(
 	id INT NOT NULL AUTO_INCREMENT,
 	crypto_name VARCHAR(255) NOT NULL UNIQUE,
 	crypto_symbol VARCHAR(255) NOT NULL UNIQUE,
 	crypto_price DECIMAL(10, 4) NOT NULL,
+	updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (id)
 );
 
