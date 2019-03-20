@@ -1,4 +1,4 @@
-var mysql = require("mysql");
+var connection = require("./utils/database");
 var express = require('express');
 var app = express();
 var router = express.Router();
@@ -21,21 +21,6 @@ app.use(express.static("public"));
 app.set('view engine', 'ejs');
 
 app.use(methodOverride('_method'));
-
-
-var connection = mysql.createConnection({
-    host: process.env.DB_HOST,
-
-    // Your port; if not 3306
-    port: 3306,
-
-    // Your username
-    user: process.env.DB_USER,
-
-    // Your password
-    password: process.env.DB_PW,
-    database: process.env.DB_DB
-});
 
 
 router.get('/load/categories/list', function (req, res) {
@@ -179,15 +164,15 @@ router.get('/api/category', function(req, res) {
 
     let category_count_filter, category_deal_filter;
     if(req.query.term !== "Most Recent Deals"){
-        category_count_filter = ` WHERE ( category_name LIKE ?) `;
-        category_deal_filter = ` WHERE (category_name LIKE ?) AND deals.deal_status <> ? LIMIT ?, ? `;
-        category_count_array = ['%'+req.query.term+'%'];
+        category_count_filter = ` WHERE ( category_name LIKE ?) AND deals.deal_status <> ? `;
+        category_deal_filter = ` WHERE (category_name LIKE ?) AND deals.deal_status <> ? ORDER BY deals.id DESC LIMIT ?, ? `;
+        category_count_array = ['%'+req.query.term+'%', "deleted"];
         category_deal_array = ['%'+req.query.term+'%', "deleted", start, numberPerPage];
     }else{
-        category_count_filter = ``;
-        category_deal_filter = ` LIMIT ?, ? `;
-        category_count_array = [];
-        category_deal_array = [start, numberPerPage];
+        category_count_filter = `WHERE deals.deal_status <> ?`;
+        category_deal_filter = `WHERE deals.deal_status <> ? ORDER BY deals.id DESC LIMIT ?, ? `;
+        category_count_array = ["deleted"];
+        category_deal_array = ["deleted", start, numberPerPage];
     }
     connection.query(
         //first query is to count the total number of results that satisfy the search

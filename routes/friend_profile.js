@@ -1,4 +1,4 @@
-var mysql = require("mysql");
+var connection = require("./utils/database");
 var express = require('express');
 var app = express();
 var router = express.Router();
@@ -24,20 +24,6 @@ app.set('view engine', 'ejs');
 
 app.use(methodOverride('_method'));
 
-
-var connection = mysql.createConnection({
-    host: process.env.DB_HOST,
-
-    // Your port; if not 3306
-    port: 3306,
-  
-    // Your username
-    user: process.env.DB_USER,
-  
-    // Your password
-    password: process.env.DB_PW,
-    database: process.env.DB_DB
-});
 
 // function verifyToken (req, res, next) {
 //     // check header or url parameters or post parameters for token
@@ -72,7 +58,7 @@ router.post('/friend/profile', verifyToken, function (req, res) {
 });
 
 router.post('/friend/profile/crypto', verifyToken, function (req, res) {
-    connection.query('SELECT users_cryptos.id, users_cryptos.user_id, users_cryptos.crypto_id, users_cryptos.crypto_address, crypto_info.crypto_metadata_name, crypto_info.crypto_logo, crypto_info.crypto_link, crypto_metadata.crypto_symbol, crypto_metadata.crypto_price FROM users_cryptos LEFT JOIN crypto_info ON users_cryptos.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE users_cryptos.user_id = ?;', 
+    connection.query('SELECT users_cryptos.id, users_cryptos.user_id, users_cryptos.crypto_id, users_cryptos.crypto_address, crypto_info.crypto_metadata_name, crypto_info.crypto_logo, crypto_info.crypto_link, crypto_metadata.crypto_symbol, crypto_metadata.crypto_price FROM users_cryptos LEFT JOIN crypto_info ON users_cryptos.crypto_id = crypto_info.id LEFT JOIN crypto_metadata ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE users_cryptos.user_id = ?;',
     [req.body.id], function (error, results, fields) {
         if (error) throw error;
         console.log(results);
@@ -82,7 +68,7 @@ router.post('/friend/profile/crypto', verifyToken, function (req, res) {
 
 
 router.post('/friend/profile/friends', verifyToken, function (req, res) {
-    connection.query('SELECT users.id, users.username, users.first_name, users.last_name, users_profiles.photo, users_profiles.user_location FROM users LEFT JOIN users_profiles ON users.id = users_profiles.user_id WHERE users.id IN (SELECT matched_friend_id AS id FROM users_matched_friends WHERE user_id = ? AND both_accepted = 1)', 
+    connection.query('SELECT users.id, users.username, users.first_name, users.last_name, users_profiles.photo, users_profiles.user_location FROM users LEFT JOIN users_profiles ON users.id = users_profiles.user_id WHERE users.id IN (SELECT matched_friend_id AS id FROM users_matched_friends WHERE user_id = ? AND both_accepted = 1)',
     [req.body.id], function (error, results, fields) {
         if(results.length > 0){
         var shuffledfriendsArray = shuffle(results);
@@ -122,7 +108,7 @@ router.post("/friend/profile/user/transactions", verifyToken, function(req, res)
         }
   });
 
-  
+
 
 function shuffle(array) {
   var currentIndex = array.length, temporaryValue, randomIndex;

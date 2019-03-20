@@ -2,17 +2,13 @@ require("dotenv").config();
 
 var express = require("express");
 var app = express();
-var mysql = require("mysql");
+var connection = require("./routes/utils/database");
 var request = require("request");
 var async = require("async");
 var bodyParser = require("body-parser");
 var methodOverride = require("method-override");
 var flash = require("express-flash");
 var path = require("path");
-//use session
-// var cookieParser = require("cookie-parser");
-// var session = require("express-session");
-//for login/logout (authentication)
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 
@@ -108,19 +104,20 @@ if (process.env.NODE_ENV === 'production') {
 //not sure what this is, I don't we need it
 path.join(__dirname, "public");
 
-var connection = mysql.createConnection({
-  host: process.env.DB_HOST,
+//for establishing a connection
+// var connection = mysql.createConnection({
+//   host: process.env.DB_HOST,
 
-  // Your port; if not 3306
-  port: 3306,
+//   // Your port; if not 3306
+//   port: 3306,
 
-  // Your username
-  user: process.env.DB_USER,
+//   // Your username
+//   user: process.env.DB_USER,
 
-  // Your password
-  password: process.env.DB_PW,
-  database: process.env.DB_DB
-});
+//   // Your password
+//   password: process.env.DB_PW,
+//   database: process.env.DB_DB
+// });
 
 //pass options as a param to request
 var options = [

@@ -171,7 +171,7 @@ class SearchDeals extends Component {
                     </div>
                     }
                   </div>
-                  <div className="mt-1 text-center mr-1 ml-1">{mobileScreenSize.matches ? handleLongDescription(deal.deal_name, 50, 20) : handleLongDescription(deal.deal_name, 50, 50) }</div>
+                  <div className="mt-1 text-center mr-1 ml-1">{mobileScreenSize.matches ? handleLongDescription(deal.deal_name, 20, 20) : handleLongDescription(deal.deal_name, 50, 50) }</div>
                   {/* <small className="deal-description">{this.handleLongDescription(deal.deal_description)}</small> */}
                   {/* if seller is a vendor then display the venue name else if seller is a user then display the seller name which is the user's username */}
                   <div className="text-center mr-1 ml-1 mob-hidden"><small>Offered by: {deal.venue_name || deal.seller_name}</small></div>

@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 var router = express.Router();
-var mysql = require('mysql');
+var connection = require("./utils/database");
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var verifyToken = require("./utils/validation");
@@ -14,21 +14,6 @@ app.use(methodOverride('_method'));
 
 //shippo
 var shippo = require('shippo')(process.env.SHIPMENT_KEY);
-
-
-var connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-
-  // Your port; if not 3306
-  port: 3306,
-
-  // Your username
-  user: process.env.DB_USER,
-
-  // Your password
-  password: process.env.DB_PW,
-  database: process.env.DB_DB
-});
 
 // api
 router.post('/api/deals', verifyToken, function (req, res) {
@@ -188,8 +173,8 @@ router.get('/api/search', function(req, res) {
     var start = numberPerPage*(req.query.page-1);
     connection.query(
         //first query is to count the total number of results that satisfy the search
-        'SELECT COUNT(DISTINCT deals.id) FROM deals LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN cryptos_deals ON cryptos_deals.deal_id = deals.id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN category ON category.id = categories_deals.category_id WHERE ( deal_name LIKE ? OR deal_description LIKE ? OR venue_name LIKE ? OR category_name LIKE ?)',
-        ['%'+req.query.term+'%','%'+req.query.term+'%','%'+req.query.term+'%','%'+req.query.term+'%'],
+        'SELECT COUNT(DISTINCT deals.id) FROM deals LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN cryptos_deals ON cryptos_deals.deal_id = deals.id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN category ON category.id = categories_deals.category_id WHERE deals.deal_status <> ? AND ( deal_name LIKE ? OR deal_description LIKE ? OR venue_name LIKE ? OR category_name LIKE ?)',
+        ["deleted",'%'+req.query.term+'%','%'+req.query.term+'%','%'+req.query.term+'%','%'+req.query.term+'%'],
         function(error, numberOfResults, fields) {
             if (error) console.log(error);
             // console.log('number of results');
@@ -197,7 +182,7 @@ router.get('/api/search', function(req, res) {
 
             connection.query(
                 //second query is to give back the set of search results specified by 'start' and 'numberPerPage'
-                'SELECT DISTINCT deals.id, deals.deal_status, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, venues.venue_name, venues.venue_link, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings FROM deals LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN cryptos_deals ON cryptos_deals.deal_id = deals.id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN category ON category.id = categories_deals.category_id WHERE deals.deal_status <> ? AND ( deal_name LIKE ? OR deal_description LIKE ? OR venue_name LIKE ? OR category_name LIKE ?) LIMIT ?, ?',
+                'SELECT DISTINCT deals.id, deals.deal_status, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, venues.venue_name, venues.venue_link, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings FROM deals LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN cryptos_deals ON cryptos_deals.deal_id = deals.id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN category ON category.id = categories_deals.category_id WHERE deals.deal_status <> ? AND ( deal_name LIKE ? OR deal_description LIKE ? OR venue_name LIKE ? OR category_name LIKE ?) ORDER BY deals.id DESC LIMIT ?, ?',
                 ['deleted', '%'+req.query.term+'%','%'+req.query.term+'%','%'+req.query.term+'%','%'+req.query.term+'%', start, numberPerPage],
                 function(error, results, fields) {
                     if (error) console.log(error);
@@ -336,14 +321,14 @@ router.post('/update_tracking_number', verifyToken, function (req, res) {
   // txn_id can either be coinpayment txn_id or paypal paypal_paymentId that is passed from front end
   let {trackingNumber, trackingCarrier} = req.body;
 
-  let transaction_id = req.body.txn_id; 
+  let transaction_id = req.body.txn_id;
 
     connection.query(
       'UPDATE users_purchases SET ? WHERE txn_id = ? OR paypal_paymentId = ?',
       [{tracking_number: trackingNumber, tracking_carrier:  trackingCarrier}, transaction_id, transaction_id],
       function (error, results, fields) {
         if (error) res.json(error);
-       
+
 
         // post tracking information to shippo tracking webhook
         var tracking_options = {
@@ -362,7 +347,7 @@ router.post('/update_tracking_number', verifyToken, function (req, res) {
 
         request(tracking_options, callback);
         res.json({message:"success"});
-      } 
+      }
 
     );
 });
