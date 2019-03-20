@@ -18,7 +18,6 @@ import { handleLongDescription } from "../../../utils/helper_functions";
 import LoadingSpinner from "../../../components/UI/LoadingSpinner";
 
 class SearchDeals extends Component {
-
   //this is needed for mobile - declaring a global variable
   constructor() {
     super();
@@ -42,24 +41,33 @@ class SearchDeals extends Component {
     }
   };
 
-
   //for mobile view
   loadMoreDeals = () => {
-
     if (this.props.pageType === "search") {
       this.state.pageOnMobile += 1;
-      this.props.searchDeals(this.props.searchTerm, parseInt(this.state.pageOnMobile));
+      this.props.searchDeals(
+        this.props.searchTerm,
+        parseInt(this.state.pageOnMobile)
+      );
       this.props.history.push(
-        "/Search?term=" + this.props.searchTerm + "&page=" + parseInt(this.state.pageOnMobile)
+        "/Search?term=" +
+          this.props.searchTerm +
+          "&page=" +
+          parseInt(this.state.pageOnMobile)
       );
     } else if (this.props.pageType === "category") {
       this.state.pageOnMobile += 1;
-      this.props.categoryDeals(this.props.categoryTerm, parseInt(this.state.pageOnMobile));
+      this.props.categoryDeals(
+        this.props.categoryTerm,
+        parseInt(this.state.pageOnMobile)
+      );
       this.props.history.push(
-        "/category?term=" + this.props.categoryTerm + "&page=" + parseInt(this.state.pageOnMobile)
+        "/category?term=" +
+          this.props.categoryTerm +
+          "&page=" +
+          parseInt(this.state.pageOnMobile)
       );
     }
-
   };
 
   componentDidMount = async () => {
@@ -121,7 +129,9 @@ class SearchDeals extends Component {
     //filter deals by search
     if (this.props.searchTerm !== "" && this.props.pageType === "search") {
       //check to see what screen size the user is viewing on
-      mobileScreenSize.matches ? deals = this.props.searchedDealsOnMobile : deals = this.props.searchedDeals;
+      mobileScreenSize.matches
+        ? (deals = this.props.searchedDealsOnMobile)
+        : (deals = this.props.searchedDeals);
       currentTerm = this.props.searchTerm;
       currentPage = this.props.searchPage;
       currentNumberOfResults = this.props.numberOfResults;
@@ -129,7 +139,9 @@ class SearchDeals extends Component {
 
     if (this.props.categoryTerm !== "" && this.props.pageType === "category") {
       //check to see what screen size the user is viewing on
-      mobileScreenSize.matches ? deals = this.props.categoriesDealsOnMobile : deals = this.props.categoriesDeals;
+      mobileScreenSize.matches
+        ? (deals = this.props.categoriesDealsOnMobile)
+        : (deals = this.props.categoriesDeals);
 
       currentTerm = this.props.categoryTerm;
       currentPage = this.props.categoryPage;
@@ -358,7 +370,9 @@ class SearchDeals extends Component {
                           "page_Number " +
                           ("button_Hide_" +
                             (parseInt(currentPage) + 1 >
-                              Math.ceil(currentNumberOfResults / numberPerPage)))
+                              Math.ceil(
+                                currentNumberOfResults / numberPerPage
+                              )))
                         }
                         onClick={() =>
                           this.goToSearchPage(parseInt(currentPage) + 1)
@@ -373,7 +387,9 @@ class SearchDeals extends Component {
                           "page_Number " +
                           ("button_Hide_" +
                             (parseInt(currentPage) + 2 >
-                              Math.ceil(currentNumberOfResults / numberPerPage)))
+                              Math.ceil(
+                                currentNumberOfResults / numberPerPage
+                              )))
                         }
                         onClick={() =>
                           this.goToSearchPage(parseInt(currentPage) + 2)
@@ -388,7 +404,9 @@ class SearchDeals extends Component {
                           "scroll_Button " +
                           ("button_Hide_" +
                             (parseInt(currentPage) ==
-                              Math.ceil(currentNumberOfResults / numberPerPage)))
+                              Math.ceil(
+                                currentNumberOfResults / numberPerPage
+                              )))
                         }
                         onClick={() =>
                           this.goToSearchPage(
@@ -401,8 +419,15 @@ class SearchDeals extends Component {
                     </span>
                   </div>
                 </div>
-                <div className="mob-loadMore">
-                   <button onClick={this.loadMoreDeals}>Load More</button>
+                <div
+                  className={
+                    "mob-loadMore " +
+                    (parseInt(currentPage) ==
+                      Math.ceil(currentNumberOfResults / numberPerPage) &&
+                      "mob-hide-loadMore")
+                  }
+                >
+                  <button onClick={this.loadMoreDeals}>Load More</button>
                 </div>
               </div>
             )}
