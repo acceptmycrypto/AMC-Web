@@ -19,7 +19,7 @@ import LoadingSpinner from "../../../components/UI/LoadingSpinner";
 
 class SearchDeals extends Component {
 
-  //this is needed for mobile
+  //this is needed for mobile - declaring a global variable
   constructor() {
     super();
     this.state = {
@@ -45,11 +45,21 @@ class SearchDeals extends Component {
 
   //for mobile view
   loadMoreDeals = () => {
-    this.state.pageOnMobile += 1;
-    this.props.categoryDeals(this.props.categoryTerm, parseInt(this.state.pageOnMobile));
-    this.props.history.push(
-      "/category?term=" + this.props.categoryTerm + "&page=" + parseInt(this.state.pageOnMobile)
-    );
+
+    if (this.props.pageType === "search") {
+      this.state.pageOnMobile += 1;
+      this.props.searchDeals(this.props.searchTerm, parseInt(this.state.pageOnMobile));
+      this.props.history.push(
+        "/Search?term=" + this.props.searchTerm + "&page=" + parseInt(this.state.pageOnMobile)
+      );
+    } else if (this.props.pageType === "category") {
+      this.state.pageOnMobile += 1;
+      this.props.categoryDeals(this.props.categoryTerm, parseInt(this.state.pageOnMobile));
+      this.props.history.push(
+        "/category?term=" + this.props.categoryTerm + "&page=" + parseInt(this.state.pageOnMobile)
+      );
+    }
+
   };
 
   componentDidMount = async () => {
@@ -110,7 +120,8 @@ class SearchDeals extends Component {
     let currentPage, currentNumberOfResults;
     //filter deals by search
     if (this.props.searchTerm !== "" && this.props.pageType === "search") {
-      deals = this.props.searchedDeals;
+      //check to see what screen size the user is viewing on
+      mobileScreenSize.matches ? deals = this.props.searchedDealsOnMobile : deals = this.props.searchedDeals;
       currentTerm = this.props.searchTerm;
       currentPage = this.props.searchPage;
       currentNumberOfResults = this.props.numberOfResults;
@@ -409,6 +420,7 @@ const mapStateToProps = state => ({
   userLoggedIn: state.LoggedIn.userLoggedIn,
   searchTerm: state.Search.searchTerm,
   searchedDeals: state.Search.searchedDeals,
+  searchedDealsOnMobile: state.Search.searchedDealsOnMobile,
   searchPage: state.Search.searchPage,
   numberOfResults: state.Search.numberOfResults,
   category: state.Category.category,
