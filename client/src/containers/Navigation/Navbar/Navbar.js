@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Link, withRouter } from "react-router-dom";
 import "./Navbar.css";
 import "./NavbarMobile.css";
@@ -7,7 +8,11 @@ import { connect } from "react-redux";
 import { _loadPhoto } from "../../../actions/navbarActions";
 import SearchBar from "./Searchbar";
 import Category from "./Category";
-import { resetNavbar, openSideBarOnMobile, closeSideBarOnMobile } from "../../../actions/navbarActions";
+import {
+  resetNavbar,
+  openSideBarOnMobile,
+  closeSideBarOnMobile
+} from "../../../actions/navbarActions";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
 import { _loadChatSessions } from "../../../actions/chatActions";
 import { resetDealitemState } from "../../../actions/dealItemActions";
@@ -46,14 +51,21 @@ class Navbar extends Component {
   };
 
   render() {
-    const {sideBarOpened, openSideBarOnMobile, closeSideBarOnMobile} = this.props;
+    const {
+      sideBarOpened,
+      openSideBarOnMobile,
+      closeSideBarOnMobile
+    } = this.props;
 
     return (
-      <header id={sideBarOpened && "mob-nav-sidebar-gradient"} className="Toolbar mob-Toolbar">
+      <header
+        id={sideBarOpened ? "mob-nav-sidebar-gradient" : undefined}
+        className="Toolbar mob-Toolbar"
+      >
         <div className="nav-left mob-nav-left">
           <div className="Logo mob-nav-header">
             <Link
-              className={sideBarOpened && "mob-nav-header-invisible"}
+              className={sideBarOpened ? "mob-nav-header-invisible" : undefined}
               onClick={() => {
                 this.resetNavbar();
                 this.props.resetDealitemState();
@@ -70,16 +82,15 @@ class Navbar extends Component {
                 <small className="beta">beta</small>
               </div>
             </Link>
-            {sideBarOpened ?
+            {sideBarOpened ? (
               <div onClick={closeSideBarOnMobile} className="mob-nav-bar">
-                <i class="fas fa-times fa-2x"></i>
+                <i class="fas fa-times fa-2x" />
               </div>
-              :
+            ) : (
               <div onClick={openSideBarOnMobile} className="mob-nav-bar">
-                <i class="fas fa-bars fa-2x"></i>
+                <i className="fas fa-bars fa-2x" />
               </div>
-            }
-
+            )}
           </div>
           <div className="mob-nav-searchBar">
             <SearchBar />
@@ -90,10 +101,15 @@ class Navbar extends Component {
         </div>
 
         <div className="Nav d-flex flex-row align-items-center">
-        {console.log("location", this.props)}
           {this.props.userLoggedIn ? (
             <div>
-              <li id={this.props.location.pathname === "/" && !sideBarOpened ? "mob-nav-createDeal" : "mob-create-deal-hidden"}>
+              <li
+                id={
+                  this.props.location.pathname === "/" && !sideBarOpened
+                    ? "mob-nav-createDeal"
+                    : "mob-create-deal-hidden"
+                }
+              >
                 <Link
                   onClick={() => {
                     this.resetNavbar();
@@ -135,7 +151,13 @@ class Navbar extends Component {
             </div>
           ) : (
             <div>
-              <li id={this.props.location.pathname === "/" && !sideBarOpened ? "mob-nav-createDeal" : "mob-create-deal-hidden"}>
+              <li
+                id={
+                  this.props.location.pathname === "/" && !sideBarOpened
+                    ? "mob-nav-createDeal"
+                    : "mob-create-deal-hidden"
+                }
+              >
                 <Link
                   onClick={() => {
                     this.resetNavbar();
@@ -164,7 +186,13 @@ class Navbar extends Component {
           )}
           <li>
             {this.props.photo.photo ? (
-              <div className={sideBarOpened ? "mob-nav-photo-visible" : "dropdown show m-0 p-0 mob-nav-photo-hidden"}>
+              <div
+                className={
+                  sideBarOpened
+                    ? "mob-nav-photo-visible"
+                    : "dropdown show m-0 p-0 mob-nav-photo-hidden"
+                }
+              >
                 <div
                   className="dropdown-toggle picture-toggle m-0 p-0"
                   id="dropdownMenuLink"
@@ -195,7 +223,13 @@ class Navbar extends Component {
                 </div>
               </div>
             ) : (
-              <div className={sideBarOpened ? "mob-nav-sidebar-signIn" : "d-flex flex-row align-items-center mob-nav-signIn"}>
+              <div
+                className={
+                  sideBarOpened
+                    ? "mob-nav-sidebar-signIn"
+                    : "d-flex flex-row align-items-center mob-nav-signIn"
+                }
+              >
                 <Link to="/SignIn">
                   <p className="navbar-login" id="nav-link-sign-in">
                     Sign In
@@ -216,11 +250,28 @@ class Navbar extends Component {
             )}
           </li>
         </div>
-
       </header>
     );
   }
 }
+
+Navbar.propTypes = {
+  _isLoggedIn: PropTypes.func,
+  _loadPhoto: PropTypes.func,
+  _loadChatSessions: PropTypes.func,
+  chat_sessions: PropTypes.arrayOf(
+    PropTypes.shape({
+      message_read: PropTypes.number
+    })
+  ),
+  sideBarOpened: PropTypes.bool,
+  openSideBarOnMobile: PropTypes.func,
+  closeSideBarOnMobile: PropTypes.func,
+  resetDealitemState: PropTypes.func,
+  photo: PropTypes.shape({
+    photo: PropTypes.string
+  })
+};
 
 const mapStateToProps = state => ({
   photo: state.Photo,
@@ -246,7 +297,9 @@ const matchDispatchToProps = dispatch => {
   );
 };
 
-export default withRouter(connect(
-  mapStateToProps,
-  matchDispatchToProps
-)(Navbar));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    matchDispatchToProps
+  )(Navbar)
+);

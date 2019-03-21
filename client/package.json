@@ -8,6 +8,7 @@
     "bootstrap": "^4.2.1",
     "coin-address-validator": "^1.0.4-1",
     "draft-js": "^0.10.5",
+    "prop-types": "^15.7.2",
     "query-string": "^6.2.0",
     "react": "^16.7.0",
     "react-anchor-link-smooth-scroll": "^1.0.11",

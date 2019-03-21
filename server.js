@@ -180,24 +180,8 @@ async.map(
         var crypto_price = coin_metadata[i].quote.USD.price;
 
 
-        // connection.query(
-        //   "INSERT IGNORE INTO crypto_metadata SET ?",
-        //   {
-        //     crypto_name: crypto_name,
-        //     crypto_symbol: crypto_symbol,
-        //     crypto_price: crypto_price
-        //   },
-        //   function(err, res) {
-        //     if (err) {
-        //       console.log("170: " + err);
-        //     }
-        //   }
-        // );
-
-        //for updating cryptos
         connection.query(
-          "UPDATE IGNORE crypto_metadata SET ?",
-
+          "INSERT IGNORE INTO crypto_metadata SET ?",
           {
             crypto_name: crypto_name,
             crypto_symbol: crypto_symbol,
@@ -209,6 +193,22 @@ async.map(
             }
           }
         );
+
+        //for updating cryptos
+        // connection.query(
+        //   "UPDATE IGNORE crypto_metadata SET ?",
+
+        //   {
+        //     crypto_name: crypto_name,
+        //     crypto_symbol: crypto_symbol,
+        //     crypto_price: crypto_price
+        //   },
+        //   function(err, res) {
+        //     if (err) {
+        //       console.log("170: " + err);
+        //     }
+        //   }
+        // );
       }
 
       for (var j in coin_info) {
@@ -216,23 +216,8 @@ async.map(
         var crypto_logo = coin_info[j].logo;
         var crypto_metadata_name = coin_info[j].name;
 
-        // connection.query(
-        //   "INSERT IGNORE INTO crypto_info SET ?",
-        //   {
-        //     crypto_logo: crypto_logo,
-        //     crypto_link: crypto_site,
-        //     crypto_metadata_name
-        //   },
-        //   function(err, res) {
-        //     if (err) {
-        //       // console.log(err);
-        //     }
-        //   }
-        // );
-
         connection.query(
-          "UPDATE IGNORE crypto_info SET ?",
-
+          "INSERT IGNORE INTO crypto_info SET ?",
           {
             crypto_logo: crypto_logo,
             crypto_link: crypto_site,
@@ -244,6 +229,21 @@ async.map(
             }
           }
         );
+
+        // connection.query(
+        //   "UPDATE IGNORE crypto_info SET ?",
+
+        //   {
+        //     crypto_logo: crypto_logo,
+        //     crypto_link: crypto_site,
+        //     crypto_metadata_name
+        //   },
+        //   function(err, res) {
+        //     if (err) {
+        //       // console.log(err);
+        //     }
+        //   }
+        // );
       }
     }
   }

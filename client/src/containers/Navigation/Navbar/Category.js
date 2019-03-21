@@ -29,7 +29,6 @@ class Category extends Component {
 
     render(){
       let{parentCategory} = this.props;
-      console.log(parentCategory);
         return (
           <div className="dropdown show mx-4">
             <a className="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
