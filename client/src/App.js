@@ -22,6 +22,11 @@ import DealItem from "./containers/Deals/DealItem";
 import Reviews from "./containers/Reviews";
 import ListDeal from "./containers/ListDeal";
 import TrackingNumber from "./containers/Deals/TrackingNumber";
+import Faq from "./containers/FooterPages/Faq/Faq"
+import TermsOfServ from "./containers/FooterPages/TermsOfServ/Terms"
+import Returns from "./containers/FooterPages/Returns/Returns"
+import CookiesPolicy from "./containers/FooterPages/CookiesPolicy/CookiesPolicy"
+
 import Chat from "./containers/Chat";
 
 // import Layout from "./components/Layout";
@@ -66,6 +71,13 @@ class App extends Component {
               <Route path="/trackingNumber/:txn_id/:deal_id" component={TrackingNumber}/>
 
               <Route exact path='/chat' component={Chat}/>
+
+              {/* <Route exact path='/AboutUs' component={AboutUs}/> */}
+              <Route exact path='/TermsOfService' component={TermsOfServ}/>
+              <Route exact path='/Faq' component={Faq}/>
+              <Route exact path='/Returns' component={Returns}/>
+              <Route exact path='/CookiesPolicy' component={CookiesPolicy}/>
+
 
 
 

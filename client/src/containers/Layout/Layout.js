@@ -8,9 +8,10 @@ import Footer from "../../components/Layout/Footer";
 
 class Layout extends Component {
 
-  // componentDidMount (){
-  //   this.props.dispatch(_isLoggedIn(localStorage.getItem('token')));
-  // }
+  componentDidMount (){
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  }
 
   render (){
 

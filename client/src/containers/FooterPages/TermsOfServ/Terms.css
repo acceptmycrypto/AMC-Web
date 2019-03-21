@@ -1,0 +1,101 @@
+.termsAnchor {
+  color: #2e4158;
+  padding-left: 50px;
+  padding-bottom: 10px;
+  font-size: 17px;
+}
+.termsMenuTitle {
+  color: #2e4158;
+  font-size: 17px;
+  padding: 15px;
+  padding-left: 20%;
+  padding-right: 50px;
+  /* padding-left: 50px;
+    padding-bottom: 10px; */
+}
+
+.termsSectionTitle {
+  color: #2e4158;
+  padding-left: 20%;
+  padding-bottom: 10px;
+}
+.termsMenuTitle:hover {
+  color: #66dac7;
+}
+
+.Terms-listItem {
+  font-size: 17px;
+  padding: 15px;
+  padding-left: 20%;
+  padding-right: 50px;
+}
+
+.Terms-listSubItem {
+  font-size: 17px;
+  padding: 10px;
+  padding-left: 10%;
+  margin-left: 250px;
+  font-weight: bold;
+  list-style: disc inside;
+}
+
+#Terms-amh {
+  padding: 20px;
+  width: 100%;
+  justify-content: center;
+  display: flex;
+  font-size: 27px;
+}
+
+.Terms-page {
+  position: relative;
+  text-align: left;
+  display: flex;
+  color: #2e4158;
+  min-height: 100%;
+}
+
+.termsMenu {
+  width: 20%;
+  height: 52%;
+  overflow-y: auto;
+  background-color: transparent;
+  position: fixed;
+  top: 145px;
+  padding: 0 10px;
+}
+
+.termsMainContent {
+  justify-content: left;
+  display: inline;
+}
+
+.Faq-menuItem:hover {
+  color: white;
+}
+
+@media only screen and (max-width: 640px) {
+  .Terms-page {
+    display: block;
+    padding-top: 0px;
+    margin-top: 48px;
+    padding-left: 0px;
+  }
+
+  .termsSectionTitle {
+    padding-left: 0%;
+    padding-bottom: 0px;
+  }
+
+  .Terms-listItem {
+    padding-left: 0%;
+    padding-right: 0px;
+  }
+
+  .Terms-listSubItem {
+    padding: 0px;
+    padding-left: 0%;
+    margin-left: 0px;
+    font-weight: normal;
+  }
+}
