@@ -60,19 +60,6 @@ class AboutUs extends Component {
             <li className="aboutUs-listItem">Avanika K. ... </li>
           </ul>
 
-          <h4 className="aboutUsMenuTitle">Jason Neitro</h4>
-
-          <ul>
-            <li>
-              <img
-                className="jasonPic"
-                src={"../../assets/images/jasonPic.jpg"}
-              />
-            </li>
-          </ul>
-          <ul className="aboutUs-list">
-            <li className="aboutUs-listItem">Jason N. ... </li>
-          </ul>
 
           <h4 className="aboutUsMenuTitle">Simon Nguyen</h4>
 
@@ -102,20 +89,7 @@ class AboutUs extends Component {
             <li className="aboutUs-listItem">Alex ... </li>
           </ul>
 
-          <h4 className="aboutUsMenuTitle">Ashley</h4>
-
-          <ul>
-            <li>
-              <img
-                className="ashleyPic"
-                src={"../../assets/images/ashleyPic.jpg"}
-              />
-            </li>
-          </ul>
-          <ul className="aboutUs-list">
-            <li className="aboutUs-listItem">Ashley ... </li>
-          </ul>
-
+         
           <h4 className="aboutUsMenuTitle">Austin</h4>
 
           <ul>
