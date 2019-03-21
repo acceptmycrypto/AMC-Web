@@ -29,7 +29,7 @@ import CookiesPolicy from "./containers/FooterPages/CookiesPolicy/CookiesPolicy"
 
 import Chat from "./containers/Chat";
 
-import Layout from "./containers/Layout";
+// import Layout from "./components/Layout";
 
 
 import "./App.css";
