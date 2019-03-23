@@ -28,7 +28,7 @@ import { _executePayPalPayment } from "../../../actions/paypalActions";
 import { _createChatSession } from "../../../actions/chatActions";
 import { Carousel } from "react-responsive-carousel";
 import ItemDescription from "../ItemDescription";
-import ShipOrder from "../ShipOrder";
+import ShipOrder from "../../../components/Deals/ShipOrder";
 import PurchaseOrder from "../../../components/Deals/PurchaseOrder";
 import Layout from "../../Layout";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
