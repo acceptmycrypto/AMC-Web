@@ -152,7 +152,7 @@ class Description extends Component {
                   value={sellerVerificationToken}
                   required
                   className="description-input"
-                  autofocus="autofocus"
+                  autoFocus="autofocus"
                   placeholder="Enter your verification code"
                 />
               </div>
@@ -209,7 +209,7 @@ class Description extends Component {
                   value={sellerVerificationToken}
                   required
                   className="description-input"
-                  autofocus="autofocus"
+                  autoFocus="autofocus"
                   placeholder="Enter your verification code"
                 />
               </div>
@@ -239,7 +239,7 @@ class Description extends Component {
                   pattern="^\d{3}-\d{3}-\d{4}$"
                   required
                   className="description-input"
-                  autofocus="autofocus"
+                  autoFocus="autofocus"
                   placeholder="Enter your phone number"
                 />
               </div>
@@ -254,7 +254,7 @@ class Description extends Component {
                   value={sellerFirstname}
                   type="text"
                   className="description-input"
-                  autofocus="autofocus"
+                  autoFocus="autofocus"
                   placeholder="First Name"
                   required
                 />
@@ -267,7 +267,7 @@ class Description extends Component {
                   value={sellerLastname}
                   type="text"
                   className="description-input"
-                  autofocus="autofocus"
+                  autoFocus="autofocus"
                   placeholder="Last Name"
                   required
                 />
@@ -281,7 +281,7 @@ class Description extends Component {
                 value={sellerAddress}
                 type="text"
                 className="description-input"
-                autofocus="autofocus"
+                autoFocus="autofocus"
                 placeholder="Address"
                 required
               />
@@ -292,7 +292,7 @@ class Description extends Component {
                 value={sellerCity}
                 type="text"
                 className="description-input"
-                autofocus="autofocus"
+                autoFocus="autofocus"
                 placeholder="City"
                 required
               />
@@ -309,7 +309,7 @@ class Description extends Component {
                 value={sellerZipcode}
                 type="number"
                 className="description-input create-deal-zipcode-input"
-                autofocus="autofocus"
+                autoFocus="autofocus"
                 placeholder="Zip Code"
                 required
               />
@@ -379,7 +379,7 @@ class Description extends Component {
             onChange={this.props.editDealName}
             value={dealNameValue}
             className="description-input"
-            autofocus="autofocus"
+            autoFocus="autofocus"
             placeholder="Enter a name that others can easily find your listing"
           />
         </div>
@@ -420,13 +420,13 @@ class Description extends Component {
           </div>
           <div className="listing-detail-buttons">
             <button className="detail-button" onClick={this.onItalicClick}>
-              <i class="fas fa-italic" />
+              <i className="fas fa-italic" />
             </button>
             <button className="detail-button" onClick={this.onBoldClick}>
-              <i class="fas fa-bold" />
+              <i className="fas fa-bold" />
             </button>
             <button className="detail-button" onClick={this.onUnderlineClick}>
-              <i class="fas fa-underline" />
+              <i className="fas fa-underline" />
             </button>
           </div>
           <div className="editor-wrapper" onClick={this.focus}>
