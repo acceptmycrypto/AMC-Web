@@ -17,7 +17,7 @@ const Checkout = props => (
 
       <div>
         <div className="payment-address">
-          <p>AcceptMyCrpto Payment Address:</p>
+          <p>AcceptMyCrypto Payment Address:</p>
           <strong><p id="coinpayment-address">{props.showTransaction.address}</p></strong>
         </div>
         <div className="payment-timeout">*If no payment received in <strong ><Countdown date={Date.now() + props.showTimeout} /></strong>, the purchase order will be canceled.</div>

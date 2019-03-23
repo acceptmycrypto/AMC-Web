@@ -236,7 +236,7 @@ class Pricing extends Component {
               />
             </div>
             <small className="pricing-footer-note">
-              This is your price if buyer pay in USD.
+              This is your price if buyer pays in USD.
             </small>
           </div>
           <div className="listed-price-in-crypto">
@@ -257,7 +257,7 @@ class Pricing extends Component {
                 />
               </div>
               <small className="pricing-footer-note">
-                This is your price if buyer pay in Cryptocurrency.
+                This is your price if buyer pays in Cryptocurrency.
               </small>
             </div>
             <div className="listed-price-in-crypto-right">
