@@ -29,7 +29,7 @@ import { _createChatSession } from "../../../actions/chatActions";
 import { Carousel } from "react-responsive-carousel";
 import ItemDescription from "../ItemDescription";
 import ShipOrder from "../ShipOrder";
-import PurchaseOrder from "../PurchaseOrder";
+import PurchaseOrder from "../../../components/Deals/PurchaseOrder";
 import Layout from "../../Layout";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
 import { _loadReviews } from "../../../actions/reviewsActions";
@@ -133,7 +133,7 @@ class DealItem extends Component {
 
     if(this.props.userLoggedIn){
       let user_email = user_info[0].email;
-      
+
       this.props._fetchTransactionInfo(
         crypto_name,
         crypto_symbol,
