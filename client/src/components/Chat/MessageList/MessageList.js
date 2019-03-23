@@ -2,7 +2,7 @@ import React from "react";
 import "./MessageList.css";
 import Timestamp from "react-timestamp";
 import { Link } from "react-router-dom";
-import { handleLongDescription } from '../../../utils/helper_functions';
+import { handleLongDescription } from "../../../utils/helper_functions";
 
 const MessageList = props => {
   const { messagesList, chatSessionInfo, userInfo, _deleteChatSession } = props;
@@ -41,7 +41,12 @@ const MessageList = props => {
 
                     <div className="message-list-deal-header">
                       <div className="message-list-deal-name-price">
-                        <Link to={`/feed/deals/${chatSession.deal_id}/${chatSession.deal_name}`} className="message-list-deal-name">
+                        <Link
+                          to={`/feed/deals/${chatSession.deal_id}/${
+                            chatSession.deal_name
+                          }`}
+                          className="message-list-deal-name"
+                        >
                           {handleLongDescription(chatSession.deal_name, 50, 30)}
                         </Link>
                         <div>
@@ -51,7 +56,11 @@ const MessageList = props => {
                           Pay in Crypto: ${chatSession.pay_in_crypto.toFixed(2)}
                         </div>
                       </div>
-                      <Link to={`/feed/deals/${chatSession.deal_id}/${chatSession.deal_name}`}>
+                      <Link
+                        to={`/feed/deals/${chatSession.deal_id}/${
+                          chatSession.deal_name
+                        }`}
+                      >
                         <div className="message-list-deal-image">
                           <img
                             src={chatSession.featured_deal_image}
@@ -61,9 +70,8 @@ const MessageList = props => {
                       </Link>
 
                       <div onClick={_deleteChatSession} className="trash-icon">
-                        <i className="fa fa-trash" aria-hidden="true"></i>
+                        <i className="fa fa-trash" aria-hidden="true" />
                       </div>
-
                     </div>
                   </div>
                 </div>
@@ -73,7 +81,7 @@ const MessageList = props => {
         <hr />
       </div>
       <div id="chat-messages">
-        {messagesList.length > 0 ?
+        {messagesList.length > 0 ? (
           messagesList.map((msg, i) => {
             return (
               <div
@@ -90,11 +98,17 @@ const MessageList = props => {
                 </small>
               </div>
             );
-          }) :
-          chatSessionInfo[0].seller_id === userInfo[0].id ?
-          <div className="chat-message non-owner-message-left">Buyer has shown interest in your listing, start a conversation with the buyer.</div> :
-          <div className="chat-message non-owner-message-left">Ask the seller something</div>
-        }
+          })
+        ) : chatSessionInfo[0].seller_id === userInfo[0].id ? (
+          <div className="chat-message non-owner-message-left">
+            Buyer has shown interest in your listing, start a conversation with
+            the buyer.
+          </div>
+        ) : (
+          <div className="chat-message non-owner-message-left">
+            Ask the seller something
+          </div>
+        )}
       </div>
     </div>
   );
