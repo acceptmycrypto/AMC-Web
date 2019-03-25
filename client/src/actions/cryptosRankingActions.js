@@ -6,7 +6,7 @@ export function _loadCryptosRanking(type) {
       "Content-Type": "application/json",
     }
   };
-
+  console.log(type);
   return dispatch => {
     dispatch(fetchCryptosBegin());
     if(type == 'venues')
@@ -19,12 +19,23 @@ export function _loadCryptosRanking(type) {
       })
       .catch(error => dispatch(fetchCryptosFailure(error)));
     }
-    else
+    else if(type == 'transactions')
     {
       return fetch("/api/cryptosranking_transactions", cryptosRankingSettings)
       .then(res => res.json())
       .then(jsonCryptos => {
         dispatch(fetchCryptosSuccess(jsonCryptos, 'transactions'));
+        console.log(jsonCryptos);
+        return jsonCryptos;
+      })
+      .catch(error => dispatch(fetchCryptosFailure(error)));
+    }
+    else if(type == 'deals')
+    {
+      return fetch("/api/cryptosranking_deals", cryptosRankingSettings)
+      .then(res => res.json())
+      .then(jsonCryptos => {
+        dispatch(fetchCryptosSuccess(jsonCryptos, 'deals'));
         console.log(jsonCryptos);
         return jsonCryptos;
       })

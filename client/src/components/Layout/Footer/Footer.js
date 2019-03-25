@@ -42,7 +42,7 @@ const Footer = props => {
         <div className="Footer-terms">
           <h4 className="Footer-linkTitle">Terms</h4>
           <span>
-            <Link className="Footer-link" to="/TermsOfServ">
+            <Link className="Footer-link" to="/TermsOfService">
               AcceptMyTerms
             </Link>
           </span>

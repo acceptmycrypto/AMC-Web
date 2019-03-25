@@ -29,7 +29,7 @@ import CookiesPolicy from "./containers/FooterPages/CookiesPolicy/CookiesPolicy"
 
 import Chat from "./containers/Chat";
 
-import Layout from "./containers/Layout";
+// import Layout from "./components/Layout";
 
 
 import "./App.css";
@@ -73,7 +73,7 @@ class App extends Component {
               <Route exact path='/chat' component={Chat}/>
 
               {/* <Route exact path='/AboutUs' component={AboutUs}/> */}
-              <Route exact path='/TermsOfServ' component={TermsOfServ}/>
+              <Route exact path='/TermsOfService' component={TermsOfServ}/>
               <Route exact path='/Faq' component={Faq}/>
               <Route exact path='/Returns' component={Returns}/>
               <Route exact path='/CookiesPolicy' component={CookiesPolicy}/>
