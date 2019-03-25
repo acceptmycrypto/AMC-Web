@@ -1,24 +1,27 @@
+// require and configure dotenv at the top of the
 require("dotenv").config();
 
-var express = require("express");
-var app = express();
-var connection = require("./routes/utils/database");
-var request = require("request");
-var async = require("async");
-var bodyParser = require("body-parser");
-var methodOverride = require("method-override");
-var flash = require("express-flash");
-var path = require("path");
-var bcrypt = require('bcryptjs');
-var jwt = require('jsonwebtoken');
+// Express
+const express = require("express");
+const app = express();
+const bodyParser = require("body-parser");
+//support parsing of application/x-www-form-urlencoded post data
+app.use(bodyParser.urlencoded({ extended: true }));
+// support parsing of application/json type post data
+app.use(bodyParser.json());
 
-if (process.env.NODE_ENV === 'production') {
+const connection = require("./routes/utils/database");
+const request = require("request");
+const async = require("async");
+const path = require("path");
+
+if (process.env.NODE_ENV === "production") {
   // Express will serve up production assets
-  app.use(express.static('client/build'));
-}
-else app.use(express.static("public"));
+  app.use(express.static("client/build"));
+} else app.use(express.static("public"));
 
 //allow the api to be accessed by other apps
+//CORS
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
@@ -30,49 +33,28 @@ app.use(function(req, res, next) {
 });
 
 //routers
-var navbarRoutes = require("./routes/navbar.js");
-var adminRoutes = require("./routes/admin.js");
-// var venueRoutes = require("./routes/venue.js");
-var cryptoRoutes = require("./routes/crypto.js");
-var apiRoutes = require("./routes/api.js");
-var supportRoutes = require("./routes/support.js");
-var userProfileRoutes = require("./routes/user_profile.js");
-var friendProfileRoutes = require("./routes/friend_profile.js");
-var matchedFriendsRoutes = require("./routes/matched_friends.js");
-var dealsRoutes = require("./routes/deals.js");
-var signUpRoutes = require('./routes/signup.js');
-var signInRoutes = require('./routes/signin.js');
-var transactionsRoutes = require("./routes/transactions.js");
-var cryptosRankingRoutes = require("./routes/cryptos_ranking.js");
-var notificationRoutes = require("./routes/cryptos_ranking.js");
-var settingsRoutes = require("./routes/settings.js");
-var reviewRoutes = require("./routes/reviews.js");
-var listDealRoutes = require("./routes/listDeal.js");
-var chatRoutes = require("./routes/chat.js");
-var homepageRoutes = require("./routes/homepage.js");
-// var landingUsersRoutes = require("./routes/landing_users.js");
-// var landingResultsRoutes = require("./routes/landing_results.js");
-
-
-
-
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-// app.use(express.static("public"));
-app.use(methodOverride("_method"));
-// app.use(cookieParser());
-// app.use(
-//   session({
-//     secret: "app",
-//     cookie: { maxAge: 60000 }
-//   })
-// );
-app.use(flash());
+const navbarRoutes = require("./routes/navbar.js");
+const adminRoutes = require("./routes/admin.js");
+const cryptoRoutes = require("./routes/crypto.js");
+const apiRoutes = require("./routes/api.js");
+const supportRoutes = require("./routes/support.js");
+const userProfileRoutes = require("./routes/user_profile.js");
+const friendProfileRoutes = require("./routes/friend_profile.js");
+const matchedFriendsRoutes = require("./routes/matched_friends.js");
+const dealsRoutes = require("./routes/deals.js");
+const signUpRoutes = require("./routes/signup.js");
+const signInRoutes = require("./routes/signin.js");
+const transactionsRoutes = require("./routes/transactions.js");
+const cryptosRankingRoutes = require("./routes/cryptos_ranking.js");
+const notificationRoutes = require("./routes/cryptos_ranking.js");
+const settingsRoutes = require("./routes/settings.js");
+const reviewRoutes = require("./routes/reviews.js");
+const listDealRoutes = require("./routes/listDeal.js");
+const chatRoutes = require("./routes/chat.js");
+const homepageRoutes = require("./routes/homepage.js");
 
 app.use("/", navbarRoutes);
 app.use("/", adminRoutes);
-// app.use("/", venueRoutes);
 app.use("/", cryptoRoutes);
 app.use("/", apiRoutes);
 app.use("/", supportRoutes);
@@ -80,8 +62,8 @@ app.use("/", userProfileRoutes);
 app.use("/", friendProfileRoutes);
 app.use("/", matchedFriendsRoutes);
 app.use("/", dealsRoutes);
-app.use('/', signUpRoutes);
-app.use('/', signInRoutes);
+app.use("/", signUpRoutes);
+app.use("/", signInRoutes);
 app.use("/", transactionsRoutes);
 app.use("/", cryptosRankingRoutes);
 app.use("/", notificationRoutes);
@@ -90,44 +72,24 @@ app.use("/", reviewRoutes);
 app.use("/", listDealRoutes);
 app.use("/", chatRoutes);
 app.use("/", homepageRoutes);
-// app.use("/", landingUsersRoutes);
-// app.use("/", landingResultsRoutes);
 
-
-
-if (process.env.NODE_ENV === 'production') {
+//important! must be placed after routes
+//Use for react routers
+if (process.env.NODE_ENV === "production") {
   // catch all routes
-  app.get('/*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  app.get("/*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
   });
 }
-//not sure what this is, I don't we need it
-path.join(__dirname, "public");
-
-//for establishing a connection
-// var connection = mysql.createConnection({
-//   host: process.env.DB_HOST,
-
-//   // Your port; if not 3306
-//   port: 3306,
-
-//   // Your username
-//   user: process.env.DB_USER,
-
-//   // Your password
-//   password: process.env.DB_PW,
-//   database: process.env.DB_DB
-// });
 
 //pass options as a param to request
-var options = [
+//make a get request to coinmarketcap to get latest crypto info
+const options = [
   {
     method: "GET",
     uri: "https://pro-api.coinmarketcap.com/v1/cryptocurrency/info",
     qs: {
-
       symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,EOS,XVG"
-
     },
     headers: {
       "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
@@ -138,9 +100,7 @@ var options = [
     method: "GET",
     uri: "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest",
     qs: {
-
       symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,EOS,XVG"
-
     },
     headers: {
       "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
@@ -149,112 +109,127 @@ var options = [
   }
 ];
 
-//as soon as server starts up, query database and get any cryptos that do not have latest info
+/**
+ * Create a function using async utility module to fetch data
+ *
+ * @param {...Array} dataSet An array of uri to iterate over.
+ * rest parameter syntax allows us to represent an indefinite number of arguments
+ * as an array
+ */
 
-//hit up coinmarket cap later
+function fetchData(dataSet) {
 
+  async.map(
+    dataSet,
+    function(option, callback) {
+      request(option, function(error, response, body) {
+        if (!error && response.statusCode == 200) {
+          let info = JSON.parse(body);
+          callback(null, info);
+        } else {
+          callback(error || response.statusCode);
+        }
+      });
+    },
+    function(err, results) {
+      if (err) console.log(err);
+      // insertCryptos(results);
+      updateCryptos(results);
+    }
+  );
 
-//use async to map two request ojects and return all results in one callback
+  function insertCryptos(Cryptoresults) {
+    let coin_info = Cryptoresults[0].data;
+    let coin_metadata = Cryptoresults[1].data;
 
-async.map(
-  options,
-  function(obj, callback) {
-    // iterator function
-    request(obj, function(error, response, body) {
-      if (!error && response.statusCode == 200) {
-        // transform data here or pass it on
-        var body = JSON.parse(body);
-        callback(null, body);
-      } else {
-        callback(error || response.statusCode);
-      }
-    });
-  },
-  function(err, results) {
-    // all requests have been made
-    if (err) {
-      console.log(err);
-    } else {
-      var coin_info = results[0].data;
-      var coin_metadata = results[1].data;
+    for (let i in coin_metadata) {
+      let crypto_name = coin_metadata[i].name;
+      let crypto_symbol = coin_metadata[i].symbol;
+      let crypto_price = coin_metadata[i].quote.USD.price;
 
-      for (var i in coin_metadata) {
-        var crypto_name = coin_metadata[i].name;
-        var crypto_symbol = coin_metadata[i].symbol;
-        var crypto_price = coin_metadata[i].quote.USD.price;
-
-
-        // connection.query(
-        //   "INSERT IGNORE INTO crypto_metadata SET ?",
-        //   {
-        //     crypto_name: crypto_name,
-        //     crypto_symbol: crypto_symbol,
-        //     crypto_price: crypto_price
-        //   },
-        //   function(err, res) {
-        //     if (err) {
-        //       console.log("170: " + err);
-        //     }
-        //   }
-        // );
-
-        //for updating cryptos
-        connection.query(
-          "UPDATE IGNORE crypto_metadata SET ?",
-
-          {
-            crypto_name: crypto_name,
-            crypto_symbol: crypto_symbol,
-            crypto_price: crypto_price
-          },
-          function(err, res) {
-            if (err) {
-              console.log("170: " + err);
-            }
+      connection.query(
+        "INSERT IGNORE INTO crypto_metadata SET ?",
+        {
+          crypto_name: crypto_name,
+          crypto_symbol: crypto_symbol,
+          crypto_price: crypto_price
+        },
+        function(err, res) {
+          if (err) {
+            console.log(err);
           }
-        );
-      }
+        }
+      );
+    }
 
-      for (var j in coin_info) {
-        var crypto_site = coin_info[j].urls.website[0];
-        var crypto_logo = coin_info[j].logo;
-        var crypto_metadata_name = coin_info[j].name;
+    for (let j in coin_info) {
+      let crypto_site = coin_info[j].urls.website[0];
+      let crypto_logo = coin_info[j].logo;
+      let crypto_metadata_name = coin_info[j].name;
 
-        // connection.query(
-        //   "INSERT IGNORE INTO crypto_info SET ?",
-        //   {
-        //     crypto_logo: crypto_logo,
-        //     crypto_link: crypto_site,
-        //     crypto_metadata_name
-        //   },
-        //   function(err, res) {
-        //     if (err) {
-        //       // console.log(err);
-        //     }
-        //   }
-        // );
-
-        connection.query(
-          "UPDATE IGNORE crypto_info SET ?",
-
-          {
-            crypto_logo: crypto_logo,
-            crypto_link: crypto_site,
-            crypto_metadata_name
-          },
-          function(err, res) {
-            if (err) {
-              // console.log(err);
-            }
+      connection.query(
+        "INSERT IGNORE INTO crypto_info SET ?",
+        {
+          crypto_logo: crypto_logo,
+          crypto_link: crypto_site,
+          crypto_metadata_name
+        },
+        function(err, res) {
+          if (err) {
+            console.log(err);
           }
-        );
-      }
+        }
+      );
     }
   }
-);
 
-// set the view engine to ejs
-// app.set("view engine", "ejs");
+  function updateCryptos(Cryptoresults) {
+    let coin_info = Cryptoresults[0].data;
+    let coin_metadata = Cryptoresults[1].data;
+
+    for (let i in coin_metadata) {
+      let crypto_name = coin_metadata[i].name;
+      let crypto_symbol = coin_metadata[i].symbol;
+      let crypto_price = coin_metadata[i].quote.USD.price;
+
+      connection.query(
+        "UPDATE IGNORE crypto_metadata SET ?",
+        {
+          crypto_name: crypto_name,
+          crypto_symbol: crypto_symbol,
+          crypto_price: crypto_price
+        },
+        function(err, res) {
+          if (err) {
+            console.log(err);
+          }
+        }
+      );
+    }
+
+    for (let j in coin_info) {
+      let crypto_site = coin_info[j].urls.website[0];
+      let crypto_logo = coin_info[j].logo;
+      let crypto_metadata_name = coin_info[j].name;
+
+      connection.query(
+        "UPDATE IGNORE crypto_info SET ?",
+        {
+          crypto_logo: crypto_logo,
+          crypto_link: crypto_site,
+          crypto_metadata_name
+        },
+        function(err, res) {
+          if (err) {
+            console.log(err);
+          }
+        }
+      );
+    }
+  }
+}
+
+fetchData(options);
 
 //Heroku tells us which port our app to use. For production, we use Heroku port. For development, we use 3001
 const PORT = process.env.PORT || 3001;
