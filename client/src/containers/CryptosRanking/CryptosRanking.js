@@ -6,11 +6,15 @@ import { _loadCryptosRanking } from "../../actions/cryptosRankingActions";
 class CryptosRankings extends Component {
 
   componentDidMount() {
-    this.props.dispatch(_loadCryptosRanking('venues'));
+    this.props.dispatch(_loadCryptosRanking('deals'));
   }
 
   venueSort = () => {
     this.props.dispatch(_loadCryptosRanking('venues'));
+  }
+
+  dealSort = () => {
+    this.props.dispatch(_loadCryptosRanking('deals'));
   }
 
   transactionSort = () => {
@@ -19,12 +23,12 @@ class CryptosRankings extends Component {
 
   render() {
     console.log(this.props.cryptosSort);
-    if(this.props.cryptosSort == 'venues')
+    if(this.props.cryptosSort == 'deals')
     {
       return (
         <div id="left" className="col-cryptos cryptosRanking">
           
-          <button className='sortButtonActive' onClick={this.venueSort}>Venues</button>
+          <button className='sortButtonActive' onClick={this.dealSort}>Deals</button>
           <button className='sortButton' onClick={this.transactionSort}>Transactions</button>
          
           
@@ -33,7 +37,7 @@ class CryptosRankings extends Component {
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Cryptocurrency</th>
-                <th scope="col">Venues</th>
+                <th scope="col">Deals</th>
                 <th className='text-align align-middle' scope="col">Price $</th>
               </tr>
             </thead>
@@ -42,7 +46,7 @@ class CryptosRankings extends Component {
                 <tr key={crypto+i}>
                   <th scope="row" className='text-align align-middle'>{i + 1}</th>
                   <td className='text-align align-middle d-flex flex-row align-items-center justify-content-between' id={i==0 ? 'no-border-top' : null }><img className="rankingImage" src={crypto.crypto_logo} alt="crypto-logo"/> <div>{crypto.crypto_symbol}</div></td>
-                  <td className='text-align align-middle'>{crypto.venues_count}</td>
+                  <td className='text-align align-middle'>{crypto.deals_count}</td>
                   <td className='text-right align-middle mr-2'>{crypto.crypto_price}</td>
                 </tr>
               ))}
@@ -58,7 +62,7 @@ class CryptosRankings extends Component {
       return (
         <div id="left" className="col-cryptos cryptosRanking">
           <div>
-          <button className='sortButton' onClick={this.venueSort}>Venues</button>
+          <button className='sortButton' onClick={this.dealSort}>Deals</button>
           <button className='sortButtonActive' onClick={this.transactionSort}>Transactions</button>
           </div>
           <table className="table table-hover">
