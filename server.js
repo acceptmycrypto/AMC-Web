@@ -7,10 +7,9 @@ const app = express();
 const bodyParser = require("body-parser");
 //support parsing of application/x-www-form-urlencoded post data
 app.use(bodyParser.urlencoded({ extended: true }));
-// support parsing of application/json type post data
+//support parsing of application/json type post data
 app.use(bodyParser.json());
 
-const fetchData = require("./routes/utils/fetchData");
 const path = require("path");
 
 if (process.env.NODE_ENV === "production") {
@@ -107,7 +106,10 @@ const options = [
   }
 ];
 
-fetchData(options);
+//whenver we starts the server, fetch data on development env
+if (process.env.NODE_ENV = "development") {
+  fetchData(options);
+}
 
 //Heroku tells us which port our app to use. For production, we use Heroku port. For development, we use 3001
 const PORT = process.env.PORT || 3001;
