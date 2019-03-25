@@ -149,6 +149,10 @@ var options = [
   }
 ];
 
+//as soon as server starts up, query database and get any cryptos that do not have latest info
+
+//hit up coinmarket cap later
+
 
 //use async to map two request ojects and return all results in one callback
 
