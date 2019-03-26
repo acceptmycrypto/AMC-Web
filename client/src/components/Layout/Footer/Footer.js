@@ -12,13 +12,13 @@ const Footer = props => {
             target="_blank"
             href="https://discordapp.com/channels/544415678191501314/544415678627577867"
           >
-            <i class="fab fa-discord fa-2x" />
+            <i className="fab fa-discord fa-2x" />
           </a>
           <a
             target="_blank"
             href="https://www.instagram.com/acceptmycrypto/?hl=en"
           >
-            <i class="fab fa-instagram fa-2x" />
+            <i className="fab fa-instagram fa-2x" />
           </a>
         </div>
         <div className="copyrightFooter">AcceptMyCrypto © 2019</div>
