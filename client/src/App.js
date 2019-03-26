@@ -22,10 +22,10 @@ import DealItem from "./containers/Deals/DealItem";
 import Reviews from "./containers/Reviews";
 import ListDeal from "./containers/ListDeal";
 import TrackingNumber from "./containers/Deals/TrackingNumber";
-import Faq from "./containers/FooterPages/Faq/Faq"
-import TermsOfServ from "./containers/FooterPages/TermsOfServ/Terms"
-import Returns from "./containers/FooterPages/Returns/Returns"
-import CookiesPolicy from "./containers/FooterPages/CookiesPolicy/CookiesPolicy"
+import Faq from "./components/Home/Faq";
+import TermsOfService from "./components/Home/TermsOfService";
+import Returns from "./components/Home/Returns";
+import CookiesPolicy from "./components/Home/CookiesPolicy";
 
 import Chat from "./containers/Chat";
 
@@ -73,7 +73,7 @@ class App extends Component {
               <Route exact path='/chat' component={Chat}/>
 
               {/* <Route exact path='/AboutUs' component={AboutUs}/> */}
-              <Route exact path='/TermsOfService' component={TermsOfServ}/>
+              <Route exact path='/TermsOfService' component={TermsOfService}/>
               <Route exact path='/Faq' component={Faq}/>
               <Route exact path='/Returns' component={Returns}/>
               <Route exact path='/CookiesPolicy' component={CookiesPolicy}/>
