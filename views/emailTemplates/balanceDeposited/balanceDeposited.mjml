@@ -16,7 +16,7 @@
 
       <mj-column>
         <mj-text color="#fff" letter-spacing="1.2px" font-size="15px" align="center" line-height="20px">
-          Your sale of <%= deal_name %> has been deposited.
+          Your sale of <%= deal_name %> has been deposited into your account.
         </mj-text>
          <mj-text color="#fff" letter-spacing="1.2px" font-size="20px" align="center" line-height="20px">
           <%= amountAfterFee %> <%= crypto_symbol %>

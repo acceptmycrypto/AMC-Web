@@ -4,8 +4,9 @@
 
     .search-deals-title{
         padding-top: 70px;
+        margin-bottom: 20px;
     }
-  
+
     .search-deals-results{
         display: flex;
         flex-direction: row;
@@ -15,5 +16,30 @@
        justify-content: center;
     }
 
+    .page_Nav {
+      display: none;
+    }
+
+    .mob-loadMore {
+      text-align: center;
+      padding: 0 20px;
+      display: block;
+    }
+
+    .mob-loadMore button {
+      width: 100%;
+      background-color: rgb(22, 190, 182);
+      color: white;
+      border: none;
+      outline: none;
+      border-radius: 25px;
+      padding: 10px 25px;
+      font-size: 1.3em;
+      font-weight: 700;
+    }
+
+    .mob-hide-loadMore {
+      display: none;
+    }
+
 }
-  
