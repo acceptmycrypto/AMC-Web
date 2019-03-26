@@ -10,6 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //support parsing of application/json type post data
 app.use(bodyParser.json());
 
+const fetchData = require("./routes/utils/fetchData");
 const path = require("path");
 
 if (process.env.NODE_ENV === "production") {
