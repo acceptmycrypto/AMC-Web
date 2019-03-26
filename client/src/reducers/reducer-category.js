@@ -3,6 +3,7 @@ const initialState = {
     filteredCategory: [],
     categoryTerm: "",
     categoriesDeals: [],
+    categoriesDealsOnMobile: [],
     categoryPage: 1,
     categoryNumberOfResults: 0,
     parentCategory: [],
@@ -22,10 +23,12 @@ export default function categoryReducer(state = initialState, action) {
         case "RESET_NAVBAR":
             return initialState;
         case "CATEGORIES_DEALS_SUCCESS":
+
             return {
                 ...state,
                 categoryTerm: action.payload.categoryTerm,
                 categoriesDeals: action.payload.categoriesDeals,
+                categoriesDealsOnMobile: [...state.categoriesDealsOnMobile, ...action.payload.categoriesDeals],
                 categoryPage: action.payload.categoryPage,
                 categoryNumberOfResults: action.payload.categoryNumberOfResults
             };
