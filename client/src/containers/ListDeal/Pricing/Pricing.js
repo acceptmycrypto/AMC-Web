@@ -223,9 +223,9 @@ class Pricing extends Component {
           <div className="listed-price-in-dollar">
             <div className="pricing-titles">Price in Dollar</div>
             <div className="pricing-input-row">
-              <i class="fas fa-dollar-sign fa-2x" />
+              <i className="fas fa-dollar-sign fa-2x" />
               <input
-                autofocus="autofocus"
+                autoFocus="autofocus"
                 className="pricing-input"
                 type="number"
                 placeholder="Enter your base price"
@@ -243,7 +243,7 @@ class Pricing extends Component {
             <div className="listed-price-in-crypto-left">
               <div className="pricing-titles">Price after Discount</div>
               <div className="pricing-input-row">
-                <i class="fas fa-dollar-sign fa-2x" />
+                <i className="fas fa-dollar-sign fa-2x" />
                 <input
                   className="pricing-input-crypto"
                   type="text"
@@ -269,7 +269,6 @@ class Pricing extends Component {
                 type="range"
                 min="10"
                 max="100"
-                defaultValue={this.props.showDiscountPercent}
                 value={this.props.showDiscountPercent}
                 id="percent-slider"
               />
@@ -325,7 +324,7 @@ class Pricing extends Component {
                 );
               })}
             </div>
-            <small class="pricing-footer-note">
+            <small className="pricing-footer-note">
               *Please be aware that the crypto amount will be different at the time
               of purchase due to market volatility.
               <hr />
