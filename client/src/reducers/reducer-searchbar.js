@@ -1,10 +1,11 @@
 const initialState = {
     searchTerm: "",
     searchedDeals: [],
+    searchedDealsOnMobile: [],
     searchPage: 1,
     numberOfResults: 0
 };
-  
+
 export default function searchbarReducer(state = initialState, action) {
     switch(action.type) {
         case "SEARCH_DEALS_SUCCESS":
@@ -15,6 +16,7 @@ export default function searchbarReducer(state = initialState, action) {
                 ...state,
                 searchTerm: action.payload.searchTerm,
                 searchedDeals: action.payload.searchedDeals,
+                searchedDealsOnMobile: [...state.searchedDealsOnMobile, ...action.payload.searchedDeals],
                 searchPage: action.payload.searchPage,
                 numberOfResults: action.payload.numberOfResults
             };

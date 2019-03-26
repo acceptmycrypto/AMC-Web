@@ -24,7 +24,7 @@ export function _loadCategory() {
         })
 
         dispatch(fetchCategorySuccess(options));
-        
+
         return options;
       })
       .catch(error => dispatch(fetchCategoryFailure(error)));
@@ -73,8 +73,6 @@ export const categoryDeals = (categoryTerm, page) => {
               "Content-Type": "application/json",
           }
       }).then(res => res.json()).then(categoriesDeals => {
-          console.log("categoriesDeals");
-          console.log(categoriesDeals);
           dispatch(categoryDealSuccess(categoryTerm, categoriesDeals.results, page, categoriesDeals.numberOfResults[0]["COUNT(DISTINCT deals.id)"]));
       })
   }
