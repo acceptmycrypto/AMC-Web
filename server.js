@@ -32,7 +32,7 @@ app.use(function(req, res, next) {
 
 //routers
 const navbarRoutes = require("./routes/navbar.js");
-const cryptoRoutes = require("./routes/crypto.js");
+const cryptoForums = require("./routes/crypto_forums.js/index.js");
 const supportRoutes = require("./routes/support.js");
 const userProfileRoutes = require("./routes/user_profile.js");
 const friendProfileRoutes = require("./routes/friend_profile.js");
@@ -50,7 +50,7 @@ const chatRoutes = require("./routes/chat.js");
 const homepageRoutes = require("./routes/homepage.js");
 
 app.use("/", navbarRoutes);
-app.use("/", cryptoRoutes);
+app.use("/", cryptoForums);
 app.use("/", supportRoutes);
 app.use("/", userProfileRoutes);
 app.use("/", friendProfileRoutes);
