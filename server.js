@@ -32,7 +32,7 @@ app.use(function(req, res, next) {
 
 //routers
 const navbarRoutes = require("./routes/navbar.js");
-const cryptoForums = require("./routes/crypto_forums.js/index.js");
+const cryptoForums = require("./routes/crypto_forums.js");
 const supportRoutes = require("./routes/support.js");
 const userProfileRoutes = require("./routes/user_profile.js");
 const friendProfileRoutes = require("./routes/friend_profile.js");
