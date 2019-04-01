@@ -1,3 +1,5 @@
+
+// used in CryptocurrencySettings
 export async function _loadCryptoSettings (token) {
     const Cryptosettings = {
       method: "POST",
