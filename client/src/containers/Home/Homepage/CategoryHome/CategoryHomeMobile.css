@@ -31,8 +31,8 @@
       }
 
       .category_item{
-          margin: 5px;
-          width: 160px;
+          margin: 2%;
+          width: 185px;
           height: 260px;
       }
 
@@ -67,4 +67,30 @@
       }
 
 }
+
+@media only screen and (max-width: 390px) {
+    .category_item{
+        margin: 2%;
+        width: 165px;
+        height: 260px;
+    }
+}
   
+@media only screen and (max-width: 370px) {
+    .category_item{
+        margin: 2%;
+        width: 160px;
+        height: 260px;
+    }
+}
+
+
+
+  
+@media only screen and (max-width: 330px) {
+    .category_item{
+        margin: 2%;
+        width: 145px;
+        height: 260px;
+    }
+}
