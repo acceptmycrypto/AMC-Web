@@ -7,75 +7,16 @@ const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
 const verifyToken = require("./utils/validation");
 const request = require("request");
+const shippo = require("shippo")(process.env.SHIPMENT_KEY); //shippo
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static("public"));
 app.use(methodOverride("_method"));
 
-//shippo
-const shippo = require("shippo")(process.env.SHIPMENT_KEY);
-
-// api
-router.post("/api/deals", verifyToken, function(req, res) {
-  let id = req.decoded._id;
-
-  if (id) {
-    //if login
-
-    // Create a multi nested SQL query
-
-    //1) query the users_cryptos table to get the crypto_id that the user is interested/owned
-
-    //2) query the venues that accept those cryptos
-
-    // 3) query the deals that offered by those venues
-    //update query to include sellers as users in addition to larger venue vendors
-    connection.query(
-      "SELECT DISTINCT deals.id, deals.deal_status, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, venues.venue_name, venues.venue_link, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings FROM deals LEFT JOIN venues ON deals.venue_id = venues.id LEFT JOIN cryptos_deals ON cryptos_deals.deal_id = deals.id LEFT JOIN users ON deals.seller_id = users.id WHERE deals.venue_id IN (SELECT DISTINCT venue_id FROM cryptos_venues WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos WHERE user_id = ?)) OR deals.id IN (SELECT DISTINCT deal_id FROM cryptos_deals WHERE crypto_id IN (SELECT DISTINCT crypto_id FROM users_cryptos WHERE user_id = ?) AND users.phone_number_verified = ?)",
-      [id, id, 1],
-      function(error, results, fields) {
-        if (error) console.log(error);
-        res.json(results);
-      }
-    );
-  }
-});
-
-//get a deal_item api
-// include id param which references the deal id in route to account for if multiple users sell item with same deal_name
-router.get("/api/deals/:deal_id/:deal_name", async function(req, res) {
-
-  let deal_query =
-    "SELECT deals.id AS deal_id, deals.seller_id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.deal_status, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.item_condition, deals.weight, deals.shipping_label_status, deals.shipment_cost, deal_images.deal_image, deal_images.deal_image_object, users.id AS seller_id, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings, users.phone_number_verified, category.category_name AS deal_category FROM deals LEFT JOIN deal_images ON deals.id = deal_images.deal_id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN category ON category.id = categories_deals.category_id WHERE deals.id = ? AND deals.deal_status <> ?";
-
-  let acceptedCrypto_query =
-    "SELECT * FROM cryptos_deals LEFT JOIN crypto_metadata ON crypto_metadata.id = cryptos_deals.crypto_id LEFT JOIN crypto_info ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE cryptos_deals.deal_id = ?";
-
-  let deal_query_result, acceptedCrypto_result;
-  let dealItem = [];
-
-  database
-    .query(deal_query, [req.params.deal_id, "deleted"])
-    .then(results => {
-
-      deal_query_result = dealItemQuery(results);
-      dealItem.push(deal_query_result);
-
-      return database.query(acceptedCrypto_query, [req.params.deal_id])
-
-    }).then(results => {
-
-      acceptedCrypto_result = acceptedCryptoQuery(results);
-      dealItem.push(acceptedCrypto_result);
-      res.json(dealItem);
-    })
-    .catch(err => {
-      res.json(err);
-      console.log(err);
-    });
-
-  const dealItemQuery = result => {
+//All methods of deals route
+class Deals {
+  dealItemQuery(result) {
     let img = "";
     let images = [];
     let imagesObj = [];
@@ -108,12 +49,11 @@ router.get("/api/deals/:deal_id/:deal_name", async function(req, res) {
     result[0].deal_category = categories;
 
     return result[0];
-  };
+  }
 
-  const acceptedCryptoQuery = result => {
+  acceptedCryptoQuery(result) {
     let acceptedCryptos = [];
     for (let crypto of result) {
-
       let acceptedCrypto = {};
       let cryptoName = crypto.crypto_name;
       let cryptoSymbol = crypto.crypto_symbol;
@@ -129,7 +69,43 @@ router.get("/api/deals/:deal_id/:deal_name", async function(req, res) {
 
     return acceptedCryptos;
   }
-  
+}
+
+//create a new deals object
+const deals = new Deals;
+
+//deal item endpoint
+router.get("/api/deals/:deal_id/:deal_name", function(req, res) {
+  // include id param which references the deal id in route to account for if multiple users sell item with same deal_name
+
+  let deal_query =
+    "SELECT deals.id AS deal_id, deals.seller_id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.deal_status, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.item_condition, deals.weight, deals.shipping_label_status, deals.shipment_cost, deal_images.deal_image, deal_images.deal_image_object, users.id AS seller_id, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings, users.phone_number_verified, category.category_name AS deal_category FROM deals LEFT JOIN deal_images ON deals.id = deal_images.deal_id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN category ON category.id = categories_deals.category_id WHERE deals.id = ? AND deals.deal_status <> ?";
+
+  let acceptedCrypto_query =
+    "SELECT * FROM cryptos_deals LEFT JOIN crypto_metadata ON crypto_metadata.id = cryptos_deals.crypto_id LEFT JOIN crypto_info ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE cryptos_deals.deal_id = ?";
+
+  let deal_query_result, acceptedCrypto_result;
+
+  //this is the array we pass to the client
+  let dealItem = [];
+
+  database
+    .query(deal_query, [req.params.deal_id, "deleted"])
+    .then(results => {
+      deal_query_result = deals.dealItemQuery(results);
+      dealItem.push(deal_query_result);
+
+      return database.query(acceptedCrypto_query, [req.params.deal_id]);
+    })
+    .then(results => {
+      acceptedCrypto_result = deals.acceptedCryptoQuery(results);
+      dealItem.push(acceptedCrypto_result);
+      res.json(dealItem);
+    })
+    .catch(err => {
+      res.json(err);
+      console.log(err);
+    });
 });
 
 router.get("/api/search", function(req, res) {
