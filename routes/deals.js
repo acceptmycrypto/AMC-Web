@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const router = express.Router();
 const connection = require("./utils/database");
-const Database = require("./utils/data");
+const database = require("./utils/data");
 const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
 const verifyToken = require("./utils/validation");
@@ -44,118 +44,156 @@ router.post("/api/deals", verifyToken, function(req, res) {
 
 //get a deal_item api
 // include id param which references the deal id in route to account for if multiple users sell item with same deal_name
-router.get("/api/deals/:deal_id/:deal_name", function(req, res) {
+router.get("/api/deals/:deal_id/:deal_name", async function(req, res) {
   let venue_name;
   let seller_name;
   let deal_query =
     "SELECT deals.id AS deal_id, deals.seller_id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.deal_status, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, deals.weight, deals.shipping_label_status, deals.shipment_cost, users.id AS seller_id, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings, users.phone_number_verified FROM deals LEFT JOIN users ON deals.seller_id = users.id WHERE deals.id = ? AND deals.deal_status <> ?";
 
-  let deal_images_query = "SELECT deal_images.deal_image, deal_images.deal_image_object FROM deals LEFT JOIN deal_images ON deals.id = deal_images.deal_id WHERE deals.id = ? AND deals.deal_status <> ?";
+  let deal_images_query =
+    "SELECT deal_images.deal_image, deal_images.deal_image_object FROM deals LEFT JOIN deal_images ON deals.id = deal_images.deal_id WHERE deals.id = ? AND deals.deal_status <> ?";
 
-  let deal_category_query = "SELECT category.category_name AS deal_category FROM deals LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN category ON category.id = categories_deals.category_id WHERE deals.id = ? AND deals.deal_status <> ?"
+  let deal_category_query =
+    "SELECT category.category_name AS deal_category FROM deals LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN category ON category.id = categories_deals.category_id WHERE deals.id = ? AND deals.deal_status <> ?";
 
-  const database = new Database;
-  database.query(deal_query, [req.params.deal_id, "deleted"]).then(results => {
-    res.json(results);
-  })
+  let deal_query_result, deal_image_result, deal_category_result;
+
+  database
+    .query(deal_query, [req.params.deal_id, "deleted"])
+    .then(results => {
+      deal_query_result = results;
+      return database.query(deal_images_query, [req.params.deal_id, "deleted"]);
+    })
+    .then(results => {
+      deal_image_result = results;
+      return database.query(deal_category_query, [
+        req.params.deal_id,
+        "deleted"
+      ]);
+    })
+    .then(results => {
+      deal_category_result = results;
+      res.json(deal_image_result);
+      //add function here
+      // res.json({ deal_query_result, deal_image_result, deal_category_result });
+    })
+    .catch(err => {
+      res.json(err);
+      console.log(err);
+    });
+
+  const dealItemQuery = (deal_query_result, deal_image_result, deal_category_result) => {
+    let images = [];
+    let imagesObj = [];
+
+    for(let i = 0; i <= deal_image_result.length; i++) {
+      let image = deal_image_result[i].deal_image;
+      let imageObj = deal_image_result[i].deal_image_object;
+      images.push(image);
+      imagesObj.push(imageObj)
+    }
+
+    let addImages = deal_query_result[0][deal_image];
+    //first make an
+  }
 
   // connection.query(`${deal_query}`, [req.params.deal_id, "deleted"], function(
   //   error,
   //   result,
   //   fields
   // ) {
-    // if (error) throw error;
-    // res.json(result);
-    // let newDealItem = [];
-    // let img = "";
-    // let images = [];
-    // let imagesObj = [];
-    // let categ = "";
-    // let categories = [];
+  // if (error) throw error;
+  // res.json(result);
+  // let newDealItem = [];
+  // let img = "";
+  // let images = [];
+  // let imagesObj = [];
+  // let categ = "";
+  // let categories = [];
 
-    // for (let i of result) {
-    //   //check to see if deal_image is not in the img
-    //   if (result[i].deal_image !== img) {
-    //     let parsedImageObj = JSON.parse(result[i].deal_image_object);
+  // for (let i of result) {
+  //   //check to see if deal_image is not in the img
+  //   if (result[i].deal_image !== img) {
+  //     let parsedImageObj = JSON.parse(result[i].deal_image_object);
 
-    //     images.push(result[i].deal_image); //store an array of image urls
-    //     imagesObj.push(parsedImageObj); //store an array of image objects
-    //     img = result[i].deal_image;
-    //   }
+  //     images.push(result[i].deal_image); //store an array of image urls
+  //     imagesObj.push(parsedImageObj); //store an array of image objects
+  //     img = result[i].deal_image;
+  //   }
 
-    //   if (result[i].deal_category !== categ) {
-    //     categories.push(result[i].deal_category);
-    //     categ = result[i].deal_category;
-    //   }
-    // }
+  //   if (result[i].deal_category !== categ) {
+  //     categories.push(result[i].deal_category);
+  //     categ = result[i].deal_category;
+  //   }
+  // }
 
-    //since every object in the array is the same, we just use the first object in the array
-    //reassign the deal_image property to images array
-    // result[0].deal_image = images;
-    // result[0].deal_image_object = imagesObj;
-    // result[0].deal_category = categories;
+  //since every object in the array is the same, we just use the first object in the array
+  //reassign the deal_image property to images array
+  // result[0].deal_image = images;
+  // result[0].deal_image_object = imagesObj;
+  // result[0].deal_category = categories;
 
-    //push the first object into an emptry array so we can use it on the client side for mapping
-    // newDealItem.push(result[0]);
+  //push the first object into an emptry array so we can use it on the client side for mapping
+  // newDealItem.push(result[0]);
 
-    //assign the venue name to the variable venue_name that we defined earlier
-    // venue_name = newDealItem[0].venue_name;
+  //assign the venue name to the variable venue_name that we defined earlier
+  // venue_name = newDealItem[0].venue_name;
 
-    // seller_name = newDealItem[0].seller_name;
+  // seller_name = newDealItem[0].seller_name;
 
-    // if (venue_name !== null) {
-    //   //query the acceptedCryptos list from the given venue
-    //   // venues.venue_name, venues.venue_description, crypto_metadata.crypto_name, crypto_metadata.crypto_symbol
-    //   connection.query(
-    //     "SELECT * FROM cryptos_venues LEFT JOIN venues ON venues.id = cryptos_venues.venue_id LEFT JOIN crypto_metadata ON crypto_metadata.id = cryptos_venues.crypto_id LEFT JOIN crypto_info ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE venue_name = ?",
-    //     [venue_name],
-    //     function(error, results, fields) {
-    //       if (error) throw error;
+  // if (venue_name !== null) {
+  //   //query the acceptedCryptos list from the given venue
+  //   // venues.venue_name, venues.venue_description, crypto_metadata.crypto_name, crypto_metadata.crypto_symbol
+  //   connection.query(
+  //     "SELECT * FROM cryptos_venues LEFT JOIN venues ON venues.id = cryptos_venues.venue_id LEFT JOIN crypto_metadata ON crypto_metadata.id = cryptos_venues.crypto_id LEFT JOIN crypto_info ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE venue_name = ?",
+  //     [venue_name],
+  //     function(error, results, fields) {
+  //       if (error) throw error;
 
-    //       let venue = [];
+  //       let venue = [];
 
-    //       for (venueObj in results) {
-    //         let cryptoName = results[venueObj].crypto_name;
-    //         let cryptoSymbol = results[venueObj].crypto_symbol;
-    //         let cryptoLogo = results[venueObj].crypto_logo;
+  //       for (venueObj in results) {
+  //         let cryptoName = results[venueObj].crypto_name;
+  //         let cryptoSymbol = results[venueObj].crypto_symbol;
+  //         let cryptoLogo = results[venueObj].crypto_logo;
 
-    //         let acceptedCrypto = {};
-    //         acceptedCrypto.crypto_name = cryptoName; //{crypto_name: "bitcoin"}
-    //         acceptedCrypto.crypto_symbol = cryptoSymbol; //{crypto_name: "btc", crypto_symbol: "btc"}
-    //         acceptedCrypto.crypto_logo = cryptoLogo;
+  //         let acceptedCrypto = {};
+  //         acceptedCrypto.crypto_name = cryptoName; //{crypto_name: "bitcoin"}
+  //         acceptedCrypto.crypto_symbol = cryptoSymbol; //{crypto_name: "btc", crypto_symbol: "btc"}
+  //         acceptedCrypto.crypto_logo = cryptoLogo;
 
-    //         venue.push(acceptedCrypto);
-    //       }
-    //       newDealItem.push(venue);
-    //       res.json(newDealItem);
-    //     }
-    //   );
-    // } else {
-    //   connection.query(
-    //     "SELECT * FROM cryptos_deals LEFT JOIN crypto_metadata ON crypto_metadata.id = cryptos_deals.crypto_id LEFT JOIN crypto_info ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE cryptos_deals.deal_id = ?",
-    //     [req.params.deal_id],
-    //     function(error, results, fields) {
-    //       if (error) throw error;
+  //         venue.push(acceptedCrypto);
+  //       }
+  //       newDealItem.push(venue);
+  //       res.json(newDealItem);
+  //     }
+  //   );
+  // } else {
+  //   connection.query(
+  //     "SELECT * FROM cryptos_deals LEFT JOIN crypto_metadata ON crypto_metadata.id = cryptos_deals.crypto_id LEFT JOIN crypto_info ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE cryptos_deals.deal_id = ?",
+  //     [req.params.deal_id],
+  //     function(error, results, fields) {
+  //       if (error) throw error;
 
-    //       let seller = [];
+  //       let seller = [];
 
-    //       for (sellerObj in results) {
-    //         let cryptoName = results[sellerObj].crypto_name;
-    //         let cryptoSymbol = results[sellerObj].crypto_symbol;
-    //         let cryptoLogo = results[sellerObj].crypto_logo;
+  //       for (sellerObj in results) {
+  //         let cryptoName = results[sellerObj].crypto_name;
+  //         let cryptoSymbol = results[sellerObj].crypto_symbol;
+  //         let cryptoLogo = results[sellerObj].crypto_logo;
 
-    //         let acceptedCrypto = {};
-    //         acceptedCrypto.crypto_name = cryptoName; //{crypto_name: "bitcoin"}
-    //         acceptedCrypto.crypto_symbol = cryptoSymbol; //{crypto_name: "btc", crypto_symbol: "btc"}
-    //         acceptedCrypto.crypto_logo = cryptoLogo;
+  //         let acceptedCrypto = {};
+  //         acceptedCrypto.crypto_name = cryptoName; //{crypto_name: "bitcoin"}
+  //         acceptedCrypto.crypto_symbol = cryptoSymbol; //{crypto_name: "btc", crypto_symbol: "btc"}
+  //         acceptedCrypto.crypto_logo = cryptoLogo;
 
-    //         seller.push(acceptedCrypto);
-    //       }
-    //       newDealItem.push(seller);
-    //       res.json(newDealItem);
-    //     }
-    //   );
-    // }
+  //         seller.push(acceptedCrypto);
+  //       }
+  //       newDealItem.push(seller);
+  //       res.json(newDealItem);
+  //     }
+  //   );
+  // }
   // });
 });
 
