@@ -48,54 +48,56 @@ router.get("/api/deals/:deal_id/:deal_name", async function(req, res) {
   let venue_name;
   let seller_name;
   let deal_query =
-    "SELECT deals.id AS deal_id, deals.seller_id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.deal_status, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.category, deals.item_condition, deals.weight, deals.shipping_label_status, deals.shipment_cost, users.id AS seller_id, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings, users.phone_number_verified FROM deals LEFT JOIN users ON deals.seller_id = users.id WHERE deals.id = ? AND deals.deal_status <> ?";
-
-  let deal_images_query =
-    "SELECT deal_images.deal_image, deal_images.deal_image_object FROM deals LEFT JOIN deal_images ON deals.id = deal_images.deal_id WHERE deals.id = ? AND deals.deal_status <> ?";
-
-  let deal_category_query =
-    "SELECT category.category_name AS deal_category FROM deals LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN category ON category.id = categories_deals.category_id WHERE deals.id = ? AND deals.deal_status <> ?";
-
-  let deal_query_result, deal_image_result, deal_category_result;
+    "SELECT deals.id AS deal_id, deals.seller_id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.deal_status, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.item_condition, deals.weight, deals.shipping_label_status, deals.shipment_cost, deal_images.deal_image, deal_images.deal_image_object, users.id AS seller_id, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings, users.phone_number_verified, category.category_name AS deal_category FROM deals LEFT JOIN deal_images ON deals.id = deal_images.deal_id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN category ON category.id = categories_deals.category_id WHERE deals.id = ? AND deals.deal_status <> ?";
 
   database
     .query(deal_query, [req.params.deal_id, "deleted"])
     .then(results => {
-      deal_query_result = results;
-      return database.query(deal_images_query, [req.params.deal_id, "deleted"]);
-    })
-    .then(results => {
-      deal_image_result = results;
-      return database.query(deal_category_query, [
-        req.params.deal_id,
-        "deleted"
-      ]);
-    })
-    .then(results => {
-      deal_category_result = results;
-      res.json(deal_image_result);
-      //add function here
-      // res.json({ deal_query_result, deal_image_result, deal_category_result });
+      // res.json(results);
+      res.json(dealItemQuery(results));
+      //create the function here
     })
     .catch(err => {
       res.json(err);
       console.log(err);
     });
 
-  const dealItemQuery = (deal_query_result, deal_image_result, deal_category_result) => {
+  const dealItemQuery = result => {
+    let img = "";
     let images = [];
     let imagesObj = [];
+    let categ = "";
+    let categories = [];
 
-    for(let i = 0; i <= deal_image_result.length; i++) {
-      let image = deal_image_result[i].deal_image;
-      let imageObj = deal_image_result[i].deal_image_object;
-      images.push(image);
-      imagesObj.push(imageObj)
+    //loop through result to get distinct images, image objects, and categories
+    for (let item of result) {
+      //check to see if deal_image is not in the img
+      if (item.deal_image !== img) {
+        let parsedImageObj = JSON.parse(item.deal_image_object);
+
+        images.push(item.deal_image); //store an array of image urls
+        imagesObj.push(parsedImageObj); //store an array of image objects
+
+        //set index image for comparison
+        img = item.deal_image;
+      }
     }
 
-    let addImages = deal_query_result[0][deal_image];
-    //first make an
-  }
+    for (let category of result) {
+      if(category.deal_category !== categ) {
+        categories.push(category.deal_category);
+        categ = category.deal_category;
+      }
+    }
+
+    //since every object in the array is the same, we just use the first object in the array
+    //reassign the deal_image property to images array, same for category and image obj
+    result[0].deal_image = images;
+    result[0].deal_image_object = imagesObj;
+    result[0].deal_category = categories;
+
+    return result[0];
+  };
 
   // connection.query(`${deal_query}`, [req.params.deal_id, "deleted"], function(
   //   error,
