@@ -8,7 +8,7 @@
     "npm": "5.6.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "server": "node server.js",
     "client": "npm run start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
@@ -54,7 +54,6 @@
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "mocha": "^6.0.2"
+    "jest": "^24.7.1"
   }
 }
