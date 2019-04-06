@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const router = express.Router();
 const connection = require("./utils/database");
-const database = require("../model/dbconnection");
+const deal_controller = require("../controllers/dealController");
 const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
 const verifyToken = require("./utils/validation");
@@ -14,99 +14,9 @@ app.use(bodyParser.json());
 app.use(express.static("public"));
 app.use(methodOverride("_method"));
 
-//All methods of deals route
-class Deals {
-  dealItemQuery(result) {
-    let img = "";
-    let images = [];
-    let imagesObj = [];
-    let categ = "";
-    let categories = [];
-
-    //loop through result to get distinct images, image objects, and categories
-    for (let item of result) {
-      //check to see if deal_image is not in the img
-      if (item.deal_image !== img) {
-        let parsedImageObj = JSON.parse(item.deal_image_object);
-
-        images.push(item.deal_image); //store an array of image urls
-        imagesObj.push(parsedImageObj); //store an array of image objects
-
-        //set index image for comparison
-        img = item.deal_image;
-      }
-
-      if (item.deal_category !== categ) {
-        categories.push(item.deal_category);
-        categ = item.deal_category;
-      }
-    }
-
-    //since every object in the array is the same, we just use the first object in the array
-    //reassign the deal_image property to images array, same for category and image obj
-    result[0].deal_image = images;
-    result[0].deal_image_object = imagesObj;
-    result[0].deal_category = categories;
-
-    return result[0];
-  }
-
-  acceptedCryptoQuery(result) {
-    let acceptedCryptos = [];
-    for (let crypto of result) {
-      let acceptedCrypto = {};
-      let cryptoName = crypto.crypto_name;
-      let cryptoSymbol = crypto.crypto_symbol;
-      let cryptoLogo = crypto.crypto_logo;
-
-      //create new properties for acceptedCrypto object
-      acceptedCrypto.crypto_name = cryptoName; //{crypto_name: "bitcoin"}
-      acceptedCrypto.crypto_symbol = cryptoSymbol; //{crypto_name: "bitcoin", crypto_symbol: "btc"}
-      acceptedCrypto.crypto_logo = cryptoLogo;
-
-      acceptedCryptos.push(acceptedCrypto);
-    }
-
-    return acceptedCryptos;
-  }
-}
-
-//create a new deals object
-const deals = new Deals;
-
 //deal item endpoint
-router.get("/api/deals/:deal_id/:deal_name", function(req, res) {
-  // include id param which references the deal id in route to account for if multiple users sell item with same deal_name
-
-  let deal_query =
-    "SELECT deals.id AS deal_id, deals.seller_id, deals.deal_name, deals.deal_description, deals.featured_deal_image, deals.pay_in_dollar, deals.deal_status, deals.pay_in_crypto, deals.date_expired, deals.date_created, deals.item_condition, deals.weight, deals.shipping_label_status, deals.shipment_cost, deal_images.deal_image, deal_images.deal_image_object, users.id AS seller_id, users.username AS seller_name, users.sellers_avg_rating, users.total_sellers_ratings, users.phone_number_verified, category.category_name AS deal_category FROM deals LEFT JOIN deal_images ON deals.id = deal_images.deal_id LEFT JOIN users ON deals.seller_id = users.id LEFT JOIN categories_deals ON deals.id = categories_deals.deals_id LEFT JOIN category ON category.id = categories_deals.category_id WHERE deals.id = ? AND deals.deal_status <> ?";
-
-  let acceptedCrypto_query =
-    "SELECT * FROM cryptos_deals LEFT JOIN crypto_metadata ON crypto_metadata.id = cryptos_deals.crypto_id LEFT JOIN crypto_info ON crypto_info.crypto_metadata_name = crypto_metadata.crypto_name WHERE cryptos_deals.deal_id = ?";
-
-  let deal_query_result, acceptedCrypto_result;
-
-  //this is the array we pass to the client
-  let dealItem = [];
-
-  database
-    .query(deal_query, [req.params.deal_id, "deleted"])
-    .then(results => {
-      deal_query_result = deals.dealItemQuery(results);
-      dealItem.push(deal_query_result);
-
-      return database.query(acceptedCrypto_query, [req.params.deal_id]);
-    })
-    .then(results => {
-      acceptedCrypto_result = deals.acceptedCryptoQuery(results);
-      dealItem.push(acceptedCrypto_result);
-      res.json(dealItem);
-    })
-    .catch(err => {
-      res.json(err);
-      console.log(err);
-    });
-});
+// include id param which references the deal id in route to account for if multiple users sell item with same deal_name
+router.get("/api/deals/:deal_id/:deal_name", deal_controller.deal);
 
 router.get("/api/search", function(req, res) {
   //     console.log("req search");
@@ -206,55 +116,7 @@ router.get("/api/reviews/sellers/:seller_id", function(req, res) {
   );
 });
 
-//get the accepted cryptos from a venue
-// router.get('/api/deals/venue_name', function(req, res) {
-//   connection.query(
-//     'SELECT venues.venue_name, venues.venue_description, crypto_metadata.crypto_name, crypto_metadata.crypto_symbol FROM cryptos_venues LEFT JOIN venues ON venues.id = cryptos_venues.venue_id LEFT JOIN crypto_metadata ON crypto_metadata.id = cryptos_venues.crypto_id WHERE venue_name = ?',
-//     [venue_name],
-//     function(error, results, fields) {
-//       if (error) throw error;
-
-//       let venue = '';
-//       let crypto = '';
-//       let cryptoSymbol = '';
-//       let cryptocurrencies = [];
-//       let crypto_symbols = [];
-//       let newObj = {};
-
-//       results.map((venueObj) => {
-
-//         if (venueObj.venue_name !== venue) {
-//           venue = venueObj.venue_name;
-//           crypto = venueObj.crypto_name;
-//           cryptoSymbol = venueObj.crypto_symbol;
-
-//           //when it's a new venue_name, empty the cryptocurrencies array
-//           cryptocurrencies = [];
-//           cryptocurrencies.push(crypto);
-//           crypto_symbols = [];
-//           crypto_symbols.push(cryptoSymbol);
-//           newObj[venueObj.venue_name] = [cryptocurrencies, crypto_symbols];
-
-//         } else {
-//           crypto = venueObj.crypto_name;
-//           cryptocurrencies.push(crypto);
-//           cryptoSymbol = venueObj.crypto_symbol;
-//           crypto_symbols.push(cryptoSymbol);
-//           newObj[venueObj.venue_name] = [cryptocurrencies, crypto_symbols];
-//         }
-
-//         return newObj;
-//       });
-
-//       res.json(newObj);
-//     }
-//   );
-// });
-
-// });
-
 // check if user can update the tracking number
-
 router.post("/can_update_tracking", verifyToken, function(req, res) {
   let seller_id = req.decoded._id;
   let { deal_id } = req.body;
