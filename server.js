@@ -10,6 +10,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //support parsing of application/json type post data
 app.use(bodyParser.json());
 
+// need methodOverride for user_profile routes
+const  methodOverride = require('method-override');
+app.use(methodOverride('_method'));
 const fetchData = require("./routes/utils/fetchData");
 const path = require("path");
 
