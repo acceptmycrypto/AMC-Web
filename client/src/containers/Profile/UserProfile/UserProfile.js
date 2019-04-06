@@ -14,7 +14,7 @@ import { bindActionCreators } from 'redux';
 import { _updateCryptoTable, _verifyUser } from "../../../services/UserProfileService";
 import { _loadProfile } from "../../../actions/userLoadActions";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
-import { handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos, _handleInitiateWithdraw, openWithdrawModal, _handleConfirmedWithdraw,  onEditWithdrawConfirmationToken } from "../../../actions/cryptoPortfolioActions";
+import { handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos, _handleInitiateWithdraw, openWithdrawModal, _handleConfirmedWithdraw,  onEditWithdrawConfirmationToken, resetCryptoPortfolio} from "../../../actions/cryptoPortfolioActions";
 import { resetDealitemState } from "../../../actions/dealItemActions";
 import Modal from "react-awesome-modal";
 import { closeModal } from "../../../actions/signInActions";
@@ -23,13 +23,13 @@ import LoadingSpinner from "../../../components/UI/LoadingSpinner";
 class UserProfile extends Component {
 
   componentDidMount = async () => {
-    // await console.log(this.props.userLoggedIn);
+  
     await this.props._isLoggedIn(localStorage.getItem('token'));
 
-    // await console.log(this.props.userLoggedIn);
-
     if (await this.props.userLoggedIn) {
+      await this.props.resetCryptoPortfolio();
       await this.props._loadProfile(localStorage.getItem('token'));
+      
     }else{
         // localStorage.removeItem('token');
         await this.props.history.push('/');
@@ -218,7 +218,7 @@ const mapStateToProps = state => ({
 });
 
 const matchDispatchToProps = dispatch =>{
-  return bindActionCreators({_isLoggedIn, _loadProfile, handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos, resetDealitemState, _handleInitiateWithdraw, openWithdrawModal, closeModal, onEditWithdrawConfirmationToken, _handleConfirmedWithdraw}, dispatch);
+  return bindActionCreators({_isLoggedIn, _loadProfile, handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos, resetDealitemState, _handleInitiateWithdraw, openWithdrawModal, closeModal, onEditWithdrawConfirmationToken, _handleConfirmedWithdraw, resetCryptoPortfolio}, dispatch);
 }
 
 
