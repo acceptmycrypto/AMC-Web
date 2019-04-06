@@ -15,7 +15,8 @@ import {
   WITHDRAW_CONFIRM_SUCCESS,
   WITHDRAW_CONFIRM_FAILURE,
   OPEN_WITHDRAW_MODAL,
-  EDIT_WITHDRAW_CONFIRMATION_TOKEN
+  EDIT_WITHDRAW_CONFIRMATION_TOKEN,
+  RESET_CRYPTO_PORTFOLIO
 
 } from "../actions/cryptoPortfolioActions";
 import {
@@ -225,6 +226,10 @@ export default function userInfoReducer(state = initialState, action) {
       return {
           ...state,
           withdrawConfirmationToken: action.payload
+      }
+    case RESET_CRYPTO_PORTFOLIO:
+      return {
+        ...initialState
       }
 
     default:
