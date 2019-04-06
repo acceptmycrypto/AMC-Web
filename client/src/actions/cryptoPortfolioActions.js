@@ -29,6 +29,7 @@ export const WITHDRAW_CONFIRM_BEGIN = "WITHDRAW_CONFIRM_BEGIN";
 export const WITHDRAW_CONFIRM_SUCCESS = "WITHDRAW_CONFIRM_SUCCESS";
 export const WITHDRAW_CONFIRM_FAILURE = "WITHDRAW_CONFIRM_FAILURE";
 export const EDIT_WITHDRAW_CONFIRMATION_TOKEN = "EDIT_WITHDRAW_CONFIRMATION_TOKEN";
+export const RESET_CRYPTO_PORTFOLIO = "RESET_CRYPTO_PORTFOLIO";
 
 /**
  * action creators return actions
@@ -187,6 +188,7 @@ export const handleQRChange = (event, qr_shown) => {
   * @member {function} fetchCryptoUpdateFailure
 */
 export function updateCryptos(event, id, current_crypto_name, token) {
+   
     event.preventDefault();
 
     let crypto_address = document.querySelector("#addressFormInput").value.trim();
@@ -208,7 +210,7 @@ export function updateCryptos(event, id, current_crypto_name, token) {
         },
         body: JSON.stringify({ token })
     };
-
+   
     return dispatch => {
         dispatch(fetchCryptoUpdateBegin());
         return Promise.all([
@@ -446,3 +448,10 @@ export const onEditWithdrawConfirmationToken = (event) => {
       payload: event.target.value
   }
 };
+
+
+export const resetCryptoPortfolio = () => {
+    return{
+        type: RESET_CRYPTO_PORTFOLIO
+    }
+}
