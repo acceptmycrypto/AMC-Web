@@ -1,6 +1,18 @@
 export const FETCH_CREATE_CHAT_SESSION_BEGIN = "FETCH_CREATE_CHAT_SESSION_BEGIN";
 export const FETCH_CREATE_CHAT_SESSION_SUCCESS = "FETCH_CREATE_CHAT_SESSION_SUCCESS";
 export const FETCH_CREATE_CHAT_SESSION_FAILURE = "FETCH_CREATE_CHAT_SESSION_FAILURE";
+export const ADD_CHAT_MESSAGE_SUCCESS = "ADD_CHAT_MESSAGE_SUCCESS";
+export const ADD_CHAT_MESSAGE_FAILURE = "ADD_CHAT_MESSAGE_FAILURE";
+export const FETCH_CHAT_SESSIONS_BEGIN = "FETCH_CHAT_SESSIONS_BEGIN";
+export const FETCH_CHAT_SESSIONS_SUCCESS = "FETCH_CHAT_SESSIONS_SUCCESS";
+export const FETCH_CHAT_SESSIONS_FAILURE = "FETCH_CHAT_SESSIONS_FAILURE";
+export const FETCH_CHAT_MESSAGES_BEGIN = "FETCH_CHAT_MESSAGES_BEGIN";
+export const FETCH_CHAT_MESSAGES_SUCCESS = "FETCH_CHAT_MESSAGES_SUCCESS";
+export const FETCH_CHAT_MESSAGES_FAILURE = "FETCH_CHAT_MESSAGES_FAILURE";
+export const DELETE_CHAT_SESSIONS_BEGIN = "DELETE_CHAT_SESSIONS_BEGIN";
+export const DELETE_CHAT_SESSIONS_SUCCESS = "DELETE_CHAT_SESSIONS_SUCCESS";
+export const DELETE_CHAT_SESSIONS_FAILURE = "DELETE_CHAT_SESSIONS_FAILURE";
+export const EDIT_CHAT_MESSAGE = "EDIT_CHAT_MESSAGE";
 
 export function _createChatSession(token, seller_id, deal_id) {
 
@@ -41,9 +53,7 @@ export const fetchCreateChatSessionFailure = error => ({
 });
 
 //load chat sessions
-export const FETCH_CHAT_SESSIONS_BEGIN = "FETCH_CHAT_SESSIONS_BEGIN";
-export const FETCH_CHAT_SESSIONS_SUCCESS = "FETCH_CHAT_SESSIONS_SUCCESS";
-export const FETCH_CHAT_SESSIONS_FAILURE = "FETCH_CHAT_SESSIONS_FAILURE";
+
 
 export function _loadChatSessions(token) {
 
@@ -84,9 +94,7 @@ export const fetchChatSessionsFailure = error => ({
 });
 
 //load chat messages
-export const FETCH_CHAT_MESSAGES_BEGIN = "FETCH_CHAT_MESSAGES_BEGIN";
-export const FETCH_CHAT_MESSAGES_SUCCESS = "FETCH_CHAT_MESSAGES_SUCCESS";
-export const FETCH_CHAT_MESSAGES_FAILURE = "FETCH_CHAT_MESSAGES_FAILURE";
+
 
 export function _loadChatMessages(token, chat_session_id) {
 
@@ -128,8 +136,7 @@ export const fetchChatMessagesFailure = error => ({
 
 //add chat message
 //load chat messages
-export const ADD_CHAT_MESSAGE_SUCCESS = "ADD_CHAT_MESSAGE_SUCCESS";
-export const ADD_CHAT_MESSAGE_FAILURE = "ADD_CHAT_MESSAGE_FAILURE";
+
 
 export function _addChatMessage(token, chat_session_id, message, recipientEmailUser_id) {
 
@@ -164,9 +171,7 @@ export const addChatMessageFailure = error => ({
   payload: { error }
 });
 
-export const DELETE_CHAT_SESSIONS_BEGIN = "DELETE_CHAT_SESSIONS_BEGIN";
-export const DELETE_CHAT_SESSIONS_SUCCESS = "DELETE_CHAT_SESSIONS_SUCCESS";
-export const DELETE_CHAT_SESSIONS_FAILURE = "DELETE_CHAT_SESSIONS_FAILURE";
+
 
 export function _deleteChatSession(token, chat_session_id) {
   const settings = {
@@ -205,7 +210,7 @@ export const deleteChatSessionFailure = error => ({
   payload: { error }
 });
 
-export const EDIT_CHAT_MESSAGE = "EDIT_CHAT_MESSAGE";
+
 export const onMessageEdit = (event) => {
   return {
       type: 'EDIT_CHAT_MESSAGE',
