@@ -1,3 +1,11 @@
+export const CREATE_PAYPAL_TRANSACTION_BEGIN = "CREATE_PAYPAL_TRANSACTION_BEGIN";
+export const CREATE_PAYPAL_TRANSACTION_SUCCESS = "CREATE_PAYPAL_TRANSACTION_SUCCESS";
+export const CREATE_PAYPAL_TRANSACTION_FAILURE = "CREATE_PAYPAL_TRANSACTION_FAILURE";
+export const EXECUTE_PAYPAL_TRANSACTION_BEGIN = "EXECUTE_PAYPAL_TRANSACTION_BEGIN";
+export const EXECUTE_PAYPAL_TRANSACTION_SUCCESS = "EXECUTE_PAYPAL_TRANSACTION_SUCCESS";
+export const  EXECUTE_PAYPAL_TRANSACTION_FAILURE = "EXECUTE_PAYPAL_TRANSACTION_FAILURE";
+
+
 export function _paypal(
   token,
   dealItem,
@@ -38,16 +46,16 @@ export function _paypal(
 }
 
 export const createPaypalTransactionBegin = () => ({
-  type: "CREATE_PAYPAL_TRANSACTION_BEGIN",
+  type: CREATE_PAYPAL_TRANSACTION_BEGIN,
 });
 
 export const createPaypalTransactionSuccess = paypalTransaction => ({
-  type: "CREATE_PAYPAL_TRANSACTION_SUCCESS",
+  type: CREATE_PAYPAL_TRANSACTION_SUCCESS,
   payload: { paypalTransaction }
 });
 
 export const createPaypalTransactionFailure = error => ({
-  type: "CREATE_PAYPAL_TRANSACTION_FAILURE",
+  type: CREATE_PAYPAL_TRANSACTION_FAILURE,
   payload: { error }
 });
 
@@ -75,15 +83,15 @@ export function _executePayPalPayment(token, payerId, paymentId, deal_id, deal_n
 }
 
 export const executePaypalTransactionBegin = () => ({
-  type: "EXECUTE_PAYPAL_TRANSACTION_BEGIN",
+  type: EXECUTE_PAYPAL_TRANSACTION_BEGIN,
 });
 
 export const executePaypalTransactionSuccess = paypalTransactionExecution => ({
-  type: "EXECUTE_PAYPAL_TRANSACTION_SUCCESS",
+  type: EXECUTE_PAYPAL_TRANSACTION_SUCCESS,
   payload: { paypalTransactionExecution }
 });
 
 export const executePaypalTransactionFailure = error => ({
-  type: "EXECUTE_PAYPAL_TRANSACTION_FAILURE",
+  type: EXECUTE_PAYPAL_TRANSACTION_FAILURE,
   payload: { error }
 });
