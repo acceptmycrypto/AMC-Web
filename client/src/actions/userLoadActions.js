@@ -28,28 +28,28 @@ export function _loadProfile(token) {
         if (transactions !== undefined && transactions.length > 0) {
           let confirmed = transactions.filter(order => order.payment_received === 1);
           let pending = transactions.filter(order => order.payment_received === 0);
-          return([user_info, user_crypto, transactions, confirmed, pending]);
+          return ([user_info, user_crypto, transactions, confirmed, pending]);
 
-        }else{
-          let confirmed  = [];
+        } else {
+          let confirmed = [];
           let pending = [];
-          return([user_info, user_crypto, transactions, confirmed, pending]);
+          return ([user_info, user_crypto, transactions, confirmed, pending]);
         }
-      }).then(([user_info, user_crypto, transactions, confirmed, pending])=>{
+      }).then(([user_info, user_crypto, transactions, confirmed, pending]) => {
 
-          // console.log(user_info, user_crypto, transactions, confirmed, pending);
-        if(confirmed.length == 0){
+        // console.log(user_info, user_crypto, transactions, confirmed, pending);
+        if (confirmed.length == 0) {
           let tx_history_view = "pending";
-          return([user_info, user_crypto, transactions, confirmed, pending, tx_history_view]);
-        }else{
+          return ([user_info, user_crypto, transactions, confirmed, pending, tx_history_view]);
+        } else {
           let tx_history_view = "confirmed";
-          return([user_info, user_crypto, transactions, confirmed, pending, tx_history_view]);
+          return ([user_info, user_crypto, transactions, confirmed, pending, tx_history_view]);
         }
 
       }).then(([user_info, user_crypto, transactions, confirmed, pending, tx_history_view]) => {
 
         dispatch(fetchUserSuccess(user_info, user_crypto, transactions, confirmed, pending, tx_history_view));
-      
+
         return (user_info, user_crypto, transactions, confirmed, pending, tx_history_view);
       })
       .catch(error => dispatch(fetchUserFailure(error)));
@@ -71,42 +71,42 @@ export const fetchUserFailure = error => ({
   payload: { error }
 });
 
-export const changeTxHistoryView = (event, new_tx_state, token) =>{
-     event.preventDefault();
+export const changeTxHistoryView = (event, new_tx_state, token) => {
+  event.preventDefault();
 
-     const settings = {
-      method: "POST",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({token})
-    };
+  const settings = {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ token })
+  };
 
-    return dispatch => {
-      dispatch(fetchTransactionsBegin());
-      return fetch("/profile/user/transactions", settings)
-        .then((res) => res.json())
-        .then((transactions) => {
-          if (transactions !== undefined && transactions.length > 0) {
-            let confirmed = transactions.filter(order => order.payment_received === 1);
-            let pending = transactions.filter(order => order.payment_received === 0);
-            return([transactions, confirmed, pending]);
+  return dispatch => {
+    dispatch(fetchTransactionsBegin());
+    return fetch("/profile/user/transactions", settings)
+      .then((res) => res.json())
+      .then((transactions) => {
+        if (transactions !== undefined && transactions.length > 0) {
+          let confirmed = transactions.filter(order => order.payment_received === 1);
+          let pending = transactions.filter(order => order.payment_received === 0);
+          return ([transactions, confirmed, pending]);
 
-          }else{
-            let confirmed  = [];
-            let pending = [];
-            return([transactions, confirmed, pending]);
-          }
-        }).then(([transactions, confirmed, pending])=>{
+        } else {
+          let confirmed = [];
+          let pending = [];
+          return ([transactions, confirmed, pending]);
+        }
+      }).then(([transactions, confirmed, pending]) => {
 
-          console.log(transactions, confirmed, pending, new_tx_state);
+        console.log(transactions, confirmed, pending, new_tx_state);
 
-          dispatch(fetchTransactionsSuccess(transactions, confirmed, pending, new_tx_state));
-          return (transactions, confirmed, pending, new_tx_state);
-        })
-        .catch(error => dispatch(fetchTransactionsFailure(error)));
-    };
+        dispatch(fetchTransactionsSuccess(transactions, confirmed, pending, new_tx_state));
+        return (transactions, confirmed, pending, new_tx_state);
+      })
+      .catch(error => dispatch(fetchTransactionsFailure(error)));
+  };
 }
 
 export const fetchTransactionsBegin = () => ({
