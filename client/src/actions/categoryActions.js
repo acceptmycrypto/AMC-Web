@@ -1,3 +1,12 @@
+export const FETCH_CATEGORY_BEGIN = "FETCH_CATEGORY_BEGIN";
+export const FETCH_CATEGORY_SUCCESS = "FETCH_CATEGORY_SUCCESS";
+export const FETCH_CATEGORY_FAILURE = "FETCH_CATEGORY_FAILURE";
+export const FILTER_DEALS_BY_CATEGORY= "FILTER_DEALS_BY_CATEGORY";
+export const CATEGORIES_DEALS_BEGIN = "CATEGORIES_DEALS_BEGIN";
+export const CATEGORIES_DEALS_SUCCESS = "CATEGORIES_DEALS_SUCCESS";
+export const CATEGORIES_DEALS_FAILURE = "CATEGORIES_DEALS_FAILURE";
+
+
 export function _loadCategory() {
   const settings = {
     method: "GET",
@@ -32,16 +41,16 @@ export function _loadCategory() {
 }
 
 export const fetchCategoryBegin = () => ({
-  type: "FETCH_CATEGORY_BEGIN"
+  type: FETCH_CATEGORY_BEGIN
 });
 
 export const fetchCategorySuccess = parentCategory => ({
-  type: "FETCH_CATEGORY_SUCCESS",
+  type: FETCH_CATEGORY_SUCCESS,
   payload: {parentCategory}
 });
 
 export const fetchCategoryFailure = error => ({
-  type: "FETCH_CATEGORY_FAILURE",
+  type: FETCH_CATEGORY_FAILURE,
   payload: { error }
 });
 
@@ -55,7 +64,7 @@ export const filterCategory = (category, allDeals) => {
   });
 
   return {
-      type: "FILTER_DEALS_BY_CATEGORY",
+      type: FILTER_DEALS_BY_CATEGORY,
       payload: {
         categorizedDeals,
         category
@@ -79,16 +88,16 @@ export const categoryDeals = (categoryTerm, page) => {
 }
 
 export const categoryDealsBegin = (categoryTerm) => ({
-  type: "CATEGORIES_DEALS_BEGIN"
+  type: CATEGORIES_DEALS_BEGIN
 });
 
 export const categoryDealSuccess = (categoryTerm, categoriesDeals, categoryPage, categoryNumberOfResults) => ({
-  type: "CATEGORIES_DEALS_SUCCESS",
+  type: CATEGORIES_DEALS_SUCCESS,
   payload: {categoryTerm, categoriesDeals, categoryPage, categoryNumberOfResults }
 });
 
 export const categoryDealsFailure = (error) => ({
-  type: "CATEGORIES_DEALS_FAILURE",
+  type: CATEGORIES_DEALS_FAILURE,
   payload: { error }
 });
 
