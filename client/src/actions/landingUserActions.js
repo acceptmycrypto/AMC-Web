@@ -1,3 +1,7 @@
+export const LOAD_CRYPTO_LANDING_BEGIN = "LOAD_CRYPTO_LANDING_BEGIN";
+export const LOAD_CRYPTO_LANDING_SUCCESS = "LOAD_CRYPTO_LANDING_SUCCESS";
+export const LOAD_CRYPTO_LANDING_FAILURE = "LOAD_CRYPTO_LANDING_FAILURE";
+
 export function _loadLandingDropdown() {
 
     return dispatch => {
@@ -30,15 +34,15 @@ export function _loadLandingDropdown() {
 
 
   export const loadCryptoBegin = () => ({
-    type: "LOAD_CRYPTO_LANDING_BEGIN"
+    type: LOAD_CRYPTO_LANDING_BEGIN
   });
 
   export const loadCryptoSuccess = landingCryptoOptions => ({
-    type: "LOAD_CRYPTO_LANDING_SUCCESS",
+    type: LOAD_CRYPTO_LANDING_SUCCESS,
     payload: { landingCryptoOptions }
   });
 
   export const loadCryptoFailure = error => ({
-    type: "LOAD_CRYPTO_LANDING_FAILURE",
+    type: LOAD_CRYPTO_LANDING_FAILURE,
     payload: { error }
   });

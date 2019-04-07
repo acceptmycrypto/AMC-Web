@@ -1,4 +1,6 @@
-
+export const LOAD_CRYPTO_RESULTS_BEGIN = "LOAD_CRYPTO_RESULTS_BEGIN";
+export const LOAD_CRYPTO_RESULTS_SUCCESS = "LOAD_CRYPTO_RESULTS_SUCCESS";
+export const LOAD_CRYPTO_RESULTS_FAILURE = "LOAD_CRYPTO_RESULTS_FAILURE";
 
 export function _loadCryptoResults() {
 
@@ -18,15 +20,15 @@ export function _loadCryptoResults() {
 
 
   export const loadCryptoResultsBegin = () => ({
-    type: "LOAD_CRYPTO_RESULTS_BEGIN"
+    type: LOAD_CRYPTO_RESULTS_BEGIN
   });
 
   export const loadCryptoResultsSuccess = cryptoResults => ({
-    type: "LOAD_CRYPTO_RESULTS_SUCCESS",
+    type: LOAD_CRYPTO_RESULTS_SUCCESS,
     payload: { cryptoResults }
   });
 
   export const loadCryptoResultsFailure = error => ({
-    type: "LOAD_CRYPTO_RESULTS_FAILURE",
+    type: LOAD_CRYPTO_RESULTS_FAILURE,
     payload: { error }
   });
