@@ -1,6 +1,63 @@
 export const UPDATING_EDITING_DEAL_BEGIN = "UPDATING_EDITING_DEAL_BEGIN";
 export const UPDATING_EDITING_DEAL_SUCCESS = "UPDATING_EDITING_DEAL_SUCCESS";
 export const UPDATING_EDITING_DEAL_FAILURE = "UPDATING_EDITING_DEAL_FAILURE";
+export const UPLOADING_IMAGES_BEGIN = "UPLOADING_IMAGES_BEGIN";
+export const UPLOADING_IMAGES_SUCCESS = "UPLOADING_IMAGES_SUCCESS";
+export const UPLOADING_IMAGES_FAILURE = "UPLOADING_IMAGES_FAILURE";
+export const VIEW_UPLOADED_IMAGE = "VIEW_UPLOADED_IMAGE";
+export const REMOVE_UPLOADED_IMAGE = "REMOVE_UPLOADED_IMAGE";
+export const SHOW_PHOTOS_UPLOADING = "SHOW_PHOTOS_UPLOADING";
+export const SHOW_PRICING = "SHOW_PRICING";
+export const SHOW_DESCRIPTION = "SHOW_DESCRIPTION";
+export const CHANGE_DISCOUNT_PERCENTAGE = "CHANGE_DISCOUNT_PERCENTAGE";
+export const CHANGE_BASE_PRICE = "CHANGE_BASE_PRICE" ;
+export const ONBLUR_BASE_PRICE_INPUT = "ONBLUR_BASE_PRICE_INPUT";
+export const GET_RATE_BEGIN = "GET_RATE_BEGIN";
+export const GET_RATE_SUCCESS = "GET_RATE_SUCCESS";
+export const GET_RATE_FAILURE = "GET_RATE_FAILURE";
+export const REMOVE_SELECTED_CRYPTO = "REMOVE_SELECTED_CRYPTO";
+export const SELECT_LABEL_OPTION_PREPAID = "SELECT_LABEL_OPTION_PREPAID";
+export const SELECT_LABEL_OPTION_SELLER = "SELECT_LABEL_OPTION_SELLER";
+export const SELECT_WEIGHT_OPTION = "SELECT_WEIGHT_OPTION";
+export const EXIT_SHIPPING_MODAL = "EXIT_SHIPPING_MODAL";
+export const SAVE_SHIPPING_MODAL = "SAVE_SHIPPING_MODAL";
+export const SHOW_WEIGHT_MODAL = "SHOW_WEIGHT_MODAL";
+export const SELLER_EARNS_CRYPTO = "SELLER_EARNS_CRYPTO";
+export const SELLER_EARNS_USD = "SELLER_EARNS_USD";
+export const EDIT_DEAL_NAME = "EDIT_DEAL_NAME";
+export const EDIT_DETAIL = "EDIT_DETAIL";
+export const SELECT_CATEGORY = "SELECT_CATEGORY";
+export const SELECT_CONDITION = "SELECT_CONDITION";
+export const CREATING_DEAL_BEGIN = "CREATING_DEAL_BEGIN";
+export const CREATING_DEAL_SUCCESS = "CREATING_DEAL_SUCCESS";
+export const CREATING_DEAL_FAILURE = "CREATING_DEAL_FAILURE";
+export const OPEN_MODAL_PHONE_VERIFICATION = "OPEN_MODAL_PHONE_VERIFICATION";
+export const CLOSE_DEAL_CREATED_MODAL = "CLOSE_DEAL_CREATED_MODAL"; 
+export const RESET_DEAL_CREATED = "RESET_DEAL_CREATED";
+export const EDIT_PHONE_NUMBER = "EDIT_PHONE_NUMBER";
+export const EDIT_SELLER_FIRSTNAME = "EDIT_SELLER_FIRSTNAME";
+export const EDIT_SELLER_LASTNAME = "EDIT_SELLER_LASTNAME";
+export const EDIT_SELLER_ADDRESS = "EDIT_SELLER_ADDRESS";
+export const EDIT_SELLER_CITY = "EDIT_SELLER_CITY";
+export const EDIT_SELLER_STATE = "EDIT_SELLER_STATE";
+export const EDIT_SELLER_ZIPCODE = "EDIT_SELLER_ZIPCODE";
+export const VERIFY_SELLER_BEGIN = "VERIFY_SELLER_BEGIN";
+export const VERIFY_SELLER_SUCCESS = "VERIFY_SELLER_SUCCESS";
+export const VERIFY_SELLER_FAILURE = "VERIFY_SELLER_FAILURE";
+export const EDIT_SELLER_VERIFICATION_TOKEN = "EDIT_SELLER_VERIFICATION_TOKEN";
+export const CHECK_CODE_BEGIN = "CHECK_CODE_BEGIN";
+export const CHECK_CODE_SUCCESS = "CHECK_CODE_SUCCESS";
+export const CHECK_CODE_FAILURE = "CHECK_CODE_FAILURE";
+export const EDIT_LISTING = "EDIT_LISTING";
+export const RESET_EDIT_LISTING = "RESET_EDIT_LISTING";
+export const OPEN_ALERT_EDIT_CANCEL_MODAL = "OPEN_ALERT_EDIT_CANCEL_MODAL";
+export const CLOSE_ALERT_EDIT_CANCEL_MODAL = "CLOSE_ALERT_EDIT_CANCEL_MODAL";
+export const OPEN_DELETE_ALERT_MODAL = "OPEN_DELETE_ALERT_MODAL";
+export const CLOSE_DELETE_ALERT_MODAL = "CLOSE_DELETE_ALERT_MODAL";
+export const DELETE_DEAL_BEGIN = "DELETE_DEAL_BEGIN";
+export const DELETE_DEAL_SUCCESS = "DELETE_DEAL_SUCCESS";
+export const DELETE_DEAL_FAILURE = "DELETE_DEAL_FAILURE"; 
+
 
 export function _uploadImage(token, imageData) {
   //once image is uploaded, push that image to the state
@@ -25,28 +82,28 @@ export function _uploadImage(token, imageData) {
 }
 
 export const uploadingImageBegin = () => ({
-  type: "UPLOADING_IMAGES_BEGIN"
+  type: UPLOADING_IMAGES_BEGIN
 });
 
 export const uploadingImageSuccess = imageData => ({
-  type: "UPLOADING_IMAGES_SUCCESS",
+  type: UPLOADING_IMAGES_SUCCESS,
   payload: imageData
 });
 
 export const uploadingImageFailure = error => ({
-  type: "UPLOADING_IMAGES_FAILURE",
+  type: UPLOADING_IMAGES_FAILURE,
   payload: { error }
 });
 
 export const onSelectImageToView = (event) => {
   return {
-      type: 'VIEW_UPLOADED_IMAGE',
-      payload: event.target.getAttribute('src')
+      type: VIEW_UPLOADED_IMAGE,
+      payload: event.target.getAttribute("src")
   }
 };
 
 export function _removeImage(token, imageKey, deal_editing) {
-  //this action is being called when user's click X on image
+  //this action is being called when user"s click X on image
 
   const settings = {
     method: "POST",
@@ -63,14 +120,14 @@ export function _removeImage(token, imageKey, deal_editing) {
   }
 
   return {
-    type: 'REMOVE_UPLOADED_IMAGE',
+    type: REMOVE_UPLOADED_IMAGE,
     payload: imageKey
   }
 }
 
 export const handleUploadingPhotosStep = () => {
   return {
-    type: "SHOW_PHOTOS_UPLOADING",
+    type: SHOW_PHOTOS_UPLOADING,
     payload: {
       showPhotosStep: true,
       showPricingStep: false,
@@ -81,7 +138,7 @@ export const handleUploadingPhotosStep = () => {
 
 export const handlePricingStep = () => {
   return {
-    type: "SHOW_PRICING",
+    type: SHOW_PRICING,
     payload: {
       showPhotosStep: false,
       showPricingStep: true,
@@ -92,7 +149,7 @@ export const handlePricingStep = () => {
 
 export const handleDescriptionStep = () => {
   return {
-    type: "SHOW_DESCRIPTION",
+    type: SHOW_DESCRIPTION,
     payload: {
       showPhotosStep: false,
       showPricingStep: false,
@@ -103,7 +160,7 @@ export const handleDescriptionStep = () => {
 
 export const onDiscountPercentageToChange = (event) => {
   return {
-      type: 'CHANGE_DISCOUNT_PERCENTAGE',
+      type: CHANGE_DISCOUNT_PERCENTAGE,
       payload: event.target.value
   }
 };
@@ -111,7 +168,7 @@ export const onDiscountPercentageToChange = (event) => {
 export const OnUSDPriceChange = (event) => {
 
   return {
-      type: 'CHANGE_BASE_PRICE',
+      type: CHANGE_BASE_PRICE,
       payload: event.target.value
   }
 };
@@ -119,7 +176,7 @@ export const OnUSDPriceChange = (event) => {
 export const validateDecimalForBasePrice = (event) => {
   let basePrice = parseFloat(event.target.value).toFixed(2);
   return {
-      type: 'ONBLUR_BASE_PRICE_INPUT',
+      type: ONBLUR_BASE_PRICE_INPUT,
       payload: basePrice
   }
 };
@@ -150,22 +207,22 @@ export function _getCryptoExchange(token, crypto_symbol, price_in_crypto) {
 }
 
 export const getRateBegin = crypto_symbol => ({
-  type: "GET_RATE_BEGIN",
+  type: GET_RATE_BEGIN,
   payload: {crypto_symbol}
 });
 
 export const getRateSuccess = (crypto_symbol, crypto_amount) => ({
-  type: "GET_RATE_SUCCESS",
+  type: GET_RATE_SUCCESS,
   payload: {crypto_symbol, crypto_amount}
 });
 
 export const getRateFailure = error => ({
-  type: "GET_RATE_FAILURE",
+  type: GET_RATE_FAILURE,
   payload: { error }
 });
 
 export const removeSelectedCrypto = (crypto_symbol) => ({
-  type: "REMOVE_SELECTED_CRYPTO",
+  type: REMOVE_SELECTED_CRYPTO,
   payload: { crypto_symbol }
 });
 
@@ -173,12 +230,12 @@ export const removeSelectedCrypto = (crypto_symbol) => ({
 export const shippingLabelOption = event => {
   if(event.target.value === "prepaid"){
     return({
-      type: "SELECT_LABEL_OPTION_PREPAID",
+      type: SELECT_LABEL_OPTION_PREPAID,
       payload: event.target.value
     });
   }else{
     return({
-      type: "SELECT_LABEL_OPTION_SELLER",
+      type: SELECT_LABEL_OPTION_SELLER,
       payload: event.target.value
     });
   }
@@ -202,57 +259,57 @@ export const weightOption = event => {
     shippingPriceSelection= 50.00;
   }
   return({
-    type: "SELECT_WEIGHT_OPTION",
+    type: SELECT_WEIGHT_OPTION,
     payload: {shippingWeightSelection: event.target.value, shippingPriceSelection: shippingPriceSelection.toFixed(2)}
   });
 
 };
 
 export const _exitShippingModal = () => ({
-  type: "EXIT_SHIPPING_MODAL",
+  type: EXIT_SHIPPING_MODAL,
 });
 
 export const _saveShippingModal = (priceInUSD, priceInCrypto) => ({
-  type: "SAVE_SHIPPING_MODAL",
+  type: SAVE_SHIPPING_MODAL,
   payload: {priceInUSD, priceInCrypto}
 });
 
 
 export const _showWeightModal = () => ({
-  type: "SHOW_WEIGHT_MODAL",
+  type: SHOW_WEIGHT_MODAL,
 });
 
 
 export const _sellerEarnCrypto = (sellerEarnsCrypto, sellerProfitsCrypto) =>({
-  type: "SELLER_EARNS_CRYPTO",
+  type: SELLER_EARNS_CRYPTO,
   payload: {sellerEarnsCrypto, sellerProfitsCrypto}
 });
 
 export const _sellerEarnUSD = (sellerEarnsUSD, sellerProfitsUSD) =>({
-  type: "SELLER_EARNS_USD",
+  type: SELLER_EARNS_USD,
   payload: {sellerEarnsUSD, sellerProfitsUSD}
 });
 
 export const onEditingDealName = event => ({
-  type: "EDIT_DEAL_NAME",
+  type: EDIT_DEAL_NAME,
   payload: event.target.value
 });
 
 export const onEditingDetail = editorState => ({
-  type: "EDIT_DETAIL",
+  type: EDIT_DETAIL,
   payload: editorState
 });
 
 export const handleSelectedCategory = (categoriesSelected) => {
   return {
-    type: 'SELECT_CATEGORY',
+    type: SELECT_CATEGORY,
     payload: {categoriesSelected}
   }
 };
 
 export const handleSelectedCondition = (selectedCondition) => {
   return {
-    type: 'SELECT_CONDITION',
+    type: SELECT_CONDITION,
     payload: {selectedCondition}
   }
 };
@@ -288,16 +345,16 @@ export function _submitDeal(token, dealName, category, selectedCondition, textDe
 }
 
 export const creatingDealBegin = () => ({
-  type: "CREATING_DEAL_BEGIN"
+  type: CREATING_DEAL_BEGIN
 });
 
 export const creatingDealSuccess = dealCreated => ({
-  type: "CREATING_DEAL_SUCCESS",
+  type: CREATING_DEAL_SUCCESS,
   payload: dealCreated
 });
 
 export const creatingDealFailure = error => ({
-  type: "CREATING_DEAL_FAILURE",
+  type: CREATING_DEAL_FAILURE,
   payload: { error }
 });
 
@@ -348,54 +405,54 @@ export const editingDealFailure = error => ({
 
 export const openModalForPhoneVerification = () => {
   return {
-    type: "OPEN_MODAL_PHONE_VERIFICATION",
+    type: OPEN_MODAL_PHONE_VERIFICATION,
   };
 };
 
 export const closeModalAfterDealCreated = () => {
   return {
-    type: "CLOSE_DEAL_CREATED_MODAL", //what does the action do = title of action
+    type: CLOSE_DEAL_CREATED_MODAL, //what does the action do = title of action
     payload: { modalVisible: false } // any data you need to return
   };
 };
 
 export const resetListDeal = () => {
   return {
-      type: "RESET_DEAL_CREATED"
+      type: RESET_DEAL_CREATED
   };
 };
 
 export const onEditPhoneNumber = (event) => {
   return {
-      type: 'EDIT_PHONE_NUMBER',
+      type: EDIT_PHONE_NUMBER,
       payload: event.target.value
   }
 };
 
 export const onEditSellerFirstname = (event) => {
   return {
-      type: 'EDIT_SELLER_FIRSTNAME',
+      type: EDIT_SELLER_FIRSTNAME,
       payload: event.target.value
   }
 };
 
 export const onEditSellerLastname = (event) => {
   return {
-      type: 'EDIT_SELLER_LASTNAME',
+      type: EDIT_SELLER_LASTNAME,
       payload: event.target.value
   }
 };
 
 export const onEditSellerAddress = (event) => {
   return {
-      type: 'EDIT_SELLER_ADDRESS',
+      type: EDIT_SELLER_ADDRESS,
       payload: event.target.value
   }
 };
 
 export const onEditSellerCity = (event) => {
   return {
-      type: 'EDIT_SELLER_CITY',
+      type: EDIT_SELLER_CITY,
       payload: event.target.value
   }
 };
@@ -405,14 +462,14 @@ export const onEditSellerState = (state) => {
   document.querySelector("#sellerState").classList.remove("create-deal-select-error");
 
   return {
-      type: 'EDIT_SELLER_STATE',
+      type: EDIT_SELLER_STATE,
       payload: {state}
   }
 };
 
 export const onEditSellerZipcode = (event) => {
   return {
-      type: 'EDIT_SELLER_ZIPCODE',
+      type: EDIT_SELLER_ZIPCODE,
       payload: event.target.value
   }
 };
@@ -443,22 +500,22 @@ export function _startVerificationForSeller(token,firstName, lastName, phoneNumb
 }
 
 export const verifySellerBegin = () => ({
-  type: "VERIFY_SELLER_BEGIN"
+  type: VERIFY_SELLER_BEGIN
 });
 
 export const verifySellerSuccess = twilioData => ({
-  type: "VERIFY_SELLER_SUCCESS",
+  type: VERIFY_SELLER_SUCCESS,
   payload: twilioData
 });
 
 export const verifySellerFailure = error => ({
-  type: "VERIFY_SELLER_FAILURE",
+  type: VERIFY_SELLER_FAILURE,
   payload: { error }
 });
 
 export const onEditSellerVerificationToken = (event) => {
   return {
-      type: 'EDIT_SELLER_VERIFICATION_TOKEN',
+      type: EDIT_SELLER_VERIFICATION_TOKEN,
       payload: event.target.value
   }
 };
@@ -488,52 +545,52 @@ export function _checkVerificationForSeller(token, phoneCode) {
 }
 
 export const checkCodeBegin = () => ({
-  type: "CHECK_CODE_BEGIN"
+  type: CHECK_CODE_BEGIN
 });
 
 export const checkCodeSuccess = codeStatus => ({
-  type: "CHECK_CODE_SUCCESS",
+  type: CHECK_CODE_SUCCESS,
   payload: codeStatus
 });
 
 export const checkCodeFailure = error => ({
-  type: "CHECK_CODE_FAILURE",
+  type: CHECK_CODE_FAILURE,
   payload: { error }
 });
 
 export const editListing = (dealItem, acceptedCryptos) => ({
-  type: "EDIT_LISTING",
+  type: EDIT_LISTING,
   payload: {dealItem, acceptedCryptos}
 });
 
 export const resetEditListing = () => ({
-  type: "RESET_EDIT_LISTING"
+  type: RESET_EDIT_LISTING
 });
 
 export const openAlertEditCancelModal = () => {
   return {
-      type: 'OPEN_ALERT_EDIT_CANCEL_MODAL',
+      type: OPEN_ALERT_EDIT_CANCEL_MODAL,
       payload: {visible: true}
   }
 };
 
 export const closeAlertEditCancelModal = () => {
   return {
-      type: 'CLOSE_ALERT_EDIT_CANCEL_MODAL',
+      type: CLOSE_ALERT_EDIT_CANCEL_MODAL,
       payload: {visible: false}
   }
 };
 
 export const openDeleteAlertModal = () => {
   return {
-      type: 'OPEN_DELETE_ALERT_MODAL',
+      type: OPEN_DELETE_ALERT_MODAL,
       payload: {visible: true}
   }
 };
 
 export const closeDeleteAlertModal = () => {
   return {
-      type: 'CLOSE_DELETE_ALERT_MODAL',
+      type: CLOSE_DELETE_ALERT_MODAL,
       payload: {visible: false}
   }
 };
@@ -560,16 +617,16 @@ export function _deleteDeal(token, deal_id) {
 }
 
 export const deleteListingDealBegin = () => ({
-  type: "DELETE_DEAL_BEGIN"
+  type: DELETE_DEAL_BEGIN
 });
 
 export const deleteListingDealSuccess = dealDeleted => ({
-  type: "DELETE_DEAL_SUCCESS",
+  type: DELETE_DEAL_SUCCESS,
   payload: dealDeleted
 });
 
 export const deleteListingDealFailure = error => ({
-  type: "DELETE_DEAL_FAILURE",
+  type: DELETE_DEAL_FAILURE,
   payload: { error }
 });
 
