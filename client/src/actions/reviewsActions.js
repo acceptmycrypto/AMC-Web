@@ -18,12 +18,12 @@ export function _loadReviews(seller_id) {
       fetch(`/api/reviews/sellers/${seller_id}`),
       fetch(`/seller-photo/${seller_id}`)
     ])
-    .then(([res1, res2]) => Promise.all([res1.json(), res2.json()]))
-    .then(([resJson, jsonSellerPhoto]) => {
-      dispatch(fetchReviewsSuccess(resJson, jsonSellerPhoto));
-      return {resJson, jsonSellerPhoto};
-    })
-    .catch(error => dispatch(fetchReviewsFailure(error)));
+      .then(([res1, res2]) => Promise.all([res1.json(), res2.json()]))
+      .then(([resJson, jsonSellerPhoto]) => {
+        dispatch(fetchReviewsSuccess(resJson, jsonSellerPhoto));
+        return { resJson, jsonSellerPhoto };
+      })
+      .catch(error => dispatch(fetchReviewsFailure(error)));
   };
 }
 
@@ -53,18 +53,18 @@ export function _selectedTransaction(token, txn_id) {
       "Accept": "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ token, txn_id})
+    body: JSON.stringify({ token, txn_id })
   };
 
   return dispatch => {
     dispatch(selectedTransactionBegin());
     return fetch("/profile/user/transaction-review", settings)
-    .then(res => res.json())
-    .then(resJson => {
-      dispatch(selectedTransactionSuccess(resJson));
-      return resJson;
-    })
-    .catch(error => dispatch(selectedTransactionError(error)));
+      .then(res => res.json())
+      .then(resJson => {
+        dispatch(selectedTransactionSuccess(resJson));
+        return resJson;
+      })
+      .catch(error => dispatch(selectedTransactionError(error)));
   };
 }
 
@@ -89,19 +89,19 @@ export function _reviewSeller(token, seller_id, deal_id, rating, review_body, ti
       "Accept": "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ token,  seller_id, deal_id, rating, review_body, title, users_purchases_id})
+    body: JSON.stringify({ token, seller_id, deal_id, rating, review_body, title, users_purchases_id })
   };
 
   return dispatch => {
     dispatch(reviewSellerBegin());
     return fetch("/seller-review/new", settings)
-    .then(res => res.json())
-    .then(resJson => {
+      .then(res => res.json())
+      .then(resJson => {
 
-      dispatch(reviewSellerSuccess(resJson));
-      return resJson;
-    })
-    .catch(error => dispatch(reviewSellerError(error)));
+        dispatch(reviewSellerSuccess(resJson));
+        return resJson;
+      })
+      .catch(error => dispatch(reviewSellerError(error)));
   };
 }
 
