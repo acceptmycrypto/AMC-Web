@@ -10,7 +10,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //support parsing of application/json type post data
 app.use(bodyParser.json());
 
-const fetchData = require("./routes/utils/fetchData");
 const path = require("path");
 
 if (process.env.NODE_ENV === "production") {
@@ -79,37 +78,4 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
   });
 }
-
-//pass options as a param to request
-//make a get request to coinmarketcap to get latest crypto info
-const options = [
-  {
-    method: "GET",
-    uri: "https://pro-api.coinmarketcap.com/v1/cryptocurrency/info",
-    qs: {
-      symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,EOS,XVG"
-    },
-    headers: {
-      "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
-      Accept: "application/json"
-    }
-  },
-  {
-    method: "GET",
-    uri: "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest",
-    qs: {
-      symbol: "BTC,ETH,LTC,BCH,DASH,ETC,DOGE,XRP,EOS,XVG"
-    },
-    headers: {
-      "X-CMC_PRO_API_KEY": process.env.COINMARKET_API_KEY,
-      Accept: "application/json"
-    }
-  }
-];
-
-//whenver we starts the server, fetch data on development env
-if (process.env.NODE_ENV = "development") {
-  fetchData(options);
-}
-
 module.exports = app;
