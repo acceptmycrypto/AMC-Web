@@ -8,12 +8,15 @@
     "npm": "5.6.0"
   },
   "scripts": {
-    "test": "jest",
+    "test": "env-cmd ./config/test.env jest --watch",
     "server": "node server.js",
     "client": "npm run start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "start": "node server.js",
     "heroku-postbuild": "cd client && npm install && npm run build"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "keywords": [],
   "author": "",
@@ -52,6 +55,7 @@
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
+    "env-cmd": "^8.0.2",
     "jest": "^23.6.0"
   }
 }
