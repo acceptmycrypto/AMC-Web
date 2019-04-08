@@ -16,7 +16,7 @@ app.use(methodOverride("_method"));
 
 //deal item endpoint
 // include id param which references the deal id in route to account for if multiple users sell item with same deal_name
-router.get("/api/deals/:deal_id/:deal_name", deal_controller.deal_detail);
+router.get("/api/deals/:deal_id/:deal_name", deal_controller.deal_detail_get);
 
 router.get("/api/search", function(req, res) {
   //     console.log("req search");

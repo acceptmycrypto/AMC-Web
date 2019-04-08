@@ -28,9 +28,9 @@ class Database {
         }
       }
       if (connection) connection.release();
-    });
 
-    return;
+      return;
+    });
   }
 
   //takes an sql string and optional array of parameters
