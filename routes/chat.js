@@ -4,7 +4,6 @@ var router = express.Router();
 var connection = require("./utils/database");
 var bodyParser = require("body-parser");
 var methodOverride = require("method-override");
-var request = require("request"); //backend version of ajax, gets entire html
 var verifyToken = require("./utils/validation");
 //use sendgrid
 var sgMail = require("@sendgrid/mail");
