@@ -1,3 +1,7 @@
+import { UPLOADING_IMAGES_BEGIN, UPLOADING_IMAGES_SUCCESS, UPLOADING_IMAGES_FAILURE, VIEW_UPLOADED_IMAGE, REMOVE_UPLOADED_IMAGE } from "../actions/listDealActions";
+
+
+
 const initialState = {
   imageData: {},
   images: [],
@@ -18,14 +22,14 @@ const handleImageRemove = (images, imageKey) => {
 export default function imagesReducer(state = initialState, action) {
 
   switch(action.type) {
-    case "UPLOADING_IMAGES_BEGIN":
+    case UPLOADING_IMAGES_BEGIN:
       return {
         ...state,
         uploading: true,
         error: null
       };
 
-    case "UPLOADING_IMAGES_SUCCESS":
+    case UPLOADING_IMAGES_SUCCESS:
       handleImagesUpload(state.images, action.payload);
       return {
         ...state,
@@ -34,7 +38,7 @@ export default function imagesReducer(state = initialState, action) {
         imageView: action.payload.Location
       };
 
-    case "UPLOADING_IMAGES_FAILURE":
+    case UPLOADING_IMAGES_FAILURE:
       return {
         ...state,
         uploading: false,
@@ -44,13 +48,13 @@ export default function imagesReducer(state = initialState, action) {
         images: []
       };
 
-    case "VIEW_UPLOADED_IMAGE":
+    case VIEW_UPLOADED_IMAGE:
       return {
         ...state,
         imageView: action.payload
       };
 
-    case "REMOVE_UPLOADED_IMAGE":
+    case REMOVE_UPLOADED_IMAGE:
       return {
         ...state,
         images: handleImageRemove(state.images, action.payload)

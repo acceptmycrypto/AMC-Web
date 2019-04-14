@@ -1,3 +1,7 @@
+import { LOAD_CRYPTO_BEGIN, LOAD_CRYPTO_SUCCESS, LOAD_CRYPTOS_FOR_CREATING_DEAL, LOAD_CRYPTO_FAILURE } from "../actions/loadCryptoActions";
+import { SHOW_CRYPTOS_LOGOS_FOR_HOME_PAGE } from "../actions/homepageActions";
+
+
 const initialState = {
     cryptoOptions: [],
     cryptoOptionsForCreatingDeal: [],

@@ -4,10 +4,15 @@ import {
     SET_ACTIVE_PROFILE_SETTINGS,
     SET_ACTIVE_CRYPTO_SETTINGS,
     SET_INITIAL_STATE,
-    CRYPTO_LEFT
-
-
+    CRYPTO_OPTIONS_LEFT_BEGIN,
+    CRYPTO_OPTIONS_LEFT_SUCCESS,
+    CRYPTO_OPTIONS_LEFT_FAILURE,
+    ADD_CRYPTO_SUCCESS,
+    ALL_TRANSACTIONS_LEFT_BEGIN,
+    ALL_TRANSACTIONS_LEFT_SUCCESS,
+    ALL_TRANSACTIONS_LEFT_FAILURE
 } from "../actions/settingsActions";
+
 
 
 const initialSettingsState = {
@@ -41,51 +46,51 @@ export default function settingsReducer(state = initialSettingsState, action) {
                 ...state,
                 activeCryptoSettingsItem: action.payload.activeCryptoSettingsItem
             }
-        case CRYPTO_LEFT:
+        case "CRYPTO_LEFT":
             return {
                 ...state,
                 cryptoLeft: action.payload.cryptoLeft
             }
-        case "CRYPTO_OPTIONS_LEFT_BEGIN":
+        case CRYPTO_OPTIONS_LEFT_BEGIN:
             return {
                 ...state,
                 loading: true,
                 error: null
             };
 
-        case "CRYPTO_OPTIONS_LEFT_SUCCESS":
+        case CRYPTO_OPTIONS_LEFT_SUCCESS:
             return {
                 ...state,
                 loading: false,
                 cryptoLeft: action.payload.cryptoLeft
             };
 
-        case "CRYPTO_OPTIONS_LEFT_FAILURE":
+        case CRYPTO_OPTIONS_LEFT_FAILURE:
             return {
                 ...state,
                 loading: false,
                 error: action.payload.error,
             };
 
-        case 'ADD_CRYPTO_SUCCESS':
+        case ADD_CRYPTO_SUCCESS:
             return {
                 ...state,
                 activeCryptoSettingsItem: action.payload.activeCryptoSettingsItem
             }
 
-        case "ALL_TRANSACTIONS_LEFT_BEGIN":
+        case ALL_TRANSACTIONS_LEFT_BEGIN:
             return {
                 ...state,
                 loading: true,
                 error: null
             };
-        case "ALL_TRANSACTIONS_LEFT_SUCCESS":
+        case ALL_TRANSACTIONS_LEFT_SUCCESS:
             return {
                 ...state,
                 loading: false,
                 transactionInfo: action.payload.transactionInfo
             };
-        case "ALL_TRANSACTIONS_LEFT_FAILURE":
+        case ALL_TRANSACTIONS_LEFT_FAILURE:
             return {
                 ...state,
                 loading: false,

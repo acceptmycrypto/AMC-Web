@@ -1,3 +1,7 @@
+import { VALIDATION_DONE, PASSWORD_RESET_DONE } from "../actions/signUpActions";
+
+
+
 const initialState = {
     pw_token_validity: "none",
     error_message: ""
@@ -5,12 +9,12 @@ const initialState = {
 
 export default function pwTokenReducer (state = initialState, action) {
     switch (action.type) {
-        case "VALIDATION_DONE":
+        case VALIDATION_DONE:
             return {
                 ...state,
                 pw_token_validity: action.payload.validation_result
             }
-        case "PASSWORD_RESET_DONE":
+        case PASSWORD_RESET_DONE:
             return {
                 ...state,
                 pw_token_validity: action.payload.pw_token_validity,

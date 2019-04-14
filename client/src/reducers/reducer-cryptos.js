@@ -1,3 +1,7 @@
+import { FETCH_CRYPTOS_BEGIN, FETCH_CRYPTOS_SUCCESS, FETCH_CRYPTOS_FAILURE } from "../actions/cryptosRankingActions";
+
+
+
 const initialState = {
   cryptos: [],
   loading: false,
@@ -6,14 +10,14 @@ const initialState = {
 
 export default function cryptosReducer(state = initialState, action) {
   switch(action.type) {
-    case "FETCH_CRYPTOS_BEGIN":
+    case FETCH_CRYPTOS_BEGIN:
       return {
         ...state,
         loading: true,
         error: null
       };
 
-    case "FETCH_CRYPTOS_SUCCESS":
+    case FETCH_CRYPTOS_SUCCESS:
       return {
         ...state,
         loading: false,
@@ -21,7 +25,7 @@ export default function cryptosReducer(state = initialState, action) {
         cryptosSort: action.cryptosSort
       };
 
-    case "FETCH_CRYPTOS_FAILURE":
+    case FETCH_CRYPTOS_FAILURE:
       return {
         ...state,
         loading: false,

@@ -1,3 +1,7 @@
+// import { FETCH_USER_BEGIN, FETCH_USER_SUCCESS, FETCH_USER_FAILURE } from "../actions/userLoadActions";
+
+
+
 // const initialState = {
 //   user: false,
 //   loading: false,
@@ -6,7 +10,7 @@
 
 // export default function layoutReducer(state = initialState, action) {
 //   switch(action.type) {
-//     case "FETCH_USER_BEGIN":
+//     case FETCH_USER_BEGIN:
 //       // Mark the state as "loading" so we can show a spinner or something
 //       // Also, reset any errors. We're starting fresh.
 //       return {
@@ -15,14 +19,14 @@
 //         error: null
 //       };
 
-//     case "FETCH_USER_SUCCESS":
+//     case FETCH_USER_SUCCESS:
 //       return {
 //         ...state,
 //         loading: false,
 //         user: action.payload
 //       };
 
-//     case "FETCH_USER_FAILURE":
+//     case FETCH_USER_FAILURE:
 //       // The request failed, but it did stop, so set loading to "false".
 //       // Save the error, and we can display it somewhere
 //       // Since it failed, we don't have items to display anymore, so set it empty.

@@ -1,4 +1,4 @@
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
 import Deals from './reducer-deals';
 import Search from './reducer-searchbar';
 import Category from './reducer-category';

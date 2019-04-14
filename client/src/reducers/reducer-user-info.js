@@ -75,7 +75,7 @@ export default function userInfoReducer(state = initialState, action) {
         user_info: action.payload.user_info,
         user_crypto: action.payload.user_crypto,
         transactions: action.payload.transactions,
-        confirmed:action.payload.confirmed,
+        confirmed: action.payload.confirmed,
         pending: action.payload.pending,
         tx_history_view: action.payload.tx_history_view
       };
@@ -199,7 +199,7 @@ export default function userInfoReducer(state = initialState, action) {
     case WITHDRAW_CONFIRM_SUCCESS:
       return {
         ...state,
-        initiateWithdraw: {success: false},
+        initiateWithdraw: { success: false },
         confirmWithdrawLoading: false,
         confirmWithdraw: action.payload.confirmWithdraw
       };
@@ -211,21 +211,21 @@ export default function userInfoReducer(state = initialState, action) {
       }
     case OPEN_WITHDRAW_MODAL:
       return {
-          ...state,
-          modalVisible: action.payload.visible,
-          selectedWithdrawCrypto: action.payload
+        ...state,
+        modalVisible: action.payload.visible,
+        selectedWithdrawCrypto: action.payload
       }
     case CLOSE_MODAL:
       return {
-          ...state,
-          modalVisible: action.payload.visible,
-          confirmWithdraw: {},
-          withdrawConfirmationToken: null
+        ...state,
+        modalVisible: action.payload.visible,
+        confirmWithdraw: {},
+        withdrawConfirmationToken: null
       }
     case EDIT_WITHDRAW_CONFIRMATION_TOKEN:
       return {
-          ...state,
-          withdrawConfirmationToken: action.payload
+        ...state,
+        withdrawConfirmationToken: action.payload
       }
     case RESET_CRYPTO_PORTFOLIO:
       return {

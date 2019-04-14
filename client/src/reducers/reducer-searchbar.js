@@ -1,3 +1,8 @@
+import { SEARCH_DEALS_SUCCESS } from "../actions/searchBarActions";
+import { FILTER_DEALS_BY_CATEGORY } from "../actions/categoryActions";
+import { RESET_NAVBAR } from "../actions/navbarActions";
+
+
 const initialState = {
     searchTerm: "",
     searchedDeals: [],
@@ -8,10 +13,7 @@ const initialState = {
 
 export default function searchbarReducer(state = initialState, action) {
     switch(action.type) {
-        case "SEARCH_DEALS_SUCCESS":
-            console.log("Matched deals filtered by search term: "+action.payload.searchTerm);
-            console.log("Searched deals:")
-            console.log(action.payload.searchedDeals);
+        case SEARCH_DEALS_SUCCESS:
             return {
                 ...state,
                 searchTerm: action.payload.searchTerm,
@@ -20,9 +22,9 @@ export default function searchbarReducer(state = initialState, action) {
                 searchPage: action.payload.searchPage,
                 numberOfResults: action.payload.numberOfResults
             };
-        case "FILTER_DEALS_BY_CATEGORY":
+        case FILTER_DEALS_BY_CATEGORY:
             return initialState;
-        case "RESET_NAVBAR":
+        case RESET_NAVBAR:
             return initialState;
         default:
             return state;
