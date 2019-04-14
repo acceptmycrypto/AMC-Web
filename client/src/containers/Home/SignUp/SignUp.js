@@ -10,7 +10,6 @@ import {
 } from "react-router-dom";
 import Modal from "react-awesome-modal";
 import Select from "react-select";
-import { _signUp } from "../../../services/AuthService";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { _loadCryptocurrencies } from "../../../actions/loadCryptoActions";
@@ -18,7 +17,8 @@ import {
   handleDropdownChange,
   openModal,
   closeModal,
-  resetSelectedCryptos
+  resetSelectedCryptos,
+  _signUp,
 } from "../../../actions/signUpActions";
 
 import Footer from "../../../components/Layout/Footer";

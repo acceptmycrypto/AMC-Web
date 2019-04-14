@@ -110,3 +110,15 @@ export const resetPassword = (token, password1, password2) => {
           })
     }
 }
+
+// imported in SignUp.js
+export const _signUp = (username, email, password, cryptoProfile) => {
+	return fetch("/register", {
+	    method: 'POST',
+	    headers: {
+	      'Accept': 'application/json',
+	      'Content-Type': 'application/json'
+	    },
+	    body: JSON.stringify({username, email, password, cryptoProfile})
+	  }).then(res => res.json())
+}

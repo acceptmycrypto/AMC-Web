@@ -11,14 +11,22 @@ import CryptoRankings from "../../CryptosRanking";
 import Layout from "../../Layout";
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
-import { _updateCryptoTable, _verifyUser } from "../../../services/UserProfileService";
-import { _loadProfile } from "../../../actions/userLoadActions";
+import { _loadProfile, _updateCryptoTable } from "../../../actions/userLoadActions";
 import { _isLoggedIn } from "../../../actions/loggedInActions";
-import { handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos, _handleInitiateWithdraw, openWithdrawModal, _handleConfirmedWithdraw,  onEditWithdrawConfirmationToken, resetCryptoPortfolio} from "../../../actions/cryptoPortfolioActions";
+import { handleToggleChange, 
+        handleAddressFormChange, 
+        handleQRChange, 
+        updateCryptos, 
+        _handleInitiateWithdraw, 
+        openWithdrawModal, 
+        _handleConfirmedWithdraw, 
+        onEditWithdrawConfirmationToken, 
+        resetCryptoPortfolio} from "../../../actions/cryptoPortfolioActions";
 import { resetDealitemState } from "../../../actions/dealItemActions";
 import Modal from "react-awesome-modal";
 import { closeModal } from "../../../actions/signInActions";
 import LoadingSpinner from "../../../components/UI/LoadingSpinner";
+
 
 class UserProfile extends Component {
 

@@ -122,3 +122,47 @@ export const fetchTransactionsFailure = error => ({
   type: FETCH_TRANSACTIONS_FAILURE,
   payload: { error }
 });
+
+// imported in UserProfile
+export async function _updateCryptoTable (crypto_address,id, token){
+  const crypto_settings = {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({crypto_address, id, token})
+    };
+
+    const data = await fetch("/profile/addAddress?_method=PUT", crypto_settings)
+      .then(response => response.json())
+      .then(json => {
+        return json;
+      })
+      .catch(e => {
+        return e
+      });
+
+  const user_settings  = {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({token})
+  };
+    
+
+    const userProfileData = await fetch("/profile", user_settings);
+    const user_info = await userProfileData.json();
+
+    const userCryptoData = await fetch("/profile/crypto", user_settings);
+    const user_crypto = await userCryptoData.json();
+    const crypto_view = await "owned";
+    const add_address = await false;
+
+    return { user_info, user_crypto, crypto_view, add_address };
+}
+
+
+
