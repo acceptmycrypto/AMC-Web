@@ -1,4 +1,4 @@
-
+// imported in UserProfile
 export async function _updateCryptoTable (crypto_address,id, token){
         const crypto_settings = {
             method: "POST",
@@ -41,7 +41,7 @@ export async function _updateCryptoTable (crypto_address,id, token){
 
 
 
-
+// imported in UserProfile
 export async function _loadProfile (token) {
   const settings = {
     method: "POST",

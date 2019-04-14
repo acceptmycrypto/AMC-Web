@@ -1,3 +1,4 @@
+// imported in SignUp.js
 export const _signUp = (username, email, password, cryptoProfile) => {
 	return fetch("/register", {
 	    method: 'POST',
@@ -9,6 +10,7 @@ export const _signUp = (username, email, password, cryptoProfile) => {
 	  }).then(res => res.json())
 }
 
+// imported in SignIn.js
 export const _login = (email, password) => {
 	return fetch("/signin", {
 	    method: 'POST',
@@ -30,6 +32,7 @@ export async function _loadCryptocurrencies () {
 //   return cryptos
 }
 
+// imported in ResendEmail.js
 export const _resendEmail = (email) => {
 	return fetch("/resend-email", {
 	    method: 'POST',
@@ -41,6 +44,7 @@ export const _resendEmail = (email) => {
 	  }).then(res => res.json())
 }
 
+// imported in ResetPasswordEmail.js
 export const _resetPasswordEmail = (email) => {
 	return fetch("/reset-password-email", {
 	    method: 'POST',
