@@ -79,7 +79,6 @@ class Navbar extends Component {
                   alt="logo"
                 />
                 <span className="ml-2">AcceptMyCrypto</span>
-                <small className="beta">beta</small>
               </div>
             </Link>
             {sideBarOpened ? (
