@@ -1,3 +1,6 @@
+import { FETCH_PHOTO_BEGIN, FETCH_PHOTO_SUCCESS, FETCH_PHOTO_FAILURE } from "../actions/navbarActions";
+
+
 const initialState = {
   photo: null,
   loading: false,
@@ -7,14 +10,14 @@ const initialState = {
 
 export default function photoReducer(state = initialState, action) {
   switch(action.type) {
-    case "FETCH_PHOTO_BEGIN":
+    case FETCH_PHOTO_BEGIN:
       return {
         ...state,
         loading: true,
         error: null
       };
 
-    case "FETCH_PHOTO_SUCCESS":
+    case FETCH_PHOTO_SUCCESS:
       return {
         ...state,
         loading: false,
@@ -22,7 +25,7 @@ export default function photoReducer(state = initialState, action) {
         user_id: action.payload.photo.user_id
       };
 
-    case "FETCH_PHOTO_FAILURE":
+    case FETCH_PHOTO_FAILURE:
       // The request failed, but it did stop, so set loading to "false".
       // Save the error, and we can display it somewhere
       // Since it failed, we don't have items to display anymore, so set it empty.

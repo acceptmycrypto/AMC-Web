@@ -1,3 +1,22 @@
+import { 
+  FETCH_DEAL_ITEM_BEGIN,
+  FETCH_DEAL_ITEM_SUCCESS,
+  FETCH_DEAL_ITEM_FAILURE,
+  LOCATION_CHANGE,
+  FIRST_NAME,
+  LAST_NAME,
+  SHIPPING_ADDRESS,
+  SHIPPING_CITY,
+  ZIP_CODE,
+  SHIPPING_STATE,
+  SHIPPING_EMAIL,
+  SHIPPING_PHONE_NUMBER,
+  SELECT_PAYMENT,
+  SHOW_DETAIL,
+  SHOW_SHIPPING,
+  SHOW_PAYING } from "../actions/dealItemActions";
+
+
 const initialState = {
   dealItem: null,
   acceptedCryptos: null,
@@ -36,14 +55,14 @@ const initialState = {
 
 export default function dealItemReducer(state = initialState, action) {
   switch (action.type) {
-    case "FETCH_DEAL_ITEM_BEGIN":
+    case FETCH_DEAL_ITEM_BEGIN:
       return {
         ...state,
         loading: true,
         error: null
       };
 
-    case "FETCH_DEAL_ITEM_SUCCESS":
+    case FETCH_DEAL_ITEM_SUCCESS:
       return {
         ...state,
         loading: false,
@@ -52,7 +71,7 @@ export default function dealItemReducer(state = initialState, action) {
         states: initialState.states
       };
 
-    case "FETCH_DEAL_ITEM_FAILURE":
+    case FETCH_DEAL_ITEM_FAILURE:
       return {
         ...state,
         loading: false,
@@ -61,64 +80,64 @@ export default function dealItemReducer(state = initialState, action) {
         acceptedCryptos: null
       };
 
-    case "LOCATION_CHANGE":
+    case LOCATION_CHANGE:
       return initialState;
 
-    case "FIRST_NAME":
+    case FIRST_NAME:
       return {
         ...state,
         firstName: action.payload
       };
 
-    case "LAST_NAME":
+    case LAST_NAME:
       return {
         ...state,
         lastName: action.payload
       };
 
-    case "SHIPPING_ADDRESS":
+    case SHIPPING_ADDRESS:
       return {
         ...state,
         shippingAddress: action.payload
       };
 
-    case "SHIPPING_CITY":
+    case SHIPPING_CITY:
       return {
         ...state,
         shippingCity: action.payload
       };
 
-    case "ZIP_CODE":
+    case ZIP_CODE:
       return {
         ...state,
         zipcode: action.payload
       };
 
-    case "SHIPPING_STATE":
+    case SHIPPING_STATE:
       return {
         ...state,
         shippingState: action.payload.selectedState
       };
 
-    case "SHIPPING_EMAIL":
+    case SHIPPING_EMAIL:
       return {
         ...state,
         email: action.payload
       };
 
-    case "SHIPPING_PHONE_NUMBER":
+    case SHIPPING_PHONE_NUMBER:
       return {
         ...state,
         phoneNumber: action.payload
       };
 
-    case "SELECT_PAYMENT":
+    case SELECT_PAYMENT:
       return {
         ...state,
         selectedOption: action.payload.selectedOption
       };
 
-    case "SHOW_DETAIL":
+    case SHOW_DETAIL:
       return {
         ...state,
         showDetailStep: action.payload.showDetailStep,
@@ -126,7 +145,7 @@ export default function dealItemReducer(state = initialState, action) {
         showPayingStep: action.payload.showPayingStep
       };
 
-    case "SHOW_SHIPPING":
+    case SHOW_SHIPPING:
       return {
         ...state,
         showDetailStep: action.payload.showDetailStep,
@@ -134,7 +153,7 @@ export default function dealItemReducer(state = initialState, action) {
         showPayingStep: action.payload.showPayingStep
       };
 
-    case "SHOW_PAYING":
+    case SHOW_PAYING:
       return {
         ...state,
         showDetailStep: action.payload.showDetailStep,

@@ -1,3 +1,9 @@
+export const LOAD_CRYPTO_BEGIN = "LOAD_CRYPTO_BEGIN";
+export const LOAD_CRYPTO_SUCCESS = "LOAD_CRYPTO_SUCCESS";
+export const LOAD_CRYPTO_FAILURE = "LOAD_CRYPTO_FAILURE";
+export const LOAD_CRYPTOS_FOR_CREATING_DEAL = "LOAD_CRYPTOS_FOR_CREATING_DEAL";
+
+
 export function _loadCryptocurrencies() {
 
   return dispatch => {
@@ -30,20 +36,20 @@ export function _loadCryptocurrencies() {
 
 
 export const loadCryptoBegin = () => ({
-  type: "LOAD_CRYPTO_BEGIN"
+  type: LOAD_CRYPTO_BEGIN
 });
 
 export const loadCryptoSuccess = cryptoOptions => ({
-  type: "LOAD_CRYPTO_SUCCESS",
+  type: LOAD_CRYPTO_SUCCESS,
   payload: { cryptoOptions }
 });
 
 export const loadCryptoFailure = error => ({
-  type: "LOAD_CRYPTO_FAILURE",
+  type: LOAD_CRYPTO_FAILURE,
   payload: { error }
 });
 
 export const loadCryptosForCreatingDeals = cryptoOptionsForCreatingDeal => ({
-  type: "LOAD_CRYPTOS_FOR_CREATING_DEAL",
+  type: LOAD_CRYPTOS_FOR_CREATING_DEAL,
   payload: { cryptoOptionsForCreatingDeal }
 });

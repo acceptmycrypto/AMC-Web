@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
-import { _resetPasswordEmail } from "../../../services/AuthService";
 import { connect } from "react-redux";
 import {bindActionCreators} from 'redux';
 import { _loadCryptocurrencies } from "../../../actions/loadCryptoActions";
@@ -8,7 +7,8 @@ import { handleDropdownChange } from "../../../actions/signUpActions";
 import Footer from "../../../components/Layout/Footer";
 import Aside from '../Aside';
 import Modal from 'react-awesome-modal';
-import { openModal, closeModal } from '../../../actions/signInActions';
+import { openModal, closeModal, _resetPasswordEmail} from '../../../actions/signInActions';
+
 
 class ResetPasswordEmail extends Component {
   constructor() {

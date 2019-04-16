@@ -1,13 +1,23 @@
+export const OPEN_MODAL  = "OPEN_MODAL"; 
+export const  CLOSE_MODAL = "CLOSE_MODAL"; 
+export const  CRYPTO_CHOSEN = "CRYPTO_CHOSEN"; 
+export const  RESET_SELECTED_CRYPTOS = "RESET_SELECTED_CRYPTOS";
+export const VALIDATION_START  = "VALIDATION_START";
+export const VALIDATION_DONE  = "VALIDATION_DONE";
+export const  PASSWORD_RESET_DONE = "PASSWORD_RESET_DONE";
+ 
+
+
 export const openModal = () => {
   return {
-    type: "OPEN_MODAL", //what does the action do = title of action
+    type: OPEN_MODAL, //what does the action do = title of action
     payload: { visible: true } // any data you need to return
   };
 };
 
 export const closeModal = () => {
   return {
-    type: "CLOSE_MODAL", //what does the action do = title of action
+    type: CLOSE_MODAL, //what does the action do = title of action
     payload: { visible: false } // any data you need to return
   };
 };
@@ -27,14 +37,14 @@ export const handleDropdownChange = selectedOptions => {
   // action
   // made up of two parts 1. type 2. payload
   return {
-    type: "CRYPTO_CHOSEN", //what does the action do = title of action
+    type: CRYPTO_CHOSEN, //what does the action do = title of action
     payload: { selectedCryptos } // any data you need to return
   };
 };
 
 export const resetSelectedCryptos = () => {
   return {
-    type: "RESET_SELECTED_CRYPTOS"
+    type: RESET_SELECTED_CRYPTOS
   };
 };
 
@@ -65,20 +75,20 @@ export const validatePWToken = (token) => {
 
 export const validationStart = () => {
     return {
-        type: "VALIDATION_START"
+        type: VALIDATION_START
     };
 }
 
 export const validationDone = (result) => {
     return {
-        type: "VALIDATION_DONE",
+        type: VALIDATION_DONE,
         payload: { validation_result: result}
     }
 }
 
 export const resetPasswordDone = (data) => {
     return {
-        type: "PASSWORD_RESET_DONE",
+        type: PASSWORD_RESET_DONE,
         payload: data
     }
 }
@@ -87,10 +97,10 @@ export const resetPassword = (token, password1, password2) => {
     return dispatch => {
         dispatch(validationStart());
         return fetch("/reset-password", {
-            method: 'POST',
+            method: "POST",
             headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
+              "Accept": "application/json",
+              "Content-Type": "application/json"
             },
             body: JSON.stringify({token, password1, password2})
           }).then(res => res.json()).then(data => {
@@ -99,4 +109,16 @@ export const resetPassword = (token, password1, password2) => {
             dispatch(resetPasswordDone(data));
           })
     }
+}
+
+// imported in SignUp.js
+export const _signUp = (username, email, password, cryptoProfile) => {
+	return fetch("/register", {
+	    method: 'POST',
+	    headers: {
+	      'Accept': 'application/json',
+	      'Content-Type': 'application/json'
+	    },
+	    body: JSON.stringify({username, email, password, cryptoProfile})
+	  }).then(res => res.json())
 }

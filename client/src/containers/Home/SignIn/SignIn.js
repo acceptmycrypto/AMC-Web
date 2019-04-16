@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import './SignIn.css';
 // Router and Route is never being called, but at the same time must not be deleted. If deleted, it thows an error.
 import { BrowserRouter as Router, Route, Link, NavLink } from 'react-router-dom';
-import { _login } from '../../../services/AuthService';
 import Modal from 'react-awesome-modal';
 import { connect } from "react-redux";
 import {bindActionCreators} from 'redux';
-import { openModal, closeModal } from '../../../actions/signInActions';
+import { openModal, closeModal, _login } from '../../../actions/signInActions';
 import { _loadProfile } from "../../../actions/userLoadActions";
 import { _isLoggedIn } from '../../../actions/loggedInActions';
 import Footer from '../../../components/Layout/Footer';

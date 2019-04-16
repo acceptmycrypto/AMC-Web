@@ -5,10 +5,16 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
+// need methodOverride for user_profile routes
+const  methodOverride = require('method-override');
+
 //support parsing of application/x-www-form-urlencoded post data
 app.use(bodyParser.urlencoded({ extended: true }));
 //support parsing of application/json type post data
 app.use(bodyParser.json());
+
+
+app.use(methodOverride('_method'));
 
 const path = require("path");
 
@@ -31,9 +37,6 @@ app.use(function(req, res, next) {
 
 //routers
 const navbarRoutes = require("./routes/navbar.js");
-const adminRoutes = require("./routes/admin.js");
-const cryptoRoutes = require("./routes/crypto.js");
-const apiRoutes = require("./routes/api.js");
 const supportRoutes = require("./routes/support.js");
 const userProfileRoutes = require("./routes/user_profile.js");
 const friendProfileRoutes = require("./routes/friend_profile.js");
@@ -51,9 +54,6 @@ const chatRoutes = require("./routes/chat.js");
 const homepageRoutes = require("./routes/homepage.js");
 
 app.use("/", navbarRoutes);
-app.use("/", adminRoutes);
-app.use("/", cryptoRoutes);
-app.use("/", apiRoutes);
 app.use("/", supportRoutes);
 app.use("/", userProfileRoutes);
 app.use("/", friendProfileRoutes);

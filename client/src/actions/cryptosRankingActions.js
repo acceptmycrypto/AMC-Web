@@ -1,3 +1,8 @@
+export const FETCH_CRYPTOS_BEGIN = "FETCH_CRYPTOS_BEGIN";
+export const FETCH_CRYPTOS_FAILURE = "FETCH_CRYPTOS_FAILURE";
+export const  FETCH_CRYPTOS_SUCCESS = "FETCH_CRYPTOS_SUCCESS";
+
+
 export function _loadCryptosRanking(type) {
   const cryptosRankingSettings = {
     method: "GET",
@@ -33,16 +38,16 @@ export function _loadCryptosRanking(type) {
 }
 
 export const fetchCryptosBegin = () => ({
-  type: "FETCH_CRYPTOS_BEGIN"
+  type: FETCH_CRYPTOS_BEGIN
 });
 
 export const fetchCryptosSuccess = (cryptos, sort) => ({
-  type: "FETCH_CRYPTOS_SUCCESS",
+  type: FETCH_CRYPTOS_SUCCESS,
   payload: { cryptos },
   cryptosSort: sort
 });
 
 export const fetchCryptosFailure = error => ({
-  type: "FETCH_CRYPTOS_FAILURE",
+  type: FETCH_CRYPTOS_FAILURE,
   payload: { error }
 });

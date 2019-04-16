@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import "./CryptocurrencySettings.css";
-import { _loadCryptoSettings } from "../../../services/SettingsService";
 import { Menu } from 'semantic-ui-react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Select from "react-select";
 import { _loadProfile } from "../../../actions/userLoadActions";
-import { handleCryptoSettingsMenuItemClick, _cryptoOptionsLeft, _addCryptos } from "../../../actions/settingsActions";
+import { handleCryptoSettingsMenuItemClick, _cryptoOptionsLeft, _addCryptos, _loadCryptoSettings } from "../../../actions/settingsActions";
 import { handleDropdownChange } from "../../../actions/signUpActions";
+
 
 class CryptocurrencySettings extends Component {
 

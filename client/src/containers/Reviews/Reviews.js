@@ -10,7 +10,7 @@ import CryptoRankings from "../CryptosRanking";
 import Layout from "../Layout";
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
-import { _updateCryptoTable, _verifyUser } from "../../services/UserProfileService";
+// import { _updateCryptoTable, _verifyUser } from "../../services/UserProfileService";
 import { _loadReviews } from "../../actions/reviewsActions";
 import { _isLoggedIn } from "../../actions/loggedInActions";
 // import { handleToggleChange, handleAddressFormChange, handleQRChange, updateCryptos } from "../../../actions/cryptoPortfolioActions";

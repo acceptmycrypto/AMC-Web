@@ -1,3 +1,9 @@
+export const SEARCH_DEALS_BEGIN = "SEARCH_DEALS_BEGIN";
+export const SEARCH_DEALS_SUCCESS = "SEARCH_DEALS_SUCCESS";
+export const SEARCH_DEALS_FAILURE = "SEARCH_DEALS_FAILURE";
+
+
+
 export const searchDeals = (searchTerm, page) => {
     return dispatch => {
         dispatch(searchDealBegin());
@@ -14,15 +20,15 @@ export const searchDeals = (searchTerm, page) => {
 }
 
 export const searchDealBegin = (searchTerm) => ({
-    type: "SEARCH_DEALS_BEGIN"
+    type: SEARCH_DEALS_BEGIN
 });
 
 export const searchDealSuccess = (searchTerm, searchedDeals, searchPage, numberOfResults) => ({
-    type: "SEARCH_DEALS_SUCCESS",
+    type: SEARCH_DEALS_SUCCESS,
     payload: { searchTerm, searchedDeals, searchPage, numberOfResults }
 });
 
 export const searchDealFailure = (error) => ({
-    type: "SEARCH_DEALS_FAILURE",
+    type: SEARCH_DEALS_FAILURE,
     payload: { error }
 });

@@ -11,7 +11,7 @@ import {
   DELETE_CHAT_SESSIONS_BEGIN,
   DELETE_CHAT_SESSIONS_SUCCESS,
   DELETE_CHAT_SESSIONS_FAILURE,
-  EDIT_CHAT_MESSAGE
+  EDIT_CHAT_MESSAGE,
 } from "../actions/chatActions";
 
 const initialState = {

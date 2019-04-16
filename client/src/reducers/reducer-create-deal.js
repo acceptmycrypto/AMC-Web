@@ -2,8 +2,67 @@ import {EditorState, convertFromRaw} from 'draft-js';
 import {
   UPDATING_EDITING_DEAL_BEGIN,
   UPDATING_EDITING_DEAL_SUCCESS,
-  UPDATING_EDITING_DEAL_FAILURE
+  UPDATING_EDITING_DEAL_FAILURE,
+  UPLOADING_IMAGES_BEGIN,
+  UPLOADING_IMAGES_SUCCESS,
+  UPLOADING_IMAGES_FAILURE,
+  VIEW_UPLOADED_IMAGE,
+  REMOVE_UPLOADED_IMAGE,
+  SHOW_PHOTOS_UPLOADING,
+  SHOW_PRICING,
+  SHOW_DESCRIPTION,
+  CHANGE_DISCOUNT_PERCENTAGE,
+  CHANGE_BASE_PRICE,
+  DELETE_DEAL_BEGIN,
+  DELETE_DEAL_SUCCESS,
+  DELETE_DEAL_FAILURE,
+  OPEN_MODAL_PHONE_VERIFICATION,
+  EDIT_LISTING,
+  ONBLUR_BASE_PRICE_INPUT,
+  GET_RATE_BEGIN,
+  GET_RATE_FAILURE,
+  GET_RATE_SUCCESS,
+  SELECT_LABEL_OPTION_PREPAID,
+  SELECT_LABEL_OPTION_SELLER,
+  SELECT_WEIGHT_OPTION,
+  EXIT_SHIPPING_MODAL,
+  SAVE_SHIPPING_MODAL,
+  SHOW_WEIGHT_MODAL,
+  SELLER_EARNS_USD,
+  SELLER_EARNS_CRYPTO,
+  EDIT_DEAL_NAME,
+  SELECT_CATEGORY,
+  SELECT_CONDITION,
+  EDIT_DETAIL,
+  CREATING_DEAL_SUCCESS,
+  CREATING_DEAL_FAILURE,
+  CLOSE_DEAL_CREATED_MODAL,
+  OPEN_ALERT_EDIT_CANCEL_MODAL,
+  CLOSE_ALERT_EDIT_CANCEL_MODAL,
+  OPEN_DELETE_ALERT_MODAL,
+  CLOSE_DELETE_ALERT_MODAL,
+  RESET_EDIT_LISTING,
+  RESET_DEAL_CREATED,
+  EDIT_SELLER_FIRSTNAME,
+  EDIT_SELLER_LASTNAME,
+  EDIT_SELLER_ADDRESS,
+  EDIT_SELLER_CITY,
+  EDIT_SELLER_STATE,
+  EDIT_SELLER_ZIPCODE,
+  VERIFY_SELLER_BEGIN,
+  VERIFY_SELLER_SUCCESS,
+  VERIFY_SELLER_FAILURE,
+  EDIT_SELLER_VERIFICATION_TOKEN,
+  CHECK_CODE_BEGIN,
+  CHECK_CODE_SUCCESS,
+  CHECK_CODE_FAILURE,
+  REMOVE_SELECTED_CRYPTO,
+  CREATING_DEAL_BEGIN,
+  EDIT_PHONE_NUMBER
 } from "../actions/listDealActions";
+
+
+
 
 const initialState = {
   imageData: {},
@@ -95,14 +154,14 @@ const calculateDiscountPercentage = (pay_in_dollar, pay_in_crypto) =>{
 
 export default function CreateDealReducer(state = initialState, action) {
   switch(action.type) {
-    case "UPLOADING_IMAGES_BEGIN":
+    case UPLOADING_IMAGES_BEGIN:
       return {
         ...state,
         uploading: true,
         error: null
       };
 
-    case "UPLOADING_IMAGES_SUCCESS":
+    case UPLOADING_IMAGES_SUCCESS:
       return {
         ...state,
         uploading: false,
@@ -111,7 +170,7 @@ export default function CreateDealReducer(state = initialState, action) {
         images: handleImagesUpload(state.images, action.payload)
       };
 
-    case "UPLOADING_IMAGES_FAILURE":
+    case UPLOADING_IMAGES_FAILURE:
       return {
         ...state,
         uploading: false,
@@ -121,19 +180,19 @@ export default function CreateDealReducer(state = initialState, action) {
         images: []
       };
 
-    case "VIEW_UPLOADED_IMAGE":
+    case VIEW_UPLOADED_IMAGE:
       return {
         ...state,
         imageView: action.payload
       };
 
-    case "REMOVE_UPLOADED_IMAGE":
+    case REMOVE_UPLOADED_IMAGE:
       return {
         ...state,
         images: handleImageRemove(state.images, action.payload)
       };
 
-    case "SHOW_PHOTOS_UPLOADING":
+    case SHOW_PHOTOS_UPLOADING:
       return {
         ...state,
         showPhotosStep: action.payload.showPhotosStep,
@@ -141,7 +200,7 @@ export default function CreateDealReducer(state = initialState, action) {
         showDescriptionStep: action.payload.showDescriptionStep
       };
 
-    case "SHOW_PRICING":
+    case SHOW_PRICING:
       return {
         ...state,
         showPhotosStep: action.payload.showPhotosStep,
@@ -149,7 +208,7 @@ export default function CreateDealReducer(state = initialState, action) {
         showDescriptionStep: action.payload.showDescriptionStep
       };
 
-    case "SHOW_DESCRIPTION":
+    case SHOW_DESCRIPTION:
       return {
         ...state,
         showPhotosStep: action.payload.showPhotosStep,
@@ -157,7 +216,7 @@ export default function CreateDealReducer(state = initialState, action) {
         showDescriptionStep: action.payload.showDescriptionStep
       };
 
-    case "CHANGE_DISCOUNT_PERCENTAGE":
+    case CHANGE_DISCOUNT_PERCENTAGE:
       let discountPriceOnPercentageChange = calculateDiscountPrice(state.priceInUSD, action.payload).toFixed(2)
       return {
         ...state,
@@ -165,7 +224,7 @@ export default function CreateDealReducer(state = initialState, action) {
         priceInCrypto: discountPriceOnPercentageChange
       };
 
-    case "CHANGE_BASE_PRICE":
+    case CHANGE_BASE_PRICE:
       let discountPrice = calculateDiscountPrice(action.payload, state.discountPercent).toFixed(2)
       return {
         ...state,
@@ -173,20 +232,20 @@ export default function CreateDealReducer(state = initialState, action) {
         priceInCrypto: discountPrice
       };
 
-    case "ONBLUR_BASE_PRICE_INPUT":
+    case ONBLUR_BASE_PRICE_INPUT:
       return {
         ...state,
         priceInUSD: action.payload,
       };
 
-    case "GET_RATE_BEGIN":
+    case GET_RATE_BEGIN:
       return {
         ...state,
         gettingRate: {[action.payload.crypto_symbol] : true},
         error: null
       };
 
-    case "GET_RATE_SUCCESS":
+    case GET_RATE_SUCCESS:
 
       return {
         ...state,
@@ -194,28 +253,28 @@ export default function CreateDealReducer(state = initialState, action) {
         crypto_amount: {...state.crypto_amount, [action.payload.crypto_symbol] : action.payload.crypto_amount} //this keeps adding new property to the crypto_amount object
       };
 
-    case "GET_RATE_FAILURE":
+    case GET_RATE_FAILURE:
       return {
         ...state,
         gettingRate: false,
         error: action.payload.error,
       };
 
-    case "REMOVE_SELECTED_CRYPTO":
+    case REMOVE_SELECTED_CRYPTO:
      //To remove the selected crypto, set the crypto_symbol to undefined
       return {
         ...state,
         crypto_amount: {...state.crypto_amount, [action.payload.crypto_symbol] : undefined}
       };
 
-    case "SELECT_LABEL_OPTION_PREPAID":
+    case SELECT_LABEL_OPTION_PREPAID:
       return {
         ...state,
         shippingLabelSelection: action.payload,
         modalVisible: true
       };
 
-    case "SELECT_LABEL_OPTION_SELLER":
+    case SELECT_LABEL_OPTION_SELLER:
       return {
         ...state,
         shippingLabelSelection: action.payload,
@@ -223,7 +282,7 @@ export default function CreateDealReducer(state = initialState, action) {
         shippingPriceSelection: null,
         modalVisible: false,
       };
-    case "SELECT_WEIGHT_OPTION":
+    case SELECT_WEIGHT_OPTION:
       return {
         ...state,
         shippingWeightSelection: action.payload.shippingWeightSelection,
@@ -231,7 +290,7 @@ export default function CreateDealReducer(state = initialState, action) {
         shippingLessThanDiscount: isShippingPriceHigher(action.payload.shippingPriceSelection, state.priceInCrypto)
       };
 
-    case "EXIT_SHIPPING_MODAL":
+    case EXIT_SHIPPING_MODAL:
       return {
         ...state,
         shippingLabelSelection: "",
@@ -240,7 +299,7 @@ export default function CreateDealReducer(state = initialState, action) {
         modalVisible: false
       };
 
-    case "SAVE_SHIPPING_MODAL":
+    case SAVE_SHIPPING_MODAL:
       return {
         ...state,
         modalVisible: false,
@@ -248,59 +307,59 @@ export default function CreateDealReducer(state = initialState, action) {
         priceInCrypto: action.payload.priceInCrypto
       };
 
-    case "SHOW_WEIGHT_MODAL":
+    case SHOW_WEIGHT_MODAL:
       return {
         ...state,
         modalVisible: true
       };
 
-    case "SELLER_EARNS_USD":
+    case SELLER_EARNS_USD:
       return {
         ...state,
         sellerEarnsUSD: action.payload.sellerEarnsUSD,
         sellerProfitsUSD: action.payload.sellerProfitsUSD
       };
 
-    case "SELLER_EARNS_CRYPTO":
+    case SELLER_EARNS_CRYPTO:
       return {
         ...state,
         sellerEarnsCrypto: action.payload.sellerEarnsCrypto,
         sellerProfitsCrypto: action.payload.sellerProfitsCrypto
       };
 
-    case "EDIT_DEAL_NAME":
+    case EDIT_DEAL_NAME:
       return {
         ...state,
         dealName: action.payload
       };
 
 
-    case "SELECT_CATEGORY":
+    case SELECT_CATEGORY:
       return {
         ...state,
         selectedCategory: action.payload.categoriesSelected
       };
 
-    case "SELECT_CONDITION":
+    case SELECT_CONDITION:
       return {
         ...state,
         selectedCondition: action.payload.selectedCondition
       };
 
-    case "EDIT_DETAIL":
+    case EDIT_DETAIL:
        return {
          ...state,
          editorState: action.payload
        };
 
-    case "CREATING_DEAL_BEGIN":
+    case CREATING_DEAL_BEGIN:
       return {
         ...state,
         creatingDeal: true,
         creatingDealError: null
       };
 
-    case "CREATING_DEAL_SUCCESS":
+    case CREATING_DEAL_SUCCESS:
       return {
         ...state,
         creatingDeal: false,
@@ -308,14 +367,14 @@ export default function CreateDealReducer(state = initialState, action) {
         modalVisible: true
       };
 
-    case "CREATING_DEAL_FAILURE":
+    case CREATING_DEAL_FAILURE:
       return {
         ...state,
         uploading: false,
         error: action.payload.error,
       };
 
-    case "CLOSE_DEAL_CREATED_MODAL":
+    case CLOSE_DEAL_CREATED_MODAL:
       return {
         ...state,
         modalVisible: action.payload.modalVisible
@@ -343,131 +402,131 @@ export default function CreateDealReducer(state = initialState, action) {
         dealEdited: action.payload.error,
       };
 
-    case "OPEN_ALERT_EDIT_CANCEL_MODAL":
+    case OPEN_ALERT_EDIT_CANCEL_MODAL:
       return {
         ...state,
         alertEditCancelModalVisible: action.payload.visible
       };
 
-    case "CLOSE_ALERT_EDIT_CANCEL_MODAL":
+    case CLOSE_ALERT_EDIT_CANCEL_MODAL:
       return {
         ...state,
         alertEditCancelModalVisible: action.payload.visible
       };
 
-    case "OPEN_DELETE_ALERT_MODAL":
+    case OPEN_DELETE_ALERT_MODAL:
       return {
         ...state,
         alertDeleteModalVisible: action.payload.visible
       };
 
-    case "CLOSE_DELETE_ALERT_MODAL":
+    case CLOSE_DELETE_ALERT_MODAL:
       return {
         ...state,
         alertDeleteModalVisible: action.payload.visible
       };
 
-    case "RESET_EDIT_LISTING":
+    case RESET_EDIT_LISTING:
       return {
         ...initialState
       };
 
-    case "RESET_DEAL_CREATED":
+    case RESET_DEAL_CREATED:
       return {
         ...initialState
       };
 
-    case "EDIT_PHONE_NUMBER":
+    case EDIT_PHONE_NUMBER:
       return {
         ...state,
         phoneNumber: action.payload
       };
 
-      case "EDIT_SELLER_FIRSTNAME":
+      case EDIT_SELLER_FIRSTNAME:
       return {
         ...state,
         sellerFirstname: action.payload
       };
 
-      case "EDIT_SELLER_LASTNAME":
+      case EDIT_SELLER_LASTNAME:
       return {
         ...state,
         sellerLastname: action.payload
       };
 
-    case "EDIT_SELLER_ADDRESS":
+    case EDIT_SELLER_ADDRESS:
       return {
         ...state,
         sellerAddress: action.payload
       };
 
-    case "EDIT_SELLER_CITY":
+    case EDIT_SELLER_CITY:
       return {
         ...state,
         sellerCity: action.payload
       };
 
-    case "EDIT_SELLER_STATE":
+    case EDIT_SELLER_STATE:
       return {
         ...state,
         sellerState: action.payload.state
       };
 
-    case "EDIT_SELLER_ZIPCODE":
+    case EDIT_SELLER_ZIPCODE:
       return {
         ...state,
         sellerZipcode: action.payload
       };
 
-    case "VERIFY_SELLER_BEGIN":
+    case VERIFY_SELLER_BEGIN:
       return {
         ...state,
         sendingCode: true,
         sendingCodeError: null
       };
 
-    case "VERIFY_SELLER_SUCCESS":
+    case VERIFY_SELLER_SUCCESS:
       return {
         ...state,
         sendingCode: false,
         sendingCodeSuccess: action.payload
       };
 
-    case "VERIFY_SELLER_FAILURE":
+    case VERIFY_SELLER_FAILURE:
       return {
         ...state,
         sendingCode: false,
         sendingCodeError: action.payload.error,
       };
 
-    case "EDIT_SELLER_VERIFICATION_TOKEN":
+    case EDIT_SELLER_VERIFICATION_TOKEN:
       return {
         ...state,
         sellerVerificationToken: action.payload
       };
 
-    case "CHECK_CODE_BEGIN":
+    case CHECK_CODE_BEGIN:
       return {
         ...state,
         checkingCodeLoading: true,
         sendingCodeError: null
       };
 
-    case "CHECK_CODE_SUCCESS":
+    case CHECK_CODE_SUCCESS:
       return {
         ...state,
         checkingCodeLoading: false,
         checkingCodeSuccess: action.payload
       };
 
-    case "CHECK_CODE_FAILURE":
+    case CHECK_CODE_FAILURE:
       return {
         ...state,
         checkingCodeLoading: false,
         checkingCodeError: action.payload.error,
       };
 
-    case "EDIT_LISTING":
+    case EDIT_LISTING:
       let {deal_name, pay_in_crypto, pay_in_dollar, deal_category, item_condition,deal_image_object, deal_description, deal_id, shipping_label_status, weight, shipment_cost} = action.payload.dealItem;
 
       let deal_selected_cryptos = {};
@@ -511,28 +570,28 @@ export default function CreateDealReducer(state = initialState, action) {
         shippingPriceSelection: shipment_cost
       };
 
-    case "DELETE_DEAL_BEGIN":
+    case DELETE_DEAL_BEGIN:
       return {
         ...state,
         deletingDealLoading: true,
         deletingDealError: null
       };
 
-    case "DELETE_DEAL_SUCCESS":
+    case DELETE_DEAL_SUCCESS:
       return {
         ...state,
         deletingDealLoading: false,
         dealDeleted: action.payload
       };
 
-    case "DELETE_DEAL_FAILURE":
+    case DELETE_DEAL_FAILURE:
       return {
         ...state,
         deletingDealLoading: false,
         deletingDealError: action.payload.error,
       };
 
-    case "OPEN_MODAL_PHONE_VERIFICATION":
+    case OPEN_MODAL_PHONE_VERIFICATION:
       return {
         ...state,
         modalVisible: true

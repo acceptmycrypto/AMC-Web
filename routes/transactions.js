@@ -725,9 +725,9 @@ router.post("/checkout/notification", function (req, res, next) {
 
           let supply_tracking_number_link;
           if (process.env.NODE_ENV == "development") {
-            supply_tracking_number_link = `${process.env.FRONTEND_URL}/trackingNumber/${req.body.txn_id}/${deal_name}`;
+            supply_tracking_number_link = `${process.env.FRONTEND_URL}/trackingNumber/${req.body.txn_id}/${deal_id}`;
           } else {
-            supply_tracking_number_link = `${process.env.BACKEND_URL}/trackingNumber/${req.body.txn_id}/${deal_name}`;
+            supply_tracking_number_link = `${process.env.BACKEND_URL}/trackingNumber/${req.body.txn_id}/${deal_id}`;
           }
 
           if (shipping_label_status === "prepaid") {
@@ -1371,9 +1371,9 @@ router.post("/paypal/execute", verifyToken, function (req, res) {
 
                     let supply_tracking_number_link;
                     if (process.env.NODE_ENV == "development") {
-                      supply_tracking_number_link = `${process.env.FRONTEND_URL}/trackingNumber/${paymentId}/${deal_name}`;
+                      supply_tracking_number_link = `${process.env.FRONTEND_URL}/trackingNumber/${paymentId}/${deal_id}`;
                     } else {
-                      supply_tracking_number_link = `${process.env.BACKEND_URL}/trackingNumber/${paymentId}/${deal_name}`;
+                      supply_tracking_number_link = `${process.env.BACKEND_URL}/trackingNumber/${paymentId}/${deal_id}`;
                     }
 
                     if (shipping_label_status === "prepaid") {

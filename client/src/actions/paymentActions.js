@@ -1,3 +1,10 @@
+export const CREATE_TRANSACTION_BEGIN =  "CREATE_TRANSACTION_BEGIN";
+export const CREATE_TRANSACTION_SUCCESS = "CREATE_TRANSACTION_SUCCESS";
+export const CREATE_TRANSACTION_FAILURE = "CREATE_TRANSACTION_FAILURE";
+export const CREATE_GUEST_TRANSACTION_BEGIN = "CREATE_GUEST_TRANSACTION_BEGIN";
+export const CREATE_GUEST_TRANSACTION_SUCCESS = "CREATE_GUEST_TRANSACTION_SUCCESS";
+export const  CREATE_GUEST_TRANSACTION_FAILURE = "CREATE_GUEST_TRANSACTION_FAILURE";
+
 export function _fetchTransactionInfo(
   crypto_name,
   crypto_symbol,
@@ -48,17 +55,17 @@ export function _fetchTransactionInfo(
 }
 
 export const createTransactionBegin = () => ({
-  type: "CREATE_TRANSACTION_BEGIN"
+  type: CREATE_TRANSACTION_BEGIN
 });
 
 
 export const createTransactionSuccess = transactionInfo => ({
-  type: "CREATE_TRANSACTION_SUCCESS",
+  type: CREATE_TRANSACTION_SUCCESS,
   payload: { transactionInfo }
 });
 
 export const createTransactionFailure = error => ({
-  type: "CREATE_TRANSACTION_FAILURE",
+  type: CREATE_TRANSACTION_FAILURE,
   payload: { error }
 });
 
@@ -110,17 +117,17 @@ export function _fetchGuestTransactionInfo(
 }
 
 export const createGuestTransactionBegin = () => ({
-  type: "CREATE_GUEST_TRANSACTION_BEGIN"
+  type: CREATE_GUEST_TRANSACTION_BEGIN
 });
 
 
 export const createGuestTransactionSuccess = transactionInfo => ({
-  type: "CREATE_GUEST_TRANSACTION_SUCCESS",
+  type: CREATE_GUEST_TRANSACTION_SUCCESS,
   payload: { transactionInfo }
 });
 
 export const createGuestTransactionFailure = error => ({
-  type: "CREATE_GUEST_TRANSACTION_FAILURE",
+  type: CREATE_GUEST_TRANSACTION_FAILURE,
   payload: { error }
 });
 

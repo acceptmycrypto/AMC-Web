@@ -1,3 +1,9 @@
+import { FILTER_DEALS_BY_CATEGORY, CATEGORIES_DEALS_SUCCESS, FETCH_CATEGORY_SUCCESS } from "../actions/categoryActions";
+import { SEARCH_DEALS_SUCCESS } from "../actions/searchBarActions";
+import { RESET_NAVBAR, OPEN_SIDE_BAR, CLOSE_SIDE_BAR } from "../actions/navbarActions";
+
+
+
 const initialState = {
     category: null,
     filteredCategory: [],
@@ -12,17 +18,17 @@ const initialState = {
 
 export default function categoryReducer(state = initialState, action) {
     switch(action.type) {
-        case "FILTER_DEALS_BY_CATEGORY":
+        case FILTER_DEALS_BY_CATEGORY:
             return {
                 ...state,
                 filteredCategory: action.payload.categorizedDeals,
                 category: action.payload.category
             };
-        case "SEARCH_DEALS_SUCCESS":
+        case SEARCH_DEALS_SUCCESS:
             return initialState;
-        case "RESET_NAVBAR":
+        case RESET_NAVBAR:
             return initialState;
-        case "CATEGORIES_DEALS_SUCCESS":
+        case CATEGORIES_DEALS_SUCCESS:
 
             return {
                 ...state,
@@ -32,19 +38,19 @@ export default function categoryReducer(state = initialState, action) {
                 categoryPage: action.payload.categoryPage,
                 categoryNumberOfResults: action.payload.categoryNumberOfResults
             };
-        case "FETCH_CATEGORY_SUCCESS":
+        case FETCH_CATEGORY_SUCCESS:
             return {
                 ...state,
                 parentCategory: action.payload.parentCategory
             };
 
-        case "OPEN_SIDE_BAR":
+        case OPEN_SIDE_BAR:
             return {
                 ...state,
                 sideBarOpened: true
             };
 
-        case "CLOSE_SIDE_BAR":
+        case CLOSE_SIDE_BAR:
           return {
               ...state,
               sideBarOpened: false

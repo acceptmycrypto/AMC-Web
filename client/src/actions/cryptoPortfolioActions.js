@@ -29,6 +29,7 @@ export const WITHDRAW_CONFIRM_BEGIN = "WITHDRAW_CONFIRM_BEGIN";
 export const WITHDRAW_CONFIRM_SUCCESS = "WITHDRAW_CONFIRM_SUCCESS";
 export const WITHDRAW_CONFIRM_FAILURE = "WITHDRAW_CONFIRM_FAILURE";
 export const EDIT_WITHDRAW_CONFIRMATION_TOKEN = "EDIT_WITHDRAW_CONFIRMATION_TOKEN";
+export const RESET_CRYPTO_PORTFOLIO = "RESET_CRYPTO_PORTFOLIO";
 
 /**
  * action creators return actions
@@ -187,6 +188,7 @@ export const handleQRChange = (event, qr_shown) => {
   * @member {function} fetchCryptoUpdateFailure
 */
 export function updateCryptos(event, id, current_crypto_name, token) {
+
     event.preventDefault();
 
     let crypto_address = document.querySelector("#addressFormInput").value.trim();
@@ -356,93 +358,100 @@ export const hideOrShowAddress = (status, address) => {
   * @member {function} initiateWithdrawFailure
 */
 export function _handleInitiateWithdraw(token, crypto_id, crypto_symbol, user_email) {
-  const settings = {
-      method: "POST",
-      headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ token, crypto_id, crypto_symbol, user_email })
-  };
+    const settings = {
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token, crypto_id, crypto_symbol, user_email })
+    };
 
-  return dispatch => {
-    dispatch(initiateWithdrawBegin());
-    return fetch("/withdraw/initiate", settings)
-      .then(res => res.json())
-      .then(jsonWithdrawInitiate => {
+    return dispatch => {
+        dispatch(initiateWithdrawBegin());
+        return fetch("/withdraw/initiate", settings)
+            .then(res => res.json())
+            .then(jsonWithdrawInitiate => {
 
-        dispatch(initiateWithdrawSuccess(jsonWithdrawInitiate));
-        return jsonWithdrawInitiate;
-      })
-      .catch(error => dispatch(initiateWithdrawFailure(error)));
-  };
+                dispatch(initiateWithdrawSuccess(jsonWithdrawInitiate));
+                return jsonWithdrawInitiate;
+            })
+            .catch(error => dispatch(initiateWithdrawFailure(error)));
+    };
 }
 
 export const initiateWithdrawBegin = () => ({
-  type: INITIATE_WITHDRAW_BEGIN,
+    type: INITIATE_WITHDRAW_BEGIN,
 });
 
 export const initiateWithdrawSuccess = (initiateWithdraw) => ({
-  type: INITIATE_WITHDRAW_SUCCESS,
-  payload: { initiateWithdraw }
+    type: INITIATE_WITHDRAW_SUCCESS,
+    payload: { initiateWithdraw }
 });
 
 export const initiateWithdrawFailure = error => ({
-  type: INITIATE_WITHDRAW_FAILURE,
-  payload: { error }
+    type: INITIATE_WITHDRAW_FAILURE,
+    payload: { error }
 });
 
 export const openWithdrawModal = (crypto_id, crypto_name, crypto_symbol, crypto_balance, crypto_address) => {
-  return {
-      type: 'OPEN_WITHDRAW_MODAL',
-      payload: {visible: true, crypto_id, crypto_name, crypto_symbol, crypto_balance, crypto_address}
-  }
+    return {
+        type: 'OPEN_WITHDRAW_MODAL',
+        payload: { visible: true, crypto_id, crypto_name, crypto_symbol, crypto_balance, crypto_address }
+    }
 };
 
 export function _handleConfirmedWithdraw(token, crypto_id, withdraw_confirmation_token) {
 
-  const settings = {
-      method: "POST",
-      headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ token, crypto_id, withdraw_confirmation_token })
-  };
+    const settings = {
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token, crypto_id, withdraw_confirmation_token })
+    };
 
-  return dispatch => {
-    dispatch(confirmWithdrawBegin());
-    return fetch("/withdraw/confirm", settings)
-      .then(res => res.json())
-      .then(jsonConfirmWithdraw => {
+    return dispatch => {
+        dispatch(confirmWithdrawBegin());
+        return fetch("/withdraw/confirm", settings)
+            .then(res => res.json())
+            .then(jsonConfirmWithdraw => {
 
-        dispatch(confirmWithdrawSuccess(jsonConfirmWithdraw));
-        return jsonConfirmWithdraw;
-      })
-      .catch(error => {
-        
-        dispatch(confirmWithdrawFailure(error))
-      } );
-  };
+                dispatch(confirmWithdrawSuccess(jsonConfirmWithdraw));
+                return jsonConfirmWithdraw;
+            })
+            .catch(error => {
+
+                dispatch(confirmWithdrawFailure(error))
+            });
+    };
 }
 
 export const confirmWithdrawBegin = () => ({
-  type: WITHDRAW_CONFIRM_BEGIN,
+    type: WITHDRAW_CONFIRM_BEGIN,
 });
 
 export const confirmWithdrawSuccess = (confirmWithdraw) => ({
-  type: WITHDRAW_CONFIRM_SUCCESS,
-  payload: { confirmWithdraw }
+    type: WITHDRAW_CONFIRM_SUCCESS,
+    payload: { confirmWithdraw }
 });
 
 export const confirmWithdrawFailure = error => ({
-  type: WITHDRAW_CONFIRM_FAILURE,
-  payload: { error }
+    type: WITHDRAW_CONFIRM_FAILURE,
+    payload: { error }
 });
 
 export const onEditWithdrawConfirmationToken = (event) => {
-  return {
-      type: EDIT_WITHDRAW_CONFIRMATION_TOKEN,
-      payload: event.target.value
-  }
+    return {
+        type: EDIT_WITHDRAW_CONFIRMATION_TOKEN,
+        payload: event.target.value
+    }
 };
+
+
+export const resetCryptoPortfolio = () => {
+    return {
+        type: RESET_CRYPTO_PORTFOLIO
+    }
+}

@@ -1,9 +1,16 @@
 export const SET_ACTIVE_SETTINGS = "SET_ACTIVE_SETTINGS";
 export const SET_ACTIVE_PROFILE_SETTINGS = "SET_ACTIVE_PROFILE_SETTINGS";
-
 export const SET_INITIAL_STATE = "SET_INITIAL_STATE";
 export const SET_ACTIVE_CRYPTO_SETTINGS = "SET_ACTIVE_CRYPTO_SETTINGS";
-export const CRYPTO_LEFT = "CRYPTO_LEFT";
+export const FETCH_PHOTO_SUCCESS = "FETCH_PHOTO_SUCCESS";
+export const CRYPTO_OPTIONS_LEFT_BEGIN = "CRYPTO_OPTIONS_LEFT_BEGIN";
+export const CRYPTO_OPTIONS_LEFT_SUCCESS = "CRYPTO_OPTIONS_LEFT_SUCCESS";
+export const CRYPTO_OPTIONS_LEFT_FAILURE = "CRYPTO_OPTIONS_LEFT_FAILURE";
+export const ADD_CRYPTO_SUCCESS = "ADD_CRYPTO_SUCCESS";
+export const ALL_TRANSACTIONS_LEFT_BEGIN = "ALL_TRANSACTIONS_LEFT_BEGIN";
+export const ALL_TRANSACTIONS_LEFT_SUCCESS = "ALL_TRANSACTIONS_LEFT_SUCCESS";
+export const ALL_TRANSACTIONS_LEFT_FAILURE = "ALL_TRANSACTIONS_LEFT_FAILURE";
+
 
 export const setInitialSettingsState = () => {
     return {
@@ -55,7 +62,7 @@ export const _changePhoto = (token, selectedPhoto)=>{
     const update_photos =  fetch("/update/photo", settings)
 
     return {
-        type: 'FETCH_PHOTO_SUCCESS',
+        type: FETCH_PHOTO_SUCCESS,
         payload: {photo:
           {photo: selectedPhoto}
         }
@@ -155,17 +162,17 @@ export const _cryptoOptionsLeft = (token) => {
 
 
     export const cryptoOptionsBegin = () => ({
-      type: "CRYPTO_OPTIONS_LEFT_BEGIN"
+      type: CRYPTO_OPTIONS_LEFT_BEGIN
     });
 
 
     export const cryptoOptionsSuccess = cryptoLeft => ({
-      type: "CRYPTO_OPTIONS_LEFT_SUCCESS",
+      type: CRYPTO_OPTIONS_LEFT_SUCCESS,
       payload: { cryptoLeft }
     });
 
     export const cryptoOptionsFailure = error => ({
-      type: "CRYPTO_OPTIONS_LEFT_FAILURE",
+      type: CRYPTO_OPTIONS_LEFT_FAILURE,
       payload: { error }
     });
 
@@ -183,7 +190,7 @@ export const _cryptoOptionsLeft = (token) => {
 
 
         return {
-            type: 'ADD_CRYPTO_SUCCESS',
+            type: ADD_CRYPTO_SUCCESS,
             payload: {
                 activeCryptoSettingsItem: "Crypto I am Are Interested In"
             }
@@ -215,18 +222,93 @@ export const _allTransactions = (token) =>{
 
 
     export const fetchAllTransactionsBegin = () => ({
-      type: "ALL_TRANSACTIONS_LEFT_BEGIN"
+      type: ALL_TRANSACTIONS_LEFT_BEGIN
     });
 
 
     export const fetchAllTransactionsSuccess = transactionInfo => ({
-      type: "ALL_TRANSACTIONS_LEFT_SUCCESS",
+      type: ALL_TRANSACTIONS_LEFT_SUCCESS,
       payload: { transactionInfo }
     });
 
     export const fetchAllTransactionsFailure = error => ({
-      type: "ALL_TRANSACTIONS_LEFT_FAILURE",
+      type: ALL_TRANSACTIONS_LEFT_FAILURE,
       payload: { error }
     });
 
 
+
+
+
+// used in CryptocurrencySettings
+export async function _loadCryptoSettings (token) {
+    const Cryptosettings = {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({token})
+    };
+ 
+  
+    const profile_crypto = await fetch("/profile/crypto", Cryptosettings)
+    const user_crypto = await profile_crypto.json();
+
+    return({user_crypto});
+  
+  }
+
+  export async function _loadMatchedFriends (token) {
+    const Matchedsettings = {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({token})
+    };
+ 
+  
+    const matched = await fetch("/profile/matched/friends", Matchedsettings)
+    const matched_friends = await matched.json();
+
+    return({matched_friends});
+  
+  }
+
+  export async function _makeFriends (token, matched_friend_id) {
+    const Friendssettings = {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({token, matched_friend_id})
+    };
+ 
+  
+    const friendship = await fetch("/settings/make/friends", Friendssettings)
+    const friends = await friendship.json();
+
+    return("done");
+  
+  }
+
+  export async function _loadAllTransactions (token) {
+    const Transactionssettings = {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({token})
+    };
+ 
+  
+    const allTransactions = await fetch("/profile/user/transactions", Transactionssettings)
+    const transactions = await allTransactions.json();
+
+    return({transactions});
+  
+  }
