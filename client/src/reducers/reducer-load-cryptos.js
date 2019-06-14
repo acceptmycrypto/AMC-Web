@@ -23,7 +23,7 @@ const initialState = {
 
 export default function loadCryptosReducer(state = initialState, action) {
     switch (action.type) {
-        case "LOAD_CRYPTO_BEGIN":
+        case LOAD_CRYPTO_BEGIN:
             // Mark the state as "loading" so we can show a spinner or something
             // Also, reset any errors. We're starting fresh.
             return {
@@ -32,26 +32,26 @@ export default function loadCryptosReducer(state = initialState, action) {
                 error: null
             };
 
-        case "LOAD_CRYPTO_SUCCESS":
+        case LOAD_CRYPTO_SUCCESS:
             return {
                 ...state,
                 loading: false,
                 cryptoOptions: action.payload.cryptoOptions
             };
 
-        case "LOAD_CRYPTOS_FOR_CREATING_DEAL":
+        case LOAD_CRYPTOS_FOR_CREATING_DEAL:
           return {
               ...state,
               loading: false,
               cryptoOptionsForCreatingDeal: action.payload.cryptoOptionsForCreatingDeal
           };
 
-        case "SHOW_CRYPTOS_LOGOS_FOR_HOME_PAGE":
+        case SHOW_CRYPTOS_LOGOS_FOR_HOME_PAGE:
           return {
               ...state,
           };
 
-        case "LOAD_CRYPTO_FAILURE":
+        case LOAD_CRYPTO_FAILURE:
             // The request failed, but it did stop, so set loading to "false".
             // Save the error, and we can display it somewhere
             // Since it failed, we don't have items to display anymore, so set it empty.
