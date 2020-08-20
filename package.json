@@ -26,7 +26,7 @@
     "ajv": "^6.8.1",
     "async": "^2.6.1",
     "aws-sdk": "^2.380.0",
-    "bcrypt": "^3.0.2",
+    "bcrypt": "^5.0.0",
     "bcrypt-nodejs": "0.0.3",
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.3",
